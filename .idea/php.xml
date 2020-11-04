@@ -64,6 +64,7 @@
       <path value="$PROJECT_DIR$/vendor/simplicity-framework/Cache" />
       <path value="$PROJECT_DIR$/vendor/mmdm/sim-auth" />
       <path value="$PROJECT_DIR$/vendor/mmdm/sim-hit-counter" />
+      <path value="$PROJECT_DIR$/vendor/mmdm/sim-cart" />
     </include_path>
   </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="7.3" />
