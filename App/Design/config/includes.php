@@ -167,6 +167,11 @@ return [
                             asset_path('be/css/colors.min.css') .
                             '" rel="stylesheet" type="text/css">'
                         ),
+                        e(
+                            '<link href="' .
+                            hashed_path('css', 'font.css') .
+                            '" rel="stylesheet" type="text/css">'
+                        ),
                     ]
                 ],
             ],
