@@ -60,6 +60,7 @@ return [
         'main' => __DIR__ . '/config.php',
         'router' => __DIR__ . '/router.php',
         'captcha' => __DIR__ . '/captcha.php',
+        'cart' => __DIR__ . '/cart.php',
         'i18n' => __DIR__ . '/i18n.php',
         'auth' => __DIR__ . '/auth.php',
         'database' => __DIR__ . '/database.php',
