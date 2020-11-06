@@ -11,6 +11,11 @@ use Sim\Interfaces\IInvalidVariableNameException;
 
 class HomeController extends AbstractController
 {
+    /**
+     * @var string
+     */
+    private $main_layout = 'admin';
+
     public function index()
     {
         $this->isIndividual(true)

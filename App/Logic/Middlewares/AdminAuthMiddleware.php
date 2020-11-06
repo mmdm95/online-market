@@ -25,10 +25,10 @@ class AdminAuthMiddleware implements IMiddleware
         /**
          * @var DBAuth $auth
          */
-        $auth = container()->get('auth_admin');
-
-        if (!$auth->isLoggedIn()) {
-            \response()->redirect(\url('admin.login'));
-        }
+//        $auth = container()->get('auth_admin');
+//
+//        if (!$auth->isLoggedIn()) {
+//            \response()->redirect(\url('admin.login'));
+//        }
     }
 }

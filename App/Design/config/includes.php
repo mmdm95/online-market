@@ -91,8 +91,6 @@ return [
             'admin' => [
                 'js' => [
                     'top' => [
-                    ],
-                    'bottom' => [
                         e(
                             '<script type="text/javascript" src="' .
                             asset_path('be/js/main/jquery.min.js') .
@@ -103,6 +101,8 @@ return [
                             asset_path('be/js/main/bootstrap.bundle.min.js') .
                             '"></script>'
                         ),
+                    ],
+                    'bottom' => [
                         e(
                             '<script type="text/javascript" src="' .
                             asset_path('be/js/plugins/loaders/blockui.min.js') .
@@ -121,6 +121,11 @@ return [
                         e(
                             '<script type="text/javascript" src="' .
                             asset_path('be/js/plugins/forms/styling/uniform.min.js') .
+                            '"></script>'
+                        ),
+                        e(
+                            '<script type="text/javascript" src="' .
+                            asset_path('be/js/plugins/forms/selects/select2.min.js') .
                             '"></script>'
                         ),
                         e(
@@ -176,12 +181,20 @@ return [
                 ],
             ],
         ],
-        'view/admin-login' => [
+        'view/user/view' => [
             'common' => 'admin',
             'js' => [
-                'top' => [
-                ],
                 'bottom' => [
+                    e(
+                        '<script type="text/javascript" src="' .
+                        asset_path('be/js/plugins/tables/datatables/datatables.min.js') .
+                        '"></script>'
+                    ),
+                    e(
+                        '<script type="text/javascript" src="' .
+                        asset_path('be/js/demo_pages/datatables_advanced.js') .
+                        '"></script>'
+                    ),
                 ],
             ],
             'css' => [

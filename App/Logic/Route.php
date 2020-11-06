@@ -89,6 +89,11 @@ class Route implements IInitialize
             // other pages that need authentication
             Router::group(['prefix' => '/admin/', 'middleware' => AdminAuthMiddleware::class], function () {
                 Router::get('/', 'Admin\HomeController@index')->name('admin.index');
+                Router::get('/user/view/{id?}', 'Admin\UserController@view')
+                    ->where([
+                        'id' => '[0-9]+',
+                    ])->name('admin.user.view');
+
             });
 
             //==========================

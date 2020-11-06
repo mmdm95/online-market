@@ -3,7 +3,7 @@
 use Sim\I18n\ISOLanguageCodes;
 
 //**** Application Version ****
-defined("APP_VERSION") OR define("APP_VERSION", "1.0.0");
+defined("APP_VERSION") OR define("APP_VERSION", "0.1.0");
 
 /***************************************
  * You can add your constants here
