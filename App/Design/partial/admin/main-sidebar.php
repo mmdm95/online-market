@@ -5,7 +5,7 @@
         <a href="#" class="sidebar-mobile-main-toggle">
             <i class="icon-arrow-right8"></i>
         </a>
-        Navigation
+        منو
         <a href="#" class="sidebar-mobile-expand">
             <i class="icon-screen-full"></i>
             <i class="icon-screen-normal"></i>
@@ -26,9 +26,9 @@
                     </div>
 
                     <div class="media-body">
-                        <div class="media-title font-weight-semibold">Victoria Baker</div>
-                        <div class="font-size-xs opacity-50">
-                            <i class="icon-pin font-size-sm"></i> &nbsp;Santa Ana, CA
+                        <div class="media-title font-weight-semibold">وحید ضیایی</div>
+                        <div class="font-size-xs opacity-50 iransans-regular">
+                            <i class="icon-user font-size-sm mr-1"></i>مدیر سایت
                         </div>
                     </div>
 
@@ -46,26 +46,21 @@
             <ul class="nav nav-sidebar" data-nav-type="accordion">
 
                 <!-- Main -->
-                <li class="nav-item-header"><div class="text-uppercase font-size-xs line-height-xs">Main</div> <i class="icon-menu" title="Main"></i></li>
+                <li class="nav-item-header"><div class="text-uppercase font-size-xs line-height-xs">اصلی</div> <i class="icon-menu" title="Main"></i></li>
                 <li class="nav-item">
                     <a href="index.html" class="nav-link">
                         <i class="icon-home4"></i>
                         <span>
-									Dashboard
-									<span class="d-block font-weight-normal opacity-50">No active orders</span>
+									میز کار
 								</span>
                     </a>
                 </li>
                 <li class="nav-item nav-item-submenu">
-                    <a href="#" class="nav-link"><i class="icon-copy"></i> <span>Layouts</span></a>
+                    <a href="#" class="nav-link"><i class="icon-users"></i> <span>کاربران</span></a>
 
                     <ul class="nav nav-group-sub" data-submenu-title="Layouts">
-                        <li class="nav-item"><a href="index.html" class="nav-link active">Default layout</a></li>
-                        <li class="nav-item"><a href="../../../../layout_2/RTL/default/full/index.html" class="nav-link">Layout 2</a></li>
-                        <li class="nav-item"><a href="../../../../layout_3/RTL/default/full/index.html" class="nav-link">Layout 3</a></li>
-                        <li class="nav-item"><a href="../../../../layout_4/RTL/default/full/index.html" class="nav-link">Layout 4</a></li>
-                        <li class="nav-item"><a href="../../../../layout_5/RTL/default/full/index.html" class="nav-link">Layout 5</a></li>
-                        <li class="nav-item"><a href="../../../../layout_6/RTL/default/full/index.html" class="nav-link disabled">Layout 6 <span class="badge bg-transparent align-self-center ml-auto">Coming soon</span></a></li>
+                        <li class="nav-item"><a href="index.html" class="nav-link active">افزودن کاربر</a></li>
+                        <li class="nav-item"><a href="../../../..k,/layout_2/RTL/default/full/index.html" class="nav-link">Layout 2</a></li>
                     </ul>
                 </li>
                 <li class="nav-item nav-item-submenu">

@@ -34,10 +34,16 @@ var DatatableAdvanced = function() {
             }],
             dom: '<"datatable-header"fl><"datatable-scroll"t><"datatable-footer"ip>',
             language: {
-                search: '<span>Filter:</span> _INPUT_',
-                searchPlaceholder: 'Type to filter...',
-                lengthMenu: '<span>Show:</span> _MENU_',
-                paginate: { 'first': 'First', 'last': 'Last', 'next': $('html').attr('dir') == 'rtl' ? '&larr;' : '&rarr;', 'previous': $('html').attr('dir') == 'rtl' ? '&rarr;' : '&larr;' }
+                search: '<span>جست‌و‌جو:</span> _INPUT_',
+                searchPlaceholder: 'کلمه مورد نظر را تایپ کنید ...',
+                lengthMenu: '<span>نمایش:</span> _MENU_',
+                paginate: { 'first': 'صفحه اول', 'last': 'صفحه آخر', 'next': $('html').attr('dir') == 'rtl' ? '&larr;' : '&rarr;', 'previous': $('html').attr('dir') == 'rtl' ? '&rarr;' : '&larr;' },
+                emptyTable: 'موردی یافت نشد.',
+                zeroRecords: 'مورد جستجو شده وجود ندارد.',
+                info: 'نمایش' + '<span class="text-primary ml-1 mr-1">_START_</span>' + 'تا' +
+                    '<span class="text-primary ml-1 mr-1">_END_</span>' + 'از' + 'مجموع' + '<span class="text-primary ml-1 mr-1">_TOTAL_</span>' + 'رکورد',
+                infoEmpty: 'نمایش' + '<span class="text-primary ml-1 mr-1">0</span>' + 'تا' +
+                    '<span class="text-primary ml-1 mr-1">0</span>' + 'از' + 'مجموع' + '<span class="text-primary ml-1 mr-1">0</span>' + 'رکورد'
             }
         });
 

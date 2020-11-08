@@ -25,7 +25,7 @@
         </ul>
 
         <span class="navbar-text ml-md-3 mr-md-auto">
-				<span class="badge bg-success">۱۰ فاکتور تأیید نشده</span>
+				<span class="badge bg-success">آنلاین</span>
 			</span>
 
         <ul class="navbar-nav">
@@ -75,13 +75,13 @@
                 </a>
 
                 <div class="dropdown-menu dropdown-menu-right">
-                    <a href="#" class="dropdown-item"><i class="icon-user-plus"></i> My profile</a>
-                    <a href="#" class="dropdown-item"><i class="icon-coins"></i> My balance</a>
-                    <a href="#" class="dropdown-item"><i class="icon-comment-discussion"></i> Messages <span
-                                class="badge badge-pill bg-blue ml-auto">58</span></a>
+                    <a href="#" class="dropdown-item"><i class="icon-user-plus"></i>اطلاعات من</a>
+                    <a href="#" class="dropdown-item"><i class="icon-coins"></i>مدیریت مالی</a>
+                    <a href="#" class="dropdown-item"><i class="icon-comment-discussion"></i> فاکتورهای جدید <span
+                                class="badge badge-pill bg-blue ml-auto">۵۸</span></a>
                     <div class="dropdown-divider"></div>
-                    <a href="#" class="dropdown-item"><i class="icon-cog5"></i> Account settings</a>
-                    <a href="#" class="dropdown-item"><i class="icon-switch2"></i> Logout</a>
+                    <a href="#" class="dropdown-item"><i class="icon-cog5"></i> تنظیمات</a>
+                    <a href="#" class="dropdown-item"><i class="icon-switch2"></i> خروج</a>
                 </div>
             </li>
         </ul>
