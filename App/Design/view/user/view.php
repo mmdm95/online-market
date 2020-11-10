@@ -27,8 +27,8 @@
                     <div class="breadcrumb">
                         <a href="<?= url('admin.index'); ?>" class="breadcrumb-item"><i class="icon-home2 mr-2"></i>
                             خانه</a>
-                        <a href="datatable_advanced.html" class="breadcrumb-item">کاربران</a>
-                        <span class="breadcrumb-item active">مدیریت کاربران</span>
+                        <a href="<?= url('admin.user.view'); ?>" class="breadcrumb-item">کاربران</a>
+                        <span class="breadcrumb-item active">لیست کاربران</span>
                     </div>
 
                     <a href="#" class="header-elements-toggle text-default d-md-none"><i class="icon-more"></i></a>

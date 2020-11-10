@@ -2,19 +2,15 @@
 
 namespace App\Logic\Controllers\Admin;
 
-use Sim\Abstracts\Mvc\Controller\AbstractController;
+use App\Logic\Abstracts\AbstractAdminController;
 use Sim\Exceptions\ConfigManager\ConfigNotRegisteredException;
 use Sim\Exceptions\Mvc\Controller\ControllerException;
 use Sim\Exceptions\PathManager\PathNotRegisteredException;
 use Sim\Interfaces\IFileNotExistsException;
 use Sim\Interfaces\IInvalidVariableNameException;
 
-class HomeController extends AbstractController
+class HomeController extends AbstractAdminController
 {
-    /**
-     * @var string
-     */
-    private $main_layout = 'admin';
 
     public function index()
     {
