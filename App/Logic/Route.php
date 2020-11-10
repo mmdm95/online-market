@@ -108,6 +108,7 @@ class Route implements IInitialize
                 Router::get('/category/add', 'Admin\CategoryController@add')->name('admin.category.add');
                 Router::get('/user/edit/{id}', 'Admin\UserController@edit')->where([
                     'id' => '[0-9]+',
+                ])->name('admin.user.edit');
 
             });
 
