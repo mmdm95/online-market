@@ -13,8 +13,7 @@ class HomeController extends AbstractController
 {
     public function index()
     {
-        $this->isIndividual(true)
-            ->setTemplate('partial/simple');
+        $this->setTemplate('partial/simple');
 
         return $this->render();
     }

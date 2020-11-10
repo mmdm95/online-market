@@ -2,7 +2,24 @@
 
 use Sim\I18n\ISOLanguageCodes;
 
-//**** Application Version ****
+/**
+ * App version
+ * Use semantic-versioning (AKA SemVer) here
+ * Numbers are Major.Minor.Patch[-a or -b]
+ * -a stands for alpha
+ * -b stands for beta
+ * -rc stands for release candidate
+ *
+ * Note:
+ *   Please use below options instead of -b and -a and -rc
+ *     0 for alpha (status)
+ *     1 for beta (status)
+ *     2 for release candidate
+ *     3 for (final) release
+ *   ie.
+ *     1.2.5.0 instead of 1.2.5-a
+ *     1.2.5.0.1 instead of 1.2.5-a1 (I'm not sure)
+ */
 defined("APP_VERSION") OR define("APP_VERSION", "1.0.0");
 
 /***************************************

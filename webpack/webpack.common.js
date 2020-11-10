@@ -52,9 +52,12 @@ module.exports = {
             fileName: "manifest.json"
         }),
         new CleanWebpackPlugin(),
-        new webpack.DefinePlugin( {
+        new webpack.DefinePlugin({
             "process.env": dotenv.parsed
-        } ),
+        }),
+        new webpack.ProvidePlugin({
+            Promise: ['es6-promise', 'Promise']
+        }),
     ],
     module: {
         rules: [
