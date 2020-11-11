@@ -314,6 +314,39 @@ return [
             'css' => [
             ],
         ],
+        'view/coupon/add' => [
+            'title' => 'پایار تأسیسات | ,مشاهده کوپن‌های تخفیف',
+            'common' => 'admin',
+            'js' => [
+                'bottom' => [
+
+                ],
+            ],
+            'css' => [
+            ],
+        ],
+        'view/coupon/edit' => [
+            'title' => 'پایار تأسیسات | ,ویرایش کوپن‌های تخفیف',
+            'common' => 'admin',
+            'js' => [
+                'bottom' => [
+
+                ],
+            ],
+            'css' => [
+            ],
+        ],
+        'view/coupon/view' => [
+            'title' => 'پایار تأسیسات | ,مشاهده کوپن‌های تخفیف',
+            'common' => 'admin',
+            'js' => [
+                'bottom' => [
+
+                ],
+            ],
+            'css' => [
+            ],
+        ],
     ],
     'tablet' => [
         'default' => [

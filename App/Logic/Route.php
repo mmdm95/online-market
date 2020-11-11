@@ -110,6 +110,16 @@ class Route implements IInitialize
                     'id' => '[0-9]+',
                 ])->name('admin.category.edit');
                 Router::get('/category/view', 'Admin\CategoryController@view')->name('admin.category.view');
+
+                /**
+                 * Coupon Route
+                 */
+                Router::get('/coupon/add', 'Admin\CouponController@add')->name('admin.coupon.add');
+                Router::get('/coupon/edit/{id}', 'Admin\CouponController@edit')->where([
+                    'id' => '[0-9]+',
+                ])->name('admin.coupon.edit');
+                Router::get('/coupon/view', 'Admin\CouponController@view')->name('admin.coupon.view');
+
             });
 
 
