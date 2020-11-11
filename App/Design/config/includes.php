@@ -176,6 +176,16 @@ return [
                         ),
                         e(
                             '<script type="text/javascript" src="' .
+                            asset_path('be/js/plugins/pickers/color/spectrum.js') .
+                            '"></script>'
+                        ),
+                        e(
+                            '<script type="text/javascript" src="' .
+                            asset_path('be/js/demo_pages/picker_color.js') .
+                            '"></script>'
+                        ),
+                        e(
+                            '<script type="text/javascript" src="' .
                             asset_path('be/js/app.js') .
                             '"></script>'
                         ),
@@ -345,6 +355,30 @@ return [
                 ],
             ],
             'css' => [
+            ],
+        ],
+        'view/color/add' => [
+            'title' => 'پایار تأسیسات | افزودن رنگ‌ جدید',
+            'common' => 'admin',
+            'js' => [
+                'bottom' => [
+
+                ],
+            ],
+            'css' => [
+
+            ],
+        ],
+        'view/color/view' => [
+            'title' => 'پایار تأسیسات | لیست رنگ‌‌ها',
+            'common' => 'admin',
+            'js' => [
+                'bottom' => [
+
+                ],
+            ],
+            'css' => [
+
             ],
         ],
     ],

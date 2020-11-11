@@ -88,6 +88,18 @@
                     </ul>
                 </li>
                 <li class="nav-item nav-item-submenu">
+                    <a href="#" class="nav-link"><i class="icon-bucket"></i> <span>رنگ‌ها</span></a>
+
+                    <ul class="nav nav-group-sub" data-submenu-title="Layouts">
+                        <li class="nav-item"><a href="<?= url('admin.color.add'); ?>" class="nav-link active">
+                                افزودن رنگ جدید
+                            </a></li>
+                        <li class="nav-item"><a href="<?= url('admin.color.view'); ?>" class="nav-link">
+                                لیست رنگ‌ها
+                            </a></li>
+                    </ul>
+                </li>
+                <li class="nav-item nav-item-submenu">
                     <a href="#" class="nav-link"><i class="icon-credit-card"></i> <span>کوپن‌های تخفیف</span></a>
 
                     <ul class="nav nav-group-sub" data-submenu-title="Layouts">
@@ -99,6 +111,7 @@
                             </a></li>
                     </ul>
                 </li>
+
                 <!-- /main -->
 
                 <!-- Forms -->

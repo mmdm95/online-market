@@ -120,6 +120,13 @@ class Route implements IInitialize
                 ])->name('admin.coupon.edit');
                 Router::get('/coupon/view', 'Admin\CouponController@view')->name('admin.coupon.view');
 
+                /**
+                 * Color Rout
+                 */
+                Router::get('/color/add', 'Admin\ColorController@add')->name('admin.color.add');
+                Router::get('/color/view', 'Admin\ColorController@view')->name('admin.color.view');
+
+
             });
 
 
