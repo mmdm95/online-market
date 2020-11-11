@@ -91,8 +91,6 @@ return [
             'admin' => [
                 'js' => [
                     'top' => [
-                    ],
-                    'bottom' => [
                         e(
                             '<script type="text/javascript" src="' .
                             asset_path('be/js/main/jquery.min.js') .
@@ -103,6 +101,8 @@ return [
                             asset_path('be/js/main/bootstrap.bundle.min.js') .
                             '"></script>'
                         ),
+                    ],
+                    'bottom' => [
                         e(
                             '<script type="text/javascript" src="' .
                             asset_path('be/js/plugins/loaders/blockui.min.js') .
@@ -125,9 +125,61 @@ return [
                         ),
                         e(
                             '<script type="text/javascript" src="' .
+                            asset_path('be/js/plugins/forms/selects/select2.min.js') .
+                            '"></script>'
+                        ),
+                        e(
+                            '<script type="text/javascript" src="' .
+                            asset_path('be/js/demo_pages/form_layouts.js') .
+                            '"></script>'
+                        ),
+                        e(
+                            '<script type="text/javascript" src="' .
+                            asset_path('be/js/plugins/tables/datatables/datatables.min.js') .
+                            '"></script>'
+                        ),
+                        e(
+                            '<script type="text/javascript" src="' .
+                            asset_path('be/js/demo_pages/datatables_advanced.js') .
+                            '"></script>'
+                        ),
+                        e(
+                            '<script type="text/javascript" src="' .
+                            asset_path('be/js/demo_pages/components_modals.js') .
+                            '"></script>'
+                        ),
+                        e(
+                            '<script type="text/javascript" src="' .
+                            asset_path('be/js/plugins/media/fancybox.min.js') .
+                            '"></script>'
+                        ),
+                        e(
+                            '<script type="text/javascript" src="' .
+                            asset_path('be/js/plugins/forms/styling/switchery.min.js') .
+                            '"></script>'
+                        ),
+
+                        e(
+                            '<script type="text/javascript" src="' .
+                            asset_path('be/js/plugins/forms/styling/switch.min.js') .
+                            '"></script>'
+                        ),
+                        e(
+                            '<script type="text/javascript" src="' .
+                            asset_path('be/js/demo_pages/gallery.js') .
+                            '"></script>'
+                        ),
+                        e(
+                            '<script type="text/javascript" src="' .
+                            asset_path('be/js/demo_pages/form_checkboxes_radios.js') .
+                            '"></script>'
+                        ),
+                        e(
+                            '<script type="text/javascript" src="' .
                             asset_path('be/js/app.js') .
                             '"></script>'
                         ),
+
                     ],
                 ],
                 'css' => [
@@ -176,12 +228,65 @@ return [
                 ],
             ],
         ],
-        'view/admin-login' => [
+        'view/user/view' => [
+            'title' => 'پایار تأسیسات | مشاهده کاربران',
             'common' => 'admin',
             'js' => [
-                'top' => [
-                ],
                 'bottom' => [
+                    e(
+                        '<script type="text/javascript" src="' .
+                        asset_path('be/js/plugins/tables/datatables/datatables.min.js') .
+                        '"></script>'
+                    ),
+                    e(
+                        '<script type="text/javascript" src="' .
+                        asset_path('be/js/demo_pages/datatables_advanced.js') .
+                        '"></script>'
+                    ),
+                ],
+            ],
+            'css' => [
+            ],
+        ],
+        'view/user/add' => [
+            'title' => 'پایار تأسیسات | افزودن کاربر',
+            'common' => 'admin',
+            'js' => [
+                'bottom' => [
+
+                ],
+            ],
+            'css' => [
+            ],
+        ],
+        'view/user/edit' => [
+            'title' => 'پایار تأسیسات | ویرایش کاربر',
+            'common' => 'admin',
+            'js' => [
+                'bottom' => [
+
+                ],
+            ],
+            'css' => [
+            ],
+        ],
+        'view/user/view-profile' => [
+            'title' => 'پایار تأسیسات | مشاهده کاربر',
+            'common' => 'admin',
+            'js' => [
+                'bottom' => [
+
+                ],
+            ],
+            'css' => [
+            ],
+        ],
+        'view/category/add' => [
+            'title' => 'پایار تأسیسات | افزودن دسته',
+            'common' => 'admin',
+            'js' => [
+                'bottom' => [
+
                 ],
             ],
             'css' => [

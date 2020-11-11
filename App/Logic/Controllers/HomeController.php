@@ -8,7 +8,7 @@ class HomeController extends AbstractController
 {
     public function index()
     {
-        $this->setTemplate('partial/simple');
+        $this->setTemplate('view/index');
 
         return $this->render();
     }
