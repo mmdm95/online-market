@@ -22,5 +22,4 @@ class CategoryController extends AbstractAdminController
 
         return $this->render();
     }
-
 }
