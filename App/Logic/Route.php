@@ -89,13 +89,33 @@ class Route implements IInitialize
             // other pages that need authentication
             Router::group(['prefix' => '/admin/', 'middleware' => AdminAuthMiddleware::class], function () {
                 Router::get('/', 'Admin\HomeController@index')->name('admin.index');
+
+                /**
+                 * User Route
+                 */
+                Router::get('/user/view/{id?}', 'Admin\UserController@view')
+                    ->where([
+                        'id' => '[0-9]+',
+                    ])->name('admin.user.view');
+                Router::get('/user/add', 'Admin\UserController@add')->name('admin.user.add');
+                Router::get('/user/edit/{id}', 'Admin\UserController@edit')->where([
+                    'id' => '[0-9]+',
+                ])->name('admin.user.edit');
+
+                /**
+                 * Category Route
+                 */
+                Router::get('/category/add', 'Admin\CategoryController@add')->name('admin.category.add');
+                Router::get('/user/edit/{id}', 'Admin\UserController@edit')->where([
+                    'id' => '[0-9]+',
+                ])->name('admin.user.edit');
+
             });
 
             //==========================
             // other routes
             //==========================
             Router::get('/', 'HomeController@index')->name('home.index');
-
             Router::get('/home/{id?}', 'HomeController@index');
             Router::get('/answers/{id}', 'HomeController@show', ['where' => ['id' => '[0-9]+']]);
 
