@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Logic\Abstracts;
 use Sim\Abstracts\Mvc\Controller\AbstractController;
 

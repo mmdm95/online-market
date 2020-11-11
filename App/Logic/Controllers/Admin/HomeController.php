@@ -11,7 +11,6 @@ use Sim\Interfaces\IInvalidVariableNameException;
 
 class HomeController extends AbstractAdminController
 {
-
     public function index()
     {
         $this->setTemplate('partial/simple');

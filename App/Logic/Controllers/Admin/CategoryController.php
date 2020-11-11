@@ -7,7 +7,6 @@ use App\Logic\Abstracts\AbstractAdminController;
 
 class CategoryController extends AbstractAdminController
 {
-
     /**
      * @return string
      * @throws \ReflectionException
