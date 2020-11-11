@@ -292,6 +292,28 @@ return [
             'css' => [
             ],
         ],
+        'view/category/edit' => [
+            'title' => 'پایار تأسیسات | ,ویرایش دسته',
+            'common' => 'admin',
+            'js' => [
+                'bottom' => [
+
+                ],
+            ],
+            'css' => [
+            ],
+        ],
+        'view/category/view' => [
+            'title' => 'پایار تأسیسات | ,مشاهده دسته‌بندی‌ها',
+            'common' => 'admin',
+            'js' => [
+                'bottom' => [
+
+                ],
+            ],
+            'css' => [
+            ],
+        ],
     ],
     'tablet' => [
         'default' => [
