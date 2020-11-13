@@ -11,8 +11,36 @@
     <?= $js['top'] ?? ''; ?>
 </head>
 <body>
+
+<!-- Main navbar -->
 <?php load_partial('admin/main-nav'); ?>
-<?= $content; ?>
+<!-- /main navbar -->
+
+<!-- Page content -->
+<div class="page-content">
+    <!-- Main sidebar -->
+    <?php load_partial('admin/main-sidebar'); ?>
+    <!-- /main sidebar -->
+
+    <!-- Main content -->
+    <div class="content-wrapper">
+        <!-- Page header -->
+        <?php load_partial('admin/page-header', [
+                'sub_title' => $sub_title ?? '',
+                'breadcrumb' => $breadcrumb ?? [],
+        ]); ?>
+        <!-- /page header -->
+
+        <?= $content; ?>
+
+        <!-- Footer -->
+        <?php load_partial('admin/footer'); ?>
+        <!-- /footer -->
+
+    </div>
+    <!-- /main content -->
+</div>
+<!-- /page content -->
 </body>
 <?= $js['bottom'] ?? ''; ?>
 </html>

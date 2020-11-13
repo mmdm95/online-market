@@ -1,4 +1,4 @@
-<!-- Main navbar -->
+
 <div class="navbar navbar-expand-md navbar-dark">
     <div class="navbar-brand">
         <a href="index.html" class="d-inline-block">
@@ -87,4 +87,3 @@
         </ul>
     </div>
 </div>
-<!-- /main navbar -->

@@ -55,6 +55,13 @@ return [
     // Manifest path
     'manifest' => BASE_ROOT . 'public/build/manifest.json',
 
+    // Tests path
+    'test' => BASE_ROOT . 'Tests/',
+
+    // Uploads path(s)
+    'upload' => BASE_ROOT . 'Uploads/',
+    'upload-root' => BASE_ROOT . 'Uploads/root/',
+
     // Config file(s) path
     'default_config' => [
         'main' => __DIR__ . '/config.php',

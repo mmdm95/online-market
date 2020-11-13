@@ -10,6 +10,14 @@ class ResourceHandler
     protected $data = [];
 
     /**
+     * ResourceHandler constructor.
+     */
+    public function __construct()
+    {
+        $this->resetData();
+    }
+
+    /**
      * @param int $code
      * @return static
      */
@@ -45,5 +53,20 @@ class ResourceHandler
     public function getReturnData(): array
     {
         return $this->data;
+    }
+
+    /**
+     * Reset data
+     *
+     * @return static
+     */
+    public function resetData()
+    {
+        $this
+            ->statusCode(200)
+            ->errorMessage(null)
+            ->data([]);
+
+        return $this;
     }
 }
