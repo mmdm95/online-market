@@ -37,7 +37,6 @@
         </div>
         <!-- /page header -->
 
-
         <!-- Content area -->
         <div class="content">
 
@@ -55,7 +54,7 @@
                 </div>
 
                 <div class="card-body">
-                    با استفاده از ستون عملیات می‌توانید اقدام به حذف رنگ کنید.
+                    با استفاده از ستون عملیات می‌توانید اقدام به حذف، ویرایش و مشاهده خرید‌های کاربر کنید.
                 </div>
 
                 <table class="table table-bordered table-hover datatable-highlight">
@@ -71,10 +70,10 @@
                     <tbody>
                     <tr>
                         <td>۱</td>
-                        <td>طلایی</td>
-                        <td>#fff000</td>
+                        <td>رز گلد</td>
+                        <td>#fffeee</td>
                         <td>
-                            <span class="icon icon-stop2 font-size-lg" style="color: #fff000"></span>
+                            <span class="p-2 d-inline-block rounded shadow-3 border-grey-300 border-1" style="background-color: #dd4a68;"></span>
                         </td>
                         <td class="text-center">
                             <div class="list-icons">
@@ -82,8 +81,11 @@
                                     <a href="#" class="list-icons-item" data-toggle="dropdown">
                                         <i class="icon-menu9"></i>
                                     </a>
+
                                     <div class="dropdown-menu dropdown-menu-right">
+                                        <a href="#" class="dropdown-item"><i class="icon-pencil"></i>ویرایش</a>
                                         <a href="#" class="dropdown-item"><i class="icon-trash"></i>حذف</a>
+                                        <a href="#" class="dropdown-item"><i class="icon-cart"></i>خریدها</a>
                                     </div>
                                 </div>
                             </div>
