@@ -124,15 +124,33 @@ class Route implements IInitialize
                  * Category Route
                  */
                 Router::get('/category/add', 'Admin\CategoryController@add')->name('admin.category.add');
-                Router::get('/user/edit/{id}', 'Admin\UserController@edit')->where([
+                Router::get('/category/edit/{id}', 'Admin\CategoryController@edit')->where([
                     'id' => '[0-9]+',
-                ])->name('admin.user.edit');
+                ])->name('admin.category.edit');
+                Router::get('/category/view', 'Admin\CategoryController@view')->name('admin.category.view');
+
+                /**
+                 * Coupon Route
+                 */
+                Router::get('/coupon/add', 'Admin\CouponController@add')->name('admin.coupon.add');
+                Router::get('/coupon/edit/{id}', 'Admin\CouponController@edit')->where([
+                    'id' => '[0-9]+',
+                ])->name('admin.coupon.edit');
+                Router::get('/coupon/view', 'Admin\CouponController@view')->name('admin.coupon.view');
+
+                /**
+                 * Color Rout
+                 */
+                Router::get('/color/add', 'Admin\ColorController@add')->name('admin.color.add');
+                Router::get('/color/view', 'Admin\ColorController@view')->name('admin.color.view');
+
 
                 /**
                  * File Manager Route
                  */
                 Router::get('/file-manager', 'Admin\FileController@index')->name('admin.file-manager');
             });
+
 
             //==========================
             // other routes

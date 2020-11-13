@@ -5,8 +5,9 @@ namespace App\Logic\Controllers\Admin;
 
 use App\Logic\Abstracts\AbstractAdminController;
 
-class CategoryController extends AbstractAdminController
+class ProductController extends AbstractAdminController
 {
+
     /**
      * @return string
      * @throws \ReflectionException
@@ -18,12 +19,10 @@ class CategoryController extends AbstractAdminController
      */
     public function add()
     {
-        $this->setLayout($this->main_layout)->setTemplate('view/category/add');
+        $this->setLayout($this->main_layout)->setTemplate('view/product/add');
 
         return $this->render();
     }
-<<<<<<< HEAD
-=======
 
     /**
      * @param $id
@@ -37,7 +36,7 @@ class CategoryController extends AbstractAdminController
      */
     public function edit($id)
     {
-        $this->setLayout($this->main_layout)->setTemplate('view/category/edit');
+        $this->setLayout($this->main_layout)->setTemplate('view/product/edit');
 
         return $this->render();
     }
@@ -53,10 +52,9 @@ class CategoryController extends AbstractAdminController
      */
     public function view()
     {
-        $this->setLayout($this->main_layout)->setTemplate('view/category/view');
+        $this->setLayout($this->main_layout)->setTemplate('view/product/view');
 
         return $this->render();
     }
 
->>>>>>> 38fa135840b78f8276d8c9e79c020469cd5260ba
 }

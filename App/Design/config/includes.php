@@ -226,11 +226,32 @@ return [
                         ),
                         e(
                             '<script type="text/javascript" src="' .
+                            asset_path('be/js/demo_pages/picker_color.js') .
+                            '"></script>'
+                        ),
+                        e(
+                            '<script type="text/javascript" src="' .
+                            asset_path('be/js/app.js') .
+                            '"></script>'
+                        ),
+                        e(
+                            '<script type="text/javascript" src="' .
                             asset_path('be/js/plugins/tables/datatables/datatables.min.js') .
                             '"></script>'
                         ),
                     ]
                 ],
+            ],
+            'admin-color' => [
+                'js' => [
+                    'bottom' => [
+                        e(
+                            '<script type="text/javascript" src="' .
+                            asset_path('be/js/plugins/pickers/color/spectrum.js') .
+                            '"></script>'
+                        ),
+                    ]
+                ]
             ],
             'admin' => [
                 'js' => [
@@ -358,6 +379,63 @@ return [
         ],
         'view/file-manager/index' => [
             'title' => 'پایار تأسیسات | مدیریت فایل‌ها',
+            'common' => [
+                'admin-base',
+                'admin-form',
+                'admin'
+            ],
+        ],
+        'view/category/edit' => [
+            'title' => 'پایار تأسیسات | ,ویرایش دسته',
+            'common' => [
+                'admin-base',
+                'admin-form',
+                'admin'
+            ],
+        ],
+        'view/category/view' => [
+            'title' => 'پایار تأسیسات | ,مشاهده دسته‌بندی‌ها',
+            'common' => [
+                'admin-base',
+                'admin-form',
+                'admin'
+            ],
+        ],
+        'view/coupon/add' => [
+            'title' => 'پایار تأسیسات | ,مشاهده کوپن‌های تخفیف',
+            'common' => [
+                'admin-base',
+                'admin-form',
+                'admin'
+            ],
+        ],
+        'view/coupon/edit' => [
+            'title' => 'پایار تأسیسات | ,ویرایش کوپن‌های تخفیف',
+            'common' => [
+                'admin-base',
+                'admin-form',
+                'admin'
+            ],
+        ],
+        'view/coupon/view' => [
+            'title' => 'پایار تأسیسات | ,مشاهده کوپن‌های تخفیف',
+            'common' => 'admin', [
+                'admin-base',
+                'admin-form',
+                'admin'
+            ],
+        ],
+        'view/color/add' => [
+            'title' => 'پایار تأسیسات | افزودن رنگ‌ جدید',
+            'common' => [
+                'admin-base',
+                'admin-form',
+                'admin-color',
+                'admin'
+            ],
+        ],
+        'view/color/view' => [
+            'title' => 'پایار تأسیسات | لیست رنگ‌‌ها',
             'common' => [
                 'admin-base',
                 'admin-form',
