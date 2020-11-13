@@ -6,7 +6,6 @@ use App\Logic\Abstracts\AbstractAdminController;
 
 class UserController extends AbstractAdminController
 {
-
     /**
      * @param null $id
      * @return string
@@ -21,9 +20,9 @@ class UserController extends AbstractAdminController
     {
         if (!is_null($id)) {
             $this->setLayout($this->main_layout)->setTemplate('view/user/view-profile');
-            return $this->render();
-        } else
+        } else {
             $this->setLayout($this->main_layout)->setTemplate('view/user/view');
+        }
 
         return $this->render();
     }
@@ -60,5 +59,4 @@ class UserController extends AbstractAdminController
 
         return $this->render();
     }
-
 }

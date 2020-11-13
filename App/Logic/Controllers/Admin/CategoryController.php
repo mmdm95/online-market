@@ -7,7 +7,6 @@ use App\Logic\Abstracts\AbstractAdminController;
 
 class CategoryController extends AbstractAdminController
 {
-
     /**
      * @return string
      * @throws \ReflectionException
@@ -23,6 +22,8 @@ class CategoryController extends AbstractAdminController
 
         return $this->render();
     }
+<<<<<<< HEAD
+=======
 
     /**
      * @param $id
@@ -57,4 +58,5 @@ class CategoryController extends AbstractAdminController
         return $this->render();
     }
 
+>>>>>>> 38fa135840b78f8276d8c9e79c020469cd5260ba
 }

@@ -37,23 +37,15 @@
                                     مرا به خاطر بسپار!
                                 </label>
                             </div>
-
-                            <a href="login_password_recover.html" class="ml-auto">بازیابی رمز عبور</a>
                         </div>
 
                         <div class="form-group">
-                            <button type="submit" class="btn btn-primary btn-block">وارد شو <i class="icon-circle-left2 ml-2"></i></button>
+                            <button type="submit" class="btn btn-primary btn-block">وارد شو <i
+                                        class="icon-circle-left2 ml-2"></i></button>
                         </div>
 
-                        <div class="form-group text-center text-muted content-divider">
-                            <span class="px-2">حساب کاربری ندارید؟</span>
-                        </div>
-
-                        <div class="form-group">
-                            <a href="#" class="btn btn-light btn-block">ثبت نام کنید.</a>
-                        </div>
-
-                        <span class="form-text text-center text-muted">توسعه داده شده توسط <a href="#">تیم</a> <a href="#">هیوا</a> </span>
+                        <span class="form-text text-center text-muted">توسعه داده شده توسط <a
+                                    href="#">تیم هیوا</a></span>
                     </div>
                 </div>
             </form>

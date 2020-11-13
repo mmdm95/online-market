@@ -2570,7 +2570,7 @@ input[class*=bg-]:not(.bg-light):not(.bg-white):not(.bg-transparent) + .form-con
 
 .navbar-dark {
     color: rgba(255, 255, 255, .9);
-    background-color: #1976d2
+    background-color: #4b60da
 }
 
 .navbar-dark .navbar-nav .nav-link {

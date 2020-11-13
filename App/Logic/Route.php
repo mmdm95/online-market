@@ -2,9 +2,12 @@
 
 namespace App\Logic;
 
-use App\Logic\Controllers\ResourceController;
 use App\Logic\Handlers\CustomExceptionHandler;
+use App\Logic\Middlewares\AdminApiVerificationMiddleware;
 use App\Logic\Middlewares\AdminAuthMiddleware;
+use App\Logic\Middlewares\ApiVerificationMiddleware;
+use Pecee\SimpleRouter\Event\EventArgument;
+use Pecee\SimpleRouter\Handlers\EventHandler;
 use Pecee\SimpleRouter\SimpleRouter as Router;
 use Sim\Interfaces\IInitialize;
 
@@ -17,8 +20,10 @@ class Route implements IInitialize
     public function init()
     {
         $this->setDependencyInjection();
+        $this->setEventHandlers();
         $this->setDefaultNamespace();
         $this->webRoutes();
+        $this->apiRoutes();
     }
 
     /**
@@ -45,6 +50,19 @@ class Route implements IInitialize
 
         // Add our container to simple-router and enable dependency injection
         Router::enableDependencyInjection($container);
+    }
+
+    protected function setEventHandlers()
+    {
+        $eventHandler = new EventHandler();
+
+        // Add event that fires when a route is rendered
+        $eventHandler->register(EventHandler::EVENT_RENDER_ROUTE, function (EventArgument $argument) {
+            // read config from database and store in config manager
+            // ...
+        });
+
+        Router::addEventHandler($eventHandler);
     }
 
     /**
@@ -127,6 +145,10 @@ class Route implements IInitialize
                 Router::get('/color/view', 'Admin\ColorController@view')->name('admin.color.view');
 
 
+                /**
+                 * File Manager Route
+                 */
+                Router::get('/file-manager', 'Admin\FileController@index')->name('admin.file-manager');
             });
 
 
@@ -134,13 +156,34 @@ class Route implements IInitialize
             // other routes
             //==========================
             Router::get('/', 'HomeController@index')->name('home.index');
-            Router::get('/home/{id?}', 'HomeController@index');
-            Router::get('/answers/{id}', 'HomeController@show', ['where' => ['id' => '[0-9]+']]);
+        });
+    }
 
-            /**
-             * Restful resource (see IResourceController interface for available methods)
-             */
-            Router::resource('/api', ResourceController::class);
+    /**
+     * Routes of api part
+     */
+    protected function apiRoutes()
+    {
+        Router::group([
+            'exceptionHandler' => CustomExceptionHandler::class,
+            'middleware' => ApiVerificationMiddleware::class
+        ], function () {
+            //==========================
+            // admin routes
+            //==========================
+            Router::group(['prefix' => '/api/', 'middleware' => AdminApiVerificationMiddleware::class], function () {
+                /**
+                 * File Manager Route
+                 */
+                Router::get('/file-manager/list', 'Admin\FileController@list')->name('api.file-manager.list');
+                Router::post('/file-manager/rename', 'Admin\FileController@rename')->name('api.file-manager.rename');
+                Router::post('/file-manager/delete', 'Admin\FileController@delete')->name('api.file-manager.delete');
+                Router::post('/file-manager/mkdir', 'Admin\FileController@makeDir')->name('api.file-manager.mkdir');
+                Router::post('/file-manager/mvdir', 'Admin\FileController@moveDir')->name('api.file-manager.mvdir');
+                Router::post('/file-manager/upload', 'Admin\FileController@upload')->name('api.file-manager.upload');
+                Router::post('/file-manager/download', 'Admin\FileController@download')->name('api.file-manager.download');
+                Router::post('/file-manager/dir-tree', 'Admin\FileController@foldersTree')->name('api.file-manager.tree');
+            });
         });
     }
 }

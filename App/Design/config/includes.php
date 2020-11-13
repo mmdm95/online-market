@@ -42,11 +42,16 @@ return [
      *                     'bottom' => [
      *                     ],
      *                   ]
-     *           'css' => css files,
+     *           'css' => [
+     *                     'top' => [
+     *                     ],
+     *                     'bottom' => [
+     *                     ],
+     *                   ],
      *         ]
      *     ],
      *     'example-page' => [
-     *       'common' => 'default',
+     *       'common' => 'default' or array of common like ['default', 'admin'],
      *       ...
      *     ]
      *   ]
@@ -88,7 +93,7 @@ return [
                 'css' => [
                 ],
             ],
-            'admin' => [
+            'admin-base' => [
                 'js' => [
                     'top' => [
                         e(
@@ -128,68 +133,6 @@ return [
                             asset_path('be/js/plugins/forms/selects/select2.min.js') .
                             '"></script>'
                         ),
-                        e(
-                            '<script type="text/javascript" src="' .
-                            asset_path('be/js/demo_pages/form_layouts.js') .
-                            '"></script>'
-                        ),
-                        e(
-                            '<script type="text/javascript" src="' .
-                            asset_path('be/js/plugins/tables/datatables/datatables.min.js') .
-                            '"></script>'
-                        ),
-                        e(
-                            '<script type="text/javascript" src="' .
-                            asset_path('be/js/demo_pages/datatables_advanced.js') .
-                            '"></script>'
-                        ),
-                        e(
-                            '<script type="text/javascript" src="' .
-                            asset_path('be/js/demo_pages/components_modals.js') .
-                            '"></script>'
-                        ),
-                        e(
-                            '<script type="text/javascript" src="' .
-                            asset_path('be/js/plugins/media/fancybox.min.js') .
-                            '"></script>'
-                        ),
-                        e(
-                            '<script type="text/javascript" src="' .
-                            asset_path('be/js/plugins/forms/styling/switchery.min.js') .
-                            '"></script>'
-                        ),
-
-                        e(
-                            '<script type="text/javascript" src="' .
-                            asset_path('be/js/plugins/forms/styling/switch.min.js') .
-                            '"></script>'
-                        ),
-                        e(
-                            '<script type="text/javascript" src="' .
-                            asset_path('be/js/demo_pages/gallery.js') .
-                            '"></script>'
-                        ),
-                        e(
-                            '<script type="text/javascript" src="' .
-                            asset_path('be/js/demo_pages/form_checkboxes_radios.js') .
-                            '"></script>'
-                        ),
-                        e(
-                            '<script type="text/javascript" src="' .
-                            asset_path('be/js/plugins/pickers/color/spectrum.js') .
-                            '"></script>'
-                        ),
-                        e(
-                            '<script type="text/javascript" src="' .
-                            asset_path('be/js/demo_pages/picker_color.js') .
-                            '"></script>'
-                        ),
-                        e(
-                            '<script type="text/javascript" src="' .
-                            asset_path('be/js/app.js') .
-                            '"></script>'
-                        ),
-
                     ],
                 ],
                 'css' => [
@@ -234,151 +177,269 @@ return [
                             hashed_path('css', 'font.css') .
                             '" rel="stylesheet" type="text/css">'
                         ),
+                    ],
+                ],
+            ],
+            'admin-form' => [
+                'js' => [
+                    'bottom' => [
+                        e(
+                            '<script type="text/javascript" src="' .
+                            asset_path('be/js/demo_pages/components_modals.js') .
+                            '"></script>'
+                        ),
+                        e(
+                            '<script type="text/javascript" src="' .
+                            asset_path('be/js/plugins/media/fancybox.min.js') .
+                            '"></script>'
+                        ),
+                        e(
+                            '<script type="text/javascript" src="' .
+                            asset_path('be/js/plugins/forms/styling/switchery.min.js') .
+                            '"></script>'
+                        ),
+                        e(
+                            '<script type="text/javascript" src="' .
+                            asset_path('be/js/demo_pages/gallery.js') .
+                            '"></script>'
+                        ),
+                        e(
+                            '<script type="text/javascript" src="' .
+                            asset_path('be/js/plugins/forms/styling/switch.min.js') .
+                            '"></script>'
+                        ),
+                        e(
+                            '<script type="text/javascript" src="' .
+                            asset_path('be/js/demo_pages/form_checkboxes_radios.js') .
+                            '"></script>'
+                        ),
+                    ],
+                ]
+            ],
+            'admin-table' => [
+                'js' => [
+                    'bottom' => [
+                        e(
+                            '<script type="text/javascript" src="' .
+                            asset_path('be/js/demo_pages/datatables_advanced.js') .
+                            '"></script>'
+                        ),
+                        e(
+                            '<script type="text/javascript" src="' .
+                            asset_path('be/js/demo_pages/picker_color.js') .
+                            '"></script>'
+                        ),
+                        e(
+                            '<script type="text/javascript" src="' .
+                            asset_path('be/js/app.js') .
+                            '"></script>'
+                        ),
+                        e(
+                            '<script type="text/javascript" src="' .
+                            asset_path('be/js/plugins/tables/datatables/datatables.min.js') .
+                            '"></script>'
+                        ),
                     ]
                 ],
+            ],
+            'admin-color' => [
+                'js' => [
+                    'bottom' => [
+                        e(
+                            '<script type="text/javascript" src="' .
+                            asset_path('be/js/plugins/pickers/color/spectrum.js') .
+                            '"></script>'
+                        ),
+                    ]
+                ]
+            ],
+            'admin' => [
+                'js' => [
+                    'bottom' => [
+                        e(
+                            '<script type="text/javascript" src="' .
+                            asset_path('be/js/demo_pages/components_popups.js') .
+                            '"></script>'
+                        ),
+                        e(
+                            '<script type="text/javascript" src="' .
+                            asset_path('be/js/demo_pages/form_layouts.js') .
+                            '"></script>'
+                        ),
+                        e(
+                            '<script type="text/javascript" src="' .
+                            asset_path('be/js/app.js') .
+                            '"></script>'
+                        ),
+                    ],
+                ],
+            ],
+        ],
+        'view/admin-login' => [
+            'title' => 'پایار تأسیسات | صفحه ورود',
+            'common' => [
+                'admin-base',
+                'admin'
             ],
         ],
         'view/user/view' => [
             'title' => 'پایار تأسیسات | مشاهده کاربران',
-            'common' => 'admin',
-            'js' => [
-                'bottom' => [
-                    e(
-                        '<script type="text/javascript" src="' .
-                        asset_path('be/js/plugins/tables/datatables/datatables.min.js') .
-                        '"></script>'
-                    ),
-                    e(
-                        '<script type="text/javascript" src="' .
-                        asset_path('be/js/demo_pages/datatables_advanced.js') .
-                        '"></script>'
-                    ),
-                ],
-            ],
-            'css' => [
+            'common' => [
+                'admin-base',
+                'admin-form',
+                'admin-table',
+                'admin'
             ],
         ],
         'view/user/add' => [
             'title' => 'پایار تأسیسات | افزودن کاربر',
-            'common' => 'admin',
-            'js' => [
-                'bottom' => [
-
-                ],
+            'common' => [
+                'admin-base',
+                'admin-form',
+                'admin'
             ],
-            'css' => [
+            'sub_title' => 'مدیریت کاربران',
+            'breadcrumb' => [
+                [
+                    'url' => url('admin.index'),
+                    'icon' => 'icon-home2',
+                    'text' => 'خانه',
+                    'is_active' => false,
+                ],
+                [
+                    'url' => url('admin.user.view'),
+                    'text' => 'کاربران',
+                    'is_active' => false,
+                ],
+                [
+                    'text' => 'افزودن کاربر',
+                    'is_active' => true,
+                ]
             ],
         ],
         'view/user/edit' => [
             'title' => 'پایار تأسیسات | ویرایش کاربر',
-            'common' => 'admin',
-            'js' => [
-                'bottom' => [
-
-                ],
+            'common' => [
+                'admin-base',
+                'admin-form',
+                'admin'
             ],
-            'css' => [
+            'sub_title' => 'مدیریت کاربران',
+            'breadcrumb' => [
+                [
+                    'url' => url('admin.index'),
+                    'icon' => 'icon-home2',
+                    'text' => 'خانه',
+                    'is_active' => false,
+                ],
+                [
+                    'url' => url('admin.user.view'),
+                    'text' => 'کاربران',
+                    'is_active' => false,
+                ],
+                [
+                    'text' => 'ویرایش کاربر',
+                    'is_active' => true,
+                ]
             ],
         ],
         'view/user/view-profile' => [
             'title' => 'پایار تأسیسات | مشاهده کاربر',
-            'common' => 'admin',
-            'js' => [
-                'bottom' => [
-
-                ],
-            ],
-            'css' => [
+            'common' => [
+                'admin-base',
+                'admin-form',
+                'admin'
             ],
         ],
         'view/category/add' => [
             'title' => 'پایار تأسیسات | افزودن دسته',
-            'common' => 'admin',
-            'js' => [
-                'bottom' => [
-
+            'common' => [
+                'admin-base',
+                'admin-form',
+                'admin'
+            ],
+            'sub_title' => 'مدیریت دسته‌بندی‌ها',
+            'breadcrumb' => [
+                [
+                    'url' => url('admin.index'),
+                    'icon' => 'icon-home2',
+                    'text' => 'خانه',
+                    'is_active' => false,
+                ],
+                [
+                    'url' => url('admin.category.add'),
+                    'text' => 'دسته‌بندی‌ها',
+                    'is_active' => false,
+                ],
+                [
+                    'text' => 'افزودن دسته',
+                    'is_active' => true,
                 ],
             ],
-            'css' => [
+        ],
+        'view/file-manager/index' => [
+            'title' => 'پایار تأسیسات | مدیریت فایل‌ها',
+            'common' => [
+                'admin-base',
+                'admin-form',
+                'admin'
             ],
         ],
         'view/category/edit' => [
             'title' => 'پایار تأسیسات | ,ویرایش دسته',
-            'common' => 'admin',
-            'js' => [
-                'bottom' => [
-
-                ],
-            ],
-            'css' => [
+            'common' => [
+                'admin-base',
+                'admin-form',
+                'admin'
             ],
         ],
         'view/category/view' => [
             'title' => 'پایار تأسیسات | ,مشاهده دسته‌بندی‌ها',
-            'common' => 'admin',
-            'js' => [
-                'bottom' => [
-
-                ],
-            ],
-            'css' => [
+            'common' => [
+                'admin-base',
+                'admin-form',
+                'admin'
             ],
         ],
         'view/coupon/add' => [
             'title' => 'پایار تأسیسات | ,مشاهده کوپن‌های تخفیف',
-            'common' => 'admin',
-            'js' => [
-                'bottom' => [
-
-                ],
-            ],
-            'css' => [
+            'common' => [
+                'admin-base',
+                'admin-form',
+                'admin'
             ],
         ],
         'view/coupon/edit' => [
             'title' => 'پایار تأسیسات | ,ویرایش کوپن‌های تخفیف',
-            'common' => 'admin',
-            'js' => [
-                'bottom' => [
-
-                ],
-            ],
-            'css' => [
+            'common' => [
+                'admin-base',
+                'admin-form',
+                'admin'
             ],
         ],
         'view/coupon/view' => [
             'title' => 'پایار تأسیسات | ,مشاهده کوپن‌های تخفیف',
-            'common' => 'admin',
-            'js' => [
-                'bottom' => [
-
-                ],
-            ],
-            'css' => [
+            'common' => 'admin', [
+                'admin-base',
+                'admin-form',
+                'admin'
             ],
         ],
         'view/color/add' => [
             'title' => 'پایار تأسیسات | افزودن رنگ‌ جدید',
-            'common' => 'admin',
-            'js' => [
-                'bottom' => [
-
-                ],
-            ],
-            'css' => [
-
+            'common' => [
+                'admin-base',
+                'admin-form',
+                'admin-color',
+                'admin'
             ],
         ],
         'view/color/view' => [
             'title' => 'پایار تأسیسات | لیست رنگ‌‌ها',
-            'common' => 'admin',
-            'js' => [
-                'bottom' => [
-
-                ],
-            ],
-            'css' => [
-
+            'common' => [
+                'admin-base',
+                'admin-form',
+                'admin'
             ],
         ],
     ],

@@ -1,0 +1,13 @@
+User-agent: *
+Disallow: /vendor/
+Disallow: /App/
+Disallow: /Config/
+Disallow: /Data/
+Disallow: /Docs/
+Disallow: /I18n/
+Disallow: /node_modules/
+Disallow: /resource/
+Disallow: /Tests/
+Disallow: /Uploads/
+Disallow: /webpack/
+Disallow: /public/be/
