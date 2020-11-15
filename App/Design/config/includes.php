@@ -283,12 +283,24 @@ return [
             ],
         ],
         'view/user/view' => [
-            'title' => 'پایار تأسیسات | مشاهده کاربران',
+            'title' => 'پایار تأسیسات | لیست کاربران سایت',
             'common' => [
                 'admin-base',
-                'admin-form',
                 'admin-table',
                 'admin'
+            ],
+            'sub_title' => 'مدیریت کاربران',
+            'breadcrumb' => [
+                [
+                    'url' => url('admin.index'),
+                    'icon' => 'icon-home2',
+                    'text' => 'خانه',
+                    'is_active' => false,
+                ],
+                [
+                    'text' => 'مدیریت کاربران',
+                    'is_active' => true,
+                ],
             ],
         ],
         'view/user/add' => [
@@ -344,11 +356,29 @@ return [
             ],
         ],
         'view/user/view-profile' => [
-            'title' => 'پایار تأسیسات | مشاهده کاربر',
+            'title' => 'پایار تأسیسات | لیست کاربران سایت',
             'common' => [
                 'admin-base',
-                'admin-form',
+                'admin-table',
                 'admin'
+            ],
+            'sub_title' => 'مدیریت کاربران',
+            'breadcrumb' => [
+                [
+                    'url' => url('admin.index'),
+                    'icon' => 'icon-home2',
+                    'text' => 'خانه',
+                    'is_active' => false,
+                ],
+                [
+                    'url' => url('admin.user.view'),
+                    'text' => 'مدیریت کاربران',
+                    'is_active' => false,
+                ],
+                [
+                    'text' => 'مشاهده کاربر',
+                    'is_active' => true,
+                ],
             ],
         ],
         'view/category/add' => [
@@ -377,65 +407,204 @@ return [
                 ],
             ],
         ],
-        'view/file-manager/index' => [
-            'title' => 'پایار تأسیسات | مدیریت فایل‌ها',
+        'view/category/edit' => [
+            'title' => 'پایار تأسیسات | ویرایش دسته',
             'common' => [
                 'admin-base',
                 'admin-form',
                 'admin'
             ],
-        ],
-        'view/category/edit' => [
-            'title' => 'پایار تأسیسات | ,ویرایش دسته',
-            'common' => [
-                'admin-base',
-                'admin-form',
-                'admin'
+            'sub_title' => 'ویرایش دسته‌بندی‌',
+            'breadcrumb' => [
+                [
+                    'url' => url('admin.index'),
+                    'icon' => 'icon-home2',
+                    'text' => 'خانه',
+                    'is_active' => false,
+                ],
+                [
+                    'url' => url('admin.category.add'),
+                    'text' => 'مدیریت دسته‌بندی‌ها',
+                    'is_active' => false,
+                ],
+                [
+                    'text' => 'ویرایش دسته',
+                    'is_active' => true,
+                ],
             ],
         ],
         'view/category/view' => [
-            'title' => 'پایار تأسیسات | ,مشاهده دسته‌بندی‌ها',
+            'title' => 'پایار تأسیسات | مشاهده دسته‌ها',
             'common' => [
                 'admin-base',
-                'admin-form',
+                'admin-table',
                 'admin'
+            ],
+            'sub_title' => 'مدیریت دسته‌بندی‌ها',
+            'breadcrumb' => [
+                [
+                    'url' => url('admin.index'),
+                    'icon' => 'icon-home2',
+                    'text' => 'خانه',
+                    'is_active' => false,
+                ],
+                [
+                    'text' => 'دسته‌بندی‌ها',
+                    'is_active' => true,
+                ],
             ],
         ],
         'view/coupon/add' => [
-            'title' => 'پایار تأسیسات | ,مشاهده کوپن‌های تخفیف',
+            'title' => 'پایار تأسیسات | افزودن کوپن تخفیف',
             'common' => [
                 'admin-base',
                 'admin-form',
                 'admin'
+            ],
+            'sub_title' => 'افزودن کوپن تخفیف',
+            'breadcrumb' => [
+                [
+                    'url' => url('admin.index'),
+                    'icon' => 'icon-home2',
+                    'text' => 'خانه',
+                    'is_active' => false,
+                ],
+                [
+                    'url' => url('admin.coupon.view'),
+                    'text' => 'مشاهده کوپن‌های تخفیف',
+                    'is_active' => false,
+                ],
+                [
+                    'text' => 'افزودن کوپن‌ تخفیف',
+                    'is_active' => true,
+                ],
             ],
         ],
         'view/coupon/edit' => [
-            'title' => 'پایار تأسیسات | ,ویرایش کوپن‌های تخفیف',
+            'title' => 'پایار تأسیسات | ویرایش کوپن تخفیف',
             'common' => [
                 'admin-base',
                 'admin-form',
                 'admin'
+            ],
+            'sub_title' => 'ویرایش کوپن تخفیف',
+            'breadcrumb' => [
+                [
+                    'url' => url('admin.index'),
+                    'icon' => 'icon-home2',
+                    'text' => 'خانه',
+                    'is_active' => false,
+                ],
+                [
+                    'url' => url('admin.coupon.view'),
+                    'text' => 'مشاهده کوپن‌های تخفیف',
+                    'is_active' => false,
+                ],
+                [
+                    'text' => 'ویرایش کوپن‌ تخفیف',
+                    'is_active' => true,
+                ],
             ],
         ],
         'view/coupon/view' => [
-            'title' => 'پایار تأسیسات | ,مشاهده کوپن‌های تخفیف',
-            'common' => 'admin', [
+            'title' => 'پایار تأسیسات | مشاهده کوپن‌های تخفیف',
+            'common' => [
                 'admin-base',
-                'admin-form',
+                'admin-table',
                 'admin'
+            ],
+            'sub_title' => 'مشاهده کوپن تخفیف',
+            'breadcrumb' => [
+                [
+                    'url' => url('admin.index'),
+                    'icon' => 'icon-home2',
+                    'text' => 'خانه',
+                    'is_active' => false,
+                ],
+                [
+                    'text' => 'مشاهده کوپن‌های تخفیف',
+                    'is_active' => true,
+                ],
             ],
         ],
         'view/color/add' => [
-            'title' => 'پایار تأسیسات | افزودن رنگ‌ جدید',
+            'title' => 'پایار تأسیسات | افزودن رنگ',
             'common' => [
                 'admin-base',
                 'admin-form',
-                'admin-color',
+                'admin-table',
                 'admin'
+            ],
+            'sub_title' => 'افزودن رنگ',
+            'breadcrumb' => [
+                [
+                    'url' => url('admin.index'),
+                    'icon' => 'icon-home2',
+                    'text' => 'خانه',
+                    'is_active' => false,
+                ],
+                [
+                    'url' => url('admin.color.view'),
+                    'text' => 'مدیریت رنگ‌ها',
+                    'is_active' => false,
+                ],
+                [
+                    'text' => 'افزودن رنگ جدید',
+                    'is_active' => true,
+                ],
+            ],
+        ],
+        'view/color/edit' => [
+            'title' => 'پایار تأسیسات | ,ویرایش رنگ',
+            'common' => [
+                'admin-base',
+                'admin-form',
+                'admin-table',
+                'admin'
+            ],
+            'sub_title' => 'ویرایش رنگ',
+            'breadcrumb' => [
+                [
+                    'url' => url('admin.index'),
+                    'icon' => 'icon-home2',
+                    'text' => 'خانه',
+                    'is_active' => false,
+                ],
+                [
+                    'url' => url('admin.color.view'),
+                    'text' => 'مدیریت رنگ‌ها',
+                    'is_active' => false,
+                ],
+                [
+                    'text' => 'ویرایش رنگ',
+                    'is_active' => true,
+                ],
             ],
         ],
         'view/color/view' => [
-            'title' => 'پایار تأسیسات | لیست رنگ‌‌ها',
+            'title' => 'پایار تأسیسات | ,ویرایش رنگ',
+            'common' => [
+                'admin-base',
+                'admin-form',
+                'admin-table',
+                'admin'
+            ],
+            'sub_title' => 'ویرایش رنگ',
+            'breadcrumb' => [
+                [
+                    'url' => url('admin.index'),
+                    'icon' => 'icon-home2',
+                    'text' => 'خانه',
+                    'is_active' => false,
+                ],
+                [
+                    'text' => 'مدیریت رنگ‌ها',
+                    'is_active' => true,
+                ],
+            ],
+        ],
+        'view/file-manager/index' => [
+            'title' => 'پایار تأسیسات | مدیریت فایل‌ها',
             'common' => [
                 'admin-base',
                 'admin-form',

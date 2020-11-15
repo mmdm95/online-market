@@ -139,11 +139,16 @@ class Route implements IInitialize
                 Router::get('/coupon/view', 'Admin\CouponController@view')->name('admin.coupon.view');
 
                 /**
-                 * Color Rout
+                 * Color Route
                  */
                 Router::get('/color/add', 'Admin\ColorController@add')->name('admin.color.add');
+                Router::get('/color/edit/{id}', 'Admin\ColorController@edit')->name('admin.color.edit');
                 Router::get('/color/view', 'Admin\ColorController@view')->name('admin.color.view');
 
+                /**
+                 * Contact us Route
+                 */
+                Router::get('/color/view', 'Admin\ContactUsController@add')->name('admin.contact-us.view');
 
                 /**
                  * File Manager Route
