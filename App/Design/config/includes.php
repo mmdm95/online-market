@@ -603,6 +603,29 @@ return [
                 ],
             ],
         ],
+        'view/contact-us/view' => [
+            'title' => 'پایار تأسیسات | مدیریت تماس‌ها',
+            'common' => [
+                'admin-base',
+                'admin-form',
+                'admin-table',
+                'admin'
+            ],
+            'sub_title' => 'مشاهده تماس‌ها',
+            'breadcrumb' => [
+                [
+                    'url' => url('admin.index'),
+                    'icon' => 'icon-home2',
+                    'text' => 'خانه',
+                    'is_active' => false,
+                ],
+                [
+                    'text' => 'مدیریت تماس‌ها',
+                    'is_active' => true,
+                ],
+            ],
+        ],
+
         'view/file-manager/index' => [
             'title' => 'پایار تأسیسات | مدیریت فایل‌ها',
             'common' => [

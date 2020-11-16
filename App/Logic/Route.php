@@ -148,7 +148,7 @@ class Route implements IInitialize
                 /**
                  * Contact us Route
                  */
-                Router::get('/color/view', 'Admin\ContactUsController@add')->name('admin.contact-us.view');
+                Router::get('/contact-us/view/{id?}', 'Admin\ContactUsController@view')->name('admin.contact-us.view');
 
                 /**
                  * File Manager Route
