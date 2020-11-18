@@ -21,14 +21,17 @@
             <div class="card-body">
                 <div class="media">
                     <div class="mr-3">
-                        <a href="#"><img src="../../../../global_assets/images/placeholders/placeholder.jpg" width="38"
-                                         height="38" class="rounded-circle" alt=""></a>
+                        <a href="#">
+                            <img src="../../../../global_assets/images/placeholders/placeholder.jpg" width="38"
+                                 height="38" class="rounded-circle" alt="">
+                        </a>
                     </div>
 
                     <div class="media-body">
                         <div class="media-title font-weight-semibold">وحید ضیایی</div>
                         <div class="font-size-xs opacity-50 iransans-regular">
-                            <i class="icon-user font-size-sm mr-1"></i>مدیر سایت
+                            <i class="icon-user font-size-sm mr-1"></i>
+                            مدیر سایت
                         </div>
                     </div>
 
@@ -47,25 +50,28 @@
                 <!-- Main -->
                 <li class="nav-item-header">
                     <div class="text-uppercase font-size-xs line-height-xs">اصلی</div>
-                    <i class="icon-menu" title="Main"></i></li>
+                    <i class="icon-menu" title="اصلی"></i>
+                </li>
                 <li class="nav-item">
                     <a href="<?= url('admin.index'); ?>" class="nav-link">
                         <i class="icon-home4"></i>
-                        <span>
-									میز کار
-                        </span>
+                        <span>میز کار</span>
                     </a>
                 </li>
                 <li class="nav-item nav-item-submenu">
                     <a href="#" class="nav-link"><i class="icon-users"></i> <span>کاربران</span></a>
 
                     <ul class="nav nav-group-sub" data-submenu-title="Layouts">
-                        <li class="nav-item"><a href="<?= url('admin.user.add'); ?>" class="nav-link active">
+                        <li class="nav-item">
+                            <a href="<?= url('admin.user.add'); ?>" class="nav-link active">
                                 افزودن کاربر
-                            </a></li>
-                        <li class="nav-item"><a href="<?= url('admin.user.view'); ?>" class="nav-link">
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="<?= url('admin.user.view'); ?>" class="nav-link">
                                 مشاهده کاربران
-                            </a></li>
+                            </a>
+                        </li>
                     </ul>
                 </li>
                 <!-- /main -->
@@ -73,57 +79,83 @@
                 <!-- Shop -->
                 <li class="nav-item-header">
                     <div class="text-uppercase font-size-xs line-height-xs">فروشگاه</div>
-                    <i class="icon-menu" title="Main"></i></li>
+                    <i class="icon-menu" title="فروشگاه"></i>
+                </li>
                 <li class="nav-item nav-item-submenu">
                     <a href="#" class="nav-link"><i class="icon-lan2"></i> <span>مدیریت دسته‌بندی</span></a>
 
                     <ul class="nav nav-group-sub" data-submenu-title="Layouts">
-                        <li class="nav-item"><a href="<?= url('admin.category.add'); ?>" class="nav-link active">
+                        <li class="nav-item">
+                            <a href="<?= url('admin.category.add'); ?>" class="nav-link active">
                                 افزودن دسته
-                            </a></li>
-                        <li class="nav-item"><a href="<?= url('admin.category.view'); ?>" class="nav-link">
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="<?= url('admin.category.view'); ?>" class="nav-link">
                                 مشاهده دسته‌ها
-                            </a></li>
+                            </a>
+                        </li>
                     </ul>
                 </li>
                 <li class="nav-item nav-item-submenu">
                     <a href="#" class="nav-link"><i class="icon-bucket"></i> <span>رنگ‌ها</span></a>
 
                     <ul class="nav nav-group-sub" data-submenu-title="Layouts">
-                        <li class="nav-item"><a href="<?= url('admin.color.add'); ?>" class="nav-link active">
+                        <li class="nav-item">
+                            <a href="<?= url('admin.color.add'); ?>" class="nav-link active">
                                 افزودن رنگ جدید
-                            </a></li>
-                        <li class="nav-item"><a href="<?= url('admin.color.view'); ?>" class="nav-link">
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="<?= url('admin.color.view'); ?>" class="nav-link">
                                 لیست رنگ‌ها
-                            </a></li>
+                            </a>
+                        </li>
                     </ul>
                 </li>
                 <li class="nav-item nav-item-submenu">
                     <a href="#" class="nav-link"><i class="icon-credit-card"></i> <span>کوپن‌های تخفیف</span></a>
 
                     <ul class="nav nav-group-sub" data-submenu-title="Layouts">
-                        <li class="nav-item"><a href="<?= url('admin.coupon.add'); ?>" class="nav-link active">
+                        <li class="nav-item">
+                            <a href="<?= url('admin.coupon.add'); ?>" class="nav-link active">
                                 افزودن کوپن تخفیف
-                            </a></li>
-                        <li class="nav-item"><a href="<?= url('admin.coupon.view'); ?>" class="nav-link">
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="<?= url('admin.coupon.view'); ?>" class="nav-link">
                                 مشاهده کوپن
-                            </a></li>
+                            </a>
+                        </li>
                     </ul>
                 </li>
                 <!-- /Shop -->
+
                 <!-- Connection -->
                 <li class="nav-item-header">
                     <div class="text-uppercase font-size-xs line-height-xs">ارتباطات</div>
-                    <i class="icon-menu" title="Main"></i></li>
+                    <i class="icon-menu" title="ارتباطات"></i>
+                </li>
                 <li class="nav-item">
                     <a href="<?= url('admin.contact-us.view'); ?>" class="nav-link">
                         <i class="icon-envelop3"></i>
-                        <span>
-									تماس‌ها
-                        </span>
+                        <span>تماس‌ها</span>
                     </a>
                 </li>
                 <!-- /Connection -->
+
+                <!-- Others -->
+                <li class="nav-item-header">
+                    <div class="text-uppercase font-size-xs line-height-xs">سایر</div>
+                    <i class="icon-menu" title="سایر"></i>
+                </li>
+                <li class="nav-item">
+                    <a href="<?= url('admin.file-manager'); ?>" class="nav-link">
+                        <i class="icon-files-empty"></i>
+                        <span>مدیریت فایل‌ها</span>
+                    </a>
+                </li>
+                <!-- /Others -->
 
             </ul>
         </div>
