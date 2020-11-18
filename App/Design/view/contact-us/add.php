@@ -1,7 +1,7 @@
 <!-- Content area -->
 <div class="content">
     <div class="card col-lg-8">
-        <?php load_partial('admin/card-header', ['header_title' => 'ویرایش دسته‌بندی']); ?>
+        <?php load_partial('admin/card-header', ['header_title' => 'افزودن دسته‌بندی جدید']); ?>
 
         <div class="card-body">
             <form action="#">

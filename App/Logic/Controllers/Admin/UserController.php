@@ -3,18 +3,24 @@
 namespace App\Logic\Controllers\Admin;
 
 use App\Logic\Abstracts\AbstractAdminController;
+use ReflectionException;
+use Sim\Exceptions\ConfigManager\ConfigNotRegisteredException;
+use Sim\Exceptions\Mvc\Controller\ControllerException;
+use Sim\Exceptions\PathManager\PathNotRegisteredException;
+use Sim\Interfaces\IFileNotExistsException;
+use Sim\Interfaces\IInvalidVariableNameException;
 
 class UserController extends AbstractAdminController
 {
     /**
      * @param null $id
      * @return string
-     * @throws \ReflectionException
-     * @throws \Sim\Exceptions\ConfigManager\ConfigNotRegisteredException
-     * @throws \Sim\Exceptions\Mvc\Controller\ControllerException
-     * @throws \Sim\Exceptions\PathManager\PathNotRegisteredException
-     * @throws \Sim\Interfaces\IFileNotExistsException
-     * @throws \Sim\Interfaces\IInvalidVariableNameException
+     * @throws ReflectionException
+     * @throws ConfigNotRegisteredException
+     * @throws ControllerException
+     * @throws PathNotRegisteredException
+     * @throws IFileNotExistsException
+     * @throws IInvalidVariableNameException
      */
     public function view($id = null)
     {
@@ -29,12 +35,12 @@ class UserController extends AbstractAdminController
 
     /**
      * @return string
-     * @throws \ReflectionException
-     * @throws \Sim\Exceptions\ConfigManager\ConfigNotRegisteredException
-     * @throws \Sim\Exceptions\Mvc\Controller\ControllerException
-     * @throws \Sim\Exceptions\PathManager\PathNotRegisteredException
-     * @throws \Sim\Interfaces\IFileNotExistsException
-     * @throws \Sim\Interfaces\IInvalidVariableNameException
+     * @throws ReflectionException
+     * @throws ConfigNotRegisteredException
+     * @throws ControllerException
+     * @throws PathNotRegisteredException
+     * @throws IFileNotExistsException
+     * @throws IInvalidVariableNameException
      */
     public function add()
     {
@@ -46,12 +52,12 @@ class UserController extends AbstractAdminController
     /**
      * @param $id
      * @return string
-     * @throws \ReflectionException
-     * @throws \Sim\Exceptions\ConfigManager\ConfigNotRegisteredException
-     * @throws \Sim\Exceptions\Mvc\Controller\ControllerException
-     * @throws \Sim\Exceptions\PathManager\PathNotRegisteredException
-     * @throws \Sim\Interfaces\IFileNotExistsException
-     * @throws \Sim\Interfaces\IInvalidVariableNameException
+     * @throws ReflectionException
+     * @throws ConfigNotRegisteredException
+     * @throws ControllerException
+     * @throws PathNotRegisteredException
+     * @throws IFileNotExistsException
+     * @throws IInvalidVariableNameException
      */
     public function edit($id)
     {

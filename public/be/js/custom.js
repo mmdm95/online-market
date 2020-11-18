@@ -70,36 +70,6 @@ window.MyGlobalVariables.icons = {
             });
         }
 
-        if ($().select2) {
-            // Basic example
-            $('.form-control-select2').select2();
-
-            //
-            // Select with icons
-            //
-
-            // Format icon
-            function iconFormat(icon) {
-                var originalOption = icon.element;
-                if (!icon.id) {
-                    return icon.text;
-                }
-                var $icon = "<i class='icon-" + $(icon.element).data('icon') + "'></i>" + icon.text;
-
-                return $icon;
-            }
-
-            // Initialize with options
-            $('.form-control-select2-icons').select2({
-                templateResult: iconFormat,
-                minimumResultsForSearch: Infinity,
-                templateSelection: iconFormat,
-                escapeMarkup: function (m) {
-                    return m;
-                }
-            });
-        }
-
         // Display color formats
         if ($().spectrum) {
             $('.colorpicker-show-input').spectrum({
@@ -149,6 +119,44 @@ window.MyGlobalVariables.icons = {
                 }
             }).on('mouseleave', function () {
                 $(table.cells().nodes()).removeClass('active');
+            });
+        }
+
+        // this must be after datatable
+        if ($().select2) {
+            // Basic example
+            $('.form-control-select2').select2();
+
+            //
+            // Select with icons
+            //
+
+            // Format icon
+            function iconFormat(icon) {
+                var originalOption = icon.element;
+                if (!icon.id) {
+                    return icon.text;
+                }
+                var $icon = "<i class='icon-" + $(icon.element).data('icon') + "'></i>" + icon.text;
+
+                return $icon;
+            }
+
+            // Initialize with options
+            $('.form-control-select2-icons').select2({
+                templateResult: iconFormat,
+                minimumResultsForSearch: Infinity,
+                templateSelection: iconFormat,
+                escapeMarkup: function (m) {
+                    return m;
+                }
+            });
+
+            // Initialize
+            $('.dataTables_length select').select2({
+                minimumResultsForSearch: Infinity,
+                dropdownAutoWidth: true,
+                width: 'auto'
             });
         }
     });

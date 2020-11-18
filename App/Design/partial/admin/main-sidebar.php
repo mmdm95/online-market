@@ -110,7 +110,20 @@
                             </a></li>
                     </ul>
                 </li>
-                <!-- /shop -->
+                <!-- /Shop -->
+                <!-- Connection -->
+                <li class="nav-item-header">
+                    <div class="text-uppercase font-size-xs line-height-xs">ارتباطات</div>
+                    <i class="icon-menu" title="Main"></i></li>
+                <li class="nav-item">
+                    <a href="<?= url('admin.contact-us.view'); ?>" class="nav-link">
+                        <i class="icon-envelop3"></i>
+                        <span>
+									تماس‌ها
+                        </span>
+                    </a>
+                </li>
+                <!-- /Connection -->
 
             </ul>
         </div>
