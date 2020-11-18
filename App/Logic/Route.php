@@ -3,9 +3,9 @@
 namespace App\Logic;
 
 use App\Logic\Handlers\CustomExceptionHandler;
-use App\Logic\Middlewares\AdminApiVerificationMiddleware;
+use App\Logic\Middlewares\AdminApiVerifierMiddleware;
 use App\Logic\Middlewares\AdminAuthMiddleware;
-use App\Logic\Middlewares\ApiVerificationMiddleware;
+use App\Logic\Middlewares\ApiVerifierMiddleware;
 use Pecee\SimpleRouter\Event\EventArgument;
 use Pecee\SimpleRouter\Handlers\EventHandler;
 use Pecee\SimpleRouter\SimpleRouter as Router;
@@ -165,13 +165,21 @@ class Route implements IInitialize
     protected function apiRoutes()
     {
         Router::group([
+            'prefix' => '/api/',
             'exceptionHandler' => CustomExceptionHandler::class,
-            'middleware' => ApiVerificationMiddleware::class
+            'middleware' => ApiVerifierMiddleware::class
         ], function () {
+            /**
+             * Csrf token generator Route
+             */
+            Router::get('/csrf-token/{name?}', 'CsrfController@getToken')->where([
+                'name' => '.+',
+            ])->name('api.csrf-token');
+
             //==========================
             // admin routes
             //==========================
-            Router::group(['prefix' => '/api/', 'middleware' => AdminApiVerificationMiddleware::class], function () {
+            Router::group(['middleware' => AdminApiVerifierMiddleware::class], function () {
                 /**
                  * File Manager Route
                  */
@@ -181,8 +189,14 @@ class Route implements IInitialize
                 Router::post('/file-manager/mkdir', 'Admin\FileController@makeDir')->name('api.file-manager.mkdir');
                 Router::post('/file-manager/mvdir', 'Admin\FileController@moveDir')->name('api.file-manager.mvdir');
                 Router::post('/file-manager/upload', 'Admin\FileController@upload')->name('api.file-manager.upload');
-                Router::post('/file-manager/download', 'Admin\FileController@download')->name('api.file-manager.download');
-                Router::post('/file-manager/dir-tree', 'Admin\FileController@foldersTree')->name('api.file-manager.tree');
+                Router::get('/file-manager/download/{filename}', 'Admin\FileController@download')->where([
+                    'filename' => '.+',
+                ])->name('api.file-manager.download');
+                Router::get('/file-manager/dir-tree', 'Admin\FileController@foldersTree')->name('api.file-manager.tree');
+                // show images outside of public folder
+                Router::get('/images/{filename}', 'Admin\FileController@showImage')->where([
+                    'filename' => '.+',
+                ])->name('admin.image.show');
             });
         });
     }

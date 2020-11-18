@@ -26,8 +26,8 @@
     <div class="content-wrapper">
         <!-- Page header -->
         <?php load_partial('admin/page-header', [
-                'sub_title' => $sub_title ?? '',
-                'breadcrumb' => $breadcrumb ?? [],
+            'sub_title' => $sub_title ?? '',
+            'breadcrumb' => $breadcrumb ?? [],
         ]); ?>
         <!-- /page header -->
 

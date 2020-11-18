@@ -20,7 +20,7 @@ use Sim\I18n\ISOLanguageCodes;
  *     1.2.5.0 instead of 1.2.5-a
  *     1.2.5.0.1 instead of 1.2.5-a1 (I'm not sure)
  */
-defined("APP_VERSION") OR define("APP_VERSION", "0.1.0");
+defined("APP_VERSION") OR define("APP_VERSION", "0.1.1");
 
 /***************************************
  * You can add your constants here
@@ -33,3 +33,7 @@ defined("APP_LANGUAGE") OR define("APP_LANGUAGE", ISOLanguageCodes::LANGUAGE_ENG
 defined("NOT_FOUND_ADMIN") OR define("NOT_FOUND_ADMIN", 'admin.page.notfound');
 defined("NOT_FOUND") OR define("NOT_FOUND", 'page.notfound');
 defined("SERVER_ERROR") OR define("SERVER_ERROR", 'page.servererror');
+
+// default placeholders
+defined("PLACEHOLDER_IMAGE") OR define("PLACEHOLDER_IMAGE", __DIR__ . '/../public/be/images/file-icons/image-placeholder.png');
+defined("PLACEHOLDER_VIDEO") OR define("PLACEHOLDER_VIDEO", __DIR__ . '/../public/be/images/file-icons/video-placeholder.png');

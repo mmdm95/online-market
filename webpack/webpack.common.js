@@ -15,6 +15,7 @@ const dotenv = require('dotenv').config({
 module.exports = {
     entry: {
         font: path.resolve(__dirname, "../resource/js/font.js"),
+        admin: path.resolve(__dirname, "../resource/js/admin.js"),
         main: path.resolve(__dirname, "../resource/js/index.js"),
         vendor: path.resolve(__dirname, "../resource/js/vendor.js")
     },

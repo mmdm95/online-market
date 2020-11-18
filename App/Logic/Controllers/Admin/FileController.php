@@ -4,6 +4,7 @@ namespace App\Logic\Controllers\Admin;
 
 use App\Logic\Abstracts\AbstractAdminController;
 use App\Logic\Handlers\ResourceHandler;
+use Dotenv\Exception\InvalidFileException;
 use Sim\Container\Exceptions\MethodNotFoundException;
 use Sim\Container\Exceptions\ParameterHasNoDefaultValueException;
 use Sim\Container\Exceptions\ServiceNotFoundException;
@@ -13,6 +14,9 @@ use Sim\Cookie\SetCookie;
 use Sim\Exceptions\ConfigManager\ConfigNotRegisteredException;
 use Sim\Exceptions\Mvc\Controller\ControllerException;
 use Sim\Exceptions\PathManager\PathNotRegisteredException;
+use Sim\File\Download;
+use Sim\File\FileSystem;
+use Sim\File\Interfaces\IFileException;
 use Sim\File\Utils\MimeTypeUtil;
 use Sim\Interfaces\IFileNotExistsException;
 use Sim\Interfaces\IInvalidVariableNameException;
@@ -76,12 +80,11 @@ class FileController extends AbstractAdminController
                     $i = $directory . '/' . $entry;
                     $stat = stat($i);
                     $result[] = [
-                        'test' => $directory,
                         'mtime' => $stat['mtime'],
-                        'size' => $stat['size'],
+                        'size' => FileSystem::getFileSize($i),
                         'ext' => $fileExt,
                         'name' => basename($i),
-                        'path' => preg_replace('@^\./@', '', $i),
+                        'path' => str_replace(get_path('upload-root'), '', preg_replace('@^\./@', '', $i)),
                         'is_dir' => is_dir($i),
                         'is_deleteable' => $allow_delete && ((!is_dir($i) && is_writable($directory)) ||
                                 (is_dir($i) && is_writable($directory) && is_recursively_deletable($i))),
@@ -112,8 +115,16 @@ class FileController extends AbstractAdminController
 
         $file = $this->getFileFromRequest();
 
-        if ($allow_delete) {
-            rmrf($file);
+        try {
+            if ($allow_delete && is_recursively_deletable($file)) {
+                rmrf($file);
+            } else {
+                $this->data->resetData()->statusCode(412)->errorMessage('Not deletable!');
+                \response()->json($this->data->getReturnData());
+            }
+        } catch (\Exception $e) {
+            $this->data->resetData()->statusCode(412)->errorMessage($e->getMessage());
+            \response()->json($this->data->getReturnData());
         }
 
         $this->data->resetData();
@@ -226,10 +237,11 @@ class FileController extends AbstractAdminController
         // Security options
         $allow_create_folder = true;
 
-        $file = $this->getFileFromRequest();
+        $file = $this->getFileFromRequest(true);
 
         if ($allow_create_folder) {
-            $fileArr = json_decode($file);
+            $fileArr = json_decode($file, true) ?: [];
+            $counter = 0;
             foreach ($fileArr as $files) {
                 $file = $files;
                 $newDir = input()->post('newPath', '')->getValue();
@@ -260,11 +272,19 @@ class FileController extends AbstractAdminController
                     \response()->json($this->data->getReturnData());
                 }
 
-                rename($file, $newFile);
+                if (!file_exists($newFile)) {
+                    rename($file, $newFile);
+                    $counter++;
+                }
             }
 
-            $this->data->resetData();
-            \response()->json($this->data->getReturnData());
+            if (count($fileArr) != $counter) {
+                $this->data->resetData()->statusCode(99);
+                \response()->json($this->data->getReturnData());
+            } else {
+                $this->data->resetData();
+                \response()->json($this->data->getReturnData());
+            }
         }
     }
 
@@ -294,7 +314,7 @@ class FileController extends AbstractAdminController
             }
 
             $xss = container()->get(AntiXSS::class);
-            $filename = $xss->xss_clean(str_replace(' ', '-', input()->file('file_data')->getName()));
+            $filename = $xss->xss_clean(str_replace(' ', '-', input()->file('file_data')->getFilename()));
             $filename = str_replace('@', '', $filename);
 
             $filename = StringUtil::toPersian($filename);
@@ -318,20 +338,22 @@ class FileController extends AbstractAdminController
     }
 
     /**
-     * @param $name
+     * @param $file
      */
-    public function download($name)
+    public function download($file)
     {
-        $file = str_replace('@', '.', $name);
-        if (file_exists($file)) {
-            $filename = basename($file);
-            header('Content-Type: ' . MimeTypeUtil::getMimeTypeFromFilename($file));
-            header('Content-Length: ' . filesize($file));
-            header(sprintf('Content-Disposition: attachment; filename=%s',
-                strpos('MSIE', $_SERVER['HTTP_REFERER']) ? rawurlencode($filename) : "\"$filename\""));
-            ob_flush();
-            readfile(get_base_url() . $file);
-            exit;
+        $path = get_path('upload-root', $file, false);
+//        $path = $this->showImage($file);
+
+        var_dump($file, $path, file_exists($path));
+
+        try {
+            Download::makeDownloadFromPath($path)->download(null);
+        } catch (IFileException $e) {
+            // do nothing
+            var_dump($e->getMessage());
+        } catch (\Exception $e) {
+            var_dump($e->getMessage());
         }
     }
 
@@ -376,48 +398,106 @@ class FileController extends AbstractAdminController
     }
 
     /**
+     * @param string $filename
+     * @return string
+     */
+    public function showImage(string $filename)
+    {
+        $path = get_path('upload-root', $filename, false);
+
+        if (FileSystem::fileExists($path)) {
+            $file = FileSystem::getFromFile($path);
+            $type = FileSystem::getFileMimeType($path, 'application/octet-stream');
+        } else {
+            $file = FileSystem::getFromFile(PLACEHOLDER_IMAGE);
+            $type = FileSystem::getFileMimeType(PLACEHOLDER_IMAGE, 'application/octet-stream');
+        }
+
+        \response()->header('Content-Type: ' . $type);
+        return $file;
+    }
+
+    /**
+     * @param bool $is_move
      * @return string
      * @throws CookieException
      */
-    private function getFileFromRequest(): string
+    private function getFileFromRequest(bool $is_move = false): string
     {
         // Disable error report for undefined superglobals
         error_reporting(error_reporting() & ~E_NOTICE);
         // must be in UTF-8 or `basename` doesn't work
         setlocale(LC_ALL, 'en_US.UTF-8');
         $tmp_dir = get_path('upload-root');
-
         $tmp_dir = str_replace('/', DIRECTORY_SEPARATOR, $tmp_dir);
-        $tmp = get_absolute_path($tmp_dir . '/' . input('file', '', 'post', 'get'));
 
-        if ($tmp === false) {
-            $this->data->resetData()->statusCode(404)->errorMessage('File or Directory Not Found');
-            \response()->json($this->data->getReturnData());
+
+        if (is_null(cookie()->get('_sfm_xsrf'))) {
+            \setcookie('_sfm_xsrf', bin2hex(openssl_random_pseudo_bytes(16)), 0, "/");
         }
-        if (substr($tmp, 0, strlen($tmp_dir)) !== $tmp_dir) {
-            $this->data->resetData()->statusCode(403)->errorMessage('Forbidden');
-            \response()->json($this->data->getReturnData());
-        }
-        if (strpos(input('file', '', 'post', 'get'), DIRECTORY_SEPARATOR) === 0) {
-            $this->data->resetData()->statusCode(403)->errorMessage('Forbidden');
-            \response()->json($this->data->getReturnData());
-        }
-        if (!is_null(cookie()->get('_sfm_xsrf'))) {
-            cookie()->set(new SetCookie('_sfm_xsrf', bin2hex(openssl_random_pseudo_bytes(16))));
-        }
-        if ($_POST) {
-            if (!is_null(input()->post('xsrf')->getValue()) || cookie()->get('_sfm_xsrf') ?: '' !== input()->post('xsrf')->getValue()) {
+
+        if (!empty($_POST)) {
+            if (is_null(input()->post('xsrf')) ||
+                (
+                    !is_null(input()->post('xsrf')) &&
+                    (
+                        is_null(input()->post('xsrf')->getValue()) ||
+                        (cookie()->get('_sfm_xsrf') ?: '') !== input()->post('xsrf')->getValue()
+                    )
+                )
+            ) {
                 $this->data->resetData()->statusCode(403)->errorMessage('XSRF Failure');
                 \response()->json($this->data->getReturnData());
             }
         }
 
-        $file = input('file', get_path('upload-root'), 'post', 'get');
-        if (strpos(str_replace('\\', '/', $file), get_path('upload-root')) === false) {
-            $file = get_path('upload-root');
-        }
-        $file = rtrim(str_replace(['//', '\\'], '/', $file));
+        if ($is_move) {
+            $tFile = input()->all()['file'] ?? '';
+            $dFiles = json_decode($tFile, true);
+            if ($dFiles) {
+                foreach ($dFiles as &$f) {
+                    if (is_string($f)) {
+                        $tmp = get_absolute_path($tmp_dir . '/' . $f);
+                        if ($tmp === false) {
+                            $this->data->resetData()->statusCode(404)->errorMessage('File or Directory Not Found');
+                            \response()->json($this->data->getReturnData());
+                        }
+                        if (substr($tmp, 0, strlen($tmp_dir)) !== $tmp_dir) {
+                            $this->data->resetData()->statusCode(403)->errorMessage('Forbidden');
+                            \response()->json($this->data->getReturnData());
+                        }
+                        //-----
+                        if (strpos(str_replace('\\', '/', $f), get_path('upload-root')) === false) {
+                            $f = get_path('upload-root') . $f;
+                        }
+                        $f = rtrim(str_replace(['//', '\\'], '/', $f));
+                    }
+                }
 
+                $file = json_encode($dFiles);
+            } else {
+                $this->data->resetData()->statusCode(404)->errorMessage('File or Directory Not Found');
+                \response()->json($this->data->getReturnData());
+            }
+        } else {
+            $tmp = get_absolute_path($tmp_dir . '/' . input()->all()['file'] ?? '');
+            if ($tmp === false) {
+                $this->data->resetData()->statusCode(404)->errorMessage('File or Directory Not Found');
+                \response()->json($this->data->getReturnData());
+            }
+            if (substr($tmp, 0, strlen($tmp_dir)) !== $tmp_dir) {
+                $this->data->resetData()->statusCode(403)->errorMessage('Forbidden');
+                \response()->json($this->data->getReturnData());
+            }
+            //-----
+            $file = input()->all()['file'] ?? get_path('upload-root');
+            if (strpos(str_replace('\\', '/', $file), get_path('upload-root')) === false) {
+                $file = get_path('upload-root') . $file;
+            }
+            $file = rtrim(str_replace(['//', '\\'], '/', $file));
+        }
+
+        // do not worry it'll never be empty
         return $file;
     }
 }

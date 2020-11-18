@@ -1,74 +1,80 @@
 <div class="row">
-    <?php if (isset($data['upload']['allow_create_folder']) && $data['upload']['allow_create_folder']): ?>
-        <div class="col-sm-6">
-            <form action="?" method="post" id="mkdir">
-                <label for="dirname" style="display: block;">
-                    ساخت پوشه جدید
-                    (Create New Folder)
-                </label>
-                <div class="form-group has-feedback has-feedback-left">
-                    <input id="dirname" class="form-control" type="text" name="name"
-                           value="" placeholder="نام لاتین پوشه را وارد کنید">
-                    <div class=" form-control-feedback">
-                        <i class="icon-folder text-muted"></i>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <button type="submit" class="btn bg-blue">
-                        ساخت پوشه
-                        <i class="icon-arrow-left13 position-right"></i>
-                    </button>
-                </div>
-            </form>
-        </div>
-    <?php endif; ?>
-
-    <?php if (isset($data['upload']['allow_upload']) && $data['upload']['allow_upload']): ?>
-        <div class="col-sm-6">
+    <?php if (isset($the_options) && isset($the_options['allow_upload']) && $the_options['allow_upload']): ?>
+        <div class="form-group col-12">
             <div id="file_drop_target">
-                <div class="uploader" style="margin-bottom: 10px;">
-                    <input type="file" class="file-styled-primary" multiple>
-                    <span class="filename"
-                          style="-webkit-user-select: none;-moz-user-select: none;-ms-user-select: none;user-select: none;">
-                                            فایلی انتخاب نشده است
-                                        </span>
-                    <span class="action btn bg-blue"
-                          style="-webkit-user-select: none;-moz-user-select: none;-ms-user-select: none;user-select: none;">
-                                            انتخاب فایل
-                                        </span>
+                <div class="my-2">
+                    <input name="recommendations" type="file" class="d-none" multiple
+                           id="file-uploader">
+                    <label for="file-uploader" class="ml-5"
+                           style="-webkit-user-select: none;-moz-user-select: none;-ms-user-select: none;user-select: none;">
+                        فایلی انتخاب نشده است
+                    </label>
+                    <label for="file-uploader" class="action btn bg-pink ml-2"
+                           style="-webkit-user-select: none;-moz-user-select: none;-ms-user-select: none;user-select: none;">
+                        انتخاب فایل
+                    </label>
                 </div>
-                <b style="display: block;">یا</b>
-                فایل را کشیده و اینجا رها کنید
+                <strong class="d-block my-3">یا</strong>
+                <span class="d-block my-2">فایل را کشیده و اینجا رها کنید</span>
             </div>
 
             <div id="upload_progress"></div>
         </div>
     <?php endif; ?>
 
-    <div class="col-sm-12"></div>
-    <div class="col-sm-6" style="margin-top: 10px;">
-        <label for="dirname" style="display: block;">
-            جستجو در پوشه فعلی:
-        </label>
-        <div class="form-group has-feedback has-feedback-left">
-            <div>
-                <input id="dirsearch" class="form-control" type="text"
-                       value="" placeholder="جستجو">
+    <div class="col-12">
+        <div class="row flex-row-reverse">
+            <div class="form-group col-lg-6 order-2">
+                <label for="dirsearch" class="d-block">
+                    جستجو در پوشه فعلی:
+                </label>
+                <div class="form-group">
+                    <div class="form-group-feedback form-group-feedback-left">
+                        <input id="dirsearch" class="form-control" type="text"
+                               value="" placeholder="جستجو">
+                        <div class="form-control-feedback form-control-feedback-lg">
+                            <i class="icon-search4 text-muted"></i>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class=" form-control-feedback">
-                <i class="icon-search4 text-muted"></i>
-            </div>
+
+            <?php if ($the_options['allow_create_folder']): ?>
+                <div class="form-group col-lg-6 order-1">
+                    <form action="?" method="post" id="mkdir">
+                        <label for="dirname" class="d-block">
+                            ساخت پوشه جدید:
+                        </label>
+                        <div class="form-group">
+                            <div class="input-group">
+                                <div class="form-group-feedback form-group-feedback-left">
+                                    <input id="dirname" class="form-control" type="text" name="name"
+                                           value="" placeholder="نام لاتین پوشه را وارد کنید">
+                                    <div class="form-control-feedback form-control-feedback-lg">
+                                        <i class="icon-folder text-muted"></i>
+                                    </div>
+                                </div>
+                                <div class="input-group-append">
+                                    <button type="submit" class="btn btn-primary btn-icon">
+                                        ساخت پوشه
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            <?php endif; ?>
         </div>
     </div>
 
-    <div class="col-sm-12">
-        <div id="breadcrumb">&nbsp;</div>
+    <div class="col-12 order-3 mb-1">
+        <div id="breadcrumb"></div>
     </div>
 </div>
 
 <div class="table-responsive">
-    <table id="table">
-        <thead class="bg-indigo">
+    <table id="table" class="table text-left">
+        <thead class="bg-green-600 border-radius">
         <tr>
             <th class="sort_desc">نام</th>
             <th>اندازه</th>

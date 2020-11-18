@@ -33,7 +33,7 @@
                         <div class="form-group d-flex align-items-center">
                             <div class="form-check mb-0">
                                 <label class="form-check-label">
-                                    <input type="checkbox" name="remember" class="form-input-styled" checked data-fouc>
+                                    <input type="checkbox" name="remember" class="form-input-styled" checked>
                                     مرا به خاطر بسپار!
                                 </label>
                             </div>

@@ -2,49 +2,40 @@
 
 namespace App\Logic\Adapters;
 
-use Pecee\Http\Middleware\BaseCsrfVerifier;
 use Pecee\Http\Security\ITokenProvider;
 
-class SessionTokenProvider extends BaseCsrfVerifier implements ITokenProvider
+class SessionTokenProvider implements ITokenProvider
 {
     /**
-     * CSRF validation will be ignored on the following urls.
-     */
-    protected $except = ['/api/*'];
-
-    /**
      * Refresh existing token
-     * @param string $name
      * @throws \Exception
      */
-    public function refresh(string $name = null): void
+    public function refresh(): void
     {
-        csrf()->regenerateToken($name);
+        csrf()->regenerateToken(trim(url()->getOriginalUrl(), '/'));
     }
 
     /**
      * Validate valid CSRF token
      *
      * @param string $token
-     * @param string|null $name
      * @return bool
      * @throws \Exception
      */
-    public function validate(string $token, string $name = null): bool
+    public function validate(string $token): bool
     {
-        return csrf()->validate($token, $name);
+        return csrf()->validate($token, trim(url()->getOriginalUrl(), '/'));
     }
 
     /**
      * Get token token
      *
      * @param string|null $defaultValue
-     * @param string|null $name
      * @return string|null
      * @throws \Exception
      */
-    public function getToken(?string $defaultValue = null, string $name = null): ?string
+    public function getToken(?string $defaultValue = null): ?string
     {
-        return csrf()->getToken($name) ?? $defaultValue;
+        return csrf()->getToken(trim(url()->getOriginalUrl(), '/')) ?? $defaultValue;
     }
 }

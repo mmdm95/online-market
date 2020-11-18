@@ -12,7 +12,7 @@
         <div class="d-flex">
             <div class="breadcrumb">
                 <?php foreach ($breadcrumb as $item): ?>
-                    <?php if ((bool)$item['is_active']): ?>
+                    <?php if ((bool)($item['is_active'] ?? false)): ?>
                         <span class="breadcrumb-item active"><?= $item['text'] ?? ''; ?></span>
                     <?php else: ?>
                         <a href="<?= $item['url'] ?? '#'; ?>"

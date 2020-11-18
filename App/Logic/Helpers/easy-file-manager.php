@@ -20,7 +20,7 @@ function allowed_extensions($arr = [])
     return $arr;
 }
 
-function hidden_extensions($arr = ['php', 'html'])
+function hidden_extensions($arr = ['php', 'html', 'keep'])
 {
     return $arr;
 }
@@ -44,13 +44,18 @@ function rmrf($dir)
 
 function is_recursively_deletable($d)
 {
-    $stack = [$d];
-    while ($dir = array_pop($stack)) {
-        if (!is_readable($dir) || !is_writable($dir))
+    if (is_file($d)) {
+        if (!is_readable($d) || !is_writable($d))
             return false;
-        $files = array_diff(scandir($dir), ['.', '..']);
-        foreach ($files as $file) if (is_dir($file)) {
-            $stack[] = "$dir/$file";
+    } else {
+        $stack = [$d];
+        while ($dir = array_pop($stack)) {
+            if (!is_readable($dir) || !is_writable($dir))
+                return false;
+            $files = array_diff(scandir($dir), ['.', '..']);
+            foreach ($files as $file) if (is_dir($file)) {
+                $stack[] = "$dir/$file";
+            }
         }
     }
     return true;

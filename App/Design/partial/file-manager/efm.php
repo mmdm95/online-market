@@ -58,54 +58,103 @@
 
         $.fn.settablesortmarkers = function () {
             this.find('thead th span.indicator').remove();
-            this.find('thead th.sort_asc').append('<span class="indicator">&darr;<span>');
-            this.find('thead th.sort_desc').append('<span class="indicator">&uarr;<span>');
+            this.find('thead th.sort_asc').append('<span class="indicator ml-2">&darr;<span>');
+            this.find('thead th.sort_desc').append('<span class="indicator ml-2">&uarr;<span>');
             return this;
         };
     })(jQuery);
 
     $(function () {
-        var
-            defaultRout = '<?= base_url(); ?>admin/',
-            urlPath = defaultRout + "easyFileManager";
+        var routes = {
+            list: '/api/file-manager/list',
+            rename: '/api/file-manager/rename',
+            delete: '/api/file-manager/delete',
+            mkdir: '/api/file-manager/mkdir',
+            upload: '/api/file-manager/upload',
+            download: '/api/file-manager/download',
+        };
 
-        var chksLen = 0,
-            chksPath = [];
+        var renameModal = $('#modal_rename'),
+            renameInput = $('#renameInput');
 
         var XSRF = (document.cookie.match('(^|; )_sfm_xsrf=([^;]*)') || 0)[2];
-        var MAX_UPLOAD_SIZE = <?= $data['upload']['MAX_UPLOAD_SIZE'] ?>;
+        XSRF = XSRF ? XSRF : null;
+        var MAX_UPLOAD_SIZE = <?= $the_options['MAX_UPLOAD_SIZE'] ?>;
         var $tbody = $('#list');
         $(window).on('hashchange', list).trigger('hashchange');
         $('#table').tablesorter();
 
-        $('#table').on('click', '.delete', function (data) {
-            var sure = confirm('آیا مطمئن هستید؟');
+        $('#table').on('click', '.delete', function () {
+            var _ = this, sure;
+            sure = confirm('آیا مطمئن هستید؟');
             if (sure) {
-                $.post(urlPath, {'do': 'delete', file: $(this).attr('data-file'), xsrf: XSRF}, function (response) {
-                }, 'json');
-                list();
+                $.ajax({
+                    url: routes.delete,
+                    method: 'POST',
+                    dataType: 'json',
+                    data: {
+                        file: $(_).attr('data-file'),
+                        xsrf: XSRF,
+                    },
+                    success: function (response) {
+                        if (null === response.error) {
+                            list();
+                        } else {
+                            console.warn(response.error);
+                        }
+                    },
+                    error: function (response) {
+                        console.warn(response.responseText);
+                    },
+                });
             }
             return false;
+        }).on('click', '.rename', function () {
+            var path = $(this).attr('data-file');
+            var name = $(this).attr('data-file-name');
+            if (path && name) {
+                renameModal.modal();
+                renameInput.attr('data-path', path).val(name);
+            }
+            return false;
+        });
+
+        $('#renameFile').on('click', function () {
+            var name = $.trim(renameInput.val());
+            var path = renameInput.attr('data-path');
+            if ('' !== name && path) {
+                $.post(routes.rename, {
+                    file: path,
+                    newName: name,
+                    xsrf: XSRF,
+                }, function (response) {
+                    if (null === response.error) {
+                        list();
+                    } else {
+                        alert(response.error);
+                    }
+                }, 'json');
+            }
         });
 
         $('#mkdir').submit(function (e) {
             var hashval = decodeURIComponent(window.location.hash.substr(1)),
                 $dir = $(this).find('#dirname[name="name"]');
             e.preventDefault();
-            $dir.val().length && $.post(urlPath, {
-                'do': 'mkdir',
-                name: $dir.val(),
-                xsrf: XSRF,
-                file: hashval
-            }, function (data) {
-            }, 'json');
-            $dir.val('');
-            list();
-            refreshtree();
+            if('' !== $.trim($dir.val())) {
+                $dir.val().length && $.post(routes.mkdir, {
+                    name: $dir.val(),
+                    xsrf: XSRF,
+                    file: hashval
+                }, function (data) {
+                }, 'json');
+                $dir.val('');
+                list();
+            }
             return false;
         });
 
-        <?php if($data['upload']['allow_upload']): ?>
+        <?php if($the_options['allow_upload']): ?>
         // file upload stuff
         $('#file_drop_target').on('dragover', function () {
             $(this).addClass('drag_over');
@@ -145,12 +194,18 @@
             fd.append('file_data', file);
             fd.append('file', folder);
             fd.append('xsrf', XSRF);
-            fd.append('do', 'upload');
             var xhr = new XMLHttpRequest();
-            xhr.open('POST', urlPath);
-            xhr.onload = function () {
-                $row.remove();
-                list();
+            xhr.open('POST', routes.upload);
+            xhr.onreadystatechange = function () {
+                if (4 === this.readyState && 200 === this.status) {
+                    var data = JSON.parse(this.responseText);
+                    if (null === data.error) {
+                        $row.remove();
+                        list();
+                    } else {
+                        console.warn(data.error);
+                    }
+                }
             };
             xhr.upload.onprogress = function (e) {
                 if (e.lengthComputable) {
@@ -161,158 +216,156 @@
         }
 
         function renderFileUploadRow(file, folder) {
-            return $row = $('<div/>')
-                .append($('<span class="fileuploadname" />').text((folder ? folder + '/' : '') + file.name))
+            return $row = $('<div class="d-flex align-items-center" />')
+                .append($('<span class="fileuploadname" />').text(file.name))
                 .append($('<div class="progress_track"><div class="progress"></div></div>'))
-                .append($('<span class="size" />').text(formatFileSize(file.size)))
+                .append($('<span class="size" style="direction: ltr;" />').text(formatFileSize(file.size)))
         }
 
         function renderFileSizeErrorRow(file, folder) {
             return $row = $('<div class="error" />')
-                .append($('<span class="fileuploadname" />').text('Error: ' + (folder ? folder + '/' : '') + file.name))
+                .append($('<span class="fileuploadname" />').text('Error: ' + file.name))
                 .append($('<span/>').html(' file size - <b>' + formatFileSize(file.size) + '</b>'
                     + ' exceeds max upload size of <b>' + formatFileSize(MAX_UPLOAD_SIZE) + '</b>'));
         }
         <?php endif; ?>
 
-        $lazyFirstTime = true;
-
         function list() {
             var hashval = window.location.hash.substr(1);
-            $.get(urlPath, {
-                'do': 'list',
+            $.get(routes.list, {
                 file: hashval
             }, function (data) {
                 $tbody.empty();
                 $('#breadcrumb').empty().html(renderBreadcrumbs(hashval));
-                if (data.success) {
-                    $.each(data.results, function (k, v) {
+
+                if (null === data.error) {
+                    $.each(data.data, function (k, v) {
                         $tbody.append(renderFileRow(v));
                     });
 
-                    $threshold = $lazyFirstTime ? 500 : 0;
-                    $lazy = $('.lazy').lazy({
+                    $('.lazy').lazy({
                         effect: "fadeIn",
                         effectTime: 800,
-                        threshold: $threshold,
-                        appendScroll: $('#table').closest('.lazyContainer').length ? $('#table').closest('.lazyContainer') : window,
+                        threshold: 0,
                         // callback
                         afterLoad: function (element) {
                             $(element).css({'background': 'none'});
                         }
                     });
-                    $lazyFirstTime = false;
 
-                    !data.results.length && $tbody.append('<tr><td class="empty" colspan=5>این پوشه خالی می‌باشد</td></tr>');
-                    data.is_writable ? $('body').removeClass('no_write') : $('body').addClass('no_write');
+                    $('[data-popup=lightbox]').on('click', function (e) {
+                        e.preventDefault();
+                    }).each(function () {
+                        if ($.fn.fancybox) {
+                            $(this).fancybox({
+                                href: $(this).attr('data-url')
+                            });
+                        }
+                    });
+
+                    !data.data.length && $tbody.append('<tr><td class="empty" colspan="5">این پوشه خالی می‌باشد</td></tr>');
                 } else {
-                    console.warn(data.error.msg);
+                    console.warn(data.error);
                 }
                 $('#table').retablesort();
-
-                $('#table').find('td.first').on('click', function (e) {
-                    if ($(this).find('a.name.image').length) {
-                        e.preventDefault();
-                        $('#table').find('tr').removeClass('selectable');
-                        $(this).closest('tr').addClass('selectable');
-                    }
-                });
-
-                $('#table').find('td.first').off('dblclick').on('dblclick', function () {
-                    if($('#file-ok').length) {
-                        $('#file-ok').trigger('click');
-                    }
-                    if($('#choose_file').length) {
-                        $('#choose_file').trigger('click');
-                    }
-                });
             }, 'json');
         }
 
         function renderFileRow(data) {
             var $checkbox = '';
 
+            if (!data.is_dir) {
+                $checkbox = $("<label class='checkbox-switch mb-0' />");
+                $checkbox.append("<input type='checkbox' class='chks styled form-input-styled' />");
+//                $checkbox = $('<input type=checkbox class="chks" />');
+            }
+
             var $link = setImagesBg(data);
-            var allow_direct_link = <?= $data['upload']['allow_direct_link'] ? 'true' : 'false'; ?>;
+            var allow_direct_link = <?= $the_options['allow_direct_link'] ? 'true' : 'false'; ?>;
             if (!data.is_dir && !allow_direct_link) $link.css('pointer-events', 'none');
 
             // Download Icon
-            var winLoc = window.location.href.split('#')[0];
-            var $dl_link = $('<a/>').attr('href', winLoc + '/download/' + data.path.replace('.', '@'))
-                .attr('target', "_blank").addClass('download btn btn-success').text('دانلود').prepend("<i class='icon-download4 position-right'></i>");
-            var $delete_link = $('<a href="#" />').attr('data-file', data.path).addClass('delete btn btn-default').text('حذف').prepend("<i class='icon-cross3 position-right'></i>");
+            var $dl_link = $('<a/>').attr('href', routes.download + data.path)
+                .attr('target', "_blank").addClass('download btn btn-success btn-icon').text('دانلود').prepend("<i class='icon-download4 ml-2'></i>");
+            var $delete_link = $('<a href="javascript:void(0);" />').attr('data-file', data.path).addClass('delete btn btn-light btn-icon').text('حذف').prepend("<i class='icon-cross3 ml-2'></i>");
+            var $rename_link = $('<a href="javascript:void(0);" />').attr('data-file-name', data.name).attr('data-file', data.path).attr('data-toggle', 'modal').attr('data-target', '#modal_rename').addClass('rename btn btn-warning btn-icon').text('تغییر نام').prepend("<i class='icon-pencil7 ml-2'></i>");
             var perms = [];
             if (data.is_readable) perms.push('read');
             if (data.is_writable) perms.push('write');
             if (data.is_executable) perms.push('exec');
             return $('<tr />')
                 .addClass(data.is_dir ? 'is_dir' : '')
+                .append($('<td />').append($checkbox))
                 .append($('<td class="first" />').append($link))
-                .append($('<td/>').attr('data-sort', data.is_dir ? -1 : data.size)
+                .append($('<td/>').attr('data-sort', data.size)
                     .html($('<span class="size" />').text(formatFileSize(data.size))))
                 .append($('<td/>').attr('data-sort', data.mtime).text(formatTimestamp(data.mtime)))
                 .append($('<td/>').text(perms.join('+')))
-                .append($('<td/>').append($dl_link).append(data.is_deleteable ? $delete_link : ''));
+                .append($('<td/>').append($dl_link).append($rename_link).append(data.is_deleteable ? $delete_link : ''));
         }
 
         function setImagesBg(data) {
-            var $link;
+            var $link, extraClass, dataSrc;
+            extraClass = '';
             switch (data.ext) {
                 case 'png':
                 case 'jpg':
                 case 'jpeg':
                 case 'gif':
                 case 'svg':
-                    $link = $('<a class="name image" />')
-                        .attr('href', data.path).attr('data-url', "<?= base_url(); ?>" + data.path)
-                        .append($('<span class="img-name">' + data.name + '</span>'))
-                        .append($('<img class="lazy" data-src="<?php echo base_url(); ?>' + data.path + '" alt="' + data.name + '" />'))
-                        .append($('<div style="clear: both;"></div>'));
+                    dataSrc = '<?= url('admin.image.show'); ?>' + data.path;
+                    break;
+                case 'js':
+                    extraClass = 'js';
+                    dataSrc = '<?= asset_path('be', false); ?>/images/file-icons/JS.png';
+                    break;
+                case 'css':
+                    extraClass = 'css';
+                    dataSrc = '<?= asset_path('be', false); ?>/images/file-icons/CSS.png';
+                    break;
+                case 'html':
+                case 'xhtml':
+                    extraClass = 'html';
+                    dataSrc = '<?= asset_path('be', false); ?>/images/file-icons/HTML.png';
                     break;
                 case 'xls':
-                    $link = $('<a class="name image xls" />')
-                        .attr('href', data.path).attr('data-url', "<?= base_url(); ?>" + data.path)
-                        .append($('<span class="img-name">' + data.name + '</span>'))
-                        .append($('<img class="lazy" data-src="<?php echo asset_url(); ?>/images/file-icons/Excel.png" alt="' + data.name + '" />'))
-                        .append($('<div style="clear: both;"></div>'));
+                    extraClass = 'xls';
+                    dataSrc = '<?= asset_path('be', false); ?>/images/file-icons/Excel.png';
                     break;
                 case 'doc':
                 case 'docx':
-                    $link = $('<a class="name image doc" />')
-                        .attr('href', data.path).attr('data-url', "<?= base_url(); ?>" + data.path)
-                        .append($('<span class="img-name">' + data.name + '</span>'))
-                        .append($('<img class="lazy" data-src="<?php echo asset_url(); ?>/images/file-icons/Word.png" alt="' + data.name + '" />'))
-                        .append($('<div style="clear: both;"></div>'));
+                    extraClass = 'doc';
+                    dataSrc = '<?= asset_path('be', false); ?>/images/file-icons/Word.png';
                     break;
                 case 'pdf':
-                    $link = $('<a class="name image pdf" />')
-                        .attr('href', data.path).attr('data-url', "<?= base_url(); ?>" + data.path)
-                        .append($('<span class="img-name">' + data.name + '</span>'))
-                        .append($('<img class="lazy" data-src="<?php echo asset_url(); ?>/images/file-icons/PDF.png" alt="' + data.name + '" />'))
-                        .append($('<div style="clear: both;"></div>'));
+                    extraClass = 'pdf';
+                    dataSrc = '<?= asset_path('be', false); ?>/images/file-icons/PDF.png';
                     break;
                 case 'php':
-                    $link = $('<a class="name image php" />')
-                        .attr('href', data.path).attr('data-url', "<?= base_url(); ?>" + data.path)
-                        .append($('<span class="img-name">' + data.name + '</span>'))
-                        .append($('<img class="lazy" data-src="<?php echo asset_url(); ?>/images/file-icons/PHP.png" alt="' + data.name + '" />'))
-                        .append($('<div style="clear: both;"></div>'));
+                case 'phtml':
+                    extraClass = 'php';
+                    dataSrc = '<?= asset_path('be', false); ?>/images/file-icons/PHP.png';
                     break;
                 case 'mp4':
                 case 'ogg':
                 case 'webm':
-                    $link = $('<a class="name image video" />')
-                        .attr('href', data.path).attr('data-url', "<?= base_url(); ?>" + data.path)
-                        .append($('<span class="img-name">' + data.name + '</span>'))
-                        .append($('<img class="lazy" data-src="<?php echo asset_url(); ?>/images/file-icons/Video.png" alt="' + data.name + '" />'))
-                        .append($('<div style="clear: both;"></div>'));
+                    extraClass = 'video';
+                    dataSrc = '<?= asset_path('be', false); ?>/images/file-icons/Video.png';
                     break;
                 default:
                     $link = $('<a class="name" />')
-                        .attr('href', data.is_dir ? '#' + data.path : '<?php echo base_url(); ?>' + data.path)
+                        .attr('href', data.is_dir ? '#' + data.path : '<?= url('admin.image.show'); ?>' + data.path)
                         .text(data.name);
-                    break;
+                    return $link;
             }
+
+            $link = $('<a class="name image ' + extraClass + '" />')
+                .attr('href', data.path).attr('data-url', "<?= url('admin.image.show'); ?>" + data.path)
+                .attr('data-popup', 'lightbox')
+                .append($('<span class="img-name">' + data.name + '</span>'))
+                .append($('<img class="lazy" data-src="' + dataSrc + '" alt="' + data.name + '" />'))
+                .append($('<div style="clear: both;"></div>'));
+
             return $link;
         }
 
@@ -321,22 +374,22 @@
                 pathArr = path.split('\\').join('/').split('/'), $html;
 
             if (pathArr.length == 1) {
-                $html = $('<div/>').append($('<a href="#" class="active">Home</a></div>'));
+                $html = $('<div/>').append($('<a href="#" class="text-dark">Home</a></div>'));
             } else {
-                $html = $('<div/>').append($('<a href="#">Home</a></div>'));
+                $html = $('<div/>').append($('<a href="#" class="text-muted">Home</a></div>'));
             }
             $.each(pathArr, function (k, v) {
                 if (v) {
-                    if (k > 1) {
+                    if (k >= 1) {
                         var v_as_text;
                         if (pathArr.length == (k + 1)) {
                             v_as_text = decodeURIComponent(v);
                             $html.append($('<span/>').text(' ▸ '))
-                                .append($('<a class="active" />').attr('href', '#' + base + v).text(v_as_text));
+                                .append($('<a class="text-dark" />').attr('href', '#/' + base + v).text(v_as_text));
                         } else {
                             v_as_text = decodeURIComponent(v);
                             $html.append($('<span/>').text(' ▸ '))
-                                .append($('<a/>').attr('href', '#' + base + v).text(v_as_text));
+                                .append($('<a class="text-muted" />').attr('href', '#/' + base + v).text(v_as_text));
                         }
                     }
                     base += v + '/';
@@ -347,8 +400,8 @@
                 var $this = $(this), prevTopScroll;
                 $this.on('click', function () {
                     prevTopScroll = $('html').scrollTop();
-                    setTimeout(function() {
-                        $('html').animate({ scrollTop: prevTopScroll }, 200);
+                    setTimeout(function () {
+                        $('html').animate({scrollTop: prevTopScroll}, 200);
                     }, 200);
                 });
             });

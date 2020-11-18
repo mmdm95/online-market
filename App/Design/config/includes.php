@@ -133,6 +133,26 @@ return [
                             asset_path('be/js/plugins/forms/selects/select2.min.js') .
                             '"></script>'
                         ),
+                        e(
+                            '<script type="text/javascript" src="' .
+                            asset_path('js/es6-promise.auto.min.js') .
+                            '"></script>'
+                        ),
+                        e(
+                            '<script type="text/javascript" src="' .
+                            asset_path('js/axios.min.js') .
+                            '"></script>'
+                        ),
+                        e(
+                            '<script type="text/javascript" src="' .
+                            asset_path('js/variables.js') .
+                            '"></script>'
+                        ),
+                        e(
+                            '<script type="text/javascript" src="' .
+                            asset_path('js/globals.js') .
+                            '"></script>'
+                        ),
                     ],
                 ],
                 'css' => [
@@ -174,7 +194,7 @@ return [
                         ),
                         e(
                             '<link href="' .
-                            hashed_path('css', 'font.css') .
+                            asset_path('css/font.css') .
                             '" rel="stylesheet" type="text/css">'
                         ),
                     ],
@@ -183,11 +203,6 @@ return [
             'admin-form' => [
                 'js' => [
                     'bottom' => [
-                        e(
-                            '<script type="text/javascript" src="' .
-                            asset_path('be/js/demo_pages/components_modals.js') .
-                            '"></script>'
-                        ),
                         e(
                             '<script type="text/javascript" src="' .
                             asset_path('be/js/plugins/media/fancybox.min.js') .
@@ -200,17 +215,7 @@ return [
                         ),
                         e(
                             '<script type="text/javascript" src="' .
-                            asset_path('be/js/demo_pages/gallery.js') .
-                            '"></script>'
-                        ),
-                        e(
-                            '<script type="text/javascript" src="' .
                             asset_path('be/js/plugins/forms/styling/switch.min.js') .
-                            '"></script>'
-                        ),
-                        e(
-                            '<script type="text/javascript" src="' .
-                            asset_path('be/js/demo_pages/form_checkboxes_radios.js') .
                             '"></script>'
                         ),
                     ],
@@ -219,21 +224,6 @@ return [
             'admin-table' => [
                 'js' => [
                     'bottom' => [
-                        e(
-                            '<script type="text/javascript" src="' .
-                            asset_path('be/js/demo_pages/datatables_advanced.js') .
-                            '"></script>'
-                        ),
-                        e(
-                            '<script type="text/javascript" src="' .
-                            asset_path('be/js/demo_pages/picker_color.js') .
-                            '"></script>'
-                        ),
-                        e(
-                            '<script type="text/javascript" src="' .
-                            asset_path('be/js/app.js') .
-                            '"></script>'
-                        ),
                         e(
                             '<script type="text/javascript" src="' .
                             asset_path('be/js/plugins/tables/datatables/datatables.min.js') .
@@ -253,17 +243,23 @@ return [
                     ]
                 ]
             ],
+            'admin-fab' => [
+                'js' => [
+                    'bottom' => [
+                        e(
+                            '<script type="text/javascript" src="' .
+                            asset_path('be/js/plugins/ui/fab.min.js') .
+                            '"></script>'
+                        ),
+                    ],
+                ],
+            ],
             'admin' => [
                 'js' => [
                     'bottom' => [
                         e(
                             '<script type="text/javascript" src="' .
-                            asset_path('be/js/demo_pages/components_popups.js') .
-                            '"></script>'
-                        ),
-                        e(
-                            '<script type="text/javascript" src="' .
-                            asset_path('be/js/demo_pages/form_layouts.js') .
+                            asset_path('be/js/plugins/loaders/lazy.min.js') .
                             '"></script>'
                         ),
                         e(
@@ -271,8 +267,22 @@ return [
                             asset_path('be/js/app.js') .
                             '"></script>'
                         ),
+                        e(
+                            '<script type="text/javascript" src="' .
+                            asset_path('be/js/custom.js') .
+                            '"></script>'
+                        ),
                     ],
                 ],
+                'css' => [
+                    'top' => [
+                        e(
+                            '<link href="' .
+                            asset_path('be/css/custom.css') .
+                            '" rel="stylesheet" type="text/css">'
+                        ),
+                    ]
+                ]
             ],
         ],
         'view/admin-login' => [
@@ -377,14 +387,6 @@ return [
                 ],
             ],
         ],
-        'view/file-manager/index' => [
-            'title' => 'پایار تأسیسات | مدیریت فایل‌ها',
-            'common' => [
-                'admin-base',
-                'admin-form',
-                'admin'
-            ],
-        ],
         'view/category/edit' => [
             'title' => 'پایار تأسیسات | ,ویرایش دسته',
             'common' => [
@@ -440,6 +442,28 @@ return [
                 'admin-base',
                 'admin-form',
                 'admin'
+            ],
+        ],
+        'view/file-manager/index' => [
+            'title' => 'پایار تأسیسات | مدیریت فایل‌ها',
+            'common' => [
+                'admin-base',
+                'admin-form',
+                'admin-fab',
+                'admin'
+            ],
+            'sub_title' => 'مدیریت فایل‌ها',
+            'breadcrumb' => [
+                [
+                    'url' => url('admin.index'),
+                    'icon' => 'icon-home2',
+                    'text' => 'خانه',
+                    'is_active' => false,
+                ],
+                [
+                    'text' => 'مدیریت فایل‌ها',
+                    'is_active' => true,
+                ],
             ],
         ],
     ],

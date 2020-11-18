@@ -5,7 +5,7 @@ namespace App\Logic\Middlewares;
 use Pecee\Http\Middleware\IMiddleware;
 use Pecee\Http\Request as Request;
 
-class ApiVerificationMiddleware implements IMiddleware
+class ApiVerifierMiddleware implements IMiddleware
 {
     public function handle(Request $request): void
     {

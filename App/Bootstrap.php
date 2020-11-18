@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Logic\Adapters\CsrfVerifier as CsrfVerifier;
 use App\Logic\Adapters\SessionTokenProvider;
 use App\Logic\Container as ContainerDefinition;
 use App\Logic\Route as RouteDefinition;
@@ -32,7 +33,6 @@ use Sim\Loader\Loader;
 use Sim\Loader\LoaderSingleton;
 use Sim\Logger\Logger;
 
-use Pecee\Http\Middleware\BaseCsrfVerifier;
 use Pecee\SimpleRouter\SimpleRouter as Router;
 
 use Dotenv\Dotenv;
@@ -105,7 +105,7 @@ class Bootstrap
     protected function defineConstants()
     {
         //****** Root Directory *******
-        defined('BASE_ROOT') OR define('BASE_ROOT', dirname(__DIR__) . '/');
+        defined('BASE_ROOT') OR define('BASE_ROOT', str_replace('\\', '/', dirname(__DIR__) . '/'));
 
         //******* Error Handler *******
         defined("E_FATAL") OR define("E_FATAL", E_ERROR | E_USER_ERROR | E_PARSE | E_CORE_ERROR | E_COMPILE_ERROR | E_RECOVERABLE_ERROR);
@@ -326,7 +326,7 @@ class Bootstrap
      */
     protected function defineRoute()
     {
-        $verifier = new BaseCsrfVerifier();
+        $verifier = new CsrfVerifier();
         $verifier->setTokenProvider(new SessionTokenProvider());
 
         Router::csrfVerifier($verifier);

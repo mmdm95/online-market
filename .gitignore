@@ -196,3 +196,4 @@ resource/*
 node_modules
 build/*
 !build/manifest.json
+public/js/variables.js

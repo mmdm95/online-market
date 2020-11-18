@@ -18,10 +18,9 @@ class CustomExceptionHandler implements IExceptionHandler
     {
         /* You can use the exception handler to format errors depending on the request and type. */
         if ($request->getUrl()->contains('/api')) {
-            response()->json([
-                'error' => $error->getMessage(),
-                'code' => $error->getCode(),
-            ]);
+            $resourceHandler = new ResourceHandler();
+            $resourceHandler->statusCode($error->getCode())->errorMessage($error->getMessage());
+            response()->httpCode($error->getCode())->json($resourceHandler->getReturnData());
         }
 
         /* The router will throw the NotFoundHttpException on 404 */
@@ -29,7 +28,7 @@ class CustomExceptionHandler implements IExceptionHandler
             // Render custom 404-page
             $request->setRewriteUrl(url(NOT_FOUND));
             return;
-        } elseif($error->getCode() == 500) {
+        } elseif ($error->getCode() == 500) {
             // Render custom 500-page
             $request->setRewriteUrl(url(SERVER_ERROR));
             return;

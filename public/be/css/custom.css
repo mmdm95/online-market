@@ -1,9 +1,18 @@
+/*********************************
+********** File manager **********
+*********************************/
+
 #table th:not(#chks) {
     cursor: pointer;
 }
 
 #table th#chks input[type=checkbox] {
     cursor: pointer;
+}
+
+#table th#chks .uniform-checker span, .uniform-choice span {
+    color: #fff;
+    border-color: #fff;
 }
 
 #table th .indicator {
@@ -38,35 +47,38 @@
 }
 
 #upload_progress > div {
-    padding: 3px 0;
+    padding: 5px 0;
 }
 
 .no_write #mkdir, .no_write #file_drop_target {
     display: none
 }
 
-.progress_track {
+#upload_progress .progress_track {
     display: inline-block;
     width: 200px;
     height: 10px;
-    border: 1px solid #333;
-    margin: 0 4px 0 10px;
+    margin: 0 8px;
+    background-color: rgba(75,96,218,0.2);
+    border-radius: .25rem;
 }
 
-.progress {
-    background-color: #82CFFA;
+#upload_progress .progress {
+    display: block;
+    background-color: #4b60da;
+    border: 1px solid #4b60da;
     height: 10px;
+    border-radius: .25rem;
 }
 
 #breadcrumb {
-    margin-top: 15px;
+    margin-top: 1rem;
     padding: 10px 15px 6px;
-    font-size: 15px;
-    color: #aaa;
+    font-size: .9rem;
     direction: ltr;
-    background-color: #f6f6f6;
+    text-align: left;
+    background-color: #f8f8f8;
     border: 1px solid #eee;
-    border-radius: 5px 5px 0 0;
 }
 
 #breadcrumb *:not(.active) {
@@ -102,7 +114,7 @@
 }
 
 #table td, #table th {
-    padding: .8em 1em .8em .2em;
+    padding: .5rem .8rem;
 }
 
 #table tr.selectable td {
@@ -133,17 +145,6 @@
 
 #table [class^=bg-] .checker span {
     color: #fff;
-}
-
-.is_dir .size {
-    color: transparent;
-    font-size: 0;
-}
-
-.is_dir .size:before {
-    content: "--";
-    font-size: 14px;
-    color: #333;
 }
 
 .is_dir .download {
@@ -196,4 +197,116 @@ a.rename {
 .download,
 .rename {
     font-size: 10px;
+}
+
+/*********************************
+*********** Tree view ************
+*********************************/
+
+.tree ul {
+    padding: 0;
+    list-style: none;
+    margin: 0;
+    position: relative;
+    color: #777;
+}
+
+.tree ul ul {
+    margin-right: .5em;
+}
+
+.tree ul:before {
+    content: "";
+    display: block;
+    width: 0;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    border-right: 1px solid;
+}
+
+.tree li {
+    margin: 0;
+    padding: 0 1em;
+    line-height: 2em;
+    color: #777;
+    font-weight: 700;
+    position: relative;
+}
+
+.tree li.empty-dir {
+    color: #999;
+    font-weight: 100;
+    font-style: italic;
+}
+
+.tree ul li:before {
+    content: "";
+    display: block;
+    width: 10px;
+    height: 0;
+    border-top: 1px solid;
+    margin-top: -1px;
+    position: absolute;
+    top: 1em;
+    right: 0;
+}
+
+.tree > ul::before,
+.tree > ul > li::before {
+    border: none;
+}
+
+.tree ul li:last-child:before {
+    background: #fff;
+    height: auto;
+    top: 1em;
+    bottom: 0;
+}
+
+.indicator {
+    margin-right: 5px;;
+}
+
+.tree li a {
+    color: #777;
+    padding: 3px 7px;
+    cursor: pointer;
+    border-radius: 2px;
+    text-decoration: none;
+    -webkit-transition: color ease-in-out 0.2s;
+    -moz-transition: color ease-in-out 0.2s;
+    -o-transition: color ease-in-out 0.2s;
+    transition: color ease-in-out 0.2s;
+}
+
+.tree li a:hover {
+    color: #555;
+    -webkit-transition: color ease-in-out 0.2s;
+    -moz-transition: color ease-in-out 0.2s;
+    -o-transition: color ease-in-out 0.2s;
+    transition: color ease-in-out 0.2s;
+}
+
+.tree li a.selectable {
+    background: rgba(33, 150, 243, 0.12);
+    color: #2196F3;
+}
+
+.tree li a .folder-icon {
+    font-size: 17px;
+    text-align: center;
+    margin: 3px 0 0 5px;
+    float: right;
+}
+
+.tree li button, .tree li button:active, .tree li button:focus {
+    text-decoration: none;
+    color: #777;
+    border: none;
+    background: transparent;
+    margin: 0 0 0 0;
+    padding: 0 0 0 0;
+    outline: 0;
 }

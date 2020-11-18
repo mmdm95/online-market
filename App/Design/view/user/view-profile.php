@@ -316,7 +316,7 @@
                     </tbody>
                 </table>
             </div>
-            <!-- /highlighting rows and columns --
+            <!-- /highlighting rows and columns -->
             <!-- Highlighting rows and columns -->
             <div class="card">
                 <div class="card-header header-elements-inline">
