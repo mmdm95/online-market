@@ -38,12 +38,14 @@ class HomeController extends AbstractAdminController
      */
     public function login()
     {
+        if(request()->getMethod() === 'post') {
+
+        }
+
         $this
             ->setLayout('admin-login')
             ->setTemplate('view/admin-login');
 
-        return $this->render([
-            'title' => \translate()->translate('admin.login.title'),
-        ]);
+        return $this->render();
     }
 }

@@ -3,11 +3,12 @@
 namespace App\Logic;
 
 use Sim\Auth\Interfaces\IAuth;
-use Sim\Cart\Cart;
-use Sim\Cookie\Cookie;
-use Sim\Crypt\Crypt;
+use Sim\Cart\Cart as Cart;
+use Sim\Cookie\Cookie as Cookie;
+use Sim\Crypt\Crypt as Crypt;
+use Sim\Form\FormValidator;
 use Sim\HitCounter\HitCounter;
-use Sim\I18n\Translate;
+use Sim\I18n\Translate as Translate;
 use Sim\Interfaces\IInitialize;
 use Sim\Container\Container as Resolver;
 use Sim\Auth\DBAuth as Auth;
@@ -98,6 +99,22 @@ class Container implements IInitialize
         // hit counter class
         \container()->set(HitCounter::class, function () {
             return new HitCounter(\connector()->getPDO(), \config()->get('hit.structure'));
+        });
+
+        // form validator class
+        \container()->set(FormValidator::class, function (Resolver $resolver) {
+            /**
+             * @var Translate $translate
+             */
+            $translate = $resolver->get(Translate::class);
+
+            $settings = $translate->translate('form_translation');
+            $settings = is_array($settings) ? $settings : [];
+
+            $formValidator = new FormValidator();
+            $formValidator->setLang($translate->getLanguage())->setLangSettings($settings);
+
+            return $formValidator;
         });
 
 //        /**

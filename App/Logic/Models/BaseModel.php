@@ -11,6 +11,16 @@ use Sim\Interfaces\IInvalidVariableNameException;
 abstract class BaseModel
 {
     /**
+     * Tables
+     */
+    const TBL_USERS = 'users';
+    const TBL_USER_ADDRESS = 'user_address';
+    const TBL_ROLES = 'roles';
+    const TBL_USER_ROLE = 'user_role';
+    const TBL_PROVINCES = 'provinces';
+    const TBL_CITIES = 'cities';
+
+    /**
      * @var DBConnector
      */
     protected $connector;
