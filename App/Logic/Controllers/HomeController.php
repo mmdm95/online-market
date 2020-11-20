@@ -2,19 +2,28 @@
 
 namespace App\Logic\Controllers;
 
-use Sim\Abstracts\Mvc\Controller\AbstractController;
+use App\Logic\Abstracts\AbstractHomeController;
+use Sim\Exceptions\ConfigManager\ConfigNotRegisteredException;
+use Sim\Exceptions\Mvc\Controller\ControllerException;
+use Sim\Exceptions\PathManager\PathNotRegisteredException;
+use Sim\Interfaces\IFileNotExistsException;
+use Sim\Interfaces\IInvalidVariableNameException;
 
-class HomeController extends AbstractController
+class HomeController extends AbstractHomeController
 {
+    /**
+     * @return string
+     * @throws \ReflectionException
+     * @throws ConfigNotRegisteredException
+     * @throws ControllerException
+     * @throws PathNotRegisteredException
+     * @throws IFileNotExistsException
+     * @throws IInvalidVariableNameException
+     */
     public function index()
     {
-        $this->setTemplate('view/index');
+        $this->setLayout($this->main_layout)->setTemplate('view/main/index');
 
-        return $this->render();
-    }
-
-    public function show($id)
-    {
-        return $id;
+        return $this->render([]);
     }
 }

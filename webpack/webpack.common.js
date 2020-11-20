@@ -8,15 +8,13 @@ const {CleanWebpackPlugin} = require("clean-webpack-plugin");
 const OptimizeCssAssetsPlugin = require("optimize-css-assets-webpack-plugin");
 const TerserPlugin = require("terser-webpack-plugin");
 const ManifestPlugin = require('webpack-manifest-plugin');
-const dotenv = require('dotenv').config({
-    path: path.join(__dirname, '.js.env')
-});
+// const dotenv = require('dotenv').config({
+//     path: path.join(__dirname, '.js.env')
+// });
 
 module.exports = {
     entry: {
-        font: path.resolve(__dirname, "../resource/js/font.js"),
-        admin: path.resolve(__dirname, "../resource/js/admin.js"),
-        main: path.resolve(__dirname, "../resource/js/index.js"),
+        // main: path.resolve(__dirname, "../resource/js/index.js"),
         vendor: path.resolve(__dirname, "../resource/js/vendor.js")
     },
     optimization: {
@@ -53,9 +51,9 @@ module.exports = {
             fileName: "manifest.json"
         }),
         new CleanWebpackPlugin(),
-        new webpack.DefinePlugin({
-            "process.env": dotenv.parsed
-        }),
+        // new webpack.DefinePlugin({
+        //     "process.env": dotenv.parsed
+        // }),
         new webpack.ProvidePlugin({
             Promise: ['es6-promise', 'Promise']
         }),

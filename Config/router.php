@@ -9,12 +9,12 @@ return [
          * Notfound error layout.
          * Note: if you don't have any layout for notfound, make sure this parameter is [null]
          */
-        'layout' => null,
+        'layout' => 'layout/main-index',
 
         /**
          * Notfound error template
          */
-        'template' => 'error/404',
+        'template' => 'view/404',
     ],
 
     'error_route' => [

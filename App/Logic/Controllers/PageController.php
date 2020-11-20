@@ -36,7 +36,7 @@ class PageController extends AbstractController
      */
     public function adminNotFound()
     {
-        return $this->show404();
+        return $this->setTemplate('error.404')->show404();
     }
 
     /**
