@@ -1,4 +1,18 @@
 (function ($) {
+    'use strict';
+
+    var shop, core, variables;
+    var dataLoadableName, loadableAttributes;
+
+    dataLoadableName = 'data-module-load';
+    loadableAttributes = [
+        'cart',
+    ];
+
+    shop = new window.TheShop();
+    core = window.TheCore;
+    variables = window.MyGlobalVariables;
+
     /**
      * Cart class contains all cart functionality
      * @returns {Cart}
@@ -13,38 +27,19 @@
 
         /**
          * @param url
+         * @param method
          * @param code
          * @param qnt
+         * @param successCallback
          */
-        function addORUpdate(url, code, qnt) {
-            axios({
-                method: 'put',
-                url: url,
+        function addORUpdate(url, method, code, qnt, successCallback) {
+            shop.request(url, method, function () {
+                successCallback.call(this);
+            }, {
                 data: {
                     code: code,
                     qnt: qnt ? qnt : 1,
                 },
-                headers: window.Shop.getAPIHeader(),
-            }).then(function (response) {
-                var data = window.Shop.handleAPIData(response.data);
-                // do other stuffs to handle data items
-            }).catch(function (error) {
-                if (error.response) {
-                    // The request was made and the server responded with a status code
-                    // that falls out of the range of 2xx
-                    console.log(error.response.data);
-                    console.log(error.response.status);
-                    console.log(error.response.headers);
-                } else if (error.request) {
-                    // The request was made but no response was received
-                    // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
-                    // http.ClientRequest in node.js
-                    console.log(error.request);
-                } else {
-                    // Something happened in setting up the request that triggered an Error
-                    console.log('Error', error.message);
-                }
-                console.log(error.config);
             });
         }
 
@@ -53,12 +48,11 @@
          *************************************************************/
 
         _.get = function () {
-            axios({
+            window.axios({
                 method: 'get',
-                url: MyGlobalVariables.url.cart.get,
-                headers: window.Shop.getAPIHeader(),
+                url: variables.url.cart.get,
             }).then(function (response) {
-                var data = window.Shop.handleAPIData(response.data);
+                var data = shop.handleAPIData(response.data);
                 // do other stuffs to handle data items
             }).catch(function (error) {
                 // catch error
@@ -66,12 +60,11 @@
         };
 
         _.save = function () {
-            axios({
+            window.axios({
                 method: 'put',
-                url: MyGlobalVariables.url.cart.save,
-                headers: window.Shop.getAPIHeader(),
+                url: variables.url.cart.save,
             }).then(function (response) {
-                var data = window.Shop.handleAPIData(response.data);
+                var data = shop.handleAPIData(response.data);
                 // do other stuffs to handle data items
             }).catch(function (error) {
                 // catch error
@@ -81,29 +74,30 @@
         /**
          * @param code
          * @param qnt
+         * @param successCallback
          */
-        _.add = function (code, qnt) {
-            addORUpdate(MyGlobalVariables.url.cart.add, code, qnt);
+        _.add = function (code, qnt, successCallback) {
+            addORUpdate(variables.url.cart.add, 'post', code, qnt, successCallback);
         };
 
         /**
          * @param code
          * @param qnt
+         * @param successCallback
          */
-        _.update = function (code, qnt) {
-            addORUpdate(MyGlobalVariables.url.cart.update, code, qnt);
+        _.update = function (code, qnt, successCallback) {
+            addORUpdate(variables.url.cart.update, 'put', code, qnt, successCallback);
         };
 
         /**
          * @param code
          */
         _.remove = function (code) {
-            axios({
+            window.axios({
                 method: 'delete',
-                url: MyGlobalVariables.cart.remove + '/' + code,
-                headers: window.Shop.getAPIHeader(),
+                url: variables.cart.remove + '/' + code,
             }).then(function (response) {
-                var data = window.Shop.handleAPIData(response.data);
+                var data = shop.handleAPIData(response.data);
                 // do other stuffs to handle data items
             }).catch(function (error) {
                 // catch error
@@ -118,4 +112,13 @@
      * @type {Cart}
      */
     window.Cart = new Cart();
+
+    /**
+     * Do stuffs after DOM loaded
+     */
+    $(function () {
+        var cart = window.Cart;
+
+
+    });
 })(jQuery);

@@ -66,12 +66,12 @@
 
     $(function () {
         var routes = {
-            list: '/api/file-manager/list',
-            rename: '/api/file-manager/rename',
-            delete: '/api/file-manager/delete',
-            mkdir: '/api/file-manager/mkdir',
-            upload: '/api/file-manager/upload',
-            download: '/api/file-manager/download',
+            list: '/ajax/file-manager/list',
+            rename: '/ajax/file-manager/rename',
+            delete: '/ajax/file-manager/delete',
+            mkdir: '/ajax/file-manager/mkdir',
+            upload: '/ajax/file-manager/upload',
+            download: '/ajax/file-manager/download',
         };
 
         var renameModal = $('#modal_rename'),
@@ -272,14 +272,6 @@
         }
 
         function renderFileRow(data) {
-            var $checkbox = '';
-
-            if (!data.is_dir) {
-                $checkbox = $("<label class='checkbox-switch mb-0' />");
-                $checkbox.append("<input type='checkbox' class='chks styled form-input-styled' />");
-//                $checkbox = $('<input type=checkbox class="chks" />');
-            }
-
             var $link = setImagesBg(data);
             var allow_direct_link = <?= $the_options['allow_direct_link'] ? 'true' : 'false'; ?>;
             if (!data.is_dir && !allow_direct_link) $link.css('pointer-events', 'none');
@@ -295,7 +287,6 @@
             if (data.is_executable) perms.push('exec');
             return $('<tr />')
                 .addClass(data.is_dir ? 'is_dir' : '')
-                .append($('<td />').append($checkbox))
                 .append($('<td class="first" />').append($link))
                 .append($('<td/>').attr('data-sort', data.size)
                     .html($('<span class="size" />').text(formatFileSize(data.size))))

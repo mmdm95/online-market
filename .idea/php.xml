@@ -23,7 +23,6 @@
       <path value="$PROJECT_DIR$/vendor/voku/portable-ascii" />
       <path value="$PROJECT_DIR$/vendor/predis/predis" />
       <path value="$PROJECT_DIR$/vendor/mobiledetect/mobiledetectlib" />
-      <path value="$PROJECT_DIR$/vendor/opis/closure" />
       <path value="$PROJECT_DIR$/vendor/simplicity-framework/Handler" />
       <path value="$PROJECT_DIR$/vendor/simplicity-framework/Loader" />
       <path value="$PROJECT_DIR$/vendor/simplicity-framework/PathManager" />
@@ -37,16 +36,12 @@
       <path value="$PROJECT_DIR$/vendor/simplicity-framework/Utils" />
       <path value="$PROJECT_DIR$/vendor/simplicity-framework/Exceptions" />
       <path value="$PROJECT_DIR$/vendor/simplicity-framework/Mvc" />
-      <path value="$PROJECT_DIR$/vendor/php-di/php-di" />
-      <path value="$PROJECT_DIR$/vendor/php-di/phpdoc-reader" />
-      <path value="$PROJECT_DIR$/vendor/php-di/invoker" />
       <path value="$PROJECT_DIR$/vendor/graham-campbell/result-type" />
       <path value="$PROJECT_DIR$/vendor/jaybizzle/crawler-detect" />
       <path value="$PROJECT_DIR$/vendor/composer" />
       <path value="$PROJECT_DIR$/vendor/simplicity-framework/Functions" />
       <path value="$PROJECT_DIR$/vendor/psr/container" />
       <path value="$PROJECT_DIR$/vendor/mmdm/sim-form" />
-      <path value="$PROJECT_DIR$/vendor/pecee/simple-router" />
       <path value="$PROJECT_DIR$/vendor/psr/log" />
       <path value="$PROJECT_DIR$/vendor/mmdm/sim-captcha" />
       <path value="$PROJECT_DIR$/vendor/mmdm/sim-csrf" />
@@ -65,6 +60,14 @@
       <path value="$PROJECT_DIR$/vendor/mmdm/sim-auth" />
       <path value="$PROJECT_DIR$/vendor/mmdm/sim-hit-counter" />
       <path value="$PROJECT_DIR$/vendor/mmdm/sim-cart" />
+      <path value="$PROJECT_DIR$/vendor/opis/closure" />
+      <path value="$PROJECT_DIR$/vendor/php-di/invoker" />
+      <path value="$PROJECT_DIR$/vendor/php-di/phpdoc-reader" />
+      <path value="$PROJECT_DIR$/vendor/php-di/php-di" />
+      <path value="$PROJECT_DIR$/vendor/simple-php-router/src" />
+      <path value="$PROJECT_DIR$/vendor/simple-php-router/.idea" />
+      <path value="$PROJECT_DIR$/vendor/simple-php-router/tests" />
+      <path value="$PROJECT_DIR$/vendor/fzaninotto/faker" />
     </include_path>
   </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="7.3" />

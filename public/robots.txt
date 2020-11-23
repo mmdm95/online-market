@@ -1,3 +1,4 @@
 User-agent: *
 Disallow: /build/
 Disallow: /be/
+Disallow: /js/variables.js

@@ -22,7 +22,9 @@ class Route implements IInitialize
         $this->setDependencyInjection();
         $this->setEventHandlers();
         $this->setDefaultNamespace();
+        //-----
         $this->webRoutes();
+        $this->ajaxRoutes();
         $this->apiRoutes();
     }
 
@@ -165,6 +167,35 @@ class Route implements IInitialize
     }
 
     /**
+     * Routes of ajax part
+     */
+    protected function ajaxRoutes()
+    {
+        Router::group([
+            'prefix' => '/ajax/',
+            'exceptionHandler' => CustomExceptionHandler::class,
+        ], function () {
+            /**
+             * File Manager Route
+             */
+            Router::get('/file-manager/list', 'Admin\FileController@list')->name('api.file-manager.list');
+            Router::post('/file-manager/rename', 'Admin\FileController@rename')->name('api.file-manager.rename');
+            Router::post('/file-manager/delete', 'Admin\FileController@delete')->name('api.file-manager.delete');
+            Router::post('/file-manager/mkdir', 'Admin\FileController@makeDir')->name('api.file-manager.mkdir');
+            Router::post('/file-manager/mvdir', 'Admin\FileController@moveDir')->name('api.file-manager.mvdir');
+            Router::post('/file-manager/upload', 'Admin\FileController@upload')->name('api.file-manager.upload');
+            Router::get('/file-manager/download/{filename}', 'Admin\FileController@download')->where([
+                'filename' => '.+',
+            ])->name('api.file-manager.download');
+            Router::get('/file-manager/dir-tree', 'Admin\FileController@foldersTree')->name('api.file-manager.tree');
+            // show images outside of public folder
+            Router::get('/images/{filename}', 'Admin\FileController@showImage')->where([
+                'filename' => '.+',
+            ])->name('admin.image.show');
+        });
+    }
+
+    /**
      * Routes of api part
      */
     protected function apiRoutes()
@@ -174,35 +205,9 @@ class Route implements IInitialize
             'exceptionHandler' => CustomExceptionHandler::class,
             'middleware' => ApiVerifierMiddleware::class
         ], function () {
-            /**
-             * Csrf token generator Route
-             */
-            Router::get('/csrf-token/{name?}', 'CsrfController@getToken')->where([
-                'name' => '.+',
-            ])->name('api.csrf-token');
-
             //==========================
-            // admin routes
+            // other routes
             //==========================
-            Router::group(['middleware' => AdminApiVerifierMiddleware::class], function () {
-                /**
-                 * File Manager Route
-                 */
-                Router::get('/file-manager/list', 'Admin\FileController@list')->name('api.file-manager.list');
-                Router::post('/file-manager/rename', 'Admin\FileController@rename')->name('api.file-manager.rename');
-                Router::post('/file-manager/delete', 'Admin\FileController@delete')->name('api.file-manager.delete');
-                Router::post('/file-manager/mkdir', 'Admin\FileController@makeDir')->name('api.file-manager.mkdir');
-                Router::post('/file-manager/mvdir', 'Admin\FileController@moveDir')->name('api.file-manager.mvdir');
-                Router::post('/file-manager/upload', 'Admin\FileController@upload')->name('api.file-manager.upload');
-                Router::get('/file-manager/download/{filename}', 'Admin\FileController@download')->where([
-                    'filename' => '.+',
-                ])->name('api.file-manager.download');
-                Router::get('/file-manager/dir-tree', 'Admin\FileController@foldersTree')->name('api.file-manager.tree');
-                // show images outside of public folder
-                Router::get('/images/{filename}', 'Admin\FileController@showImage')->where([
-                    'filename' => '.+',
-                ])->name('admin.image.show');
-            });
         });
     }
 }

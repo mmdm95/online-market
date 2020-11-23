@@ -66,14 +66,14 @@
 
     $(function () {
         var routes = {
-            list: '/api/file-manager/list',
-            rename: '/api/file-manager/rename',
-            delete: '/api/file-manager/delete',
-            mkdir: '/api/file-manager/mkdir',
-            mvdir: '/api/file-manager/mvdir',
-            upload: '/api/file-manager/upload',
-            download: '/api/file-manager/download',
-            tree: '/api/file-manager/dir-tree',
+            list: '/ajax/file-manager/list',
+            rename: '/ajax/file-manager/rename',
+            delete: '/ajax/file-manager/delete',
+            mkdir: '/ajax/file-manager/mkdir',
+            mvdir: '/ajax/file-manager/mvdir',
+            upload: '/ajax/file-manager/upload',
+            download: '/ajax/file-manager/download',
+            tree: '/ajax/file-manager/dir-tree',
         };
 
         var renameModal = $('#modal_rename'),
@@ -133,18 +133,24 @@
             var name = $.trim(renameInput.val());
             var path = renameInput.attr('data-path');
             if ('' !== name && path) {
-                $.post(routes.rename, {
-                    file: path,
-                    newName: name,
-                    xsrf: XSRF,
-                }, function (response) {
-                    if (null === response.error) {
-                        list();
-                        refreshtree();
-                    } else {
-                        alert(response.error);
-                    }
-                }, 'json');
+                $.ajax({
+                    method: 'POST',
+                    url: routes.rename,
+                    dataType: 'json',
+                    data: {
+                        file: path,
+                        newName: name,
+                        xsrf: XSRF,
+                    },
+                    success: function (response) {
+                        if (null === response.error) {
+                            list();
+                            refreshtree();
+                        } else {
+                            alert(response.error);
+                        }
+                    },
+                });
             }
         });
 
@@ -152,7 +158,7 @@
             var hashval = decodeURIComponent(window.location.hash.substr(1)),
                 $dir = $(this).find('#dirname[name="name"]');
             e.preventDefault();
-            if('' !== $.trim($dir.val())) {
+            if ('' !== $.trim($dir.val())) {
                 $dir.val().length && $.post(routes.mkdir, {
                     name: $dir.val(),
                     xsrf: XSRF,
@@ -446,7 +452,6 @@
             if (!data.is_dir) {
                 $checkbox = $("<label class='checkbox-switch mb-0' />");
                 $checkbox.append("<input type='checkbox' class='chks styled form-input-styled' />");
-//                $checkbox = $('<input type=checkbox class="chks" />');
             }
 
             var $link = setImagesBg(data);

@@ -17,7 +17,8 @@ class CustomExceptionHandler implements IExceptionHandler
     public function handleError(Request $request, \Exception $error): void
     {
         /* You can use the exception handler to format errors depending on the request and type. */
-        if ($request->getUrl()->contains('/api')) {
+        if ($request->getUrl()->contains('/api') ||
+            $request->getUrl()->contains('/ajax')) {
             $resourceHandler = new ResourceHandler();
             $resourceHandler->statusCode($error->getCode())->errorMessage($error->getMessage());
             response()->httpCode($error->getCode())->json($resourceHandler->getReturnData());

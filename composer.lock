@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "dff48daecaf68ff25241acbe588a1d34",
+    "content-hash": "67d2b6a8b4a30499e5e56f5069d16e4f",
     "packages": [
         {
             "name": "aura/sql",
@@ -122,6 +122,57 @@
                 "update"
             ],
             "time": "2016-10-03T20:34:56+00:00"
+        },
+        {
+            "name": "fzaninotto/faker",
+            "version": "v1.9.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/fzaninotto/Faker.git",
+                "reference": "fc10d778e4b84d5bd315dad194661e091d307c6f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/fzaninotto/Faker/zipball/fc10d778e4b84d5bd315dad194661e091d307c6f",
+                "reference": "fc10d778e4b84d5bd315dad194661e091d307c6f",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^5.3.3 || ^7.0"
+            },
+            "require-dev": {
+                "ext-intl": "*",
+                "phpunit/phpunit": "^4.8.35 || ^5.7",
+                "squizlabs/php_codesniffer": "^2.9.2"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.9-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Faker\\": "src/Faker/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "François Zaninotto"
+                }
+            ],
+            "description": "Faker is a PHP library that generates fake data for you.",
+            "keywords": [
+                "data",
+                "faker",
+                "fixtures"
+            ],
+            "abandoned": true,
+            "time": "2019-12-12T13:22:17+00:00"
         },
         {
             "name": "graham-campbell/result-type",
@@ -294,16 +345,16 @@
         },
         {
             "name": "mmdm/sim-auth",
-            "version": "v0.2.3",
+            "version": "v0.2.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/mmdm95/sim-auth.git",
-                "reference": "0ba1f6babc40f4fcba8090c4e10bc80b7a69d06d"
+                "reference": "e6c5304c09bb5e77eb7922c4b7cf4571c66ea3ea"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mmdm95/sim-auth/zipball/0ba1f6babc40f4fcba8090c4e10bc80b7a69d06d",
-                "reference": "0ba1f6babc40f4fcba8090c4e10bc80b7a69d06d",
+                "url": "https://api.github.com/repos/mmdm95/sim-auth/zipball/e6c5304c09bb5e77eb7922c4b7cf4571c66ea3ea",
+                "reference": "e6c5304c09bb5e77eb7922c4b7cf4571c66ea3ea",
                 "shasum": ""
             },
             "require": {
@@ -333,7 +384,7 @@
                 }
             ],
             "description": "A simple yet nice authentication library",
-            "time": "2020-10-30T14:11:03+00:00"
+            "time": "2020-11-21T10:53:48+00:00"
         },
         {
             "name": "mmdm/sim-benchmark",
@@ -489,16 +540,16 @@
         },
         {
             "name": "mmdm/sim-cookie",
-            "version": "v1.0.3",
+            "version": "v1.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/mmdm95/sim-cookie.git",
-                "reference": "e6f3746f3b3601dbb9566c25087c5a4ede36ca54"
+                "reference": "8b089a1d39b5c9957edc3489ad54270e11728300"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mmdm95/sim-cookie/zipball/e6f3746f3b3601dbb9566c25087c5a4ede36ca54",
-                "reference": "e6f3746f3b3601dbb9566c25087c5a4ede36ca54",
+                "url": "https://api.github.com/repos/mmdm95/sim-cookie/zipball/8b089a1d39b5c9957edc3489ad54270e11728300",
+                "reference": "8b089a1d39b5c9957edc3489ad54270e11728300",
                 "shasum": ""
             },
             "require": {
@@ -523,7 +574,7 @@
                 }
             ],
             "description": "A simple yet nice cookie management library",
-            "time": "2020-11-17T23:11:30+00:00"
+            "time": "2020-11-21T18:21:19+00:00"
         },
         {
             "name": "mmdm/sim-crypt",
@@ -1051,62 +1102,6 @@
                 "serialize"
             ],
             "time": "2020-11-07T02:01:34+00:00"
-        },
-        {
-            "name": "pecee/simple-router",
-            "version": "4.2.0.6",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/skipperbent/simple-php-router.git",
-                "reference": "b715c48415d5e3660df668350152bba8798a6e33"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/skipperbent/simple-php-router/zipball/b715c48415d5e3660df668350152bba8798a6e33",
-                "reference": "b715c48415d5e3660df668350152bba8798a6e33",
-                "shasum": ""
-            },
-            "require": {
-                "ext-json": "*",
-                "php": ">=7.1",
-                "php-di/php-di": "^6.0"
-            },
-            "require-dev": {
-                "mockery/mockery": "^1",
-                "phpunit/phpunit": "^6.0"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Pecee\\": "src/Pecee/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Simon Sessingø",
-                    "email": "simon.sessingoe@gmail.com"
-                }
-            ],
-            "description": "Simple, fast PHP router that is easy to get integrated and in almost any project. Heavily inspired by the Laravel router.",
-            "keywords": [
-                "framework",
-                "input-handler",
-                "laravel",
-                "pecee",
-                "php",
-                "request-handler",
-                "route",
-                "router",
-                "routing",
-                "routing-engine",
-                "simple-php-router",
-                "url-handling"
-            ],
-            "time": "2018-11-24T23:47:02+00:00"
         },
         {
             "name": "php-di/invoker",

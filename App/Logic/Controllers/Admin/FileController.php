@@ -60,7 +60,7 @@ class FileController extends AbstractAdminController
     }
 
     /**
-     * @throws CookieException
+     * Get a list of specific directory
      */
     public function list()
     {
@@ -106,7 +106,7 @@ class FileController extends AbstractAdminController
     }
 
     /**
-     * @throws CookieException
+     * Delete a file or directory
      */
     public function delete()
     {
@@ -132,7 +132,6 @@ class FileController extends AbstractAdminController
     }
 
     /**
-     * @throws CookieException
      * @throws \ReflectionException
      * @throws MethodNotFoundException
      * @throws ParameterHasNoDefaultValueException
@@ -199,7 +198,7 @@ class FileController extends AbstractAdminController
     }
 
     /**
-     * @throws CookieException
+     * Create a directory
      */
     public function makeDir()
     {
@@ -230,7 +229,7 @@ class FileController extends AbstractAdminController
     }
 
     /**
-     * @throws CookieException
+     * Move items to another directory
      */
     public function moveDir()
     {
@@ -289,7 +288,6 @@ class FileController extends AbstractAdminController
     }
 
     /**
-     * @throws CookieException
      * @throws MethodNotFoundException
      * @throws ParameterHasNoDefaultValueException
      * @throws ServiceNotFoundException
@@ -343,7 +341,6 @@ class FileController extends AbstractAdminController
     public function download($file)
     {
         $path = get_path('upload-root', $file, false);
-//        $path = $this->showImage($file);
 
         var_dump($file, $path, file_exists($path));
 
@@ -358,7 +355,7 @@ class FileController extends AbstractAdminController
     }
 
     /**
-     * @throws CookieException
+     * Get folders tree
      */
     public function foldersTree()
     {
@@ -420,7 +417,6 @@ class FileController extends AbstractAdminController
     /**
      * @param bool $is_move
      * @return string
-     * @throws CookieException
      */
     private function getFileFromRequest(bool $is_move = false): string
     {
@@ -442,7 +438,7 @@ class FileController extends AbstractAdminController
                     !is_null(input()->post('xsrf')) &&
                     (
                         is_null(input()->post('xsrf')->getValue()) ||
-                        (cookie()->get('_sfm_xsrf') ?: '') !== input()->post('xsrf')->getValue()
+                        (\cookie()->get('_sfm_xsrf') ?: '') !== input()->post('xsrf')->getValue()
                     )
                 )
             ) {

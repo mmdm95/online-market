@@ -87,3 +87,35 @@
         </tbody>
     </table>
 </div>
+
+<?php if ($the_options['allow_rename']): ?>
+    <!-- Standard width modal -->
+    <div id="modal_rename" class="modal fade">
+        <div class="modal-dialog modal-md">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">تغییر نام</h5>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <div id="rename-body" class="modal-body">
+                    <div class="form-group-feedback form-group-feedback-left">
+                        <input id="renameInput" class="form-control text-right"
+                               style="direction: ltr;" type="text" value="" placeholder="">
+                        <div class="form-control-feedback form-control-feedback-lg">
+                            <i class="icon-pencil7 text-muted"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-link" data-dismiss="modal">لغو</button>
+                    <button id="renameFile" type="button" class="btn btn-primary" data-dismiss="modal">تغییر
+                        نام
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /standard width modal -->
+<?php endif; ?>

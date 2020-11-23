@@ -22,7 +22,7 @@ class HomeController extends AbstractHomeController
      */
     public function index()
     {
-        $this->setLayout($this->main_layout)->setTemplate('view/main/index');
+        $this->setLayout('main-index')->setTemplate('view/main/index');
 
         return $this->render([]);
     }

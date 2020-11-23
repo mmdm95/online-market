@@ -12,9 +12,9 @@ return [
         'home_btn' => 'صفحه اصلی'
     ],
     '500' => [
-        'title' => 'خطای ۵۰۰ - خطای سمت سرور',
+        'title' => 'خطای ۵۰۰ - خطای سرور',
         'number' => '۵۰۰',
-        'message' => 'خطای سمت سرور',
+        'message' => 'خطای سرور',
     ],
 
     /**
@@ -54,14 +54,5 @@ return [
         'url' => '{alias} یک آدرس url نامعتبر است.',
         'match' => 'مقدار {second} با مقدار {first} برابر نیست.',
         'fileDuplicate' => 'فایل {filename} وجود دارد.',
-    ],
-
-    /**
-     * Admin login translate
-     */
-    'admin' => [
-        'login' => [
-            'title' => 'صفحه ورود ادمین',
-        ],
     ],
 ];

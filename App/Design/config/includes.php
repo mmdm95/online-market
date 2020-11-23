@@ -88,74 +88,19 @@ return [
                     'top' => [
                         e(
                             '<script type="text/javascript" src="' .
-                            asset_path('js/jquery-1.12.4.min.js') .
-                            '"></script>'
-                        ),
-                        e(
-                            '<script type="text/javascript" src="' .
-                            asset_path('js/popper.min.js') .
-                            '"></script>'
-                        ),
-                        e(
-                            '<script type="text/javascript" src="' .
-                            asset_path('js/bootstrap.min.js') .
+                            asset_path('js/main.js') .
                             '"></script>'
                         ),
                     ],
                     'bottom' => [
                         e(
                             '<script type="text/javascript" src="' .
-                            asset_path('js/owl.carousel.min.js') .
-                            '"></script>'
-                        ),
-                        e(
-                            '<script type="text/javascript" src="' .
-                            asset_path('js/magnific-popup.min.js') .
-                            '"></script>'
-                        ),
-                        e(
-                            '<script type="text/javascript" src="' .
-                            asset_path('js/waypoints.min.js') .
-                            '"></script>'
-                        ),
-                        e(
-                            '<script type="text/javascript" src="' .
-                            asset_path('js/parallax.js') .
-                            '"></script>'
-                        ),
-                        e(
-                            '<script type="text/javascript" src="' .
-                            asset_path('js/jquery.countdown.min.js') .
-                            '"></script>'
-                        ),
-                        e(
-                            '<script type="text/javascript" src="' .
-                            asset_path('js/imagesloaded.pkgd.min.js') .
-                            '"></script>'
-                        ),
-                        e(
-                            '<script type="text/javascript" src="' .
-                            asset_path('js/isotope.min.js') .
-                            '"></script>'
-                        ),
-                        e(
-                            '<script type="text/javascript" src="' .
-                            asset_path('js/jquery.dd.min.js') .
-                            '"></script>'
-                        ),
-                        e(
-                            '<script type="text/javascript" src="' .
-                            asset_path('js/slick.min.js') .
-                            '"></script>'
-                        ),
-                        e(
-                            '<script type="text/javascript" src="' .
-                            asset_path('js/jquery.elevatezoom.js') .
-                            '"></script>'
-                        ),
-                        e(
-                            '<script type="text/javascript" src="' .
                             asset_path('js/scripts.js') .
+                            '"></script>'
+                        ),
+                        e(
+                            '<script type="text/javascript" src="' .
+                            asset_path('js/index.js') .
                             '"></script>'
                         ),
                     ],
@@ -174,72 +119,7 @@ return [
                         ),
                         e(
                             '<link href="' .
-                            asset_path('css/animate.css') .
-                            '" rel="stylesheet" type="text/css">'
-                        ),
-                        e(
-                            '<link href="' .
-                            asset_path('css/bootstrap.min.css') .
-                            '" rel="stylesheet" type="text/css">'
-                        ),
-                        e(
-                            '<link href="' .
-                            asset_path('css/all.min.css') .
-                            '" rel="stylesheet" type="text/css">'
-                        ),
-                        e(
-                            '<link href="' .
-                            asset_path('css/ionicons.min.css') .
-                            '" rel="stylesheet" type="text/css">'
-                        ),
-                        e(
-                            '<link href="' .
-                            asset_path('css/themify-icons.css') .
-                            '" rel="stylesheet" type="text/css">'
-                        ),
-                        e(
-                            '<link href="' .
-                            asset_path('css/linearicons.css') .
-                            '" rel="stylesheet" type="text/css">'
-                        ),
-                        e(
-                            '<link href="' .
-                            asset_path('css/flaticon.css') .
-                            '" rel="stylesheet" type="text/css">'
-                        ),
-                        e(
-                            '<link href="' .
-                            asset_path('css/simple-line-icons.css') .
-                            '" rel="stylesheet" type="text/css">'
-                        ),
-                        e(
-                            '<link href="' .
-                            asset_path('css/owl.carousel.min.css') .
-                            '" rel="stylesheet" type="text/css">'
-                        ),
-                        e(
-                            '<link href="' .
-                            asset_path('css/owl.theme.css') .
-                            '" rel="stylesheet" type="text/css">'
-                        ),
-                        e(
-                            '<link href="' .
-                            asset_path('css/owl.theme.default.min.css') .
-                            '" rel="stylesheet" type="text/css">'
-                        ),
-                        e(
-                            '<link href="' .
-                            asset_path('css/magnific-popup.css') .
-                            '" rel="stylesheet" type="text/css">'
-                        ),
-                        e(
-                            '<link href="' .
-                            asset_path('css/slick.css') .
-                            '" rel="stylesheet" type="text/css">'
-                        ),
-                        e(
-                            '<link href="' .
-                            asset_path('css/slick-theme.css') .
+                            asset_path('css/main.css') .
                             '" rel="stylesheet" type="text/css">'
                         ),
                         e(
@@ -256,6 +136,17 @@ return [
                             '<link href="' .
                             asset_path('css/rtl-style.css') .
                             '" rel="stylesheet" type="text/css">'
+                        ),
+                    ],
+                ],
+            ],
+            'default-cart' => [
+                'js' => [
+                    'bottom' => [
+                        e(
+                            '<script type="text/javascript" src="' .
+                            asset_path('js/cart.js') .
+                            '"></script>'
                         ),
                     ],
                 ],
@@ -308,11 +199,6 @@ return [
                         e(
                             '<script type="text/javascript" src="' .
                             asset_path('js/axios.min.js') .
-                            '"></script>'
-                        ),
-                        e(
-                            '<script type="text/javascript" src="' .
-                            asset_path('js/variables.js') .
                             '"></script>'
                         ),
                         e(
@@ -458,7 +344,10 @@ return [
          *****************************/
         'view/main/index' => [
             'title' => 'پایار تأسیسات | صفحه اصلی',
-            'common' => 'default',
+            'common' => [
+                'default',
+                'default-cart',
+            ],
         ],
 
         /******************************
