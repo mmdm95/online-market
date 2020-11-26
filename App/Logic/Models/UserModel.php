@@ -67,6 +67,25 @@ class UserModel extends BaseModel
     }
 
     /**
+     * @param int|null $id
+     * @return string|null
+     */
+    public function getUsernameFromID(?int $id): ?string
+    {
+        $id = $id ?? 0;
+        $select = $this->connector->select();
+        $select
+            ->from(self::TBL_USERS)
+            ->cols(['username'])
+            ->where('id=:id')
+            ->bindValues(['id' => $id]);
+
+        $username = $this->db->fetchAll($select->getStatement(), $select->getBindValues());
+        if (!count($username)) return null;
+        return $username[0]['username'];
+    }
+
+    /**
      * @param array $columns
      * @param string|null $where
      * @param array $bind_values
@@ -222,6 +241,11 @@ class UserModel extends BaseModel
         return $this->db->fetchAll($select->getStatement(), $select->getBindValues());
     }
 
+    /**
+     * @param int $addr_id
+     * @param int|null $user_id
+     * @return array
+     */
     public function getSingleUserAddress(int $addr_id, ?int $user_id = null): array
     {
         $select = $this->connector->select();
@@ -259,6 +283,50 @@ class UserModel extends BaseModel
     }
 
     /**
+     * @param array $values
+     * @param bool $get_last_inserted_id
+     * @return bool|int
+     */
+    public function insert(array $values, bool $get_last_inserted_id = false)
+    {
+        $insert = $this->connector->insert();
+        $insert
+            ->into(self::TBL_USERS)
+            ->cols($values);
+
+        $stmt = $this->db->prepare($insert->getStatement());
+        $res = $stmt->execute($insert->getBindValues());
+
+        if ($get_last_inserted_id) {
+            // get the last insert ID
+            $name = $insert->getLastInsertIdName('id');
+            $res = (int)$this->db->lastInsertId($name);
+        }
+
+        return $res;
+    }
+
+    /**
+     * @param array $data
+     * @param int $user_id
+     * @return bool
+     */
+    public function update(array $data, int $user_id): bool
+    {
+        $update = $this->connector->update();
+        $update
+            ->table(self::TBL_USERS)
+            ->cols($data)
+            ->where('id=:id')
+            ->bindValues([
+                'id' => $user_id,
+            ]);
+
+        $stmt = $this->db->prepare($update->getStatement());
+        return $stmt->execute($update->getBindValues());
+    }
+
+    /**
      * @param int $user_id
      * @param bool $soft
      * @return bool
@@ -288,26 +356,6 @@ class UserModel extends BaseModel
 
         $stmt = $this->db->prepare($deleteOrUpdate->getStatement());
         return $stmt->execute($deleteOrUpdate->getBindValues());
-    }
-
-    /**
-     * @param array $data
-     * @param int $user_id
-     * @return bool
-     */
-    public function update(array $data, int $user_id): bool
-    {
-        $update = $this->connector->update();
-        $update
-            ->table(self::TBL_USERS)
-            ->cols($data)
-            ->where('id=:id')
-            ->bindValues([
-                'id' => $user_id,
-            ]);
-
-        $stmt = $this->db->prepare($update->getStatement());
-        return $stmt->execute($update->getBindValues());
     }
 
     /**

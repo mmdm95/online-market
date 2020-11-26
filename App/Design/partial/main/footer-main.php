@@ -51,7 +51,7 @@
                 <div class="col-lg-4 col-md-12 col-sm-12">
                     <div class="widget">
                         <div class="footer_logo">
-                            <a href="#"><img src="assets/images/logo_dark.png" alt="logo"/></a>
+                            <a href="#"><img src="<?= asset_path('image', false); ?>/logo_dark.png" alt="logo"/></a>
                         </div>
                         <p class="mb-3">لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ، و با استفاده از
                             طراحان گرافیک است</p>
@@ -99,21 +99,21 @@
                     <div class="widget">
                         <h6 class="widget_title">نمادها</h6>
                         <ul class="widget_instafeed instafeed_col4">
-                            <li><a href="#"><img src="assets/images/insta_img1.jpg" alt="insta_img"><span
+                            <li><a href="#"><img src="<?= asset_path('image', false); ?>/insta_img1.jpg" alt="insta_img"><span
                                         class="insta_icon"><i class="ti-instagram"></i></span></a></li>
-                            <li><a href="#"><img src="assets/images/insta_img2.jpg" alt="insta_img"><span
+                            <li><a href="#"><img src="<?= asset_path('image', false); ?>/insta_img2.jpg" alt="insta_img"><span
                                         class="insta_icon"><i class="ti-instagram"></i></span></a></li>
-                            <li><a href="#"><img src="assets/images/insta_img3.jpg" alt="insta_img"><span
+                            <li><a href="#"><img src="<?= asset_path('image', false); ?>/insta_img3.jpg" alt="insta_img"><span
                                         class="insta_icon"><i class="ti-instagram"></i></span></a></li>
-                            <li><a href="#"><img src="assets/images/insta_img4.jpg" alt="insta_img"><span
+                            <li><a href="#"><img src="<?= asset_path('image', false); ?>/insta_img4.jpg" alt="insta_img"><span
                                         class="insta_icon"><i class="ti-instagram"></i></span></a></li>
-                            <li><a href="#"><img src="assets/images/insta_img5.jpg" alt="insta_img"><span
+                            <li><a href="#"><img src="<?= asset_path('image', false); ?>/insta_img5.jpg" alt="insta_img"><span
                                         class="insta_icon"><i class="ti-instagram"></i></span></a></li>
-                            <li><a href="#"><img src="assets/images/insta_img6.jpg" alt="insta_img"><span
+                            <li><a href="#"><img src="<?= asset_path('image', false); ?>/insta_img6.jpg" alt="insta_img"><span
                                         class="insta_icon"><i class="ti-instagram"></i></span></a></li>
-                            <li><a href="#"><img src="assets/images/insta_img7.jpg" alt="insta_img"><span
+                            <li><a href="#"><img src="<?= asset_path('image', false); ?>/insta_img7.jpg" alt="insta_img"><span
                                         class="insta_icon"><i class="ti-instagram"></i></span></a></li>
-                            <li><a href="#"><img src="assets/images/insta_img8.jpg" alt="insta_img"><span
+                            <li><a href="#"><img src="<?= asset_path('image', false); ?>/insta_img8.jpg" alt="insta_img"><span
                                         class="insta_icon"><i class="ti-instagram"></i></span></a></li>
                         </ul>
                     </div>

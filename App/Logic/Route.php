@@ -6,10 +6,12 @@ use App\Logic\Handlers\CustomExceptionHandler;
 use App\Logic\Middlewares\AdminApiVerifierMiddleware;
 use App\Logic\Middlewares\AdminAuthMiddleware;
 use App\Logic\Middlewares\ApiVerifierMiddleware;
+use App\Logic\Models\Model;
 use Pecee\SimpleRouter\Event\EventArgument;
 use Pecee\SimpleRouter\Handlers\EventHandler;
 use Pecee\SimpleRouter\SimpleRouter as Router;
 use Sim\Interfaces\IInitialize;
+use Sim\Utils\ArrayUtil;
 
 class Route implements IInitialize
 {
@@ -61,7 +63,21 @@ class Route implements IInitialize
         // Add event that fires when a route is rendered
         $eventHandler->register(EventHandler::EVENT_RENDER_ROUTE, function (EventArgument $argument) {
             // read config from database and store in config manager
-            // ...
+            /**
+             * @var Model $model
+             */
+            $model = \container()->get(Model::class);
+            $select = $model->select();
+            $select->from('settings')->cols(['*']);
+            $config = $model->get($select);
+            $config = ArrayUtil::arrayGroupBy('setting_name', $config, ['setting_name'], true);
+            $config = array_map(function ($value) {
+                $arr = $value[0];
+                $arr['value'] = !empty($arr['setting_value']) ? $arr['setting_value'] : $arr['default_value'];
+                unset($arr['setting_value']);
+                return $arr;
+            }, $config);
+            \config()->setAsConfig('settings', $config);
         });
 
         Router::addEventHandler($eventHandler);
@@ -158,6 +174,10 @@ class Route implements IInitialize
                 Router::get('/file-manager', 'Admin\FileController@index')->name('admin.file-manager');
             });
 
+            // show images outside of public folder
+            Router::get('/images/{filename}', 'Admin\FileController@showImage')->where([
+                'filename' => '.+',
+            ])->name('admin.image.show');
 
             //==========================
             // other routes
@@ -188,10 +208,6 @@ class Route implements IInitialize
                 'filename' => '.+',
             ])->name('api.file-manager.download');
             Router::get('/file-manager/dir-tree', 'Admin\FileController@foldersTree')->name('api.file-manager.tree');
-            // show images outside of public folder
-            Router::get('/images/{filename}', 'Admin\FileController@showImage')->where([
-                'filename' => '.+',
-            ])->name('admin.image.show');
         });
     }
 

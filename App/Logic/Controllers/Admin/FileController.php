@@ -4,20 +4,22 @@ namespace App\Logic\Controllers\Admin;
 
 use App\Logic\Abstracts\AbstractAdminController;
 use App\Logic\Handlers\ResourceHandler;
-use Dotenv\Exception\InvalidFileException;
+use App\Logic\Middlewares\Logic\NonePublicFolderAccessMiddleware;
+use App\Logic\Middlewares\Logic\PublicFolderModifyMiddleware;
+use App\Logic\Models\Model;
+use App\Logic\Models\UserModel;
+use Sim\Auth\DBAuth;
+use Sim\Auth\Interfaces\IDBException;
 use Sim\Container\Exceptions\MethodNotFoundException;
 use Sim\Container\Exceptions\ParameterHasNoDefaultValueException;
 use Sim\Container\Exceptions\ServiceNotFoundException;
 use Sim\Container\Exceptions\ServiceNotInstantiableException;
-use Sim\Cookie\Exceptions\CookieException;
-use Sim\Cookie\SetCookie;
 use Sim\Exceptions\ConfigManager\ConfigNotRegisteredException;
 use Sim\Exceptions\Mvc\Controller\ControllerException;
 use Sim\Exceptions\PathManager\PathNotRegisteredException;
 use Sim\File\Download;
 use Sim\File\FileSystem;
 use Sim\File\Interfaces\IFileException;
-use Sim\File\Utils\MimeTypeUtil;
 use Sim\Interfaces\IFileNotExistsException;
 use Sim\Interfaces\IInvalidVariableNameException;
 use Sim\Utils\StringUtil;
@@ -61,6 +63,12 @@ class FileController extends AbstractAdminController
 
     /**
      * Get a list of specific directory
+     *
+     * @throws MethodNotFoundException
+     * @throws ParameterHasNoDefaultValueException
+     * @throws ServiceNotFoundException
+     * @throws ServiceNotInstantiableException
+     * @throws \ReflectionException
      */
     public function list()
     {
@@ -70,11 +78,36 @@ class FileController extends AbstractAdminController
 
         $file = $this->getFileFromRequest();
 
+        $filename = str_replace(get_path('upload-root'), '', $file);
+        $filename = str_replace(['\\', '//'], '/', $filename);
+        $filename = explode('/', trim($filename, '\\/'))[0];
+
+        $this->checkListAccess($file);
+
+        /**
+         * @var DBAuth $auth
+         */
+        $auth = \container()->get('auth_home');
+
+        /**
+         * @var UserModel $userModel
+         */
+        $userModel = \container()->get(UserModel::class);
+        $username = $userModel->getUsernameFromID($auth->getCurrentUser()['id'] ?? null);
+
         $result = [];
         if (is_dir($file)) {
             $directory = $file;
             $files = array_diff(scandir($directory), ['.', '..']);
             foreach ($files as $entry) {
+//                if(
+//                    $filename === '' &&
+//                    PUBLIC_ACCESS_DIR !== $filename &&
+//                    $filename !== $username
+//                ) {
+//                    continue;
+//                }
+
                 $fileExt = get_extension($entry);
                 if ($entry !== basename(__FILE__) && !in_array($fileExt, $hidden_extensions)) {
                     $i = $directory . '/' . $entry;
@@ -107,6 +140,12 @@ class FileController extends AbstractAdminController
 
     /**
      * Delete a file or directory
+     *
+     * @throws MethodNotFoundException
+     * @throws ParameterHasNoDefaultValueException
+     * @throws ServiceNotFoundException
+     * @throws ServiceNotInstantiableException
+     * @throws \ReflectionException
      */
     public function delete()
     {
@@ -114,6 +153,8 @@ class FileController extends AbstractAdminController
         $allow_delete = true;
 
         $file = $this->getFileFromRequest();
+
+        $this->checkAccess($file);
 
         try {
             if ($allow_delete && is_recursively_deletable($file)) {
@@ -155,6 +196,8 @@ class FileController extends AbstractAdminController
         $filename = $xss->xss_clean(str_replace(' ', '-', $newName));
         $filename = StringUtil::toPersian($filename);
         $filename = StringUtil::toEnglish($filename);
+
+        $this->checkAccess($file);
 
         if (!file_exists($file)) {
             $this->data->resetData()->statusCode(412)->errorMessage('File does not exists');
@@ -199,6 +242,12 @@ class FileController extends AbstractAdminController
 
     /**
      * Create a directory
+     *
+     * @throws MethodNotFoundException
+     * @throws ParameterHasNoDefaultValueException
+     * @throws ServiceNotFoundException
+     * @throws ServiceNotInstantiableException
+     * @throws \ReflectionException
      */
     public function makeDir()
     {
@@ -206,6 +255,8 @@ class FileController extends AbstractAdminController
         $allow_create_folder = true;
 
         $file = $this->getFileFromRequest();
+
+        $this->checkAccess($file);
 
         if ($allow_create_folder) {
             // don't allow actions outside root. we also filter out slashes to catch args like './../outside'
@@ -230,6 +281,12 @@ class FileController extends AbstractAdminController
 
     /**
      * Move items to another directory
+     *
+     * @throws MethodNotFoundException
+     * @throws ParameterHasNoDefaultValueException
+     * @throws ServiceNotFoundException
+     * @throws ServiceNotInstantiableException
+     * @throws \ReflectionException
      */
     public function moveDir()
     {
@@ -237,6 +294,8 @@ class FileController extends AbstractAdminController
         $allow_create_folder = true;
 
         $file = $this->getFileFromRequest(true);
+
+        $this->checkAccess($file);
 
         if ($allow_create_folder) {
             $fileArr = json_decode($file, true) ?: [];
@@ -302,9 +361,10 @@ class FileController extends AbstractAdminController
 
         $file = $this->getFileFromRequest();
 
+        $this->checkAccess($file);
+
         if ($allow_upload) {
             foreach ($disallowed_extensions as $ext) {
-                ;
                 if (preg_match(sprintf('/\.%s$/', preg_quote($ext)), input()->file('file_data')->getName())) {
                     $this->data->resetData()->statusCode(412)->errorMessage('Files of this type are not allowed');
                     \response()->json($this->data->getReturnData());
@@ -337,20 +397,22 @@ class FileController extends AbstractAdminController
 
     /**
      * @param $file
+     * @throws MethodNotFoundException
+     * @throws ParameterHasNoDefaultValueException
+     * @throws ServiceNotFoundException
+     * @throws ServiceNotInstantiableException
+     * @throws \ReflectionException
      */
     public function download($file)
     {
         $path = get_path('upload-root', $file, false);
 
-        var_dump($file, $path, file_exists($path));
+        $this->checkAccess($file);
 
         try {
             Download::makeDownloadFromPath($path)->download(null);
-        } catch (IFileException $e) {
+        } catch (IFileException | \Exception $e) {
             // do nothing
-            var_dump($e->getMessage());
-        } catch (\Exception $e) {
-            var_dump($e->getMessage());
         }
     }
 
@@ -495,5 +557,53 @@ class FileController extends AbstractAdminController
 
         // do not worry it'll never be empty
         return $file;
+    }
+
+    /**
+     * @param $filename
+     * @throws MethodNotFoundException
+     * @throws ParameterHasNoDefaultValueException
+     * @throws ServiceNotFoundException
+     * @throws ServiceNotInstantiableException
+     * @throws \ReflectionException
+     */
+    private function checkListAccess($filename)
+    {
+        $middleware = new NonePublicFolderAccessMiddleware();
+        $filename = str_replace(get_path('upload-root'), '', $filename);
+        $res = $middleware->handle($filename);
+        if (!$res) {
+            if (\request()->isAjax()) {
+                $this->data->resetData()->statusCode(403)->errorMessage('Access denied!');
+                \response()->json($this->data->getReturnData());
+            } else {
+                echo 'دسترسی غیرمجاز';
+                exit(0);
+            }
+        }
+    }
+
+    /**
+     * @param $filename
+     * @throws MethodNotFoundException
+     * @throws ParameterHasNoDefaultValueException
+     * @throws ServiceNotFoundException
+     * @throws ServiceNotInstantiableException
+     * @throws \ReflectionException
+     */
+    private function checkAccess($filename)
+    {
+        $filename = str_replace(get_path('upload-root'), '', $filename);
+        $middleware = new PublicFolderModifyMiddleware();
+        $res = $middleware->handle($filename);
+        if (!$res) {
+            if (\request()->isAjax()) {
+                $this->data->resetData()->statusCode(403)->errorMessage('Access denied!');
+                \response()->json($this->data->getReturnData());
+            } else {
+                echo 'دسترسی غیرمجاز';
+                exit(0);
+            }
+        }
     }
 }

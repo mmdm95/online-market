@@ -17,10 +17,9 @@
                                 </div>
                                 <div class="form-group col-md-4">
                                     <label>انتخاب رنگ:</label>
-                                    </br>
+                                    <br>
                                     <div class="d-inline-block">
-                                        <input type="text" class="form-control colorpicker-show-input"
-                                               data-preferred-format="HSL" value="#00fff5" data-fouc>
+                                        <input type="text" class="form-control colorpicker-show-input">
                                     </div>
                                 </div>
                             </div>

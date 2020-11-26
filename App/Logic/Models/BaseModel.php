@@ -19,6 +19,9 @@ abstract class BaseModel
     const TBL_USER_ROLE = 'user_role';
     const TBL_PROVINCES = 'provinces';
     const TBL_CITIES = 'cities';
+    const TBL_BLOG = 'blog';
+    const TBL_BLOG_CATEGORIES = 'blog_categories';
+    const TBL_CATEGORIES = 'categories';
 
     /**
      * @var DBConnector

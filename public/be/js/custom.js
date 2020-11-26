@@ -7,11 +7,17 @@
  * ---------------------------------------------------------------------------- */
 
 window.MyGlobalVariables.icons = {
-    success: '',
-    info: '',
-    warning: '',
-    error: '',
+    success: 'icon-checkmark3',
+    info: 'icon-info3',
+    warning: 'icon-warning',
+    error: 'icon-cross2',
 };
+window.MyGlobalVariables.toasts.toast.theme = 'limitless';
+window.MyGlobalVariables.toasts.toast.layout = 'topLeft';
+window.MyGlobalVariables.toasts.confirm.theme = 'limitless';
+window.MyGlobalVariables.toasts.confirm.type = 'confirm';
+window.MyGlobalVariables.toasts.confirm.btnClasses.yes = 'btn bg-blue ml-1';
+window.MyGlobalVariables.toasts.confirm.btnClasses.no = 'btn btn-link';
 
 (function ($) {
     $.extend(window.MyGlobalVariables.url, {
@@ -49,12 +55,37 @@ window.MyGlobalVariables.icons = {
             }
         });
 
+        if ($().spectrum) {
+            var cps = $(".colorpicker-show-input");
+            cps.each(function () {
+                var $this = $(this);
+
+                $this.spectrum({
+                    color: (typeof $this.attr('data-color') !== 'undefined') ? $this.attr('data-color') : "#2196f3",
+                    cancelText: "لغو",
+                    chooseText: "انتخاب",
+                    preferredFormat: "hex",
+                    showInput: true
+                })
+            });
+        }
+
         // Image lightbox
         if ($().fancybox) {
             $('[data-popup="lightbox"]').fancybox({
                 padding: 3
             });
         }
+
+
+        if (typeof Switchery !== 'undefined') {
+            // Initialize multiple switches
+            var elems = Array.prototype.slice.call(document.querySelectorAll('.form-check-input-switchery'));
+            elems.forEach(function (html) {
+                var switchery = new Switchery(html);
+            });
+        }
+
 
         // uniform initialize
         if ($().uniform) {

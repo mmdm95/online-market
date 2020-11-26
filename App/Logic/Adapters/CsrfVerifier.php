@@ -9,5 +9,8 @@ class CsrfVerifier extends BaseCsrfVerifier
     /**
      * CSRF validation will be ignored on the following urls.
      */
-    protected $except = ['/api/*'];
+    protected $except = [
+        '/api/*',
+        '/ajax/file-manager/upload',
+    ];
 }

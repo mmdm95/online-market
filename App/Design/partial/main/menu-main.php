@@ -2,13 +2,13 @@
     <div class="middle-header dark_skin">
         <div class="container">
             <div class="nav_block">
-                <a class="navbar-brand" href="index.html">
-                    <img class="logo_light" src="assets/images/logo_light.png" alt="logo"/>
-                    <img class="logo_dark" src="assets/images/logo_dark.png" alt="logo"/>
+                <a class="navbar-brand" href="<?= url('home.index'); ?>">
+                    <img class="logo_light" src="<?= asset_path('image', false); ?>/logo_light.png" alt="logo"/>
+                    <img class="logo_dark" src="<?= asset_path('image', false); ?>/logo_dark.png" alt="logo"/>
                 </a>
                 <div class="contact_phone order-md-last">
                     <i class="linearicons-phone-wave"></i>
-                    <span>021-1234567</span>
+                    <span><?= local_number(\config()->get('settings.main_phone.value')) ?></span>
                 </div>
                 <div class="product_search_form">
                     <form>
@@ -98,7 +98,8 @@
                                             </li>
                                             <li class="mega-menu-col col-lg-5">
                                                 <div class="header-banner2">
-                                                    <img src="assets/images/menu_banner1.jpg" alt="menu_banner1">
+                                                    <img src="<?= asset_path('image', false); ?>/menu_banner1.jpg"
+                                                         alt="menu_banner1">
                                                     <div class="banne_info">
                                                         <h6>%10 تخفیف</h6>
                                                         <h4>محصولات جدید</h4>
@@ -106,7 +107,8 @@
                                                     </div>
                                                 </div>
                                                 <div class="header-banner2">
-                                                    <img src="assets/images/menu_banner2.jpg" alt="menu_banner2">
+                                                    <img src="<?= asset_path('image', false); ?>/menu_banner2.jpg"
+                                                         alt="menu_banner2">
                                                     <div class="banne_info">
                                                         <h6>%15 تخفیف</h6>
                                                         <h4>مد مردانه</h4>
@@ -166,8 +168,9 @@
                                             </li>
                                             <li class="mega-menu-col col-lg-5">
                                                 <div class="header-banner2">
-                                                    <a href="#"><img src="assets/images/menu_banner4.jpg"
-                                                                     alt="menu_banner4"></a>
+                                                    <a href="#"><img
+                                                                src="<?= asset_path('image', false); ?>/menu_banner4.jpg"
+                                                                alt="menu_banner4"></a>
                                                 </div>
                                             </li>
                                         </ul>
@@ -222,8 +225,9 @@
                                             </li>
                                             <li class="mega-menu-col col-lg-5">
                                                 <div class="header-banner2">
-                                                    <a href="#"><img src="assets/images/menu_banner5.jpg"
-                                                                     alt="menu_banner5"></a>
+                                                    <a href="#"><img
+                                                                src="<?= asset_path('image', false); ?>/menu_banner5.jpg"
+                                                                alt="menu_banner5"></a>
                                                 </div>
                                             </li>
                                         </ul>
@@ -287,27 +291,27 @@
                                     </div>
                                 </li>
                                 <li><a class="dropdown-item nav-link nav_item" href="coming-soon.html"><i
-                                            class="flaticon-jacket"></i> <span>پوشاک</span></a></li>
+                                                class="flaticon-jacket"></i> <span>پوشاک</span></a></li>
                                 <li><a class="dropdown-item nav-link nav_item" href="404.html"><i
-                                            class="flaticon-sneakers"></i> <span>کفش</span></a></li>
+                                                class="flaticon-sneakers"></i> <span>کفش</span></a></li>
                                 <li><a class="dropdown-item nav-link nav_item" href="login.html"><i
-                                            class="flaticon-watch"></i> <span>ساعت</span></a></li>
+                                                class="flaticon-watch"></i> <span>ساعت</span></a></li>
                                 <li><a class="dropdown-item nav-link nav_item" href="register.html"><i
-                                            class="flaticon-necklace"></i> <span>جواهرات</span></a></li>
+                                                class="flaticon-necklace"></i> <span>جواهرات</span></a></li>
                                 <li><a class="dropdown-item nav-link nav_item" href="coming-soon.html"><i
-                                            class="flaticon-herbal"></i> <span>سلامت و زیبایی</span></a></li>
+                                                class="flaticon-herbal"></i> <span>سلامت و زیبایی</span></a></li>
                                 <li><a class="dropdown-item nav-link nav_item" href="404.html"><i
-                                            class="flaticon-ball"></i> <span>ورزشی</span></a></li>
+                                                class="flaticon-ball"></i> <span>ورزشی</span></a></li>
                                 <li>
                                     <ul class="more_slide_open">
                                         <li><a class="dropdown-item nav-link nav_item" href="login.html"><i
-                                                    class="flaticon-pijamas"></i> <span>لباس خواب</span></a></li>
+                                                        class="flaticon-pijamas"></i> <span>لباس خواب</span></a></li>
                                         <li><a class="dropdown-item nav-link nav_item" href="register.html"><i
-                                                    class="flaticon-scarf"></i> <span>زمستونی</span></a></li>
+                                                        class="flaticon-scarf"></i> <span>زمستونی</span></a></li>
                                         <li><a class="dropdown-item nav-link nav_item" href="404.html"><i
-                                                    class="flaticon-vintage"></i> <span>لباس محلی</span></a></li>
+                                                        class="flaticon-vintage"></i> <span>لباس محلی</span></a></li>
                                         <li><a class="dropdown-item nav-link nav_item" href="coming-soon.html"><i
-                                                    class="flaticon-pregnant"></i> <span>لباس کودک</span></a></li>
+                                                        class="flaticon-pregnant"></i> <span>لباس کودک</span></a></li>
                                     </ul>
                                 </li>
                             </ul>
@@ -437,7 +441,8 @@
                                         <div class="d-lg-flex menu_banners">
                                             <div class="col-lg-6">
                                                 <div class="header-banner">
-                                                    <img src="assets/images/menu_banner1.jpg" alt="menu_banner1">
+                                                    <img src="<?= asset_path('image', false); ?>/menu_banner1.jpg"
+                                                         alt="menu_banner1">
                                                     <div class="banne_info">
                                                         <h6>%10 تخفیف</h6>
                                                         <h4>محصولات جدید</h4>
@@ -447,7 +452,8 @@
                                             </div>
                                             <div class="col-lg-6">
                                                 <div class="header-banner">
-                                                    <img src="assets/images/menu_banner2.jpg" alt="menu_banner2">
+                                                    <img src="<?= asset_path('image', false); ?>/menu_banner2.jpg"
+                                                         alt="menu_banner2">
                                                     <div class="banne_info">
                                                         <h6>%15 تخفیف</h6>
                                                         <h4>مد مردانه</h4>
@@ -605,7 +611,7 @@
                                                     <div class="header_banner_content">
                                                         <div class="shop_banner">
                                                             <div class="banner_img overlay_bg_40">
-                                                                <img src="assets/images/shop_banner2.jpg"
+                                                                <img src="<?= asset_path('image', false); ?>/shop_banner2.jpg"
                                                                      alt="shop_banner2"/>
                                                             </div>
                                                             <div class="shop_bn_content">
@@ -629,30 +635,32 @@
                         <ul class="navbar-nav attr-nav align-items-center">
                             <li><a href="#" class="nav-link"><i class="linearicons-user"></i></a></li>
                             <li><a href="#" class="nav-link"><i class="linearicons-heart"></i><span
-                                        class="wishlist_count">0</span></a></li>
+                                            class="wishlist_count">0</span></a></li>
                             <li class="dropdown cart_dropdown"><a class="nav-link cart_trigger" href="#"
                                                                   data-toggle="dropdown"><i
-                                        class="linearicons-cart"></i><span class="cart_count">2</span></a>
+                                            class="linearicons-cart"></i><span class="cart_count">2</span></a>
                                 <div class="cart_box dropdown-menu dropdown-menu-right">
                                     <ul class="cart_list">
                                         <li>
                                             <a href="#" class="item_remove"><i class="ion-close"></i></a>
-                                            <a href="#"><img src="assets/images/cart_thamb1.jpg" alt="cart_thumb1">تی
+                                            <a href="#"><img src="<?= asset_path('image', false); ?>/cart_thamb1.jpg"
+                                                             alt="cart_thumb1">تی
                                                 شرت و پولوشرت</a>
                                             <span class="cart_quantity"> 1عدد  78000<span class="cart_amount"> <span
-                                                        class="price_symbole">تومان</span></span></span>
+                                                            class="price_symbole">تومان</span></span></span>
                                         </li>
                                         <li>
                                             <a href="#" class="item_remove"><i class="ion-close"></i></a>
-                                            <a href="#"><img src="assets/images/cart_thamb2.jpg" alt="cart_thumb2">لباس
+                                            <a href="#"><img src="<?= asset_path('image', false); ?>/cart_thamb2.jpg"
+                                                             alt="cart_thumb2">لباس
                                                 زنانه</a>
                                             <span class="cart_quantity"> 1عدد  81000<span class="cart_amount"> <span
-                                                        class="price_symbole">تومان</span></span></span>
+                                                            class="price_symbole">تومان</span></span></span>
                                         </li>
                                     </ul>
                                     <div class="cart_footer">
                                         <p class="cart_total"><strong>جمع:</strong> 159000<span
-                                                class="cart_price"> <span class="price_symbole">تومان</span></span>
+                                                    class="cart_price"> <span class="price_symbole">تومان</span></span>
                                         </p>
                                         <p class="cart_buttons"><a href="#" class="btn btn-fill-line view-cart">سبد
                                                 خرید</a><a href="#" class="btn btn-fill-out checkout">بررسی</a></p>
@@ -662,7 +670,7 @@
                         </ul>
                         <div class="pr_search_icon">
                             <a href="javascript:void(0);" class="nav-link pr_search_trigger"><i
-                                    class="linearicons-magnifier"></i></a>
+                                        class="linearicons-magnifier"></i></a>
                         </div>
                     </nav>
                 </div>

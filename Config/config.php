@@ -14,6 +14,4 @@ return [
      * Acceptable values are [true], [false]
      */
     'show_native_errors' => false,
-
-    'csrf_expiration' => 18000,
 ];

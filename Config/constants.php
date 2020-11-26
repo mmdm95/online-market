@@ -34,6 +34,13 @@ defined("NOT_FOUND_ADMIN") OR define("NOT_FOUND_ADMIN", 'admin.page.notfound');
 defined("NOT_FOUND") OR define("NOT_FOUND", 'page.notfound');
 defined("SERVER_ERROR") OR define("SERVER_ERROR", 'page.servererror');
 
+// publish or true in database
+defined("DB_YES") OR define("DB_YES", 1);
+defined("DB_NO") OR define("DB_NO", 0);
+
 // default placeholders
 defined("PLACEHOLDER_IMAGE") OR define("PLACEHOLDER_IMAGE", __DIR__ . '/../public/be/images/file-icons/image-placeholder.png');
 defined("PLACEHOLDER_VIDEO") OR define("PLACEHOLDER_VIDEO", __DIR__ . '/../public/be/images/file-icons/video-placeholder.png');
+
+// public access directory name
+defined("PUBLIC_ACCESS_DIR") OR define("PUBLIC_ACCESS_DIR", 'public-access');

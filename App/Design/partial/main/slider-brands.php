@@ -16,32 +16,32 @@
                      data-responsive='{"0":{"items": "2"}, "480":{"items": "3"}, "767":{"items": "4"}, "991":{"items": "5"}}'>
                     <div class="item">
                         <div class="cl_logo">
-                            <img src="assets/images/cl_logo1.png" alt="cl_logo"/>
+                            <img src="<?= asset_path('image', false); ?>/cl_logo1.png" alt="cl_logo"/>
                         </div>
                     </div>
                     <div class="item">
                         <div class="cl_logo">
-                            <img src="assets/images/cl_logo2.png" alt="cl_logo"/>
+                            <img src="<?= asset_path('image', false); ?>/cl_logo2.png" alt="cl_logo"/>
                         </div>
                     </div>
                     <div class="item">
                         <div class="cl_logo">
-                            <img src="assets/images/cl_logo3.png" alt="cl_logo"/>
+                            <img src="<?= asset_path('image', false); ?>/cl_logo3.png" alt="cl_logo"/>
                         </div>
                     </div>
                     <div class="item">
                         <div class="cl_logo">
-                            <img src="assets/images/cl_logo4.png" alt="cl_logo"/>
+                            <img src="<?= asset_path('image', false); ?>/cl_logo4.png" alt="cl_logo"/>
                         </div>
                     </div>
                     <div class="item">
                         <div class="cl_logo">
-                            <img src="assets/images/cl_logo5.png" alt="cl_logo"/>
+                            <img src="<?= asset_path('image', false); ?>/cl_logo5.png" alt="cl_logo"/>
                         </div>
                     </div>
                     <div class="item">
                         <div class="cl_logo">
-                            <img src="assets/images/cl_logo6.png" alt="cl_logo"/>
+                            <img src="<?= asset_path('image', false); ?>/cl_logo6.png" alt="cl_logo"/>
                         </div>
                     </div>
                 </div>

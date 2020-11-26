@@ -14,7 +14,7 @@
 <div class="main_content">
 
     <!-- START SECTION SHOP -->
-    <?php load_partial('main/slider-tabed'); ?>
+    <?php load_partial('main/slider-tabbed'); ?>
     <!-- END SECTION SHOP -->
 
     <!-- START SECTION INSTAGRAM IMAGE -->

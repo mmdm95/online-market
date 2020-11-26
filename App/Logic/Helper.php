@@ -17,6 +17,7 @@ class Helper implements IInitialize
         // __DIR__ . '/Helpers/'
         return [
             __DIR__ . '/Helpers/easy-file-manager.php',
+            __DIR__ . '/Helpers/persian-support.php',
         ];
     }
 }

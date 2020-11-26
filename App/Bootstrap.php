@@ -104,13 +104,13 @@ class Bootstrap
      */
     protected function defineConstants()
     {
-        //****** Root Directory *******
+        //******** Root Directory *********
         defined('BASE_ROOT') OR define('BASE_ROOT', str_replace('\\', '/', dirname(__DIR__) . '/'));
 
-        //******* Error Handler *******
+        //********* Error Handler *********
         defined("E_FATAL") OR define("E_FATAL", E_ERROR | E_USER_ERROR | E_PARSE | E_CORE_ERROR | E_COMPILE_ERROR | E_RECOVERABLE_ERROR);
 
-        //*********** Modes ***********
+        //************* Modes *************
         defined("MODE_DEVELOPMENT") OR define("MODE_DEVELOPMENT", 0x1);
         defined("MODE_PRODUCTION") OR define("MODE_PRODUCTION", 0x2);
     }
@@ -170,6 +170,9 @@ class Bootstrap
             'DB_PORT' => $_ENV['DB_PORT'],
         ]);
 
+        // Load constants first
+        LoaderSingleton::getInstance()->load(__DIR__ . '/../Config/constants.php', null, Loader::TYPE_REQUIRE_ONCE);
+
         // Call needed functionality
         $this->defineConfig();
         $this->definePath();
@@ -182,21 +185,22 @@ class Bootstrap
 
     /**
      * Define all paths
-     *
      * @throws IFileNotExistsException
      */
     protected function definePath()
     {
-        // Load constants first
-        LoaderSingleton::getInstance()->load(__DIR__ . '/../config/constants.php', null, Loader::TYPE_REQUIRE_ONCE);
         // Then load path config
-        $paths = ConfigManagerSingleton::getInstance()->getDirectly(__DIR__ . '/../config/path.php');
+        $paths = ConfigManagerSingleton::getInstance()->getDirectly(__DIR__ . '/../Config/path.php');
 
         // Add all of them to path collector if $path is an array
         if (is_array($paths)) {
             foreach ($paths as $alias => $path) {
                 if (is_string($path) && 'default_config' != $path) {
-                    $this->path->set((string)$alias, (string)$path);
+                    try {
+                        $this->path->set((string)$alias, (string)$path);
+                    } catch (IFileNotExistsException $e) {
+                        // do nothing for now
+                    }
                 }
             }
         }
@@ -236,7 +240,7 @@ class Bootstrap
     protected function defineConfig()
     {
         // Get config paths
-        $configs = $this->config->getDirectly(__DIR__ . '/../config/path.php')['default_config'] ?? [];
+        $configs = $this->config->getDirectly(__DIR__ . '/../Config/path.php')['default_config'] ?? [];
 
         // Add all of them to config collector if $configs is an array
         if (is_array($configs)) {

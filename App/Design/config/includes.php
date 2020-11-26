@@ -100,6 +100,16 @@ return [
                         ),
                         e(
                             '<script type="text/javascript" src="' .
+                            asset_path('js/plugins/noty/noty.min.js') .
+                            '"></script>'
+                        ),
+                        e(
+                            '<script type="text/javascript" src="' .
+                            asset_path('js/globals.js') .
+                            '"></script>'
+                        ),
+                        e(
+                            '<script type="text/javascript" src="' .
                             asset_path('js/index.js') .
                             '"></script>'
                         ),
@@ -120,6 +130,16 @@ return [
                         e(
                             '<link href="' .
                             asset_path('css/main.css') .
+                            '" rel="stylesheet" type="text/css">'
+                        ),
+                        e(
+                            '<link href="' .
+                            asset_path('css/plugins/noty/noty.css') .
+                            '" rel="stylesheet" type="text/css">'
+                        ),
+                        e(
+                            '<link href="' .
+                            asset_path('css/plugins/noty/themes/sunset.css') .
                             '" rel="stylesheet" type="text/css">'
                         ),
                         e(
@@ -174,6 +194,11 @@ return [
                         e(
                             '<script type="text/javascript" src="' .
                             asset_path('be/js/plugins/ui/ripple.min.js') .
+                            '"></script>'
+                        ),
+                        e(
+                            '<script type="text/javascript" src="' .
+                            asset_path('be/js/plugins/notifications/noty.min.js') .
                             '"></script>'
                         ),
                         e(
@@ -611,6 +636,7 @@ return [
                 'admin-base',
                 'admin-form',
                 'admin-table',
+                'admin-color',
                 'admin'
             ],
             'sub_title' => 'افزودن رنگ',
@@ -637,6 +663,7 @@ return [
             'common' => [
                 'admin-base',
                 'admin-form',
+                'admin-color',
                 'admin-table',
                 'admin'
             ],

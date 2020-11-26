@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="<?= \translate()->getLanguage() ?>" dir="<?= \translate()->isRTL() ? 'rtl' : 'ltr'; ?>">
+<html lang="<?= \translate()->getLanguage() ?>">
 <head>
     <meta charset="utf-8">
     <meta name="viewport"
@@ -18,7 +18,7 @@
     <?= $css['top'] ?? ''; ?>
     <?= $js['top'] ?? ''; ?>
 </head>
-<body dir="rtl">
+<body dir="<?= \translate()->isRTL() ? 'rtl' : 'ltr'; ?>">
 
 <!-- LOADER -->
 <div class="preloader">

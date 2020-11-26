@@ -61,6 +61,7 @@ return [
     // Uploads path(s)
     'upload' => BASE_ROOT . 'Uploads/',
     'upload-root' => BASE_ROOT . 'Uploads/root/',
+    'upload-public' => BASE_ROOT . 'Uploads/root/' . PUBLIC_ACCESS_DIR . '/',
 
     // Config file(s) path
     'default_config' => [

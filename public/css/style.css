@@ -2185,7 +2185,7 @@ header.light_skin.nav-fixed .social_icons li a:hover {
 	z-index: 9999;
 	top: 0;
 	transition: all 0.5s ease-in-out;
-	cursor: url("../images/close.png"), pointer;
+	cursor: url("../image/close.png"), pointer;
 }
 body.active {
 	overflow: hidden;
@@ -2831,7 +2831,7 @@ input.text {
 	width: 100%;
 }
 .wave_shape_bottom::before {
-	background-image: url("../images/wave_shape.png");
+	background-image: url("../image/wave_shape.png");
 	display: block;
 	height: 100%;
 	content: "";
@@ -5988,7 +5988,7 @@ label.label_info {
 	transform: scale(0);
 }
 .loading {
-	background: url('../images/loading.gif') center center no-repeat;
+	background: url('../image/loading.gif') center center no-repeat;
 	font-size: 0 !important;
 	background-color: #000 !important;
 	border: 0;
@@ -6177,7 +6177,7 @@ select option {
 	left: 50%;
 	width: 24px;
 	height: 24px;
-	background: url("../images/loading.gif") center center no-repeat;
+	background: url("../image/loading.gif") center center no-repeat;
 	text-align: center;
 	margin-top: -12px;
 	margin-left: -12px;

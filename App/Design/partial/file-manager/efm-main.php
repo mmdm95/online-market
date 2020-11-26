@@ -84,6 +84,8 @@
         var chksLen = 0,
             chksPath = [];
 
+        var adminCommon = new window.TheAdmin();
+
         changeSelectedItemsCount();
 
         var XSRF = (document.cookie.match('(^|; )_sfm_xsrf=([^;]*)') || 0)[2];
@@ -94,9 +96,8 @@
         $('#table').tablesorter();
 
         $('#table').on('click', '.delete', function () {
-            var _ = this, sure;
-            sure = confirm('آیا مطمئن هستید؟');
-            if (sure) {
+            var _ = this;
+            adminCommon.toasts.confirm(null, function () {
                 $.ajax({
                     url: routes.delete,
                     method: 'POST',
@@ -110,14 +111,18 @@
                             uncheckAll(mainChks);
                             list();
                         } else {
-                            console.warn(response.error);
+                            adminCommon.toasts.toast(response.error, {
+                                type: 'error',
+                            });
                         }
                     },
                     error: function (response) {
-                        console.warn(response.responseText);
+                        // console.warn(response.responseText);
                     },
                 });
-            }
+            }, {
+                type: 'confirm',
+            });
             return false;
         }).on('click', '.rename', function () {
             var path = $(this).attr('data-file');
@@ -143,11 +148,15 @@
                         xsrf: XSRF,
                     },
                     success: function (response) {
+                        console.log(response);
+
                         if (null === response.error) {
                             list();
                             refreshtree();
                         } else {
-                            alert(response.error);
+                            adminCommon.toasts.toast(response.error, {
+                                type: 'error',
+                            });
                         }
                     },
                 });
@@ -201,11 +210,13 @@
                             mainChks.find('input[type=checkbox]').removeAttr('checked');
                             changeSelectedItemsCount();
                         } else {
-                            console.warn(response.error);
+                            adminCommon.toasts.toast(response.error, {
+                                type: 'error',
+                            });
                         }
                     },
                     error: function (response) {
-                        console.log(response.responseText);
+                        // console.log(response.responseText);
                     },
                 });
             } else {
@@ -290,7 +301,9 @@
                         tree_clicked(e, $(this));
                     });
                 } else {
-                    console.warn(data.error);
+                    adminCommon.toasts.toast(data.error, {
+                        type: 'error',
+                    });
                 }
             }, 'json');
         }
@@ -318,14 +331,19 @@
             e.preventDefault();
             var files = e.originalEvent.dataTransfer.files;
             $.each(files, function (k, file) {
-                uploadFile(file);
+                setTimeout(function () {
+                    uploadFile(file);
+                }, 400);
             });
             $(this).removeClass('drag_over');
         });
         $('#file_drop_target').find('input[type=file]').change(function (e) {
             e.preventDefault();
+
             $.each(this.files, function (k, file) {
-                uploadFile(file);
+                setTimeout(function () {
+                    uploadFile(file);
+                }, 400);
             });
         });
 
@@ -355,7 +373,9 @@
                         $row.remove();
                         list();
                     } else {
-                        console.warn(data.error);
+                        adminCommon.toasts.toast(data.error, {
+                            type: 'error',
+                        });
                     }
                 }
             };
@@ -440,7 +460,9 @@
 
                     !data.data.length && $tbody.append('<tr><td class="empty" colspan="6">این پوشه خالی می‌باشد</td></tr>');
                 } else {
-                    console.warn(data.error);
+                    adminCommon.toasts.toast(data.error, {
+                        type: 'error',
+                    });
                 }
                 $('#table').retablesort();
             }, 'json');

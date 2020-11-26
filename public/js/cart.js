@@ -2,12 +2,6 @@
     'use strict';
 
     var shop, core, variables;
-    var dataLoadableName, loadableAttributes;
-
-    dataLoadableName = 'data-module-load';
-    loadableAttributes = [
-        'cart',
-    ];
 
     shop = new window.TheShop();
     core = window.TheCore;
@@ -15,10 +9,10 @@
 
     /**
      * Cart class contains all cart functionality
-     * @returns {Cart}
+     * @returns {TheCart}
      * @constructor
      */
-    const Cart = function () {
+    window.TheCart = function () {
         var _ = this;
 
         /*************************************************************
@@ -108,16 +102,10 @@
     };
 
     /**
-     * Make Cart class global to window
-     * @type {Cart}
-     */
-    window.Cart = new Cart();
-
-    /**
      * Do stuffs after DOM loaded
      */
     $(function () {
-        var cart = window.Cart;
+        var cart = new window.TheCart();
 
 
     });

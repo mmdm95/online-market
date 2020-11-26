@@ -12,7 +12,7 @@
                 <div class="blog_post blog_style2 box_shadow1">
                     <div class="blog_img">
                         <a href="blog-single.html">
-                            <img src="assets/images/el_blog_img1.jpg" alt="el_blog_img1">
+                            <img src="<?= asset_path('image', false); ?>/el_blog_img1.jpg" alt="el_blog_img1">
                         </a>
                     </div>
                     <div class="blog_content bg-white">
@@ -33,7 +33,7 @@
                 <div class="blog_post blog_style2 box_shadow1">
                     <div class="blog_img">
                         <a href="blog-single.html">
-                            <img src="assets/images/el_blog_img2.jpg" alt="el_blog_img2">
+                            <img src="<?= asset_path('image', false); ?>/el_blog_img2.jpg" alt="el_blog_img2">
                         </a>
                     </div>
                     <div class="blog_content bg-white">
@@ -54,7 +54,7 @@
                 <div class="blog_post blog_style2 box_shadow1">
                     <div class="blog_img">
                         <a href="blog-single.html">
-                            <img src="assets/images/el_blog_img3.jpg" alt="el_blog_img2">
+                            <img src="<?= asset_path('image', false); ?>/el_blog_img3.jpg" alt="el_blog_img2">
                         </a>
                     </div>
                     <div class="blog_content bg-white">

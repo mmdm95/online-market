@@ -3,20 +3,36 @@
  */
 window.MyGlobalVariables = {
     icons: {
-        success: 'la la-check',
-        info: 'la la-info',
-        warning: 'la la-bell',
-        error: 'la la-danger',
+        success: '',
+        info: '',
+        warning: '',
+        error: '',
     },
     messages: {
         request: {
-            error: 'دریافت اطلاعات با خطا روبرو شد!',
+            error: 'ارسال/دریافت اطلاعات با خطا روبرو شد!',
         },
-        confirm: 'آیا از این عملیات مطمئن هستید؟',
     },
-    apiCodes: {
-        success: 200,
+    toasts: {
+        toast: {
+            theme: 'sunset',
+            layout: 'topRight',
+        },
+        confirm: {
+            message: 'آیا از این عملیات مطمئن هستید؟',
+            theme: 'sunset',
+            type: 'question',
+            confirmLabels: {
+                yes: 'بله',
+                no: 'خیر',
+            },
+            btnClasses: {
+                yes: 'btn btn-fill-line ml-1 btn-sm',
+                no: 'btn btn-fill-out btn-sm',
+            }
+        },
     },
+    apiCodes: {},
     url: {
         cart: {
             get: '/ajax/cart/get',
@@ -88,7 +104,7 @@ window.MyGlobalVariables = {
         return {
             // Inheritance support
             extend: function (sub, sup) {
-                let f = function () {
+                var f = function () {
                 };
                 f.prototype = sup.prototype;
                 sub.prototype = new f();
@@ -129,12 +145,17 @@ window.MyGlobalVariables = {
             isString: function (t) {
                 return $.type(t) === window.TheCore.types.string;
             },
+            isDefined: function (t) {
+                return typeof t !== 'undefined';
+            },
             trim: function (string, char) {
                 if (char === "]") char = "\\]";
                 if (char === "\\") char = "\\\\";
                 return string.replace(new RegExp(
                     "^[" + char + "]+|[" + char + "]+$", "g"
                 ), "");
+            },
+            noop: function () {
             },
             getCookie: function (cname) {
                 var name = cname + "=";
@@ -161,6 +182,7 @@ window.MyGlobalVariables = {
     // Axios
     window.axios.defaults.xsrfCookieName = 'CSRF-TOKEN';
     window.axios.defaults.xsrfHeaderName = 'X-CSRF-TOKEN';
+    window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
     //=========================================================================
     // jQuery
     function csrfSafeMethod(method) {
@@ -205,27 +227,59 @@ window.MyGlobalVariables = {
                  * @param options
                  */
                 toast: function (message, options) {
-                    if ($.iziToast) {
-                        $.iziToast(options);
+                    options = typeof options === typeof {} ? options : {};
+                    if (window.TheCore.isDefined(Noty)) {
+                        new Noty($.extend({
+                            theme: window.MyGlobalVariables.toasts.toast.theme,
+                            type: 'alert',
+                            layout: window.MyGlobalVariables.toasts.toast.layout,
+                            text: message,
+                            timeout: 5000,
+                            modal: false,
+                        }, options)).show();
                     } else {
                         alert(message);
                     }
                 },
                 /**
                  * @param message
+                 * @param onOkCallback
                  * @param options
                  * @returns {boolean}
                  */
-                confirm: function (message, options) {
-                    let res = false;
+                confirm: function (message, onOkCallback, options) {
+                    var res = false;
+                    onOkCallback = window.TheCore.isFunction(onOkCallback) ? onOkCallback : window.TheCore.noop;
+                    options = typeof options === typeof {} ? options : {};
+                    message = message ? message : window.MyGlobalVariables.toasts.confirm.message;
 
-                    if ($.iziToast) {
-                        $.iziToast(options);
+                    if (window.TheCore.isDefined(Noty)) {
+                        var n = new Noty($.extend({
+                            theme: window.MyGlobalVariables.toasts.confirm.theme,
+                            type: window.MyGlobalVariables.toasts.confirm.type,
+                            layout: 'topCenter',
+                            text: message,
+                            timeout: false,
+                            modal: true,
+                            closeWith: ['button'],
+                            buttons: [
+                                Noty.button(window.MyGlobalVariables.toasts.confirm.confirmLabels.yes, window.MyGlobalVariables.toasts.confirm.btnClasses.yes, function () {
+                                    onOkCallback.call(null);
+                                    n.close();
+                                }),
+
+                                Noty.button(window.MyGlobalVariables.toasts.confirm.confirmLabels.no, window.MyGlobalVariables.toasts.confirm.btnClasses.no, function () {
+                                    n.close();
+                                })
+                            ]
+                        }, options)).show();
                     } else {
                         res = confirm(message);
                     }
 
-                    return res;
+                    if (res) {
+                        onOkCallback.call(null);
+                    }
                 }
             },
 
@@ -257,7 +311,7 @@ window.MyGlobalVariables = {
                             console.log(error.response.data);
                             console.log(error.response.status);
                         } else if (error.request) {
-                            _.toasts.toast('تمکان ارتباط با سرور وجود ندارد!');
+                            _.toasts.toast(window.MyGlobalVariables.messages.request.error);
                         } else {
                             _.toasts.toast(error.message);
                         }
@@ -273,9 +327,9 @@ window.MyGlobalVariables = {
                 var _ = this;
                 options = typeof options === typeof {} ? options : {};
 
-                if (_.confirm(MyGlobalVariables.messages.confirm)) {
+                _.confirm(MyGlobalVariables.messages.confirm, function () {
                     _.request(url, 'delete', successCallback, options);
-                }
+                });
             },
         });
 
