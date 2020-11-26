@@ -24,8 +24,10 @@ class MenuModel extends BaseModel
                 ->from(self::TBL_CATEGORIES . ' AS c')
                 ->cols($columns)
                 ->where('c.publish=:pub')
+                ->where('c.show_in_menu=:sim')
                 ->bindValues([
                     'pub' => DB_YES,
+                    'sim' => DB_YES,
                 ])
                 ->leftJoin(self::TBL_CATEGORIES . ' AS pc', 'c.parent_id=pc.id')
                 ->orderBy(['c.priority DESC']);

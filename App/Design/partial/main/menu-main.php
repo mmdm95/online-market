@@ -3,25 +3,25 @@
         <div class="container">
             <div class="nav_block">
                 <a class="navbar-brand" href="<?= url('home.index'); ?>">
-                    <img class="logo_light" src="<?= asset_path('image', false); ?>/logo_light.png" alt="logo"/>
-                    <img class="logo_dark" src="<?= asset_path('image', false); ?>/logo_dark.png" alt="logo"/>
+                    <img class="logo_light"
+                         src="<?= url('image.show') . \config()->get('settings.logo_light.value'); ?>" alt="logo"/>
+                    <img class="logo_dark" src="<?= url('image.show') . \config()->get('settings.logo.value'); ?>"
+                         alt="logo"/>
                 </a>
                 <div class="contact_phone order-md-last">
                     <i class="linearicons-phone-wave"></i>
                     <span><?= local_number(\config()->get('settings.main_phone.value')) ?></span>
                 </div>
                 <div class="product_search_form">
-                    <form>
+                    <form method="get" action="<?= url('home.search'); ?>">
                         <div class="input-group">
                             <div class="input-group-prepend">
                                 <div class="custom_select">
                                     <select class="first_null">
-                                        <option value="">همه دسته ها</option>
-                                        <option value="Dresses">لباس</option>
-                                        <option value="Shirt-Tops">پیراهن</option>
-                                        <option value="T-Shirt">تی شرت</option>
-                                        <option value="Pents">چادر</option>
-                                        <option value="Jeans">شلوار جین</option>
+                                        <option value="-1">همه دسته ها</option>
+                                        <?php foreach ($categories as $category): ?>
+                                            <option value="<?= $category['id']; ?>"><?= $category['name']; ?></option>
+                                        <?php endforeach; ?>
                                     </select>
                                 </div>
                             </div>

@@ -3,7 +3,10 @@
 <!-- End Screen Load Popup Section -->
 
 <!-- START HEADER -->
-<?php load_partial('main/menu-main'); ?>
+<?php load_partial('main/menu-main', [
+    'menu' => $menu ?? [],
+    'categories' => $categories ?? [],
+]); ?>
 <!-- END HEADER -->
 
 <!-- START SECTION BANNER -->

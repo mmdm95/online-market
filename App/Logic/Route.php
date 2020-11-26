@@ -177,12 +177,14 @@ class Route implements IInitialize
             // show images outside of public folder
             Router::get('/images/{filename}', 'Admin\FileController@showImage')->where([
                 'filename' => '.+',
-            ])->name('admin.image.show');
+            ])->name('image.show');
 
             //==========================
             // other routes
             //==========================
             Router::get('/', 'HomeController@index')->name('home.index');
+
+            Router::get('/search', 'HomeController@search')->name('home.search');
         });
     }
 

@@ -304,7 +304,7 @@
                 case 'jpeg':
                 case 'gif':
                 case 'svg':
-                    dataSrc = '<?= url('admin.image.show'); ?>' + data.path;
+                    dataSrc = '<?= url('image.show'); ?>' + data.path;
                     break;
                 case 'js':
                     extraClass = 'js';
@@ -345,13 +345,13 @@
                     break;
                 default:
                     $link = $('<a class="name" />')
-                        .attr('href', data.is_dir ? '#' + data.path : '<?= url('admin.image.show'); ?>' + data.path)
+                        .attr('href', data.is_dir ? '#' + data.path : '<?= url('image.show'); ?>' + data.path)
                         .text(data.name);
                     return $link;
             }
 
             $link = $('<a class="name image ' + extraClass + '" />')
-                .attr('href', data.path).attr('data-url', "<?= url('admin.image.show'); ?>" + data.path)
+                .attr('href', data.path).attr('data-url', "<?= url('image.show'); ?>" + data.path)
                 .attr('data-popup', 'lightbox')
                 .append($('<span class="img-name">' + data.name + '</span>'))
                 .append($('<img class="lazy" data-src="' + dataSrc + '" alt="' + data.name + '" />'))

@@ -1058,6 +1058,7 @@ button:focus {
 .dark_skin .logo_dark,
 .light_skin .logo_light {
 	display: block;
+	max-height: 50px;
 }
 .light_skin .navbar-nav a,
 .light_skin .navbar-toggler,
