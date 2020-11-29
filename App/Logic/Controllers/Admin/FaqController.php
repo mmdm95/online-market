@@ -10,10 +10,9 @@ use Sim\Exceptions\PathManager\PathNotRegisteredException;
 use Sim\Interfaces\IFileNotExistsException;
 use Sim\Interfaces\IInvalidVariableNameException;
 
-class ContactUsController extends AbstractAdminController
+class FaqController extends AbstractAdminController
 {
     /**
-     * @param $id
      * @return string
      * @throws ReflectionException
      * @throws ConfigNotRegisteredException
@@ -22,13 +21,10 @@ class ContactUsController extends AbstractAdminController
      * @throws IFileNotExistsException
      * @throws IInvalidVariableNameException
      */
-    public function view($id = null)
+    public function view()
     {
-        if (!is_null($id)) {
-            $this->setLayout($this->main_layout)->setTemplate('view/contact-us/message');
-        } else {
-            $this->setLayout($this->main_layout)->setTemplate('view/contact-us/view');
-        }
+            $this->setLayout($this->main_layout)->setTemplate('view/faq/view');
+
         return $this->render();
     }
 }

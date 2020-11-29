@@ -3,16 +3,13 @@
 namespace App\Logic;
 
 use App\Logic\Handlers\CustomExceptionHandler;
-use App\Logic\Middlewares\AdminApiVerifierMiddleware;
 use App\Logic\Middlewares\AdminAuthMiddleware;
 use App\Logic\Middlewares\ApiVerifierMiddleware;
-use App\Logic\Models\Model;
 use App\Logic\Utils\ConfigUtil;
 use Pecee\SimpleRouter\Event\EventArgument;
 use Pecee\SimpleRouter\Handlers\EventHandler;
 use Pecee\SimpleRouter\SimpleRouter as Router;
 use Sim\Interfaces\IInitialize;
-use Sim\Utils\ArrayUtil;
 
 class Route implements IInitialize
 {
@@ -159,6 +156,47 @@ class Route implements IInitialize
                  */
                 Router::get('/contact-us/view/{id?}', 'Admin\ContactUsController@view')->name('admin.contact-us.view');
 
+                /**
+                 * Unit Route
+                 */
+                Router::get('/unit/view', 'Admin\UnitController@view')->name('admin.unit.view');
+
+                /**
+                 * FAQ Route
+                 */
+                Router::get('/faq/view', 'Admin\FaqController@view')->name('admin.faq.view');
+
+                /**
+                 * complaints Route
+                 */
+                Router::get('/complaints/view/{id?}', 'Admin\complaintsController@view')->name('admin.complaints.view');
+
+                /**
+                 * Newsletter Route
+                 */
+                Router::get('/newsletter/view/{id?}', 'Admin\NewsletterController@view')->name('admin.newsletter.view');
+
+                /**
+                 * Wallet Route
+                 */
+                Router::get('/wallet/view{id?}', 'Admin\WalletController@view')->name('admin.wallet.view');
+                Router::get('/wallet/deposit-type', 'Admin\WalletController@depositType')->name('admin.wallet.deposit-type');
+
+                /**
+                 * Order Route
+                 */
+                Router::get('/order/view{id?}', 'Admin\OrderController@view')->name('admin.order.view');
+                Router::get('/order/badges', 'Admin\OrderController@badges')->name('admin.order.badges');
+
+                /**
+                 * Slider Route
+                 */
+                Router::get('/slider/view', 'Admin\SliderController@view')->name('admin.slider.view');
+
+                /**
+                 * Setting Route
+                 */
+                Router::get('/setting', 'Admin\SettingController@view')->name('admin.setting');
                 /**
                  * File Manager Route
                  */

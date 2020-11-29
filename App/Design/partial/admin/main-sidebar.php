@@ -113,6 +113,14 @@
                         </li>
                     </ul>
                 </li>
+                <li class="nav-item">
+                    <a href="<?= url('admin.unit.view'); ?>" class="nav-link">
+                        <i class="icon-unicode"></i>
+                        <span>
+									واحد‌ها
+                        </span>
+                    </a>
+                </li>
                 <li class="nav-item nav-item-submenu">
                     <a href="#" class="nav-link"><i class="icon-credit-card"></i> <span>کوپن‌های تخفیف</span></a>
 
@@ -131,15 +139,65 @@
                 </li>
                 <!-- /Shop -->
 
+                <!-- Financial and Orders -->
+                <li class="nav-item-header">
+                    <div class="text-uppercase font-size-xs line-height-xs">سفارشات و امور مالی</div>
+                    <i class="icon-menu" title="سفارشات و امور مالی"></i>
+                </li>
+                <li class="nav-item nav-item-submenu">
+                    <a href="#" class="nav-link"><i class="icon-wallet"></i> <span>کیف پول</span></a>
+
+                    <ul class="nav nav-group-sub" data-submenu-title="Layouts">
+                        <li class="nav-item">
+                            <a href="<?= url('admin.wallet.view'); ?>" class="nav-link active">
+                                مشاهده کیف پول کاربران
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="<?= url('admin.wallet.deposit-type'); ?>" class="nav-link">
+                                مدیریت انواع تراکنش ها
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="nav-item nav-item-submenu">
+                    <a href="#" class="nav-link"><i class="icon-basket"></i> <span>سفارشات</span></a>
+
+                    <ul class="nav nav-group-sub" data-submenu-title="Layouts">
+                        <li class="nav-item">
+                            <a href="<?= url('admin.order.view'); ?>" class="nav-link active">
+                                سفارشات ثبت شده
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="<?= url('admin.order.badges'); ?>" class="nav-link">
+                                مدیریت وضیعت سفارشات
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <!-- /financial and orders -->
+
                 <!-- Connection -->
                 <li class="nav-item-header">
                     <div class="text-uppercase font-size-xs line-height-xs">ارتباطات</div>
-                    <i class="icon-menu" title="ارتباطات"></i>
-                </li>
+                    <i class="icon-menu" title="ارتباطات"></i></li>
                 <li class="nav-item">
                     <a href="<?= url('admin.contact-us.view'); ?>" class="nav-link">
                         <i class="icon-envelop3"></i>
                         <span>تماس‌ها</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="<?= url('admin.faq.view'); ?>" class="nav-link">
+                        <i class="icon-question7"></i>
+                        <span>سؤالات متداول</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="<?= url('admin.newsletter.view'); ?>" class="nav-link">
+                        <i class="icon-newspaper2"></i>
+                        <span>خبرنامه</span>
                     </a>
                 </li>
                 <!-- /Connection -->
@@ -150,9 +208,21 @@
                     <i class="icon-menu" title="سایر"></i>
                 </li>
                 <li class="nav-item">
+                    <a href="<?= url('admin.slider.view'); ?>" class="nav-link">
+                        <i class="icon-image-compare"></i>
+                        <span>مدیریت اسلایدشو</span>
+                    </a>
+                </li>
+                <li class="nav-item">
                     <a href="<?= url('admin.file-manager'); ?>" class="nav-link">
                         <i class="icon-files-empty"></i>
                         <span>مدیریت فایل‌ها</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="<?= url('admin.setting'); ?>" class="nav-link">
+                        <i class="icon-cog"></i>
+                        <span>تنظیمات</span>
                     </a>
                 </li>
                 <!-- /Others -->

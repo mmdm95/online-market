@@ -3,7 +3,7 @@
 
         <!-- Highlighting rows and columns -->
         <div class="card">
-            <?php load_partial('admin/card-header', ['header_title' => 'پیام‌ها']); ?>
+            <?php load_partial('admin/card-header', ['header_title' => 'شکایات']); ?>
 
             <div class="card-body">
                 با استفاده از ستون عملیات می‌توانید اقدام به حذف، ویرایش و مشاهده خرید‌های کاربر کنید.
