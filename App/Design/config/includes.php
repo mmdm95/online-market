@@ -355,7 +355,7 @@ return [
                 ]
             ],
         ],
-        'view/user/view-profile' => [
+        'view/user/user-profile' => [
             'title' => 'پایار تأسیسات | لیست کاربران سایت',
             'common' => [
                 'admin-base',
@@ -625,7 +625,338 @@ return [
                 ],
             ],
         ],
+        'view/contact-us/message' => [
+            'title' => 'پایار تأسیسات | مشاهده تماس‌',
+            'common' => [
+                'admin-base',
+                'admin-form',
+                'admin-table',
+                'admin'
+            ],
+            'sub_title' => 'مشاهده تماس‌',
+            'breadcrumb' => [
+                [
+                    'url' => url('admin.index'),
+                    'icon' => 'icon-home2',
+                    'text' => 'خانه',
+                    'is_active' => false,
+                ],
+                [
+                    'url' => url('admin.contact-us.view'),
+                    'text' => 'مدیریت تماس‌ها',
+                    'is_active' => false,
+                ],
+                [
+                    'text' => 'مشاهده تماس‌',
+                    'is_active' => true,
+                ],
+            ],
+        ],
+        'view/unit/view' => [
+            'title' => 'پایار تأسیسات | واحدها',
+            'common' => [
+                'admin-base',
+                'admin-form',
+                'admin-table',
+                'admin'
+            ],
+            'sub_title' => 'مشاهده واحد',
+            'breadcrumb' => [
+                [
+                    'url' => url('admin.index'),
+                    'icon' => 'icon-home2',
+                    'text' => 'خانه',
+                    'is_active' => false,
+                ],
+                [
+                    'text' => 'مدیریت واحدها',
+                    'is_active' => true,
+                ],
+            ],
+        ],
+        'view/faq/view' => [
+            'title' => 'پایار تأسیسات | سؤالات متداول',
+            'common' => [
+                'admin-base',
+                'admin-form',
+                'admin-table',
+                'admin'
+            ],
+            'sub_title' => 'مشاهده سؤالات',
+            'breadcrumb' => [
+                [
+                    'url' => url('admin.index'),
+                    'icon' => 'icon-home2',
+                    'text' => 'خانه',
+                    'is_active' => false,
+                ],
+                [
+                    'text' => 'مدیریت سؤالات متداول',
+                    'is_active' => true,
+                ],
+            ],
+        ],
+        'view/complaints/view' => [
+            'title' => 'پایار تأسیسات | شکایت',
+            'common' => [
+                'admin-base',
+                'admin-form',
+                'admin-table',
+                'admin'
+            ],
+            'sub_title' => 'بررسی شکایات',
+            'breadcrumb' => [
+                [
+                    'url' => url('admin.index'),
+                    'icon' => 'icon-home2',
+                    'text' => 'خانه',
+                    'is_active' => false,
+                ],
+                [
+                    'text' => 'مدیریت شکایات',
+                    'is_active' => true,
+                ],
+            ],
+        ],
+        'view/complaints/message' => [
+            'title' => 'پایار تأسیسات | مشاهده شکایت',
+            'common' => [
+                'admin-base',
+                'admin-form',
+                'admin-table',
+                'admin'
+            ],
+            'sub_title' => 'بررسی شکایات',
+            'breadcrumb' => [
+                [
+                    'url' => url('admin.index'),
+                    'icon' => 'icon-home2',
+                    'text' => 'خانه',
+                    'is_active' => false,
+                ],
+                [
+                    'url' => url('admin.complaints.view'),
+                    'text' => 'مشاهده شکایات',
+                    'is_active' => false,
+                ],
+                [
+                    'text' => 'بررسی شکایت',
+                    'is_active' => true,
+                ],
+            ],
+        ],
+        'view/newsletter/view' => [
+            'title' => 'پایار تأسیسات | خبرنامه',
+            'common' => [
+                'admin-base',
+                'admin-form',
+                'admin-table',
+                'admin'
+            ],
+            'sub_title' => 'مشاهده خبرنامه',
+            'breadcrumb' => [
+                [
+                    'url' => url('admin.index'),
+                    'icon' => 'icon-home2',
+                    'text' => 'خانه',
+                    'is_active' => false,
+                ],
+                [
+                    'text' => 'خبرنامه',
+                    'is_active' => true,
+                ],
+            ],
+        ],
+        'view/wallet/view' => [
+            'title' => 'پایار تأسیسات | کیف پول',
+            'common' => [
+                'admin-base',
+                'admin-table',
+                'admin'
+            ],
+            'sub_title' => 'مشاهده خبرنامه',
+            'breadcrumb' => [
+                [
+                    'url' => url('admin.index'),
+                    'icon' => 'icon-home2',
+                    'text' => 'خانه',
+                    'is_active' => false,
+                ],
+                [
+                    'text' => 'خبرنامه',
+                    'is_active' => true,
+                ],
+            ],
+        ],
+        'view/wallet/user-wallet' => [
+            'title' => 'پایار تأسیسات | کیف پول',
+            'common' => [
+                'admin-base',
+                'admin-table',
+                'admin-form',
+                'admin'
+            ],
+            'sub_title' => 'مشاهده کیف پول',
+            'breadcrumb' => [
+                [
+                    'url' => url('admin.index'),
+                    'icon' => 'icon-home2',
+                    'text' => 'خانه',
+                    'is_active' => false,
+                ],
+                [
+                    'url' => url('admin.wallet.view'),
+                    'text' => 'کیف پول کاربران',
+                    'is_active' => false,
+                ],
+                [
+                    'text' => 'کیف پول کاربر',
+                    'is_active' => true,
+                ],
+            ],
+        ],
+        'view/wallet/deposit-type' => [
+            'title' => 'پایار تأسیسات | انواع تراکنش',
+            'common' => [
+                'admin-base',
+                'admin-table',
+                'admin-form',
+                'admin'
+            ],
+            'sub_title' => 'انواع تراکنش‌ها',
+            'breadcrumb' => [
+                [
+                    'url' => url('admin.index'),
+                    'icon' => 'icon-home2',
+                    'text' => 'خانه',
+                    'is_active' => false,
+                ],
+                [
+                    'text' => 'انواع تراکنش',
+                    'is_active' => true,
+                ],
+            ],
+        ],
+        'view/slider/view' => [
+            'title' => 'پایار تأسیسات | مدیریت اسلایدشو',
+            'common' => [
+                'admin-base',
+                'admin-table',
+                'admin-form',
+                'admin'
+            ],
+            'sub_title' => 'اسلایدها',
+            'breadcrumb' => [
+                [
+                    'url' => url('admin.index'),
+                    'icon' => 'icon-home2',
+                    'text' => 'خانه',
+                    'is_active' => false,
+                ],
+                [
+                    'text' => 'اسلایدها',
+                    'is_active' => true,
+                ],
+            ],
 
+        ],
+        'view/order/view' => [
+            'title' => 'پایار تأسیسات | لیست سفارشات',
+            'common' => [
+                'admin-base',
+                'admin-table',
+                'admin-form',
+                'admin'
+            ],
+            'sub_title' => 'سفارشات',
+            'breadcrumb' => [
+                [
+                    'url' => url('admin.index'),
+                    'icon' => 'icon-home2',
+                    'text' => 'خانه',
+                    'is_active' => false,
+                ],
+                [
+                    'text' => 'اسلایدها',
+                    'is_active' => true,
+                ],
+            ],
+
+        ],
+        'view/order/order-detail' => [
+            'title' => 'پایار تأسیسات | جزئیات سفارش',
+            'common' => [
+                'admin-base',
+                'admin-table',
+                'admin-form',
+                'admin'
+            ],
+            'sub_title' => 'سفارش',
+            'breadcrumb' => [
+                [
+                    'url' => url('admin.index'),
+                    'icon' => 'icon-home2',
+                    'text' => 'خانه',
+                    'is_active' => false,
+                ],
+                [
+                    'url' => url('admin.order.view'),
+                    'text' => 'مدیرت سفارشات',
+                    'is_active' => false,
+                ],
+                [
+                    'text' => 'سفارش',
+                    'is_active' => true,
+                ],
+            ],
+
+        ],
+        'view/order/badges' => [
+            'title' => 'پایار تأسیسات | وضعیت سفارش',
+            'common' => [
+                'admin-base',
+                'admin-table',
+                'admin-form',
+                'admin'
+            ],
+            'sub_title' => 'مدیریت وضعیت سفارش',
+            'breadcrumb' => [
+                [
+                    'url' => url('admin.index'),
+                    'icon' => 'icon-home2',
+                    'text' => 'خانه',
+                    'is_active' => false,
+                ],
+                [
+                    'text' => 'وضعیت سفارش',
+                    'is_active' => true,
+                ],
+            ],
+
+        ],
+        'view/setting' => [
+            'title' => 'پایار تأسیسات | تنظیمات سایت',
+            'common' => [
+                'admin-base',
+                'admin-table',
+                'admin-form',
+                'admin'
+            ],
+            'sub_title' => 'اسلایدها',
+            'breadcrumb' => [
+                [
+                    'url' => url('admin.index'),
+                    'icon' => 'icon-home2',
+                    'text' => 'خانه',
+                    'is_active' => false,
+                ],
+                [
+                    'text' => 'اسلایدها',
+                    'is_active' => true,
+                ],
+            ],
+
+        ],
         'view/file-manager/index' => [
             'title' => 'پایار تأسیسات | مدیریت فایل‌ها',
             'common' => [

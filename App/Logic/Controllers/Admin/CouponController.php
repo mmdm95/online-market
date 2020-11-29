@@ -4,18 +4,24 @@
 namespace App\Logic\Controllers\Admin;
 
 use App\Logic\Abstracts\AbstractAdminController;
+use ReflectionException as ReflectionExceptionAlias;
+use Sim\Exceptions\ConfigManager\ConfigNotRegisteredException;
+use Sim\Exceptions\Mvc\Controller\ControllerException;
+use Sim\Exceptions\PathManager\PathNotRegisteredException;
+use Sim\Interfaces\IFileNotExistsException;
+use Sim\Interfaces\IInvalidVariableNameException;
 
 class CouponController extends AbstractAdminController
 {
 
     /**
      * @return string
-     * @throws \ReflectionException
-     * @throws \Sim\Exceptions\ConfigManager\ConfigNotRegisteredException
-     * @throws \Sim\Exceptions\Mvc\Controller\ControllerException
-     * @throws \Sim\Exceptions\PathManager\PathNotRegisteredException
-     * @throws \Sim\Interfaces\IFileNotExistsException
-     * @throws \Sim\Interfaces\IInvalidVariableNameException
+     * @throws ReflectionExceptionAlias
+     * @throws ConfigNotRegisteredException
+     * @throws ControllerException
+     * @throws PathNotRegisteredException
+     * @throws IFileNotExistsException
+     * @throws IInvalidVariableNameException
      */
     public function add()
     {
@@ -27,12 +33,12 @@ class CouponController extends AbstractAdminController
     /**
      * @param $id
      * @return string
-     * @throws \ReflectionException
-     * @throws \Sim\Exceptions\ConfigManager\ConfigNotRegisteredException
-     * @throws \Sim\Exceptions\Mvc\Controller\ControllerException
-     * @throws \Sim\Exceptions\PathManager\PathNotRegisteredException
-     * @throws \Sim\Interfaces\IFileNotExistsException
-     * @throws \Sim\Interfaces\IInvalidVariableNameException
+     * @throws ReflectionExceptionAlias
+     * @throws ConfigNotRegisteredException
+     * @throws ControllerException
+     * @throws PathNotRegisteredException
+     * @throws IFileNotExistsException
+     * @throws IInvalidVariableNameException
      */
     public function edit($id)
     {
@@ -43,12 +49,12 @@ class CouponController extends AbstractAdminController
 
     /**
      * @return string
-     * @throws \ReflectionException
-     * @throws \Sim\Exceptions\ConfigManager\ConfigNotRegisteredException
-     * @throws \Sim\Exceptions\Mvc\Controller\ControllerException
-     * @throws \Sim\Exceptions\PathManager\PathNotRegisteredException
-     * @throws \Sim\Interfaces\IFileNotExistsException
-     * @throws \Sim\Interfaces\IInvalidVariableNameException
+     * @throws ReflectionExceptionAlias
+     * @throws ConfigNotRegisteredException
+     * @throws ControllerException
+     * @throws PathNotRegisteredException
+     * @throws IFileNotExistsException
+     * @throws IInvalidVariableNameException
      */
     public function view()
     {

@@ -99,6 +99,14 @@
                             </a></li>
                     </ul>
                 </li>
+                <li class="nav-item">
+                    <a href="<?= url('admin.unit.view'); ?>" class="nav-link">
+                        <i class="icon-unicode"></i>
+                        <span>
+									واحد‌ها
+                        </span>
+                    </a>
+                </li>
                 <li class="nav-item nav-item-submenu">
                     <a href="#" class="nav-link"><i class="icon-credit-card"></i> <span>کوپن‌های تخفیف</span></a>
 
@@ -112,41 +120,86 @@
                     </ul>
                 </li>
                 <!-- /Shop -->
+                <!-- Financial and Orders -->
+                <li class="nav-item-header">
+                    <div class="text-uppercase font-size-xs line-height-xs">سفارشات و امور مالی</div>
+                    <i class="icon-menu" title="Main"></i>
+                </li>
+                <li class="nav-item nav-item-submenu">
+                    <a href="#" class="nav-link"><i class="icon-wallet"></i> <span>کیف پول</span></a>
+
+                    <ul class="nav nav-group-sub" data-submenu-title="Layouts">
+                        <li class="nav-item"><a href="<?= url('admin.wallet.view'); ?>" class="nav-link active">
+                                مشاهده کیف پول کاربران
+                            </a>
+                        </li>
+                        <li class="nav-item"><a href="<?= url('admin.wallet.deposit-type'); ?>" class="nav-link">
+                                مدیریت انواع تراکنش ها
+                            </a></li>
+                    </ul>
+                </li>
+                <li class="nav-item nav-item-submenu">
+                    <a href="#" class="nav-link"><i class="icon-basket"></i> <span>سفارشات</span></a>
+
+                    <ul class="nav nav-group-sub" data-submenu-title="Layouts">
+                        <li class="nav-item"><a href="<?= url('admin.order.view'); ?>" class="nav-link active">
+                                سفارشات ثبت شده
+                            </a>
+                        </li>
+                        <li class="nav-item"><a href="<?= url('admin.order.badges'); ?>" class="nav-link">
+                                مدیریت وضیعت سفارشات
+                            </a></li>
+                    </ul>
+                </li>
+                <!-- /Shop -->
                 <!-- Connection -->
                 <li class="nav-item-header">
                     <div class="text-uppercase font-size-xs line-height-xs">ارتباطات</div>
                     <i class="icon-menu" title="Main"></i></li>
                 <li class="nav-item">
-                    <a href="<?= url('admin.index'); ?>" class="nav-link">
+                    <a href="<?= url('admin.contact-us.view'); ?>" class="nav-link">
                         <i class="icon-envelop3"></i>
                         <span>
 									تماس‌ها
                         </span>
                     </a>
                 </li>
-                <li class="nav-item nav-item-submenu">
-                    <a href="#" class="nav-link"><i class="icon-bucket"></i> <span>رنگ‌ها</span></a>
-
-                    <ul class="nav nav-group-sub" data-submenu-title="Layouts">
-                        <li class="nav-item"><a href="<?= url('admin.color.add'); ?>" class="nav-link active">
-                                افزودن رنگ جدید
-                            </a></li>
-                        <li class="nav-item"><a href="<?= url('admin.color.view'); ?>" class="nav-link">
-                                لیست رنگ‌ها
-                            </a></li>
-                    </ul>
+                <li class="nav-item">
+                    <a href="<?= url('admin.faq.view'); ?>" class="nav-link">
+                        <i class="icon-question7"></i>
+                        <span>
+									سؤالات متداول
+                        </span>
+                    </a>
                 </li>
-                <li class="nav-item nav-item-submenu">
-                    <a href="#" class="nav-link"><i class="icon-credit-card"></i> <span>کوپن‌های تخفیف</span></a>
-
-                    <ul class="nav nav-group-sub" data-submenu-title="Layouts">
-                        <li class="nav-item"><a href="<?= url('admin.coupon.add'); ?>" class="nav-link active">
-                                افزودن کوپن تخفیف
-                            </a></li>
-                        <li class="nav-item"><a href="<?= url('admin.coupon.view'); ?>" class="nav-link">
-                                مشاهده کوپن
-                            </a></li>
-                    </ul>
+                <li class="nav-item">
+                    <a href="<?= url('admin.newsletter.view'); ?>" class="nav-link">
+                        <i class="icon-newspaper2"></i>
+                        <span>
+                            خبرنامه
+                        </span>
+                    </a>
+                </li>
+                <!-- /Connection -->
+                <!-- Connection -->
+                <li class="nav-item-header">
+                    <div class="text-uppercase font-size-xs line-height-xs">تنظیمات</div>
+                    <i class="icon-menu" title="Main"></i></li>
+                <li class="nav-item">
+                    <a href="<?= url('admin.slider.view'); ?>" class="nav-link">
+                        <i class="icon-image-compare"></i>
+                        <span>
+									مدیریت اسلایدشو
+                        </span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="<?= url('admin.setting'); ?>" class="nav-link">
+                        <i class="icon-cog"></i>
+                        <span>
+									تنظیمات
+                        </span>
+                    </a>
                 </li>
                 <!-- /Connection -->
 

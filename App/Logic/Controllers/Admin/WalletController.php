@@ -10,24 +10,24 @@ use Sim\Exceptions\PathManager\PathNotRegisteredException;
 use Sim\Interfaces\IFileNotExistsException;
 use Sim\Interfaces\IInvalidVariableNameException;
 
-class UserController extends AbstractAdminController
+class WalletController extends AbstractAdminController
 {
     /**
      * @param null $id
      * @return string
-     * @throws ReflectionException
      * @throws ConfigNotRegisteredException
      * @throws ControllerException
-     * @throws PathNotRegisteredException
      * @throws IFileNotExistsException
      * @throws IInvalidVariableNameException
+     * @throws PathNotRegisteredException
+     * @throws ReflectionException
      */
     public function view($id = null)
     {
         if (!is_null($id)) {
-            $this->setLayout($this->main_layout)->setTemplate('view/user/user-profile');
+            $this->setLayout($this->main_layout)->setTemplate('view/wallet/user-wallet');
         } else {
-            $this->setLayout($this->main_layout)->setTemplate('view/user/view');
+            $this->setLayout($this->main_layout)->setTemplate('view/wallet/view');
         }
 
         return $this->render();
@@ -42,26 +42,10 @@ class UserController extends AbstractAdminController
      * @throws IFileNotExistsException
      * @throws IInvalidVariableNameException
      */
-    public function add()
+    public function depositType()
     {
-        $this->setLayout($this->main_layout)->setTemplate('view/user/add');
 
-        return $this->render();
-    }
-
-    /**
-     * @param $id
-     * @return string
-     * @throws ReflectionException
-     * @throws ConfigNotRegisteredException
-     * @throws ControllerException
-     * @throws PathNotRegisteredException
-     * @throws IFileNotExistsException
-     * @throws IInvalidVariableNameException
-     */
-    public function edit($id)
-    {
-        $this->setLayout($this->main_layout)->setTemplate('view/user/edit');
+        $this->setLayout($this->main_layout)->setTemplate('view/wallet/deposit-type');
 
         return $this->render();
     }

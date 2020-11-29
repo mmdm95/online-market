@@ -131,12 +131,12 @@
             با استفاده از ستون عملیات می‌توانید اقدام به حذف، ویرایش و مشاهده خرید‌های کاربر کنید.
             <div class="col-md-2 float-right">
                 <button type="button" class="btn btn-danger" data-toggle="modal"
-                        data-target="#modal_form_vertical">
+                        data-target="#modal_form_address_add">
                     افزودن آدرس
                     <i class="icon-truck ml-2"></i></button>
             </div>
             <!-- Vertical form modal -->
-            <div id="modal_form_vertical" class="modal fade" tabindex="-1">
+            <div id="modal_form_address_add" class="modal fade" tabindex="-1">
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
@@ -264,7 +264,7 @@
                             </a>
 
                             <div class="dropdown-menu dropdown-menu-right">
-                                <a href="#" class="dropdown-item"><i class="icon-pencil"></i>ویرایش</a>
+                                <a href="#modal_form_address_edit" data-toggle="modal" class="dropdown-item"><i class="icon-pencil"></i>ویرایش</a>
                                 <a href="#" class="dropdown-item"><i class="icon-trash"></i>حذف</a>
                                 <a href="#" class="dropdown-item"><i class="icon-cart"></i>خریدها</a>
                             </div>
@@ -274,6 +274,101 @@
             </tr>
             </tbody>
         </table>
+        <!-- Vertical form modal -->
+        <div id="modal_form_address_edit" class="modal fade" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">ویرایش آدرس</h5>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+
+                    <form action="#">
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <label>نام گیرنده</label>
+                                        <input type="text" placeholder="وارد کنید" class="form-control">
+                                    </div>
+
+                                    <div class="col-sm-6">
+                                        <label>نام خانوادگی گیرنده</label>
+                                        <input type="text" placeholder="وارد کنید" class="form-control">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <label>موبایل گیرنده:</label>
+                                        <input type="text" placeholder="09139518055"
+                                               class="form-control">
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <label>تلفن ثابت گیرنده:</label>
+                                        <input type="text" placeholder="eugene@kopyov.com"
+                                               class="form-control">
+                                    </div>
+
+
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label>استان:</label>
+                                            <select data-placeholder="استان را انتخاب کنید."
+                                                    class="form-control form-control-select2" data-fouc>
+                                                <option></option>
+                                                <option value="Cambodia">یزد</option>
+                                                <option value="Cameroon">اصفهان</option>
+                                                <option value="Canada">تهران</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label>شهر:</label>
+                                            <select data-placeholder="شهر را انتخاب کنید."
+                                                    class="form-control form-control-select2" data-fouc>
+                                                <option></option>
+                                                <option value="Cambodia">یزد</option>
+                                                <option value="Cameroon">اصفهان</option>
+                                                <option value="Canada">تهران</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-4">
+                                        <label>کد پستی:</label>
+                                        <input type="text" placeholder="8916754595" class="form-control">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <label>آدرس پستی</label>
+                                        <input type="text"
+                                               placeholder="آدرس کامل پستی را در اینجا وارد کنید."
+                                               class="form-control">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-link" data-dismiss="modal">بستن</button>
+                            <button type="submit" class="btn bg-primary">افزودن</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!-- /vertical form modal -->
     </div>
     <!-- /highlighting rows and columns --
     <!-- Highlighting rows and columns -->
