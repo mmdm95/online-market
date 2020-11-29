@@ -41,27 +41,19 @@
          ********************* Public Functions **********************
          *************************************************************/
 
-        _.get = function () {
-            window.axios({
-                method: 'get',
-                url: variables.url.cart.get,
-            }).then(function (response) {
-                var data = shop.handleAPIData(response.data);
-                // do other stuffs to handle data items
-            }).catch(function (error) {
-                // catch error
-            });
+        _.get = function ($successCallback) {
+            shop.request(variables.url.cart.get, 'get', $successCallback);
         };
 
         _.save = function () {
-            window.axios({
-                method: 'put',
-                url: variables.url.cart.save,
-            }).then(function (response) {
-                var data = shop.handleAPIData(response.data);
+            shop.request(variables.url.cart.save, 'put', function () {
                 // do other stuffs to handle data items
-            }).catch(function (error) {
-                // catch error
+            });
+        };
+
+        _.delete = function () {
+            shop.request(variables.url.cart.delete, 'delete', function () {
+                // do other stuffs to handle data items
             });
         };
 
@@ -87,14 +79,8 @@
          * @param code
          */
         _.remove = function (code) {
-            window.axios({
-                method: 'delete',
-                url: variables.cart.remove + '/' + code,
-            }).then(function (response) {
-                var data = shop.handleAPIData(response.data);
+            shop.request(variables.url.cart.remove + '/' + code, 'delete', function () {
                 // do other stuffs to handle data items
-            }).catch(function (error) {
-                // catch error
             });
         };
 
@@ -107,6 +93,10 @@
     $(function () {
         var cart = new window.TheCart();
 
+        // first fetch all items from cart and put in right place
+        cart.get(function () {
+            // do other stuffs to handle data items
 
+        });
     });
 })(jQuery);

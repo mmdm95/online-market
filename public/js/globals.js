@@ -37,6 +37,7 @@ window.MyGlobalVariables = {
         cart: {
             get: '/ajax/cart/get',
             save: '/ajax/cart/store',
+            delete: '/ajax/cart/delete',
             add: '/ajax/cart/add',
             update: '/ajax/cart/update',
             remove: '/ajax/cart/remove',

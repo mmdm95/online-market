@@ -2,9 +2,10 @@
 
 use Sim\I18n\ISOLanguageCodes;
 
-function local_number(string $str): string
+function local_number(?string $str): string
 {
     $lang = \config()->get('i18n.language');
+    $str = (string)$str;
     if (
         !empty($lang) &&
         in_array(

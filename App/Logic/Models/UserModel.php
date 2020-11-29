@@ -86,6 +86,8 @@ class UserModel extends BaseModel
     }
 
     /**
+     * Use [u for users], [r for roles], [ur for user_role]
+     *
      * @param array $columns
      * @param string|null $where
      * @param array $bind_values
@@ -148,6 +150,8 @@ class UserModel extends BaseModel
     }
 
     /**
+     * Use [u for users], [r for roles], [ur for user_role]
+     *
      * @param string|null $where
      * @param array $bindParams
      * @return int
@@ -168,7 +172,7 @@ class UserModel extends BaseModel
                 'r.id=ur.role_id'
             );
         } catch (AuraException $e) {
-            die('unexpected error: ' . $e->getMessage());
+            return 0;
         }
 
         if (!empty($where)) {
@@ -185,6 +189,8 @@ class UserModel extends BaseModel
     }
 
     /**
+     * Use [r for roles], [ur for user_role]
+     *
      * @param int $user_id
      * @return array
      */
@@ -193,7 +199,7 @@ class UserModel extends BaseModel
         $select = $this->connector->select();
         $select
             ->from(self::TBL_ROLES . ' AS r')
-            ->cols(['r.*', 'u.id AS user_id'])
+            ->cols(['r.*', 'ur.user_id'])
             ->where('ur.user_id=:u_id')
             ->bindValues(['u_id' => $user_id]);
 
@@ -210,6 +216,8 @@ class UserModel extends BaseModel
     }
 
     /**
+     * Use [u_addr for user_address], [p for provinces], [c for cities]
+     *
      * @param int $user_id
      * @return array
      */
@@ -242,6 +250,8 @@ class UserModel extends BaseModel
     }
 
     /**
+     * Use [u_addr for user_address], [p for provinces], [c for cities]
+     *
      * @param int $addr_id
      * @param int|null $user_id
      * @return array

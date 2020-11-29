@@ -7,6 +7,7 @@ use App\Logic\Middlewares\AdminApiVerifierMiddleware;
 use App\Logic\Middlewares\AdminAuthMiddleware;
 use App\Logic\Middlewares\ApiVerifierMiddleware;
 use App\Logic\Models\Model;
+use App\Logic\Utils\ConfigUtil;
 use Pecee\SimpleRouter\Event\EventArgument;
 use Pecee\SimpleRouter\Handlers\EventHandler;
 use Pecee\SimpleRouter\SimpleRouter as Router;
@@ -64,20 +65,10 @@ class Route implements IInitialize
         $eventHandler->register(EventHandler::EVENT_RENDER_ROUTE, function (EventArgument $argument) {
             // read config from database and store in config manager
             /**
-             * @var Model $model
+             * @var ConfigUtil $configUtil
              */
-            $model = \container()->get(Model::class);
-            $select = $model->select();
-            $select->from('settings')->cols(['*']);
-            $config = $model->get($select);
-            $config = ArrayUtil::arrayGroupBy('setting_name', $config, ['setting_name'], true);
-            $config = array_map(function ($value) {
-                $arr = $value[0];
-                $arr['value'] = !empty($arr['setting_value']) ? $arr['setting_value'] : $arr['default_value'];
-                unset($arr['setting_value']);
-                return $arr;
-            }, $config);
-            \config()->setAsConfig('settings', $config);
+            $configUtil = \container()->get(ConfigUtil::class);
+            $configUtil->pullConfig();
         });
 
         Router::addEventHandler($eventHandler);
@@ -183,8 +174,10 @@ class Route implements IInitialize
             // other routes
             //==========================
             Router::get('/', 'HomeController@index')->name('home.index');
-
+            Router::get('/login', 'LoginController@index')->name('home.login');
+            Router::get('/cart', 'CartController@index')->name('home.cart');
             Router::get('/search', 'HomeController@search')->name('home.search');
+            Router::get('/product/{id}/{slug?}', 'ProductController@show')->name('home.product');
         });
     }
 

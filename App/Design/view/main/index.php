@@ -5,23 +5,31 @@
 <!-- START HEADER -->
 <?php load_partial('main/menu-main', [
     'menu' => $menu ?? [],
+    'menu_images' => $menu_images ?? [],
     'categories' => $categories ?? [],
+    'cart_section' => $cart_section ?? '',
 ]); ?>
 <!-- END HEADER -->
 
 <!-- START SECTION BANNER -->
-<?php load_partial('main/slider-main'); ?>
+<?php load_partial('main/slider-main', [
+    'main_slider' => $main_slider ?? [],
+]); ?>
 <!-- END SECTION BANNER -->
 
 <!-- END MAIN CONTENT -->
 <div class="main_content">
 
     <!-- START SECTION SHOP -->
-    <?php load_partial('main/slider-tabbed'); ?>
+    <?php load_partial('main/slider-tabbed', [
+        'tabbed_slider' => $tabbed_slider ?? [],
+    ]); ?>
     <!-- END SECTION SHOP -->
 
     <!-- START SECTION INSTAGRAM IMAGE -->
-    <?php load_partial('main/instagram-images'); ?>
+    <?php load_partial('main/instagram-images', [
+        'instagram_images' => $instagram_images ?? [],
+    ]); ?>
     <!-- END SECTION INSTAGRAM IMAGE -->
 
     <!-- START SECTION SHOP -->

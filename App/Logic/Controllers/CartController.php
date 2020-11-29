@@ -1,50 +1,44 @@
 <?php
 
-namespace App\Logic\Abstracts;
+namespace App\Logic\Controllers;
 
+use App\Logic\Abstracts\AbstractHomeController;
 use App\Logic\Utils\CartUtil;
-use Sim\Abstracts\Mvc\Controller\AbstractController;
 use Sim\Container\Exceptions\MethodNotFoundException;
 use Sim\Container\Exceptions\ParameterHasNoDefaultValueException;
 use Sim\Container\Exceptions\ServiceNotFoundException;
 use Sim\Container\Exceptions\ServiceNotInstantiableException;
 use Sim\Exceptions\ConfigManager\ConfigNotRegisteredException;
+use Sim\Exceptions\Mvc\Controller\ControllerException;
+use Sim\Exceptions\PathManager\PathNotRegisteredException;
 use Sim\Interfaces\IFileNotExistsException;
 use Sim\Interfaces\IInvalidVariableNameException;
 
-abstract class AbstractHomeController extends AbstractController
+class CartController extends AbstractHomeController
 {
     /**
-     * @var string
-     */
-    protected $main_layout = 'main';
-
-    /**
-     * @var string
-     */
-    protected $main_index_layout = 'main-index';
-
-    /**
-     * AbstractAdminController constructor.
+     * @return string
      * @throws ConfigNotRegisteredException
+     * @throws ControllerException
      * @throws IFileNotExistsException
      * @throws IInvalidVariableNameException
+     * @throws PathNotRegisteredException
      * @throws \ReflectionException
      * @throws MethodNotFoundException
      * @throws ParameterHasNoDefaultValueException
      * @throws ServiceNotFoundException
      * @throws ServiceNotInstantiableException
      */
-    public function __construct()
+    public function cart()
     {
-        parent::__construct();
+        $this->setLayout($this->main_layout)->setTemplate('view/shop-cart');
 
         /**
          * @var CartUtil $cartUtil
          */
         $cartUtil = \container()->get(CartUtil::class);
 
-        $this->setDefaultArguments([
+        return $this->render([
             'cart_section' => $cartUtil->getCartSection(),
         ]);
     }
