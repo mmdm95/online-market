@@ -212,10 +212,19 @@ class Route implements IInitialize
             // other routes
             //==========================
             Router::get('/', 'HomeController@index')->name('home.index');
+
             Router::get('/login', 'LoginController@index')->name('home.login');
+
             Router::get('/cart', 'CartController@index')->name('home.cart');
+
             Router::get('/search', 'HomeController@search')->name('home.search');
-            Router::get('/product/{id}/{slug?}', 'ProductController@show')->name('home.product');
+
+            Router::get('/product/{id}/{slug?}', 'ProductController@show')->name('home.product.show');
+
+            Router::get('/compare', 'CompareController@compare')->name('home.compare');
+
+            Router::get('/blog/search', 'BlogController@search')->name('home.blog.search');
+            Router::get('/blog/{id}/{slug?}', 'BlogController@show')->name('home.blog.show');
         });
     }
 

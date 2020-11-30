@@ -28,6 +28,7 @@ abstract class BaseModel
     const TBL_FESTIVALS = 'festivals';
     const TBL_INSTAGRAM_IMAGES = 'instagram_images';
     const TBL_MAIN_SLIDER = 'main_slider';
+    const TBL_NEWSLETTERS = 'newsletters';
     const TBL_ORDERS = 'orders';
     const TBL_ORDER_BADGES = 'order_badges';
     const TBL_ORDER_ITEMS = 'order_items';
@@ -60,8 +61,10 @@ abstract class BaseModel
     protected $db;
 
     /**
-     * Model constructor.
+     * @var string
      */
+    protected $table;
+
     /**
      * BaseModel constructor.
      * @throws ConfigNotRegisteredException
@@ -72,5 +75,108 @@ abstract class BaseModel
     {
         $this->connector = \connector();
         $this->db = $this->connector->getDb();
+    }
+
+    /**
+     * @param array $columns
+     * @param string|null $where
+     * @param array $bind_values
+     * @param array $order_by
+     * @param int|null $limit
+     * @return array
+     */
+    public function get(
+        array $columns = ['*'],
+        ?string $where = null,
+        array $bind_values = [],
+        array $order_by = ['id DESC'],
+        int $limit = null
+    ): array
+    {
+        $select = $this->connector->select();
+        $select
+            ->from($this->table)
+            ->cols($columns)
+            ->orderBy($order_by);
+
+        if (!empty($where)) {
+            $select
+                ->where($where)
+                ->bindValues($bind_values);
+        }
+
+        if (!empty($limit) && $limit > 0) {
+            $select->limit($limit);
+        }
+
+        return $this->db->fetchAll($select->getStatement(), $select->getBindValues());
+    }
+
+    /**
+     * @param array $values
+     * @param bool $get_last_inserted_id
+     * @return bool|int
+     */
+    public function insert(array $values, bool $get_last_inserted_id = false)
+    {
+        $insert = $this->connector->insert();
+        $insert
+            ->into($this->table)
+            ->cols($values);
+
+        $stmt = $this->db->prepare($insert->getStatement());
+        $res = $stmt->execute($insert->getBindValues());
+
+        if ($get_last_inserted_id) {
+            // get the last insert ID
+            $name = $insert->getLastInsertIdName('id');
+            $res = (int)$this->db->lastInsertId($name);
+        }
+
+        return $res;
+    }
+
+    /**
+     * @param array $data
+     * @param string $where
+     * @param array $bind_values
+     * @return bool
+     */
+    public function update(array $data, string $where, array $bind_values = []): bool
+    {
+        $update = $this->connector->update();
+        $update
+            ->table($this->table)
+            ->cols($data);
+
+        if (!empty($where)) {
+            $update
+                ->where($where)
+                ->bindValues($bind_values);
+        }
+
+        $stmt = $this->db->prepare($update->getStatement());
+        return $stmt->execute($update->getBindValues());
+    }
+
+    /**
+     * @param string $where
+     * @param array $bind_values
+     * @return bool
+     */
+    public function delete(string $where, array $bind_values = []): bool
+    {
+        $delete = $this->connector->delete();
+        $delete
+            ->from($this->table);
+
+        if (!empty($where)) {
+            $delete
+                ->where($where)
+                ->bindValues($bind_values);
+        }
+
+        $stmt = $this->db->prepare($delete->getStatement());
+        return $stmt->execute($delete->getBindValues());
     }
 }

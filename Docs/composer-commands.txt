@@ -1,0 +1,14 @@
+// install a library
+composer require library_name
+
+// update libraries
+composer update
+
+// update specific library
+composer update library_name
+
+// create autoloader
+composer dumpautoload
+
+// create autoloader optimized
+composer dumpautoload -o

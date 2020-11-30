@@ -2,6 +2,7 @@
  * Global variables
  */
 window.MyGlobalVariables = {
+    namespace: '.online_market',
     icons: {
         success: '',
         info: '',

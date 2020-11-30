@@ -2,13 +2,40 @@
 
 namespace App\Logic\Models;
 
+use Aura\Sql\ExtendedPdoInterface;
 use Aura\SqlQuery\Common\DeleteInterface;
 use Aura\SqlQuery\Common\InsertInterface;
 use Aura\SqlQuery\Common\SelectInterface;
 use Aura\SqlQuery\Common\UpdateInterface;
+use Sim\DBConnector;
+use Sim\Exceptions\ConfigManager\ConfigNotRegisteredException;
+use Sim\Interfaces\IFileNotExistsException;
+use Sim\Interfaces\IInvalidVariableNameException;
 
-class Model extends BaseModel
+class Model
 {
+    /**
+     * @var DBConnector
+     */
+    protected $connector;
+
+    /**
+     * @var ExtendedPdoInterface
+     */
+    protected $db;
+
+    /**
+     * BaseModel constructor.
+     * @throws ConfigNotRegisteredException
+     * @throws IFileNotExistsException
+     * @throws IInvalidVariableNameException
+     */
+    public function __construct()
+    {
+        $this->connector = \connector();
+        $this->db = $this->connector->getDb();
+    }
+
     /**
      * @param SelectInterface $select
      * @return array

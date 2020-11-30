@@ -14,7 +14,8 @@
                             </button>
                             <ul class="nav nav-tabs justify-content-center justify-content-md-end" id="tabmenubar"
                                 role="tablist">
-                                <?php foreach ($tabbed_slider['items'] as $k => $tab): ?>
+                                <?php $k = 0; ?>
+                                <?php foreach ($tabbed_slider['items'] as $tab): ?>
                                     <li class="nav-item">
                                         <a class="nav-link <?= 0 === $k ? 'active' : ''; ?>" id="tab<?= ($k + 1); ?>tab"
                                            data-toggle="tab"
@@ -23,6 +24,7 @@
                                             <?= $tab['name']; ?>
                                         </a>
                                     </li>
+                                    <?php $k++; ?>
                                 <?php endforeach; ?>
                             </ul>
                         </div>
@@ -32,7 +34,8 @@
             <div class="row">
                 <div class="col-12">
                     <div class="tab_slider">
-                        <?php foreach ($tabbed_slider['items'] as $k => $tab): ?>
+                        <?php $k = 0; ?>
+                        <?php foreach ($tabbed_slider['items'] as $tab): ?>
                             <div class="tab-pane fade <?= 0 === $k ? 'show active' : ''; ?>"
                                  id="tab<?= ($k + 1); ?>" role="tabpanel"
                                  aria-labelledby="<?= $tab['name']; ?>">
@@ -42,20 +45,33 @@
                                     <?php foreach ($tab['items'] as $item): ?>
                                         <div class="item">
                                             <div class="product_box text-center">
+                                                <?php if (isset($item['festival_discount'])): ?>
+                                                    <span class="pr_flash bg-danger">جشنواره</span>
+                                                <?php elseif (DB_YES === $item['is_special']): ?>
+                                                    <span class="pr_flash">ویژه</span>
+                                                <?php endif; ?>
+
                                                 <div class="product_img">
-                                                    <a href="shop-product-detail.html">
-                                                        <img src="assets/images/furniture_img4.jpg"
-                                                             alt="furniture_img4">
+                                                    <a href="<?= url('home.product.show', [
+                                                        'id' => $item['product_id'],
+                                                        'slug' => $item['slug'],
+                                                    ]); ?>">
+                                                        <img src="<?= url('image.show') . $item['image']; ?>"
+                                                             alt="<?= $item['title']; ?>">
                                                     </a>
                                                     <div class="product_action_box">
                                                         <ul class="list_none pr_action_btn">
                                                             <li>
-                                                                <a href="shop-compare.html" class="popup-ajax">
+                                                                <a href="<?= url('home.compare'); ?>"
+                                                                   class="popup-ajax">
                                                                     <i class="icon-shuffle"></i>
                                                                 </a>
                                                             </li>
                                                             <li>
-                                                                <a href="shop-quick-view.html" class="popup-ajax">
+                                                                <a href="<?= url('home.product.show', [
+                                                                    'id' => $item['product_id'],
+                                                                    'slug' => $item['slug'],
+                                                                ]); ?>" class="popup-ajax">
                                                                     <i class="icon-eye"></i>
                                                                 </a>
                                                             </li>
@@ -64,35 +80,74 @@
                                                 </div>
                                                 <div class="product_info">
                                                     <h6 class="product_title">
-                                                        <a href="shop-product-detail.html">صندلی ناهارخوری</a>
-                                                    </h6>
-                                                    <div class="product_price">
-                                                        <span class="price">69000 تومان</span>
-                                                        <del>89000 تومان</del>
-                                                    </div>
-                                                    <div class="rating_wrap">
-                                                        <div class="rating">
-                                                            <div class="product_rate" style="width:70%"></div>
-                                                        </div>
-                                                        <span class="rating_num">(22)</span>
-                                                    </div>
-                                                    <div class="pr_desc">
-                                                        <p>لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ، و
-                                                            با استفاده از طراحان گرافیک است، چاپگرها و متون بلکه
-                                                            روزنامه.</p>
-                                                    </div>
-                                                    <div class="add-to-cart">
-                                                        <a href="#" class="btn btn-fill-out btn-radius">
-                                                            <i class="icon-basket-loaded"></i>
-                                                            افزودن به سبد خرید
+                                                        <a href="<?= url('home.product.show', [
+                                                            'id' => $item['product_id'],
+                                                            'slug' => $item['slug'],
+                                                        ]); ?>">
+                                                            <?= $item['title']; ?>
                                                         </a>
-                                                    </div>
+                                                    </h6>
+                                                    <?php if (DB_YES === $item['product_availability'] || DB_YES === $item['is_available']): ?>
+                                                        <div class="product_price">
+                                                            <?php
+                                                            $hasDiscount = false;
+                                                            $discountPrice = number_format($item['price']);
+
+                                                            if (isset($item['festival_discount']) && 0 != $item['festival_discount']) {
+                                                                $hasDiscount = true;
+                                                                $discountPrice = number_format($item['price'] * (int)$item['festival_discount']);
+                                                            } elseif (isset($item['discount_until']) && $item['discount_until'] >= time()) {
+                                                                $hasDiscount = true;
+                                                                $discountPrice = number_format($item['discounted_price']);
+                                                            }
+                                                            ?>
+
+                                                            <span class="price">
+                                                                <?php if (isset($item['festival_discount'])): ?>
+                                                                    <?= local_number($discountPrice); ?>
+                                                                <?php else: ?>
+                                                                    <?= local_number($discountPrice); ?>
+                                                                <?php endif; ?>
+                                                                 تومان
+                                                            </span>
+                                                            <?php if ($hasDiscount): ?>
+                                                                <del>
+                                                                    <?= local_number(number_format($item['price'])); ?>
+                                                                    تومان
+                                                                </del>
+                                                                <div class="on_sale">
+                                                                <span>
+                                                                    ٪
+                                                                    <?php if (isset($item['festival_discount'])): ?>
+                                                                        <?= local_number($item['festival_discount']); ?>
+                                                                    <?php else: ?>
+                                                                        <?= local_number(get_percentage($item['price'], $item['discounted_price'])); ?>
+                                                                    <?php endif; ?>
+                                                                     تخفیف
+                                                                </span>
+                                                                </div>
+                                                            <?php endif; ?>
+                                                        </div>
+                                                        <div class="add-to-cart">
+                                                            <a href="javascript:void(0);"
+                                                               class="btn btn-fill-out btn-radius __add_to_cart_btn"
+                                                               data-cart-item-code="<?= $item['code']; ?>">
+                                                                <i class="icon-basket-loaded"></i>
+                                                                افزودن به سبد خرید
+                                                            </a>
+                                                        </div>
+                                                    <?php else: ?>
+                                                        <div class="product_price">
+                                                            <span class="badge badge-danger d-block py-3">ناموجود</span>
+                                                        </div>
+                                                    <?php endif; ?>
                                                 </div>
                                             </div>
                                         </div>
                                     <?php endforeach; ?>
                                 </div>
                             </div>
+                            <?php $k++; ?>
                         <?php endforeach; ?>
                     </div>
                 </div>

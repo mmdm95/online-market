@@ -17,6 +17,16 @@ class StringUtil
     /**
      * @var array
      */
+    private static $persian_decimal = array('&#1776;', '&#1777;', '&#1778;', '&#1779;', '&#1780;', '&#1781;', '&#1782;', '&#1783;', '&#1784;', '&#1785;');
+
+    /**
+     * @var array
+     */
+    private static $arabic_decimal = array('&#1632;', '&#1633;', '&#1634;', '&#1635;', '&#1636;', '&#1637;', '&#1638;', '&#1639;', '&#1640;', '&#1641;');
+
+    /**
+     * @var array
+     */
     private static $persian_numbers = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
 
     /**
@@ -84,6 +94,92 @@ class StringUtil
     }
 
     /**
+     * @param int $decimal
+     * @param int $base - max value is 62
+     * @return string
+     */
+    public static function baseNEncode(int $decimal, int $base): string
+    {
+        if (0 === $decimal) {
+            return '0';
+        }
+
+        $s = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $len = min(62, $base);
+        $result = '';
+
+        while ($decimal > 0) {
+            $result = $s[$decimal % $len] . $result;
+            $decimal = (int)($decimal / $len);
+        }
+
+        return $result;
+    }
+
+    /**
+     * @param string $hashed_str
+     * @param int $base - max value is 62
+     * @return int|null
+     */
+    public static function baseNDecode(string $hashed_str, int $base)
+    {
+        $hashedStrLen = strlen($hashed_str);
+        if (empty($hashed_str) || 0 === $hashedStrLen) {
+            return 0;
+        }
+
+        $s = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $len = min(62, $base);
+        $result = 0;
+
+        for ($i = 0; $i < $hashedStrLen; $i++) {
+            $p = strpos($s, $hashed_str[$i]);
+            if (false === $p || $p < 0 || $p >= $base) {
+                return null;
+            }
+            $result += $p * pow($len, $hashedStrLen - $i - 1);
+        }
+
+        return (int)$result;
+    }
+
+    /**
+     * @param int $decimal
+     * @return string
+     */
+    public static function base62Encode(int $decimal): string
+    {
+        return self::baseNEncode($decimal, 62);
+    }
+
+    /**
+     * @param string $hashed_str
+     * @return int|null
+     */
+    public static function base62Decode(string $hashed_str)
+    {
+        self::baseNDecode($hashed_str, 62);
+    }
+
+    /**
+     * @param int $decimal
+     * @return string
+     */
+    public static function base10Encode(int $decimal): string
+    {
+        return self::baseNEncode($decimal, 10);
+    }
+
+    /**
+     * @param string $hashed_str
+     * @return int|null
+     */
+    public static function base10Decode(string $hashed_str)
+    {
+        self::baseNDecode($hashed_str, 10);
+    }
+
+    /**
      * convert arabic and english numbers and arabic specific
      * characters to persian numbers and specific characters
      *
@@ -105,6 +201,7 @@ class StringUtil
             if (is_string($str)) {
                 $str = str_replace(self::$english_numbers, self::$persian_numbers, $str);
                 $str = str_replace(self::$arabic_numbers, self::$persian_numbers, $str);
+                $str = str_replace(self::$arabic_decimal, self::$persian_numbers, $str);
             }
         } elseif (StringUtil::CONVERT_CHARACTERS & $convert_type || StringUtil::CONVERT_ALL & $convert_type) {
             if (is_array($str)) {
@@ -145,6 +242,7 @@ class StringUtil
             if (is_string($str)) {
                 $str = str_replace(self::$english_numbers, self::$arabic_numbers, $str);
                 $str = str_replace(self::$persian_numbers, self::$arabic_numbers, $str);
+                $str = str_replace(self::$persian_decimal, self::$arabic_numbers, $str);
             }
         } elseif (StringUtil::CONVERT_CHARACTERS & $convert_type || StringUtil::CONVERT_ALL & $convert_type) {
             if (is_array($str)) {
@@ -182,6 +280,8 @@ class StringUtil
         if (is_string($str)) {
             $str = str_replace(self::$arabic_numbers, self::$english_numbers, $str);
             $str = str_replace(self::$persian_numbers, self::$english_numbers, $str);
+            $str = str_replace(self::$persian_decimal, self::$english_numbers, $str);
+            $str = str_replace(self::$arabic_decimal, self::$english_numbers, $str);
         }
 
         return $str;
@@ -206,7 +306,7 @@ class StringUtil
      * @param string $delimiter
      * @return string
      */
-    public static function truncate_word(string $string, int $length, string $delimiter = '...'): string
+    public static function truncate_word(string $string, int $length, string $delimiter = '…'): string
     {
         // we don't want new lines in our preview
         $text_only_spaces = preg_replace('/\s+/', ' ', $string);

@@ -1,0 +1,74 @@
+// get status of current branch. It show:
+// - current branch name
+// - staged and unstaged files
+git status
+
+// to add files to staged condition
+git add [filename]
+// OR to add all of files
+git add -A
+
+// reset staged files
+git reset [filename]
+// OR to reset all of files
+git reset -A
+
+// reset last commit
+// --soft keeps files
+// --hard delete all committed files
+git reset --soft HEAD
+git reset --hard HEAD
+
+// do commit to add a hashed code
+// to manage previous commits
+// -m is for message
+// second -m if for description(not necessary)
+git commit -m "the message" -m "long message but not needed mostly"
+
+// branch operation
+// create
+git branch [branch_name]
+// -m to rename
+git branch -m [old_name] [new_name]
+// -d for delete
+git branch -d [branch_name]
+
+// create branch with switch to it
+git checkout -b [branch_name]
+
+// switch branch
+git checkout [branch_name]
+
+// pull all data from upstream
+// pull = fetch + merge
+git pull
+// if you need to pull specific data
+git pull origin [branch_name]
+
+// push data to upstream
+git push origin [branch_name]
+
+// fetch data from upstream but nor merge it
+git fetch [name_of_your_remote]
+
+// merge current branch with another one
+git merge [name_of_your_remote]/[branch_name]
+
+// show all tags
+// tags are for version stuffs
+git tag
+// add new tag
+git tag [tag_name]
+// delete a tag
+git tag -d [tag_name]
+
+// delete a branch or tag from remote
+git push origin --delete [name_of_your_remote_or_your_branch]
+
+// show previous commits
+// to quit from logs, press [q] button
+git log
+
+// show differences (mostly after a conflict)
+// to solve conflict, go to mentioned files and fix it
+git diff

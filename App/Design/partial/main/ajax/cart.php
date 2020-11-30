@@ -12,9 +12,9 @@
                 <li>
                     <a href="javascript:void(0);" class="item_remove"><i class="ion-close"></i></a>
                     <?php if (isset($item['title']) || isset($item['image'])): ?>
-                        <a href="<?= url('home.product', [
+                        <a href="<?= url('home.product.show', [
                             'id' => $item['product_id'],
-                            'slug' => $item['title'] ?? '',
+                            'slug' => $item['slug'] ?? '',
                         ]); ?>">
                             <?php if (isset($item['image'])): ?>
                                 <img src="<?= url('image.show') . $item['image']; ?>"

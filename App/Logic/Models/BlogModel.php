@@ -7,15 +7,21 @@ use Aura\SqlQuery\Exception as AuraException;
 class BlogModel extends BaseModel
 {
     /**
+     * @var string
+     */
+    protected $table = self::TBL_BLOG;
+
+    /**
      * Use [b for blog], [bc for blog_categories], [u for users - created_by], [uu for users - updated_by]
      *
      * @param array $columns
      * @param string|null $where
      * @param array $bind_values
+     * @param array $order_by
      * @param int|null $limit
      * @return array
      */
-    public function getBlog(
+    public function get(
         array $columns = [
             'b.*',
             'bc.name AS category_name',
@@ -27,12 +33,13 @@ class BlogModel extends BaseModel
         ],
         ?string $where = null,
         array $bind_values = [],
+        array $order_by = ['id DESC'],
         int $limit = null
     ): array
     {
         $select = $this->connector->select();
         $select
-            ->from(self::TBL_BLOG . ' AS b')
+            ->from($this->table . ' AS b')
             ->cols($columns)
             ->orderBy(['b.id DESC'])
             ->groupBy(['b.id']);
@@ -76,35 +83,7 @@ class BlogModel extends BaseModel
      */
     public function getBlogCount(?string $where = null, array $bindParams = []): int
     {
-        $select = $this->connector->select();
-        $select
-            ->cols(['COUNT(DISTINCT(b.id)) AS count'])
-            ->from(self::TBL_BLOG . ' AS b');
-
-        try {
-            $select
-                ->innerJoin(
-                    self::TBL_BLOG_CATEGORIES . ' AS bc',
-                    'b.category_id=bc.id'
-                )
-                ->leftJoin(
-                    self::TBL_USERS . ' AS u',
-                    'b.created_by=u.id'
-                )->leftJoin(
-                    self::TBL_USERS . ' AS uu',
-                    'b.updated_by=uu.id'
-                );
-        } catch (AuraException $e) {
-            return 0;
-        }
-
-        if (!empty($where)) {
-            $select
-                ->where($where)
-                ->bindValues($bindParams);
-        }
-
-        $res = $this->db->fetchAll($select->getStatement(), $select->getBindValues());
+        $res = $this->get(['COUNT(DISTINCT(b.id)) AS count'], $where, $bindParams);
         if (count($res)) {
             return (int)$res[0]['count'];
         }

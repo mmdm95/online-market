@@ -1,19 +1,20 @@
 (function ($) {
     'use strict';
 
-    var shop, core, variables;
-
-    shop = new window.TheShop();
-    core = window.TheCore;
-    variables = window.MyGlobalVariables;
+    var
+        shop = new window.TheShop(),
+        core = window.TheCore,
+        variables = window.MyGlobalVariables;
 
     /**
      * Cart class contains all cart functionality
      * @returns {TheCart}
      * @constructor
      */
-    window.TheCart = function () {
-        var _ = this;
+    window.TheCart = (function () {
+        var
+            _ = this,
+            cartContainer = $('#__cart_main_container');
 
         /*************************************************************
          ********************* Private Functions *********************
@@ -41,16 +42,25 @@
          ********************* Public Functions **********************
          *************************************************************/
 
+        /**
+         * @param $successCallback
+         */
         _.get = function ($successCallback) {
             shop.request(variables.url.cart.get, 'get', $successCallback);
         };
 
+        /**
+         * Save a cart to database
+         */
         _.save = function () {
             shop.request(variables.url.cart.save, 'put', function () {
                 // do other stuffs to handle data items
             });
         };
 
+        /**
+         * Delete a cart from database
+         */
         _.delete = function () {
             shop.request(variables.url.cart.delete, 'delete', function () {
                 // do other stuffs to handle data items
@@ -59,11 +69,12 @@
 
         /**
          * @param code
-         * @param qnt
          * @param successCallback
          */
-        _.add = function (code, qnt, successCallback) {
-            addORUpdate(variables.url.cart.add, 'post', code, qnt, successCallback);
+        _.add = function (code, successCallback) {
+            if (core.isDefined(code)) {
+                addORUpdate(variables.url.cart.add, 'post', code, 1, successCallback);
+            }
         };
 
         /**
@@ -72,7 +83,9 @@
          * @param successCallback
          */
         _.update = function (code, qnt, successCallback) {
-            addORUpdate(variables.url.cart.update, 'put', code, qnt, successCallback);
+            if (core.isDefined(code)) {
+                addORUpdate(variables.url.cart.update, 'put', code, qnt, successCallback);
+            }
         };
 
         /**
@@ -84,19 +97,55 @@
             });
         };
 
+        _.getNPlaceCart = function () {
+            _.get(function () {
+                cartContainer.html(this.data);
+            });
+        };
+
         return _;
-    };
+    });
 
     /**
      * Do stuffs after DOM loaded
      */
     $(function () {
-        var cart = new window.TheCart();
+        var
+            $this,
+            cart,
+            addToCartBtn;
 
-        // first fetch all items from cart and put in right place
-        cart.get(function () {
-            // do other stuffs to handle data items
+        var
+            dataItemCode = 'data-cart-item-code',
+            dataItemQnt = 'data-cart-item-quantity';
 
+        cart = new window.TheCart();
+        addToCartBtn = $('.__add_to_cart_btn');
+
+        /**
+         * Cart add or update button click event
+         */
+        addToCartBtn.on('click' + variables.namespace, function (e) {
+            e.preventDefault();
+
+            var code, qnt;
+
+            $this = $(this);
+            code = $this.attr(dataItemCode);
+            qnt = $this.attr(dataItemQnt);
+
+            qnt = core.isDefined(qnt) && !isNaN(parseInt(qnt, 10)) ? parseInt(qnt, 10) : null;
+            qnt = null !== qnt && qnt > 0 ? qnt : null;
+
+            if (null === qnt) {
+                cart.add(code, function () {
+                    cart.getNPlaceCart();
+                });
+            } else {
+                cart.update(code, qnt, function () {
+                    cart.getNPlaceCart();
+                });
+            }
         });
     });
 })(jQuery);

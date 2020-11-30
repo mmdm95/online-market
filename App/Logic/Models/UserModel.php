@@ -15,6 +15,11 @@ use Sim\Container\Exceptions\ServiceNotInstantiableException;
 class UserModel extends BaseModel
 {
     /**
+     * @var string
+     */
+    protected $table = self::TBL_USERS;
+
+    /**
      * @param array $credentials
      * @param bool $is_admin
      * @return bool
@@ -75,7 +80,7 @@ class UserModel extends BaseModel
         $id = $id ?? 0;
         $select = $this->connector->select();
         $select
-            ->from(self::TBL_USERS)
+            ->from($this->table)
             ->cols(['username'])
             ->where('id=:id')
             ->bindValues(['id' => $id]);
@@ -103,7 +108,7 @@ class UserModel extends BaseModel
     {
         $select = $this->connector->select();
         $select
-            ->from(self::TBL_USERS . ' AS u')
+            ->from($this->table . ' AS u')
             ->cols($columns)
             ->orderBy(['u.id DESC'])
             ->groupBy(['u.id']);
@@ -161,7 +166,7 @@ class UserModel extends BaseModel
         $select = $this->connector->select();
         $select
             ->cols(['COUNT(DISTINCT(u.id)) AS count'])
-            ->from(self::TBL_USERS . ' AS u');
+            ->from($this->table . ' AS u');
 
         try {
             $select->leftJoin(
@@ -293,39 +298,15 @@ class UserModel extends BaseModel
     }
 
     /**
-     * @param array $values
-     * @param bool $get_last_inserted_id
-     * @return bool|int
-     */
-    public function insert(array $values, bool $get_last_inserted_id = false)
-    {
-        $insert = $this->connector->insert();
-        $insert
-            ->into(self::TBL_USERS)
-            ->cols($values);
-
-        $stmt = $this->db->prepare($insert->getStatement());
-        $res = $stmt->execute($insert->getBindValues());
-
-        if ($get_last_inserted_id) {
-            // get the last insert ID
-            $name = $insert->getLastInsertIdName('id');
-            $res = (int)$this->db->lastInsertId($name);
-        }
-
-        return $res;
-    }
-
-    /**
      * @param array $data
      * @param int $user_id
      * @return bool
      */
-    public function update(array $data, int $user_id): bool
+    public function updateWithID(array $data, int $user_id): bool
     {
         $update = $this->connector->update();
         $update
-            ->table(self::TBL_USERS)
+            ->table($this->table)
             ->cols($data)
             ->where('id=:id')
             ->bindValues([
@@ -341,12 +322,12 @@ class UserModel extends BaseModel
      * @param bool $soft
      * @return bool
      */
-    public function delete(int $user_id, bool $soft = false): bool
+    public function deleteWithID(int $user_id, bool $soft = false): bool
     {
         if ($soft) {
             $deleteOrUpdate = $this->connector->update();
             $deleteOrUpdate
-                ->table(self::TBL_USERS)
+                ->table($this->table)
                 ->cols([
                     'delete' => 1,
                 ])
@@ -357,7 +338,7 @@ class UserModel extends BaseModel
         } else {
             $deleteOrUpdate = $this->connector->delete();
             $deleteOrUpdate
-                ->from(self::TBL_USERS)
+                ->from($this->table)
                 ->where('id=:id')
                 ->bindValues([
                     'id' => $user_id,

@@ -1,76 +1,60 @@
-<div class="section pb_20">
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-lg-6 col-md-8">
-                <div class="heading_s1 text-center">
-                    <h2>آخرین خبرها</h2>
-                </div>
-            </div>
-        </div>
-        <div class="row justify-content-center">
-            <div class="col-lg-4 col-md-6">
-                <div class="blog_post blog_style2 box_shadow1">
-                    <div class="blog_img">
-                        <a href="blog-single.html">
-                            <img src="<?= asset_path('image', false); ?>/el_blog_img1.jpg" alt="el_blog_img1">
-                        </a>
-                    </div>
-                    <div class="blog_content bg-white">
-                        <div class="blog_text">
-                            <h5 class="blog_title"><a href="blog-single.html">لورم ایپسوم متن ساختگی با تولید سادگی
-                                    نامفهوم از صنعت چاپ</a></h5>
-                            <ul class="list_none blog_meta">
-                                <li><a href="#"><i class="ti-calendar"></i> 14 اسفند 1399</a></li>
-                                <li><a href="#"><i class="ti-comments"></i> 2 نظر</a></li>
-                            </ul>
-                            <p>نرم افزارها شناخت بیشتری را برای طراحان رایانه ای علی الخصوص طراحان خلاقی، و فرهنگ
-                                پیشرو در زبان فارسی ایجاد کرد</p>
-                        </div>
+<?php
+
+use App\Logic\Utils\Jdf;
+use Sim\Utils\StringUtil;
+
+?>
+<?php if (count($blog ?? [])): ?>
+    <div class="section pb_20">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-6 col-md-8">
+                    <div class="heading_s1 text-center">
+                        <h2>آخرین خبرها</h2>
                     </div>
                 </div>
             </div>
-            <div class="col-lg-4 col-md-6">
-                <div class="blog_post blog_style2 box_shadow1">
-                    <div class="blog_img">
-                        <a href="blog-single.html">
-                            <img src="<?= asset_path('image', false); ?>/el_blog_img2.jpg" alt="el_blog_img2">
-                        </a>
-                    </div>
-                    <div class="blog_content bg-white">
-                        <div class="blog_text">
-                            <h5 class="blog_title"><a href="blog-single.html">لورم ایپسوم متن ساختگی با تولید سادگی
-                                    نامفهوم از صنعت چاپ</a></h5>
-                            <ul class="list_none blog_meta">
-                                <li><a href="#"><i class="ti-calendar"></i> 14 اسفند 1399</a></li>
-                                <li><a href="#"><i class="ti-comments"></i> 2 نظر</a></li>
-                            </ul>
-                            <p>نرم افزارها شناخت بیشتری را برای طراحان رایانه ای علی الخصوص طراحان خلاقی، و فرهنگ
-                                پیشرو در زبان فارسی ایجاد کرد</p>
+            <div class="row justify-content-center">
+                <?php foreach ($blog as $item): ?>
+                    <div class="col-lg-4 col-md-6">
+                        <div class="blog_post blog_style2 box_shadow1">
+                            <div class="blog_img">
+                                <a href="<?= url('home.blog.show', [
+                                    'id' => $item['id'],
+                                    'slug' => $item['slug'],
+                                ]); ?>">
+                                    <img src="<?= url('image.show') . $item['image']; ?>" alt="<?= $item['title']; ?>">
+                                </a>
+                            </div>
+                            <div class="blog_content bg-white">
+                                <div class="blog_text">
+                                    <h5 class="blog_title">
+                                        <a href="<?= url('home.blog.show', [
+                                            'id' => $item['id'],
+                                            'slug' => $item['slug'],
+                                        ]); ?>">
+                                            <?= $item['title']; ?>
+                                        </a>
+                                    </h5>
+                                    <ul class="list_none blog_meta">
+                                        <li>
+                                            <a href="<?= url('home.blog.search', null, [
+                                                'time' => get_today_start_of_time($item['created_at']),
+                                            ]); ?>">
+                                                <i class="ti-calendar"></i>
+                                                <?= Jdf::jdate('j F Y', $item['created_at']) ?>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                    <p>
+                                        <?= StringUtil::truncate_word($item['abstract'], 150); ?>
+                                    </p>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </div>
-            <div class="col-lg-4 col-md-6">
-                <div class="blog_post blog_style2 box_shadow1">
-                    <div class="blog_img">
-                        <a href="blog-single.html">
-                            <img src="<?= asset_path('image', false); ?>/el_blog_img3.jpg" alt="el_blog_img2">
-                        </a>
-                    </div>
-                    <div class="blog_content bg-white">
-                        <div class="blog_text">
-                            <h5 class="blog_title"><a href="blog-single.html">لورم ایپسوم متن ساختگی با تولید سادگی
-                                    نامفهوم از صنعت چاپ</a></h5>
-                            <ul class="list_none blog_meta">
-                                <li><a href="#"><i class="ti-calendar"></i> 14 اسفند 1399</a></li>
-                                <li><a href="#"><i class="ti-comments"></i> 2 نظر</a></li>
-                            </ul>
-                            <p>نرم افزارها شناخت بیشتری را برای طراحان رایانه ای علی الخصوص طراحان خلاقی، و فرهنگ
-                                پیشرو در زبان فارسی ایجاد کرد</p>
-                        </div>
-                    </div>
-                </div>
+                <?php endforeach; ?>
             </div>
         </div>
     </div>
-</div>
+<?php endif; ?>

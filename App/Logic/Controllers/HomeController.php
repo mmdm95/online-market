@@ -3,11 +3,14 @@
 namespace App\Logic\Controllers;
 
 use App\Logic\Abstracts\AbstractHomeController;
+use App\Logic\Models\BlogModel;
+use App\Logic\Models\BrandModel;
 use App\Logic\Models\CategoryModel;
 use App\Logic\Models\IndexPageModel;
+use App\Logic\Models\InstagramImagesModel;
 use App\Logic\Models\MenuModel;
 use App\Logic\Utils\MenuUtil;
-use App\Logic\Utils\TabSliderUtil;
+use App\Logic\Utils\SliderUtil;
 use Aura\SqlQuery\Exception as AuraException;
 use Sim\Container\Exceptions\MethodNotFoundException;
 use Sim\Container\Exceptions\ParameterHasNoDefaultValueException;
@@ -50,48 +53,69 @@ class HomeController extends AbstractHomeController
          */
         $catModel = \container()->get(CategoryModel::class);
         /**
-         * @var MenuUtil $menuUtil
-         */
-        $menuUtil = \container()->get(MenuUtil::class);
-        /**
          * @var IndexPageModel $indexModel
          */
         $indexModel = \container()->get(IndexPageModel::class);
         /**
-         * @var TabSliderUtil $tabSliderUtil
+         * @var InstagramImagesModel $instagramImagesModel
          */
-        $tabSliderUtil = \container()->get(TabSliderUtil::class);
+        $instagramImagesModel = \container()->get(InstagramImagesModel::class);
+        /**
+         * @var BlogModel $blogModel
+         */
+        $blogModel = \container()->get(BlogModel::class);
+        /**
+         * @var BrandModel $brandModel
+         */
+        $brandModel = \container()->get(BrandModel::class);
+        /**
+         * @var MenuUtil $menuUtil
+         */
+        $menuUtil = \container()->get(MenuUtil::class);
+        /**
+         * @var SliderUtil $sliderUtil
+         */
+        $sliderUtil = \container()->get(SliderUtil::class);
 
-        $menuItems = $menuUtil->getMainMenuItems();
-        //-----
         $menuImages = $menuModel->getMenuImages();
         //----------------------
         // group by category id
         //----------------------
         $menuImages = ArrayUtil::arrayGroupBy('id', $menuImages);
         //-----
-        $categories = $catModel->getCategories(['id', 'name'], 'publish=:pub', ['pub' => DB_YES]);
-        //-----
-        $mainSlider = $indexModel->getMainSlider();
         // tabbed slider
         $tabbedSlider = [];
         foreach (\config()->get('settings.index_tabbed_slider.value.items') ?? [] as $k => $tab) {
             if (is_array($tab)) {
                 $tabbedSlider[$k]['info'] = $tab;
-                $tabbedSlider[$k]['items'] = $tabSliderUtil->getTabSliderItems($tab);
+                $tabbedSlider[$k]['items'] = $sliderUtil->getTabSliderItems($tab);
             }
         }
 
         return $this->render([
-            'menu' => $menuItems,
+            'menu' => $menuUtil->getMainMenuItems(),
             'menu_images' => $menuImages,
-            'categories' => $categories,
-            'main_slider' => $mainSlider,
+            'categories' => $catModel->get(['id', 'name'], 'publish=:pub', ['pub' => DB_YES], ['name ASC']),
+            'main_slider' => $indexModel->getMainSlider(),
             'tabbed_slider' => [
                 'title' => \config()->get('settings.index_tabbed_slider.value.title'),
                 'items' => $tabbedSlider,
             ],
-            'instagram_images' => [],
+            'instagram_images' => $instagramImagesModel->get(['image', 'link']),
+            'special_slider' => $sliderUtil->getSpecialsSlider(),
+            'three_images' => \config()->get('settings.index_3_images.value'),
+            'blog' => $blogModel->get(
+                ['b.id', 'b.title', 'b.slug', 'b.image', 'b.abstract', 'b.created_at'],
+                'b.publish=:b_pub',
+                ['b_pub' => DB_YES],
+                ['id DESC'],
+                3
+            ),
+            'brands' => $brandModel->get(
+                ['name', 'image'],
+                'publish=:pub AND show_in_sliders=:sis',
+                ['pub' => DB_YES, 'sis' => DB_YES]
+            )
         ]);
     }
 

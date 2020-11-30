@@ -48,7 +48,8 @@ defined("PUBLIC_ACCESS_DIR") OR define("PUBLIC_ACCESS_DIR", 'public-access');
 // tabbed slider predefined items
 defined("SLIDER_TABBED_NEWEST") OR define("SLIDER_TABBED_NEWEST", 1);
 defined("SLIDER_TABBED_MOST_SELLER") OR define("SLIDER_TABBED_MOST_SELLER", 2);
+defined("SLIDER_TABBED_MOST_DISCOUNT") OR define("SLIDER_TABBED_MOST_DISCOUNT", 3);
 // featured = اختصاصی - is_special in products
-defined("SLIDER_TABBED_FEATURED") OR define("SLIDER_TABBED_FEATURED", 3);
+defined("SLIDER_TABBED_FEATURED") OR define("SLIDER_TABBED_FEATURED", 4);
 // special = ویژه - from festivals
-defined("SLIDER_TABBED_SPECIAL") OR define("SLIDER_TABBED_SPECIAL", 4);
+defined("SLIDER_TABBED_SPECIAL") OR define("SLIDER_TABBED_SPECIAL", 5);

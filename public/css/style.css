@@ -1844,7 +1844,7 @@ button:focus {
 }
 
 .cart_list img {
-    border: 1px solid #ddd
+    border: 1px solid #ddd;
     background-color: #ffffff;
     float: left;
     margin-right: 10px;
@@ -5089,7 +5089,6 @@ footer .widget_title {
     top: 0;
     bottom: 0;
     background-color: #FF324D;
-    z-index: ;
     transition: all 0.5s ease-in-out;
     -moz-transform: scale(0);
     -webkit-transform: scale(0);

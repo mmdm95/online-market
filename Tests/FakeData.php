@@ -49,6 +49,27 @@ class FakeData
         $insert
             ->into('settings')
             ->addRows([
+                // index page 3 images
+                [
+                    'setting_name' => 'index_3_images',
+                    'setting_value' => json_encode([
+                        [
+                            'image' => 'image name',
+                            'link' => '#',
+                        ],
+                        [
+                            'image' => 'image name 2',
+                            'link' => '#',
+                        ],
+                        [
+                            'image' => 'image name 3',
+                            'link' => '#',
+                        ],
+                    ]),
+                    'group_name' => 'index_page',
+                    'default_value' => '',
+                    'desc' => '',
+                ],
                 // index page tabbed slider
                 [
                     'setting_name' => 'index_tabbed_slider',
@@ -197,6 +218,27 @@ class FakeData
                     'group_name' => 'sms',
                     'default_value' => '',
                     'desc' => 'پیامک برای آگاهی از وضعیت کیف پول',
+                ],
+                // features
+                [
+                    'setting_name' => 'features',
+                    'setting_value' => json_encode([
+                        [
+                            'title' => 'ارسال رایگان',
+                            'sub_title' => 'لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ',
+                        ],
+                        [
+                            'title' => '30 روز ضمانت بازگشت',
+                            'sub_title' => 'لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ',
+                        ],
+                        [
+                            'title' => 'پشتیبانی 24 ساعته',
+                            'sub_title' => 'لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ',
+                        ],
+                    ]),
+                    'group_name' => 'contact',
+                    'default_value' => 'other',
+                    'desc' => '',
                 ],
                 // contact
                 [
