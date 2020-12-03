@@ -59,7 +59,7 @@ class SliderUtil
                 break;
             case SLIDER_TABBED_MOST_DISCOUNT:
                 $select
-                    ->orderBy(['CASE WHEN (pa.discount_until IS NULL OR pa.discount_until >= UNIX_TIMESTAMP()) AND pa.stock_count > 0 AND pa.is_available = 1 THEN 0 ELSE 1 END', '((pa.price - pa.discount_price) / pa.price * 100) DESC', 'pa.discount_price ASC', 'pa.id DESC']);
+                    ->orderBy(['CASE WHEN (pa.discount_until IS NULL OR pa.discount_until >= UNIX_TIMESTAMP()) AND pa.stock_count > 0 AND pa.is_available = 1 THEN 0 ELSE 1 END', '((pa.price - pa.discounted_price) / pa.price * 100) DESC', 'pa.discounted_price ASC', 'pa.title DESC']);
                 break;
             case SLIDER_TABBED_SPECIAL:
                 $select
@@ -78,7 +78,7 @@ class SliderUtil
 
         $select
             ->where('pa.product_availability=:is_available')
-            ->bindValue('pa.is_available', DB_YES)
+            ->bindValue('is_available', DB_YES)
             ->limit($info['limit'])
             ->orderBy(['pa.title DESC'])
             ->groupBy(['pa.product_id']);
@@ -124,7 +124,7 @@ class SliderUtil
             ->where('pa.festival_id IS NOT NULL')
             ->where('pa.festival_start<=:start')
             ->bindValue('start', time())
-            ->limit(10);
+            ->limit(15);
 
         return $model->get($select);
     }

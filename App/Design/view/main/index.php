@@ -57,7 +57,7 @@
     <!-- END SECTION CLIENT LOGO -->
 
     <!-- START SECTION SUBSCRIBE NEWSLETTER -->
-    <?php load_partial('main/newsletter'); ?>
+    <?php load_partial('main/newsletter-main'); ?>
     <!-- START SECTION SUBSCRIBE NEWSLETTER -->
 
 </div>
@@ -66,5 +66,3 @@
 <!-- START FOOTER -->
 <?php load_partial('main/footer-main'); ?>
 <!-- END FOOTER -->
-
-<a href="#" class="scrollup" style="display: none;"><i class="ion-ios-arrow-up"></i></a>

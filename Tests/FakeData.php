@@ -105,14 +105,27 @@ class FakeData
                                 'limit' => 10,
                             ],
                             [
-                                'name' => 'پیشنهاد ویژه',
-                                'type' => SLIDER_TABBED_SPECIAL,
+                                'name' => 'پرتخفیف ترین',
+                                'type' => SLIDER_TABBED_MOST_DISCOUNT,
                                 'category' => null,
                                 'limit' => 10,
                             ],
                         ],
                     ]),
                     'group_name' => 'index_page',
+                    'default_value' => '',
+                    'desc' => '',
+                ],
+                // about us
+                [
+                    'setting_name' => 'about_section',
+                    'setting_value' => json_encode([
+                        'image' => '',
+                        'title' => 'ما کی هستیم',
+                        'desc' => encode_html('لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ، و با استفاده از طراحان گرافیک است، چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است
+برای شرایط فعلی تکنولوژی مورد نیاز، و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد، کتابهای زیادی در شصت و سه درصد گذشته حال و آینده، شناخت فراوان جامعه و متخصصان را می طلبد، تا با نرم افزارها شناخت بیشتری را برای طراحان رایانه ای علی الخصوص طراحان خلاقی، و فرهنگ پیشرو در زبان فارسی ایجاد کرد.'),
+                    ]),
+                    'group_name' => 'about_page',
                     'default_value' => '',
                     'desc' => '',
                 ],
@@ -262,6 +275,33 @@ class FakeData
                     'default_value' => '09139518055',
                     'desc' => 'شماره تماس اصلی',
                 ],
+                [
+                    'setting_name' => 'email',
+                    'setting_value' => '',
+                    'group_name' => 'contact',
+                    'default_value' => 'info@sitename.com',
+                    'desc' => 'ایمیل سایت',
+                ],
+                [
+                    'setting_name' => 'lat_lng',
+                    'setting_value' => '',
+                    'group_name' => 'contact',
+                    'default_value' => json_encode([
+                        'lat' => '35.804357',
+                        'lng' => '51.414715',
+                    ]),
+                    'desc' => 'ایمیل سایت',
+                ],
+                // our team
+                [
+                    'setting_name' => 'our_team',
+                    'setting_value' => json_encode([
+                        'sub_title' => 'لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ، و با استفاده از طراحان گرافیک است.',
+                    ]),
+                    'group_name' => 'our_team',
+                    'default_value' => '',
+                    'desc' => null,
+                ],
                 // socials
                 [
                     'setting_name' => 'social_telegram',
@@ -286,15 +326,70 @@ class FakeData
                 ],
                 // footer
                 [
-                    'setting_name' => 'footer_section_1',
+                    'setting_name' => 'footer_tiny_desc',
                     'setting_value' => '',
                     'group_name' => 'footer',
                     'default_value' => '',
                     'desc' => null,
                 ],
                 [
+                    'setting_name' => 'footer_section_1',
+                    'setting_value' => json_encode([
+                        'title' => 'لینک های مفید',
+                        'links' => [
+                            [
+                                'name' => 'درباره ما',
+                                'link' => '#',
+                            ],
+                            [
+                                'name' => 'سؤالات متداول',
+                                'link' => '#',
+                            ],
+                            [
+                                'name' => 'موقعیت',
+                                'link' => '#',
+                            ],
+                            [
+                                'name' => 'شرکت ها',
+                                'link' => '#',
+                            ],
+                            [
+                                'name' => 'تماس',
+                                'link' => '#',
+                            ],
+                        ],
+                    ]),
+                    'group_name' => 'footer',
+                    'default_value' => '',
+                    'desc' => null,
+                ],
+                [
                     'setting_name' => 'footer_section_2',
-                    'setting_value' => '',
+                    'setting_value' => json_encode([
+                        'title' => 'حساب کاربری من',
+                        'links' => [
+                            [
+                                'name' => 'حساب کاربری',
+                                'link' => '#',
+                            ],
+                            [
+                                'name' => 'تخفیف',
+                                'link' => '#',
+                            ],
+                            [
+                                'name' => 'بازگشتی',
+                                'link' => '#',
+                            ],
+                            [
+                                'name' => 'تاریخچه سفارشات',
+                                'link' => '#',
+                            ],
+                            [
+                                'name' => 'رهگیری سفارش',
+                                'link' => '#',
+                            ],
+                        ],
+                    ]),
                     'group_name' => 'footer',
                     'default_value' => '',
                     'desc' => null,

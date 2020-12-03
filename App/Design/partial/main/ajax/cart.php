@@ -47,8 +47,8 @@
             </p>
         </div>
     <?php else: ?>
-        <div>
-            هیچ محصولی در سبد خرید وجود ندارد.
+        <div class="cart_total text-center">
+            هیچ محصولی در سبد خرید وجود ندارد
         </div>
     <?php endif; ?>
 </div>

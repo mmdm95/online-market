@@ -14,7 +14,7 @@
     window.TheCart = (function () {
         var
             _ = this,
-            cartContainer = $('#__cart_main_container');
+            cartContainer = $(variables.elements.cart.container);
 
         /*************************************************************
          ********************* Private Functions *********************
@@ -35,7 +35,7 @@
                     code: code,
                     qnt: qnt ? qnt : 1,
                 },
-            });
+            }, true);
         }
 
         /*************************************************************
@@ -46,7 +46,7 @@
          * @param $successCallback
          */
         _.get = function ($successCallback) {
-            shop.request(variables.url.cart.get, 'get', $successCallback);
+            shop.request(variables.url.cart.get, 'get', $successCallback, {}, true);
         };
 
         /**
@@ -55,7 +55,7 @@
         _.save = function () {
             shop.request(variables.url.cart.save, 'put', function () {
                 // do other stuffs to handle data items
-            });
+            }, {}, true);
         };
 
         /**
@@ -64,7 +64,7 @@
         _.delete = function () {
             shop.request(variables.url.cart.delete, 'delete', function () {
                 // do other stuffs to handle data items
-            });
+            }, {}, true);
         };
 
         /**
@@ -94,7 +94,7 @@
         _.remove = function (code) {
             shop.request(variables.url.cart.remove + '/' + code, 'delete', function () {
                 // do other stuffs to handle data items
-            });
+            }, {}, true);
         };
 
         _.getNPlaceCart = function () {
@@ -120,12 +120,12 @@
             dataItemQnt = 'data-cart-item-quantity';
 
         cart = new window.TheCart();
-        addToCartBtn = $('.__add_to_cart_btn');
+        addToCartBtn = $(variables.elements.cart.addBtn);
 
         /**
          * Cart add or update button click event
          */
-        addToCartBtn.on('click' + variables.namespace, function (e) {
+        addToCartBtn.on('click' + variables.namespace + ' touchend' + variables.namespace, function (e) {
             e.preventDefault();
 
             var code, qnt;

@@ -15,6 +15,14 @@ window.MyGlobalVariables = {
         },
     },
     toasts: {
+        general: {
+            confirmLabels: {
+                ok: 'باشه',
+            },
+            btnClasses: {
+                ok: 'btn btn-fill-out btn-sm',
+            }
+        },
         toast: {
             theme: 'sunset',
             layout: 'topRight',
@@ -96,6 +104,90 @@ window.MyGlobalVariables = {
                 complaint: '/ajax/complaint/add',
             },
         },
+        captcha: '/ajax/captcha',
+    },
+    elements: {
+        captcha: {
+            mainContainer: '.__captcha_main_container',
+            container: '.__captcha_container',
+            refreshBtn: '.__captcha_regenerate_btn',
+        },
+        cart: {
+            container: '#__cart_main_container',
+            addBtn: '.__add_to_cart_btn',
+        },
+        newsletter: {
+            form: '#__form_newsletter',
+            inputs: {
+                mobile: 'inp-newsletter-mobile',
+            },
+        },
+        contactUs: {
+            form: '#__form_contact',
+            inputs: {
+                name: 'inp-contact-name',
+                email: 'inp-contact-email',
+                mobile: 'inp-contact-mobile',
+                subject: 'inp-contact-subject',
+                message: 'inp-contact-message',
+                captcha: 'inp-contact-captcha',
+            },
+        },
+    },
+    validation: {
+        common: {
+            name: {
+                presence: {
+                    allowEmpty: false,
+                    message: '^' + 'فیلد نام را خالی نگذارید.',
+                },
+                format: {
+                    pattern: /^[پچجحخهعغفقثصضشسیبلاتنمکگوئدذرزطظژؤإأآءًٌٍَُِّ\s]+$/u,
+                    message: '^' + 'نام باید دارای حروف فارسی باشد.',
+                },
+            },
+            email: {
+                email: {
+                    message: '^' + 'ایمیل نامعتبر است.',
+                }
+            },
+            mobile: {
+                presence: {
+                    allowEmpty: false,
+                    message: '^' + 'فیلد موبایل را خالی نگذارید.',
+                },
+                format: {
+                    pattern: /^(098|\+98|0)?9\d{9}$/,
+                    message: '^' + 'موبایل وارد شده نامعتبر است.',
+                },
+                length: {
+                    is: 11,
+                    message: '^' + 'موبایل باید عددی ۱۱ رقمی باشد.',
+                }
+            },
+            captcha: {
+                presence: {
+                    allowEmpty: false,
+                    message: '^' + 'فیلد کد تصویر را خالی نگذارید.',
+                },
+            },
+        },
+        constraints: {
+            contactUs: {
+                subject: {
+                    presence: {
+                        allowEmpty: false,
+                        message: '^' + 'فیلد موضوع را خالی نگذارید.',
+                    },
+                },
+                message: {
+                    presence: {
+                        allowEmpty: false,
+                        message: '^' + 'فیلد پیام خالی نگذارید.',
+                    },
+                },
+            },
+        },
     },
 };
 
@@ -148,7 +240,7 @@ window.MyGlobalVariables = {
                 return $.type(t) === window.TheCore.types.string;
             },
             isDefined: function (t) {
-                return typeof t !== 'undefined';
+                return null !== t && typeof t !== 'undefined';
             },
             trim: function (string, char) {
                 if (char === "]") char = "\\]";
@@ -157,7 +249,65 @@ window.MyGlobalVariables = {
                     "^[" + char + "]+|[" + char + "]+$", "g"
                 ), "");
             },
-            noop: function () {
+            scrollTo: function (el, gap, speed) {
+                el = $(el);
+                gap = gap && !isNaN(parseInt(gap, 10)) ? parseInt(gap, 10) : 0;
+                speed = speed && !isNaN(parseInt(speed, 10)) ? parseInt(speed, 10) : 250;
+
+                $('html, body').animate({
+                    scrollTop: el.offset().top - gap,
+                }, speed);
+            },
+            /**
+             * @see https://stackoverflow.com/a/6969486/12154893
+             * @param string
+             * @returns {*}
+             */
+            escapeRegExp: function (string) {
+                return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); // $& means the whole matched string
+            },
+            toEnglishNumbers: function (str) {
+                var
+                    _ = this,
+                    persianDecimal = ['&#1776;', '&#1777;', '&#1778;', '&#1779;', '&#1780;', '&#1781;', '&#1782;', '&#1783;', '&#1784;', '&#1785;'],
+                    arabicDecimal = ['&#1632;', '&#1633;', '&#1634;', '&#1635;', '&#1636;', '&#1637;', '&#1638;', '&#1639;', '&#1640;', '&#1641;'],
+                    persianNumbers = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'],
+                    arabicNumbers = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'],
+                    englishNumbers = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+
+                if (_.isString(str)) {
+                    var i, len;
+                    len = englishNumbers.length;
+                    for (i = 0; i < len; i++) {
+                        str = str.replace(new RegExp(_.escapeRegExp(arabicNumbers[i]), 'ig'), englishNumbers[i]);
+                    }
+                    for (i = 0; i < len; i++) {
+                        str = str.replace(new RegExp(_.escapeRegExp(persianNumbers[i]), 'ig'), englishNumbers[i]);
+                    }
+                    for (i = 0; i < len; i++) {
+                        str = str.replace(new RegExp(_.escapeRegExp(persianDecimal[i]), 'ig'), englishNumbers[i]);
+                    }
+                    for (i = 0; i < len; i++) {
+                        str = str.replace(new RegExp(_.escapeRegExp(arabicDecimal[i]), 'i'), englishNumbers[i]);
+                    }
+                }
+
+                return str;
+            },
+            /**
+             * @see https://stackoverflow.com/a/9907509/12154893
+             * @param obj
+             * @param value
+             * @returns {*}
+             */
+            getKeyByValue: function (obj, value) {
+                for (var prop in obj) {
+                    if (obj.hasOwnProperty(prop)) {
+                        if (obj[prop] === value)
+                            return prop;
+                    }
+                }
+                return null;
             },
             getCookie: function (cname) {
                 var name = cname + "=";
@@ -176,6 +326,19 @@ window.MyGlobalVariables = {
             },
             getCsrfTokenFromCookie: function () {
                 return window.TheCore.getCookie('CSRF-TOKEN');
+            },
+            noop: function () {
+            },
+            //-----
+            constraints: {
+                contactUs: {
+                    name: window.MyGlobalVariables.validation.common.name,
+                    email: window.MyGlobalVariables.validation.common.email,
+                    mobile: window.MyGlobalVariables.validation.common.mobile,
+                    subject: window.MyGlobalVariables.validation.constraints.contactUs.subject,
+                    message: window.MyGlobalVariables.validation.constraints.contactUs.message,
+                    captcha: window.MyGlobalVariables.validation.common.captcha,
+                },
             },
         };
     })();
@@ -290,10 +453,12 @@ window.MyGlobalVariables = {
              * @param method
              * @param successCallback
              * @param options
+             * @param showError
              */
-            request: function (url, method, successCallback, options) {
+            request: function (url, method, successCallback, options, showError) {
                 var _ = this;
                 options = typeof options === typeof {} ? options : {};
+                showError = window.TheCore.isBoolean(showError) ? showError : false;
                 window.axios($.extend(options, {
                     method: method,
                     url: url,
@@ -303,7 +468,11 @@ window.MyGlobalVariables = {
                         if (null === data.error) {
                             successCallback.call(data);
                         } else {
-                            _.toasts.toast(data.error);
+                            if (showError) {
+                                _.toasts.toast(data.error);
+                            } else {
+                                console.error(data.error);
+                            }
                         }
                     })
                     .catch(function (error) {
@@ -313,9 +482,13 @@ window.MyGlobalVariables = {
                             console.log(error.response.data);
                             console.log(error.response.status);
                         } else if (error.request) {
-                            _.toasts.toast(window.MyGlobalVariables.messages.request.error);
+                            if (showError) {
+                                _.toasts.toast(window.MyGlobalVariables.messages.request.error);
+                            }
                         } else {
-                            _.toasts.toast(error.message);
+                            if (showError) {
+                                _.toasts.toast(error.message);
+                            }
                         }
                     });
             },
@@ -333,8 +506,87 @@ window.MyGlobalVariables = {
                     _.request(url, 'delete', successCallback, options);
                 });
             },
+
+            /**
+             * @param name
+             * @param successCallback
+             */
+            captchaReload: function (name, successCallback) {
+                var _ = this;
+                name = name && window.TheCore.isString(name) ? name : '';
+
+                _.request(window.MyGlobalVariables.url.captcha, 'get', successCallback, {
+                    params: {
+                        name: name,
+                    },
+                }, true);
+            },
+
+            forms: {
+                convertFormObjectNumbersToEnglish: function (obj, formKey) {
+                    var
+                        keyFromVal,
+                        newFormValues = {};
+                    for (var prop in obj) {
+                        // skip loop if the property is from prototype
+                        if (!obj.hasOwnProperty(prop)) continue;
+
+                        // get key from value and if its null return false
+                        keyFromVal = window.TheCore.getKeyByValue(window.MyGlobalVariables.elements[formKey].inputs, prop);
+                        if (null === keyFromVal) return false;
+
+                        newFormValues[keyFromVal] = window.TheCore.toEnglishNumbers(obj[prop]);
+                    }
+
+                    return newFormValues;
+                },
+                showFormErrors: function (errors) {
+                    var shop = new ShopBase();
+                    var s, p, a;
+
+                    s = '<h5 class="text-white">' + 'خطا در اعتبار سنجی فرم' + '</h5><hr>';
+                    for (p in errors) {
+                        if (errors.hasOwnProperty(p)) {
+                            for (a of errors[p]) {
+                                s += a + "<br>";
+                            }
+                            s += "<br>";
+                        }
+                    }
+                    shop.toasts.toast(s, {
+                        type: 'error',
+                        layout: 'center',
+                        modal: true,
+                        timeout: null,
+                    });
+                },
+            }
         });
 
         return ShopBase;
     })();
+
+    $(function () {
+        var
+            shop = new window.TheShopBase(),
+            variables = window.MyGlobalVariables,
+            $this,
+            captchaReloadBtn = $(variables.elements.captcha.refreshBtn);
+
+        //---------------------------------------------------------------
+        // CAPTCHA RELOAD
+        //---------------------------------------------------------------
+        captchaReloadBtn.on('click' + variables.namespace, function () {
+            $this = $(this);
+            shop.captchaReload(window.captchaPageName, function () {
+                $this
+                    .closest(variables.elements.captcha.mainContainer)
+                    .find(variables.elements.captcha.container)
+                    .html(this.data);
+            });
+        });
+        if ($(variables.elements.captcha.mainContainer).length) {
+            captchaReloadBtn.trigger('click' + variables.namespace);
+        }
+    });
 })(jQuery);

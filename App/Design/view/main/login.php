@@ -166,12 +166,12 @@
                             <a class="dropdown-toggle nav-link active" href="#" data-toggle="dropdown">صفحات</a>
                             <div class="dropdown-menu">
                                 <ul> 
-                                    <li><a class="dropdown-item nav-link nav_item" href="about.html">درباره ما</a></li> 
-                                    <li><a class="dropdown-item nav-link nav_item" href="contact.html">تماس با ما</a></li> 
-                                    <li><a class="dropdown-item nav-link nav_item" href="faq.html">سؤالات متداول</a></li>
+                                    <li><a class="dropdown-item nav-link nav_item" href="about.php">درباره ما</a></li>
+                                    <li><a class="dropdown-item nav-link nav_item" href="contact.php">تماس با ما</a></li>
+                                    <li><a class="dropdown-item nav-link nav_item" href="faq.php">سؤالات متداول</a></li>
                                     <li><a class="dropdown-item nav-link nav_item" href="404.php">خطا 404</a></li>
                                     <li><a class="dropdown-item nav-link nav_item active" href="login.php">ورود</a></li>
-                                    <li><a class="dropdown-item nav-link nav_item" href="signup.html">ثبت نام</a></li>
+                                    <li><a class="dropdown-item nav-link nav_item" href="signup.php">ثبت نام</a></li>
                                     <li><a class="dropdown-item nav-link nav_item" href="term-condition.html">شرایط و ضوابط</a></li>
                                 </ul>
                             </div>
@@ -365,7 +365,7 @@
                                 </ul>
                             </div>
                         </li>
-                        <li><a class="nav-link nav_item" href="contact.html">تماس با ما</a></li> 
+                        <li><a class="nav-link nav_item" href="contact.php">تماس با ما</a></li>
                     </ul>
                 </div>
                 <ul class="navbar-nav attr-nav align-items-center">
@@ -459,7 +459,7 @@
                                 <button type="submit" class="btn btn-fill-out btn-block" name="login">ورود</button>
                             </div>
                         </form>
-                        <div class="form-note text-center">حساب کاربری ندارید؟ <a href="signup.html">ثبت نام کنید</a></div>
+                        <div class="form-note text-center">حساب کاربری ندارید؟ <a href="signup.php">ثبت نام کنید</a></div>
                     </div>
                 </div>
             </div>

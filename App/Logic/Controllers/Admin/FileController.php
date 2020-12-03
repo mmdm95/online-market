@@ -7,7 +7,6 @@ use App\Logic\Handlers\ResourceHandler;
 use App\Logic\Middlewares\Logic\NonePublicFolderAccessMiddleware;
 use App\Logic\Middlewares\Logic\PublicFolderModifyMiddleware;
 use App\Logic\Models\UserModel;
-use App\Logic\Utils\Jdf;
 use Sim\Auth\DBAuth;
 use Sim\Container\Exceptions\MethodNotFoundException;
 use Sim\Container\Exceptions\ParameterHasNoDefaultValueException;
@@ -76,10 +75,6 @@ class FileController extends AbstractAdminController
         $hidden_extensions = hidden_extensions();
 
         $file = $this->getFileFromRequest();
-
-        $filename = str_replace(get_path('upload-root'), '', $file);
-        $filename = str_replace(['\\', '//'], '/', $filename);
-        $filename = explode('/', trim($filename, '\\/'))[0];
 
         $this->checkListAccess($file);
 

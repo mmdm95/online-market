@@ -20,7 +20,7 @@ class LoginController extends AbstractHomeController
      * @throws IFileNotExistsException
      * @throws IInvalidVariableNameException
      */
-    public function login()
+    public function index()
     {
         $this->setLayout($this->main_layout)->setTemplate('view/login');
 

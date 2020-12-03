@@ -5,10 +5,10 @@
                 <div class="col-md-12">
                     <div class="heading_tab_header">
                         <div class="heading_s2">
-                            <h2>تخفیف ویژه های امروز</h2>
+                            <h2>تخفیف های ویژه امروز</h2>
                         </div>
                         <div class="deal_timer">
-                            <div class="countdown_time countdown_style1" data-time="<?= date('Y/m/d H:i:s', ); ?>"></div>
+                            <div class="countdown_time countdown_style1" data-time="<?= '';//date('Y/m/d H:i:s'); ?>"></div>
                         </div>
                     </div>
                 </div>

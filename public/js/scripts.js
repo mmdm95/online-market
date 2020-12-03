@@ -467,39 +467,6 @@ PAGE JS
         carousel_slider();
         slick_slider();
     });
-    /*===================================*
-    11. CONTACT FORM JS
-    *===================================*/
-    $("#submitButton").on("click", function (event) {
-        event.preventDefault();
-        var mydata = $("form").serialize();
-        $.ajax({
-            type: "POST",
-            dataType: "json",
-            url: "contact.php",
-            data: mydata,
-            success: function (data) {
-                if (data.type === "error") {
-                    $("#alert-msg").removeClass("alert, alert-success");
-                    $("#alert-msg").addClass("alert, alert-danger");
-                } else {
-                    $("#alert-msg").addClass("alert, alert-success");
-                    $("#alert-msg").removeClass("alert, alert-danger");
-                    $("#first-name").val("Enter Name");
-                    $("#email").val("Enter Email");
-                    $("#phone").val("Enter Phone Number");
-                    $("#subject").val("Enter Subject");
-                    $("#description").val("Enter Message");
-
-                }
-                $("#alert-msg").html(data.msg);
-                $("#alert-msg").show();
-            },
-            error: function (xhr, textStatus) {
-                alert(textStatus);
-            }
-        });
-    });
 
     /*===================================*
     12. POPUP JS
@@ -518,16 +485,6 @@ PAGE JS
                 enabled: true,
             },
         });
-    });
-
-    $('.popup-ajax').magnificPopup({
-        type: 'ajax',
-        callbacks: {
-            ajaxContentAdded: function () {
-                carousel_slider();
-                slick_slider();
-            }
-        }
     });
 
     $('.video_popup, .iframe_popup').magnificPopup({
@@ -816,6 +773,28 @@ PAGE JS
             $("#onload-popup").modal('show', {}, 500);
         }, 3000);
 
+    });
+
+    /*===================================*
+    MY CUSTOM CODES
+    *===================================*/
+    $(function () {
+        var tabbedSlier = $('.__tabbed_slider_multi');
+        if (tabbedSlier.length) {
+            $(window).on('resize', function () {
+                if ($(window).outerWidth() > 991) {
+                    tabbedSlier.addClass('show');
+                } else {
+                    var id = tabbedSlier.attr('id');
+                    if (id) {
+                        var expanded = $('[data-targer="#' + id + '"]').attr('aria-expanded');
+                        if (expanded && 'false' === expanded) {
+                            tabbedSlier.removeClass('show');
+                        }
+                    }
+                }
+            });
+        }
     });
 
     /*===================================*

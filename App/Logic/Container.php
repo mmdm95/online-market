@@ -68,6 +68,11 @@ class Container implements IInitialize
             return $formValidator;
         });
 
+        // simple captcha class
+        \container()->set('captcha-simple', function () {
+            return \captcha();
+        });
+
 //        /**
 //         * @var Auth $t
 //         */

@@ -20,7 +20,7 @@ use Sim\I18n\ISOLanguageCodes;
  *     1.2.5.0 instead of 1.2.5-a
  *     1.2.5.0.1 instead of 1.2.5-a1 (I'm not sure)
  */
-defined("APP_VERSION") OR define("APP_VERSION", "0.1.2");
+defined("APP_VERSION") OR define("APP_VERSION", "0.1.3");
 
 /***************************************
  * You can add your constants here
@@ -33,6 +33,9 @@ defined("APP_LANGUAGE") OR define("APP_LANGUAGE", ISOLanguageCodes::LANGUAGE_ENG
 defined("NOT_FOUND_ADMIN") OR define("NOT_FOUND_ADMIN", 'admin.page.notfound');
 defined("NOT_FOUND") OR define("NOT_FOUND", 'page.notfound');
 defined("SERVER_ERROR") OR define("SERVER_ERROR", 'page.servererror');
+
+// title delimiter
+defined("TITLE_DELIMITER") OR define("TITLE_DELIMITER", ' | ');
 
 // publish or true in database
 defined("DB_YES") OR define("DB_YES", 1);

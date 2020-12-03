@@ -130,6 +130,23 @@ video {
     width: 100%;
 }
 
+.icon-2x {
+    font-size: 26px !important;
+}
+
+.stretch-card {
+    display: -webkit-box;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: -moz-flex;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-align-items: stretch;
+    align-items: stretch;
+    -webkit-justify-content: stretch;
+    justify-content: stretch;
+}
+
 .section {
     padding: 100px 0;
     position: relative;
@@ -7507,6 +7524,10 @@ footer .widget_recent_post .post_img img {
     position: relative;
 }
 
+.namad_img li {
+    width: 50%;
+}
+
 .instafeed_col4 li {
     width: 25%;
 }
@@ -8170,6 +8191,16 @@ body .owl-theme .owl-nav [class*="owl-"] {
 .sc_tumblr {
     background-color: #34526f !important;
     border-color: #34526f !important;
+}
+
+.sc_telegram {
+    background-color: #0088cc !important;
+    border-color: #0088cc !important;
+}
+
+.sc_whatsapp {
+    background-color: #25D366 !important;
+    border-color: #25D366 !important;
 }
 
 .sc_instagram {

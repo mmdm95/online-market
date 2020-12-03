@@ -100,7 +100,7 @@ return [
                         ),
                         e(
                             '<script type="text/javascript" src="' .
-                            asset_path('js/plugins/noty/noty.min.js') .
+                            asset_path('plugins/noty/noty.min.js') .
                             '"></script>'
                         ),
                         e(
@@ -134,12 +134,12 @@ return [
                         ),
                         e(
                             '<link href="' .
-                            asset_path('css/plugins/noty/noty.css') .
+                            asset_path('plugins/noty/noty.css') .
                             '" rel="stylesheet" type="text/css">'
                         ),
                         e(
                             '<link href="' .
-                            asset_path('css/plugins/noty/themes/sunset.css') .
+                            asset_path('plugins/noty/themes/sunset.css') .
                             '" rel="stylesheet" type="text/css">'
                         ),
                         e(
@@ -167,6 +167,35 @@ return [
                             '<script type="text/javascript" src="' .
                             asset_path('js/cart.js') .
                             '"></script>'
+                        ),
+                    ],
+                ],
+            ],
+            'default-map' => [
+                'js' => [
+                    'top' => [
+                        e(
+                            '<script type="text/javascript" src="' .
+                            asset_path('plugins/leaflet/leaflet.js') .
+                            '"></script>'
+                        ),
+                    ],
+                ],
+                'css' => [
+                    'top' => [
+                        e(
+                            '<link href="' .
+                            asset_path('plugins/leaflet/leaflet.css') .
+                            '" rel="stylesheet" type="text/css">'
+                        ),
+                    ],
+                ],
+            ],
+            'default-google-map' => [
+                'js' => [
+                    'top' => [
+                        e(
+                            '<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD7TypZFTl4Z3gVtikNOdGSfNTpnmq-ahQ&amp;"></script>'
                         ),
                     ],
                 ],
@@ -368,10 +397,68 @@ return [
          ************ Home ************
          *****************************/
         'view/main/index' => [
-            'title' => 'پایار تأسیسات | صفحه اصلی',
+            'title' => title_concat(\config()->get('settings.title.value'), 'صفحه اصلی'),
             'common' => [
                 'default',
                 'default-cart',
+            ],
+        ],
+        'view/main/about' => [
+            'title' => title_concat(\config()->get('settings.title.value'), 'درباره ما'),
+            'common' => [
+                'default',
+                'default-cart',
+            ],
+            'sub_title' => 'درباره ما',
+            'breadcrumb' => [
+                [
+                    'url' => url('home.index'),
+                    'text' => 'خانه',
+                    'is_active' => false,
+                ],
+                [
+                    'text' => 'درباره ما',
+                    'is_active' => true,
+                ],
+            ],
+        ],
+        'view/main/faq' => [
+            'title' => title_concat(\config()->get('settings.title.value'), 'سؤالات متداول'),
+            'common' => [
+                'default',
+                'default-cart',
+            ],
+            'sub_title' => 'سؤالات متداول',
+            'breadcrumb' => [
+                [
+                    'url' => url('home.index'),
+                    'text' => 'خانه',
+                    'is_active' => false,
+                ],
+                [
+                    'text' => 'سؤالات متداول',
+                    'is_active' => true,
+                ],
+            ],
+        ],
+        'view/main/contact' => [
+            'title' => title_concat(\config()->get('settings.title.value'), 'تماس با ما'),
+            'common' => [
+                'default',
+                'default-google-map',
+                'default-cart',
+            ],
+            'sub_title' => 'تماس با ما',
+            'breadcrumb' => [
+                [
+                    'url' => url('home.index'),
+                    'text' => 'خانه',
+                    'is_active' => false,
+                ],
+                [
+                    'text' => 'تماس با ما',
+                    'is_active' => true,
+                ],
             ],
         ],
 
@@ -379,14 +466,14 @@ return [
          *********** Admin ************
          *****************************/
         'view/admin-login' => [
-            'title' => 'پایار تأسیسات | صفحه ورود',
+            'title' => title_concat(\config()->get('settings.title.value'), 'صفحه ورود'),
             'common' => [
                 'admin-base',
                 'admin'
             ],
         ],
         'view/user/view' => [
-            'title' => 'پایار تأسیسات | لیست کاربران سایت',
+            'title' => title_concat(\config()->get('settings.title.value'), 'لیست کاربران سایت'),
             'common' => [
                 'admin-base',
                 'admin-table',
@@ -407,7 +494,7 @@ return [
             ],
         ],
         'view/user/add' => [
-            'title' => 'پایار تأسیسات | افزودن کاربر',
+            'title' => title_concat(\config()->get('settings.title.value'), 'افزودن کاربر'),
             'common' => [
                 'admin-base',
                 'admin-form',
@@ -433,7 +520,7 @@ return [
             ],
         ],
         'view/user/edit' => [
-            'title' => 'پایار تأسیسات | ویرایش کاربر',
+            'title' => title_concat(\config()->get('settings.title.value'), 'ویرایش کاربر'),
             'common' => [
                 'admin-base',
                 'admin-form',
@@ -459,7 +546,7 @@ return [
             ],
         ],
         'view/user/user-profile' => [
-            'title' => 'پایار تأسیسات | لیست کاربران سایت',
+            'title' => title_concat(\config()->get('settings.title.value'), 'لیست کاربران سایت'),
             'common' => [
                 'admin-base',
                 'admin-table',
@@ -485,7 +572,7 @@ return [
             ],
         ],
         'view/category/add' => [
-            'title' => 'پایار تأسیسات | افزودن دسته',
+            'title' => title_concat(\config()->get('settings.title.value'), 'افزودن دسته'),
             'common' => [
                 'admin-base',
                 'admin-form',
@@ -511,7 +598,7 @@ return [
             ],
         ],
         'view/category/edit' => [
-            'title' => 'پایار تأسیسات | ویرایش دسته',
+            'title' => title_concat(\config()->get('settings.title.value'), 'ویرایش دسته'),
             'common' => [
                 'admin-base',
                 'admin-form',
@@ -537,7 +624,7 @@ return [
             ],
         ],
         'view/category/view' => [
-            'title' => 'پایار تأسیسات | مشاهده دسته‌ها',
+            'title' => title_concat(\config()->get('settings.title.value'), 'مشاهده دسته‌ها'),
             'common' => [
                 'admin-base',
                 'admin-table',
@@ -558,7 +645,7 @@ return [
             ],
         ],
         'view/coupon/add' => [
-            'title' => 'پایار تأسیسات | افزودن کوپن تخفیف',
+            'title' => title_concat(\config()->get('settings.title.value'), 'افزودن کوپن تخفیف'),
             'common' => [
                 'admin-base',
                 'admin-form',
@@ -584,7 +671,7 @@ return [
             ],
         ],
         'view/coupon/edit' => [
-            'title' => 'پایار تأسیسات | ویرایش کوپن تخفیف',
+            'title' => title_concat(\config()->get('settings.title.value'), 'ویرایش کوپن تخفیف'),
             'common' => [
                 'admin-base',
                 'admin-form',
@@ -610,7 +697,7 @@ return [
             ],
         ],
         'view/coupon/view' => [
-            'title' => 'پایار تأسیسات | مشاهده کوپن‌های تخفیف',
+            'title' => title_concat(\config()->get('settings.title.value'), 'مشاهده کوپن‌های تخفیف'),
             'common' => [
                 'admin-base',
                 'admin-table',
@@ -631,7 +718,7 @@ return [
             ],
         ],
         'view/color/add' => [
-            'title' => 'پایار تأسیسات | افزودن رنگ',
+            'title' => title_concat(\config()->get('settings.title.value'), 'افزودن رنگ'),
             'common' => [
                 'admin-base',
                 'admin-form',
@@ -659,7 +746,7 @@ return [
             ],
         ],
         'view/color/edit' => [
-            'title' => 'پایار تأسیسات | ,ویرایش رنگ',
+            'title' => title_concat(\config()->get('settings.title.value'), ',ویرایش رنگ'),
             'common' => [
                 'admin-base',
                 'admin-form',
@@ -687,7 +774,7 @@ return [
             ],
         ],
         'view/color/view' => [
-            'title' => 'پایار تأسیسات | ,ویرایش رنگ',
+            'title' => title_concat(\config()->get('settings.title.value'), ',ویرایش رنگ'),
             'common' => [
                 'admin-base',
                 'admin-form',
@@ -709,7 +796,7 @@ return [
             ],
         ],
         'view/contact-us/view' => [
-            'title' => 'پایار تأسیسات | مدیریت تماس‌ها',
+            'title' => title_concat(\config()->get('settings.title.value'), 'مدیریت تماس‌ها'),
             'common' => [
                 'admin-base',
                 'admin-form',
@@ -731,7 +818,7 @@ return [
             ],
         ],
         'view/contact-us/message' => [
-            'title' => 'پایار تأسیسات | مشاهده تماس‌',
+            'title' => title_concat(\config()->get('settings.title.value'), 'مشاهده تماس‌'),
             'common' => [
                 'admin-base',
                 'admin-form',
@@ -758,7 +845,7 @@ return [
             ],
         ],
         'view/unit/view' => [
-            'title' => 'پایار تأسیسات | واحدها',
+            'title' => title_concat(\config()->get('settings.title.value'), 'واحدها'),
             'common' => [
                 'admin-base',
                 'admin-form',
@@ -780,7 +867,7 @@ return [
             ],
         ],
         'view/faq/view' => [
-            'title' => 'پایار تأسیسات | سؤالات متداول',
+            'title' => title_concat(\config()->get('settings.title.value'), 'سؤالات متداول'),
             'common' => [
                 'admin-base',
                 'admin-form',
@@ -802,7 +889,7 @@ return [
             ],
         ],
         'view/complaints/view' => [
-            'title' => 'پایار تأسیسات | شکایت',
+            'title' => title_concat(\config()->get('settings.title.value'), 'شکایت'),
             'common' => [
                 'admin-base',
                 'admin-form',
@@ -824,7 +911,7 @@ return [
             ],
         ],
         'view/complaints/message' => [
-            'title' => 'پایار تأسیسات | مشاهده شکایت',
+            'title' => title_concat(\config()->get('settings.title.value'), 'مشاهده شکایت'),
             'common' => [
                 'admin-base',
                 'admin-form',
@@ -851,7 +938,7 @@ return [
             ],
         ],
         'view/newsletter/view' => [
-            'title' => 'پایار تأسیسات | خبرنامه',
+            'title' => title_concat(\config()->get('settings.title.value'), 'خبرنامه'),
             'common' => [
                 'admin-base',
                 'admin-form',
@@ -873,7 +960,7 @@ return [
             ],
         ],
         'view/wallet/view' => [
-            'title' => 'پایار تأسیسات | کیف پول',
+            'title' => title_concat(\config()->get('settings.title.value'), 'کیف پول'),
             'common' => [
                 'admin-base',
                 'admin-table',
@@ -894,7 +981,7 @@ return [
             ],
         ],
         'view/wallet/user-wallet' => [
-            'title' => 'پایار تأسیسات | کیف پول',
+            'title' => title_concat(\config()->get('settings.title.value'), 'کیف پول'),
             'common' => [
                 'admin-base',
                 'admin-table',
@@ -921,7 +1008,7 @@ return [
             ],
         ],
         'view/wallet/deposit-type' => [
-            'title' => 'پایار تأسیسات | انواع تراکنش',
+            'title' => title_concat(\config()->get('settings.title.value'), 'انواع تراکنش'),
             'common' => [
                 'admin-base',
                 'admin-table',
@@ -943,7 +1030,7 @@ return [
             ],
         ],
         'view/slider/view' => [
-            'title' => 'پایار تأسیسات | مدیریت اسلایدشو',
+            'title' => title_concat(\config()->get('settings.title.value'), 'مدیریت اسلایدشو'),
             'common' => [
                 'admin-base',
                 'admin-table',
@@ -966,7 +1053,7 @@ return [
 
         ],
         'view/order/view' => [
-            'title' => 'پایار تأسیسات | لیست سفارشات',
+            'title' => title_concat(\config()->get('settings.title.value'), 'لیست سفارشات'),
             'common' => [
                 'admin-base',
                 'admin-table',
@@ -989,7 +1076,7 @@ return [
 
         ],
         'view/order/order-detail' => [
-            'title' => 'پایار تأسیسات | جزئیات سفارش',
+            'title' => title_concat(\config()->get('settings.title.value'), 'جزئیات سفارش'),
             'common' => [
                 'admin-base',
                 'admin-table',
@@ -1017,7 +1104,7 @@ return [
 
         ],
         'view/order/badges' => [
-            'title' => 'پایار تأسیسات | وضعیت سفارش',
+            'title' => title_concat(\config()->get('settings.title.value'), 'وضعیت سفارش'),
             'common' => [
                 'admin-base',
                 'admin-table',
@@ -1040,7 +1127,7 @@ return [
 
         ],
         'view/setting' => [
-            'title' => 'پایار تأسیسات | تنظیمات سایت',
+            'title' => title_concat(\config()->get('settings.title.value'), 'تنظیمات سایت'),
             'common' => [
                 'admin-base',
                 'admin-table',
@@ -1063,7 +1150,7 @@ return [
 
         ],
         'view/file-manager/index' => [
-            'title' => 'پایار تأسیسات | مدیریت فایل‌ها',
+            'title' => title_concat(\config()->get('settings.title.value'), 'مدیریت فایل‌ها'),
             'common' => [
                 'admin-base',
                 'admin-form',

@@ -1,6 +1,27 @@
 <?php
 
 /**
+ * @return bool
+ */
+function is_post(): bool
+{
+    return request()->getMethod() === 'post';
+}
+
+/**
+ * @param mixed ...$_
+ * @return string
+ */
+function title_concat(...$_): string
+{
+    $_ = array_filter($_, function ($val) {
+        if (is_scalar($val)) return true;
+        return false;
+    });
+    return implode(TITLE_DELIMITER, $_);
+}
+
+/**
  * @param int $time
  * @return int
  */

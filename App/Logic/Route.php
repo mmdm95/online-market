@@ -212,12 +212,18 @@ class Route implements IInitialize
             // other routes
             //==========================
             Router::get('/', 'HomeController@index')->name('home.index');
+            Router::get('/search', 'HomeController@search')->name('home.search');
+
+            Router::get('/about', 'PageController@about')->name('home.about');
+            Router::get('/faq', 'PageController@faq')->name('home.faq');
+            Router::get('/contact', 'PageController@contact')->name('home.contact');
+            Router::post('/contact/', 'PageController@contact')->name('home.contact');
 
             Router::get('/login', 'LoginController@index')->name('home.login');
 
-            Router::get('/cart', 'CartController@index')->name('home.cart');
+            Router::get('/register', 'RegisterController@index')->name('home.register');
 
-            Router::get('/search', 'HomeController@search')->name('home.search');
+            Router::get('/cart', 'CartController@index')->name('home.cart');
 
             Router::get('/product/{id}/{slug?}', 'ProductController@show')->name('home.product.show');
 
@@ -250,6 +256,9 @@ class Route implements IInitialize
                 'filename' => '.+',
             ])->name('api.file-manager.download');
             Router::get('/file-manager/dir-tree', 'Admin\FileController@foldersTree')->name('api.file-manager.tree');
+
+            // get captcha image
+            Router::get('/captcha', 'CaptchaController@generateCaptcha')->name('api.captcha');
         });
     }
 

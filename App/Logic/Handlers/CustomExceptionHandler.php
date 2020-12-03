@@ -2,7 +2,6 @@
 
 namespace App\Logic\Handlers;
 
-use App\Logic\Controller\PageController;
 use Pecee\Http\Request;
 use Pecee\SimpleRouter\Handlers\IExceptionHandler;
 use Pecee\SimpleRouter\Exceptions\NotFoundHttpException;

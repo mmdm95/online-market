@@ -13,7 +13,8 @@
     <title><?= $title ?? ''; ?></title>
 
     <!-- Favicon Icon -->
-    <link rel="shortcut icon" type="image/x-icon" href="">
+    <link rel="shortcut icon" type="image/x-icon"
+          href="<?= url('image.show') . \config()->get('settings.favicon.value'); ?>">
 
     <?= $css['top'] ?? ''; ?>
     <?= $js['top'] ?? ''; ?>
@@ -30,8 +31,34 @@
 </div>
 <!-- END LOADER -->
 
+<!-- START HEADER -->
+<?php load_partial('main/menu', [
+    'cart_section' => $cart_section ?? '',
+]); ?>
+<!-- END HEADER -->
+
+<!-- START SECTION BREADCRUMB -->
+<?php load_partial('main/section-breadcrumb', [
+    'sub_title' => $sub_title ?? '',
+    'breadcrumb' => $breadcrumb ?? [],
+]); ?>
+<!-- END SECTION BREADCRUMB -->
+
 <?= $content; ?>
 
+<!-- START FOOTER -->
+<?php load_partial('main/footer'); ?>
+<!-- END FOOTER -->
+
+<a href="#" class="scrollup" style="display: none;"><i class="ion-ios-arrow-up"></i></a>
+
+<script type="text/javascript">
+    (function () {
+        'use strict';
+
+        window.captchaPageName = '<?= url()->getOriginalUrl(); ?>';
+    })();
+</script>
 <?= $js['bottom'] ?? ''; ?>
 </body>
 </html>

@@ -17,7 +17,7 @@
                         <div class="input-group">
                             <div class="input-group-prepend">
                                 <div class="custom_select">
-                                    <select class="first_null">
+                                    <select class="first_null" name="search-categories-select-inp">
                                         <option value="-1">همه دسته ها</option>
                                         <?php foreach ($categories as $category): ?>
                                             <option value="<?= $category['id']; ?>"><?= $category['name']; ?></option>
@@ -57,7 +57,6 @@
                                         <a class="dropdown-item nav-link <?= $hasChildren ? 'dropdown-toggler' : 'nav_item'; ?>"
                                            href="#"
                                             <?= $hasChildren ? 'data-toggle="dropdown"' : ''; ?>>
-                                            <i class="flaticon-friendship"></i>
                                             <span><?= $m['name']; ?></span>
                                         </a>
 
@@ -205,7 +204,7 @@
                         <div class="collapse navbar-collapse mobile_side_menu" id="navbarSidetoggle">
                             <ul class="navbar-nav">
                                 <?php
-                                $topMenu = \config()->get('settings.top_menu') ?? [];
+                                $topMenu = \config()->get('settings.top_menu.value') ?? [];
                                 ?>
 
                                 <?php foreach ($topMenu as $t): ?>

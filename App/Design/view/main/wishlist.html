@@ -168,12 +168,12 @@
                             <a class="dropdown-toggle nav-link" href="#" data-toggle="dropdown">صفحات</a>
                             <div class="dropdown-menu">
                                 <ul> 
-                                    <li><a class="dropdown-item nav-link nav_item" href="about.html">درباره ما</a></li> 
-                                    <li><a class="dropdown-item nav-link nav_item" href="contact.html">تماس با ما</a></li> 
-                                    <li><a class="dropdown-item nav-link nav_item" href="faq.html">سؤالات متداول</a></li>
+                                    <li><a class="dropdown-item nav-link nav_item" href="about.php">درباره ما</a></li>
+                                    <li><a class="dropdown-item nav-link nav_item" href="contact.php">تماس با ما</a></li>
+                                    <li><a class="dropdown-item nav-link nav_item" href="faq.php">سؤالات متداول</a></li>
                                     <li><a class="dropdown-item nav-link nav_item" href="404.php">خطا 404</a></li>
                                     <li><a class="dropdown-item nav-link nav_item" href="login.php">ورود</a></li>
-                                    <li><a class="dropdown-item nav-link nav_item" href="signup.html">ثبت نام</a></li>
+                                    <li><a class="dropdown-item nav-link nav_item" href="signup.php">ثبت نام</a></li>
                                     <li><a class="dropdown-item nav-link nav_item" href="term-condition.html">شرایط و ضوابط</a></li>
                                 </ul>
                             </div>
@@ -367,7 +367,7 @@
                                 </ul>
                             </div>
                         </li>
-                        <li><a class="nav-link nav_item" href="contact.html">تماس با ما</a></li> 
+                        <li><a class="nav-link nav_item" href="contact.php">تماس با ما</a></li>
                     </ul>
                 </div>
                 <ul class="navbar-nav attr-nav align-items-center">

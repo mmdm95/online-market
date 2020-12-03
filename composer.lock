@@ -464,16 +464,16 @@
         },
         {
             "name": "mmdm/sim-cart",
-            "version": "v1.1.3",
+            "version": "v1.1.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/mmdm95/sim-cart.git",
-                "reference": "5347cd08e20d0508b071edcc78571871866f2cfe"
+                "reference": "be5c0753405f8ad69ea080e2ea2584303ff930b4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mmdm95/sim-cart/zipball/5347cd08e20d0508b071edcc78571871866f2cfe",
-                "reference": "5347cd08e20d0508b071edcc78571871866f2cfe",
+                "url": "https://api.github.com/repos/mmdm95/sim-cart/zipball/be5c0753405f8ad69ea080e2ea2584303ff930b4",
+                "reference": "be5c0753405f8ad69ea080e2ea2584303ff930b4",
                 "shasum": ""
             },
             "require": {
@@ -499,7 +499,7 @@
                 }
             ],
             "description": "A simple yet nice shopping cart library",
-            "time": "2020-11-28T02:25:09+00:00"
+            "time": "2020-11-30T17:32:12+00:00"
         },
         {
             "name": "mmdm/sim-container",

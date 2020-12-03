@@ -1,3 +1,9 @@
+<?php
+
+use App\Logic\Utils\Jdf;
+
+?>
+
 <footer class="bg_gray">
     <div class="middle_footer">
         <div class="container">
@@ -5,14 +11,22 @@
                 <div class="col-12">
                     <div class="shopping_info">
                         <div class="row justify-content-center">
+                            <?php
+                            $features = \config()->get('settings.features.value');
+                            $feature1 = $features[0];
+                            $feature2 = $features[1];
+                            $feature3 = $features[2];
+                            ?>
                             <div class="col-md-4">
                                 <div class="icon_box icon_box_style2">
                                     <div class="icon">
                                         <i class="flaticon-shipped"></i>
                                     </div>
                                     <div class="icon_box_content">
-                                        <h5>ارسال رایگان</h5>
-                                        <p>لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ</p>
+                                        <h5><?= $feature1['title']; ?></h5>
+                                        <?php if (!empty($feature1['sub_title'])): ?>
+                                            <p><?= $feature1['sub_title']; ?></p>
+                                        <?php endif; ?>
                                     </div>
                                 </div>
                             </div>
@@ -22,8 +36,10 @@
                                         <i class="flaticon-money-back"></i>
                                     </div>
                                     <div class="icon_box_content">
-                                        <h5>30 روز ضمانت بازگشت</h5>
-                                        <p>لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ</p>
+                                        <h5><?= $feature2['title']; ?></h5>
+                                        <?php if (!empty($feature1['sub_title'])): ?>
+                                            <p><?= $feature2['sub_title']; ?></p>
+                                        <?php endif; ?>
                                     </div>
                                 </div>
                             </div>
@@ -33,8 +49,10 @@
                                         <i class="flaticon-support"></i>
                                     </div>
                                     <div class="icon_box_content">
-                                        <h5>پشتیبانی 24 ساعته</h5>
-                                        <p>لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ</p>
+                                        <h5><?= $feature3['title']; ?></h5>
+                                        <?php if (!empty($feature1['sub_title'])): ?>
+                                            <p><?= $feature3['sub_title']; ?></p>
+                                        <?php endif; ?>
                                     </div>
                                 </div>
                             </div>
@@ -51,82 +69,164 @@
                 <div class="col-lg-4 col-md-12 col-sm-12">
                     <div class="widget">
                         <div class="footer_logo">
-                            <a href="#"><img src="<?= asset_path('image', false); ?>/logo_dark.png" alt="logo"/></a>
+                            <a href="<?= url('home.index'); ?>">
+                                <img src="<?= url('image.show') . \config()->get('settings.logo.value'); ?>"
+                                     alt="logo"/>
+                            </a>
                         </div>
-                        <p class="mb-3">لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ، و با استفاده از
-                            طراحان گرافیک است</p>
+                        <?php
+                        $tinyDesc = \config()->get('settings.footer_tiny_desc.value');
+                        ?>
+                        <?php if (!empty($tinyDesc)): ?>
+                            <p class="mb-3"><?= $tinyDesc; ?></p>
+                        <?php endif; ?>
                         <ul class="contact_info">
-                            <li>
-                                <i class="ti-location-pin"></i>
-                                <p>ایران , تهران , زعفرانیه , ساختمان هستی</p>
-                            </li>
-                            <li>
-                                <i class="ti-email"></i>
-                                <a href="mailto:info@sitename.com">info@sitename.com</a>
-                            </li>
-                            <li>
-                                <i class="ti-mobile"></i>
-                                <p>021-1234567</p>
-                            </li>
+                            <?php
+                            $address = \config()->get('settings.address.value');
+                            $phones = \config()->get('settings.phones.value');
+                            $phones = explode(',', $phones);
+                            $phones = array_filter($phones, function ($val) {
+                                if(is_string($val) && !empty(trim($val))) return true;
+                                return false;
+                            });
+                            $email = \config()->get('settings.email.value');
+                            ?>
+                            <?php if (!empty($address)): ?>
+                                <li>
+                                    <i class="ti-location-pin"></i>
+                                    <p><?= nl2br($address); ?></p>
+                                </li>
+                            <?php endif; ?>
+                            <?php if (!empty($email)): ?>
+                                <li>
+                                    <i class="ti-email"></i>
+                                    <a href="mailto:<?= hexentities($email); ?>"><?= hexentities($email); ?></a>
+                                </li>
+                            <?php endif; ?>
+                            <?php if (count($phones)): ?>
+                                <li>
+                                    <i class="ti-mobile"></i>
+                                    <p>
+                                        <?php foreach ($phones as $phone): ?>
+                                            <span class="d-block">
+                                                <?= local_number($phone); ?>
+                                            </span>
+                                        <?php endforeach; ?>
+                                    </p>
+                                </li>
+                            <?php endif; ?>
                         </ul>
                     </div>
                 </div>
-                <div class="col-lg-2 col-md-4 col-sm-6">
-                    <div class="widget">
-                        <h6 class="widget_title">لینک های مفید</h6>
-                        <ul class="widget_links">
-                            <li><a href="#">درباره ما</a></li>
-                            <li><a href="#">سؤالات متداول</a></li>
-                            <li><a href="#">موقعیت</a></li>
-                            <li><a href="#">شرکت ها</a></li>
-                            <li><a href="#">تماس</a></li>
-                        </ul>
+
+                <?php
+                $section1 = \config()->get('settings.footer_section_1.value');
+                $section2 = \config()->get('settings.footer_section_2.value');
+                ?>
+                <?php if (count($section1['links'])): ?>
+                    <div class="col-lg-2 col-md-4 col-sm-6">
+                        <div class="widget">
+                            <h6 class="widget_title"><?= $section1['title']; ?></h6>
+                            <ul class="widget_links">
+                                <?php foreach ($section1['links'] as $link): ?>
+                                    <li><a href="<?= $link['link']; ?>"><?= $link['name']; ?></a></li>
+                                <?php endforeach; ?>
+                            </ul>
+                        </div>
                     </div>
-                </div>
-                <div class="col-lg-2 col-md-4 col-sm-6">
-                    <div class="widget">
-                        <h6 class="widget_title">حساب کاربری من</h6>
-                        <ul class="widget_links">
-                            <li><a href="#">حساب کاربری</a></li>
-                            <li><a href="#">تخفیف</a></li>
-                            <li><a href="#">بازگشتی</a></li>
-                            <li><a href="#">تاریخچه سفارشات</a></li>
-                            <li><a href="#">رهگیری سفارش</a></li>
-                        </ul>
+                <?php endif; ?>
+                <?php if (count($section2['links'])): ?>
+                    <div class="col-lg-2 col-md-4 col-sm-6">
+                        <div class="widget">
+                            <h6 class="widget_title"><?= $section2['title']; ?></h6>
+                            <ul class="widget_links">
+                                <?php foreach ($section2['links'] as $link): ?>
+                                    <li><a href="<?= $link['link']; ?>"><?= $link['name']; ?></a></li>
+                                <?php endforeach; ?>
+                            </ul>
+                        </div>
                     </div>
-                </div>
-                <div class="col-lg-4 col-md-4 col-sm-12">
-                    <div class="widget">
-                        <h6 class="widget_title">نمادها</h6>
-                        <ul class="widget_instafeed instafeed_col4">
-                            <li><a href="#"><img src="<?= asset_path('image', false); ?>/insta_img1.jpg" alt="insta_img"><span
-                                        class="insta_icon"><i class="ti-instagram"></i></span></a></li>
-                            <li><a href="#"><img src="<?= asset_path('image', false); ?>/insta_img2.jpg" alt="insta_img"><span
-                                        class="insta_icon"><i class="ti-instagram"></i></span></a></li>
-                            <li><a href="#"><img src="<?= asset_path('image', false); ?>/insta_img3.jpg" alt="insta_img"><span
-                                        class="insta_icon"><i class="ti-instagram"></i></span></a></li>
-                            <li><a href="#"><img src="<?= asset_path('image', false); ?>/insta_img4.jpg" alt="insta_img"><span
-                                        class="insta_icon"><i class="ti-instagram"></i></span></a></li>
-                            <li><a href="#"><img src="<?= asset_path('image', false); ?>/insta_img5.jpg" alt="insta_img"><span
-                                        class="insta_icon"><i class="ti-instagram"></i></span></a></li>
-                            <li><a href="#"><img src="<?= asset_path('image', false); ?>/insta_img6.jpg" alt="insta_img"><span
-                                        class="insta_icon"><i class="ti-instagram"></i></span></a></li>
-                            <li><a href="#"><img src="<?= asset_path('image', false); ?>/insta_img7.jpg" alt="insta_img"><span
-                                        class="insta_icon"><i class="ti-instagram"></i></span></a></li>
-                            <li><a href="#"><img src="<?= asset_path('image', false); ?>/insta_img8.jpg" alt="insta_img"><span
-                                        class="insta_icon"><i class="ti-instagram"></i></span></a></li>
-                        </ul>
+                <?php endif; ?>
+
+                <?php
+                $namad1 = \config()->get('settings.footer_namad_1.value');
+                $namad2 = \config()->get('settings.footer_namad_2.value');
+                ?>
+                <?php if (!empty($namad1) || !empty($namad2)): ?>
+                    <div class="col-lg-4 col-md-4 col-sm-12">
+                        <div class="widget">
+                            <h6 class="widget_title">نمادها</h6>
+                            <ul class="widget_instafeed namad_img">
+                                <?php if (!empty($namad1)): ?>
+                                    <li>
+                                        <?= $namad1; ?>
+                                    </li>
+                                <?php endif; ?>
+                                <?php if (!empty($namad2)): ?>
+                                    <li>
+                                        <?= $namad2; ?>
+                                    </li>
+                                <?php endif; ?>
+                            </ul>
+                        </div>
                     </div>
-                </div>
+                <?php endif; ?>
             </div>
         </div>
     </div>
+
     <div class="bottom_footer border-top-tran mt-0">
         <div class="container">
             <div class="row align-items-center">
-                <div class="col-lg-4">
-                    <p class="mb-lg-0 text-center">© 1399 کلیه حقوق این سایت متعلق به ... است</p>
+                <div class="col-lg-6">
+                    <p class="mb-lg-0 text-center">
+                        ©
+                        <?= Jdf::jdate('Y'); ?>
+                        کلیه حقوق این سایت متعلق به
+                        <?= \config()->get('settings.title.value'); ?>
+                        است
+                    </p>
                 </div>
+                <?php
+                $telegram = \config()->get('settings.social_telegram.value');
+                $whatsapp = \config()->get('settings.social_whatsapp.value');
+                $instagram = \config()->get('settings.social_instagram.value');
+                ?>
+                <?php if (!empty($telegram) || !empty($instagram) || !empty($whatsapp)): ?>
+                    <div class="col-lg-6 order-lg-first">
+                        <div class="widget mb-0">
+                            <ul class="social_icons text-center text-lg-left">
+                                <?php if (!empty($telegram)): ?>
+                                    <?php foreach (explode(',', $telegram) as $item): ?>
+                                        <li>
+                                            <a href="<?= $item; ?>" class="sc_telegram">
+                                                <i class="ion-ios-paperplane-outline"></i>
+                                            </a>
+                                        </li>
+                                    <?php endforeach; ?>
+                                <?php endif; ?>
+                                <?php if (!empty($whatsapp)): ?>
+                                    <?php foreach (explode(',', $whatsapp) as $item): ?>
+                                        <li>
+                                            <a href="<?= $item; ?>" class="sc_whatsapp">
+                                                <i class="ion-social-whatsapp-outline"></i>
+                                            </a>
+                                        </li>
+                                    <?php endforeach; ?>
+                                <?php endif; ?>
+                                <?php if (!empty($instagram)): ?>
+                                    <?php foreach (explode(',', $instagram) as $item): ?>
+                                        <li>
+                                            <a href="<?= $item; ?>" class="sc_instagram">
+                                                <i class="ion-social-instagram-outline"></i>
+                                            </a>
+                                        </li>
+                                    <?php endforeach; ?>
+                                <?php endif; ?>
+                            </ul>
+                        </div>
+                    </div>
+                <?php endif; ?>
             </div>
         </div>
     </div>

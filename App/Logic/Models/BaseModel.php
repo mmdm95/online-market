@@ -33,6 +33,7 @@ abstract class BaseModel
     const TBL_ORDER_BADGES = 'order_badges';
     const TBL_ORDER_ITEMS = 'order_items';
     const TBL_ORDER_RESERVED = 'order_reserved';
+    const TBL_OUR_TEAM = 'our_team';
     const TBL_PRODUCTS = 'products';
     const TBL_PRODUCT_ADVANCED = 'product_advanced';
     const TBL_PRODUCT_CATEGORY_FESTIVAL = 'product_category_festival';
