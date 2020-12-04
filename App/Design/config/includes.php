@@ -746,7 +746,7 @@ return [
             ],
         ],
         'view/color/edit' => [
-            'title' => title_concat(\config()->get('settings.title.value'), ',ویرایش رنگ'),
+            'title' => title_concat(\config()->get('settings.title.value'), 'ویرایش رنگ'),
             'common' => [
                 'admin-base',
                 'admin-form',
@@ -774,7 +774,7 @@ return [
             ],
         ],
         'view/color/view' => [
-            'title' => title_concat(\config()->get('settings.title.value'), ',ویرایش رنگ'),
+            'title' => title_concat(\config()->get('settings.title.value'), 'نمایش رنگ'),
             'common' => [
                 'admin-base',
                 'admin-form',
@@ -791,6 +791,178 @@ return [
                 ],
                 [
                     'text' => 'مدیریت رنگ‌ها',
+                    'is_active' => true,
+                ],
+            ],
+        ],
+        'view/festival/add' => [
+            'title' => title_concat(\config()->get('settings.title.value'), 'افزودن جشنواره'),
+            'common' => [
+                'admin-base',
+                'admin-form',
+                'admin'
+            ],
+            'sub_title' => 'افزودن جشنواره',
+            'breadcrumb' => [
+                [
+                    'url' => url('admin.index'),
+                    'icon' => 'icon-home2',
+                    'text' => 'خانه',
+                    'is_active' => false,
+                ],
+                [
+                    'url' => url('admin.festival.add'),
+                    'text' => 'مدیریت جشنواره',
+                    'is_active' => false,
+                ],
+                [
+                    'text' => 'افزودن جشنواره',
+                    'is_active' => true,
+                ],
+            ],
+        ],
+        'view/festival/edit' => [
+            'title' => title_concat(\config()->get('settings.title.value'), 'ویرایش جشنواره'),
+            'common' => [
+                'admin-base',
+                'admin-form',
+                'admin'
+            ],
+            'sub_title' => 'ویرایش جشنواره',
+            'breadcrumb' => [
+                [
+                    'url' => url('admin.index'),
+                    'icon' => 'icon-home2',
+                    'text' => 'خانه',
+                    'is_active' => false,
+                ],
+                [
+                    'url' => url('admin.festival.view'),
+                    'text' => 'مدیریت جشنواره',
+                    'is_active' => false,
+                ],
+                [
+                    'text' => 'افزودن جشنواره',
+                    'is_active' => true,
+                ],
+            ],
+        ],
+        'view/festival/view' => [
+            'title' => title_concat(\config()->get('settings.title.value'), 'مدیریت جشنواره'),
+            'common' => [
+                'admin-base',
+                'admin-table',
+                'admin'
+            ],
+            'sub_title' => 'ویرایش جشنواره',
+            'breadcrumb' => [
+                [
+                    'url' => url('admin.index'),
+                    'icon' => 'icon-home2',
+                    'text' => 'خانه',
+                    'is_active' => false,
+                ],
+                [
+                    'url' => url('admin.festival.view'),
+                    'text' => 'مدیریت جشنواره',
+                    'is_active' => false,
+                ],
+                [
+                    'text' => 'افزودن جشنواره',
+                    'is_active' => true,
+                ],
+            ],
+        ],
+
+        'view/blog/category/add' => [
+            'title' => title_concat(\config()->get('settings.title.value'), 'افزودن دسته'),
+            'common' => [
+                'admin-base',
+                'admin-form',
+                'admin'
+            ],
+            'sub_title' => 'مدیریت دسته‌بندی‌ها',
+            'breadcrumb' => [
+                [
+                    'url' => url('admin.index'),
+                    'icon' => 'icon-home2',
+                    'text' => 'خانه',
+                    'is_active' => false,
+                ],
+                [
+                    'url' => url('admin.blog.view'),
+                    'text' => 'وبلاگ',
+                    'is_active' => false,
+                ],
+                [
+                    'url' => url('admin.blog.category.add'),
+                    'text' => 'دسته‌بندی‌ها',
+                    'is_active' => false,
+                ],
+                [
+                    'text' => 'افزودن دسته',
+                    'is_active' => true,
+                ],
+            ],
+        ],
+        'view/blog/category/edit' => [
+            'title' => title_concat(\config()->get('settings.title.value'), 'ویرایش دسته'),
+            'common' => [
+                'admin-base',
+                'admin-form',
+                'admin'
+            ],
+            'sub_title' => 'ویرایش دسته‌بندی‌',
+            'breadcrumb' => [
+                [
+                    'url' => url('admin.index'),
+                    'icon' => 'icon-home2',
+                    'text' => 'خانه',
+                    'is_active' => false,
+                ],
+                [
+                    'url' => url('admin.blog.view'),
+                    'text' => 'وبلاگ',
+                    'is_active' => false,
+                ],
+                [
+                    'url' => url('admin.category.add'),
+                    'text' => 'مدیریت دسته‌بندی‌ها',
+                    'is_active' => false,
+                ],
+                [
+                    'text' => 'ویرایش دسته',
+                    'is_active' => true,
+                ],
+            ],
+        ],
+        'view/blog/category/view' => [
+            'title' => title_concat(\config()->get('settings.title.value'), 'مشاهده دسته‌ها'),
+            'common' => [
+                'admin-base',
+                'admin-table',
+                'admin'
+            ],
+            'sub_title' => 'مدیریت دسته‌بندی‌ها',
+            'breadcrumb' => [
+                [
+                    'url' => url('admin.index'),
+                    'icon' => 'icon-home2',
+                    'text' => 'خانه',
+                    'is_active' => false,
+                ],
+                [
+                    'url' => url('admin.blog.view'),
+                    'text' => 'وبلاگ',
+                    'is_active' => false,
+                ],
+                [
+                    'url' => url('admin.blog.category.view'),
+                    'text' => 'دسته‌بندی‌ها',
+                    'is_active' => false,
+                ],
+                [
+                    'text' => 'دسته‌بندی‌ها',
                     'is_active' => true,
                 ],
             ],
@@ -1121,6 +1293,57 @@ return [
                 ],
                 [
                     'text' => 'وضعیت سفارش',
+                    'is_active' => true,
+                ],
+            ],
+
+        ],
+        'view/order/return-order' => [
+            'title' => title_concat(\config()->get('settings.title.value'), 'سفارشات مرجوعی'),
+            'common' => [
+                'admin-base',
+                'admin-table',
+                'admin-form',
+                'admin'
+            ],
+            'sub_title' => 'مدیریت سفارشات مرجوعی',
+            'breadcrumb' => [
+                [
+                    'url' => url('admin.index'),
+                    'icon' => 'icon-home2',
+                    'text' => 'خانه',
+                    'is_active' => false,
+                ],
+                [
+                    'text' => 'سفارشات مرجوعی',
+                    'is_active' => true,
+                ],
+            ],
+
+        ],
+        'view/order/return-order-detail' => [
+            'title' => title_concat(\config()->get('settings.title.value'), 'سفارشات مرجوعی'),
+            'common' => [
+                'admin-base',
+                'admin-table',
+                'admin-form',
+                'admin'
+            ],
+            'sub_title' => 'مشاهده سفارشات مرجوعی',
+            'breadcrumb' => [
+                [
+                    'url' => url('admin.index'),
+                    'icon' => 'icon-home2',
+                    'text' => 'خانه',
+                    'is_active' => false,
+                ],
+                [
+                    'url' => url('admin.order.return'),
+                    'text' => 'مدیریت سفارشات مرجوعی',
+                    'is_active' => false,
+                ],
+                [
+                    'text' => 'سفارشات مرجوعی',
                     'is_active' => true,
                 ],
             ],

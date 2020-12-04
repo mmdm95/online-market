@@ -63,7 +63,6 @@
                             <div class="card-body">
                                 <h5 class="card-title">اطلاعات گیرنده</h5>
                             </div>
-
                             <ul class="list-group list-group-flush border-top">
                                 <li class="list-group-item">
                                     <span class="font-weight-semibold">نام گیرنده:</span>

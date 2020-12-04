@@ -117,8 +117,7 @@ class Route implements IInitialize
                 /**
                  * User Route
                  */
-                Router::get('/user/view/{id?}', 'Admin\UserController@view')
-                    ->where([
+                Router::get('/user/view/{id?}', 'Admin\UserController@view')->where([
                         'id' => '[0-9]+',
                     ])->name('admin.user.view');
                 Router::get('/user/add', 'Admin\UserController@add')->name('admin.user.add');
@@ -147,14 +146,33 @@ class Route implements IInitialize
                 /**
                  * Color Route
                  */
-                Router::get('/color/add', 'Admin\ColorController@add')->name('admin.color.add');
-                Router::get('/color/edit/{id}', 'Admin\ColorController@edit')->name('admin.color.edit');
-                Router::get('/color/view', 'Admin\ColorController@view')->name('admin.color.view');
+                Router::get('/color/add', 'Admin\FestivalController@add')->name('admin.color.add');
+
+                /**
+                 * Festival Route
+                 */
+                Router::get('/festival/add', 'Admin\festivalController@add')->name('admin.festival.add');
+                Router::get('/festival/edit/{id}', 'Admin\FestivalController@edit')->where([
+                    'id' => '[0-9]+',
+                ])->name('admin.festival.edit');
+                Router::get('/festival/view', 'Admin\FestivalController@view')->name('admin.festival.view');
+
+                /**
+                 * Blog Category Route
+                 */
+                Router::get('/blog/category/add', 'Admin\BlogController@CategoryAdd')->name('admin.blog.category.add');
+                Router::get('/blog/category/edit/{id}', 'Admin\BlogController@CategoryEdit')->where([
+                    'id' => '[0-9]+',
+                ])->name('admin.blog.category.edit');
+                Router::get('blog/category/view', 'Admin\BlogController@CategoryView')->name('admin.blog.category.view');
+
 
                 /**
                  * Contact us Route
                  */
-                Router::get('/contact-us/view/{id?}', 'Admin\ContactUsController@view')->name('admin.contact-us.view');
+                Router::get('/contact-us/view/{id?}', 'Admin\ContactUsController@view')->where([
+                    'id' => '[0-9]+',
+                ])->name('admin.contact-us.view');
 
                 /**
                  * Unit Route
@@ -169,24 +187,35 @@ class Route implements IInitialize
                 /**
                  * complaints Route
                  */
-                Router::get('/complaints/view/{id?}', 'Admin\complaintsController@view')->name('admin.complaints.view');
+                Router::get('/complaints/view/{id?}', 'Admin\complaintsController@view')->where([
+                    'id' => '[0-9]+',
+                ])->name('admin.complaints.view');
 
                 /**
                  * Newsletter Route
                  */
-                Router::get('/newsletter/view/{id?}', 'Admin\NewsletterController@view')->name('admin.newsletter.view');
+                Router::get('/newsletter/view/{id?}', 'Admin\NewsletterController@view')->where([
+                    'id' => '[0-9]+',
+                ])->name('admin.newsletter.view');
 
                 /**
                  * Wallet Route
                  */
-                Router::get('/wallet/view{id?}', 'Admin\WalletController@view')->name('admin.wallet.view');
+                Router::get('/wallet/view/{id?}', 'Admin\WalletController@view')->where([
+                    'id' => '[0-9]+',
+                ])->name('admin.wallet.view');
                 Router::get('/wallet/deposit-type', 'Admin\WalletController@depositType')->name('admin.wallet.deposit-type');
 
                 /**
                  * Order Route
                  */
-                Router::get('/order/view{id?}', 'Admin\OrderController@view')->name('admin.order.view');
+                Router::get('/order/view/{id?}', 'Admin\OrderController@view')->where([
+                    'id' => '[0-9]+',
+                ])->name('admin.order.view');
                 Router::get('/order/badges', 'Admin\OrderController@badges')->name('admin.order.badges');
+                Router::get('/order/return-order/{id?}', 'Admin\OrderController@returnOrder')->where([
+                    'id' => '[0-9]+',
+                ])->name('admin.return.order');
 
                 /**
                  * Slider Route
@@ -224,7 +253,9 @@ class Route implements IInitialize
 
             Router::get('/cart', 'CartController@index')->name('home.cart');
 
-            Router::get('/product/{id}/{slug?}', 'ProductController@show')->name('home.product.show');
+            Router::get('/product/{id}/{slug?}', 'ProductController@show')->where([
+                'id' => '[0-9]+',
+            ])->name('home.product.show');
 
             Router::get('/compare', 'CompareController@compare')->name('home.compare');
 
