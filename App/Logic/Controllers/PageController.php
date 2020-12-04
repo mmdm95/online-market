@@ -3,8 +3,10 @@
 namespace App\Logic\Controllers;
 
 use App\Logic\Abstracts\AbstractHomeController;
+use App\Logic\Models\ContactUsModel;
 use App\Logic\Models\FAQModel;
 use App\Logic\Models\OurTeamModel;
+use App\Logic\Validations\FormValidations;
 use Sim\Container\Exceptions\MethodNotFoundException;
 use Sim\Container\Exceptions\ParameterHasNoDefaultValueException;
 use Sim\Container\Exceptions\ServiceNotFoundException;
@@ -12,8 +14,10 @@ use Sim\Container\Exceptions\ServiceNotInstantiableException;
 use Sim\Exceptions\ConfigManager\ConfigNotRegisteredException;
 use Sim\Exceptions\Mvc\Controller\ControllerException;
 use Sim\Exceptions\PathManager\PathNotRegisteredException;
+use Sim\Form\Exceptions\FormException;
 use Sim\Interfaces\IFileNotExistsException;
 use Sim\Interfaces\IInvalidVariableNameException;
+use voku\helper\AntiXSS;
 
 class PageController extends AbstractHomeController
 {
@@ -77,22 +81,40 @@ class PageController extends AbstractHomeController
      * @throws ControllerException
      * @throws IFileNotExistsException
      * @throws IInvalidVariableNameException
+     * @throws MethodNotFoundException
+     * @throws ParameterHasNoDefaultValueException
      * @throws PathNotRegisteredException
+     * @throws ServiceNotFoundException
+     * @throws ServiceNotInstantiableException
      * @throws \ReflectionException
+     * @throws FormException
      */
     public function contact()
     {
         $data = [];
 
-        var_dump(is_post(), request()->getMethod());
-        var_dump($_POST, $_GET);
         if (is_post()) {
-            // submit contact form
-            $data['contact_errors'] = [
-                'oh noo!',
-                'go go go...'
-            ];
-            $data['contact_success'] = 'OK!';
+            /**
+             * @var FormValidations $contactForm
+             */
+            $contactForm = container()->get(FormValidations::class);
+            [$status, $errors] = $contactForm->contact();
+            if ($status) {
+                /**
+                 * @var ContactUsModel $contactModel
+                 */
+                $contactModel = container()->get(ContactUsModel::class);
+                /**
+                 * @var AntiXSS $xss
+                 */
+                $xss = container()->get(AntiXSS::class);
+                $data['contact_success'] = 'اطلاعات با موفقیت ثبت شد.';
+                $contactModel->insert([
+                    '' => '',
+                ]);
+            } else {
+                $data['contact_errors'] = $errors;
+            }
         }
 
         $this->setLayout($this->main_layout)->setTemplate('view/main/contact');

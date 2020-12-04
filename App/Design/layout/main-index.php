@@ -34,13 +34,6 @@
 
 <a href="#" class="scrollup" style="display: none;"><i class="ion-ios-arrow-up"></i></a>
 
-<script type="text/javascript">
-    (function () {
-        'use strict';
-
-        window.captchaPageName = '<?= url()->getOriginalUrl(); ?>';
-    })();
-</script>
 <?= $js['bottom'] ?? ''; ?>
 </body>
 </html>

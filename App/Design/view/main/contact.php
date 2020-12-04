@@ -64,12 +64,7 @@
                         پیام خود را با ما در میان بگذارید.
                     </p>
                     <div class="field_form">
-
-                        <form name="yourForm" id="theForm" method="post">
-                            <input type="text" name="fname" id="fname">
-                            <input type="submit" value="submit">
-                        </form>
-                        <form
+                        <form action="<?= rtrim(url('home.contact'), '/'); ?>"
                               method="post" id="__form_contact">
                             <?php load_partial('main/message-form', [
                                 'errors' => $contact_errors ?? [],
@@ -77,7 +72,6 @@
                             ]); ?>
                             <div class="row">
                                 <input type="hidden" name="csrf_token" value="<?= csrf_token(); ?>" data-ignored>
-                                <input type="hidden" name="_method" value="post" data-ignored>
                                 <div class="form-group col-md-6">
                                     <input placeholder="نام را وارد کنید *"
                                            class="form-control" name="inp-contact-name" type="text">
@@ -107,6 +101,7 @@
                                     </div>
                                     <button class="btn btn-link text_default p-2 ml-3 __captcha_regenerate_btn"
                                             type="button" aria-label="regenerate captcha">
+                                        <input type="hidden" name="inp-captcha-name" value="<?= url() . '__form_contact'; ?>">
                                         <i class="icon-refresh icon-2x" aria-hidden="true"></i>
                                     </button>
                                 </div>

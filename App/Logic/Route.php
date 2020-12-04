@@ -108,7 +108,7 @@ class Route implements IInitialize
             // admin routes
             //==========================
             // admin login page
-            Router::match(['get', 'post'], '/admin/login', 'Admin\HomeController@login')->name('admin.login');
+            Router::form('/admin/login', 'Admin\HomeController@login')->name('admin.login');
 
             // other pages that need authentication
             Router::group(['prefix' => '/admin/', 'middleware' => AdminAuthMiddleware::class], function () {
@@ -216,8 +216,7 @@ class Route implements IInitialize
 
             Router::get('/about', 'PageController@about')->name('home.about');
             Router::get('/faq', 'PageController@faq')->name('home.faq');
-            Router::get('/contact', 'PageController@contact')->name('home.contact');
-            Router::post('/contact/', 'PageController@contact')->name('home.contact');
+            Router::form('/contact', 'PageController@contact')->name('home.contact');
 
             Router::get('/login', 'LoginController@index')->name('home.login');
 

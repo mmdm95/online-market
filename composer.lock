@@ -425,16 +425,16 @@
         },
         {
             "name": "mmdm/sim-captcha",
-            "version": "v1.0.1",
+            "version": "v1.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/mmdm95/sim-captcha.git",
-                "reference": "3c0e4ca0e443cbcaa6ad92fb8ea62e9868b9b442"
+                "reference": "0b5d87817959ee8814071db46c6ff31f98fe66a4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mmdm95/sim-captcha/zipball/3c0e4ca0e443cbcaa6ad92fb8ea62e9868b9b442",
-                "reference": "3c0e4ca0e443cbcaa6ad92fb8ea62e9868b9b442",
+                "url": "https://api.github.com/repos/mmdm95/sim-captcha/zipball/0b5d87817959ee8814071db46c6ff31f98fe66a4",
+                "reference": "0b5d87817959ee8814071db46c6ff31f98fe66a4",
                 "shasum": ""
             },
             "require": {
@@ -460,7 +460,7 @@
                 }
             ],
             "description": "A simple yet nice captcha library",
-            "time": "2020-10-05T19:30:23+00:00"
+            "time": "2020-12-04T12:00:05+00:00"
         },
         {
             "name": "mmdm/sim-cart",
@@ -805,16 +805,16 @@
         },
         {
             "name": "mmdm/sim-form",
-            "version": "v0.1.4",
+            "version": "v0.1.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/mmdm95/sim-form.git",
-                "reference": "aa4dc80447b1f9feb6c573aeba7d07dd1cb0dc34"
+                "reference": "7015e1b0b22b785752930606a6dfa4bdf4dda41b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mmdm95/sim-form/zipball/aa4dc80447b1f9feb6c573aeba7d07dd1cb0dc34",
-                "reference": "aa4dc80447b1f9feb6c573aeba7d07dd1cb0dc34",
+                "url": "https://api.github.com/repos/mmdm95/sim-form/zipball/7015e1b0b22b785752930606a6dfa4bdf4dda41b",
+                "reference": "7015e1b0b22b785752930606a6dfa4bdf4dda41b",
                 "shasum": ""
             },
             "require": {
@@ -838,7 +838,7 @@
                 }
             ],
             "description": "A simple yet nice form library",
-            "time": "2020-11-18T23:38:48+00:00"
+            "time": "2020-12-04T11:38:32+00:00"
         },
         {
             "name": "mmdm/sim-hit-counter",
@@ -1492,16 +1492,16 @@
         },
         {
             "name": "symfony/console",
-            "version": "v5.1.8",
+            "version": "v5.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/console.git",
-                "reference": "e0b2c29c0fa6a69089209bbe8fcff4df2a313d0e"
+                "reference": "3e0564fb08d44a98bd5f1960204c958e57bd586b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/console/zipball/e0b2c29c0fa6a69089209bbe8fcff4df2a313d0e",
-                "reference": "e0b2c29c0fa6a69089209bbe8fcff4df2a313d0e",
+                "url": "https://api.github.com/repos/symfony/console/zipball/3e0564fb08d44a98bd5f1960204c958e57bd586b",
+                "reference": "3e0564fb08d44a98bd5f1960204c958e57bd586b",
                 "shasum": ""
             },
             "require": {
@@ -1562,6 +1562,12 @@
             ],
             "description": "Symfony Console Component",
             "homepage": "https://symfony.com",
+            "keywords": [
+                "cli",
+                "command line",
+                "console",
+                "terminal"
+            ],
             "funding": [
                 {
                     "url": "https://symfony.com/sponsor",
@@ -1576,7 +1582,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2020-10-24T12:01:57+00:00"
+            "time": "2020-11-28T11:24:18+00:00"
         },
         {
             "name": "symfony/polyfill-ctype",
@@ -2274,16 +2280,16 @@
         },
         {
             "name": "symfony/string",
-            "version": "v5.1.8",
+            "version": "v5.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/string.git",
-                "reference": "a97573e960303db71be0dd8fda9be3bca5e0feea"
+                "reference": "40e975edadd4e32cd16f3753b3bad65d9ac48242"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/string/zipball/a97573e960303db71be0dd8fda9be3bca5e0feea",
-                "reference": "a97573e960303db71be0dd8fda9be3bca5e0feea",
+                "url": "https://api.github.com/repos/symfony/string/zipball/40e975edadd4e32cd16f3753b3bad65d9ac48242",
+                "reference": "40e975edadd4e32cd16f3753b3bad65d9ac48242",
                 "shasum": ""
             },
             "require": {
@@ -2350,7 +2356,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2020-10-24T12:01:57+00:00"
+            "time": "2020-10-24T12:08:07+00:00"
         },
         {
             "name": "vlucas/phpdotenv",
@@ -2430,21 +2436,21 @@
         },
         {
             "name": "voku/anti-xss",
-            "version": "4.1.30",
+            "version": "4.1.31",
             "source": {
                 "type": "git",
                 "url": "https://github.com/voku/anti-xss.git",
-                "reference": "ff6e54f4a98ad1cd28f8b4a0f3c3f92f3c421f0a"
+                "reference": "22dea9be8dbffa466995ea87a12da5f3bce874bb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/voku/anti-xss/zipball/ff6e54f4a98ad1cd28f8b4a0f3c3f92f3c421f0a",
-                "reference": "ff6e54f4a98ad1cd28f8b4a0f3c3f92f3c421f0a",
+                "url": "https://api.github.com/repos/voku/anti-xss/zipball/22dea9be8dbffa466995ea87a12da5f3bce874bb",
+                "reference": "22dea9be8dbffa466995ea87a12da5f3bce874bb",
                 "shasum": ""
             },
             "require": {
                 "php": ">=7.0.0",
-                "voku/portable-utf8": "~5.4.50"
+                "voku/portable-utf8": "~5.4.51"
             },
             "require-dev": {
                 "phpunit/phpunit": "~6.0 || ~7.0 || ~9.0"
@@ -2505,7 +2511,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2020-11-12T00:30:57+00:00"
+            "time": "2020-12-02T02:10:30+00:00"
         },
         {
             "name": "voku/portable-ascii",
@@ -2579,16 +2585,16 @@
         },
         {
             "name": "voku/portable-utf8",
-            "version": "5.4.50",
+            "version": "5.4.51",
             "source": {
                 "type": "git",
                 "url": "https://github.com/voku/portable-utf8.git",
-                "reference": "f14ed68ea9ced6639e71ca989c6d907892115ba0"
+                "reference": "578f5266725dc9880483d24ad0cfb39f8ce170f7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/voku/portable-utf8/zipball/f14ed68ea9ced6639e71ca989c6d907892115ba0",
-                "reference": "f14ed68ea9ced6639e71ca989c6d907892115ba0",
+                "url": "https://api.github.com/repos/voku/portable-utf8/zipball/578f5266725dc9880483d24ad0cfb39f8ce170f7",
+                "reference": "578f5266725dc9880483d24ad0cfb39f8ce170f7",
                 "shasum": ""
             },
             "require": {
@@ -2670,7 +2676,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2020-11-12T00:17:47+00:00"
+            "time": "2020-12-02T01:58:49+00:00"
         }
     ],
     "packages-dev": [],

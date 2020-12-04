@@ -327,6 +327,12 @@ window.MyGlobalVariables = {
             getCsrfTokenFromCookie: function () {
                 return window.TheCore.getCookie('CSRF-TOKEN');
             },
+            getCaptchaName: function (btn) {
+                var _ = this, val;
+                val = $(btn).find('.inp-captcha-name').val();
+                val = _.isString(val) && trim(val).length ? val : '';
+                return val;
+            },
             noop: function () {
             },
             //-----
@@ -570,6 +576,7 @@ window.MyGlobalVariables = {
         var
             shop = new window.TheShopBase(),
             variables = window.MyGlobalVariables,
+            core = window.TheCore,
             $this,
             captchaReloadBtn = $(variables.elements.captcha.refreshBtn);
 
@@ -577,8 +584,11 @@ window.MyGlobalVariables = {
         // CAPTCHA RELOAD
         //---------------------------------------------------------------
         captchaReloadBtn.on('click' + variables.namespace, function () {
+            var name;
+
             $this = $(this);
-            shop.captchaReload(window.captchaPageName, function () {
+            name = core.getCaptchaName($this);
+            shop.captchaReload(name, function () {
                 $this
                     .closest(variables.elements.captcha.mainContainer)
                     .find(variables.elements.captcha.container)

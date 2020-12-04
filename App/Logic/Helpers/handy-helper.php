@@ -1,5 +1,7 @@
 <?php
 
+use Pecee\Http\Url;
+
 /**
  * @return bool
  */
