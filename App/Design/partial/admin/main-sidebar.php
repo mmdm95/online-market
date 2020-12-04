@@ -114,12 +114,12 @@
                     </ul>
                 </li>
                 <li class="nav-item nav-item-submenu">
-                    <a href="#" class="nav-link"><i class="icon-bucket"></i> <span>جشنواره‌ها</span></a>
+                    <a href="#" class="nav-link"><i class="icon-gift"></i> <span>جشنواره‌ها</span></a>
 
                     <ul class="nav nav-group-sub" data-submenu-title="Layouts">
                         <li class="nav-item">
                             <a href="<?= url('admin.festival.add'); ?>" class="nav-link active">
-افزودن جشنواره
+                                افزودن جشنواره
                             </a>
                         </li>
                         <li class="nav-item">
@@ -212,7 +212,7 @@
                     <a href="<?= url('-'); ?>" class="nav-link">
                         <i class="icon-envelop3"></i>
                         <span>دسته‌بندی مطالب</span>
-                       </a>
+                    </a>
                 </li>
 
                 <!-- Connection -->
