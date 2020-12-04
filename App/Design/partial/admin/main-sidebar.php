@@ -113,6 +113,22 @@
                         </li>
                     </ul>
                 </li>
+                <li class="nav-item nav-item-submenu">
+                    <a href="#" class="nav-link"><i class="icon-bucket"></i> <span>جشنواره‌ها</span></a>
+
+                    <ul class="nav nav-group-sub" data-submenu-title="Layouts">
+                        <li class="nav-item">
+                            <a href="<?= url('admin.festival.add'); ?>" class="nav-link active">
+افزودن جشنواره
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="<?= url('admin.color.view'); ?>" class="nav-link">
+                                لیست رنگ‌ها
+                            </a>
+                        </li>
+                    </ul>
+                </li>
                 <li class="nav-item">
                     <a href="<?= url('admin.unit.view'); ?>" class="nav-link">
                         <i class="icon-unicode"></i>
@@ -175,13 +191,35 @@
                             </a>
                         </li>
                     </ul>
+
+                </li>
+                <li class="nav-item">
+                    <a href="<?= url('admin.return.order'); ?>" class="nav-link">
+                        <i class="icon-backspace2"></i>
+                        <span>
+									سفارشات مرجوعی
+                        </span>
+                    </a>
                 </li>
                 <!-- /financial and orders -->
+
+                <!-- Blog -->
+                <li class="nav-item-header">
+                    <div class="text-uppercase font-size-xs line-height-xs">وبلاگ</div>
+                    <i class="icon-menu" title="وبلاگ"></i>
+                </li>
+                <li class="nav-item">
+                    <a href="<?= url('-'); ?>" class="nav-link">
+                        <i class="icon-envelop3"></i>
+                        <span>دسته‌بندی مطالب</span>
+                       </a>
+                </li>
 
                 <!-- Connection -->
                 <li class="nav-item-header">
                     <div class="text-uppercase font-size-xs line-height-xs">ارتباطات</div>
-                    <i class="icon-menu" title="ارتباطات"></i></li>
+                    <i class="icon-menu" title="ارتباطات"></i>
+                </li>
                 <li class="nav-item">
                     <a href="<?= url('admin.contact-us.view'); ?>" class="nav-link">
                         <i class="icon-envelop3"></i>

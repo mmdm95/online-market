@@ -147,9 +147,24 @@ class Route implements IInitialize
                 /**
                  * Color Route
                  */
-                Router::get('/color/add', 'Admin\ColorController@add')->name('admin.color.add');
-                Router::get('/color/edit/{id}', 'Admin\ColorController@edit')->name('admin.color.edit');
-                Router::get('/color/view', 'Admin\ColorController@view')->name('admin.color.view');
+                Router::get('/color/add', 'Admin\FestivalController@add')->name('admin.festival.add');
+
+                /**
+                 * Festival Route
+                 */
+                Router::get('/festival/add', 'Admin\festivalController@add')->name('admin.festival.add');
+                Router::get('/festival/edit/{id}', 'Admin\FestivalController@edit')->name('admin.festival.edit');
+                Router::get('/festival/view', 'Admin\FestivalController@view')->name('admin.festival.view');
+
+                /**
+                 * Blog Category Route
+                 */
+                Router::get('/blog/category/add', 'Admin\BlogController@CategoryAdd')->name('admin.blog.category.add');
+                Router::get('/blog/category/edit/{id}', 'Admin\BlogController@CategoryEdit')->where([
+                    'id' => '[0-9]+',
+                ])->name('admin.blog.category.edit');
+                Router::get('blog/category/view', 'Admin\BlogController@CategoryView')->name('admin.blog.category.view');
+
 
                 /**
                  * Contact us Route
@@ -187,6 +202,7 @@ class Route implements IInitialize
                  */
                 Router::get('/order/view{id?}', 'Admin\OrderController@view')->name('admin.order.view');
                 Router::get('/order/badges', 'Admin\OrderController@badges')->name('admin.order.badges');
+                Router::get('/order/return-order/{id?}', 'Admin\OrderController@returnOrder')->name('admin.return.order');
 
                 /**
                  * Slider Route

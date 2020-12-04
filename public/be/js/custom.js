@@ -115,7 +115,7 @@ window.MyGlobalVariables.toasts.confirm.btnClasses.no = 'btn btn-link';
                 columnDefs: [{
                     orderable: false,
                     width: 100,
-                    targets: [5]
+                    targets: [2]
                 }],
                 dom: '<"datatable-header"fl><"datatable-scroll"t><"datatable-footer"ip>',
                 language: {

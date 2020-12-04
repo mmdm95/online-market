@@ -708,6 +708,179 @@ return [
                 ],
             ],
         ],
+        'view/festival/add' => [
+            'title' => 'پایار تأسیسات | افزودن جشنواره',
+            'common' => [
+                'admin-base',
+                'admin-form',
+                'admin'
+            ],
+            'sub_title' => 'افزودن جشنواره',
+            'breadcrumb' => [
+                [
+                    'url' => url('admin.index'),
+                    'icon' => 'icon-home2',
+                    'text' => 'خانه',
+                    'is_active' => false,
+                ],
+                [
+                    'url' => url('admin.festival.add'),
+                    'text' => 'مدیریت جشنواره',
+                    'is_active' => false,
+                ],
+                [
+                    'text' => 'افزودن جشنواره',
+                    'is_active' => true,
+                ],
+            ],
+        ],
+        'view/festival/edit' => [
+            'title' => 'پایار تأسیسات | افزودن جشنواره',
+            'common' => [
+                'admin-base',
+                'admin-form',
+                'admin'
+            ],
+            'sub_title' => 'ویرایش جشنواره',
+            'breadcrumb' => [
+                [
+                    'url' => url('admin.index'),
+                    'icon' => 'icon-home2',
+                    'text' => 'خانه',
+                    'is_active' => false,
+                ],
+                [
+                    'url' => url('admin.festival.view'),
+                    'text' => 'مدیریت جشنواره',
+                    'is_active' => false,
+                ],
+                [
+                    'text' => 'افزودن جشنواره',
+                    'is_active' => true,
+                ],
+            ],
+        ],
+        'view/festival/view' => [
+            'title' => 'پایار تأسیسات | مدیریت جشنواره',
+            'common' => [
+                'admin-base',
+                'admin-table',
+                'admin'
+            ],
+            'sub_title' => 'ویرایش جشنواره',
+            'breadcrumb' => [
+                [
+                    'url' => url('admin.index'),
+                    'icon' => 'icon-home2',
+                    'text' => 'خانه',
+                    'is_active' => false,
+                ],
+                [
+                    'url' => url('admin.festival.view'),
+                    'text' => 'مدیریت جشنواره',
+                    'is_active' => false,
+                ],
+                [
+                    'text' => 'افزودن جشنواره',
+                    'is_active' => true,
+                ],
+            ],
+        ],
+
+        'view/blog/category/add' => [
+            'title' => 'پایار تأسیسات | افزودن دسته',
+            'common' => [
+                'admin-base',
+                'admin-form',
+                'admin'
+            ],
+            'sub_title' => 'مدیریت دسته‌بندی‌ها',
+            'breadcrumb' => [
+                [
+                    'url' => url('admin.index'),
+                    'icon' => 'icon-home2',
+                    'text' => 'خانه',
+                    'is_active' => false,
+                ],
+                [
+                    'url' => url('admin.blog.view'),
+                    'text' => 'وبلاگ',
+                    'is_active' => false,
+                ],
+                [
+                    'url' => url('admin.blog.category.add'),
+                    'text' => 'دسته‌بندی‌ها',
+                    'is_active' => false,
+                ],
+                [
+                    'text' => 'افزودن دسته',
+                    'is_active' => true,
+                ],
+            ],
+        ],
+        'view/blog/category/edit' => [
+            'title' => 'پایار تأسیسات | ویرایش دسته',
+            'common' => [
+                'admin-base',
+                'admin-form',
+                'admin'
+            ],
+            'sub_title' => 'ویرایش دسته‌بندی‌',
+            'breadcrumb' => [
+                [
+                    'url' => url('admin.index'),
+                    'icon' => 'icon-home2',
+                    'text' => 'خانه',
+                    'is_active' => false,
+                ],
+                [
+                    'url' => url('admin.blog.view'),
+                    'text' => 'وبلاگ',
+                    'is_active' => false,
+                ],
+                [
+                    'url' => url('admin.category.add'),
+                    'text' => 'مدیریت دسته‌بندی‌ها',
+                    'is_active' => false,
+                ],
+                [
+                    'text' => 'ویرایش دسته',
+                    'is_active' => true,
+                ],
+            ],
+        ],
+        'view/blog/category/view' => [
+            'title' => 'پایار تأسیسات | مشاهده دسته‌ها',
+            'common' => [
+                'admin-base',
+                'admin-table',
+                'admin'
+            ],
+            'sub_title' => 'مدیریت دسته‌بندی‌ها',
+            'breadcrumb' => [
+                [
+                    'url' => url('admin.index'),
+                    'icon' => 'icon-home2',
+                    'text' => 'خانه',
+                    'is_active' => false,
+                ],
+                [
+                    'url' => url('admin.blog.view'),
+                    'text' => 'وبلاگ',
+                    'is_active' => false,
+                ],
+                [
+                    'url' => url('admin.blog.category.view'),
+                    'text' => 'دسته‌بندی‌ها',
+                    'is_active' => false,
+                ],
+                [
+                    'text' => 'دسته‌بندی‌ها',
+                    'is_active' => true,
+                ],
+            ],
+        ],
+
         'view/contact-us/view' => [
             'title' => 'پایار تأسیسات | مدیریت تماس‌ها',
             'common' => [
@@ -1034,6 +1207,57 @@ return [
                 ],
                 [
                     'text' => 'وضعیت سفارش',
+                    'is_active' => true,
+                ],
+            ],
+
+        ],
+        'view/order/return-order' => [
+            'title' => 'پایار تأسیسات | سفارشات مرجوعی',
+            'common' => [
+                'admin-base',
+                'admin-table',
+                'admin-form',
+                'admin'
+            ],
+            'sub_title' => 'مدیریت سفارشات مرجوعی',
+            'breadcrumb' => [
+                [
+                    'url' => url('admin.index'),
+                    'icon' => 'icon-home2',
+                    'text' => 'خانه',
+                    'is_active' => false,
+                ],
+                [
+                    'text' => 'سفارشات مرجوعی',
+                    'is_active' => true,
+                ],
+            ],
+
+        ],
+        'view/order/return-order-detail' => [
+            'title' => 'پایار تأسیسات | سفارشات مرجوعی',
+            'common' => [
+                'admin-base',
+                'admin-table',
+                'admin-form',
+                'admin'
+            ],
+            'sub_title' => 'مشاهده سفارشات مرجوعی',
+            'breadcrumb' => [
+                [
+                    'url' => url('admin.index'),
+                    'icon' => 'icon-home2',
+                    'text' => 'خانه',
+                    'is_active' => false,
+                ],
+                [
+                    'url' => url('admin.order.return'),
+                    'text' => 'مدیریت سفارشات مرجوعی',
+                    'is_active' => false,
+                ],
+                [
+                    'text' => 'سفارشات مرجوعی',
                     'is_active' => true,
                 ],
             ],
