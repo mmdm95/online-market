@@ -13,7 +13,8 @@
     <title><?= $title ?? ''; ?></title>
 
     <!-- Favicon Icon -->
-    <link rel="shortcut icon" type="image/x-icon" href="<?= url('image.show') . \config()->get('settings.favicon.value'); ?>">
+    <link rel="shortcut icon" type="image/x-icon"
+          href="<?= url('image.show') . \config()->get('settings.favicon.value'); ?>">
 
     <?= $css['top'] ?? ''; ?>
     <?= $js['top'] ?? ''; ?>
@@ -30,7 +31,20 @@
 </div>
 <!-- END LOADER -->
 
+<!-- START HEADER -->
+<?php load_partial('main/menu-main', [
+    'menu' => $menu ?? [],
+    'menu_images' => $menu_images ?? [],
+    'categories' => $categories ?? [],
+    'cart_section' => $cart_section ?? '',
+]); ?>
+<!-- END HEADER -->
+
 <?= $content; ?>
+
+<!-- START FOOTER -->
+<?php load_partial('main/footer-main'); ?>
+<!-- END FOOTER -->
 
 <a href="#" class="scrollup" style="display: none;"><i class="ion-ios-arrow-up"></i></a>
 

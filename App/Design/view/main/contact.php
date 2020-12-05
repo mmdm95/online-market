@@ -56,6 +56,9 @@ $validator = form_validator();
     </div>
     <!-- END SECTION CONTACT -->
 
+    <p class="ltr">
+        <?= url('home.contact')->getOriginalUrl(); ?>
+    </p>
     <!-- START SECTION CONTACT -->
     <div class="section pt-0">
         <div class="container">
@@ -68,7 +71,7 @@ $validator = form_validator();
                         پیام خود را با ما در میان بگذارید.
                     </p>
                     <div class="field_form">
-                        <form action="<?= rtrim(url('home.contact'), '/'); ?>#__contact_form_container"
+                        <form action="<?= url('home.contact')->getOriginalUrl(); ?>#__contact_form_container"
                               method="post" id="__form_contact">
                             <?php load_partial('main/message/message-form', [
                                 'errors' => $contact_errors ?? [],
@@ -79,32 +82,32 @@ $validator = form_validator();
                                 <input type="hidden" name="csrf_token" value="<?= csrf_token(); ?>" data-ignored>
                                 <div class="form-group col-md-6">
                                     <input placeholder="نام را وارد کنید *"
-                                           class="form-control" name="inp-contact-name" type="text"
+                                           class="form-control" name="inp-contact-name" type="text" required
                                            value="<?= $validator->setInput('inp-contact-name'); ?>">
                                 </div>
                                 <div class="form-group col-md-6 ltr">
                                     <input placeholder="ایمیل را وارد کنید" class="form-control text-left"
-                                           name="inp-contact-email" type="text"
+                                           name="inp-contact-email" type="text" required
                                            value="<?= $validator->setInput('inp-contact-email'); ?>">
                                 </div>
                                 <div class="form-group col-md-6">
                                     <input placeholder="شماره موبایل خود را وارد کنید *"
-                                           class="form-control" name="inp-contact-mobile"
+                                           class="form-control" name="inp-contact-mobile" type="text" required
                                            value="<?= $validator->setInput('inp-contact-mobile'); ?>">
                                 </div>
                                 <div class="form-group col-md-6">
                                     <input placeholder="موضوع را وارد کنید" class="form-control"
-                                           name="inp-contact-subject"
+                                           name="inp-contact-subject" type="text" required
                                            value="<?= $validator->setInput('inp-contact-subject'); ?>">
                                 </div>
                                 <div class="form-group col-md-12">
                                     <textarea placeholder="پیام *" class="form-control"
-                                              name="inp-contact-message"
+                                              name="inp-contact-message" required
                                               rows="4"><?= $validator->setInput('inp-contact-message'); ?></textarea>
                                 </div>
                                 <div class="form-group col-md-6">
                                     <input placeholder="کد تصویر را وارد کنید *" class="form-control"
-                                           name="inp-contact-captcha">
+                                           name="inp-contact-captcha" required>
                                 </div>
                                 <div class="form-group col-md-6 d-flex justify-content-center align-items-center __captcha_main_container">
                                     <div class="__captcha_container">

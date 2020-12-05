@@ -9,7 +9,7 @@ return [
          * Notfound error layout.
          * Note: if you don't have any layout for notfound, make sure this parameter is [null]
          */
-        'layout' => 'main-index',
+        'layout' => 'main',
 
         /**
          * Notfound error template

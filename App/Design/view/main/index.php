@@ -2,15 +2,6 @@
 <?php load_partial('main/message/popup-newsletter'); ?>
 <!-- End Screen Load Popup Section -->
 
-<!-- START HEADER -->
-<?php load_partial('main/menu-main', [
-    'menu' => $menu ?? [],
-    'menu_images' => $menu_images ?? [],
-    'categories' => $categories ?? [],
-    'cart_section' => $cart_section ?? '',
-]); ?>
-<!-- END HEADER -->
-
 <!-- START SECTION BANNER -->
 <?php load_partial('main/slider-main', [
     'main_slider' => $main_slider ?? [],
@@ -62,7 +53,3 @@
 
 </div>
 <!-- END MAIN CONTENT -->
-
-<!-- START FOOTER -->
-<?php load_partial('main/footer-main'); ?>
-<!-- END FOOTER -->

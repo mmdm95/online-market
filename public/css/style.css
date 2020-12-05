@@ -77,12 +77,12 @@ p {
 
 a {
     color: #292b2c;
-    text-decoration: none;
+    text-decoration: none !important;
     -webkit-transition: all 0.3s ease-in-out;
     transition: all .3s ease-in-out;
 }
 
-a:hover {
+a:hover, .btn-link:hover {
     color: #FF324D;
     text-decoration: none;
 }

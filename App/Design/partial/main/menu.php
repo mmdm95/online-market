@@ -16,7 +16,7 @@
                     <div class="text-center text-md-right">
                         <ul class="header_list">
                             <li><a href="<?= url('home.login'); ?>"><i class="ti-user"></i><span>ورود</span></a></li>
-                            <li><a href="<?= url('home.register'); ?>"><i class="linearicons-user-plus"></i><span>ثبت نام</span></a>
+                            <li><a href="<?= url('home.signup'); ?>"><i class="linearicons-user-plus"></i><span>ثبت نام</span></a>
                             </li>
                         </ul>
                     </div>
@@ -80,7 +80,7 @@
                         </a>
                         <div class="search_wrap">
                             <span class="close-search"><i class="ion-ios-close-empty"></i></span>
-                            <form action="<?= url('home.search'); ?>" method="get">
+                            <form action="<?= url('home.search')->getOriginalUrl(); ?>" method="get">
                                 <input type="text" placeholder="جستجو" class="form-control" id="search_input">
                                 <button type="submit" class="search_icon"><i class="ion-ios-search-strong"></i></button>
                             </form>

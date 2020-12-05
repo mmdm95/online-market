@@ -22,7 +22,7 @@ class RegisterController extends AbstractHomeController
      */
     public function index()
     {
-        $this->setLayout($this->main_layout)->setTemplate('view/signup');
+        $this->setLayout($this->main_layout)->setTemplate('view/main/signup');
 
         return $this->render([]);
     }

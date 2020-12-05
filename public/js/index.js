@@ -66,16 +66,16 @@
         //---------------------------------------------------------------
         // CONTACT US FORM
         //---------------------------------------------------------------
-        // contactUsForm = $(variables.elements.contactUs.form);
-        // contactUsConstraints = core.constraints.contactUs;
-        // contactUsForm.submit(function () {
-        //     formValues = shop.forms.convertFormObjectNumbersToEnglish(window.validate.collectFormValues(this), 'contactUs');
-        //     formErrors = window.validate(formValues, contactUsConstraints);
-        //     if (!formErrors) {
-        //
-        //     }
-        //     shop.forms.showFormErrors(formErrors);
-        //     return false;
-        // });
+        contactUsForm = $(variables.elements.contactUs.form);
+        contactUsConstraints = core.constraints.contactUs;
+        contactUsForm.submit(function () {
+            formValues = shop.forms.convertFormObjectNumbersToEnglish(window.validate.collectFormValues(this), 'contactUs');
+            formErrors = window.validate(formValues, contactUsConstraints);
+            if (!formErrors) {
+                return true;
+            }
+            shop.forms.showFormErrors(formErrors);
+            return false;
+        });
     });
 })(jQuery);

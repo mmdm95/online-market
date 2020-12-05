@@ -67,7 +67,7 @@ class ContactForm implements IPageForm
             ->stopValidationAfterFirstError(false)
             ->required('{alias} ' . 'اجباری می‌باشد.')
             ->stopValidationAfterFirstError(true)
-            ->persianMobile('موبایل نامعتبر است.');
+            ->persianMobile('{alias} ' . 'نامعتبر است.');
         // subject
         $validator
             ->setFields('inp-contact-subject')

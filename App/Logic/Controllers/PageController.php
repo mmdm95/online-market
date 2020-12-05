@@ -7,6 +7,7 @@ use App\Logic\Forms\ContactForm;
 use App\Logic\Models\ContactUsModel;
 use App\Logic\Models\FAQModel;
 use App\Logic\Models\OurTeamModel;
+use App\Logic\Models\StaticPageModel;
 use App\Logic\Models\UserModel;
 use App\Logic\Validations\FormValidations;
 use Sim\Auth\DBAuth;
@@ -117,6 +118,53 @@ class PageController extends AbstractHomeController
 
         $this->setLayout($this->main_layout)->setTemplate('view/main/contact');
         return $this->render($data);
+    }
+
+    /**
+     * @param $url
+     * @return string
+     * @throws ConfigNotRegisteredException
+     * @throws ControllerException
+     * @throws IFileNotExistsException
+     * @throws IInvalidVariableNameException
+     * @throws MethodNotFoundException
+     * @throws ParameterHasNoDefaultValueException
+     * @throws PathNotRegisteredException
+     * @throws ServiceNotFoundException
+     * @throws ServiceNotInstantiableException
+     * @throws \ReflectionException
+     */
+    public function pages($url)
+    {
+        /**
+         * @var StaticPageModel $pageModel
+         */
+        $pageModel = container()->get(StaticPageModel::class);
+
+        $page = $pageModel->get(['title', 'body'], 'url=:url', ['url' => $url ?? '']);
+
+        if (!count($page)) {
+            $this->show404();
+        } else {
+            $page = $page[0];
+            $this->setLayout($this->main_layout)->setTemplate('view/main/static-page');
+            return $this->render([
+                'title' => title_concat(\config()->get('settings.title.value'), $page['title']),
+                'sub_title' => $page['title'],
+                'breadcrumb' => [
+                    [
+                        'url' => url('home.index'),
+                        'text' => 'خانه',
+                        'is_active' => false,
+                    ],
+                    [
+                        'text' => $page['title'],
+                        'is_active' => true,
+                    ],
+                ],
+                'page_content' => $page['body'],
+            ]);
+        }
     }
 
     /**

@@ -396,8 +396,85 @@ return [
         /******************************
          ************ Home ************
          *****************************/
+        'view/main/404' => [
+            'title' => title_concat(\config()->get('settings.title.value'), 'صفحه مورد نظر پیدا نشد'),
+            'common' => [
+                'default',
+                'default-cart',
+            ],
+        ],
         'view/main/index' => [
             'title' => title_concat(\config()->get('settings.title.value'), 'صفحه اصلی'),
+            'common' => [
+                'default',
+                'default-cart',
+            ],
+        ],
+        'view/main/login' => [
+            'title' => title_concat(\config()->get('settings.title.value'), 'صفحه ورود'),
+            'common' => [
+                'default',
+                'default-cart',
+            ],
+        ],
+        'view/main/signup' => [
+            'title' => title_concat(\config()->get('settings.title.value'), 'صفحه ثبت نام'),
+            'common' => [
+                'default',
+                'default-cart',
+            ],
+        ],
+        'view/main/forget_password/step1' => [
+            'title' => title_concat(\config()->get('settings.title.value'), 'فراموشی کلمه عبور' , 'وارد کردن شماره موبایل'),
+            'common' => [
+                'default',
+                'default-cart',
+            ],
+            'stepy' => [
+                [
+                    'text' => 'وارد کردن شماره موبایل',
+                    'icon' => '',
+                    'is_active' => true,
+                ],
+                [
+                    'text' => 'وارد کردن کد ارسال شده',
+                    'icon' => '',
+                    'is_active' => false,
+                ],
+                [
+                    'text' => 'تغییر کلمه عبور',
+                    'icon' => '',
+                    'is_active' => false,
+                ],
+                [
+                    'text' => 'اتمام عملیات',
+                    'icon' => '',
+                    'is_active' => false,
+                ],
+            ],
+        ],
+        'view/main/forget_password/step2' => [
+            'title' => title_concat(\config()->get('settings.title.value'), 'فراموشی کلمه عبور' , 'کد ارسال شده'),
+            'common' => [
+                'default',
+                'default-cart',
+            ],
+        ],
+        'view/main/forget_password/step3' => [
+            'title' => title_concat(\config()->get('settings.title.value'), 'فراموشی کلمه عبور' , 'تغییر کلمه عبور'),
+            'common' => [
+                'default',
+                'default-cart',
+            ],
+        ],
+        'view/main/forget_password/step4' => [
+            'title' => title_concat(\config()->get('settings.title.value'), 'فراموشی کلمه عبور' , 'اتمام'),
+            'common' => [
+                'default',
+                'default-cart',
+            ],
+        ],
+        'view/main/static-page' => [
             'common' => [
                 'default',
                 'default-cart',

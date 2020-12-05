@@ -118,8 +118,8 @@ class Route implements IInitialize
                  * User Route
                  */
                 Router::get('/user/view/{id?}', 'Admin\UserController@view')->where([
-                        'id' => '[0-9]+',
-                    ])->name('admin.user.view');
+                    'id' => '[0-9]+',
+                ])->name('admin.user.view');
                 Router::get('/user/add', 'Admin\UserController@add')->name('admin.user.add');
                 Router::get('/user/edit/{id}', 'Admin\UserController@edit')->where([
                     'id' => '[0-9]+',
@@ -246,10 +246,15 @@ class Route implements IInitialize
             Router::get('/about', 'PageController@about')->name('home.about');
             Router::get('/faq', 'PageController@faq')->name('home.faq');
             Router::form('/contact', 'PageController@contact')->name('home.contact');
+            Router::get('/pages/{url}', 'PageController@pages')->where([
+                'url' => '.+',
+            ])->name('home.pages');
 
             Router::get('/login', 'LoginController@index')->name('home.login');
-
-            Router::get('/register', 'RegisterController@index')->name('home.register');
+            Router::form('/forget-password/{step?}', 'LoginController@forgetPassrowd')->where([
+                'step' => '^step(1|2|3|4)$',
+            ])->name('home.forget-password');
+            Router::get('/signup', 'RegisterController@index')->name('home.signup');
 
             Router::get('/cart', 'CartController@index')->name('home.cart');
 
