@@ -22,7 +22,7 @@ class LoginController extends AbstractHomeController
      */
     public function index()
     {
-        $this->setLayout($this->main_layout)->setTemplate('view/login');
+        $this->setLayout($this->main_layout)->setTemplate('view/main/login');
 
         return $this->render([]);
     }

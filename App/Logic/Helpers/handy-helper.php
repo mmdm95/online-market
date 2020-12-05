@@ -1,6 +1,11 @@
 <?php
 
-use Pecee\Http\Url;
+use App\Logic\Validations\ExtendedValidator;
+use Sim\Container\Exceptions\MethodNotFoundException;
+use Sim\Container\Exceptions\ParameterHasNoDefaultValueException;
+use Sim\Container\Exceptions\ServiceNotFoundException;
+use Sim\Container\Exceptions\ServiceNotInstantiableException;
+use Sim\Form\FormValidator;
 
 /**
  * @return bool
@@ -60,4 +65,17 @@ function get_percentage($num, $total, bool $low = true): int
 
     if (!$low) return ceil($percentage);
     return floor($percentage);
+}
+
+/**
+ * @return FormValidator
+ * @throws ReflectionException
+ * @throws MethodNotFoundException
+ * @throws ParameterHasNoDefaultValueException
+ * @throws ServiceNotFoundException
+ * @throws ServiceNotInstantiableException
+ */
+function form_validator(): FormValidator
+{
+    return container()->get(ExtendedValidator::class);
 }

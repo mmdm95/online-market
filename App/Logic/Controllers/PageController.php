@@ -109,9 +109,9 @@ class PageController extends AbstractHomeController
                  */
                 $xss = container()->get(AntiXSS::class);
                 $data['contact_success'] = 'اطلاعات با موفقیت ثبت شد.';
-                $contactModel->insert([
-                    '' => '',
-                ]);
+//                $contactModel->insert([
+//                    '' => '',
+//                ]);
             } else {
                 $data['contact_errors'] = $errors;
             }

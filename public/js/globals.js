@@ -179,6 +179,10 @@ window.MyGlobalVariables = {
                         allowEmpty: false,
                         message: '^' + 'فیلد موضوع را خالی نگذارید.',
                     },
+                    length: {
+                        maximum: 250,
+                        message: '^' + 'فیلد موضوع باید حداکثر دارای ۲۵۰ کاراکتر باشد.',
+                    }
                 },
                 message: {
                     presence: {

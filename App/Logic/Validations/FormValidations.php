@@ -7,6 +7,7 @@ use Sim\Container\Exceptions\ParameterHasNoDefaultValueException;
 use Sim\Container\Exceptions\ServiceNotFoundException;
 use Sim\Container\Exceptions\ServiceNotInstantiableException;
 use Sim\Form\Exceptions\FormException;
+use Sim\Form\FormValue;
 
 class FormValidations
 {
@@ -25,7 +26,7 @@ class FormValidations
      */
     public function __construct()
     {
-        $this->validator = container()->get(ExtendedValidator::class);
+        $this->validator = form_validator();
         $this->validator->reset();
     }
 
@@ -50,30 +51,32 @@ class FormValidations
         // name
         $this->validator
             ->setFields('inp-contact-name')
-            ->stopValidationAfterFirstError(true)
-            ->required('فیلد' . ' {alias} ' . 'اجباری می‌باشد.')
             ->stopValidationAfterFirstError(false)
-            ->persianAlpha('فیلد' . ' {alias} ' . 'باید از حروف فارسی باشد.')
-            ->lessThanEqualLength(30, 'فیلد' . ' {alias} ' . 'باید کمتر از' . ' {max} ' . 'کاراکتر باشد.');
+            ->required('{alias} ' . 'اجباری می‌باشد.')
+            ->stopValidationAfterFirstError(true)
+            ->persianAlpha('{alias} ' . 'باید از حروف فارسی باشد.')
+            ->lessThanEqualLength(30, '{alias} ' . 'باید کمتر از' . ' {max} ' . 'کاراکتر باشد.');
         // mobile
         $this->validator
             ->setFields('inp-contact-mobile')
-            ->stopValidationAfterFirstError(true)
-            ->required('فیلد' . ' {alias} ' . 'اجباری می‌باشد.')
             ->stopValidationAfterFirstError(false)
+            ->required('{alias} ' . 'اجباری می‌باشد.')
+            ->stopValidationAfterFirstError(true)
             ->persianMobile('موبایل نامعتبر است.');
         // subject
         $this->validator
             ->setFields('inp-contact-subject')
+            ->stopValidationAfterFirstError(false)
+            ->required('{alias} ' . 'اجباری می‌باشد.')
             ->stopValidationAfterFirstError(true)
-            ->required('فیلد' . ' {alias} ' . 'اجباری می‌باشد.')
-            ->persianAlpha('فیلد' . ' {alias} ' . 'باید از حروف فارسی باشد.')
-            ->lessThanEqualLength(250, 'فیلد' . ' {alias} ' . 'باید کمتر از' . ' {max} ' . 'کاراکتر باشد.');
+            ->persianAlpha('{alias} ' . 'باید از حروف فارسی باشد.')
+            ->lessThanEqualLength(250, '{alias} ' . 'باید کمتر از' . ' {max} ' . 'کاراکتر باشد.');
         // message
         $this->validator
             ->setFields('inp-contact-message')
-            ->stopValidationAfterFirstError(true)
-            ->required('فیلد' . ' {alias} ' . 'اجباری می‌باشد.');
+            ->stopValidationAfterFirstError(false)
+            ->required('{alias} ' . 'اجباری می‌باشد.')
+            ->stopValidationAfterFirstError(true);
 
         return [
             $this->validator->getStatus(),

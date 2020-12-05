@@ -1,3 +1,7 @@
+<?php
+$validator = form_validator();
+?>
+
 <!-- Home Popup Section -->
 <?php load_partial('main/popup-newsletter'); ?>
 <!-- End Screen Load Popup Section -->
@@ -64,7 +68,7 @@
                         پیام خود را با ما در میان بگذارید.
                     </p>
                     <div class="field_form">
-                        <form action="<?= rtrim(url('home.contact'), '/'); ?>"
+                        <form action="<?= rtrim(url('home.contact'), '/'); ?>#__contact_form_container"
                               method="post" id="__form_contact">
                             <?php load_partial('main/message-form', [
                                 'errors' => $contact_errors ?? [],
@@ -74,23 +78,28 @@
                                 <input type="hidden" name="csrf_token" value="<?= csrf_token(); ?>" data-ignored>
                                 <div class="form-group col-md-6">
                                     <input placeholder="نام را وارد کنید *"
-                                           class="form-control" name="inp-contact-name" type="text">
+                                           class="form-control" name="inp-contact-name" type="text"
+                                           value="<?= $validator->setInput('inp-contact-name'); ?>">
                                 </div>
                                 <div class="form-group col-md-6 ltr">
                                     <input placeholder="ایمیل را وارد کنید" class="form-control text-left"
-                                           name="inp-contact-email" type="text">
+                                           name="inp-contact-email" type="text"
+                                           value="<?= $validator->setInput('inp-contact-email'); ?>">
                                 </div>
                                 <div class="form-group col-md-6">
                                     <input placeholder="شماره موبایل خود را وارد کنید *"
-                                           class="form-control" name="inp-contact-mobile">
+                                           class="form-control" name="inp-contact-mobile"
+                                           value="<?= $validator->setInput('inp-contact-mobile'); ?>">
                                 </div>
                                 <div class="form-group col-md-6">
                                     <input placeholder="موضوع را وارد کنید" class="form-control"
-                                           name="inp-contact-subject">
+                                           name="inp-contact-subject"
+                                           value="<?= $validator->setInput('inp-contact-subject'); ?>">
                                 </div>
                                 <div class="form-group col-md-12">
                                     <textarea placeholder="پیام *" class="form-control"
-                                              name="inp-contact-message" rows="4"></textarea>
+                                              name="inp-contact-message"
+                                              rows="4"><?= $validator->setInput('inp-contact-message'); ?></textarea>
                                 </div>
                                 <div class="form-group col-md-6">
                                     <input placeholder="کد تصویر را وارد کنید *" class="form-control"
@@ -101,7 +110,8 @@
                                     </div>
                                     <button class="btn btn-link text_default p-2 ml-3 __captcha_regenerate_btn"
                                             type="button" aria-label="regenerate captcha">
-                                        <input type="hidden" name="inp-captcha-name" value="<?= url() . '__form_contact'; ?>">
+                                        <input type="hidden" name="inp-captcha-name"
+                                               value="<?= url() . '__form_contact'; ?>">
                                         <i class="icon-refresh icon-2x" aria-hidden="true"></i>
                                     </button>
                                 </div>

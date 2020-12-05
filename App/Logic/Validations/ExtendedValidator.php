@@ -80,7 +80,7 @@ class ExtendedValidator extends AbstractCustomValidation
         $this->assertRequirements();
         $name = $this->fields;
         $this->_execute($name, $message, __FUNCTION__, function ($value) {
-            return !CaptchaUtil::verify($value, input()->post('inp-captcha-name', ''));
+            return CaptchaUtil::verify($value, input()->post('inp-captcha-name', '')->getValue());
         }, $callback);
         return $this;
     }

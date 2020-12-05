@@ -27,6 +27,11 @@ body {
     margin-left: 5px;
 }
 
+body[dir="rtl"] .alert .close {
+    margin-left: 0;
+    margin-right: 10px;
+}
+
 [type="button"]:not(:disabled), [type="reset"]:not(:disabled), [type="submit"]:not(:disabled), button:not(:disabled) {
     cursor: pointer;
 }
