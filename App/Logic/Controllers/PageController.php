@@ -3,10 +3,13 @@
 namespace App\Logic\Controllers;
 
 use App\Logic\Abstracts\AbstractHomeController;
+use App\Logic\Forms\ContactForm;
 use App\Logic\Models\ContactUsModel;
 use App\Logic\Models\FAQModel;
 use App\Logic\Models\OurTeamModel;
+use App\Logic\Models\UserModel;
 use App\Logic\Validations\FormValidations;
+use Sim\Auth\DBAuth;
 use Sim\Container\Exceptions\MethodNotFoundException;
 use Sim\Container\Exceptions\ParameterHasNoDefaultValueException;
 use Sim\Container\Exceptions\ServiceNotFoundException;
@@ -95,23 +98,18 @@ class PageController extends AbstractHomeController
 
         if (is_post()) {
             /**
-             * @var FormValidations $contactForm
+             * @var ContactForm $contactForm
              */
-            $contactForm = container()->get(FormValidations::class);
-            [$status, $errors] = $contactForm->contact();
+            $contactForm = container()->get(ContactForm::class);
+            [$status, $errors] = $contactForm->validate();
             if ($status) {
-                /**
-                 * @var ContactUsModel $contactModel
-                 */
-                $contactModel = container()->get(ContactUsModel::class);
-                /**
-                 * @var AntiXSS $xss
-                 */
-                $xss = container()->get(AntiXSS::class);
-                $data['contact_success'] = 'اطلاعات با موفقیت ثبت شد.';
-//                $contactModel->insert([
-//                    '' => '',
-//                ]);
+                $res = $contactForm->store();
+                // success or warning message
+                if ($res) {
+                    $data['contact_success'] = 'اطلاعات با موفقیت ثبت شد.';
+                } else {
+                    $data['contact_warning'] = 'خطا در ارتباط با سرور، لطفا دوباره تلاش کنید.';
+                }
             } else {
                 $data['contact_errors'] = $errors;
             }
@@ -119,11 +117,6 @@ class PageController extends AbstractHomeController
 
         $this->setLayout($this->main_layout)->setTemplate('view/main/contact');
         return $this->render($data);
-    }
-
-    public function contactPost()
-    {
-        var_dump(is_post(), request()->getMethod());
     }
 
     /**

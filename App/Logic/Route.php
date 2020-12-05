@@ -260,7 +260,9 @@ class Route implements IInitialize
             Router::get('/compare', 'CompareController@compare')->name('home.compare');
 
             Router::get('/blog/search', 'BlogController@search')->name('home.blog.search');
-            Router::get('/blog/{id}/{slug?}', 'BlogController@show')->name('home.blog.show');
+            Router::get('/blog/{id}/{slug?}', 'BlogController@show')->where([
+                'id' => '[0-9]+',
+            ])->name('home.blog.show');
         });
     }
 

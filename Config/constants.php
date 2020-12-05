@@ -48,6 +48,10 @@ defined("PLACEHOLDER_VIDEO") OR define("PLACEHOLDER_VIDEO", __DIR__ . '/../publi
 // public access directory name
 defined("PUBLIC_ACCESS_DIR") OR define("PUBLIC_ACCESS_DIR", 'public-access');
 
+// contact us statuses
+defined("CONTACT_STATUS_UNREAD") OR define("CONTACT_STATUS_UNREAD", 1);
+defined("CONTACT_STATUS_READ") OR define("CONTACT_STATUS_READ", 2);
+
 // tabbed slider predefined items
 defined("SLIDER_TABBED_NEWEST") OR define("SLIDER_TABBED_NEWEST", 1);
 defined("SLIDER_TABBED_MOST_SELLER") OR define("SLIDER_TABBED_MOST_SELLER", 2);

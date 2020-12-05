@@ -3,7 +3,7 @@ $validator = form_validator();
 ?>
 
 <!-- Home Popup Section -->
-<?php load_partial('main/popup-newsletter'); ?>
+<?php load_partial('main/message/popup-newsletter'); ?>
 <!-- End Screen Load Popup Section -->
 
 <!-- START MAIN CONTENT -->
@@ -70,9 +70,10 @@ $validator = form_validator();
                     <div class="field_form">
                         <form action="<?= rtrim(url('home.contact'), '/'); ?>#__contact_form_container"
                               method="post" id="__form_contact">
-                            <?php load_partial('main/message-form', [
+                            <?php load_partial('main/message/message-form', [
                                 'errors' => $contact_errors ?? [],
-                                'success' => $contact_success ?? ''
+                                'success' => $contact_success ?? '',
+                                'warning' => $contact_warning ?? '',
                             ]); ?>
                             <div class="row">
                                 <input type="hidden" name="csrf_token" value="<?= csrf_token(); ?>" data-ignored>
