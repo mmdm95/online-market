@@ -1,7 +1,7 @@
 <!-- START MAIN CONTENT -->
 <div class="main_content">
 
-    <!-- STAT SECTION FAQ -->
+    <!-- START SECTION PAGE -->
     <div class="section">
         <div class="container">
             <div class="row">
@@ -13,7 +13,7 @@
             </div>
         </div>
     </div>
-    <!-- END SECTION FAQ -->
+    <!-- END SECTION PAGE -->
 
     <!-- START SECTION SUBSCRIBE NEWSLETTER -->
     <?php load_partial('main/newsletter'); ?>

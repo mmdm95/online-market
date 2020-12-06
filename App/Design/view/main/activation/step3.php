@@ -20,7 +20,7 @@
                             <div class="form-group">
                                 <p class="text-success">
                                     <i class="linearicons-check"></i>
-                                    کلمه عبور شما با موفقیت تغییر یافت.
+                                    حساب شما با موفقیت فعال شد.
                                 </p>
                             </div>
                             <div class="form-note text-center">

@@ -22,8 +22,39 @@ class RegisterController extends AbstractHomeController
      */
     public function index()
     {
-        $this->setLayout($this->main_layout)->setTemplate('view/main/signup');
 
+
+        $this->setLayout($this->main_layout)->setTemplate('view/main/signup');
         return $this->render([]);
+    }
+
+    /**
+     * @param string $step
+     * @return string
+     * @throws ConfigNotRegisteredException
+     * @throws ControllerException
+     * @throws IFileNotExistsException
+     * @throws IInvalidVariableNameException
+     * @throws PathNotRegisteredException
+     * @throws \ReflectionException
+     */
+    public function activation($step = 'step1')
+    {
+        if (is_post()) {
+            switch (strtolower($step)) {
+                case 'step1':
+
+                    break;
+                case 'step2':
+
+                    break;
+                case 'step3':
+
+                    break;
+            }
+        }
+
+        $this->setLayout($this->main_layout)->setTemplate('view/main/activation/' . $step);
+        return $this->render();
     }
 }

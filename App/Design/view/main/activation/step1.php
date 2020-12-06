@@ -17,11 +17,11 @@
                             <div class="heading_s1">
                                 <h3>وارد کردن شماره موبایل</h3>
                             </div>
-                            <form action="<?= url('home.forget-password', [
+                            <form action="<?= url('home.activation', [
                                 'step' => 'step1'
                             ])->getOriginalUrl(); ?>" method="post">
                                 <div class="form-group">
-                                    <input type="text" required class="form-control" name="forget-mobile"
+                                    <input type="text" required class="form-control" name="activate-mobile"
                                            placeholder="شماره موبایل شما">
                                 </div>
                                 <div class="form-group text-center ltr">

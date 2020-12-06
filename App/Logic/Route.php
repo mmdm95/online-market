@@ -251,10 +251,13 @@ class Route implements IInitialize
             ])->name('home.pages');
 
             Router::get('/login', 'LoginController@index')->name('home.login');
-            Router::form('/forget-password/{step?}', 'LoginController@forgetPassrowd')->where([
-                'step' => '^step(1|2|3|4)$',
+            Router::form('/forget-password/{step?}', 'LoginController@forgetPassword')->where([
+                'step' => 'step[1|2|3|4]',
             ])->name('home.forget-password');
             Router::get('/signup', 'RegisterController@index')->name('home.signup');
+            Router::form('/activation/{step?}', 'RegisterController@activation')->where([
+                'step' => 'step[1|2|3]',
+            ])->name('home.activation');
 
             Router::get('/cart', 'CartController@index')->name('home.cart');
 

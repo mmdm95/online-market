@@ -424,54 +424,181 @@ return [
                 'default-cart',
             ],
         ],
-        'view/main/forget_password/step1' => [
+        'view/main/activation/step1' => [
+            'title' => title_concat(\config()->get('settings.title.value'), 'فعالسازی حساب' , 'وارد کردن شماره موبایل'),
+            'common' => [
+                'default',
+                'default-cart',
+            ],
+            'sub_title' => 'فعالسازی حساب',
+            'stepy' => [
+                [
+                    'text' => 'وارد کردن شماره موبایل',
+                    'icon' => 'linearicons-phone',
+                    'is_active' => true,
+                ],
+                [
+                    'text' => 'وارد کردن کد ارسال شده',
+                ],
+                [
+                    'text' => 'اتمام عملیات',
+                ],
+            ],
+        ],
+        'view/main/activation/step2' => [
+            'title' => title_concat(\config()->get('settings.title.value'), 'فعالسازی حساب' , 'وارد کردن کد ارسال شده'),
+            'common' => [
+                'default',
+                'default-cart',
+            ],
+            'sub_title' => 'فعالسازی حساب',
+            'stepy' => [
+                [
+                    'text' => 'وارد کردن شماره موبایل',
+                    'icon' => 'linearicons-check',
+                    'is_done' => true,
+                ],
+                [
+                    'text' => 'وارد کردن کد ارسال شده',
+                    'icon' => 'linearicons-barcode',
+                    'is_active' => true,
+                ],
+                [
+                    'text' => 'اتمام عملیات',
+                ],
+            ],
+        ],
+        'view/main/activation/step3' => [
+            'title' => title_concat(\config()->get('settings.title.value'), 'فعالسازی حساب' , 'اتمام'),
+            'common' => [
+                'default',
+                'default-cart',
+            ],
+            'sub_title' => 'فعالسازی حساب',
+            'stepy' => [
+                [
+                    'text' => 'وارد کردن شماره موبایل',
+                    'icon' => 'linearicons-check',
+                    'is_done' => true,
+                ],
+                [
+                    'text' => 'وارد کردن کد ارسال شده',
+                    'icon' => 'linearicons-check',
+                    'is_done' => true,
+                ],
+                [
+                    'text' => 'اتمام عملیات',
+                    'icon' => 'linearicons-check',
+                    'is_done' => true,
+                ],
+            ],
+        ],
+        'view/main/forget-password/step1' => [
             'title' => title_concat(\config()->get('settings.title.value'), 'فراموشی کلمه عبور' , 'وارد کردن شماره موبایل'),
             'common' => [
                 'default',
                 'default-cart',
             ],
+            'sub_title' => 'فراموشی کلمه عبور',
             'stepy' => [
                 [
                     'text' => 'وارد کردن شماره موبایل',
-                    'icon' => '',
+                    'icon' => 'linearicons-phone',
                     'is_active' => true,
                 ],
                 [
                     'text' => 'وارد کردن کد ارسال شده',
-                    'icon' => '',
-                    'is_active' => false,
                 ],
                 [
                     'text' => 'تغییر کلمه عبور',
-                    'icon' => '',
-                    'is_active' => false,
                 ],
                 [
                     'text' => 'اتمام عملیات',
-                    'icon' => '',
-                    'is_active' => false,
                 ],
             ],
         ],
-        'view/main/forget_password/step2' => [
+        'view/main/forget-password/step2' => [
             'title' => title_concat(\config()->get('settings.title.value'), 'فراموشی کلمه عبور' , 'کد ارسال شده'),
             'common' => [
                 'default',
                 'default-cart',
             ],
+            'sub_title' => 'فراموشی کلمه عبور',
+            'stepy' => [
+                [
+                    'text' => 'وارد کردن شماره موبایل',
+                    'icon' => 'linearicons-check',
+                    'is_done' => true,
+                ],
+                [
+                    'text' => 'وارد کردن کد ارسال شده',
+                    'icon' => 'linearicons-barcode',
+                    'is_active' => true,
+                ],
+                [
+                    'text' => 'تغییر کلمه عبور',
+                ],
+                [
+                    'text' => 'اتمام عملیات',
+                ],
+            ],
         ],
-        'view/main/forget_password/step3' => [
+        'view/main/forget-password/step3' => [
             'title' => title_concat(\config()->get('settings.title.value'), 'فراموشی کلمه عبور' , 'تغییر کلمه عبور'),
             'common' => [
                 'default',
                 'default-cart',
             ],
+            'sub_title' => 'فراموشی کلمه عبور',
+            'stepy' => [
+                [
+                    'text' => 'وارد کردن شماره موبایل',
+                    'icon' => 'linearicons-check',
+                    'is_done' => true,
+                ],
+                [
+                    'text' => 'وارد کردن کد ارسال شده',
+                    'icon' => 'linearicons-check',
+                    'is_done' => true,
+                ],
+                [
+                    'text' => 'تغییر کلمه عبور',
+                    'icon' => 'linearicons-keyboard',
+                    'is_active' => true,
+                ],
+                [
+                    'text' => 'اتمام عملیات',
+                ],
+            ],
         ],
-        'view/main/forget_password/step4' => [
+        'view/main/forget-password/step4' => [
             'title' => title_concat(\config()->get('settings.title.value'), 'فراموشی کلمه عبور' , 'اتمام'),
             'common' => [
                 'default',
                 'default-cart',
+            ],
+            'sub_title' => 'فراموشی کلمه عبور',
+            'stepy' => [
+                [
+                    'text' => 'وارد کردن شماره موبایل',
+                    'icon' => 'linearicons-check',
+                    'is_done' => true,
+                ],
+                [
+                    'text' => 'وارد کردن کد ارسال شده',
+                    'icon' => 'linearicons-check',
+                    'is_done' => true,
+                ],
+                [
+                    'text' => 'تغییر کلمه عبور',
+                    'icon' => 'linearicons-check',
+                    'is_done' => true,
+                ],
+                [
+                    'text' => 'اتمام عملیات',
+                    'icon' => 'linearicons-check',
+                    'is_done' => true,
+                ],
             ],
         ],
         'view/main/static-page' => [

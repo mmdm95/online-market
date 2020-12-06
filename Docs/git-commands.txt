@@ -72,3 +72,9 @@ git log
 // show differences (mostly after a conflict)
 // to solve conflict, go to mentioned files and fix it
 git diff
+
+// remove a file from repository and filesystem
+git rm [filename]
+
+// remove a file from repository but not from filesystem
+git rm --cached [filename]

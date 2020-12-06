@@ -998,6 +998,13 @@ body[dir="rtl"] .alert .close {
     .shop_cart_table td.product-thumbnail, .shop_cart_table td.product-add-to-cart, .wishlist_table td.product-thumbnail, .wishlist_table td.product-add-to-cart {
         text-align: center;
     }
+
+    .step-container .step-item:not(.active)::after,
+    .step-container .step-item:not(.done)::after,
+    .step-container .step-item:not(.wait)::after,
+    .step-container .step-item:not(.failed)::after {
+        display: none;
+    }
 }
 
 @media only screen and (max-width: 575px) {
