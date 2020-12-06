@@ -4,13 +4,9 @@ namespace App\Logic\Controllers;
 
 use App\Logic\Abstracts\AbstractHomeController;
 use App\Logic\Forms\ContactForm;
-use App\Logic\Models\ContactUsModel;
 use App\Logic\Models\FAQModel;
 use App\Logic\Models\OurTeamModel;
 use App\Logic\Models\StaticPageModel;
-use App\Logic\Models\UserModel;
-use App\Logic\Validations\FormValidations;
-use Sim\Auth\DBAuth;
 use Sim\Container\Exceptions\MethodNotFoundException;
 use Sim\Container\Exceptions\ParameterHasNoDefaultValueException;
 use Sim\Container\Exceptions\ServiceNotFoundException;
@@ -21,7 +17,6 @@ use Sim\Exceptions\PathManager\PathNotRegisteredException;
 use Sim\Form\Exceptions\FormException;
 use Sim\Interfaces\IFileNotExistsException;
 use Sim\Interfaces\IInvalidVariableNameException;
-use voku\helper\AntiXSS;
 
 class PageController extends AbstractHomeController
 {
@@ -144,7 +139,7 @@ class PageController extends AbstractHomeController
         $page = $pageModel->get(['title', 'body'], 'url=:url', ['url' => $url ?? '']);
 
         if (!count($page)) {
-            $this->show404();
+            return $this->show404();
         } else {
             $page = $page[0];
             $this->setLayout($this->main_layout)->setTemplate('view/main/static-page');
@@ -192,7 +187,7 @@ class PageController extends AbstractHomeController
      */
     public function adminNotFound()
     {
-        return $this->setTemplate('error.404')->show404();
+        return $this->show404([], null, 'error.404');
     }
 
     /**

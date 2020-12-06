@@ -6,8 +6,8 @@
                     <div class="d-flex align-items-center justify-content-center justify-content-md-start">
                         <ul class="contact_detail text-center text-lg-left">
                             <li>
-                                <i class="ti-mobile"></i>
-                                <span><?= local_number(\config()->get('settings.main_phone.value')) ?></span>
+                                <i class="linearicons-phone"></i>
+                                <span><?= local_number(\config()->get('settings.main_phone.value')); ?></span>
                             </li>
                         </ul>
                     </div>
@@ -15,8 +15,17 @@
                 <div class="col-md-6">
                     <div class="text-center text-md-right">
                         <ul class="header_list">
-                            <li><a href="<?= url('home.login'); ?>"><i class="ti-user"></i><span>ورود</span></a></li>
-                            <li><a href="<?= url('home.signup'); ?>"><i class="linearicons-user-plus"></i><span>ثبت نام</span></a>
+                            <li>
+                                <a href="<?= url('home.login'); ?>">
+                                    <i class="linearicons-user"></i>
+                                    <span>ورود</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="<?= url('home.signup'); ?>">
+                                    <i class="linearicons-user-plus"></i>
+                                    <span>ثبت نام</span>
+                                </a>
                             </li>
                         </ul>
                     </div>
