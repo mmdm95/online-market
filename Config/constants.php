@@ -48,6 +48,22 @@ defined("PLACEHOLDER_VIDEO") OR define("PLACEHOLDER_VIDEO", __DIR__ . '/../publi
 // public access directory name
 defined("PUBLIC_ACCESS_DIR") OR define("PUBLIC_ACCESS_DIR", 'public-access');
 
+// sms types
+defined("SMS_TYPE_ACTIVATION") OR define("SMS_TYPE_ACTIVATION", 'sms_activation');
+defined("SMS_TYPE_RECOVER_PASS") OR define("SMS_TYPE_RECOVER_PASS", 'sms_recover_pass');
+defined("SMS_TYPE_BUY") OR define("SMS_TYPE_BUY", 'sms_buy');
+defined("SMS_TYPE_ORDER_STATUS") OR define("SMS_TYPE_ORDER_STATUS", 'sms_order_status');
+defined("SMS_TYPE_WALLET_CHARGE") OR define("SMS_TYPE_WALLET_CHARGE", 'sms_wallet_charge');
+
+// sms replacements
+defined('SMS_REPLACEMENTS') OR define('SMS_REPLACEMENTS', [
+    'mobile' => '@mobile@',
+    'code' => '@code@',
+    'orderCode' => '@orderCode@',
+    'status' => '@status@',
+    'balance' => '@balance@',
+]);
+
 // contact us statuses
 defined("CONTACT_STATUS_UNREAD") OR define("CONTACT_STATUS_UNREAD", 1);
 defined("CONTACT_STATUS_READ") OR define("CONTACT_STATUS_READ", 2);

@@ -1,3 +1,7 @@
+<?php
+$validator = form_validator();
+?>
+
 <!-- START MAIN CONTENT -->
 <div class="main_content">
 
@@ -6,32 +10,44 @@
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-xl-6 col-md-8 col-sm-10">
-                    <div class="login_wrap">
+                    <div class="login_wrap" id="__register_form_container">
                         <div class="padding_eight_all bg-white">
                             <div class="heading_s1">
                                 <h3>ایجاد یک حساب کاربری</h3>
                             </div>
-                            <form action="<?= url('home.signup')->getOriginalUrl(); ?>" method="post">
+                            <form action="<?= url('home.signup')->getOriginalUrl(); ?>#__register_form_container"
+                                  method="post" id="__form_register">
+                                <?php load_partial('main/message/message-form', [
+                                    'errors' => $register_errors ?? [],
+                                    'success' => $register_success ?? '',
+                                    'warning' => $register_warning ?? '',
+                                ]); ?>
                                 <div class="form-group">
-                                    <input type="text" required class="form-control" name="name"
-                                           placeholder="نام خود را وارد کنید">
+                                    <input type="text" required class="form-control" name="inp-register-username"
+                                           placeholder="موبایل خود را وارد کنید"
+                                           value="<?= $validator->setInput('inp-register-username'); ?>">
                                 </div>
-                                <div class="form-group">
-                                    <input type="text" required class="form-control" name="email"
-                                           placeholder="نام کاربری خود را وارد کنید">
-                                </div>
-                                <div class="form-group">
-                                    <input class="form-control" required type="password" name="password"
-                                           placeholder="کلمه عبور">
-                                </div>
-                                <div class="form-group">
-                                    <input class="form-control" required type="password" name="re-password"
-                                           placeholder="تأیید کلمه عبور">
+                                <div class="row">
+                                    <div class="form-group col-md-6">
+                                        <input placeholder="کد تصویر را وارد کنید" class="form-control"
+                                               name="inp-register-captcha" required>
+                                    </div>
+                                    <div class="form-group col-md-6 d-flex justify-content-center align-items-center __captcha_main_container">
+                                        <div class="__captcha_container">
+                                        </div>
+                                        <button class="btn btn-link text_default p-2 ml-3 __captcha_regenerate_btn"
+                                                type="button" aria-label="regenerate captcha">
+                                            <input type="hidden" name="inp-captcha-name"
+                                                   value="<?= url() . '__form_register'; ?>">
+                                            <i class="icon-refresh icon-2x" aria-hidden="true"></i>
+                                        </button>
+                                    </div>
                                 </div>
                                 <div class="login_footer form-group">
                                     <div class="chek-form">
                                         <div class="custome-checkbox">
-                                            <input class="form-check-input" type="checkbox" name="checkbox"
+                                            <input class="form-check-input" type="checkbox"
+                                                   name="inp-register-terms-chk"
                                                    id="termChk">
                                             <label class="form-check-label" for="termChk">
                                                 <span>

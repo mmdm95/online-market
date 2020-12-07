@@ -14,7 +14,7 @@
                             <form action="<?= url('home.login')->getOriginalUrl(); ?>" method="post">
                                 <div class="form-group">
                                     <input type="text" required class="form-control" name="username"
-                                           placeholder="نام کاربری">
+                                           placeholder="موبایل">
                                 </div>
                                 <div class="form-group">
                                     <input class="form-control" required type="password" name="password"

@@ -52,6 +52,6 @@ class CaptchaUtil
          * @var Captcha $captcha
          */
         $captcha = \container()->get('captcha-simple');
-        return $captcha->setName(trim($name))->verify($input);
+        return $captcha->useEnglishNumbersToVerify(true)->setName(trim($name))->verify($input);
     }
 }

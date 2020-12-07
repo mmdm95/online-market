@@ -131,8 +131,12 @@ class HomeController extends AbstractHomeController
     public function search()
     {
         $this->setLayout($this->main_index_layout)->setTemplate('view/main/search');
-
         return $this->render([]);
+    }
+
+    public function newsletter()
+    {
+
     }
 
     /**

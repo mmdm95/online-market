@@ -79,6 +79,7 @@ return [
         'payment' => __DIR__ . '/payment.php',
         'router' => __DIR__ . '/router.php',
         'security' => __DIR__ . '/security.php',
+        'sms' => __DIR__ . '/sms.php',
         // webpack config
         // DO NOT change it at all
         'webpack' => __DIR__ . '/webpack.php',

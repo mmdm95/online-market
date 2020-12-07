@@ -9,6 +9,7 @@ use Sim\Form\ValidationExtend\AbstractCustomValidation;
 use Sim\Form\Validations\PersianAlphaValidation;
 use Sim\Form\Validations\PersianMobileValidation;
 use Sim\Form\Validations\PersianNationalCodeValidation;
+use Sim\Utils\StringUtil;
 
 class ExtendedValidator extends AbstractCustomValidation
 {
@@ -112,7 +113,7 @@ class ExtendedValidator extends AbstractCustomValidation
          * @var PersianMobileValidation $instance
          */
         $instance = $this->getInstanceOf('persianMobile');
-        return $instance->validate($value);
+        return $instance->validate(StringUtil::toEnglish($value));
     }
 
     /**
@@ -127,6 +128,6 @@ class ExtendedValidator extends AbstractCustomValidation
          * @var PersianNationalCodeValidation $instance
          */
         $instance = $this->getInstanceOf('persianNationalCode');
-        return $instance->validate($value);
+        return $instance->validate(StringUtil::toEnglish($value));
     }
 }

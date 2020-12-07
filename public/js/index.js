@@ -30,9 +30,11 @@
     $(function () {
         var
             shop,
+            registerForm,
             contactUsForm,
             newsletterForm,
             //-----
+            registerConstraints,
             contactUsConstraints,
             //-----
             formValues,
@@ -53,6 +55,21 @@
         if ($.inArray(hashval, elementsHash) !== -1) {
             core.scrollTo('#' + hashval, 140);
         }
+
+        //---------------------------------------------------------------
+        // REGISTER FORM
+        //---------------------------------------------------------------
+        registerForm = $(variables.elements.register.form);
+        registerConstraints = core.constraints.register;
+        registerForm.submit(function () {
+            formValues = shop.forms.convertFormObjectNumbersToEnglish(window.validate.collectFormValues(this), 'register');
+            formErrors = window.validate(formValues, registerConstraints);
+            if (!formErrors) {
+                return true;
+            }
+            shop.forms.showFormErrors(formErrors);
+            return false;
+        });
 
         //---------------------------------------------------------------
         // NEWSLETTER FORM

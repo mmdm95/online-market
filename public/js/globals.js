@@ -116,6 +116,16 @@ window.MyGlobalVariables = {
             container: '#__cart_main_container',
             addBtn: '.__add_to_cart_btn',
         },
+        register: {
+            form: '#__form_register',
+            inputs: {
+                name: 'inp-register-name',
+                username: 'inp-register-username',
+                password: 'inp-register-password',
+                confirmPassword: 'inp-register-re-password',
+                captcha: 'inp-register-captcha',
+            },
+        },
         newsletter: {
             form: '#__form_newsletter',
             inputs: {
@@ -173,6 +183,23 @@ window.MyGlobalVariables = {
             },
         },
         constraints: {
+            register: {
+                password: {
+                    presence: {
+                        allowEmpty: false,
+                        message: '^' + 'فیلد کلمه عبور اجباری می‌باشد.',
+                    },
+                },
+                confirmPassword: function (value, attributes) {
+                    if (value !== attributes.password) return null;
+                    return {
+                        presence: {
+                            allowEmpty: false,
+                            message: '^' + 'فیلد تایید کلمه عبور اجباری می‌باشد.',
+                        },
+                    };
+                }
+            },
             contactUs: {
                 subject: {
                     presence: {
@@ -341,6 +368,13 @@ window.MyGlobalVariables = {
             },
             //-----
             constraints: {
+                register: {
+                    name: window.MyGlobalVariables.validation.common.name,
+                    username: window.MyGlobalVariables.validation.common.mobile,
+                    password: window.MyGlobalVariables.validation.constraints.register.password,
+                    confirmPassword: window.MyGlobalVariables.validation.constraints.register.confirmPassword,
+                    captcha: window.MyGlobalVariables.validation.common.captcha,
+                },
                 contactUs: {
                     name: window.MyGlobalVariables.validation.common.name,
                     email: window.MyGlobalVariables.validation.common.email,

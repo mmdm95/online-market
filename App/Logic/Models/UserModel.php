@@ -71,6 +71,14 @@ class UserModel extends BaseModel
         return $res;
     }
 
+    public function registerUser(array $user_info): bool
+    {
+        $this->db->beginTransaction();
+
+        $this->db->rollBack();
+        $this->db->commit();
+    }
+
     /**
      * @param int|null $id
      * @return string|null

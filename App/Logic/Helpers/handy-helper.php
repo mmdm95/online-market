@@ -5,7 +5,10 @@ use Sim\Container\Exceptions\MethodNotFoundException;
 use Sim\Container\Exceptions\ParameterHasNoDefaultValueException;
 use Sim\Container\Exceptions\ServiceNotFoundException;
 use Sim\Container\Exceptions\ServiceNotInstantiableException;
+use Sim\Exceptions\ConfigManager\ConfigNotRegisteredException;
 use Sim\Form\FormValidator;
+use Sim\Interfaces\IFileNotExistsException;
+use Sim\Interfaces\IInvalidVariableNameException;
 
 /**
  * @return bool
@@ -78,4 +81,37 @@ function get_percentage($num, $total, bool $low = true): int
 function form_validator(): FormValidator
 {
     return container()->get(ExtendedValidator::class);
+}
+
+/**
+ * @param $type
+ * @param array $placeholders
+ * @return string
+ */
+function replaced_sms_body($type, array $placeholders = []): string
+{
+    /**
+     * @param string $message
+     * @param array $placeholders
+     * @return string
+     */
+    function message_replacer(string $message, array $placeholders): string
+    {
+        if (!empty($message)) {
+            foreach ($placeholders as $placeholder => $value) {
+                if (is_scalar($value)) {
+                    $message = str_replace($placeholder, $value, $message);
+                }
+            }
+        }
+        return $message;
+    }
+
+    try {
+        $body = config()->get('settings.' . $type . '.value');
+    } catch (ConfigNotRegisteredException|IFileNotExistsException|IInvalidVariableNameException $e) {
+        return '';
+    }
+
+    return message_replacer((string)$body, $placeholders);
 }

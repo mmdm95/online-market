@@ -652,16 +652,16 @@
         },
         {
             "name": "mmdm/sim-event-dispatcher",
-            "version": "v1.1.0",
+            "version": "v1.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/mmdm95/sim-event-dispatcher.git",
-                "reference": "711e132a8461d51b1d631d1eb77c294071d4d6a8"
+                "reference": "08b85d74a565dc92c1da176149ebb452d4e3124c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mmdm95/sim-event-dispatcher/zipball/711e132a8461d51b1d631d1eb77c294071d4d6a8",
-                "reference": "711e132a8461d51b1d631d1eb77c294071d4d6a8",
+                "url": "https://api.github.com/repos/mmdm95/sim-event-dispatcher/zipball/08b85d74a565dc92c1da176149ebb452d4e3124c",
+                "reference": "08b85d74a565dc92c1da176149ebb452d4e3124c",
                 "shasum": ""
             },
             "require": {
@@ -685,7 +685,7 @@
                 }
             ],
             "description": "A simple yet nice event dispatcher",
-            "time": "2020-11-25T01:51:47+00:00"
+            "time": "2020-12-06T17:27:19+00:00"
         },
         {
             "name": "mmdm/sim-fa-payment",

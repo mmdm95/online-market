@@ -417,80 +417,25 @@ return [
                 'default-cart',
             ],
         ],
-        'view/main/signup' => [
+        'view/main/signup/step1' => [
             'title' => title_concat(\config()->get('settings.title.value'), 'صفحه ثبت نام'),
             'common' => [
                 'default',
                 'default-cart',
             ],
         ],
-        'view/main/activation/step1' => [
-            'title' => title_concat(\config()->get('settings.title.value'), 'فعالسازی حساب' , 'وارد کردن شماره موبایل'),
+        'view/main/signup/step2' => [
+            'title' => title_concat(\config()->get('settings.title.value'), 'صفحه ثبت نام', 'وارد کردن کد ارسال شده'),
             'common' => [
                 'default',
                 'default-cart',
-            ],
-            'sub_title' => 'فعالسازی حساب',
-            'stepy' => [
-                [
-                    'text' => 'وارد کردن شماره موبایل',
-                    'icon' => 'linearicons-phone',
-                    'is_active' => true,
-                ],
-                [
-                    'text' => 'وارد کردن کد ارسال شده',
-                ],
-                [
-                    'text' => 'اتمام عملیات',
-                ],
             ],
         ],
-        'view/main/activation/step2' => [
-            'title' => title_concat(\config()->get('settings.title.value'), 'فعالسازی حساب' , 'وارد کردن کد ارسال شده'),
+        'view/main/signup/step3' => [
+            'title' => title_concat(\config()->get('settings.title.value'), 'صفحه ثبت نام',  'وارد کردن کلمه عبور'),
             'common' => [
                 'default',
                 'default-cart',
-            ],
-            'sub_title' => 'فعالسازی حساب',
-            'stepy' => [
-                [
-                    'text' => 'وارد کردن شماره موبایل',
-                    'icon' => 'linearicons-check',
-                    'is_done' => true,
-                ],
-                [
-                    'text' => 'وارد کردن کد ارسال شده',
-                    'icon' => 'linearicons-barcode',
-                    'is_active' => true,
-                ],
-                [
-                    'text' => 'اتمام عملیات',
-                ],
-            ],
-        ],
-        'view/main/activation/step3' => [
-            'title' => title_concat(\config()->get('settings.title.value'), 'فعالسازی حساب' , 'اتمام'),
-            'common' => [
-                'default',
-                'default-cart',
-            ],
-            'sub_title' => 'فعالسازی حساب',
-            'stepy' => [
-                [
-                    'text' => 'وارد کردن شماره موبایل',
-                    'icon' => 'linearicons-check',
-                    'is_done' => true,
-                ],
-                [
-                    'text' => 'وارد کردن کد ارسال شده',
-                    'icon' => 'linearicons-check',
-                    'is_done' => true,
-                ],
-                [
-                    'text' => 'اتمام عملیات',
-                    'icon' => 'linearicons-check',
-                    'is_done' => true,
-                ],
             ],
         ],
         'view/main/forget-password/step1' => [

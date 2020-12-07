@@ -9,6 +9,8 @@ use Sim\Interfaces\IInitialize;
 use Sim\Container\Container as Resolver;
 use Sim\Auth\DBAuth as Auth;
 use Sim\Auth\APIAuth as APIAuth;
+use Sim\SMS\Factories\NiazPardaz;
+use Sim\SMS\SMSFactory;
 
 class Container implements IInitialize
 {
@@ -71,6 +73,19 @@ class Container implements IInitialize
         // simple captcha class
         \container()->set('captcha-simple', function () {
             return \captcha();
+        });
+
+        // sms panel
+        \container()->set('sms_panel', function () {
+            $config = config()->get('sms.niaz');
+
+            /**
+             * @var NiazPardaz $panel
+             */
+            $panel = new NiazPardaz($config['username'], $config['password']);
+            $panel->fromNumber($config['from']);
+
+            return $panel;
         });
 
 //        /**

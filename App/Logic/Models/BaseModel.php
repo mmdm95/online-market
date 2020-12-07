@@ -114,6 +114,27 @@ abstract class BaseModel
     }
 
     /**
+     * @param array $columns
+     * @param string|null $where
+     * @param array $bind_values
+     * @param array $order_by
+     * @param int|null $limit
+     * @return array
+     */
+    public function getFirst(
+        array $columns = ['*'],
+        ?string $where = null,
+        array $bind_values = [],
+        array $order_by = ['id DESC'],
+        int $limit = null
+    ): array
+    {
+        $res = $this->get($columns, $where, $bind_values, $order_by, $limit);
+        if (count($res)) return $res[0];
+        return [];
+    }
+
+    /**
      * @param array $values
      * @param bool $get_last_inserted_id
      * @return bool|int
@@ -179,5 +200,31 @@ abstract class BaseModel
 
         $stmt = $this->db->prepare($delete->getStatement());
         return $stmt->execute($delete->getBindValues());
+    }
+
+
+    /**
+     * @param string|null $where
+     * @param array $bindParams
+     * @return int
+     */
+    public function count(?string $where = null, array $bindParams = []): int
+    {
+        $select = $this->connector->select();
+        $select
+            ->cols(['COUNT(DISTINCT(id)) AS count'])
+            ->from($this->table);
+
+        if (!empty($where)) {
+            $select
+                ->where($where)
+                ->bindValues($bindParams);
+        }
+
+        $res = $this->db->fetchAll($select->getStatement(), $select->getBindValues());
+        if (count($res)) {
+            return (int)$res[0]['count'];
+        }
+        return 0;
     }
 }

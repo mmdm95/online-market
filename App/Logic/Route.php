@@ -238,11 +238,22 @@ class Route implements IInitialize
             ])->name('image.show');
 
             //==========================
+            // user routes
+            //==========================
+
+            //==========================
             // other routes
             //==========================
+            /**
+             * index routes
+             */
             Router::get('/', 'HomeController@index')->name('home.index');
             Router::get('/search', 'HomeController@search')->name('home.search');
+            Router::post('/newsletter', 'HomeController@newsletter')->name('home.newsletter');
 
+            /**
+             * common routes
+             */
             Router::get('/about', 'PageController@about')->name('home.about');
             Router::get('/faq', 'PageController@faq')->name('home.faq');
             Router::form('/contact', 'PageController@contact')->name('home.contact');
@@ -250,23 +261,33 @@ class Route implements IInitialize
                 'url' => '.+',
             ])->name('home.pages');
 
-            Router::get('/login', 'LoginController@index')->name('home.login');
+            /**
+             * login & signup routes
+             */
+            Router::form('/login', 'LoginController@index')->name('home.login');
             Router::form('/forget-password/{step?}', 'LoginController@forgetPassword')->where([
                 'step' => 'step[1|2|3|4]',
             ])->name('home.forget-password');
-            Router::get('/signup', 'RegisterController@index')->name('home.signup');
-            Router::form('/activation/{step?}', 'RegisterController@activation')->where([
-                'step' => 'step[1|2|3]',
-            ])->name('home.activation');
+            Router::form('/signup', 'RegisterController@index')->name('home.signup');
+            Router::form('/signup/code', 'RegisterController@enterCode')->name('home.signup.code');
+            Router::form('/signup/password', 'RegisterController@enterPassword')->name('home.signup.password');
 
+            /**
+             * cart routes
+             */
             Router::get('/cart', 'CartController@index')->name('home.cart');
 
+            /**
+             * product routes
+             */
             Router::get('/product/{id}/{slug?}', 'ProductController@show')->where([
                 'id' => '[0-9]+',
             ])->name('home.product.show');
-
             Router::get('/compare', 'CompareController@compare')->name('home.compare');
 
+            /**
+             * blog routes
+             */
             Router::get('/blog/search', 'BlogController@search')->name('home.blog.search');
             Router::get('/blog/{id}/{slug?}', 'BlogController@show')->where([
                 'id' => '[0-9]+',
