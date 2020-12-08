@@ -12,21 +12,26 @@
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-xl-6 col-md-8 col-sm-10">
-                    <div class="login_wrap">
+                    <div class="login_wrap" id="__forget_form_container">
                         <div class="padding_eight_all bg-white">
                             <div class="heading_s1">
                                 <h3>تغییر کلمه عبور</h3>
                             </div>
                             <form action="<?= url('home.forget-password', [
                                 'step' => 'step2'
-                            ])->getOriginalUrl(); ?>" method="post">
-
+                            ])->getOriginalUrl(); ?>#__forget_form_container"
+                                  method="post" id="__forget_form_step3">
+                                <?php load_partial('main/message/message-form', [
+                                    'errors' => $forget_errors ?? [],
+                                    'success' => $forget_success ?? '',
+                                    'warning' => $forget_warning ?? '',
+                                ]); ?>
                                 <div class="form-group">
-                                    <input class="form-control" required type="password" name="forget-new-password"
+                                    <input class="form-control" required type="password" name="inp-forget-new-password"
                                            placeholder="کلمه عبور جدید">
                                 </div>
                                 <div class="form-group">
-                                    <input class="form-control" required type="password" name="forget-new-re-password"
+                                    <input class="form-control" required type="password" name="inp-forget-new-re-password"
                                            placeholder="تأیید کلمه عبور جدید">
                                 </div>
                                 <div class="row form-group text-center ltr m-0">

@@ -3,6 +3,7 @@
 namespace App\Logic\Controllers;
 
 use App\Logic\Abstracts\AbstractHomeController;
+use App\Logic\Middlewares\Logic\ForgetMobileCheckMiddleware;
 use Sim\Exceptions\ConfigManager\ConfigNotRegisteredException;
 use Sim\Exceptions\Mvc\Controller\ControllerException;
 use Sim\Exceptions\PathManager\PathNotRegisteredException;
@@ -42,6 +43,7 @@ class LoginController extends AbstractHomeController
         if (is_post()) {
             switch (strtolower($step)) {
                 case 'step1':
+//                    ForgetMobileCheckMiddleware::class
 
                     break;
                 case 'step2':

@@ -6,6 +6,11 @@ use App\Logic\Abstracts\AbstractHomeController;
 
 class BlogController extends AbstractHomeController
 {
+    public function index()
+    {
+
+    }
+
     public function show($id, $slug = null)
     {
 

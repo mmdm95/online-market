@@ -48,6 +48,12 @@ defined("PLACEHOLDER_VIDEO") OR define("PLACEHOLDER_VIDEO", __DIR__ . '/../publi
 // public access directory name
 defined("PUBLIC_ACCESS_DIR") OR define("PUBLIC_ACCESS_DIR", 'public-access');
 
+// define all roles
+defined("ROLE_DEVELOPER") OR define("ROLE_DEVELOPER", 'developer');
+defined("ROLE_SUPER_USER") OR define("ROLE_SUPER_USER", 'super_user');
+defined("ROLE_ADMIN") OR define("ROLE_ADMIN", 'admin');
+defined("ROLE_USER") OR define("ROLE_USER", 'user');
+
 // sms types
 defined("SMS_TYPE_ACTIVATION") OR define("SMS_TYPE_ACTIVATION", 'sms_activation');
 defined("SMS_TYPE_RECOVER_PASS") OR define("SMS_TYPE_RECOVER_PASS", 'sms_recover_pass');

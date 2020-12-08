@@ -1,3 +1,7 @@
+<?php
+$validator = form_validator();
+?>
+
 <!-- START MAIN CONTENT -->
 <div class="main_content">
 
@@ -12,7 +16,7 @@
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-xl-6 col-md-8 col-sm-10">
-                    <div class="login_wrap">
+                    <div class="login_wrap" id="__forget_form_container">
                         <div class="padding_eight_all bg-white">
                             <div class="heading_s1">
                                 <h3>وارد کردن کد ارسال شده/پاسخ سؤال امنیتی</h3>
@@ -36,9 +40,15 @@
                                      aria-labelledby="nav-code-tab">
                                     <form action="<?= url('home.forget-password', [
                                         'step' => 'step2'
-                                    ])->getOriginalUrl(); ?>" method="post">
+                                    ])->getOriginalUrl(); ?>#__forget_form_container"
+                                          method="post" id="__forget_form_step2_1">
+                                        <?php load_partial('main/message/message-form', [
+                                            'errors' => $forget_errors ?? [],
+                                            'success' => $forget_success ?? '',
+                                            'warning' => $forget_warning ?? '',
+                                        ]); ?>
                                         <div class="form-group">
-                                            <input type="text" required class="form-control" name="forget-code"
+                                            <input type="text" required class="form-control" name="inp-forget-code"
                                                    placeholder="کد ارسال شده">
                                         </div>
                                         <div class="row form-group text-center ltr m-0">
@@ -63,13 +73,20 @@
                                      aria-labelledby="nav-question-tab">
                                     <form action="<?= url('home.forget-password', [
                                         'step' => 'step2'
-                                    ])->getOriginalUrl(); ?>" method="post">
+                                    ])->getOriginalUrl(); ?>#__forget_form_container"
+                                          method="post" id="__forget_form_step2_2">
+                                        <?php load_partial('main/message/message-form', [
+                                            'errors' => $forget_errors ?? [],
+                                            'success' => $forget_success ?? '',
+                                            'warning' => $forget_warning ?? '',
+                                        ]); ?>
                                         <p>
-                                            سعید خره گاو کیه؟
+                                            اسم اولین خواننده‌ای که باهاش خاطره داری؟
                                         </p>
                                         <div class="form-group">
-                                            <input type="text" required class="form-control" name="forget-question"
-                                                   placeholder="پاسخ سؤال امنیتی">
+                                            <input type="text" required class="form-control" name="inp-forget-question"
+                                                   placeholder="پاسخ سؤال امنیتی"
+                                                   value="<?= $validator->setInput('inp-forget-question'); ?>">
                                         </div>
                                         <div class="row form-group text-center ltr m-0">
                                             <button type="submit" class="col-sm-6 btn btn-danger mb-2 rtl"

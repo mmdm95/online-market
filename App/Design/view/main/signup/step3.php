@@ -12,7 +12,7 @@
                                 <h3>وارد کردن کلمه عبور</h3>
                             </div>
                             <form action="<?= url('home.signup.password')->getOriginalUrl(); ?>#__register_form_container"
-                                  method="post" id="__form_register">
+                                  method="post" id="__form_register_step3">
                                 <?php load_partial('main/message/message-form', [
                                     'errors' => $register_errors ?? [],
                                     'success' => $register_success ?? '',

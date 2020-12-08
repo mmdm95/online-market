@@ -71,12 +71,72 @@ class UserModel extends BaseModel
         return $res;
     }
 
-    public function registerUser(array $user_info): bool
+    /**
+     * @param string $username
+     * @param array $user_info
+     * @param string $where
+     * @param array $bind_values
+     * @return bool
+     * @throws MethodNotFoundException
+     * @throws ParameterHasNoDefaultValueException
+     * @throws ServiceNotFoundException
+     * @throws ServiceNotInstantiableException
+     * @throws \ReflectionException
+     */
+    public function updateNRegisterUser(string $username, array $user_info, string $where, array $bind_values = []): bool
     {
         $this->db->beginTransaction();
 
-        $this->db->rollBack();
-        $this->db->commit();
+        // get user id from username
+        $userId = $this->getIDFromUsername($username);
+        /**
+         * @var RoleModel $roleModel
+         */
+        $roleModel = container()->get(RoleModel::class);
+        // get role id
+        $roleId = $roleModel->getIDFromRoleName(ROLE_USER);
+        // if there is no user with specific id or
+        // if there is no role with specific id
+        if (empty($userId) || empty($roleId)) {
+            $this->db->rollBack();
+            return false;
+        }
+        // update user info
+        $update = $this->connector->update();
+        $res = $update
+            ->table($this->table)
+            ->cols($user_info)
+            ->where($where)
+            ->bindValues($bind_values);
+        // add role to user
+        $insert = $this->connector->insert();
+        $res2 = $insert
+            ->into(self::TBL_USER_ROLE)
+            ->cols([
+                'user_id' => $userId,
+                'role_id' => $roleId
+            ]);
+        // if role insertion failed
+        if (!$res2) {
+            $this->db->rollBack();
+            return false;
+        }
+        // add wallet info
+        $insert = $this->connector->insert();
+        $res3 = $insert
+            ->into(self::TBL_WALLET)
+            ->cols([
+                'user_id' => $userId,
+                'balance' => 0,
+            ]);
+
+        if ($res && $res2 && $res3) {
+            $this->db->commit();
+            return true;
+        } else {
+            $this->db->rollBack();
+            return false;
+        }
     }
 
     /**
@@ -85,7 +145,7 @@ class UserModel extends BaseModel
      */
     public function getUsernameFromID(?int $id): ?string
     {
-        $id = $id ?? 0;
+        if (0 === $id || empty($id)) return null;
         $select = $this->connector->select();
         $select
             ->from($this->table)
@@ -96,6 +156,25 @@ class UserModel extends BaseModel
         $username = $this->db->fetchAll($select->getStatement(), $select->getBindValues());
         if (!count($username)) return null;
         return $username[0]['username'];
+    }
+
+    /**
+     * @param string|null $username
+     * @return int|null
+     */
+    public function getIDFromUsername(?string $username): ?int
+    {
+        if (empty($id)) return null;
+        $select = $this->connector->select();
+        $select
+            ->from($this->table)
+            ->cols(['id'])
+            ->where('username=:username')
+            ->bindValues(['username' => $username]);
+
+        $id = $this->db->fetchAll($select->getStatement(), $select->getBindValues());
+        if (!count($id)) return null;
+        return (int)$id[0]['id'];
     }
 
     /**

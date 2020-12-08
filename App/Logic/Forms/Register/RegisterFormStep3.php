@@ -76,18 +76,14 @@ class RegisterFormStep3 implements IPageForm
          * @var UserModel $userModel
          */
         $userModel = container()->get(UserModel::class);
-        /**
-         * @var AntiXSS $xss
-         */
-        $xss = container()->get(AntiXSS::class);
 
-        $username = '';
+        $username = session()->getFlash('register.username', '', false);
         $password = input()->post('inp-register-password', '')->getValue();
         // insert to database
-        $res = $userModel->registerUser([
-
+        $res = $userModel->updateNRegisterUser($username, [
+            'password' => password_hash($password, PASSWORD_BCRYPT),
             'created_at' => time(),
-        ]);
+        ], 'username=:u_name', ['u_name' => $username]);
 
         return $res;
     }

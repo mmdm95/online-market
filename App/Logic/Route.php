@@ -288,6 +288,7 @@ class Route implements IInitialize
             /**
              * blog routes
              */
+            Router::get('/blog/', 'BlogController@index')->name('home.blog');
             Router::get('/blog/search', 'BlogController@search')->name('home.blog.search');
             Router::get('/blog/{id}/{slug?}', 'BlogController@show')->where([
                 'id' => '[0-9]+',

@@ -6,8 +6,12 @@ use App\Logic\Abstracts\AbstractHomeController;
 use App\Logic\Forms\Register\RegisterFormStep1;
 use App\Logic\Forms\Register\RegisterFormStep2;
 use App\Logic\Forms\Register\RegisterFormStep3;
+use App\Logic\Middlewares\Logic\RegisterCodeCheckMiddleware;
 use App\Logic\Middlewares\Logic\RegisterMobileCheckMiddleware;
 use App\Logic\SMS\RegisterSMS;
+use Sim\Auth\DBAuth;
+use Sim\Auth\Exceptions\InvalidUserException;
+use Sim\Auth\Interfaces\IDBException;
 use Sim\Container\Exceptions\MethodNotFoundException;
 use Sim\Container\Exceptions\ParameterHasNoDefaultValueException;
 use Sim\Container\Exceptions\ServiceNotFoundException;
@@ -108,6 +112,7 @@ class RegisterController extends AbstractHomeController
                 $res = $registerForm->store();
                 // success or warning message
                 if ($res) {
+                    session()->setFlash('register.code-step', 'I am ready to set password');
                     response()->redirect(url('home.signup.password')->getOriginalUrl());
                 } else {
                     $data['register_warning'] = 'خطا در ارتباط با سرور، لطفا دوباره تلاش کنید.';
@@ -137,6 +142,13 @@ class RegisterController extends AbstractHomeController
      */
     public function enterPassword()
     {
+        $this->setMiddleWare(RegisterCodeCheckMiddleware::class);
+        if (!$this->middlewareResult()) {
+            response()->redirect(url('home.signup')->getOriginalUrl());
+        } else {
+            $this->removeAllMiddlewares();
+        }
+
         if (is_post()) {
             /**
              * @var RegisterFormStep3 $registerForm
@@ -147,7 +159,26 @@ class RegisterController extends AbstractHomeController
                 $res = $registerForm->store();
                 // success or warning message
                 if ($res) {
-                    response()->redirect(url('user.index')->getOriginalUrl());
+                    // login user and redirect to user's panel
+                    /**
+                     * @var DBAuth $auth
+                     */
+                    $auth = container()->get('auth_home');
+                    try {
+                        $auth->loginWithUsername(
+                            session()->getFlash('register.username', ''),
+                            'users.is_activated=:is_active',
+                            ['is_active' => DB_YES]
+                        );
+                        response()->redirect(url('user.index')->getOriginalUrl());
+                    } catch (InvalidUserException|IDBException $e) {
+                        $data['register_warning'] = encode_html('خطا در عملیات ورود! لطفا از '
+                            . "<a href=\"" . url('home.login')
+                            . "\" class=\"btn-link\">"
+                            . 'صفحه ورود'
+                            . "</a>"
+                            . ' استفاده کنید.');
+                    }
                 } else {
                     $data['register_warning'] = 'خطا در ارتباط با سرور، لطفا دوباره تلاش کنید.';
                 }

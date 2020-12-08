@@ -106,120 +106,6 @@ window.MyGlobalVariables = {
         },
         captcha: '/ajax/captcha',
     },
-    elements: {
-        captcha: {
-            mainContainer: '.__captcha_main_container',
-            container: '.__captcha_container',
-            refreshBtn: '.__captcha_regenerate_btn',
-        },
-        cart: {
-            container: '#__cart_main_container',
-            addBtn: '.__add_to_cart_btn',
-        },
-        register: {
-            form: '#__form_register',
-            inputs: {
-                name: 'inp-register-name',
-                username: 'inp-register-username',
-                password: 'inp-register-password',
-                confirmPassword: 'inp-register-re-password',
-                captcha: 'inp-register-captcha',
-            },
-        },
-        newsletter: {
-            form: '#__form_newsletter',
-            inputs: {
-                mobile: 'inp-newsletter-mobile',
-            },
-        },
-        contactUs: {
-            form: '#__form_contact',
-            inputs: {
-                name: 'inp-contact-name',
-                email: 'inp-contact-email',
-                mobile: 'inp-contact-mobile',
-                subject: 'inp-contact-subject',
-                message: 'inp-contact-message',
-                captcha: 'inp-contact-captcha',
-            },
-        },
-    },
-    validation: {
-        common: {
-            name: {
-                presence: {
-                    allowEmpty: false,
-                    message: '^' + 'فیلد نام را خالی نگذارید.',
-                },
-                format: {
-                    pattern: /^[پچجحخهعغفقثصضشسیبلاتنمکگوئدذرزطظژؤإأآءًٌٍَُِّ\s]+$/u,
-                    message: '^' + 'نام باید دارای حروف فارسی باشد.',
-                },
-            },
-            email: {
-                email: {
-                    message: '^' + 'ایمیل نامعتبر است.',
-                }
-            },
-            mobile: {
-                presence: {
-                    allowEmpty: false,
-                    message: '^' + 'فیلد موبایل را خالی نگذارید.',
-                },
-                format: {
-                    pattern: /^(098|\+98|0)?9\d{9}$/,
-                    message: '^' + 'موبایل وارد شده نامعتبر است.',
-                },
-                length: {
-                    is: 11,
-                    message: '^' + 'موبایل باید عددی ۱۱ رقمی باشد.',
-                }
-            },
-            captcha: {
-                presence: {
-                    allowEmpty: false,
-                    message: '^' + 'فیلد کد تصویر را خالی نگذارید.',
-                },
-            },
-        },
-        constraints: {
-            register: {
-                password: {
-                    presence: {
-                        allowEmpty: false,
-                        message: '^' + 'فیلد کلمه عبور اجباری می‌باشد.',
-                    },
-                },
-                confirmPassword: function (value, attributes) {
-                    if (value !== attributes.password) return null;
-                    return {
-                        presence: {
-                            allowEmpty: false,
-                            message: '^' + 'فیلد تایید کلمه عبور اجباری می‌باشد.',
-                        },
-                    };
-                }
-            },
-            contactUs: {
-                subject: {
-                    presence: {
-                        allowEmpty: false,
-                        message: '^' + 'فیلد موضوع را خالی نگذارید.',
-                    },
-                    length: {
-                        maximum: 250,
-                        message: '^' + 'فیلد موضوع باید حداکثر دارای ۲۵۰ کاراکتر باشد.',
-                    }
-                },
-                message: {
-                    presence: {
-                        allowEmpty: false,
-                        message: '^' + 'فیلد پیام خالی نگذارید.',
-                    },
-                },
-            },
-        },
-    },
 };
 
 (function ($) {
@@ -368,21 +254,31 @@ window.MyGlobalVariables = {
             },
             //-----
             constraints: {
-                register: {
-                    name: window.MyGlobalVariables.validation.common.name,
-                    username: window.MyGlobalVariables.validation.common.mobile,
-                    password: window.MyGlobalVariables.validation.constraints.register.password,
-                    confirmPassword: window.MyGlobalVariables.validation.constraints.register.confirmPassword,
-                    captcha: window.MyGlobalVariables.validation.common.captcha,
-                },
-                contactUs: {
-                    name: window.MyGlobalVariables.validation.common.name,
-                    email: window.MyGlobalVariables.validation.common.email,
-                    mobile: window.MyGlobalVariables.validation.common.mobile,
-                    subject: window.MyGlobalVariables.validation.constraints.contactUs.subject,
-                    message: window.MyGlobalVariables.validation.constraints.contactUs.message,
-                    captcha: window.MyGlobalVariables.validation.common.captcha,
-                },
+                home: {
+                    register: {
+                        username: window.MyGlobalVariables.validation.common.mobile,
+                        captcha: window.MyGlobalVariables.validation.common.captcha,
+                    },
+                    registerStep3: {
+                        password: window.MyGlobalVariables.validation.constraints.register.password,
+                        confirmPassword: window.MyGlobalVariables.validation.constraints.register.confirmPassword,
+                    },
+                    forgetStep1: {
+                        mobile: window.MyGlobalVariables.validation.common.mobile,
+                    },
+                    forgetStep3: {
+                        password: window.MyGlobalVariables.validation.constraints.forgetStep3.password,
+                        confirmPassword: window.MyGlobalVariables.validation.constraints.forgetStep3.confirmPassword,
+                    },
+                    contactUs: {
+                        name: window.MyGlobalVariables.validation.common.name,
+                        email: window.MyGlobalVariables.validation.common.email,
+                        mobile: window.MyGlobalVariables.validation.common.mobile,
+                        subject: window.MyGlobalVariables.validation.constraints.contactUs.subject,
+                        message: window.MyGlobalVariables.validation.constraints.contactUs.message,
+                        captcha: window.MyGlobalVariables.validation.common.captcha,
+                    },
+                }
             },
         };
     })();
@@ -567,6 +463,33 @@ window.MyGlobalVariables = {
             },
 
             forms: {
+                submitForm: function (formKey, scope, validationSuccessCallback, validationErrorCallback, check) {
+                    var
+                        self = this,
+                        //-----
+                        form,
+                        formValues,
+                        formErrors,
+                        //-----
+                        constraints;
+
+                    validationSuccessCallback = window.TheCore.isFunction(validationSuccessCallback) ? validationSuccessCallback : null;
+                    validationErrorCallback = window.TheCore.isFunction(validationErrorCallback) ? validationErrorCallback : null;
+                    check = false !== check;
+
+                    form = $(window.MyGlobalVariables.elements[formKey].form);
+                    constraints = window.TheCore.constraints[scope][formKey];
+                    form.submit(function () {
+                        if (check) {
+                            formValues = self.convertFormObjectNumbersToEnglish(window.validate.collectFormValues(this), formKey);
+                            formErrors = window.validate(formValues, constraints);
+                            if (!formErrors) {
+                                return validationSuccessCallback.apply(null, [formValues]);
+                            }
+                            return validationErrorCallback.apply(null, [formErrors]);
+                        }
+                    });
+                },
                 convertFormObjectNumbersToEnglish: function (obj, formKey) {
                     var
                         keyFromVal,
