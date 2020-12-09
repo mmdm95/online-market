@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Logic\Forms\ForgetPassword;
+namespace App\Logic\Forms;
 
 use App\Logic\Interfaces\IPageForm;
 use App\Logic\Models\UserModel;
@@ -11,11 +11,10 @@ use Sim\Container\Exceptions\ServiceNotFoundException;
 use Sim\Container\Exceptions\ServiceNotInstantiableException;
 use Sim\Form\Exceptions\FormException;
 
-class ForgetFormStep2 implements IPageForm
+class LoginForm implements IPageForm
 {
     /**
      * {@inheritdoc}
-     * @return array
      * @throws \ReflectionException
      * @throws MethodNotFoundException
      * @throws ParameterHasNoDefaultValueException
@@ -33,26 +32,43 @@ class ForgetFormStep2 implements IPageForm
 
         // aliases
         $validator->setFieldsAlias([
-            'inp-forget-code' => 'کد ارسال شده',
+            'inp-login-username' => 'موبایل',
+            'inp-login-password' => 'کلمه عبور',
+            'inp-login-captcha' => 'کد تصویر',
         ]);
-        // code
+        // captcha
         $validator
-            ->setFields('inp-forget-code')
+            ->setFields('inp-register-captcha')
+            ->captcha('{alias} ' . 'به درستی وارد نشده است.');
+        // username
+        $validator
+            ->setFields('inp-login-username')
+            ->stopValidationAfterFirstError(false)
+            ->required('{alias} ' . 'اجباری می‌باشد.')
+            ->stopValidationAfterFirstError(true)
+            ->persianMobile('{alias} ' . 'نامعتبر است.');
+        // password
+        $validator
+            ->setFields('inp-login-password')
             ->stopValidationAfterFirstError(false)
             ->required('{alias} ' . 'اجباری می‌باشد.')
             ->stopValidationAfterFirstError(true);
 
-        // validate code
+        // validate user status
         /**
          * @var UserModel $userModel
          */
         $userModel = container()->get(UserModel::class);
-        $code = $userModel->getFirst(
-            ['forget_password_code'],
+        $info = $userModel->getFirst(
+            ['is_login_locked', 'ban', 'ban_desc', 'delete'],
             'username=:u_name',
-            ['u_name' => session()->getFlash('forget.username', '', false)]);
-        if (input()->post('inp-forget-code', null)->getValue() !== $code['forget_password_code'] ?? '') {
-            $validator->setError('inp-forget-code', 'کد وارد شده صحیح نمی‌باشد.');
+            ['u_name' => input()->post('inp-login-username', '')->getValue()]);
+        if (!count($info)) {
+            $validator->setError('inp-login-username', 'نام کاربری یا کلمه عبور نادرست است!');
+        } elseif (DB_NO === $info['is_login_locked'] || DB_YES === $info['delete']) {
+            $validator->setError('inp-login-username', 'امکان ورود با این حساب کاربری وجود ندارد.');
+        } elseif (DB_YES === $info['ban']) {
+            $validator->setError('inp-login-username', $info['ban_desc']);
         }
 
         return [
@@ -66,30 +82,11 @@ class ForgetFormStep2 implements IPageForm
     }
 
     /**
-     */
-    /**
      * {@inheritdoc}
-     * @throws MethodNotFoundException
-     * @throws ParameterHasNoDefaultValueException
-     * @throws ServiceNotFoundException
-     * @throws ServiceNotInstantiableException
-     * @throws \ReflectionException
      */
     public function store(): bool
     {
-        /**
-         * @var UserModel $userModel
-         */
-        $userModel = container()->get(UserModel::class);
-
-        $username = session()->getFlash('forget.username', '', false);
-        // insert to database
-        $res = $userModel->update([
-            'incorrect_password_count' => 0,
-            'forget_password_code' => null,
-            'activate_code_request_free_at' => null,
-        ], 'username=:u_name', ['u_name' => $username]);
-
-        return $res;
+        // there is nothing to store
+        return true;
     }
 }

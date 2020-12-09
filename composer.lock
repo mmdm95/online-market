@@ -345,16 +345,16 @@
         },
         {
             "name": "mmdm/sim-auth",
-            "version": "v0.2.4",
+            "version": "v0.2.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/mmdm95/sim-auth.git",
-                "reference": "e6c5304c09bb5e77eb7922c4b7cf4571c66ea3ea"
+                "reference": "64f0a777b1da0d9af4b2167451b4b7a4ac36de61"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mmdm95/sim-auth/zipball/e6c5304c09bb5e77eb7922c4b7cf4571c66ea3ea",
-                "reference": "e6c5304c09bb5e77eb7922c4b7cf4571c66ea3ea",
+                "url": "https://api.github.com/repos/mmdm95/sim-auth/zipball/64f0a777b1da0d9af4b2167451b4b7a4ac36de61",
+                "reference": "64f0a777b1da0d9af4b2167451b4b7a4ac36de61",
                 "shasum": ""
             },
             "require": {
@@ -384,7 +384,7 @@
                 }
             ],
             "description": "A simple yet nice authentication library",
-            "time": "2020-11-21T10:53:48+00:00"
+            "time": "2020-12-08T19:24:18+00:00"
         },
         {
             "name": "mmdm/sim-benchmark",

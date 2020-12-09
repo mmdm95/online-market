@@ -20,7 +20,7 @@ use Sim\I18n\ISOLanguageCodes;
  *     1.2.5.0 instead of 1.2.5-a
  *     1.2.5.0.1 instead of 1.2.5-a1 (I'm not sure)
  */
-defined("APP_VERSION") OR define("APP_VERSION", "0.1.4");
+defined("APP_VERSION") OR define("APP_VERSION", "0.1.5");
 
 /***************************************
  * You can add your constants here
@@ -52,6 +52,7 @@ defined("PUBLIC_ACCESS_DIR") OR define("PUBLIC_ACCESS_DIR", 'public-access');
 defined("ROLE_DEVELOPER") OR define("ROLE_DEVELOPER", 'developer');
 defined("ROLE_SUPER_USER") OR define("ROLE_SUPER_USER", 'super_user');
 defined("ROLE_ADMIN") OR define("ROLE_ADMIN", 'admin');
+defined("ROLE_COLLEAGUE") OR define("ROLE_COLLEAGUE", 'colleague');
 defined("ROLE_USER") OR define("ROLE_USER", 'user');
 
 // sms types
@@ -73,6 +74,13 @@ defined('SMS_REPLACEMENTS') OR define('SMS_REPLACEMENTS', [
 // contact us statuses
 defined("CONTACT_STATUS_UNREAD") OR define("CONTACT_STATUS_UNREAD", 1);
 defined("CONTACT_STATUS_READ") OR define("CONTACT_STATUS_READ", 2);
+
+// complaint statuses
+defined("COMPLAINT_STATUS_UNREAD") OR define("COMPLAINT_STATUS_UNREAD", 1);
+defined("COMPLAINT_STATUS_READ") OR define("COMPLAINT_STATUS_READ", 2);
+
+// time constants
+defined("TIME_ACTIVATE_CODE") OR define("TIME_ACTIVATE_CODE", 180);
 
 // tabbed slider predefined items
 defined("SLIDER_TABBED_NEWEST") OR define("SLIDER_TABBED_NEWEST", 1);

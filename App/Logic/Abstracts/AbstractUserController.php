@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Logic\SMS;
+namespace App\Logic\Abstracts;
 
-use App\Logic\Interfaces\ICustomSMS as ISMS;
+use App\Logic\Utils\CartUtil;
+use Sim\Abstracts\Mvc\Controller\AbstractController;
 use Sim\Container\Exceptions\MethodNotFoundException;
 use Sim\Container\Exceptions\ParameterHasNoDefaultValueException;
 use Sim\Container\Exceptions\ServiceNotFoundException;
@@ -10,39 +11,36 @@ use Sim\Container\Exceptions\ServiceNotInstantiableException;
 use Sim\Exceptions\ConfigManager\ConfigNotRegisteredException;
 use Sim\Interfaces\IFileNotExistsException;
 use Sim\Interfaces\IInvalidVariableNameException;
-use Sim\SMS\Exceptions\SMSException;
-use Sim\SMS\Factories\NiazPardaz;
-use Sim\SMS\MessageProvider;
 
-class RegisterSMS implements ISMS
+abstract class AbstractUserController extends AbstractController
 {
     /**
-     * {@inheritdoc}
-     * @param array $numbers
+     * @var string
+     */
+    protected $main_layout = 'main-user';
+
+    /**
+     * AbstractAdminController constructor.
      * @throws ConfigNotRegisteredException
      * @throws IFileNotExistsException
      * @throws IInvalidVariableNameException
+     * @throws \ReflectionException
      * @throws MethodNotFoundException
      * @throws ParameterHasNoDefaultValueException
      * @throws ServiceNotFoundException
      * @throws ServiceNotInstantiableException
-     * @throws \ReflectionException
-     * @throws SMSException
      */
-    public function send(array $numbers, string $body): bool
+    public function __construct()
     {
+        parent::__construct();
+
         /**
-         * @var NiazPardaz $sms
+         * @var CartUtil $cartUtil
          */
-        $sms = container()->get('sms_panel');
-        $provider = new MessageProvider();
+        $cartUtil = \container()->get(CartUtil::class);
 
-        $provider
-            ->setNumbers($numbers)
-            ->withBody($body);
-
-        $sms->send($provider);
-
-        return $sms->isSuccessful();
+        $this->setDefaultArguments([
+            'cart_section' => $cartUtil->getCartSection(),
+        ]);
     }
 }

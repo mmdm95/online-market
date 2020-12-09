@@ -18,14 +18,20 @@ class ForgetMobileCheckMiddleware extends AbstractMiddleware
          */
         $mobileValidator = container()->get(PersianMobileValidation::class);
         $isValid = $mobileValidator->validate($mobile);
-        if (!$isValid) return false;
+        if (!$isValid) {
+            session()->removeFlash('forget.username');
+            return false;
+        };
 
         /**
          * @var UserModel $userModel
          */
         $userModel = container()->get(UserModel::class);
         $count = $userModel->count('username=:username', ['username' => $mobile]);
-        if (1 !== $count) return false;
+        if (1 !== $count) {
+            session()->removeFlash('forget.username');
+            return false;
+        }
 
         return parent::handle(...$_);
     }

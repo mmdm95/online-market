@@ -3,6 +3,7 @@
 namespace App\Logic\Forms;
 
 use App\Logic\Interfaces\IPageForm;
+use App\Logic\Models\ComplaintModel;
 use App\Logic\Models\ContactUsModel;
 use App\Logic\Models\UserModel;
 use App\Logic\Validations\ExtendedValidator;
@@ -14,7 +15,7 @@ use Sim\Container\Exceptions\ServiceNotInstantiableException;
 use Sim\Form\Exceptions\FormException;
 use voku\helper\AntiXSS;
 
-class ContactForm implements IPageForm
+class ComplaintForm implements IPageForm
 {
     /**
      * {@inheritdoc}
@@ -35,20 +36,20 @@ class ContactForm implements IPageForm
 
         // aliases
         $validator->setFieldsAlias([
-            'inp-contact-name' => 'نام',
-            'inp-contact-email' => 'ایمیل',
-            'inp-contact-mobile' => 'موبایل',
-            'inp-contact-subject' => 'موضوع',
-            'inp-contact-message' => 'متن پیام',
-            'inp-contact-captcha' => 'کد تصویر',
+            'inp-complaint-name' => 'نام',
+            'inp-complaint-email' => 'ایمیل',
+            'inp-complaint-mobile' => 'موبایل',
+            'inp-complaint-subject' => 'موضوع',
+            'inp-complaint-message' => 'متن پیام',
+            'inp-complaint-captcha' => 'کد تصویر',
         ]);
         // captcha
         $validator
-            ->setFields('inp-contact-captcha')
+            ->setFields('inp-complaint-captcha')
             ->captcha('{alias} ' . 'به درستی وارد نشده است.');
         // name
         $validator
-            ->setFields('inp-contact-name')
+            ->setFields('inp-complaint-name')
             ->stopValidationAfterFirstError(false)
             ->required('{alias} ' . 'اجباری می‌باشد.')
             ->stopValidationAfterFirstError(true)
@@ -56,21 +57,21 @@ class ContactForm implements IPageForm
             ->lessThanEqualLength(30, '{alias} ' . 'باید کمتر از' . ' {max} ' . 'کاراکتر باشد.');
         // email
         $validator
-            ->setFields('inp-contact-email')
+            ->setFields('inp-complaint-email')
             ->stopValidationAfterFirstError(false)
             ->required('{alias} ' . 'اجباری می‌باشد.')
             ->stopValidationAfterFirstError(true)
             ->email('{alias} ' . 'وارد شده نامعتبر است.');
         // mobile
         $validator
-            ->setFields('inp-contact-mobile')
+            ->setFields('inp-complaint-mobile')
             ->stopValidationAfterFirstError(false)
             ->required('{alias} ' . 'اجباری می‌باشد.')
             ->stopValidationAfterFirstError(true)
             ->persianMobile('{alias} ' . 'نامعتبر است.');
         // subject
         $validator
-            ->setFields('inp-contact-subject')
+            ->setFields('inp-complaint-subject')
             ->stopValidationAfterFirstError(false)
             ->required('{alias} ' . 'اجباری می‌باشد.')
             ->stopValidationAfterFirstError(true)
@@ -78,7 +79,7 @@ class ContactForm implements IPageForm
             ->lessThanEqualLength(250, '{alias} ' . 'باید کمتر از' . ' {max} ' . 'کاراکتر باشد.');
         // message
         $validator
-            ->setFields('inp-contact-message')
+            ->setFields('inp-complaint-message')
             ->stopValidationAfterFirstError(false)
             ->required('{alias} ' . 'اجباری می‌باشد.')
             ->stopValidationAfterFirstError(true);
@@ -112,22 +113,21 @@ class ContactForm implements IPageForm
          */
         $userModel = container()->get(UserModel::class);
         /**
-         * @var ContactUsModel $contactModel
+         * @var ComplaintModel $complaintModel
          */
-        $contactModel = container()->get(ContactUsModel::class);
+        $complaintModel = container()->get(ComplaintModel::class);
         /**
          * @var AntiXSS $xss
          */
         $xss = container()->get(AntiXSS::class);
 
-        $name = input()->post('inp-contact-name', '')->getValue();
-        $email = input()->post('inp-contact-email', '')->getValue();
-        $mobile = input()->post('inp-contact-mobile', '')->getValue();
-        $subject = input()->post('inp-contact-subject', '')->getValue();
-        $message = input()->post('inp-contact-message', '')->getValue();
+        $name = input()->post('inp-complaint-name', '')->getValue();
+        $email = input()->post('inp-complaint-email', '')->getValue();
+        $mobile = input()->post('inp-complaint-mobile', '')->getValue();
+        $subject = input()->post('inp-complaint-subject', '')->getValue();
+        $message = input()->post('inp-complaint-message', '')->getValue();
         // if user is logged in, fetch his info
         if ($auth->isLoggedIn()) {
-            $userId = $auth->getCurrentUser()['id'] ?? 0;
             $user = $userModel->get(['first_name', 'mobile', 'email']);
             $user = count($user) ? $user[0] : [];
             //-----
@@ -136,14 +136,13 @@ class ContactForm implements IPageForm
             $mobile = isset($user['mobile']) && !empty($user['mobile']) ? $user['mobile'] : $mobile;
         }
         // insert to database
-        $res = $contactModel->insert([
-            'user_id' => $userId ?? null,
+        $res = $complaintModel->insert([
             'title' => $xss->xss_clean($subject),
             'name' => $xss->xss_clean($name),
             'mobile' => $xss->xss_clean($mobile),
             'email' => $xss->xss_clean($email),
             'body' => $xss->xss_clean($message),
-            'status' => CONTACT_STATUS_UNREAD,
+            'status' => COMPLAINT_STATUS_UNREAD,
             'created_at' => time(),
         ]);
 

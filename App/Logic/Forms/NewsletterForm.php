@@ -1,22 +1,21 @@
 <?php
 
-namespace App\Logic\Forms\ForgetPassword;
+namespace App\Logic\Forms;
 
 use App\Logic\Interfaces\IPageForm;
-use App\Logic\Models\UserModel;
+use App\Logic\Models\NewsletterModel;
 use App\Logic\Validations\ExtendedValidator;
 use Sim\Container\Exceptions\MethodNotFoundException;
 use Sim\Container\Exceptions\ParameterHasNoDefaultValueException;
 use Sim\Container\Exceptions\ServiceNotFoundException;
 use Sim\Container\Exceptions\ServiceNotInstantiableException;
 use Sim\Form\Exceptions\FormException;
-use Sim\Form\Validations\PasswordValidation;
+use voku\helper\AntiXSS;
 
-class ForgetFormStep3 implements IPageForm
+class NewsletterForm implements IPageForm
 {
     /**
      * {@inheritdoc}
-     * @return array
      * @throws \ReflectionException
      * @throws MethodNotFoundException
      * @throws ParameterHasNoDefaultValueException
@@ -34,29 +33,19 @@ class ForgetFormStep3 implements IPageForm
 
         // aliases
         $validator->setFieldsAlias([
-            'inp-forget-new-password' => 'کلمه عبور',
+            'inp-newsletter-mobile' => 'موبایل',
         ]);
-        // password
+        // username
         $validator
-            ->setFields('inp-forget-new-password')
+            ->setFields('inp-newsletter-mobile')
             ->stopValidationAfterFirstError(false)
             ->required('{alias} ' . 'اجباری می‌باشد.')
             ->stopValidationAfterFirstError(true)
-            ->password(PasswordValidation::STRENGTH_NORMAL, '{alias} ' . 'باید شامل حروف و اعداد باشد.')
-            ->greaterThanEqualLength(8, '{alias} ' . 'باید بیشتر از' . ' {min} ' . 'کاراکتر باشد.')
-            ->match(
-                'inp-forget-new-password',
-                ['تایید کلمه عبور' => 'inp-forget-new-re-password'],
-                '{first} ' . 'با' . ' {second} ' . 'یکسان نمی‌باشد.'
-            );
+            ->persianMobile('{alias} ' . 'نامعتبر است.');
 
         return [
             $validator->getStatus(),
-            $validator->getError(),
-            $validator->getUniqueErrors(),
-            $validator->getFormattedError('<p class="m-0">'),
             $validator->getFormattedUniqueErrors('<p class="m-0">'),
-            $validator->getRawErrors(),
         ];
     }
 
@@ -71,18 +60,23 @@ class ForgetFormStep3 implements IPageForm
     public function store(): bool
     {
         /**
-         * @var UserModel $userModel
+         * @var NewsletterModel $newsletterModel
          */
-        $userModel = container()->get(UserModel::class);
+        $newsletterModel = container()->get(NewsletterModel::class);
+        /**
+         * @var AntiXSS $xss
+         */
+        $xss = container()->get(AntiXSS::class);
 
-        $username = session()->getFlash('forget.username', '', false);
-        $password = input()->post('inp-forget-new-password', '')->getValue();
-        // insert to database
-        $res = $userModel->updateNRegisterUser($username, [
-            'password' => password_hash($password, PASSWORD_BCRYPT),
-            'forget_password_at' => time(),
-        ], 'username=:u_name', ['u_name' => $username]);
+        $mobile = input()->post('inp-newsletter-mobile', '')->getValue();
+        if (0 === $newsletterModel->count('mobile=:mobile', ['mobile' => $mobile])) {
+            // insert to database
+            $res = $newsletterModel->insert([
+                'mobile' => $xss->xss_clean($mobile),
+                'created_at' => time(),
+            ]);
+        }
 
-        return $res;
+        return $res ?? true;
     }
 }

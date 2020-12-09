@@ -30,10 +30,27 @@ $validator = form_validator();
                                     'success' => $forget_success ?? '',
                                     'warning' => $forget_warning ?? '',
                                 ]); ?>
+                                <input type="hidden" name="csrf_token" value="<?= csrf_token(); ?>" data-ignored>
                                 <div class="form-group">
                                     <input type="text" required class="form-control" name="inp-forget-mobile"
                                            placeholder="شماره موبایل شما"
                                            value="<?= $validator->setInput('inp-forget-mobile'); ?>">
+                                </div>
+                                <div class="row">
+                                    <div class="form-group col-md-6">
+                                        <input placeholder="کد تصویر را وارد کنید" class="form-control"
+                                               name="inp-forget-captcha" required>
+                                    </div>
+                                    <div class="form-group col-md-6 d-flex justify-content-center align-items-center __captcha_main_container">
+                                        <div class="__captcha_container">
+                                        </div>
+                                        <button class="btn btn-link text_default p-2 ml-3 __captcha_regenerate_btn"
+                                                type="button" aria-label="regenerate captcha">
+                                            <input type="hidden" name="inp-captcha-name"
+                                                   value="<?= url() . '__forget_form_step1'; ?>">
+                                            <i class="icon-refresh icon-2x" aria-hidden="true"></i>
+                                        </button>
+                                    </div>
                                 </div>
                                 <div class="form-group text-center ltr">
                                     <button type="submit" class="btn btn-danger rtl">

@@ -134,11 +134,6 @@ class HomeController extends AbstractHomeController
         return $this->render([]);
     }
 
-    public function newsletter()
-    {
-
-    }
-
     /**
      * @throws MethodNotFoundException
      * @throws ParameterHasNoDefaultValueException

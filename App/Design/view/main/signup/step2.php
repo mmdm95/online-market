@@ -18,6 +18,7 @@
                                     'success' => $register_success ?? '',
                                     'warning' => $register_warning ?? '',
                                 ]); ?>
+                                <input type="hidden" name="csrf_token" value="<?= csrf_token(); ?>" data-ignored>
                                 <div class="form-group">
                                     <input class="form-control" required type="text" name="inp-register-code"
                                            placeholder="کد ارسال شده">

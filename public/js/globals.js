@@ -51,6 +51,10 @@ window.MyGlobalVariables = {
             update: '/ajax/cart/update',
             remove: '/ajax/cart/remove',
         },
+        newsletter: {
+            add: '/ajax/newsletter/add',
+            remove: '/ajax/newsletter/remove',
+        },
         products: {
             get: {
                 products: '/ajax/products',
@@ -105,6 +109,23 @@ window.MyGlobalVariables = {
             },
         },
         captcha: '/ajax/captcha',
+    },
+    elements: {
+        captcha: {
+            mainContainer: '.__captcha_main_container',
+            container: '.__captcha_container',
+            refreshBtn: '.__captcha_regenerate_btn',
+        },
+    },
+    validation: {
+        common: {
+            captcha: {
+                presence: {
+                    allowEmpty: false,
+                    message: '^' + 'فیلد کد تصویر را خالی نگذارید.',
+                },
+            },
+        },
     },
 };
 
@@ -165,6 +186,14 @@ window.MyGlobalVariables = {
                 return string.replace(new RegExp(
                     "^[" + char + "]+|[" + char + "]+$", "g"
                 ), "");
+            },
+            idGenerator: function (prefix) {
+                var elNum, rndEl;
+                do {
+                    elNum = Math.floor(Math.random() * 10000000);
+                    rndEl = $(document).find('#' + prefix + elNum).length;
+                } while (rndEl !== 0);
+                return prefix + elNum
             },
             scrollTo: function (el, gap, speed) {
                 el = $(el);
@@ -251,34 +280,6 @@ window.MyGlobalVariables = {
                 return val;
             },
             noop: function () {
-            },
-            //-----
-            constraints: {
-                home: {
-                    register: {
-                        username: window.MyGlobalVariables.validation.common.mobile,
-                        captcha: window.MyGlobalVariables.validation.common.captcha,
-                    },
-                    registerStep3: {
-                        password: window.MyGlobalVariables.validation.constraints.register.password,
-                        confirmPassword: window.MyGlobalVariables.validation.constraints.register.confirmPassword,
-                    },
-                    forgetStep1: {
-                        mobile: window.MyGlobalVariables.validation.common.mobile,
-                    },
-                    forgetStep3: {
-                        password: window.MyGlobalVariables.validation.constraints.forgetStep3.password,
-                        confirmPassword: window.MyGlobalVariables.validation.constraints.forgetStep3.confirmPassword,
-                    },
-                    contactUs: {
-                        name: window.MyGlobalVariables.validation.common.name,
-                        email: window.MyGlobalVariables.validation.common.email,
-                        mobile: window.MyGlobalVariables.validation.common.mobile,
-                        subject: window.MyGlobalVariables.validation.constraints.contactUs.subject,
-                        message: window.MyGlobalVariables.validation.constraints.contactUs.message,
-                        captcha: window.MyGlobalVariables.validation.common.captcha,
-                    },
-                }
             },
         };
     })();
@@ -409,7 +410,9 @@ window.MyGlobalVariables = {
                             successCallback.call(data);
                         } else {
                             if (showError) {
-                                _.toasts.toast(data.error);
+                                _.toasts.toast(data.error, {
+                                    type: 'error',
+                                });
                             } else {
                                 console.error(data.error);
                             }
@@ -423,11 +426,15 @@ window.MyGlobalVariables = {
                             console.log(error.response.status);
                         } else if (error.request) {
                             if (showError) {
-                                _.toasts.toast(window.MyGlobalVariables.messages.request.error);
+                                _.toasts.toast(window.MyGlobalVariables.messages.request.error, {
+                                    type: 'error',
+                                });
                             }
                         } else {
                             if (showError) {
-                                _.toasts.toast(error.message);
+                                _.toasts.toast(error.message, {
+                                    type: 'error',
+                                });
                             }
                         }
                     });
@@ -463,22 +470,19 @@ window.MyGlobalVariables = {
             },
 
             forms: {
-                submitForm: function (formKey, scope, validationSuccessCallback, validationErrorCallback, check) {
+                submitForm: function (formKey, constraints, validationSuccessCallback, validationErrorCallback, check) {
                     var
                         self = this,
                         //-----
                         form,
                         formValues,
-                        formErrors,
-                        //-----
-                        constraints;
+                        formErrors;
 
                     validationSuccessCallback = window.TheCore.isFunction(validationSuccessCallback) ? validationSuccessCallback : null;
                     validationErrorCallback = window.TheCore.isFunction(validationErrorCallback) ? validationErrorCallback : null;
                     check = false !== check;
 
                     form = $(window.MyGlobalVariables.elements[formKey].form);
-                    constraints = window.TheCore.constraints[scope][formKey];
                     form.submit(function () {
                         if (check) {
                             formValues = self.convertFormObjectNumbersToEnglish(window.validate.collectFormValues(this), formKey);

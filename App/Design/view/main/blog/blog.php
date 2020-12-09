@@ -265,7 +265,7 @@
                                             <ul> 
                                                 <li><a class="dropdown-item nav-link nav_item" href="blog-three-columns.html">3 ستون</a></li>
                                                 <li><a class="dropdown-item nav-link nav_item" href="blog-four-columns.html">4 ستون</a></li> 
-                                                <li><a class="dropdown-item nav-link nav_item active" href="blog-left-sidebar.html">نوار کناری سمت چپ</a></li> 
+                                                <li><a class="dropdown-item nav-link nav_item active" href="blog.php">نوار کناری سمت چپ</a></li>
                                                 <li><a class="dropdown-item nav-link nav_item" href="blog-right-sidebar.html">نوار کناری سمت راست</a></li>
                                                 <li><a class="dropdown-item nav-link nav_item" href="blog-standard-left-sidebar.html">نوار کناری استاندارد چپ</a></li> 
                                                 <li><a class="dropdown-item nav-link nav_item" href="blog-standard-right-sidebar.html">نوار کناری استاندارد راست</a></li>

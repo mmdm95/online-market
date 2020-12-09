@@ -14,7 +14,7 @@ use Sim\Form\Exceptions\FormException;
 class RegisterFormStep2 implements IPageForm
 {
     /**
-     * @return array
+     * {@inheritdoc}
      * @throws \ReflectionException
      * @throws MethodNotFoundException
      * @throws ParameterHasNoDefaultValueException
@@ -65,7 +65,7 @@ class RegisterFormStep2 implements IPageForm
     }
 
     /**
-     * @return mixed
+     * {@inheritdoc}
      * @throws MethodNotFoundException
      * @throws ParameterHasNoDefaultValueException
      * @throws ServiceNotFoundException

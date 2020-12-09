@@ -8,7 +8,8 @@ use App\Logic\Forms\Register\RegisterFormStep2;
 use App\Logic\Forms\Register\RegisterFormStep3;
 use App\Logic\Middlewares\Logic\RegisterCodeCheckMiddleware;
 use App\Logic\Middlewares\Logic\RegisterMobileCheckMiddleware;
-use App\Logic\SMS\RegisterSMS;
+use App\Logic\Models\BaseModel;
+use App\Logic\SMS\CommonSMS;
 use Sim\Auth\DBAuth;
 use Sim\Auth\Exceptions\InvalidUserException;
 use Sim\Auth\Interfaces\IDBException;
@@ -59,7 +60,7 @@ class RegisterController extends AbstractHomeController
                     session()->setFlash('register.username', $username);
 
                     // send code as sms
-//                    $registerSms = new RegisterSMS();
+//                    $registerSms = new CommonSMS();
 //                    $registerSms->send([$username], replaced_sms_body(SMS_TYPE_ACTIVATION, [
 //                        SMS_REPLACEMENTS['mobile'] => $username,
 //                        SMS_REPLACEMENTS['code'] => session()->getFlash('register.code', ''),
@@ -167,7 +168,7 @@ class RegisterController extends AbstractHomeController
                     try {
                         $auth->loginWithUsername(
                             session()->getFlash('register.username', ''),
-                            'users.is_activated=:is_active',
+                            BaseModel::TBL_USERS . '.is_activated=:is_active',
                             ['is_active' => DB_YES]
                         );
                         response()->redirect(url('user.index')->getOriginalUrl());

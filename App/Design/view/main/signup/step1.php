@@ -22,6 +22,7 @@ $validator = form_validator();
                                     'success' => $register_success ?? '',
                                     'warning' => $register_warning ?? '',
                                 ]); ?>
+                                <input type="hidden" name="csrf_token" value="<?= csrf_token(); ?>" data-ignored>
                                 <div class="form-group">
                                     <input type="text" required class="form-control" name="inp-register-username"
                                            placeholder="موبایل خود را وارد کنید"

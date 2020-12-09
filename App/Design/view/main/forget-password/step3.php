@@ -26,6 +26,7 @@
                                     'success' => $forget_success ?? '',
                                     'warning' => $forget_warning ?? '',
                                 ]); ?>
+                                <input type="hidden" name="csrf_token" value="<?= csrf_token(); ?>" data-ignored>
                                 <div class="form-group">
                                     <input class="form-control" required type="password" name="inp-forget-new-password"
                                            placeholder="کلمه عبور جدید">

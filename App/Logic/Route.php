@@ -5,17 +5,23 @@ namespace App\Logic;
 use App\Logic\Handlers\CustomExceptionHandler;
 use App\Logic\Middlewares\AdminAuthMiddleware;
 use App\Logic\Middlewares\ApiVerifierMiddleware;
+use App\Logic\Middlewares\AuthMiddleware;
 use App\Logic\Utils\ConfigUtil;
 use Pecee\SimpleRouter\Event\EventArgument;
 use Pecee\SimpleRouter\Handlers\EventHandler;
 use Pecee\SimpleRouter\SimpleRouter as Router;
+use Sim\Exceptions\ConfigManager\ConfigNotRegisteredException;
+use Sim\Interfaces\IFileNotExistsException;
 use Sim\Interfaces\IInitialize;
+use Sim\Interfaces\IInvalidVariableNameException;
 
 class Route implements IInitialize
 {
     /**
      * Route definitions
-     * @throws \Exception
+     * @throws ConfigNotRegisteredException
+     * @throws IFileNotExistsException
+     * @throws IInvalidVariableNameException
      */
     public function init()
     {
@@ -29,26 +35,32 @@ class Route implements IInitialize
     }
 
     /**
+     * @throws ConfigNotRegisteredException
+     * @throws IFileNotExistsException
+     * @throws IInvalidVariableNameException
      * @throws \Exception
      */
     protected function setDependencyInjection()
     {
-        // Development code for container
-        // Create our new php-di container
-        $container = (new \DI\ContainerBuilder())
-            ->useAutowiring(true)
-            ->build();
+        $mode = config()->get('main.mode') ?? MODE_PRODUCTION;
+        if (MODE_PRODUCTION == $mode) {
+            // Production code for container
+            // Cache directory
+            $cacheDir = cache_path('simple-router');
 
-        // Production code for container
-//        // Cache directory
-//        $cacheDir = cache_path('simple-router');
-//
-//        // Create our new php-di container
-//        $container = (new \DI\ContainerBuilder())
-//            ->enableCompilation($cacheDir)
-//            ->writeProxiesToFile(true, $cacheDir . '/proxies')
-//            ->useAutowiring(true)
-//            ->build();
+            // Create our new php-di container
+            $container = (new \DI\ContainerBuilder())
+                ->enableCompilation($cacheDir)
+                ->writeProxiesToFile(true, $cacheDir . '/proxies')
+                ->useAutowiring(true)
+                ->build();
+        } else {
+            // Development code for container
+            // Create our new php-di container
+            $container = (new \DI\ContainerBuilder())
+                ->useAutowiring(true)
+                ->build();
+        }
 
         // Add our container to simple-router and enable dependency injection
         Router::enableDependencyInjection($container);
@@ -166,7 +178,6 @@ class Route implements IInitialize
                 ])->name('admin.blog.category.edit');
                 Router::get('blog/category/view', 'Admin\BlogController@CategoryView')->name('admin.blog.category.view');
 
-
                 /**
                  * Contact us Route
                  */
@@ -240,6 +251,22 @@ class Route implements IInitialize
             //==========================
             // user routes
             //==========================
+            Router::group(['prefix' => '/user/', 'middleware' => AuthMiddleware::class], function () {
+                /**
+                 * dashboard
+                 */
+                Router::get('/', 'User\HomeController@index')->name('user.index');
+            });
+
+            //==========================
+            // colleague routes
+            //==========================
+            Router::group(['prefix' => '/colleague/', 'middleware' => AuthMiddleware::class], function () {
+                /**
+                 * dashboard
+                 */
+                Router::get('/', 'Colleague\HomeController@index')->name('colleague.index');
+            });
 
             //==========================
             // other routes
@@ -249,7 +276,6 @@ class Route implements IInitialize
              */
             Router::get('/', 'HomeController@index')->name('home.index');
             Router::get('/search', 'HomeController@search')->name('home.search');
-            Router::post('/newsletter', 'HomeController@newsletter')->name('home.newsletter');
 
             /**
              * common routes
@@ -257,6 +283,7 @@ class Route implements IInitialize
             Router::get('/about', 'PageController@about')->name('home.about');
             Router::get('/faq', 'PageController@faq')->name('home.faq');
             Router::form('/contact', 'PageController@contact')->name('home.contact');
+            Router::form('/complaint', 'PageController@complaint')->name('home.complaint');
             Router::get('/pages/{url}', 'PageController@pages')->where([
                 'url' => '.+',
             ])->name('home.pages');
@@ -306,6 +333,12 @@ class Route implements IInitialize
             'exceptionHandler' => CustomExceptionHandler::class,
         ], function () {
             /**
+             * newsletter route
+             */
+            Router::post('/newsletter/add', 'PageController@addNewsletter')->name('ajax.newsletter.add');
+            Router::post('/newsletter/remove', 'PageController@removeNewsletter')->name('ajax.newsletter.remove');
+
+            /**
              * File Manager Route
              */
             Router::get('/file-manager/list', 'Admin\FileController@list')->name('api.file-manager.list');
@@ -319,7 +352,9 @@ class Route implements IInitialize
             ])->name('api.file-manager.download');
             Router::get('/file-manager/dir-tree', 'Admin\FileController@foldersTree')->name('api.file-manager.tree');
 
-            // get captcha image
+            /**
+             * get captcha image
+             */
             Router::get('/captcha', 'CaptchaController@generateCaptcha')->name('api.captcha');
         });
     }
@@ -334,9 +369,7 @@ class Route implements IInitialize
             'exceptionHandler' => CustomExceptionHandler::class,
             'middleware' => ApiVerifierMiddleware::class
         ], function () {
-            //==========================
-            // other routes
-            //==========================
+
         });
     }
 }

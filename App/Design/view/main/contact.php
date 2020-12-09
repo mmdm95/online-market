@@ -56,9 +56,6 @@ $validator = form_validator();
     </div>
     <!-- END SECTION CONTACT -->
 
-    <p class="ltr">
-        <?= url('home.contact')->getOriginalUrl(); ?>
-    </p>
     <!-- START SECTION CONTACT -->
     <div class="section pt-0">
         <div class="container">

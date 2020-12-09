@@ -69,18 +69,6 @@ PAGE JS
     /*===================================*
     04. MENU JS
     *===================================*/
-    //Main navigation scroll spy for shadow
-    $(window).on('scroll', function () {
-        var scroll = $(window).scrollTop();
-
-        if (scroll >= 150) {
-            $('header.fixed-top').addClass('nav-fixed');
-        } else {
-            $('header.fixed-top').removeClass('nav-fixed');
-        }
-
-    });
-
     //Show Hide dropdown-menu Main navigation
     $(document).on('ready', function () {
         $('.dropdown-menu a.dropdown-toggler').on('click', function () {
@@ -132,14 +120,17 @@ PAGE JS
         }
     });
 
+    //Main navigation scroll spy for shadow
     $(window).on('scroll', function () {
         var scroll = $(window).scrollTop();
 
         if (scroll >= 150) {
+            $('header.fixed-top').addClass('nav-fixed');
             $('.header_sticky_bar').removeClass('d-none');
             $('header.no-sticky').removeClass('nav-fixed');
 
         } else {
+            $('header.fixed-top').removeClass('nav-fixed');
             $('.header_sticky_bar').addClass('d-none');
         }
 

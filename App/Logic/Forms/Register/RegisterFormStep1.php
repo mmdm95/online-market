@@ -16,7 +16,7 @@ use voku\helper\AntiXSS;
 class RegisterFormStep1 implements IPageForm
 {
     /**
-     * @return array
+     * {@inheritdoc}
      * @throws \ReflectionException
      * @throws MethodNotFoundException
      * @throws ParameterHasNoDefaultValueException
@@ -76,7 +76,7 @@ class RegisterFormStep1 implements IPageForm
     }
 
     /**
-     * @return mixed
+     * {@inheritdoc}
      * @throws MethodNotFoundException
      * @throws ParameterHasNoDefaultValueException
      * @throws ServiceNotFoundException
@@ -104,6 +104,7 @@ class RegisterFormStep1 implements IPageForm
                 'password' => '',
                 'is_activated' => DB_NO,
                 'activate_code' => $code,
+                'activate_code_request_free_at' => time() + TIME_ACTIVATE_CODE,
                 'created_at' => time(),
             ]);
 

@@ -3,10 +3,14 @@
 namespace App\Logic\Controllers;
 
 use App\Logic\Abstracts\AbstractHomeController;
+use App\Logic\Forms\ComplaintForm;
 use App\Logic\Forms\ContactForm;
+use App\Logic\Forms\NewsletterForm;
+use App\Logic\Handlers\ResourceHandler;
 use App\Logic\Models\FAQModel;
 use App\Logic\Models\OurTeamModel;
 use App\Logic\Models\StaticPageModel;
+use Jenssegers\Agent\Agent;
 use Sim\Container\Exceptions\MethodNotFoundException;
 use Sim\Container\Exceptions\ParameterHasNoDefaultValueException;
 use Sim\Container\Exceptions\ServiceNotFoundException;
@@ -116,6 +120,47 @@ class PageController extends AbstractHomeController
     }
 
     /**
+     * @return string
+     * @throws ConfigNotRegisteredException
+     * @throws ControllerException
+     * @throws IFileNotExistsException
+     * @throws IInvalidVariableNameException
+     * @throws MethodNotFoundException
+     * @throws ParameterHasNoDefaultValueException
+     * @throws PathNotRegisteredException
+     * @throws ServiceNotFoundException
+     * @throws ServiceNotInstantiableException
+     * @throws \ReflectionException
+     * @throws FormException
+     */
+    public function complaint()
+    {
+        $data = [];
+
+        if (is_post()) {
+            /**
+             * @var ComplaintForm $complaintForm
+             */
+            $complaintForm = container()->get(ComplaintForm::class);
+            [$status, $errors] = $complaintForm->validate();
+            if ($status) {
+                $res = $complaintForm->store();
+                // success or warning message
+                if ($res) {
+                    $data['complaint_success'] = 'اطلاعات با موفقیت ثبت شد.';
+                } else {
+                    $data['complaint_warning'] = 'خطا در ارتباط با سرور، لطفا دوباره تلاش کنید.';
+                }
+            } else {
+                $data['complaint_errors'] = $errors;
+            }
+        }
+
+        $this->setLayout($this->main_layout)->setTemplate('view/main/complaint');
+        return $this->render($data);
+    }
+
+    /**
      * @param $url
      * @return string
      * @throws ConfigNotRegisteredException
@@ -160,6 +205,50 @@ class PageController extends AbstractHomeController
                 'page_content' => $page['body'],
             ]);
         }
+    }
+
+    /**
+     * @throws MethodNotFoundException
+     * @throws ParameterHasNoDefaultValueException
+     * @throws ServiceNotFoundException
+     * @throws ServiceNotInstantiableException
+     * @throws \ReflectionException
+     * @throws FormException
+     */
+    public function addNewsletter()
+    {
+        $resourceHandler = new ResourceHandler();
+
+        /**
+         * @var Agent $agent
+         */
+        $agent = container()->get(Agent::class);
+        if (!$agent->isRobot()) {
+            /**
+             * @var NewsletterForm $registerForm
+             */
+            $registerForm = container()->get(NewsletterForm::class);
+            [$status, $formattedErrors] = $registerForm->validate();
+            if ($status) {
+                $res = $registerForm->store();
+                if ($res) {
+                    $resourceHandler->data('شماره شما در خبرنامه با موفقیت ثبت شد.');
+                } else {
+                    $resourceHandler->errorMessage('خطا در ارتباط با سرور، لطفا دوباره تلاش کنید.');
+                }
+            } else {
+                $resourceHandler->errorMessage(encode_html($formattedErrors));
+            }
+        } else {
+            response()->httpCode(403);
+            $resourceHandler->errorMessage('خطا در ارتباط با سرور، لطفا دوباره تلاش کنید.');
+        }
+        response()->json($resourceHandler->getReturnData());
+    }
+
+    public function removeNewsletter()
+    {
+        // implement later if needed
     }
 
     /**

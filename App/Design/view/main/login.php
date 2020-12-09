@@ -1,3 +1,7 @@
+<?php
+$validator = form_validator();
+?>
+
 <!-- START MAIN CONTENT -->
 <div class="main_content">
 
@@ -11,19 +15,25 @@
                             <div class="heading_s1">
                                 <h3>ورود</h3>
                             </div>
-                            <form action="<?= url('home.login')->getOriginalUrl(); ?>" method="post">
+                            <form action="<?= url('home.login')->getOriginalUrl(); ?>" method="post" id="__form_login">
+                                <?php load_partial('main/message/message-form', [
+                                    'errors' => $login_errors ?? [],
+                                    'warning' => $login_warning ?? '',
+                                ]); ?>
+                                <input type="hidden" name="csrf_token" value="<?= csrf_token(); ?>" data-ignored>
                                 <div class="form-group">
-                                    <input type="text" required class="form-control" name="username"
-                                           placeholder="موبایل">
+                                    <input type="text" required class="form-control" name="inp-login-username"
+                                           placeholder="موبایل"
+                                           value="<?= $validator->setInput('inp-login-username'); ?>">
                                 </div>
                                 <div class="form-group">
-                                    <input class="form-control" required type="password" name="password"
+                                    <input class="form-control" required type="password" name="inp-login-password"
                                            placeholder="کلمه عبور">
                                 </div>
                                 <div class="login_footer form-group">
                                     <div class="chek-form">
                                         <div class="custome-checkbox">
-                                            <input class="form-check-input" type="checkbox" name="checkbox"
+                                            <input class="form-check-input" type="checkbox" name="inp-login-chk"
                                                    id="rememberChk">
                                             <label class="form-check-label" for="rememberChk">
                                                 <span>مرا به خاطر بسپار</span>
@@ -31,6 +41,22 @@
                                         </div>
                                     </div>
                                     <a href="<?= url('home.forget-password'); ?>">رمز عبور را فراموش کرده اید؟</a>
+                                </div>
+                                <div class="row">
+                                    <div class="form-group col-md-6">
+                                        <input placeholder="کد تصویر را وارد کنید" class="form-control"
+                                               name="inp-login-captcha" required>
+                                    </div>
+                                    <div class="form-group col-md-6 d-flex justify-content-center align-items-center __captcha_main_container">
+                                        <div class="__captcha_container">
+                                        </div>
+                                        <button class="btn btn-link text_default p-2 ml-3 __captcha_regenerate_btn"
+                                                type="button" aria-label="regenerate captcha">
+                                            <input type="hidden" name="inp-captcha-name"
+                                                   value="<?= url() . '__form_login'; ?>">
+                                            <i class="icon-refresh icon-2x" aria-hidden="true"></i>
+                                        </button>
+                                    </div>
                                 </div>
                                 <div class="form-group">
                                     <button type="submit" class="btn btn-fill-out btn-block" name="login">ورود</button>

@@ -2,12 +2,7 @@
     'use strict';
 
     // add/change global variable
-    window.MyGlobalVariables.elements = {
-        captcha: {
-            mainContainer: '.__captcha_main_container',
-            container: '.__captcha_container',
-            refreshBtn: '.__captcha_regenerate_btn',
-        },
+    window.MyGlobalVariables.elements = $.extend({}, window.MyGlobalVariables.elements, {
         cart: {
             container: '#__cart_main_container',
             addBtn: '.__add_to_cart_btn',
@@ -56,8 +51,19 @@
                 captcha: 'inp-contact-captcha',
             },
         },
-    };
-    window.MyGlobalVariables.validation = {
+        complaint: {
+            form: '#__form_complaint',
+            inputs: {
+                name: 'inp-complaint-name',
+                email: 'inp-complaint-email',
+                mobile: 'inp-complaint-mobile',
+                subject: 'inp-complaint-subject',
+                message: 'inp-complaint-message',
+                captcha: 'inp-complaint-captcha',
+            },
+        },
+    });
+    window.MyGlobalVariables.validation = $.extend({}, window.MyGlobalVariables.validation, {
         common: {
             name: {
                 presence: {
@@ -87,12 +93,6 @@
                     is: 11,
                     message: '^' + 'موبایل باید عددی ۱۱ رقمی باشد.',
                 }
-            },
-            captcha: {
-                presence: {
-                    allowEmpty: false,
-                    message: '^' + 'فیلد کد تصویر را خالی نگذارید.',
-                },
             },
         },
         constraints: {
@@ -144,8 +144,26 @@
                     },
                 },
             },
+            complaint: {
+                subject: {
+                    presence: {
+                        allowEmpty: false,
+                        message: '^' + 'فیلد موضوع را خالی نگذارید.',
+                    },
+                    length: {
+                        maximum: 250,
+                        message: '^' + 'فیلد موضوع باید حداکثر دارای ۲۵۰ کاراکتر باشد.',
+                    }
+                },
+                message: {
+                    presence: {
+                        allowEmpty: false,
+                        message: '^' + 'فیلد پیام خالی نگذارید.',
+                    },
+                },
+            },
         },
-    };
+    });
 
     var core, variables;
 
@@ -165,7 +183,25 @@
             _super.call(this);
         }
 
-        $.extend(Shop.prototype, {});
+        $.extend(Shop.prototype, {
+            showLoader: function () {
+                var id = core.idGenerator('loader');
+                $('body').append(
+                    $('<div class="preloader preloader-opacity" id="' + id + '" />').append(
+                        $('<div class="lds-ellipsis" />')
+                            .append($('<span/>'))
+                            .append($('<span/>'))
+                            .append($('<span/>'))
+                    )
+                );
+                return id;
+            },
+            hideLoader: function (id) {
+                $('#' + id).fadeOut(300, function () {
+                    $(this).remove();
+                });
+            },
+        });
 
         return Shop;
     })(window.TheShopBase, core);
@@ -175,9 +211,50 @@
      */
     $(function () {
         var
-            shop;
+            shop,
+            constraints;
 
         shop = new window.TheShop();
+
+        //-----
+        constraints = {
+            home: {
+                newsletter: {
+                    mobile: variables.validation.common.mobile,
+                },
+                register: {
+                    username: variables.validation.common.mobile,
+                    captcha: variables.validation.common.captcha,
+                },
+                registerStep3: {
+                    password: variables.validation.constraints.register.password,
+                    confirmPassword: variables.validation.constraints.register.confirmPassword,
+                },
+                forgetStep1: {
+                    mobile: variables.validation.common.mobile,
+                },
+                forgetStep3: {
+                    password: variables.validation.constraints.forgetStep3.password,
+                    confirmPassword: variables.validation.constraints.forgetStep3.confirmPassword,
+                },
+                contactUs: {
+                    name: variables.validation.common.name,
+                    email: variables.validation.common.email,
+                    mobile: variables.validation.common.mobile,
+                    subject: variables.validation.constraints.contactUs.subject,
+                    message: variables.validation.constraints.contactUs.message,
+                    captcha: variables.validation.common.captcha,
+                },
+                complaint: {
+                    name: variables.validation.common.name,
+                    email: variables.validation.common.email,
+                    mobile: variables.validation.common.mobile,
+                    subject: variables.validation.constraints.complaint.subject,
+                    message: variables.validation.constraints.complaint.message,
+                    captcha: variables.validation.common.captcha,
+                },
+            }
+        };
 
         //---------------------------------------------------------------
         // CHECK SCROLL TO ELEMENT
@@ -198,7 +275,7 @@
         //---------------------------------------------------------------
         // REGISTER FORM - STEP 1
         //---------------------------------------------------------------
-        shop.forms.submitForm('register', 'home', function () {
+        shop.forms.submitForm('register', constraints['register'], function () {
             return true;
         }, function (errors) {
             shop.forms.showFormErrors(errors);
@@ -208,7 +285,7 @@
         //---------------------------------------------------------------
         // REGISTER FORM - STEP 3
         //---------------------------------------------------------------
-        shop.forms.submitForm('registerStep3', 'home', function () {
+        shop.forms.submitForm('registerStep3', constraints['registerStep3'], function () {
             return true;
         }, function (errors) {
             shop.forms.showFormErrors(errors);
@@ -218,7 +295,7 @@
         //---------------------------------------------------------------
         // FORGET PASSWORD FORM - STEP 1
         //---------------------------------------------------------------
-        shop.forms.submitForm('forgetStep1', 'home', function () {
+        shop.forms.submitForm('forgetStep1', constraints['forgetStep1'], function () {
             return true;
         }, function (errors) {
             shop.forms.showFormErrors(errors);
@@ -228,7 +305,7 @@
         //---------------------------------------------------------------
         // FORGET PASSWORD FORM - STEP 3
         //---------------------------------------------------------------
-        shop.forms.submitForm('forgetStep3', 'home', function () {
+        shop.forms.submitForm('forgetStep3', constraints['forgetStep3'], function () {
             return true;
         }, function (errors) {
             shop.forms.showFormErrors(errors);
@@ -239,9 +316,25 @@
         // NEWSLETTER FORM
         //---------------------------------------------------------------
 
-        shop.forms.submitForm('newsletter', 'home', function (values) {
+        shop.forms.submitForm('newsletter', constraints['newsletter'], function (values) {
             // do ajax
-            // ...
+            var loaderId = shop.showLoader();
+            shop.request(variables.url.newsletter.add, 'post', function () {
+                if (null === this.error) {
+                    shop.hideLoader(loaderId);
+                    // clear element after success
+                    $(variables.elements.newsletter.form).reset();
+                    shop.toasts.toast(this.data, {
+                        type: 'success',
+                    });
+                } else {
+                    shop.toasts.toast(this.error, {
+                        type: 'error',
+                    });
+                }
+            }, {
+                data: values,
+            });
             return false;
         }, function (errors) {
             shop.forms.showFormErrors(errors);
@@ -251,7 +344,17 @@
         //---------------------------------------------------------------
         // CONTACT US FORM
         //---------------------------------------------------------------
-        shop.forms.submitForm('contactUs', 'home', function () {
+        shop.forms.submitForm('contactUs', constraints['contactUs'], function () {
+            return true;
+        }, function (errors) {
+            shop.forms.showFormErrors(errors);
+            return false
+        });
+
+        //---------------------------------------------------------------
+        // COMPLAINT FORM
+        //---------------------------------------------------------------
+        shop.forms.submitForm('complaint', constraints['complaint'], function () {
             return true;
         }, function (errors) {
             shop.forms.showFormErrors(errors);
