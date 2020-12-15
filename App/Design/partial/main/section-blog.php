@@ -38,8 +38,8 @@ use Sim\Utils\StringUtil;
                                     </h5>
                                     <ul class="list_none blog_meta">
                                         <li>
-                                            <a href="<?= url('home.blog.search', null, [
-                                                'time' => get_today_start_of_time($item['created_at']),
+                                            <a href="<?= url('home.blog', null, [
+                                                'time' => $item['created_at'],
                                             ]); ?>">
                                                 <i class="ti-calendar"></i>
                                                 <?= Jdf::jdate('j F Y', $item['created_at']) ?>

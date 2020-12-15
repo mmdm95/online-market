@@ -55,6 +55,9 @@ window.MyGlobalVariables = {
             add: '/ajax/newsletter/add',
             remove: '/ajax/newsletter/remove',
         },
+        blog: {
+            search: '/ajax/blog/search',
+        },
         products: {
             get: {
                 products: '/ajax/products',
@@ -69,6 +72,7 @@ window.MyGlobalVariables = {
             remove: {
                 like: '/ajax/product/like/remove'
             },
+            search: '/ajax/product/search',
         },
         users: {
             get: {
@@ -124,6 +128,35 @@ window.MyGlobalVariables = {
                     allowEmpty: false,
                     message: '^' + 'فیلد کد تصویر را خالی نگذارید.',
                 },
+            },
+            name: {
+                presence: {
+                    allowEmpty: false,
+                    message: '^' + 'فیلد نام را خالی نگذارید.',
+                },
+                format: {
+                    pattern: /^[پچجحخهعغفقثصضشسیبلاتنمکگوئدذرزطظژؤإأآءًٌٍَُِّ\s]+$/u,
+                    message: '^' + 'نام باید دارای حروف فارسی باشد.',
+                },
+            },
+            email: {
+                email: {
+                    message: '^' + 'ایمیل نامعتبر است.',
+                }
+            },
+            mobile: {
+                presence: {
+                    allowEmpty: false,
+                    message: '^' + 'فیلد موبایل را خالی نگذارید.',
+                },
+                format: {
+                    pattern: /^(098|\+98|0)?9\d{9}$/,
+                    message: '^' + 'موبایل وارد شده نامعتبر است.',
+                },
+                length: {
+                    is: 11,
+                    message: '^' + 'موبایل باید عددی ۱۱ رقمی باشد.',
+                }
             },
         },
     },
@@ -393,13 +426,15 @@ window.MyGlobalVariables = {
              * @param url
              * @param method
              * @param successCallback
-             * @param options
-             * @param showError
+             * @param [options]
+             * @param [showError]
+             * @param [errorCallback]
              */
-            request: function (url, method, successCallback, options, showError) {
+            request: function (url, method, successCallback, options, showError, errorCallback) {
                 var _ = this;
                 options = typeof options === typeof {} ? options : {};
-                showError = window.TheCore.isBoolean(showError) ? showError : false;
+                showError = true === showError;
+                errorCallback = window.TheCore.isFunction(errorCallback) ? errorCallback : window.TheCore.noop;
                 window.axios($.extend(options, {
                     method: method,
                     url: url,
@@ -407,8 +442,11 @@ window.MyGlobalVariables = {
                     .then(function (response) {
                         var data = _.handleAPIData(response.data);
                         if (null === data.error) {
-                            successCallback.call(data);
+                            if (window.TheCore.isFunction(successCallback)) {
+                                successCallback.call(data);
+                            }
                         } else {
+                            errorCallback.call(data);
                             if (showError) {
                                 _.toasts.toast(data.error, {
                                     type: 'error',
@@ -419,6 +457,7 @@ window.MyGlobalVariables = {
                         }
                     })
                     .catch(function (error) {
+                        errorCallback.call({catchErr: error});
                         if (error.response) {
                             // The request was made and the server responded with a status code
                             // that falls out of the range of 2xx

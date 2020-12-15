@@ -2,7 +2,7 @@
     'use strict';
 
     // add/change global variable
-    window.MyGlobalVariables.elements = $.extend({}, window.MyGlobalVariables.elements, {
+    window.MyGlobalVariables.elements = $.extend(true, window.MyGlobalVariables.elements, {
         cart: {
             container: '#__cart_main_container',
             addBtn: '.__add_to_cart_btn',
@@ -64,37 +64,6 @@
         },
     });
     window.MyGlobalVariables.validation = $.extend({}, window.MyGlobalVariables.validation, {
-        common: {
-            name: {
-                presence: {
-                    allowEmpty: false,
-                    message: '^' + 'فیلد نام را خالی نگذارید.',
-                },
-                format: {
-                    pattern: /^[پچجحخهعغفقثصضشسیبلاتنمکگوئدذرزطظژؤإأآءًٌٍَُِّ\s]+$/u,
-                    message: '^' + 'نام باید دارای حروف فارسی باشد.',
-                },
-            },
-            email: {
-                email: {
-                    message: '^' + 'ایمیل نامعتبر است.',
-                }
-            },
-            mobile: {
-                presence: {
-                    allowEmpty: false,
-                    message: '^' + 'فیلد موبایل را خالی نگذارید.',
-                },
-                format: {
-                    pattern: /^(098|\+98|0)?9\d{9}$/,
-                    message: '^' + 'موبایل وارد شده نامعتبر است.',
-                },
-                length: {
-                    is: 11,
-                    message: '^' + 'موبایل باید عددی ۱۱ رقمی باشد.',
-                }
-            },
-        },
         constraints: {
             register: {
                 password: {
@@ -218,42 +187,40 @@
 
         //-----
         constraints = {
-            home: {
-                newsletter: {
-                    mobile: variables.validation.common.mobile,
-                },
-                register: {
-                    username: variables.validation.common.mobile,
-                    captcha: variables.validation.common.captcha,
-                },
-                registerStep3: {
-                    password: variables.validation.constraints.register.password,
-                    confirmPassword: variables.validation.constraints.register.confirmPassword,
-                },
-                forgetStep1: {
-                    mobile: variables.validation.common.mobile,
-                },
-                forgetStep3: {
-                    password: variables.validation.constraints.forgetStep3.password,
-                    confirmPassword: variables.validation.constraints.forgetStep3.confirmPassword,
-                },
-                contactUs: {
-                    name: variables.validation.common.name,
-                    email: variables.validation.common.email,
-                    mobile: variables.validation.common.mobile,
-                    subject: variables.validation.constraints.contactUs.subject,
-                    message: variables.validation.constraints.contactUs.message,
-                    captcha: variables.validation.common.captcha,
-                },
-                complaint: {
-                    name: variables.validation.common.name,
-                    email: variables.validation.common.email,
-                    mobile: variables.validation.common.mobile,
-                    subject: variables.validation.constraints.complaint.subject,
-                    message: variables.validation.constraints.complaint.message,
-                    captcha: variables.validation.common.captcha,
-                },
-            }
+            newsletter: {
+                mobile: variables.validation.common.mobile,
+            },
+            register: {
+                username: variables.validation.common.mobile,
+                captcha: variables.validation.common.captcha,
+            },
+            registerStep3: {
+                password: variables.validation.constraints.register.password,
+                confirmPassword: variables.validation.constraints.register.confirmPassword,
+            },
+            forgetStep1: {
+                mobile: variables.validation.common.mobile,
+            },
+            forgetStep3: {
+                password: variables.validation.constraints.forgetStep3.password,
+                confirmPassword: variables.validation.constraints.forgetStep3.confirmPassword,
+            },
+            contactUs: {
+                name: variables.validation.common.name,
+                email: variables.validation.common.email,
+                mobile: variables.validation.common.mobile,
+                subject: variables.validation.constraints.contactUs.subject,
+                message: variables.validation.constraints.contactUs.message,
+                captcha: variables.validation.common.captcha,
+            },
+            complaint: {
+                name: variables.validation.common.name,
+                email: variables.validation.common.email,
+                mobile: variables.validation.common.mobile,
+                subject: variables.validation.constraints.complaint.subject,
+                message: variables.validation.constraints.complaint.message,
+                captcha: variables.validation.common.captcha,
+            },
         };
 
         //---------------------------------------------------------------
@@ -275,48 +242,48 @@
         //---------------------------------------------------------------
         // REGISTER FORM - STEP 1
         //---------------------------------------------------------------
-        shop.forms.submitForm('register', constraints['register'], function () {
+        shop.forms.submitForm('register', constraints.register, function () {
             return true;
         }, function (errors) {
             shop.forms.showFormErrors(errors);
-            return false
+            return false;
         });
 
         //---------------------------------------------------------------
         // REGISTER FORM - STEP 3
         //---------------------------------------------------------------
-        shop.forms.submitForm('registerStep3', constraints['registerStep3'], function () {
+        shop.forms.submitForm('registerStep3', constraints.registerStep3, function () {
             return true;
         }, function (errors) {
             shop.forms.showFormErrors(errors);
-            return false
+            return false;
         });
 
         //---------------------------------------------------------------
         // FORGET PASSWORD FORM - STEP 1
         //---------------------------------------------------------------
-        shop.forms.submitForm('forgetStep1', constraints['forgetStep1'], function () {
+        shop.forms.submitForm('forgetStep1', constraints.forgetStep1, function () {
             return true;
         }, function (errors) {
             shop.forms.showFormErrors(errors);
-            return false
+            return false;
         });
 
         //---------------------------------------------------------------
         // FORGET PASSWORD FORM - STEP 3
         //---------------------------------------------------------------
-        shop.forms.submitForm('forgetStep3', constraints['forgetStep3'], function () {
+        shop.forms.submitForm('forgetStep3', constraints.forgetStep3, function () {
             return true;
         }, function (errors) {
             shop.forms.showFormErrors(errors);
-            return false
+            return false;
         });
 
         //---------------------------------------------------------------
         // NEWSLETTER FORM
         //---------------------------------------------------------------
 
-        shop.forms.submitForm('newsletter', constraints['newsletter'], function (values) {
+        shop.forms.submitForm('newsletter', constraints.newsletter, function (values) {
             // do ajax
             var loaderId = shop.showLoader();
             shop.request(variables.url.newsletter.add, 'post', function () {
@@ -338,27 +305,27 @@
             return false;
         }, function (errors) {
             shop.forms.showFormErrors(errors);
-            return false
+            return false;
         });
 
         //---------------------------------------------------------------
         // CONTACT US FORM
         //---------------------------------------------------------------
-        shop.forms.submitForm('contactUs', constraints['contactUs'], function () {
+        shop.forms.submitForm('contactUs', constraints.contactUs, function () {
             return true;
         }, function (errors) {
             shop.forms.showFormErrors(errors);
-            return false
+            return false;
         });
 
         //---------------------------------------------------------------
         // COMPLAINT FORM
         //---------------------------------------------------------------
-        shop.forms.submitForm('complaint', constraints['complaint'], function () {
+        shop.forms.submitForm('complaint', constraints.complaint, function () {
             return true;
         }, function (errors) {
             shop.forms.showFormErrors(errors);
-            return false
+            return false;
         });
     });
 })(jQuery);

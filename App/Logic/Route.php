@@ -275,7 +275,6 @@ class Route implements IInitialize
              * index routes
              */
             Router::get('/', 'HomeController@index')->name('home.index');
-            Router::get('/search', 'HomeController@search')->name('home.search');
 
             /**
              * common routes
@@ -307,6 +306,9 @@ class Route implements IInitialize
             /**
              * product routes
              */
+            Router::get('/search/{category?}/{category_slug?}', 'ProductController@index')->where([
+                'category' => '[0-9]+',
+            ])->name('home.search');
             Router::get('/product/{id}/{slug?}', 'ProductController@show')->where([
                 'id' => '[0-9]+',
             ])->name('home.product.show');
@@ -316,7 +318,6 @@ class Route implements IInitialize
              * blog routes
              */
             Router::get('/blog/', 'BlogController@index')->name('home.blog');
-            Router::get('/blog/search', 'BlogController@search')->name('home.blog.search');
             Router::get('/blog/{id}/{slug?}', 'BlogController@show')->where([
                 'id' => '[0-9]+',
             ])->name('home.blog.show');
@@ -337,6 +338,16 @@ class Route implements IInitialize
              */
             Router::post('/newsletter/add', 'PageController@addNewsletter')->name('ajax.newsletter.add');
             Router::post('/newsletter/remove', 'PageController@removeNewsletter')->name('ajax.newsletter.remove');
+
+            /**
+             * blog route
+             */
+            Router::get('/blog/search', 'BlogController@search')->name('ajax.blog.search');
+
+            /**
+             * product route
+             */
+            Router::get('/product/search', 'ProductController@search')->name('ajax.product.search');
 
             /**
              * File Manager Route

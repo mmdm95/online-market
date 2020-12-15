@@ -238,7 +238,9 @@ class UserModel extends BaseModel
         array $bind_values = []
     ): array
     {
-        return $this->getUsers($columns, $where, $bind_values, 1);
+        $res = $this->getUsers($columns, $where, $bind_values, 1);
+        if (count($res)) return $res[0];
+        return [];
     }
 
     /**
@@ -381,7 +383,9 @@ class UserModel extends BaseModel
             return [];
         }
 
-        return $this->db->fetchAll($select->getStatement(), $select->getBindValues());
+        $res = $this->db->fetchAll($select->getStatement(), $select->getBindValues());
+        if (count($res)) return $res[0];
+        return [];
     }
 
     /**

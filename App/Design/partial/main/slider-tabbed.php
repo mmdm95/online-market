@@ -125,28 +125,24 @@ foreach ($tabbed_slider['items'] ?? [] as $tab) {
                                                                 ?>
 
                                                                 <span class="price">
-                                                                <?php if (isset($item['festival_discount'])): ?>
                                                                     <?= local_number($discountPrice); ?>
-                                                                <?php else: ?>
-                                                                    <?= local_number($discountPrice); ?>
-                                                                <?php endif; ?>
-                                                                 تومان
-                                                            </span>
+                                                                    تومان
+                                                                </span>
                                                                 <?php if ($hasDiscount): ?>
                                                                     <del>
                                                                         <?= local_number(number_format($item['price'])); ?>
                                                                         تومان
                                                                     </del>
                                                                     <div class="on_sale">
-                                                                <span>
-                                                                    ٪
-                                                                    <?php if (isset($item['festival_discount'])): ?>
-                                                                        <?= local_number($item['festival_discount']); ?>
-                                                                    <?php else: ?>
-                                                                        <?= local_number(get_percentage($item['price'], $item['discounted_price'])); ?>
-                                                                    <?php endif; ?>
-                                                                     تخفیف
-                                                                </span>
+                                                                        <span>
+                                                                            ٪
+                                                                            <?php if (isset($item['festival_discount'])): ?>
+                                                                                <?= local_number($item['festival_discount']); ?>
+                                                                            <?php else: ?>
+                                                                                <?= local_number(get_percentage($item['price'], $item['discounted_price'])); ?>
+                                                                            <?php endif; ?>
+                                                                             تخفیف
+                                                                        </span>
                                                                     </div>
                                                                 <?php endif; ?>
                                                             </div>

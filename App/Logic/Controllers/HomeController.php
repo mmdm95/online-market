@@ -104,11 +104,11 @@ class HomeController extends AbstractHomeController
             'instagram_images' => $instagramImagesModel->get(['image', 'link']),
             'special_slider' => $sliderUtil->getSpecialsSlider(),
             'three_images' => \config()->get('settings.index_3_images.value'),
-            'blog' => $blogModel->get(
+            'blog' => $blogModel->getBlog(
                 ['b.id', 'b.title', 'b.slug', 'b.image', 'b.abstract', 'b.created_at'],
                 'b.publish=:b_pub',
                 ['b_pub' => DB_YES],
-                ['id DESC'],
+                ['b.id DESC'],
                 3
             ),
             'brands' => $brandModel->get(
@@ -117,21 +117,6 @@ class HomeController extends AbstractHomeController
                 ['pub' => DB_YES, 'sis' => DB_YES]
             )
         ]);
-    }
-
-    /**
-     * @return string
-     * @throws ConfigNotRegisteredException
-     * @throws ControllerException
-     * @throws IFileNotExistsException
-     * @throws IInvalidVariableNameException
-     * @throws PathNotRegisteredException
-     * @throws \ReflectionException
-     */
-    public function search()
-    {
-        $this->setLayout($this->main_index_layout)->setTemplate('view/main/search');
-        return $this->render([]);
     }
 
     /**

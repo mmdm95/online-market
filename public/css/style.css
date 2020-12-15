@@ -6631,6 +6631,7 @@ footer .widget_title {
 }
 
 .filter_price .ui-widget.ui-widget-content {
+    position: relative;
     border: 0;
     border-radius: 0;
     background-color: #ddd;
@@ -6644,11 +6645,14 @@ footer .widget_title {
 }
 
 .filter_price .ui-slider .ui-slider-range {
+    position: absolute;
     background-color: #FF324D;
     border-radius: 0;
 }
 
 .filter_price .ui-slider .ui-slider-handle {
+    position: absolute;
+    display: inline-block;
     cursor: pointer;
     background-color: #fff;
     border-radius: 100%;
@@ -6658,6 +6662,7 @@ footer .widget_title {
     width: 18px;
     margin: 0;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    outline: none;
 }
 
 .price_range {
@@ -8920,7 +8925,7 @@ body.switch-open {
 }
 
 .step-container .step-item.active,
-.step-container .step-separator.active  {
+.step-container .step-separator.active {
     background-color: var(--primary);
 }
 
@@ -8941,4 +8946,70 @@ body.switch-open {
 
 .step-container .step-separator.failed {
     background: linear-gradient(90deg, #dbdbdb 50%, var(--danger) 50%);
+}
+
+/* SWITCH */
+
+.m_switch {
+    display: inline-block;
+    width: 54px;
+    height: 27px;
+    border-radius: 100px;
+    background-color: #f3f3f3;
+    overflow: hidden;
+    box-shadow: inset 0 0 0px 1px rgba(0, 0, 0, 0.1);
+    transition: 0.25s all;
+    transition-delay: 0s, .08s;
+    margin: 0;
+    padding: 0;
+    position: relative;
+}
+
+.m_switch_color {
+    background-color: #00bfd6 !important;
+    box-shadow: inset 0 0 0px 1px rgba(0, 0, 0, 0.05) !important;
+}
+
+.m_switch_success {
+    background-color: #2ecc71 !important;
+    box-shadow: inset 0 0 0px 1px rgba(0, 0, 0, 0.05) !important;
+}
+
+.m_switch_b {
+    display: block;
+}
+
+.m_switch_check {
+    position: absolute;
+    display: block;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    z-index: 6;
+}
+
+.m_switch_element {
+    position: absolute;
+    left: 2px;
+    top: 2px;
+    bottom: 2px;
+    right: 48%;
+    background-color: #fff;
+    border-radius: 36px;
+    z-index: 1;
+    transition: 0.25s cubic-bezier(0.785, 0.135, 0.15, 0.86);
+    transition-property: left, right;
+    transition-delay: 0s, .08s;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.m_switch_checked {
+    right: 2px !important;
+    left: 48% !important;
+    transition: 0.25s cubic-bezier(0.785, 0.135, 0.15, 0.86) !important;
+    transition-property: left, right !important;
+    transition-delay: .08s, 0s !important;
 }

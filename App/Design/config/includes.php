@@ -95,22 +95,7 @@ return [
                     'bottom' => [
                         e(
                             '<script type="text/javascript" src="' .
-                            asset_path('js/scripts.js') .
-                            '"></script>'
-                        ),
-                        e(
-                            '<script type="text/javascript" src="' .
                             asset_path('plugins/noty/noty.min.js') .
-                            '"></script>'
-                        ),
-                        e(
-                            '<script type="text/javascript" src="' .
-                            asset_path('js/globals.js') .
-                            '"></script>'
-                        ),
-                        e(
-                            '<script type="text/javascript" src="' .
-                            asset_path('js/index.js') .
                             '"></script>'
                         ),
                     ],
@@ -160,12 +145,44 @@ return [
                     ],
                 ],
             ],
+            'default-changeable' => [
+                'js' => [
+                    'bottom' => [
+                        e(
+                            '<script type="text/javascript" src="' .
+                            asset_path('js/scripts.js') .
+                            '"></script>'
+                        ),
+                        e(
+                            '<script type="text/javascript" src="' .
+                            asset_path('js/globals.js') .
+                            '"></script>'
+                        ),
+                        e(
+                            '<script type="text/javascript" src="' .
+                            asset_path('js/index.js') .
+                            '"></script>'
+                        ),
+                    ],
+                ],
+            ],
             'default-cart' => [
                 'js' => [
                     'bottom' => [
                         e(
                             '<script type="text/javascript" src="' .
                             asset_path('js/cart.js') .
+                            '"></script>'
+                        ),
+                    ],
+                ],
+            ],
+            'default-jquery-ui' => [
+                'js' => [
+                    'bottom' => [
+                        e(
+                            '<script type="text/javascript" src="' .
+                            asset_path('js/all/jquery-ui.js') .
                             '"></script>'
                         ),
                     ],
@@ -400,6 +417,7 @@ return [
             'title' => title_concat(\config()->get('settings.title.value'), 'داشبورد'),
             'common' => [
                 'default',
+                'default-changeable',
                 'default-cart',
             ],
         ],
@@ -411,6 +429,7 @@ return [
             'title' => title_concat(\config()->get('settings.title.value'), 'داشبورد'),
             'common' => [
                 'default',
+                'default-changeable',
                 'default-cart',
             ],
         ],
@@ -422,6 +441,7 @@ return [
             'title' => title_concat(\config()->get('settings.title.value'), 'صفحه مورد نظر پیدا نشد'),
             'common' => [
                 'default',
+                'default-changeable',
                 'default-cart',
             ],
         ],
@@ -429,6 +449,7 @@ return [
             'title' => title_concat(\config()->get('settings.title.value'), 'صفحه اصلی'),
             'common' => [
                 'default',
+                'default-changeable',
                 'default-cart',
             ],
         ],
@@ -436,6 +457,7 @@ return [
             'title' => title_concat(\config()->get('settings.title.value'), 'صفحه ورود'),
             'common' => [
                 'default',
+                'default-changeable',
                 'default-cart',
             ],
         ],
@@ -443,6 +465,7 @@ return [
             'title' => title_concat(\config()->get('settings.title.value'), 'صفحه ثبت نام'),
             'common' => [
                 'default',
+                'default-changeable',
                 'default-cart',
             ],
         ],
@@ -450,6 +473,7 @@ return [
             'title' => title_concat(\config()->get('settings.title.value'), 'صفحه ثبت نام', 'وارد کردن کد ارسال شده'),
             'common' => [
                 'default',
+                'default-changeable',
                 'default-cart',
             ],
         ],
@@ -457,6 +481,7 @@ return [
             'title' => title_concat(\config()->get('settings.title.value'), 'صفحه ثبت نام', 'وارد کردن کلمه عبور'),
             'common' => [
                 'default',
+                'default-changeable',
                 'default-cart',
             ],
         ],
@@ -464,6 +489,7 @@ return [
             'title' => title_concat(\config()->get('settings.title.value'), 'فراموشی کلمه عبور', 'وارد کردن شماره موبایل'),
             'common' => [
                 'default',
+                'default-changeable',
                 'default-cart',
             ],
             'sub_title' => 'فراموشی کلمه عبور',
@@ -488,6 +514,7 @@ return [
             'title' => title_concat(\config()->get('settings.title.value'), 'فراموشی کلمه عبور', 'کد ارسال شده'),
             'common' => [
                 'default',
+                'default-changeable',
                 'default-cart',
             ],
             'sub_title' => 'فراموشی کلمه عبور',
@@ -514,6 +541,7 @@ return [
             'title' => title_concat(\config()->get('settings.title.value'), 'فراموشی کلمه عبور', 'تغییر کلمه عبور'),
             'common' => [
                 'default',
+                'default-changeable',
                 'default-cart',
             ],
             'sub_title' => 'فراموشی کلمه عبور',
@@ -542,6 +570,7 @@ return [
             'title' => title_concat(\config()->get('settings.title.value'), 'فراموشی کلمه عبور', 'اتمام'),
             'common' => [
                 'default',
+                'default-changeable',
                 'default-cart',
             ],
             'sub_title' => 'فراموشی کلمه عبور',
@@ -571,6 +600,7 @@ return [
         'view/main/static-page' => [
             'common' => [
                 'default',
+                'default-changeable',
                 'default-cart',
             ],
         ],
@@ -578,6 +608,7 @@ return [
             'title' => title_concat(\config()->get('settings.title.value'), 'درباره ما'),
             'common' => [
                 'default',
+                'default-changeable',
                 'default-cart',
             ],
             'sub_title' => 'درباره ما',
@@ -597,6 +628,7 @@ return [
             'title' => title_concat(\config()->get('settings.title.value'), 'سؤالات متداول'),
             'common' => [
                 'default',
+                'default-changeable',
                 'default-cart',
             ],
             'sub_title' => 'سؤالات متداول',
@@ -616,6 +648,7 @@ return [
             'title' => title_concat(\config()->get('settings.title.value'), 'تماس با ما'),
             'common' => [
                 'default',
+                'default-changeable',
                 'default-google-map',
                 'default-cart',
             ],
@@ -636,6 +669,7 @@ return [
             'title' => title_concat(\config()->get('settings.title.value'), 'ثبت شکایات'),
             'common' => [
                 'default',
+                'default-changeable',
                 'default-cart',
             ],
             'sub_title' => 'ثبت شکایات',
@@ -648,6 +682,95 @@ return [
                 [
                     'text' => 'ثبت شکایات',
                     'is_active' => true,
+                ],
+            ],
+        ],
+        'view/main/blog/index' => [
+            'title' => title_concat(\config()->get('settings.title.value'), 'بلاگ'),
+            'common' => [
+                'default',
+                'default-changeable',
+                'default-cart',
+            ],
+            'sub_title' => 'بلاگ',
+            'breadcrumb' => [
+                [
+                    'url' => url('home.index'),
+                    'text' => 'خانه',
+                    'is_active' => false,
+                ],
+                [
+                    'text' => 'بلاگ',
+                    'is_active' => true,
+                ],
+            ],
+            'js' => [
+                'bottom' => [
+                    e(
+                        '<script type="text/javascript" src="' .
+                        asset_path('plugins/UriParser.js') .
+                        '"></script>'
+                    ),
+                    e(
+                        '<script type="text/javascript" src="' .
+                        asset_path('js/blog-search.js') .
+                        '"></script>'
+                    ),
+                ],
+            ],
+        ],
+        'view/main/blog/detail' => [
+            'common' => [
+                'default',
+                'default-changeable',
+                'default-cart',
+            ],
+            'breadcrumb' => [
+                [
+                    'url' => url('home.index'),
+                    'text' => 'خانه',
+                    'is_active' => false,
+                ],
+                [
+                    'url' => url('home.blog'),
+                    'text' => 'بلاگ',
+                    'is_active' => false,
+                ],
+            ],
+        ],
+        'view/main/product/index' => [
+            'title' => title_concat(\config()->get('settings.title.value'), 'محصولات'),
+            'common' => [
+                'default',
+                'default-jquery-ui',
+                'default-changeable',
+                'default-cart',
+            ],
+            'sub_title' => 'محصولات',
+            'breadcrumb' => [
+                [
+                    'url' => url('home.index'),
+                    'text' => 'خانه',
+                    'is_active' => false,
+                ],
+                [
+                    'url' => url('home.blog'),
+                    'text' => 'محصولات',
+                    'is_active' => false,
+                ],
+            ],
+            'js' => [
+                'bottom' => [
+                    e(
+                        '<script type="text/javascript" src="' .
+                        asset_path('plugins/UriParser.js') .
+                        '"></script>'
+                    ),
+                    e(
+                        '<script type="text/javascript" src="' .
+                        asset_path('js/product-search.js') .
+                        '"></script>'
+                    ),
                 ],
             ],
         ],

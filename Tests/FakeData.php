@@ -153,6 +153,21 @@ class FakeData
                     'default_value' => '',
                     'desc' => '',
                 ],
+                // pagination
+                [
+                    'setting_name' => 'blog_each_page',
+                    'setting_value' => '',
+                    'group_name' => 'pagination',
+                    'default_value' => '15',
+                    'desc' => 'تعداد نمایش بلاگ در هر صفحه',
+                ],
+                [
+                    'setting_name' => 'product_each_page',
+                    'setting_value' => '',
+                    'group_name' => 'pagination',
+                    'default_value' => '15',
+                    'desc' => 'تعداد نمایش محصول در هر صفحه',
+                ],
                 // main
                 [
                     'setting_name' => 'logo_light',

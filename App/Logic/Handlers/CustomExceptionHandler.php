@@ -19,8 +19,8 @@ class CustomExceptionHandler implements IExceptionHandler
         if ($request->getUrl()->contains('/api') ||
             $request->getUrl()->contains('/ajax')) {
             $resourceHandler = new ResourceHandler();
-            $resourceHandler->statusCode($error->getCode())->errorMessage($error->getMessage());
-            response()->httpCode($error->getCode())->json($resourceHandler->getReturnData());
+            $resourceHandler->statusCode((int)$error->getCode())->errorMessage($error->getMessage());
+            response()->httpCode((int)$error->getCode())->json($resourceHandler->getReturnData());
         }
 
         /* The router will throw the NotFoundHttpException on 404 */
