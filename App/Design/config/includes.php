@@ -182,7 +182,7 @@ return [
                     'bottom' => [
                         e(
                             '<script type="text/javascript" src="' .
-                            asset_path('js/all/jquery-ui.js') .
+                            asset_path('js/all/jquery-ui.min.js') .
                             '"></script>'
                         ),
                     ],
@@ -761,6 +761,16 @@ return [
             ],
             'js' => [
                 'bottom' => [
+                    e(
+                        '<script type="text/javascript" src="' .
+                        asset_path('plugins/theia/ResizeSensor.min.js') .
+                        '"></script>'
+                    ),
+                    e(
+                        '<script type="text/javascript" src="' .
+                        asset_path('plugins/theia/theia-sticky-sidebar.min.js') .
+                        '"></script>'
+                    ),
                     e(
                         '<script type="text/javascript" src="' .
                         asset_path('plugins/UriParser.js') .

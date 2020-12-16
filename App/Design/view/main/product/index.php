@@ -8,7 +8,7 @@
     <!-- START SECTION SHOP -->
     <div class="section">
         <div class="container">
-            <div class="row">
+            <div class="row" id="__sticky_sidebar_container">
                 <div class="col-lg-9">
                     <div class="row align-items-center mb-4 pb-1">
                         <div class="col-12">
@@ -29,7 +29,7 @@
                     </div>
                 </div>
                 <div class="col-lg-3 order-lg-first mt-4 pt-2 mt-lg-0 pt-lg-0">
-                    <div class="sidebar">
+                    <div class="sidebar" id="__the_sticky_sidebar">
                         <div class="widget">
                             <h5 class="widget_title">دسته بندی ها</h5>
                             <ul class="widget_categories">
@@ -51,7 +51,8 @@
                                     <input type="hidden" id="price_second">
                                     <input type="hidden" id="price_first">
                                 </div>
-                                <button type="button" class="mt-3 btn btn-info btn-block" id="__search_product_price_filter">
+                                <button type="button" class="mt-3 btn btn-info btn-block"
+                                        id="__search_product_price_filter">
                                     اعمال فیلتر
                                 </button>
                             </div>
@@ -72,13 +73,17 @@
                         </div>
                         <div class="widget">
                             <h5 class="widget_title">سایزها</h5>
-                            <div class="product_size_switch">
+                            <div class="product_size_switch product_size_switch_multi">
                                 <span>xs</span>
+                            </div>
+                            <div class="product_size_switch product_size_switch_multi">
+                                <span>xxl</span>
                             </div>
                         </div>
                         <div class="widget">
                             <h5 class="widget_title">رنگ ها</h5>
-                            <div class="product_color_switch">
+                            <div class="product_color_switch product_color_switch_multi d-flex justify-content-between">
+                                <div>رنگ قهوه ای</div>
                                 <span data-color="#87554B"></span>
                             </div>
                         </div>

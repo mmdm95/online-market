@@ -605,11 +605,19 @@ PAGE JS
     *===================================*/
     $('.product_color_switch span').each(function () {
         var get_color = $(this).attr('data-color');
-        $(this).css("background-color", get_color);
+        if (get_color) {
+            $(this).css("background-color", get_color);
+        }
     });
 
-    $('.product_color_switch span,.product_size_switch span').on("click", function () {
+    $('.product_size_switch:not(.product_size_switch_multi) span').on("click", function () {
         $(this).siblings(this).removeClass('active').end().addClass('active');
+    });
+    $('.product_color_switch:not(.product_color_switch_multi)').on('click', function () {
+        $(this).find('span').siblings(this).removeClass('active').end().addClass('active');
+    });
+    $('.product_color_switch_multi,.product_size_switch_multi').on('click', function () {
+        $(this).find('span').toggleClass('active');
     });
 
     /*===================================*
