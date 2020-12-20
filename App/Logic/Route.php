@@ -132,8 +132,8 @@ class Route implements IInitialize
                 Router::get('/user/view/{id?}', 'Admin\UserController@view')->where([
                     'id' => '[0-9]+',
                 ])->name('admin.user.view');
-                Router::get('/user/add', 'Admin\UserController@add')->name('admin.user.add');
-                Router::get('/user/edit/{id}', 'Admin\UserController@edit')->where([
+                Router::form('/user/add', 'Admin\UserController@add')->name('admin.user.add');
+                Router::form('/user/edit/{id}', 'Admin\UserController@edit')->where([
                     'id' => '[0-9]+',
                 ])->name('admin.user.edit');
 
