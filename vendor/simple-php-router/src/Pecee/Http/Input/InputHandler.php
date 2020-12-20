@@ -122,12 +122,12 @@ class InputHandler
                 try {
 
                     $file = InputFile::createFromArray([
-                        'index'    => (empty($key) === true && empty($originalIndex) === false) ? $originalIndex : $key,
-                        'name'     => $original['name'][$key],
-                        'error'    => $original['error'][$key],
+                        'index' => (empty($key) === true && empty($originalIndex) === false) ? $originalIndex : $key,
+                        'name' => $original['name'][$key],
+                        'error' => $original['error'][$key],
                         'tmp_name' => $original['tmp_name'][$key],
-                        'type'     => $original['type'][$key],
-                        'size'     => $original['size'][$key],
+                        'type' => $original['type'][$key],
+                        'size' => $original['size'][$key],
                     ]);
 
                     if (isset($output[$key]) === true) {
@@ -254,11 +254,11 @@ class InputHandler
      *
      * @param string $index
      * @param string|null $defaultValue
-     * @return InputItem|array|string|null
+     * @return InputItem|array|
      */
     public function post(string $index, ?string $defaultValue = null)
     {
-        return $this->post[$index] ?? $defaultValue;
+        return $this->post[$index] ?? new InputItem($index, $defaultValue);
     }
 
     /**
@@ -266,11 +266,11 @@ class InputHandler
      *
      * @param string $index
      * @param string|null $defaultValue
-     * @return InputFile|array|string|null
+     * @return InputFile|array|
      */
     public function file(string $index, ?string $defaultValue = null)
     {
-        return $this->file[$index] ?? $defaultValue;
+        return $this->file[$index] ?? new InputItem($index, $defaultValue);
     }
 
     /**
@@ -278,11 +278,11 @@ class InputHandler
      *
      * @param string $index
      * @param string|null $defaultValue
-     * @return InputItem|array|string|null
+     * @return InputItem|array
      */
     public function get(string $index, ?string $defaultValue = null)
     {
-        return $this->get[$index] ?? $defaultValue;
+        return $this->get[$index] ?? new InputItem($index, $defaultValue);
     }
 
     /**

@@ -220,6 +220,7 @@
             toObjectRecursively: function (arr, unique, definedValues, encoded) {
                 var self = this, rv = {}, i, len, t;
                 encoded = !(false === encoded);
+                unique = true === unique;
                 if (this.isObject(arr)) {
                     for (i in arr) {
                         if (arr.hasOwnProperty(i)) {
@@ -232,7 +233,7 @@
                         arr = self.definedArray(arr);
                     }
                     // if unique values are only required
-                    if (true === unique) {
+                    if (unique) {
                         arr = self.uniqueArray(arr);
                     }
                     len = arr.length;
@@ -289,28 +290,40 @@
              * @param obj
              * @param keys
              * @param v
+             * @param [replace]
+             * @param [unique]
              * @returns {*}
              */
-            setIntoObject: function (obj, keys, v, replace) {
+            setIntoObject: function (obj, keys, v, replace, unique) {
                 var key, last, o;
                 if (!utils.isString(keys)) return;
                 replace = true === replace;
+                unique = true === unique;
                 keys = keys.split('.');
                 while (keys.length > 1) {
                     key = keys.shift();
                     if (!utils.isObject(obj[key])) {
-                        obj[key] = {};
+                        if (obj[key]) {
+                            obj[key] = {
+                                0: obj[key],
+                            };
+                        } else {
+                            obj[key] = {};
+                        }
                     }
                     obj = obj[key];
                 }
                 last = keys.shift();
-                o = utils.toObjectRecursively(v, null, true);
+                o = utils.toObjectRecursively(v, unique, true);
                 if ((obj[last]) && !replace) {
                     if (utils.isObject(obj[last]) && utils.isObject(o)) {
                         obj[last] = extend(true, obj[last], o);
                     } else if (!utils.isObject(obj[last]) && !utils.isObject(o)) {
                         var newArr = [];
                         obj[last] = newArr.concat(obj[last], o);
+                        if (unique) {
+                            obj[last] = utils.uniqueArray(obj[last]);
+                        }
                     } else {
                         obj[last] = o;
                     }
@@ -430,11 +443,12 @@
             //------------------------------------------
             this.regexp = {
                 removeQuestionMark: /^\?/,
-                slashToDot: /[\[]([^\]\[]+)[\]]/g,
+                slashToDot: /[\[]([^\]\[]*)[\]]/g,
                 dotToSlash: /[.]([\w]*)/g,
             };
             this.obj = {};
             this.search = '?';
+            this.numberedQuery = false;
             this.changeStateFn = function () {
             };
             this.canCallChangeState = true;
@@ -554,7 +568,12 @@
                 len = all.length;
                 for (i = 0; i < len; ++i) {
                     parts = all[i].split('=');
-                    converted = parts[0].replace(self.regexp.slashToDot, '.$1');
+                    converted = parts[0].replace(self.regexp.slashToDot, function (match, p1) {
+                        if (p1.length) {
+                            return '.' + p1;
+                        }
+                        return p1;
+                    });
                     afterEqualSign = parts[1];
                     if (true === afterEqualSign) {
                         afterEqualSign = 1;
@@ -573,12 +592,13 @@
              * @param key
              * @param value
              * @param [replace]
+             * @param [unique]
              * @returns {UriParser}
              */
-            push: function (key, value, replace) {
+            push: function (key, value, replace, unique) {
                 var self = this;
 
-                helper.setIntoObject(self.obj, key, value, replace);
+                helper.setIntoObject(self.obj, key, value, replace, unique);
 
                 if (self.canCallChangeState) {
                     // call on change state hook
@@ -684,6 +704,7 @@
             query: function (key, unique, encoded, numbered) {
                 var self = this;
                 encoded = true === encoded;
+                numbered = !(false === numbered);
                 return '?' + self.querySearchMaker(
                     key ? helper.getFromObject(self.obj, key, {}, !encoded, unique) : self.obj,
                     key ? key.replace(self.regexp.dotToSlash, '[$1]') : null,
@@ -701,21 +722,6 @@
                 if (utils.isFunction(callback)) {
                     self.changeStateFn = callback;
                 }
-                return self;
-            },
-
-            /**
-             * @param callback
-             * @returns {UriParser}
-             */
-            onpopstate: function (callback) {
-                var self = this;
-                window.onpopstate = function (event) {
-                    if (event.state) {
-                        if (utils.isFunction(callback))
-                            callback.apply(self, [event]);
-                    }
-                };
                 return self;
             },
 
@@ -757,11 +763,24 @@
             },
 
             /**
+             * @param answer
+             * @returns {UriParser}
+             */
+            updateSearchWithNumberedQuery: function (answer) {
+                this.numberedQuery = true === answer;
+                return this;
+            },
+
+            /**
              * Update search/query string with global object
              * @returns {UriParser}
              */
             updateSearch: function () {
-
+                if (this.numberedQuery) {
+                    this.search = this.query(null, true, false, true);
+                } else {
+                    this.search = this.query(null, true, false, false);
+                }
                 return this;
             },
         });

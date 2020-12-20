@@ -7,125 +7,136 @@
  * 
  */
 
-(function($) {
+(function ($) {
+    "use strict";
 
-	$.fn.extend({
-		mSwitch: function(params) {
-			
-			var elements;
-			params = $.extend({}, $.mSwitch.defaults, params);
+    // Create the defaults once
+    var pluginName = "mSwitch",
+        defaults = {
+            colorClass: 'm_switch_color',
+            onRendered: function () {
+            },
+            onRender: function (elem) {
+            },
+            onTurnOn: function (elem) {
+                return true;
+            },
+            onTurnOff: function (elem) {
+                return true;
+            }
+        };
 
-			if (this && this.length > 0){
-				elements = this.each(function() {
-					new $.mSwitch(this, params);
-				});
+    // The actual plugin constructor
+    function MSwitch(elem, options) {
+        this.elem = elem;
+        this.$elem = $(elem);
+        this.settings = $.extend({}, defaults, options);
+        this._defaults = defaults;
+        this._name = pluginName;
+        this.init();
+    }
 
-				if (params.onRendered && typeof params.onRendered == 'function'){
-					params.onRendered($(this));
-				}
-			}
+    // Avoid Plugin.prototype conflicts
+    $.extend(MSwitch.prototype, {
+        init: function () {
+            var _this = this;
+            if (_this.$elem && _this.$elem.is(":checkbox")) {
+                _this.$elem.addClass("m_switch_check");
+                var $div = $("<div class='m_switch'/>");
+                var $b = $("<b class='m_switch_b m_switch_element'/>");
 
-			return elements;
+                _this.$elem.wrap($div);
+                $b.insertAfter(_this.$elem);
 
-		}
-	});
-	
-	$.mSwitch = function(_this, params) {
-		$.mSwitch.colorClass = $(_this).attr('data-color-class');
-		$.mSwitch.colorClass = $.mSwitch.colorClass ? $.mSwitch.colorClass : 'm_switch_color';
+                if (_this.$elem.is(":checked")) {
+                    _this.turnOn(_this.$elem);
+                } else {
+                    _this.turnOff(_this.$elem);
+                }
 
-		if ($(_this) && $(_this).is(":checkbox")){
-			$(_this).addClass("m_switch_check");
-			// var element_parent = $(_this).parent();
-			// var element = $(_this).detach().html();
-			var $div = $("<div/>").attr("class", "m_switch");
-			var $b = $("<b/>").attr("class", "m_switch_b m_switch_element");
+                if (_this.settings.onRender && typeof _this.settings.onRender == 'function') {
+                    _this.settings.onRender(_this.$elem);
+                }
 
-			// MMDM changed this part
-			$(_this).wrap($div);
-			$b.insertAfter($(_this));
+                _this.$elem.change(function () {
+                    if (_this.$elem.is(":checked")) {
+                        if (_this.settings.onTurnOn && typeof _this.settings.onTurnOn == 'function') {
+                            _this.settings.onTurnOn($(this));
+                        }
+                        _this.turnOn($(this));
+                    } else if (!_this.$elem.is(":checked")) {
+                        if (_this.settings.onTurnOff && typeof _this.settings.onTurnOff == 'function') {
+                            _this.settings.onTurnOff($(this));
+                        }
+                        _this.turnOff($(this));
+                    }
+                });
+            }
+        },
 
-			// $b.appendTo($div);
-			// $(_this).detach().prependTo($div);
-			// element_parent.append($div);
+        turnOn: function (elem) {
+            if (elem.parent(".m_switch").length > 0) {
+                if (!elem.parent(".m_switch").hasClass(this.settings.colorClass)) {
+                    elem.parent(".m_switch").addClass(this.settings.colorClass);
+                }
+            }
+            if (elem.next("b.m_switch_b").length > 0) {
+                if (!elem.next("b.m_switch_b").hasClass("m_switch_checked")) {
+                    elem.next("b.m_switch_b").addClass("m_switch_checked");
+                }
+            }
+            if (elem.parent(".m_switch").hasClass(this.settings.colorClass) &&
+                elem.next("b.m_switch_b").hasClass("m_switch_checked")) {
+                elem.attr('checked', true).prop('checked', true);
+            }
+        },
 
-			if ($(_this).is(":checked")){
-				$.mSwitch.turnOn($(_this));
-			}else{
-				$.mSwitch.turnOff($(_this));
-			}
+        turnOff: function (elem) {
+            if (elem.parent(".m_switch").length > 0) {
+                if (elem.parent(".m_switch").hasClass(this.settings.colorClass)) {
+                    elem.parent(".m_switch").removeClass(this.settings.colorClass);
+                }
+            }
+            if (elem.next("b.m_switch_b").length > 0) {
+                if (elem.next("b.m_switch_b").hasClass("m_switch_checked")) {
+                    elem.next("b.m_switch_b").removeClass("m_switch_checked");
+                }
+            }
+            if (!elem.parent(".m_switch").hasClass(this.settings.colorClass) &&
+                !elem.next("b.m_switch_b").hasClass("m_switch_checked")) {
+                elem.removeAttr('checked', false).prop('checked', false);
+            }
+        },
 
-			if (params.onRender && typeof params.onRender == 'function'){
-				params.onRender($(_this));
-			}
+        isOn: function (elem) {
+            var res = false;
+            if (elem.is(":checked")) {
+                res = true;
+            }
+            return res;
+        },
 
-			$(_this).change(function(){
-				if ($(_this).is(":checked")){
-					if (params.onTurnOn && typeof params.onTurnOn == 'function'){
-						params.onTurnOn($(this));
-					}
-					$.mSwitch.turnOn($(this));
-				}else if (!$(_this).is(":checked")){
-					if (params.onTurnOff && typeof params.onTurnOff == 'function'){
-						params.onTurnOff($(this));
-					}
-					$.mSwitch.turnOff($(this));
-				}
-			});
-		}
-	};
-	
-	$.mSwitch.turnOn = function(elem){
-		if (elem.parent(".m_switch").length > 0){
-			if (!elem.parent(".m_switch").hasClass($.mSwitch.colorClass)){
-				elem.parent(".m_switch").addClass($.mSwitch.colorClass);
-			}
-		}
-		if (elem.next("b.m_switch_b").length > 0){
-			if (!elem.next("b.m_switch_b").hasClass("m_switch_checked")){
-				elem.next("b.m_switch_b").addClass("m_switch_checked");
-			}
-		}
-		if (elem.parent(".m_switch").hasClass($.mSwitch.colorClass) &&
-				elem.next("b.m_switch_b").hasClass("m_switch_checked")){
-				elem.attr('checked', true);
-		}
-	};
-	
-	$.mSwitch.turnOff = function(elem){
-		if (elem.parent(".m_switch").length > 0){
-			if (elem.parent(".m_switch").hasClass($.mSwitch.colorClass)){
-				elem.parent(".m_switch").removeClass($.mSwitch.colorClass);
-			}
-		}
-		if (elem.next("b.m_switch_b").length > 0){
-			if (elem.next("b.m_switch_b").hasClass("m_switch_checked")){
-				elem.next("b.m_switch_b").removeClass("m_switch_checked");
-			}
-		}
-		if (!elem.parent(".m_switch").hasClass($.mSwitch.colorClass) &&
-				!elem.next("b.m_switch_b").hasClass("m_switch_checked")){
-				elem.attr('checked', false);
-		}
-	};
+        options: function (options) {
+            if ($.type(options) !== 'object') return;
+            $.extend(true, this.settings, options);
+        },
+    });
 
-	$.mSwitch.isOn = function(elem){
-		var res = false;
-		if (elem.is(":checked")){
-				res = true;
-		}
-		return res;
-	};
-	
-	$.mSwitch.defaults = {
-		onRendered: function(){},
-		onRender: function(elem){},
-		onTurnOn: function(elem){
-			return true;
-		},
-		onTurnOff: function(elem){
-			return true;
-		}
-	};
-	
+    // A really lightweight plugin wrapper around the constructor,
+    // preventing against multiple instantiations
+    $.fn[pluginName] = function (options) {
+        var args = Array.prototype.slice.call(arguments, 1);
+        return this.each(function () {
+            if (!$.data(this, "plugin_" + pluginName)) {
+                $.data(this, "plugin_" + pluginName, new MSwitch(this, options));
+
+                if (options && options.onRendered && typeof options.onRendered == 'function') {
+                    options.onRendered($(this));
+                }
+            } else if ($.isFunction(MSwitch.prototype[options]) && $.data(this, 'plugin_' + pluginName)) {
+                $.data(this, 'plugin_' + pluginName)[options].apply($.data(this, 'plugin_' + pluginName), args)
+            }
+        });
+    };
+
 }(jQuery));

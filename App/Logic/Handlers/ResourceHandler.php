@@ -28,6 +28,16 @@ class ResourceHandler
     }
 
     /**
+     * @param string $type
+     * @return static
+     */
+    public function type(string $type)
+    {
+        $this->data['type'] = $type;
+        return $this;
+    }
+
+    /**
      * @param string|null $msg
      * @return static
      */
@@ -64,6 +74,7 @@ class ResourceHandler
     {
         $this
             ->statusCode(200)
+            ->type(RESPONSE_TYPE_SUCCESS)
             ->errorMessage(null)
             ->data([]);
 

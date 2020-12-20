@@ -20,7 +20,7 @@ use Sim\I18n\ISOLanguageCodes;
  *     1.2.5.0 instead of 1.2.5-a
  *     1.2.5.0.1 instead of 1.2.5-a1 (I'm not sure)
  */
-defined("APP_VERSION") OR define("APP_VERSION", "0.1.8");
+defined("APP_VERSION") OR define("APP_VERSION", "0.1.9");
 
 /***************************************
  * You can add your constants here
@@ -34,12 +34,23 @@ defined("NOT_FOUND_ADMIN") OR define("NOT_FOUND_ADMIN", 'admin.page.notfound');
 defined("NOT_FOUND") OR define("NOT_FOUND", 'page.notfound');
 defined("SERVER_ERROR") OR define("SERVER_ERROR", 'page.servererror');
 
+// response types
+defined("RESPONSE_TYPE_SUCCESS") OR define("RESPONSE_TYPE_SUCCESS", 'success');
+defined("RESPONSE_TYPE_WARNING") OR define("RESPONSE_TYPE_WARNING", 'warning');
+defined("RESPONSE_TYPE_INFO") OR define("RESPONSE_TYPE_INFO", 'info');
+defined("RESPONSE_TYPE_ERROR") OR define("RESPONSE_TYPE_ERROR", 'error');
+
 // title delimiter
 defined("TITLE_DELIMITER") OR define("TITLE_DELIMITER", ' | ');
 
 // publish or true in database
 defined("DB_YES") OR define("DB_YES", 1);
 defined("DB_NO") OR define("DB_NO", 0);
+
+// comment statuses
+defined("COMMENT_STATUS_NOT_READ") OR define("COMMENT_STATUS_NOT_READ", 0);
+defined("COMMENT_STATUS_ACCEPT") OR define("COMMENT_STATUS_ACCEPT", 1);
+defined("COMMENT_STATUS_REJECT") OR define("COMMENT_STATUS_REJECT", 2);
 
 // default placeholders
 defined("PLACEHOLDER_IMAGE") OR define("PLACEHOLDER_IMAGE", __DIR__ . '/../public/be/images/file-icons/image-placeholder.png');

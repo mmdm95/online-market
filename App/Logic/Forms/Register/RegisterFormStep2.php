@@ -50,7 +50,7 @@ class RegisterFormStep2 implements IPageForm
             ['activate_code'],
             'username=:u_name',
             ['u_name' => session()->getFlash('register.username', '', false)]);
-        if (input()->post('inp-register-code', null)->getValue() !== $code['activate_code'] ?? '') {
+        if (input()->post('inp-register-code', null)->getValue() !== ($code['activate_code'] ?? '')) {
             $validator->setError('inp-register-code', 'کد وارد شده صحیح نمی‌باشد.');
         }
 

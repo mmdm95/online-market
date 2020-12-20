@@ -6442,14 +6442,17 @@ footer .widget_title {
     margin-bottom: 10px;
 }
 
-.product_size_switch span {
+.product_model_switch {
+    margin-bottom: .5rem;
+}
+
+.product_size_switch span,
+.product_model_switch span {
     cursor: pointer;
     text-transform: uppercase;
-    width: 32px;
     display: inline-block;
     border: 2px solid #ddd;
     text-align: center;
-    height: 32px;
     line-height: 28px;
     font-size: 14px;
     margin-bottom: 3px;
@@ -6459,10 +6462,30 @@ footer .widget_title {
     user-select: none;
 }
 
-.product_size_switch span.active {
+.product_size_switch span {
+    width: 32px;
+    height: 32px;
+}
+
+.product_size_switch span.active,
+.product_model_switch span.active {
     border-color: #FF324D;
     background-color: #ff324d;
     color: #fff;
+    -webkit-transform: scale(1.05);
+    -moz-transform: scale(1.05);
+    -ms-transform: scale(1.05);
+    -o-transform: scale(1.05);
+    transform: scale(1.05);
+}
+
+.product_size_switch span.deactivate {
+    background-color: #ddd;
+    -webkit-transform: scale(.95);
+    -moz-transform: scale(.95);
+    -ms-transform: scale(.95);
+    -o-transform: scale(.95);
+    transform: scale(.95);
 }
 
 .list_brand li {
@@ -6483,6 +6506,14 @@ footer .widget_title {
     display: inline-block;
     margin-left: 15px;
     vertical-align: middle;
+}
+
+.cart_btn .add_wishlist.active {
+    text-align: center;
+    border-radius: .25rem;
+    color: #fff;
+    background-color: var(--info);
+    padding: .25rem;
 }
 
 .product_gallery_item a {
@@ -8847,6 +8878,17 @@ body.switch-open {
   MY CUSTOM ELEMENT(S)
 *===================================*/
 
+.btn.disabled, .btn:disabled {
+    cursor: default;
+}
+
+.user-select-none {
+    -webkit-user-select: none !important;
+    -moz-user-select: none !important;
+    -ms-user-select: none !important;
+    user-select: none !important;
+}
+
 .tooltip {
     font-family: inherit;
 }
@@ -9123,4 +9165,39 @@ body.switch-open {
     transition: 0.25s cubic-bezier(0.785, 0.135, 0.15, 0.86) !important;
     transition-property: left, right !important;
     transition-delay: .08s, 0s !important;
+}
+
+.max-widget-height {
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+#Additional-info table {
+    width: 100%;
+    margin-bottom: 1rem;
+    background-color: transparent;
+    border: 1px solid #dee2e6;
+    border-collapse: collapse !important;
+}
+
+#Additional-info table td,
+#Additional-info table th {
+    padding: .75rem;
+    vertical-align: top;
+    background-color: #fff !important;
+    border-top: 1px solid #dee2e6;
+    border-bottom-width: 2px;
+}
+
+#Additional-info table thead th {
+    vertical-align: bottom;
+    border: 1px solid #dee2e6;
+}
+
+#Additional-info table + tbody {
+    border-top: 2px solid #dee2e6;
+}
+
+#Additional-info table table {
+    background-color: #fff;
 }

@@ -25,8 +25,9 @@ class CaptchaController extends AbstractHomeController
     public function generateCaptcha()
     {
         $name = '';
-        if (!empty(input()->get('name', ''))) {
-            $name = input()->get('name', '');
+        $inp = input()->get('name', '');
+        if (!is_array($inp) && !empty($inp)) {
+            $name = input()->get('name', '')->getValue();
         }
         $captcha = CaptchaUtil::get($name);
 
@@ -46,10 +47,16 @@ class CaptchaController extends AbstractHomeController
     public function verifyCaptcha()
     {
         $name = '';
-        if (!empty(input()->post('name', ''))) {
-            $name = input()->post('name', '');
+        $inp = input()->post('name', '');
+        if (!is_array($inp) && !empty($inp)) {
+            $name = input()->post('name', '')->getValue();
         }
-        $res = CaptchaUtil::verify(input()->post('captcha', ''), $name);
+        $captcha = '';
+        $inp = input()->post('captcha', '');
+        if (!is_array($inp) && !empty($inp)) {
+            $captcha = input()->post('captcha', '')->getValue();
+        }
+        $res = CaptchaUtil::verify($captcha, $name);
 
         $data = new ResourceHandler();
         if ($res) {

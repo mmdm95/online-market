@@ -315,6 +315,13 @@ class Route implements IInitialize
             Router::get('/compare', 'CompareController@compare')->name('home.compare');
 
             /**
+             * brand routes
+             */
+            Router::get('/brands/{id}/{slug?}', 'BrandController@show')->where([
+                'id' => '[0-9]+'
+            ])->name('home.brand.show');
+
+            /**
              * blog routes
              */
             Router::get('/blog/', 'BlogController@index')->name('home.blog');
@@ -348,6 +355,16 @@ class Route implements IInitialize
              * product route
              */
             Router::get('/product/search', 'ProductController@search')->name('ajax.product.search');
+            Router::get('/product/comments/{product_id}', 'CommentController@paginate')->where([
+                'product_id' => '[0-9]+',
+            ])->name('ajax.product.comments');
+            //-----
+            Router::post('/product/wishlist/toggle/{product_id}', 'ProductController@wishlistToggle')->where([
+                'product_id' => '[0-9]+',
+            ])->name('ajax.product.wishlist.toggle');
+            Router::post('/product/wishlist/remove/{product_id}', 'ProductController@wishlistRemove')->where([
+                'product_id' => '[0-9]+',
+            ])->name('ajax.product.wishlist.remove');
 
             /**
              * File Manager Route

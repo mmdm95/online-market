@@ -150,6 +150,16 @@ return [
                     'bottom' => [
                         e(
                             '<script type="text/javascript" src="' .
+                            asset_path('plugins/selectric/jquery.selectric.min.js') .
+                            '"></script>'
+                        ),
+                        e(
+                            '<script type="text/javascript" src="' .
+                            asset_path('plugins/jquery.mswitch.js') .
+                            '"></script>'
+                        ),
+                        e(
+                            '<script type="text/javascript" src="' .
                             asset_path('js/scripts.js') .
                             '"></script>'
                         ),
@@ -165,6 +175,15 @@ return [
                         ),
                     ],
                 ],
+                'css' => [
+                    'top' => [
+                        e(
+                            '<link href="' .
+                            asset_path('plugins/selectric/selectric.min.css') .
+                            '" rel="stylesheet" type="text/css">'
+                        ),
+                    ],
+                ]
             ],
             'default-cart' => [
                 'js' => [
@@ -754,7 +773,7 @@ return [
                     'is_active' => false,
                 ],
                 [
-                    'url' => url('home.blog'),
+                    'url' => url('home.search'),
                     'text' => 'محصولات',
                     'is_active' => false,
                 ],
@@ -779,6 +798,34 @@ return [
                     e(
                         '<script type="text/javascript" src="' .
                         asset_path('js/product-search.js') .
+                        '"></script>'
+                    ),
+                ],
+            ],
+        ],
+        'view/main/product/detail' => [
+            'common' => [
+                'default',
+                'default-changeable',
+                'default-cart',
+            ],
+            'breadcrumb' => [
+                [
+                    'url' => url('home.index'),
+                    'text' => 'خانه',
+                    'is_active' => false,
+                ],
+                [
+                    'url' => url('home.search'),
+                    'text' => 'محصولات',
+                    'is_active' => false,
+                ],
+            ],
+            'js' => [
+                'bottom' => [
+                    e(
+                        '<script type="text/javascript" src="' .
+                        asset_path('js/product-detail.js') .
                         '"></script>'
                     ),
                 ],
@@ -1196,7 +1243,6 @@ return [
                 ],
             ],
         ],
-
         'view/blog/category/add' => [
             'title' => title_concat(\config()->get('settings.title.value'), 'افزودن دسته'),
             'common' => [

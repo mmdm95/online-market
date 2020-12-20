@@ -32,9 +32,14 @@ class BlogUtil
          */
         $blogModel = container()->get(BlogModel::class);
         // parse query
-        $limit = input()->get('each_page', config()->get('settings.blog_each_page.value'));
+        try {
+            $limit = input()->get('each_page', config()->get('settings.blog_each_page.value'))->getValue();
+            $page = input()->get('page', 1)->getValue();
+        } catch (\Exception $e) {
+            $limit = config()->get('settings.blog_each_page.value');
+            $page = 1;
+        }
         $limit = $limit > 0 ? $limit : 1;
-        $page = input()->get('page', 1);
         $offset = ($page - 1) * $limit;
 
         $withCategory = false;
@@ -43,50 +48,62 @@ class BlogUtil
         $where = 'b.publish=:pub';
         $bindValues = ['pub' => DB_YES];
         // query search parameter
-        $q = input()->get('q', '');
-        if (is_string($q) && !empty($q)) {
-            $withCategory = true;
-            $withUsers = true;
-            //-----
-            $where .= ' AND (bc.name LIKE :b_category';
-            $where .= ' OR b.fa_title LIKE :b_fa_title';
-            $where .= ' OR b.slug LIKE :b_slug';
-            $where .= ' OR b.keywords LIKE :b_keywords';
-            $where .= ' OR b.writer LIKE :b_writer';
-            $where .= ' OR b.abstract LIKE :b_abstract';
-            $where .= ' OR bc.slug LIKE :b_slug';
-            $where .= ' OR u.first_name LIKE :c_f_name';
-            $where .= ')';
-            $bindValues['b_category'] = '%' . $q . '%';
-            $bindValues['b_fa_title'] = '%' . StringUtil::toPersian($q) . '%';
-            $bindValues['b_slug'] = '%' . StringUtil::slugify($q) . '%';
-            $bindValues['b_keywords'] = '%' . $q . '%';
-            $bindValues['b_writer'] = '%' . $q . '%';
-            $bindValues['b_abstract'] = '%' . $q . '%';
-            $bindValues['b_slug'] = '%' . $q . '%';
-            $bindValues['c_f_name'] = '%' . $q . '%';
+        $q = input()->get('q', null);
+        if (!is_array($q) && !empty($q)) {
+            $q = $q->getValue();
+            if (is_string($q) && !empty($q)) {
+                $withCategory = true;
+                $withUsers = true;
+                //-----
+                $where .= ' AND (bc.name LIKE :b_category';
+                $where .= ' OR b.fa_title LIKE :b_fa_title';
+                $where .= ' OR b.slug LIKE :b_slug';
+                $where .= ' OR b.keywords LIKE :b_keywords';
+                $where .= ' OR b.writer LIKE :b_writer';
+                $where .= ' OR b.abstract LIKE :b_abstract';
+                $where .= ' OR bc.slug LIKE :b_slug';
+                $where .= ' OR u.first_name LIKE :c_f_name';
+                $where .= ')';
+                $bindValues['b_category'] = '%' . $q . '%';
+                $bindValues['b_fa_title'] = '%' . StringUtil::toPersian($q) . '%';
+                $bindValues['b_slug'] = '%' . StringUtil::slugify($q) . '%';
+                $bindValues['b_keywords'] = '%' . $q . '%';
+                $bindValues['b_writer'] = '%' . $q . '%';
+                $bindValues['b_abstract'] = '%' . $q . '%';
+                $bindValues['b_slug'] = '%' . $q . '%';
+                $bindValues['c_f_name'] = '%' . $q . '%';
+            }
         }
         // time parameter for blog in that entire day
-        $time = input()->get('time', 0);
-        if (is_numeric($time) && !empty($time)) {
-            $where .= ' AND b.created_at >= :b_t1';
-            $where .= ' AND b.created_at <= :b_t2';
-            $bindValues['b_t1'] = get_today_start_of_time($time);
-            $bindValues['b_t2'] = get_today_end_of_time($time);
+        $time = input()->get('time', null);
+        if (!is_array($time)) {
+            $time = $time->getValue();
+            if (is_numeric($time) && !empty($time)) {
+                $where .= ' AND b.created_at >= :b_t1';
+                $where .= ' AND b.created_at <= :b_t2';
+                $bindValues['b_t1'] = get_today_start_of_time($time);
+                $bindValues['b_t2'] = get_today_end_of_time($time);
+            }
         }
         // tag parameter
-        $tag = input()->get('tag', '');
-        if (is_string($tag) && !empty($tag)) {
-            $where .= ' AND b.keywords LIKE :be_keywords';
-            $bindValues['be_keywords'] = '%' . $tag . '%';
+        $tag = input()->get('tag', null);
+        if (!is_array($tag)) {
+            $tag = $tag->getValue();
+            if (is_string($tag) && !empty($tag)) {
+                $where .= ' AND b.keywords LIKE :be_keywords';
+                $bindValues['be_keywords'] = '%' . $tag . '%';
+            }
         }
         // category parameter
-        $category = input()->get('category', 0);
-        if (is_numeric($category) && !empty($category)) {
-            $withCategory = true;
-            //-----
-            $where .= ' AND bc.id=:b_category_id';
-            $bindValues['b_category_id'] = $category;
+        $category = input()->get('category', null);
+        if (!is_array($category)) {
+            $category = $category->getValue();
+            if (is_numeric($category) && !empty($category)) {
+                $withCategory = true;
+                //-----
+                $where .= ' AND bc.id=:b_category_id';
+                $bindValues['b_category_id'] = $category;
+            }
         }
 
         // other info

@@ -166,9 +166,14 @@
                 return id;
             },
             hideLoader: function (id) {
-                $('#' + id).fadeOut(300, function () {
-                    $(this).remove();
-                });
+                if (id) {
+                    id = $('#' + id);
+                    if (id.length) {
+                        id.fadeOut(300, function () {
+                            $(this).remove();
+                        });
+                    }
+                }
             },
         });
 
@@ -181,7 +186,12 @@
     $(function () {
         var
             shop,
-            constraints;
+            constraints,
+            //-----
+            loaderId,
+            wishListBtn,
+            //-----
+            createLoader = true;
 
         shop = new window.TheShop();
 
@@ -222,6 +232,8 @@
                 captcha: variables.validation.common.captcha,
             },
         };
+
+        wishListBtn = $('.add_wishlist');
 
         //---------------------------------------------------------------
         // CHECK SCROLL TO ELEMENT
@@ -285,22 +297,22 @@
 
         shop.forms.submitForm('newsletter', constraints.newsletter, function (values) {
             // do ajax
-            var loaderId = shop.showLoader();
+            if (createLoader) {
+                createLoader = false;
+                loaderId = shop.showLoader();
+            }
             shop.request(variables.url.newsletter.add, 'post', function () {
-                if (null === this.error) {
-                    shop.hideLoader(loaderId);
-                    // clear element after success
-                    $(variables.elements.newsletter.form).reset();
-                    shop.toasts.toast(this.data, {
-                        type: 'success',
-                    });
-                } else {
-                    shop.toasts.toast(this.error, {
-                        type: 'error',
-                    });
-                }
+                shop.hideLoader(loaderId);
+                // clear element after success
+                $(variables.elements.newsletter.form).reset();
+                shop.toasts.toast(this.data, {
+                    type: 'success',
+                });
+                createLoader = true;
             }, {
                 data: values,
+            }, true, function () {
+                createLoader = true;
             });
             return false;
         }, function (errors) {
@@ -326,6 +338,44 @@
         }, function (errors) {
             shop.forms.showFormErrors(errors);
             return false;
+        });
+
+        //---------------------------------------------------------------
+        // ADD TO WISH LIST
+        //---------------------------------------------------------------
+        wishListBtn.on('click' + variables.namespace, function (e) {
+            e.preventDefault();
+
+            var $this, id;
+            $this = $(this);
+            id = $(this).attr('data-product-id');
+            if (id) {
+                if (createLoader) {
+                    createLoader = false;
+                    loaderId = shop.showLoader();
+                }
+                shop.request(variables.url.products.add.wishList, 'post', function () {
+                    shop.hideLoader(loaderId);
+                    var type, message;
+                    type = this.data.type;
+                    message = this.data.message;
+                    if (type === variables.types.success) {
+                        $this.addClass('active');
+                    } else if (type === variables.types.info) {
+                        $this.removeClass('active');
+                    }
+                    shop.toasts.toast(message, {
+                        type: type,
+                    });
+                    createLoader = true;
+                }, {
+                    data: {
+                        product_id: id,
+                    },
+                }, true, function () {
+                    createLoader = true;
+                });
+            }
         });
     });
 })(jQuery);

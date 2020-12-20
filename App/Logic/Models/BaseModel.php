@@ -20,11 +20,13 @@ abstract class BaseModel
     const TBL_CATEGORY_IMAGES = 'category_images';
     const TBL_CITIES = 'cities';
     const TBL_COLORS = 'colors';
+    const TBL_COMMENTS = 'comments';
     const TBL_COMPLAINTS = 'complaints';
     const TBL_CONTACT_US = 'contact_us';
     const TBL_COUPONS = 'coupons';
     const TBL_DEPOSIT_TYPES = 'deposit_types';
     const TBL_FAQ = 'faq';
+    const TBL_FAVORITE_USER_PRODUCT = 'favorite_user_product';
     const TBL_FESTIVALS = 'festivals';
     const TBL_INSTAGRAM_IMAGES = 'instagram_images';
     const TBL_MAIN_SLIDER = 'main_slider';
@@ -35,8 +37,8 @@ abstract class BaseModel
     const TBL_ORDER_RESERVED = 'order_reserved';
     const TBL_OUR_TEAM = 'our_team';
     const TBL_PRODUCTS = 'products';
+    const TBL_PRODUCT_PROPERTY = 'product_property';
     const TBL_PRODUCT_ADVANCED = 'product_advanced';
-    const TBL_PRODUCT_CATEGORY_FESTIVAL = 'product_category_festival';
     const TBL_PRODUCT_FESTIVAL = 'product_festival';
     const TBL_PRODUCT_GALLERY = 'product_gallery';
     const TBL_PRODUCT_RELATED = 'product_related';

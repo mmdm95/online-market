@@ -9,6 +9,12 @@ window.MyGlobalVariables = {
         warning: '',
         error: '',
     },
+    types: {
+        success: 'success',
+        warning: 'warning',
+        info: 'info',
+        error: 'error',
+    },
     messages: {
         request: {
             error: 'ارسال/دریافت اطلاعات با خطا روبرو شد!',
@@ -67,10 +73,10 @@ window.MyGlobalVariables = {
             },
             add: {
                 comment: '/ajax/product/comment/add',
-                like: '/ajax/product/like/add',
+                wishList: '/ajax/product/wishlist/toggle',
             },
             remove: {
-                like: '/ajax/product/like/remove'
+                wishList: '/ajax/product/wishlist/remove'
             },
             search: '/ajax/product/search',
         },
@@ -212,6 +218,24 @@ window.MyGlobalVariables = {
             },
             isDefined: function (t) {
                 return null !== t && typeof t !== 'undefined';
+            },
+            isChecked: function (t) {
+                return -1 !== [1, '1', true, 'yes', 'on'].indexOf(t);
+            },
+            isEmptyObject: function (obj) {
+                for (var prop in obj) {
+                    if (obj.hasOwnProperty(prop)) {
+                        return false;
+                    }
+                }
+                return JSON.stringify(obj) === JSON.stringify({});
+            },
+            objSize: function (obj) {
+                var size = 0, key;
+                for (key in obj) {
+                    if (obj.hasOwnProperty(key)) ++size;
+                }
+                return size;
             },
             trim: function (string, char) {
                 if (char === "]") char = "\\]";
@@ -357,6 +381,7 @@ window.MyGlobalVariables = {
                     data: data.data,
                     error: data.error,
                     code: data.status_code,
+                    type: data.type,
                 };
             },
 
@@ -447,12 +472,14 @@ window.MyGlobalVariables = {
                             }
                         } else {
                             errorCallback.call(data);
-                            if (showError) {
-                                _.toasts.toast(data.error, {
-                                    type: 'error',
-                                });
-                            } else {
-                                console.error(data.error);
+                            if (data.error) {
+                                if (showError) {
+                                    _.toasts.toast(data.error, {
+                                        type: 'error',
+                                    });
+                                } else {
+                                    console.error(data.error);
+                                }
                             }
                         }
                     })

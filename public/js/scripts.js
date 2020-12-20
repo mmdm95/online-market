@@ -430,7 +430,6 @@ PAGE JS
         $('.slick_slider').each(function () {
             var $slick_carousel = $(this);
             $slick_carousel.slick({
-                rtl: true,
                 arrows: $slick_carousel.data("arrows"),
                 dots: $slick_carousel.data("dots"),
                 infinite: $slick_carousel.data("infinite"),
@@ -446,6 +445,7 @@ PAGE JS
                 draggable: $slick_carousel.data("draggable"),
                 slidesToShow: $slick_carousel.data("slides-to-show"),
                 slidesToScroll: $slick_carousel.data("slides-to-scroll"),
+                swipeToSlide: true,
                 asNavFor: $slick_carousel.data("as-nav-for"),
                 focusOnSelect: $slick_carousel.data("focus-on-select"),
                 responsive: $slick_carousel.data("responsive")
@@ -531,6 +531,67 @@ PAGE JS
         });
     }
 
+    if ($(".selectric_dropdown").length > 0) {
+        if ($.fn.selectric) {
+            $.fn.selectric.defaults = $.extend($.fn.selectric.defaults, {
+                arrowButtonMarkup: '<b class="button iconize ion-chevron-down"></b>',
+            });
+        }
+        $(document).on('ready', function () {
+            $(".selectric_dropdown").selectric();
+            $(".selectric_dropdown.selectric_dropdown_changeable_stuffs").selectric({
+                optionsItemBuilder: function (itemData) {
+                    var
+                        el, str,
+                        colorHex, colorName, size,
+                        colorSpan = '', sizeSpan = '';
+
+                    el = $(itemData.element);
+                    str = itemData.text;
+                    colorHex = el.attr('data-color-hex');
+                    colorName = el.attr('data-color-name');
+                    size = el.attr('data-size');
+
+                    if (colorHex && colorName) {
+                        colorSpan = '<div class="product_color_switch d-inline-block mx-2">' +
+                            '<span style="background-color: ' + colorHex + ';"></span>' +
+                            '<div class="d-inline-block mr-2">' + colorName + '</div>' +
+                            '</div>';
+                    }
+                    if (size) {
+                        sizeSpan = '<span class="product_size_switch mx-2"><span>' + size + '</span></span>';
+                    }
+
+                    return str + colorSpan + sizeSpan;
+                },
+                labelBuilder: function (currItem) {
+                    var
+                        el, str,
+                        colorHex, colorName, size,
+                        colorSpan = '', sizeSpan = '';
+
+                    el = $(currItem.element);
+                    str = currItem.text;
+                    colorHex = el.attr('data-color-hex');
+                    colorName = el.attr('data-color-name');
+                    size = el.attr('data-size');
+
+                    if (colorHex && colorName) {
+                        colorSpan = '<div class="product_color_switch d-inline-block mx-2">' +
+                            '<span style="background-color: ' + colorHex + ';"></span>' +
+                            '<div class="d-inline-block mr-2">' + colorName + '</div>' +
+                            '</div>';
+                    }
+                    if (size) {
+                        sizeSpan = '<span class="product_size_switch mx-2"><span>' + size + '</span></span>';
+                    }
+
+                    return str + colorSpan + sizeSpan;
+                }
+            });
+        });
+    }
+
     /*===================================*
     16.MAP JS
     *===================================*/
@@ -610,15 +671,17 @@ PAGE JS
         }
     });
 
-    $('.product_size_switch:not(.product_size_switch_multi) span').on("click", function () {
-        $(this).siblings(this).removeClass('active').end().addClass('active');
-    });
+    $('.product_size_switch:not(.product_size_switch_multi) span')
+        .on("click", function () {
+            $(this).siblings(this).removeClass('active').end().addClass('active');
+        });
     $('.product_color_switch:not(.product_color_switch_multi)').on('click', function () {
         $(this).find('span').siblings(this).removeClass('active').end().addClass('active');
     });
-    $('.product_color_switch_multi,.product_size_switch_multi').on('click', function () {
-        $(this).find('span').toggleClass('active');
-    });
+    $('.product_color_switch_multi,.product_size_switch_multi,.product_model_switch_multi')
+        .on('click', function () {
+            $(this).find('span').toggleClass('active');
+        });
 
     /*===================================*
     21. QUICKVIEW POPUP + ZOOM IMAGE + PRODUCT SLIDER JS
@@ -694,28 +757,9 @@ PAGE JS
         }
     });
 
-    /*===================================*
-   22. PRICE FILTER JS
-   *===================================*/
-    $('#price_filter').each(function () {
-        var $filter_selector = $(this);
-        var a = $filter_selector.data("min-value");
-        var b = $filter_selector.data("max-value");
-        var c = $filter_selector.data("price-sign");
-        $filter_selector.slider({
-            range: true,
-            isRTL: true,
-            min: $filter_selector.data("min"),
-            max: $filter_selector.data("max"),
-            values: [a, b],
-            slide: function (event, ui) {
-                $("#flt_price").html(ui.values[0] + c + " - " + ui.values[1] + c);
-                $("#price_first").val(ui.values[0]);
-                $("#price_second").val(ui.values[1]);
-            }
-        });
-        $("#flt_price").html($filter_selector.slider("values", 0) + c + " - " + $filter_selector.slider("values", 1) + c);
-    });
+    /*==========================================
+   22. PRICE FILTER JS - MOVED TO PRODUCT SEARCH
+   *==========================================*/
 
     /*===================================*
     23. RATING STAR JS
@@ -778,6 +822,10 @@ PAGE JS
     MY CUSTOM CODES
     *===================================*/
     $(function () {
+        if ($.fn.mSwitch) {
+            $('.mswitch').mSwitch();
+        }
+
         var tabbedSlier = $('.__tabbed_slider_multi');
         if (tabbedSlier.length) {
             $(window).on('resize', function () {

@@ -7,6 +7,7 @@ function local_number(?string $str): string
     $lang = \config()->get('i18n.language');
     $str = (string)$str;
     if (
+        !empty($str) &&
         !empty($lang) &&
         in_array(
             $lang,

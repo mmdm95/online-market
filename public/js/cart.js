@@ -132,18 +132,24 @@
 
             $this = $(this);
             code = $this.attr(dataItemCode);
-            qnt = $this.attr(dataItemQnt);
+            if(code) {
+                qnt = $this.attr(dataItemQnt);
 
-            qnt = core.isDefined(qnt) && !isNaN(parseInt(qnt, 10)) ? parseInt(qnt, 10) : null;
-            qnt = null !== qnt && qnt > 0 ? qnt : null;
+                qnt = core.isDefined(qnt) && !isNaN(parseInt(qnt, 10)) ? parseInt(qnt, 10) : null;
+                qnt = null !== qnt && qnt > 0 ? qnt : null;
 
-            if (null === qnt) {
-                cart.add(code, function () {
-                    cart.getNPlaceCart();
-                });
+                if (null === qnt) {
+                    cart.add(code, function () {
+                        cart.getNPlaceCart();
+                    });
+                } else {
+                    cart.update(code, qnt, function () {
+                        cart.getNPlaceCart();
+                    });
+                }
             } else {
-                cart.update(code, qnt, function () {
-                    cart.getNPlaceCart();
+                shop.toasts.toast('لطفا محصول مورد نظر خود را انتخاب کنید.', {
+                    type: 'warning',
                 });
             }
         });

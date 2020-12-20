@@ -70,15 +70,15 @@ class SliderUtil
                     )
                     ->where('pa.festival_id IS NOT NULL')
                     ->where('pa.festival_start<=:start')
-                    ->bindValue('start', time());
+                    ->bindValue('start', time())
+                    ->where('pa.festival_expire>=:expire')
+                    ->bindValue('expire', time());
                 break;
             default:
                 return [];
         }
 
         $select
-            ->where('pa.product_availability=:is_available')
-            ->bindValue('is_available', DB_YES)
             ->limit($info['limit'])
             ->orderBy(['pa.title DESC'])
             ->groupBy(['pa.product_id']);
@@ -124,6 +124,8 @@ class SliderUtil
             ->where('pa.festival_id IS NOT NULL')
             ->where('pa.festival_start<=:start')
             ->bindValue('start', time())
+            ->where('pa.festival_expire>=:expire')
+            ->bindValue('expire', time())
             ->limit(15);
 
         return $model->get($select);

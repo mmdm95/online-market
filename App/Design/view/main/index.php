@@ -25,25 +25,25 @@
 
     <!-- START SECTION SHOP -->
     <?php load_partial('main/slider-specials', [
-            'special_slider' => $special_slider ?? [],
+        'special_slider' => $special_slider ?? [],
     ]); ?>
     <!-- END SECTION SHOP -->
 
     <!-- START SECTION BANNER -->
     <?php load_partial('main/section-banner', [
-            'three_images' => $three_images ?? [],
+        'three_images' => $three_images ?? [],
     ]); ?>
     <!-- END SECTION BANNER -->
 
     <!-- START SECTION BLOG -->
     <?php load_partial('main/section-blog', [
-            'blog' => $blog ?? [],
+        'blog' => $blog ?? [],
     ]); ?>
     <!-- END SECTION BLOG -->
 
     <!-- START SECTION CLIENT LOGO -->
     <?php load_partial('main/slider-brands', [
-            'brands' => $brands ?? [],
+        'brands' => $brands ?? [],
     ]); ?>
     <!-- END SECTION CLIENT LOGO -->
 

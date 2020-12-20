@@ -50,6 +50,15 @@ function get_today_end_of_time(int $time): int
 }
 
 /**
+ * @param $val
+ * @return bool
+ */
+function is_value_checked($val): bool
+{
+    return in_array($val, ['yes', 'on', 1, '1', true]);
+}
+
+/**
  * @param $num
  * @param $total
  * @param bool $low

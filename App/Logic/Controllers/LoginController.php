@@ -27,6 +27,7 @@ use Sim\Form\Exceptions\FormException;
 use Sim\Interfaces\IFileNotExistsException;
 use Sim\Interfaces\IInvalidVariableNameException;
 use Sim\SMS\Exceptions\SMSException;
+use Sim\Utils\ArrayUtil;
 
 class LoginController extends AbstractHomeController
 {
@@ -60,14 +61,17 @@ class LoginController extends AbstractHomeController
                 [$status, $errors] = $loginForm->validate();
                 if ($status) {
                     $auth->login([
-                        'username' => input()->post('inp-login-username', ''),
-                        'password' => input()->post('inp-login-password', '')
+                        'username' => input()->post('inp-login-username', '')->getValue(),
+                        'password' => input()->post('inp-login-password', '')->getValue()
                     ], BaseModel::TBL_USERS . '.is_activated=:isActive',
                         [
                             'isActive' => DB_YES
                         ]);
                     if ($auth->isLoggedIn()) {
-                        if ($auth->userHasRole(ROLE_COLLEAGUE)) {
+                        $backUrl = ArrayUtil::get($_GET, 'back_url', null);
+                        if (!empty($backUrl)) {
+                            response()->redirect($backUrl);
+                        } elseif ($auth->userHasRole(ROLE_COLLEAGUE)) {
                             response()->redirect(url('colleague.index')->getOriginalUrl());
                         } else {
                             response()->redirect(url('user.index')->getOriginalUrl());

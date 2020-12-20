@@ -177,11 +177,12 @@ class FileController extends AbstractAdminController
     {
         $file = $this->getFileFromRequest();
 
-        $newName = input()->post('newName', '')->getValue();
-        if (empty($newName)) {
+        $newName = input()->post('newName', '');
+        if (is_array($newName) || empty($newName)) {
             $this->data->resetData()->statusCode(412)->errorMessage('Invalid file name');
             \response()->json($this->data->getReturnData());
         }
+        $newName = $newName->getValue();
 
         /**
          * @var AntiXSS $xss
@@ -254,11 +255,16 @@ class FileController extends AbstractAdminController
 
         if ($allow_create_folder) {
             // don't allow actions outside root. we also filter out slashes to catch args like './../outside'
-            $dir = input()->post('name', '')->getValue();
+            $dir = input()->post('name', '');
+            if (is_array($dir) || empty($dir)) {
+                $this->data->resetData()->statusCode(412)->errorMessage('Invalid folder name');
+                \response()->json($this->data->getReturnData());
+            }
+            $dir = $dir->getValue();
             $dir = str_replace('/', '', $dir);
 
             if (check_file_uploaded_length($dir)) {
-                $this->data->resetData()->statusCode(412)->errorMessage('Invalid name size');
+                $this->data->resetData()->statusCode(412)->errorMessage('Invalid name length');
                 \response()->json($this->data->getReturnData());
             }
             if (substr($dir, 0, 2) === '..') {
@@ -296,7 +302,12 @@ class FileController extends AbstractAdminController
             $counter = 0;
             foreach ($fileArr as $files) {
                 $file = $files;
-                $newDir = input()->post('newPath', '')->getValue();
+                $newDir = input()->post('newPath', '');
+                if (is_array($newDir) || empty($newDir)) {
+                    $this->data->resetData()->statusCode(412)->errorMessage('Invalid folder selected');
+                    \response()->json($this->data->getReturnData());
+                }
+                $newDir = $newDir->getValue();
 
                 if (!file_exists($file)) {
                     $this->data->resetData()->statusCode(412)->errorMessage('File does not exists!');
@@ -489,9 +500,9 @@ class FileController extends AbstractAdminController
         }
 
         if (!empty($_POST)) {
-            if (is_null(input()->post('xsrf')) ||
+            if (is_null(input()->post('xsrf')->getValue()) ||
                 (
-                    !is_null(input()->post('xsrf')) &&
+                    !is_null(input()->post('xsrf')->getValue()) &&
                     (
                         is_null(input()->post('xsrf')->getValue()) ||
                         (\cookie()->get('_sfm_xsrf') ?: '') !== input()->post('xsrf')->getValue()
