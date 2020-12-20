@@ -299,9 +299,9 @@ PAGE JS
     *===================================*/
     $(window).on('scroll', function () {
         if ($(this).scrollTop() > 150) {
-            $('.scrollup').stop().fadeIn();
+            $('.scrollup').fadeIn();
         } else {
-            $('.scrollup').stop().fadeOut();
+            $('.scrollup').fadeOut();
         }
     });
 

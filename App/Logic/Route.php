@@ -347,6 +347,19 @@ class Route implements IInitialize
             Router::post('/newsletter/remove', 'PageController@removeNewsletter')->name('ajax.newsletter.remove');
 
             /**
+             * cart routes
+             */
+            Router::post('/cart/add/{product_code}', 'CartController@addToCart')->where([
+                'product_code' => '\w+',
+            ])->name('ajax.cart.add');
+            Router::post('/cart/update/{product_code}', 'CartController@updateCart')->where([
+                'product_code' => '\w+',
+            ])->name('ajax.cart.update');
+            Router::post('/cart/remove/{product_code}', 'CartController@removeFromCart')->where([
+                'product_code' => '\w+',
+            ])->name('ajax.cart.remove');
+
+            /**
              * blog route
              */
             Router::get('/blog/search', 'BlogController@search')->name('ajax.blog.search');

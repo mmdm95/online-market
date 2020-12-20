@@ -534,6 +534,26 @@
     .pr_search_icon {
         display: none;
     }
+
+    .empty-cart-container {
+        padding: 2.5rem 4.5rem;
+    }
+
+    .empty-cart {
+        display: -webkit-box;
+        display: -moz-box;
+        display: -ms-flexbox;
+        display: -moz-flex;
+        display: -webkit-flex;
+        display: flex;
+        -ms-flex-direction: row;
+        -webkit-flex-direction: row;
+        flex-direction: row;
+        -ms-flex-pack: distribute;
+        justify-content: space-around;
+        -ms-flex-align: center;
+        align-items: center;
+    }
 }
 
 /* -------------------------------------------------

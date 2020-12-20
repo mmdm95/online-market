@@ -276,7 +276,9 @@ class ProductController extends AbstractHomeController
             ]));
         } else {
             response()->httpCode(403);
-            $resourceHandler->errorMessage('خطا در ارتباط با سرور، لطفا دوباره تلاش کنید.');
+            $resourceHandler
+                ->type(RESPONSE_TYPE_ERROR)
+                ->errorMessage('خطا در ارتباط با سرور، لطفا دوباره تلاش کنید.');
         }
         response()->json($resourceHandler->getReturnData());
     }
@@ -336,6 +338,11 @@ class ProductController extends AbstractHomeController
                 ]),
                 'max_cart_count' => $product['max_cart_count'] ?? 0,
             ]);
+        } else {
+            response()->httpCode(403);
+            $resourceHandler
+                ->type(RESPONSE_TYPE_ERROR)
+                ->errorMessage('خطا در ارتباط با سرور، لطفا دوباره تلاش کنید.');
         }
         response()->json($resourceHandler->getReturnData());
     }
@@ -374,6 +381,11 @@ class ProductController extends AbstractHomeController
                 [$res, $type, $message] = $productModel->toggleUserFavoriteProduct($auth->getCurrentUser()['id'] ?? 0, $product_id);
                 $resourceHandler->type($type)->data($message);
             }
+        } else {
+            response()->httpCode(403);
+            $resourceHandler
+                ->type(RESPONSE_TYPE_ERROR)
+                ->errorMessage('خطا در ارتباط با سرور، لطفا دوباره تلاش کنید.');
         }
         response()->json($resourceHandler->getReturnData());
     }
@@ -419,6 +431,11 @@ class ProductController extends AbstractHomeController
                 }
                 $resourceHandler->type($type)->data($message);
             }
+        } else {
+            response()->httpCode(403);
+            $resourceHandler
+                ->type(RESPONSE_TYPE_ERROR)
+                ->errorMessage('خطا در ارتباط با سرور، لطفا دوباره تلاش کنید.');
         }
         response()->json($resourceHandler->getReturnData());
     }

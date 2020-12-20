@@ -98,6 +98,21 @@ return [
                             asset_path('plugins/noty/noty.min.js') .
                             '"></script>'
                         ),
+                        e(
+                            '<script type="text/javascript" src="' .
+                            asset_path('js/cart.js') .
+                            '"></script>'
+                        ),
+                        e(
+                            '<script type="text/javascript" src="' .
+                            asset_path('plugins/selectric/jquery.selectric.min.js') .
+                            '"></script>'
+                        ),
+                        e(
+                            '<script type="text/javascript" src="' .
+                            asset_path('plugins/jquery.mswitch.js') .
+                            '"></script>'
+                        ),
                     ],
                 ],
                 'css' => [
@@ -148,16 +163,6 @@ return [
             'default-changeable' => [
                 'js' => [
                     'bottom' => [
-                        e(
-                            '<script type="text/javascript" src="' .
-                            asset_path('plugins/selectric/jquery.selectric.min.js') .
-                            '"></script>'
-                        ),
-                        e(
-                            '<script type="text/javascript" src="' .
-                            asset_path('plugins/jquery.mswitch.js') .
-                            '"></script>'
-                        ),
                         e(
                             '<script type="text/javascript" src="' .
                             asset_path('js/scripts.js') .
@@ -828,6 +833,26 @@ return [
                         asset_path('js/product-detail.js') .
                         '"></script>'
                     ),
+                ],
+            ],
+        ],
+        'view/main/order/shop-cart' => [
+            'title' => title_concat(\config()->get('settings.title.value'), 'سبد خرید'),
+            'common' => [
+                'default',
+                'default-changeable',
+                'default-cart',
+            ],
+            'sub_title' => 'سبد خرید',
+            'breadcrumb' => [
+                [
+                    'url' => url('home.index'),
+                    'text' => 'خانه',
+                    'is_active' => false,
+                ],
+                [
+                    'text' => 'سبد خرید',
+                    'is_active' => true,
                 ],
             ],
         ],

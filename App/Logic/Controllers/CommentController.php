@@ -54,6 +54,11 @@ class CommentController extends AbstractHomeController
                     'comments' => $comments['items'],
                     'pagination' => $comments['pagination'],
                 ]));
+        } else {
+            response()->httpCode(403);
+            $resourceHandler
+                ->type(RESPONSE_TYPE_ERROR)
+                ->errorMessage('خطا در ارتباط با سرور، لطفا دوباره تلاش کنید.');
         }
         response()->json($resourceHandler->getReturnData());
     }

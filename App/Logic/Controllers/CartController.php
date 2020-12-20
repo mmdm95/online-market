@@ -3,7 +3,9 @@
 namespace App\Logic\Controllers;
 
 use App\Logic\Abstracts\AbstractHomeController;
+use App\Logic\Handlers\ResourceHandler;
 use App\Logic\Utils\CartUtil;
+use Jenssegers\Agent\Agent;
 use Sim\Container\Exceptions\MethodNotFoundException;
 use Sim\Container\Exceptions\ParameterHasNoDefaultValueException;
 use Sim\Container\Exceptions\ServiceNotFoundException;
@@ -24,22 +26,114 @@ class CartController extends AbstractHomeController
      * @throws IInvalidVariableNameException
      * @throws PathNotRegisteredException
      * @throws \ReflectionException
+     */
+    public function index()
+    {
+        $this->setLayout($this->main_layout)->setTemplate('view/main/order/shop-cart');
+        return $this->render();
+    }
+
+    /**
      * @throws MethodNotFoundException
      * @throws ParameterHasNoDefaultValueException
      * @throws ServiceNotFoundException
      * @throws ServiceNotInstantiableException
+     * @throws \ReflectionException
      */
-    public function cart()
+    public function addToCart()
     {
-        $this->setLayout($this->main_layout)->setTemplate('view/shop-cart');
+        $resourceHandler = new ResourceHandler();
 
         /**
-         * @var CartUtil $cartUtil
+         * @var Agent $agent
          */
-        $cartUtil = \container()->get(CartUtil::class);
+        $agent = container()->get(Agent::class);
+        if (!$agent->isRobot()) {
 
-        return $this->render([
-            'cart_section' => $cartUtil->getCartSection(),
-        ]);
+        } else {
+            response()->httpCode(403);
+            $resourceHandler
+                ->type(RESPONSE_TYPE_ERROR)
+                ->errorMessage('خطا در ارتباط با سرور، لطفا دوباره تلاش کنید.');
+        }
+        response()->json($resourceHandler->getReturnData());
+    }
+
+    /**
+     * @throws MethodNotFoundException
+     * @throws ParameterHasNoDefaultValueException
+     * @throws ServiceNotFoundException
+     * @throws ServiceNotInstantiableException
+     * @throws \ReflectionException
+     */
+    public function updateCart()
+    {
+        $resourceHandler = new ResourceHandler();
+
+        /**
+         * @var Agent $agent
+         */
+        $agent = container()->get(Agent::class);
+        if (!$agent->isRobot()) {
+
+        } else {
+            response()->httpCode(403);
+            $resourceHandler
+                ->type(RESPONSE_TYPE_ERROR)
+                ->errorMessage('خطا در ارتباط با سرور، لطفا دوباره تلاش کنید.');
+        }
+        response()->json($resourceHandler->getReturnData());
+    }
+
+    /**
+     * @throws MethodNotFoundException
+     * @throws ParameterHasNoDefaultValueException
+     * @throws ServiceNotFoundException
+     * @throws ServiceNotInstantiableException
+     * @throws \ReflectionException
+     */
+    public function removeFromCart()
+    {
+        $resourceHandler = new ResourceHandler();
+
+        /**
+         * @var Agent $agent
+         */
+        $agent = container()->get(Agent::class);
+        if (!$agent->isRobot()) {
+
+        } else {
+            response()->httpCode(403);
+            $resourceHandler
+                ->type(RESPONSE_TYPE_ERROR)
+                ->errorMessage('خطا در ارتباط با سرور، لطفا دوباره تلاش کنید.');
+        }
+        response()->json($resourceHandler->getReturnData());
+    }
+
+    /**
+     * @throws MethodNotFoundException
+     * @throws ParameterHasNoDefaultValueException
+     * @throws ServiceNotFoundException
+     * @throws ServiceNotInstantiableException
+     * @throws \ReflectionException
+     */
+    public function checkCoupon()
+    {
+        $resourceHandler = new ResourceHandler();
+
+        /**
+         * @var Agent $agent
+         */
+        $agent = container()->get(Agent::class);
+        if (!$agent->isRobot()) {
+
+        } else {
+            response()->httpCode(403);
+            $resourceHandler
+                ->type(RESPONSE_TYPE_ERROR)
+                ->errorMessage('خطا در ارتباط با سرور، لطفا دوباره تلاش کنید.');
+        }
+        response()->json($resourceHandler->getReturnData());
     }
 }
