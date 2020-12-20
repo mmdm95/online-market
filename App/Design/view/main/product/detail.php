@@ -9,6 +9,7 @@
     <div class="section">
         <div class="container">
             <div class="row">
+                <input type="hidden" value="<?= $product['id']; ?>" id="__current_product_id">
 
                 <!-- START GALLERY -->
                 <div class="col-lg-6 col-md-6 mb-4 mb-md-0">
@@ -82,8 +83,8 @@
                             <div>
                                 <select name="changeable-stuffs"
                                         class="selectric_dropdown selectric_dropdown_changeable_stuffs">
-                                    <?php foreach ($colors_and_sizes as $prd): ?>
-                                        <option value='<?= $prd['code']; ?>'
+                                    <?php foreach ($colors_and_sizes as $k => $prd): ?>
+                                        <option value='<?= $prd['code']; ?>' <?= 0 === $k ? 'selected="selected"' : ''; ?>
                                                 data-color-hex="<?= $prd['color_hex'] ?>"
                                                 data-color-name="<?= $prd['color_name']; ?>"
                                                 data-size="<?= $prd['size']; ?>"></option>
@@ -96,8 +97,17 @@
                         <hr/>
 
                         <div class="cart_extra">
+                            <div class="cart-product-quantity">
+                                <div class="quantity">
+                                    <input type="button" value="-" class="minus">
+                                    <input type="text" name="quantity" value="1" title="Qty"
+                                           class="qty" size="4" data-max-cart-count="1">
+                                    <input type="button" value="+" class="plus">
+                                </div>
+                            </div>
                             <div class="cart_btn">
-                                <button class="btn btn-fill-out btn-addtocart __add_to_cart_btn" type="button">
+                                <button class="btn btn-fill-out btn-addtocart __add_to_cart_btn"
+                                        id="__main_add_to_cart" type="button">
                                     <i class="icon-basket-loaded"></i>
                                     افزودن به سبد خرید
                                 </button>
@@ -295,16 +305,17 @@
                                                 </form>
                                             </div>
                                         <?php else: ?>
-                                            برای ارسال نظر، ابتدا به پنل کاربری خود
-                                            <a href="<?= url('home.login', null, [
-                                                'back_url' => url('home.product.show', [
-                                                    'id' => $product['id'],
-                                                    'slug' => $product['slug'],
-                                                ]),
-                                            ]); ?>">
-                                                وارد شوید
-                                            </a>
-                                            .
+                                            <div class="d-flex justify-content-between align-items-center">
+                                                <span>برای ارسال نظر، ابتدا باید به پنل کاربری خود وارد شوید.</span>
+                                                <a class="btn btn-fill-line ml-3" href="<?= url('home.login', null, [
+                                                    'back_url' => url('home.product.show', [
+                                                        'id' => $product['id'],
+                                                        'slug' => $product['slug'],
+                                                    ]),
+                                                ]); ?>">
+                                                    وارد شوید
+                                                </a>
+                                            </div>
                                         <?php endif; ?>
                                     <?php else: ?>
                                         <h5>امکان ارسال نظر برای این محصول، وجود ندارد.</h5>

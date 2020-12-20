@@ -232,16 +232,24 @@ class PageController extends AbstractHomeController
             if ($status) {
                 $res = $registerForm->store();
                 if ($res) {
-                    $resourceHandler->data('شماره شما در خبرنامه با موفقیت ثبت شد.');
+                    $resourceHandler
+                        ->type(RESPONSE_TYPE_SUCCESS)
+                        ->data('شماره شما در خبرنامه با موفقیت ثبت شد.');
                 } else {
-                    $resourceHandler->errorMessage('خطا در ارتباط با سرور، لطفا دوباره تلاش کنید.');
+                    $resourceHandler
+                        ->type(RESPONSE_TYPE_ERROR)
+                        ->errorMessage('خطا در ارتباط با سرور، لطفا دوباره تلاش کنید.');
                 }
             } else {
-                $resourceHandler->errorMessage(encode_html($formattedErrors));
+                $resourceHandler
+                    ->type(RESPONSE_TYPE_ERROR)
+                    ->errorMessage(encode_html($formattedErrors));
             }
         } else {
             response()->httpCode(403);
-            $resourceHandler->errorMessage('خطا در ارتباط با سرور، لطفا دوباره تلاش کنید.');
+            $resourceHandler
+                ->type(RESPONSE_TYPE_ERROR)
+                ->errorMessage('خطا در ارتباط با سرور، لطفا دوباره تلاش کنید.');
         }
         response()->json($resourceHandler->getReturnData());
     }

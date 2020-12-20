@@ -68,7 +68,7 @@ window.MyGlobalVariables = {
             get: {
                 products: '/ajax/products',
                 product: '/ajax/product/get',
-                properties: '/ajax/product/property/get',
+                properties: '/ajax/product/price',
                 comments: '/ajax/product/comments',
             },
             add: {
@@ -428,7 +428,7 @@ window.MyGlobalVariables = {
                             closeWith: ['button'],
                             buttons: [
                                 Noty.button(window.MyGlobalVariables.toasts.confirm.confirmLabels.yes, window.MyGlobalVariables.toasts.confirm.btnClasses.yes, function () {
-                                    onOkCallback.call(null);
+                                    onOkCallback.call(window);
                                     n.close();
                                 }),
 

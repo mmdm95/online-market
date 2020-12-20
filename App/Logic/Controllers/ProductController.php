@@ -6,6 +6,7 @@ use App\Logic\Abstracts\AbstractHomeController;
 use App\Logic\Handlers\ResourceHandler;
 use App\Logic\Middlewares\Logic\NeedLoginResponseMiddleware;
 use App\Logic\Models\BaseModel;
+use App\Logic\Models\CommentModel;
 use App\Logic\Models\Model;
 use App\Logic\Models\ProductModel;
 use App\Logic\Utils\ProductUtil;
@@ -276,6 +277,65 @@ class ProductController extends AbstractHomeController
         } else {
             response()->httpCode(403);
             $resourceHandler->errorMessage('خطا در ارتباط با سرور، لطفا دوباره تلاش کنید.');
+        }
+        response()->json($resourceHandler->getReturnData());
+    }
+
+    /**
+     * @param $product_code
+     * @throws ConfigNotRegisteredException
+     * @throws ControllerException
+     * @throws IFileNotExistsException
+     * @throws IInvalidVariableNameException
+     * @throws MethodNotFoundException
+     * @throws ParameterHasNoDefaultValueException
+     * @throws PathNotRegisteredException
+     * @throws ServiceNotFoundException
+     * @throws ServiceNotInstantiableException
+     * @throws \ReflectionException
+     */
+    public function getPrice($product_code)
+    {
+        $resourceHandler = new ResourceHandler();
+
+        /**
+         * @var Agent $agent
+         */
+        $agent = container()->get(Agent::class);
+        if (!$agent->isRobot()) {
+            /**
+             * @var ProductModel $productModel
+             */
+            $productModel = container()->get(ProductModel::class);
+            $product = $productModel->getLimitedProduct(
+                'pa.code=:p_code',
+                ['p_code' => $product_code],
+                [],
+                1,
+                0,
+                [],
+                [
+                    'pa.product_availability',
+                    'pa.is_available',
+                    'pa.price',
+                    'pa.festival_discount',
+                    'pa.discount_until',
+                    'pa.discounted_price',
+                    'pa.guarantee',
+                    'pa.max_cart_count',
+                ]
+            );
+
+            if (count($product)) $product = $product[0];
+
+            $resourceHandler
+                ->type(RESPONSE_TYPE_SUCCESS)
+                ->data([
+                'html' => $this->setTemplate('partial/main/product/price')->render([
+                    'product' => $product,
+                ]),
+                'max_cart_count' => $product['max_cart_count'] ?? 0,
+            ]);
         }
         response()->json($resourceHandler->getReturnData());
     }

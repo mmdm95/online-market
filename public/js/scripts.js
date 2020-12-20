@@ -299,9 +299,9 @@ PAGE JS
     *===================================*/
     $(window).on('scroll', function () {
         if ($(this).scrollTop() > 150) {
-            $('.scrollup').fadeIn();
+            $('.scrollup').stop().fadeIn();
         } else {
-            $('.scrollup').fadeOut();
+            $('.scrollup').stop().fadeOut();
         }
     });
 
@@ -510,15 +510,6 @@ PAGE JS
                     $el.removeClass('not_chosen');
             });
 
-        });
-    }
-
-    /*==============================================================
-    14. FIT VIDEO JS
-    ==============================================================*/
-    if ($(".fit-videos").length > 0) {
-        $(".fit-videos").fitVids({
-            customSelector: "iframe[src^='https://w.soundcloud.com']"
         });
     }
 
@@ -747,18 +738,28 @@ PAGE JS
     });
 
     $('.plus').on('click', function () {
-        if ($(this).prev().val()) {
-            $(this).prev().val(+$(this).prev().val() + 1);
+        var val, inp, max;
+        inp = $(this).prev();
+        val = inp.val();
+        val = val && !isNaN(parseInt(val, 10)) ? parseInt(val, 10) : 0;
+        max = inp.attr('data-max-cart-count');
+        max = max && !isNaN(parseInt(max, 10)) ? parseInt(max, 10) : 0;
+        if (val >= 0 || (0 !== max && val <= max)) {
+            inp.val(+inp.val() + 1);
         }
     });
     $('.minus').on('click', function () {
-        if ($(this).next().val() > 1) {
-            if ($(this).next().val() > 1) $(this).next().val(+$(this).next().val() - 1);
+        var val, inp;
+        inp = $(this).next();
+        val = inp.val();
+        val = val && !isNaN(parseInt(val, 10)) ? parseInt(val, 10) : 0;
+        if (val > 1) {
+            if (inp.val() > 1) inp.val(+inp.val() - 1);
         }
     });
 
     /*==========================================
-   22. PRICE FILTER JS - MOVED TO PRODUCT SEARCH
+   22. PRICE FILTER JS - [MOVED TO PRODUCT SEARCH]
    *==========================================*/
 
     /*===================================*

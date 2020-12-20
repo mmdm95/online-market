@@ -28,4 +28,12 @@ use App\Logic\Utils\Jdf;
             </li>
         <?php endforeach; ?>
     </ul>
+
+    <div class="row mt-4">
+        <div class="col-12">
+            <!-- START SECTION PAGINATION -->
+            <?php load_partial('main/section-pagination', ['pagination' => $pagination ?? []]); ?>
+            <!-- END SECTION PAGINATION -->
+        </div>
+    </div>
 <?php endif; ?>

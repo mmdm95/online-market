@@ -355,10 +355,15 @@ class Route implements IInitialize
              * product route
              */
             Router::get('/product/search', 'ProductController@search')->name('ajax.product.search');
+            Router::get('/product/price/{product_code}', 'ProductController@getPrice')->where([
+                'product_code' => '\w+',
+            ])->name('ajax.product.price');
             Router::get('/product/comments/{product_id}', 'CommentController@paginate')->where([
                 'product_id' => '[0-9]+',
             ])->name('ajax.product.comments');
-            //-----
+            Router::post('/product/comment/add/{product_id}', 'CommentController@saveComment')->where([
+                'product_id' => '[0-9]+',
+            ])->name('ajax.product.comments');
             Router::post('/product/wishlist/toggle/{product_id}', 'ProductController@wishlistToggle')->where([
                 'product_id' => '[0-9]+',
             ])->name('ajax.product.wishlist.toggle');

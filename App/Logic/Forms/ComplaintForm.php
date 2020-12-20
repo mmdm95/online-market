@@ -4,7 +4,6 @@ namespace App\Logic\Forms;
 
 use App\Logic\Interfaces\IPageForm;
 use App\Logic\Models\ComplaintModel;
-use App\Logic\Models\ContactUsModel;
 use App\Logic\Models\UserModel;
 use App\Logic\Validations\ExtendedValidator;
 use Sim\Auth\DBAuth;

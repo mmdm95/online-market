@@ -36,7 +36,6 @@
             priceHandleMax,
             priceFilterBtn,
             brandChk,
-            modelChk,
             sizeChk,
             colorChk,
             availabilitySwitch,
@@ -68,7 +67,6 @@
         priceHandleMin = $('#price_first');
         priceHandleMax = $('#price_second');
         brandChk = $('.product_brand_switch');
-        modelChk = $('.product_model_switch_multi');
         sizeChk = $('.product_size_switch_multi');
         colorChk = $('.product_color_switch_multi');
         availabilitySwitch = $('#available_product');
