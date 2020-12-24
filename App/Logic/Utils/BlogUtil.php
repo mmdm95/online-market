@@ -120,7 +120,7 @@ class BlogUtil
                 $withUsers
             ),
             'pagination' => [
-                'base_url' => url('home.blog')->getOriginalUrl(),
+                'base_url' => url('home.blog')->getRelativeUrlTrimmed(),
                 'total' => $total,
                 'first_page' => 1,
                 'last_page' => $lastPage,

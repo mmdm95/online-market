@@ -23,7 +23,7 @@ $validator = form_validator();
                             </div>
                             <form action="<?= url('home.forget-password', [
                                 'step' => 'step1'
-                            ])->getOriginalUrl(); ?>#__forget_form_container"
+                            ])->getRelativeUrlTrimmed(); ?>#__forget_form_container"
                                   method="post" id="__forget_form_step1">
                                 <?php load_partial('main/message/message-form', [
                                     'errors' => $forget_errors ?? [],

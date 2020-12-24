@@ -72,6 +72,91 @@ class UserModel extends BaseModel
     }
 
     /**
+     * @param array $user_info
+     * @param array $roles
+     * @return bool
+     * @throws MethodNotFoundException
+     * @throws ParameterHasNoDefaultValueException
+     * @throws ServiceNotFoundException
+     * @throws ServiceNotInstantiableException
+     * @throws \ReflectionException
+     */
+    public function registerUser(array $user_info, array $roles = [ROLE_USER]): bool
+    {
+        $this->db->beginTransaction();
+
+        // insert new user to database and get the id
+        $userId = $this->insert($user_info, true);
+
+        // if there is no user with specific id
+        if (empty($userId)) {
+            $this->db->rollBack();
+            return false;
+        }
+
+        /**
+         * @var RoleModel $roleModel
+         */
+        $roleModel = container()->get(RoleModel::class);
+
+        $res2 = true;
+        foreach ($roles as $role) {
+            // get role id
+            $roleId = $roleModel->getIDFromRoleName($role);
+
+            // if there is no role with specific id
+            if (empty($roleId)) {
+                $this->db->rollBack();
+                return false;
+            }
+
+            // add role to user
+            $insert = $this->connector->insert();
+            $insert
+                ->into(self::TBL_USER_ROLE)
+                ->cols([
+                    'user_id' => $userId,
+                    'role_id' => $roleId
+                ]);
+            $stmt = $this->db->prepare($insert->getStatement());
+            $res2 = $stmt->execute($insert->getBindValues());
+
+            // if role insertion failed
+            if (!$res2) {
+                $this->db->rollBack();
+                return false;
+            }
+        }
+
+        // get username from user id
+        $username = $this->getUsernameFromID($userId);
+
+        if (empty($username)) {
+            $this->db->rollBack();
+            return false;
+        }
+
+        // add wallet info
+        $insert = $this->connector->insert();
+        $insert
+            ->into(self::TBL_WALLET)
+            ->cols([
+                'username' => $username,
+                'balance' => 0,
+            ]);
+        $stmt = $this->db->prepare($insert->getStatement());
+        $res3 = $stmt->execute($insert->getBindValues());
+
+        if ($res2 && $res3) {
+            $this->db->commit();
+            return true;
+        } else {
+            $this->db->rollBack();
+            return false;
+        }
+    }
+
+    /**
      * @param string $username
      * @param array $user_info
      * @param string $where
@@ -108,29 +193,8 @@ class UserModel extends BaseModel
             ->cols($user_info)
             ->where($where)
             ->bindValues($bind_values);
-        // add role to user
-        $insert = $this->connector->insert();
-        $res2 = $insert
-            ->into(self::TBL_USER_ROLE)
-            ->cols([
-                'user_id' => $userId,
-                'role_id' => $roleId
-            ]);
-        // if role insertion failed
-        if (!$res2) {
-            $this->db->rollBack();
-            return false;
-        }
-        // add wallet info
-        $insert = $this->connector->insert();
-        $res3 = $insert
-            ->into(self::TBL_WALLET)
-            ->cols([
-                'user_id' => $userId,
-                'balance' => 0,
-            ]);
 
-        if ($res && $res2 && $res3) {
+        if ($res) {
             $this->db->commit();
             return true;
         } else {
@@ -184,21 +248,28 @@ class UserModel extends BaseModel
      * @param string|null $where
      * @param array $bind_values
      * @param int|null $limit
+     * @param int|null $offset
+     * @param array $order_by
+     * @param array $group_by
      * @return array
      */
     public function getUsers(
         array $columns = ['u.*', 'r.id AS role_id', 'r.name AS role_name', 'r.is_admin'],
         ?string $where = null,
         array $bind_values = [],
-        int $limit = null
+        int $limit = null,
+        int $offset = 0,
+        array $order_by = ['u.id DESC'],
+        array $group_by = ['u.id']
     ): array
     {
         $select = $this->connector->select();
         $select
             ->from($this->table . ' AS u')
             ->cols($columns)
-            ->orderBy(['u.id DESC'])
-            ->groupBy(['u.id']);
+            ->offset($offset)
+            ->orderBy($order_by)
+            ->groupBy($group_by);
 
         try {
             $select
@@ -286,16 +357,30 @@ class UserModel extends BaseModel
      * Use [r for roles], [ur for user_role]
      *
      * @param int $user_id
+     * @param string|null $where
+     * @param array $bind_values
+     * @param array $columns
      * @return array
      */
-    public function getUserRoles(int $user_id): array
+    public function getUserRoles(
+        int $user_id,
+        ?string $where = null,
+        array $bind_values = [],
+        array $columns = ['r.*', 'ur.user_id']
+    ): array
     {
         $select = $this->connector->select();
         $select
             ->from(self::TBL_ROLES . ' AS r')
-            ->cols(['r.*', 'ur.user_id'])
+            ->cols($columns)
             ->where('ur.user_id=:u_id')
             ->bindValues(['u_id' => $user_id]);
+
+        if (!empty($where)) {
+            $select
+                ->where($where)
+                ->bindValues($bind_values);
+        }
 
         try {
             $select->leftJoin(

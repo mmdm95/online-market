@@ -68,7 +68,7 @@ $validator = form_validator();
                         پیام خود را با ما در میان بگذارید.
                     </p>
                     <div class="field_form">
-                        <form action="<?= url('home.contact')->getOriginalUrl(); ?>#__contact_form_container"
+                        <form action="<?= url('home.contact')->getRelativeUrlTrimmed(); ?>#__contact_form_container"
                               method="post" id="__form_contact">
                             <?php load_partial('main/message/message-form', [
                                 'errors' => $contact_errors ?? [],

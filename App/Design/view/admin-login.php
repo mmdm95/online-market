@@ -8,7 +8,7 @@
         <div class="content d-flex justify-content-center align-items-center">
 
             <!-- Login card -->
-            <form class="login-form form-validate" action="<?= url('admin.login')->getOriginalUrl(); ?>" method="post">
+            <form class="login-form form-validate" action="<?= url('admin.login')->getRelativeUrlTrimmed(); ?>" method="post">
                 <div class="card mb-0">
                     <div class="card-body">
                         <div class="text-center mb-3">

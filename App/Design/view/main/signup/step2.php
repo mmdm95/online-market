@@ -11,7 +11,7 @@
                             <div class="heading_s1">
                                 <h3>وارد کردن کد ارسال شده</h3>
                             </div>
-                            <form action="<?= url('home.signup.code')->getOriginalUrl(); ?>#__register_form_container"
+                            <form action="<?= url('home.signup.code')->getRelativeUrlTrimmed(); ?>#__register_form_container"
                                   method="post" id="__form_register_step2">
                                 <?php load_partial('main/message/message-form', [
                                     'errors' => $register_errors ?? [],

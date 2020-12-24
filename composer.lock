@@ -125,16 +125,16 @@
         },
         {
             "name": "fzaninotto/faker",
-            "version": "v1.9.1",
+            "version": "v1.9.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/fzaninotto/Faker.git",
-                "reference": "fc10d778e4b84d5bd315dad194661e091d307c6f"
+                "reference": "848d8125239d7dbf8ab25cb7f054f1a630e68c2e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/fzaninotto/Faker/zipball/fc10d778e4b84d5bd315dad194661e091d307c6f",
-                "reference": "fc10d778e4b84d5bd315dad194661e091d307c6f",
+                "url": "https://api.github.com/repos/fzaninotto/Faker/zipball/848d8125239d7dbf8ab25cb7f054f1a630e68c2e",
+                "reference": "848d8125239d7dbf8ab25cb7f054f1a630e68c2e",
                 "shasum": ""
             },
             "require": {
@@ -172,7 +172,7 @@
                 "fixtures"
             ],
             "abandoned": true,
-            "time": "2019-12-12T13:22:17+00:00"
+            "time": "2020-12-11T09:56:16+00:00"
         },
         {
             "name": "graham-campbell/result-type",
@@ -652,16 +652,16 @@
         },
         {
             "name": "mmdm/sim-event-dispatcher",
-            "version": "v1.1.1",
+            "version": "v1.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/mmdm95/sim-event-dispatcher.git",
-                "reference": "08b85d74a565dc92c1da176149ebb452d4e3124c"
+                "reference": "42791f6f376010cf75fa5621dc4f86d3e3da467f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mmdm95/sim-event-dispatcher/zipball/08b85d74a565dc92c1da176149ebb452d4e3124c",
-                "reference": "08b85d74a565dc92c1da176149ebb452d4e3124c",
+                "url": "https://api.github.com/repos/mmdm95/sim-event-dispatcher/zipball/42791f6f376010cf75fa5621dc4f86d3e3da467f",
+                "reference": "42791f6f376010cf75fa5621dc4f86d3e3da467f",
                 "shasum": ""
             },
             "require": {
@@ -685,7 +685,7 @@
                 }
             ],
             "description": "A simple yet nice event dispatcher",
-            "time": "2020-12-06T17:27:19+00:00"
+            "time": "2020-12-22T17:31:51+00:00"
         },
         {
             "name": "mmdm/sim-fa-payment",
@@ -805,16 +805,16 @@
         },
         {
             "name": "mmdm/sim-form",
-            "version": "v0.1.11",
+            "version": "v0.1.12",
             "source": {
                 "type": "git",
                 "url": "https://github.com/mmdm95/sim-form.git",
-                "reference": "968652b871d9bf9cf798e4420e31a1d7d78eeac1"
+                "reference": "2a4f02c2d5411b932a240237ab1c0094c4c1ad9d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mmdm95/sim-form/zipball/968652b871d9bf9cf798e4420e31a1d7d78eeac1",
-                "reference": "968652b871d9bf9cf798e4420e31a1d7d78eeac1",
+                "url": "https://api.github.com/repos/mmdm95/sim-form/zipball/2a4f02c2d5411b932a240237ab1c0094c4c1ad9d",
+                "reference": "2a4f02c2d5411b932a240237ab1c0094c4c1ad9d",
                 "shasum": ""
             },
             "require": {
@@ -838,7 +838,7 @@
                 }
             ],
             "description": "A simple yet nice form library",
-            "time": "2020-12-05T03:46:19+00:00"
+            "time": "2020-12-22T02:07:22+00:00"
         },
         {
             "name": "mmdm/sim-hit-counter",
@@ -1492,16 +1492,16 @@
         },
         {
             "name": "symfony/console",
-            "version": "v5.2.0",
+            "version": "v5.2.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/console.git",
-                "reference": "3e0564fb08d44a98bd5f1960204c958e57bd586b"
+                "reference": "47c02526c532fb381374dab26df05e7313978976"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/console/zipball/3e0564fb08d44a98bd5f1960204c958e57bd586b",
-                "reference": "3e0564fb08d44a98bd5f1960204c958e57bd586b",
+                "url": "https://api.github.com/repos/symfony/console/zipball/47c02526c532fb381374dab26df05e7313978976",
+                "reference": "47c02526c532fb381374dab26df05e7313978976",
                 "shasum": ""
             },
             "require": {
@@ -1582,7 +1582,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2020-11-28T11:24:18+00:00"
+            "time": "2020-12-18T08:03:05+00:00"
         },
         {
             "name": "symfony/polyfill-ctype",
@@ -2280,16 +2280,16 @@
         },
         {
             "name": "symfony/string",
-            "version": "v5.2.0",
+            "version": "v5.2.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/string.git",
-                "reference": "40e975edadd4e32cd16f3753b3bad65d9ac48242"
+                "reference": "5bd67751d2e3f7d6f770c9154b8fbcb2aa05f7ed"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/string/zipball/40e975edadd4e32cd16f3753b3bad65d9ac48242",
-                "reference": "40e975edadd4e32cd16f3753b3bad65d9ac48242",
+                "url": "https://api.github.com/repos/symfony/string/zipball/5bd67751d2e3f7d6f770c9154b8fbcb2aa05f7ed",
+                "reference": "5bd67751d2e3f7d6f770c9154b8fbcb2aa05f7ed",
                 "shasum": ""
             },
             "require": {
@@ -2356,7 +2356,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2020-10-24T12:08:07+00:00"
+            "time": "2020-12-05T07:33:16+00:00"
         },
         {
             "name": "vlucas/phpdotenv",

@@ -19,7 +19,7 @@
                             </div>
                             <form action="<?= url('home.forget-password', [
                                 'step' => 'step2'
-                            ])->getOriginalUrl(); ?>#__forget_form_container"
+                            ])->getRelativeUrlTrimmed(); ?>#__forget_form_container"
                                   method="post" id="__forget_form_step3">
                                 <?php load_partial('main/message/message-form', [
                                     'errors' => $forget_errors ?? [],

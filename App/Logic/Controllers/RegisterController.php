@@ -66,7 +66,7 @@ class RegisterController extends AbstractHomeController
 //                        SMS_REPLACEMENTS['code'] => session()->getFlash('register.code', ''),
 //                    ]));
 
-                    response()->redirect(url('home.signup.code')->getOriginalUrl());
+                    response()->redirect(url('home.signup.code')->getRelativeUrlTrimmed());
                 } else {
                     $data['register_warning'] = 'خطا در ارتباط با سرور، لطفا دوباره تلاش کنید.';
                 }
@@ -97,7 +97,7 @@ class RegisterController extends AbstractHomeController
     {
         $this->setMiddleWare(RegisterMobileCheckMiddleware::class);
         if (!$this->middlewareResult()) {
-            response()->redirect(url('home.signup')->getOriginalUrl());
+            response()->redirect(url('home.signup')->getRelativeUrlTrimmed());
         } else {
             $this->removeAllMiddlewares();
         }
@@ -114,7 +114,7 @@ class RegisterController extends AbstractHomeController
                 // success or warning message
                 if ($res) {
                     session()->setFlash('register.code-step', 'I am ready to set password');
-                    response()->redirect(url('home.signup.password')->getOriginalUrl());
+                    response()->redirect(url('home.signup.password')->getRelativeUrlTrimmed());
                 } else {
                     $data['register_warning'] = 'خطا در ارتباط با سرور، لطفا دوباره تلاش کنید.';
                 }
@@ -145,7 +145,7 @@ class RegisterController extends AbstractHomeController
     {
         $this->setMiddleWare(RegisterCodeCheckMiddleware::class);
         if (!$this->middlewareResult()) {
-            response()->redirect(url('home.signup')->getOriginalUrl());
+            response()->redirect(url('home.signup')->getRelativeUrlTrimmed());
         } else {
             $this->removeAllMiddlewares();
         }
@@ -171,7 +171,7 @@ class RegisterController extends AbstractHomeController
                             BaseModel::TBL_USERS . '.is_activated=:is_active',
                             ['is_active' => DB_YES]
                         );
-                        response()->redirect(url('user.index')->getOriginalUrl());
+                        response()->redirect(url('user.index')->getRelativeUrlTrimmed());
                     } catch (InvalidUserException|IDBException $e) {
                         $data['register_warning'] = encode_html('خطا در عملیات ورود! لطفا از '
                             . "<a href=\"" . url('home.login')

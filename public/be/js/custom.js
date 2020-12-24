@@ -6,30 +6,35 @@
  *
  * ---------------------------------------------------------------------------- */
 
-window.MyGlobalVariables.icons = {
-    success: 'icon-checkmark3',
-    info: 'icon-info3',
-    warning: 'icon-warning',
-    error: 'icon-cross2',
-};
-window.MyGlobalVariables.toasts.toast.theme = 'limitless';
-window.MyGlobalVariables.toasts.toast.layout = 'topLeft';
-window.MyGlobalVariables.toasts.confirm.theme = 'limitless';
-window.MyGlobalVariables.toasts.confirm.type = 'confirm';
-window.MyGlobalVariables.toasts.confirm.btnClasses.yes = 'btn bg-blue ml-1';
-window.MyGlobalVariables.toasts.confirm.btnClasses.no = 'btn btn-link';
-
 (function ($) {
-    $.extend(window.MyGlobalVariables.url, {
+    window.MyGlobalVariables.icons = {
+        success: 'icon-checkmark3',
+        info: 'icon-info3',
+        warning: 'icon-warning',
+        error: 'icon-cross2',
+    };
+    window.MyGlobalVariables.toasts.toast.theme = 'limitless';
+    window.MyGlobalVariables.toasts.toast.layout = 'topLeft';
+    window.MyGlobalVariables.toasts.confirm.theme = 'limitless';
+    window.MyGlobalVariables.toasts.confirm.type = 'confirm';
+    window.MyGlobalVariables.toasts.confirm.btnClasses.yes = 'btn bg-blue text-white ml-1';
+    window.MyGlobalVariables.toasts.confirm.btnClasses.no = 'btn btn-link';
+
+    $.extend(true, window.MyGlobalVariables.url, {
         url: {},
     });
 
+    var core, variables;
+
+    core = window.TheCore;
+    variables = window.MyGlobalVariables;
+
     /**
      * Make Admin class global to window
-     * @type {Admin}
+     * @type {TheAdmin}
      */
-    window.TheAdmin = (function (_super) {
-        window.TheCore.extend(Admin, _super);
+    window.TheAdmin = (function (_super, c) {
+        c.extend(Admin, _super);
 
         function Admin() {
             _super.call(this);
@@ -40,9 +45,24 @@ window.MyGlobalVariables.toasts.confirm.btnClasses.no = 'btn btn-link';
         });
 
         return Admin;
-    })(window.TheShopBase);
+    })(window.TheShopBase, core);
 
     $(function () {
+        var
+            admin;
+
+        admin = new window.TheAdmin();
+
+        function deleteOperation(btn) {
+            var url, id;
+            url = $(btn).attr('data-remove-url');
+            id = $(btn).attr('data-remove-id');
+
+            if (url && id) {
+                admin.deleteItem(url, null, {}, true);
+            }
+        }
+
         // Add bottom spacing if reached bottom,
         // to avoid footer overlapping
         // -------------------------
@@ -61,7 +81,7 @@ window.MyGlobalVariables.toasts.confirm.btnClasses.no = 'btn btn-link';
                 var $this = $(this);
 
                 $this.spectrum({
-                    color: (typeof $this.attr('data-color') !== 'undefined') ? $this.attr('data-color') : "#2196f3",
+                    color: $this.attr('data-color') ? $this.attr('data-color') : "#2196f3",
                     cancelText: "لغو",
                     chooseText: "انتخاب",
                     preferredFormat: "hex",
@@ -112,13 +132,11 @@ window.MyGlobalVariables.toasts.confirm.btnClasses.no = 'btn btn-link';
             // Setting datatable defaults
             $.extend($.fn.dataTable.defaults, {
                 autoWidth: false,
-                columnDefs: [{
-                    orderable: false,
-                    width: 100,
-                    targets: [2]
-                }],
                 dom: '<"datatable-header"fl><"datatable-scroll"t><"datatable-footer"ip>',
+                lengthMenu: [[10, 25, 50, 100], [10, 25, 50, 100]],
+                pageLength: 10,
                 language: {
+                    processing: "در حال بارگذاری...",
                     search: '<span>جست‌و‌جو:</span> _INPUT_',
                     searchPlaceholder: 'کلمه مورد نظر را تایپ کنید ...',
                     lengthMenu: '<span>نمایش:</span> _MENU_',
@@ -133,23 +151,190 @@ window.MyGlobalVariables.toasts.confirm.btnClasses.no = 'btn btn-link';
                     info: 'نمایش' + '<span class="text-primary ml-1 mr-1">_START_</span>' + 'تا' +
                         '<span class="text-primary ml-1 mr-1">_END_</span>' + 'از' + 'مجموع' + '<span class="text-primary ml-1 mr-1">_TOTAL_</span>' + 'رکورد',
                     infoEmpty: 'نمایش' + '<span class="text-primary ml-1 mr-1">0</span>' + 'تا' +
-                        '<span class="text-primary ml-1 mr-1">0</span>' + 'از' + 'مجموع' + '<span class="text-primary ml-1 mr-1">0</span>' + 'رکورد'
+                        '<span class="text-primary ml-1 mr-1">0</span>' + 'از' + 'مجموع' + '<span class="text-primary ml-1 mr-1">0</span>' + 'رکورد',
+                    infoFiltered: '(' + 'فیلتر شده از مجموع' + ' _MAX_ ' + 'رکورد' + ')',
                 }
+            });
+
+            /**
+             * Pipelining function for DataTables. To be used to the `ajax` option of DataTables
+             *
+             * @see https://datatables.net/examples/server_side/pipeline.html
+             * @param [opts]
+             * @returns {Function}
+             */
+            $.fn.dataTable.pipeline = function (opts) {
+                // Configuration options
+                var conf = $.extend({
+                    pages: 5,     // number of pages to cache
+                    url: '',      // script url
+                    data: null,   // function or object with parameters to send to the server
+                                  // matching how `ajax.data` works in DataTables
+                    method: 'GET' // Ajax HTTP method
+                }, opts);
+
+                // Private variables for storing the cache
+                var
+                    cacheLower = -1,
+                    cacheUpper = null,
+                    cacheLastRequest = null,
+                    cacheLastJson = null;
+
+                return function (request, drawCallback, settings) {
+                    var
+                        ajax = false,
+                        requestStart = request.start,
+                        drawStart = request.start,
+                        requestLength = request.length,
+                        requestEnd = requestStart + requestLength;
+
+                    if (settings.clearCache) {
+                        // API requested that the cache be cleared
+                        ajax = true;
+                        settings.clearCache = false;
+                    } else if (cacheLower < 0 || requestStart < cacheLower || requestEnd > cacheUpper) {
+                        // outside cached data - need to make a request
+                        ajax = true;
+                    } else if (JSON.stringify(request.order) !== JSON.stringify(cacheLastRequest.order) ||
+                        JSON.stringify(request.columns) !== JSON.stringify(cacheLastRequest.columns) ||
+                        JSON.stringify(request.search) !== JSON.stringify(cacheLastRequest.search)
+                    ) {
+                        // properties changed (ordering, columns, searching)
+                        ajax = true;
+                    }
+
+                    // Store the request for checking next time around
+                    cacheLastRequest = $.extend(true, {}, request);
+
+                    if (ajax) {
+                        // Need data from the server
+                        if (requestStart < cacheLower) {
+                            requestStart = requestStart - (requestLength * (conf.pages - 1));
+
+                            if (requestStart < 0) {
+                                requestStart = 0;
+                            }
+                        }
+
+                        cacheLower = requestStart;
+                        cacheUpper = requestStart + (requestLength * conf.pages);
+
+                        request.start = requestStart;
+                        request.length = requestLength * conf.pages;
+
+                        // Provide the same `data` options as DataTables.
+                        if (typeof conf.data === 'function') {
+                            // As a function it is executed with the data object as an arg
+                            // for manipulation. If an object is returned, it is used as the
+                            // data object to submit
+                            var d = conf.data(request);
+                            if (d) {
+                                $.extend(request, d);
+                            }
+                        } else if ($.isPlainObject(conf.data)) {
+                            // As an object, the data given extends the default
+                            $.extend(request, conf.data);
+                        }
+
+                        return $.ajax({
+                            "type": conf.method,
+                            "url": conf.url,
+                            "data": request,
+                            "dataType": "json",
+                            "cache": false,
+                            "success": function (json) {
+                                cacheLastJson = $.extend(true, {}, json);
+
+                                if (json.data) {
+                                    if (cacheLower != drawStart) {
+                                        json.data.splice(0, drawStart - cacheLower);
+                                    }
+                                    if (requestLength >= -1) {
+                                        json.data.splice(requestLength, json.data.length);
+                                    }
+                                } else {
+                                    json.data = [];
+                                    json.recordsFiltered = 0;
+                                    json.recordsTotal = 0;
+                                }
+
+                                drawCallback(json);
+                            }
+                        });
+                    } else {
+                        var json = $.extend(true, {}, cacheLastJson);
+                        json.draw = request.draw; // Update the echo for each response
+                        if (json.data) {
+                            json.data.splice(0, requestStart - cacheLower);
+                            json.data.splice(requestLength, json.data.length);
+                        } else {
+                            json.data = [];
+                            json.recordsFiltered = 0;
+                            json.recordsTotal = 0;
+                        }
+
+                        drawCallback(json);
+                    }
+                }
+            };
+
+            // Register an API method that will empty the pipelined data, forcing an Ajax
+            // fetch on the next draw (i.e. `table.clearPipeline().draw()`)
+            $.fn.dataTable.Api.register('clearPipeline()', function () {
+                return this.iterator('table', function (settings) {
+                    settings.clearCache = true;
+                });
             });
 
             // Highlighting rows and columns on mouseover
             var lastIdx = null;
-            var table = $('.datatable-highlight').DataTable();
+            $.each($('.datatable-highlight'), function () {
+                var $this, table, url;
+                $this = $(this);
+                url = $this.attr('data-ajax-url');
+                if (url) {
+                    table = $this.DataTable({
+                        stateSave: true,
+                        processing: true,
+                        serverSide: true,
+                        ajax: $.fn.dataTable.pipeline({
+                            url: url,
+                            method: 'POST',
+                            pages: 5, // number of pages to cache
+                        }),
+                        deferRender: true,
+                        initComplete: function () {
+                            // Initialize select inputs in datatable
+                            $('.dataTables_length select').select2({
+                                minimumResultsForSearch: Infinity,
+                                dropdownAutoWidth: true,
+                                width: 'auto'
+                            });
 
-            $('.datatable-highlight tbody').on('mouseover', 'td', function () {
-                var colIdx = table.cell(this).index().column;
+                            $('[data-toggle="dropdown"]').dropdown();
 
-                if (colIdx !== lastIdx) {
-                    $(table.cells().nodes()).removeClass('active');
-                    $(table.column(colIdx).nodes()).addClass('active');
+                            // delete button click event
+                            $('.__item_remover_btn')
+                                .off('click' + variables.namespace)
+                                .on('click' + variables.namespace, function () {
+                                    deleteOperation($(this));
+                                });
+                        },
+                    });
+
+                    $('.datatable-highlight tbody').off('mouseover').on('mouseover', 'td', function () {
+                        if (table.cell(this).index()) {
+                            var colIdx = table.cell(this).index().column;
+
+                            if (colIdx !== lastIdx) {
+                                $(table.cells().nodes()).removeClass('active');
+                                $(table.column(colIdx).nodes()).addClass('active');
+                            }
+                        }
+                    }).off('mouseleave').on('mouseleave', function () {
+                        $(table.cells().nodes()).removeClass('active');
+                    });
                 }
-            }).on('mouseleave', function () {
-                $(table.cells().nodes()).removeClass('active');
             });
         }
 

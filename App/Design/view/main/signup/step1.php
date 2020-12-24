@@ -15,7 +15,7 @@ $validator = form_validator();
                             <div class="heading_s1">
                                 <h3>ایجاد یک حساب کاربری</h3>
                             </div>
-                            <form action="<?= url('home.signup')->getOriginalUrl(); ?>#__register_form_container"
+                            <form action="<?= url('home.signup')->getRelativeUrlTrimmed(); ?>#__register_form_container"
                                   method="post" id="__form_register">
                                 <?php load_partial('main/message/message-form', [
                                     'errors' => $register_errors ?? [],

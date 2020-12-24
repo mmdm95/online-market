@@ -248,7 +248,7 @@ class Url implements \JsonSerializable
     {
         $params = [];
 
-        if(parse_str($queryString, $params) !== false) {
+        if (parse_str($queryString, $params) !== false) {
             return $this->setParams($params);
         }
 
@@ -433,6 +433,22 @@ class Url implements \JsonSerializable
         $params = $this->getQueryString();
 
         $path = $this->path ?? '';
+        $query = $params !== '' ? '?' . $params : '';
+        $fragment = $this->fragment !== null ? '#' . $this->fragment : '';
+
+        return $path . $query . $fragment;
+    }
+
+    /**
+     * Returns the trimmed relative url
+     *
+     * @return string
+     */
+    public function getRelativeUrlTrimmed(): string
+    {
+        $params = $this->getQueryString();
+
+        $path = rtrim($this->path ?? '', '/');
         $query = $params !== '' ? '?' . $params : '';
         $fragment = $this->fragment !== null ? '#' . $this->fragment : '';
 

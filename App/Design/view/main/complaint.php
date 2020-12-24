@@ -20,7 +20,7 @@ $validator = form_validator();
                         پیام خود را با ما در میان بگذارید.
                     </p>
                     <div class="field_form">
-                        <form action="<?= url('home.complaint')->getOriginalUrl(); ?>#__complaint_form_container"
+                        <form action="<?= url('home.complaint')->getRelativeUrlTrimmed(); ?>#__complaint_form_container"
                               method="post" id="__form_complaint">
                             <?php load_partial('main/message/message-form', [
                                 'errors' => $complaint_errors ?? [],

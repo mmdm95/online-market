@@ -508,15 +508,24 @@ window.MyGlobalVariables = {
 
             /**
              * @param url
-             * @param options
-             * @param successCallback
+             * @param [successCallback]
+             * @param [options]
+             * @param [showError]
+             * @param [errorCallback]
              */
-            deleteItem: function (url, options, successCallback) {
+            deleteItem: function (url, successCallback, options, showError, errorCallback) {
                 var _ = this;
                 options = typeof options === typeof {} ? options : {};
+                if (!window.TheCore.isFunction(successCallback)) {
+                    successCallback = function () {
+                        _.toasts.toast(this.data, {
+                            type: 'success',
+                        });
+                    };
+                }
 
-                _.confirm(MyGlobalVariables.messages.confirm, function () {
-                    _.request(url, 'delete', successCallback, options);
+                _.toasts.confirm(MyGlobalVariables.messages.confirm, function () {
+                    _.request(url, 'delete', successCallback, options, showError, errorCallback);
                 });
             },
 

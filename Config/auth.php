@@ -132,8 +132,8 @@ return [
                     'role_id' => 'INT(11) UNSIGNED NOT NULL',
                 ],
                 'constraints' => [
-                    'ADD CONSTRAINT fk_urp_u FOREIGN KEY(user_id) REFERENCES users(id)',
-                    'ADD CONSTRAINT fk_urp_r FOREIGN KEY(role_id) REFERENCES roles(id)',
+                    'ADD CONSTRAINT fk_urp_u FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE',
+                    'ADD CONSTRAINT fk_urp_r FOREIGN KEY(role_id) REFERENCES roles(id) ON DELETE CASCADE ON UPDATE CASCADE',
                 ],
             ],
             'api_key_role' => [
@@ -149,8 +149,8 @@ return [
                     'role_id' => 'INT(11) UNSIGNED NOT NULL',
                 ],
                 'constraints' => [
-                    'ADD CONSTRAINT fk_akr_ak FOREIGN KEY(api_key_id) REFERENCES api_keys(id)',
-                    'ADD CONSTRAINT fk_akr_r FOREIGN KEY(role_id) REFERENCES roles(id)',
+                    'ADD CONSTRAINT fk_akr_ak FOREIGN KEY(api_key_id) REFERENCES api_keys(id) ON DELETE CASCADE ON UPDATE CASCADE',
+                    'ADD CONSTRAINT fk_akr_r FOREIGN KEY(role_id) REFERENCES roles(id) ON DELETE CASCADE ON UPDATE CASCADE',
                 ],
             ],
             'role_res_perm' => [
@@ -168,8 +168,8 @@ return [
                     'perm_id' => 'INT(11) UNSIGNED NOT NULL',
                 ],
                 'constraints' => [
-                    'ADD CONSTRAINT fk_rpp_r FOREIGN KEY(role_id) REFERENCES roles(id)',
-                    'ADD CONSTRAINT fk_rpp_res FOREIGN KEY(resource_id) REFERENCES resources(id)',
+                    'ADD CONSTRAINT fk_rpp_r FOREIGN KEY(role_id) REFERENCES roles(id) ON DELETE CASCADE ON UPDATE CASCADE',
+                    'ADD CONSTRAINT fk_rpp_res FOREIGN KEY(resource_id) REFERENCES resources(id) ON DELETE CASCADE ON UPDATE CASCADE',
                 ],
             ],
             'user_res_perm' => [
@@ -189,8 +189,8 @@ return [
                     'is_allow' => 'TINYINT(1) UNSIGNED NOT NULL DEFAULT 1',
                 ],
                 'constraints' => [
-                    'ADD CONSTRAINT fk_upp_u FOREIGN KEY(user_id) REFERENCES users(id)',
-                    'ADD CONSTRAINT fk_upp_res FOREIGN KEY(resource_id) REFERENCES resources(id)',
+                    'ADD CONSTRAINT fk_upp_u FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE',
+                    'ADD CONSTRAINT fk_upp_res FOREIGN KEY(resource_id) REFERENCES resources(id) ON DELETE CASCADE ON UPDATE CASCADE',
                 ],
             ],
             'sessions' => [

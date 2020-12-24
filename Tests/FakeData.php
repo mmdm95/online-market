@@ -2,7 +2,9 @@
 
 namespace Tests;
 
+use App\Logic\Models\BaseModel;
 use App\Logic\Models\Model;
+use App\Logic\Models\UserModel;
 use Aura\SqlQuery\Mysql\Insert;
 use Faker\Factory;
 use Faker\Generator;
@@ -579,12 +581,41 @@ class FakeData
 
     }
 
+    /**
+     * @throws MethodNotFoundException
+     * @throws ParameterHasNoDefaultValueException
+     * @throws ServiceNotFoundException
+     * @throws ServiceNotInstantiableException
+     * @throws \ReflectionException
+     */
     public function users()
     {
         // clear all
+        $this->deleteAllFromTable(BaseModel::TBL_USERS);
 
         // create new fake data
+        /**
+         * @var UserModel $userModel
+         */
+        $userModel = container()->get(UserModel::class);
+        for ($i = 0; $i < 100; $i++) {
+            $rndActive = $this->faker->randomElement([0, 1]);
+            $activatedAt = 1 === $rndActive ? time() : null;
+            $roleSubset = $this->faker->randomElements([
+                ROLE_ADMIN,
+                ROLE_COLLEAGUE,
+                ROLE_USER
+            ], $this->faker->numberBetween(1, 3));
 
+            $userModel->registerUser([
+                'username' => $this->faker->mobileNumber,
+                'first_name' => $this->faker->firstName,
+                'last_name' => $this->faker->lastName,
+                'is_activated' => $rndActive,
+                'activated_at' => $activatedAt,
+                'created_at' => time(),
+            ], $roleSubset);
+        }
     }
 
     /**

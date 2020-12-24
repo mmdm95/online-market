@@ -43,7 +43,7 @@
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label>نقش کاربر:</label>
-                                        <select data-placeholder="نقش کاربر در سایت"
+                                        <select data-placeholder="نقش کاربر در سایت" multiple="multiple"
                                                 class="form-control form-control-select2" data-fouc>
                                             <option></option>
                                             <option value="Cambodia">عادی</option>

@@ -14,7 +14,7 @@
                                 صفحه مورد نظر شما منتقل شد ، حذف شد ، تغییر نام داد یا ممکن است هرگز وجود نداشته باشد.
                             </p>
                             <div class="search_form pb-3 pb-md-4">
-                                <form action="<?= url('home.search')->getOriginalUrl(); ?>" method="get">
+                                <form action="<?= url('home.search')->getRelativeUrlTrimmed(); ?>" method="get">
                                     <input name="text" id="text" type="text" placeholder="جستجو" class="form-control">
                                     <button type="submit" class="btn icon_search">
                                         <i class="ion-ios-search-strong"></i>

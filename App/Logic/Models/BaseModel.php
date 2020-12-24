@@ -153,8 +153,7 @@ abstract class BaseModel
 
         if ($get_last_inserted_id) {
             // get the last insert ID
-            $name = $insert->getLastInsertIdName('id');
-            $res = (int)$this->db->lastInsertId($name);
+            $res = (int)$this->db->lastInsertId();
         }
 
         return $res;

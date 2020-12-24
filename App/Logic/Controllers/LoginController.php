@@ -72,9 +72,9 @@ class LoginController extends AbstractHomeController
                         if (!empty($backUrl)) {
                             response()->redirect($backUrl);
                         } elseif ($auth->userHasRole(ROLE_COLLEAGUE)) {
-                            response()->redirect(url('colleague.index')->getOriginalUrl());
+                            response()->redirect(url('colleague.index')->getRelativeUrlTrimmed());
                         } else {
-                            response()->redirect(url('user.index')->getOriginalUrl());
+                            response()->redirect(url('user.index')->getRelativeUrlTrimmed());
                         }
                     } else {
                         $data['login_errors'] = [
@@ -138,7 +138,7 @@ class LoginController extends AbstractHomeController
 //                                SMS_REPLACEMENTS['code'] => session()->getFlash('register.code', ''),
 //                            ]));
 
-                            response()->redirect(url('home.forget-password', ['step' => 'step2'])->getOriginalUrl());
+                            response()->redirect(url('home.forget-password', ['step' => 'step2'])->getRelativeUrlTrimmed());
                         } else {
                             $data['register_warning'] = 'خطا در ارتباط با سرور، لطفا دوباره تلاش کنید.';
                         }
@@ -154,7 +154,7 @@ class LoginController extends AbstractHomeController
                 $checkStep1 = container()->get(ForgetMobileCheckMiddleware::class);
                 $isValid = $checkStep1->handle();
                 if (!$isValid) {
-                    response()->redirect(url('home.forget-password', ['step' => 'step1'])->getOriginalUrl());
+                    response()->redirect(url('home.forget-password', ['step' => 'step1'])->getRelativeUrlTrimmed());
                 }
                 // submit code
                 if (is_post()) {
@@ -168,7 +168,7 @@ class LoginController extends AbstractHomeController
                         // success or warning message
                         if ($res) {
                             session()->setFlash('forget.code-step', 'I am ready to set password');
-                            response()->redirect(url('home.forget-password', ['step' => 'step3'])->getOriginalUrl());
+                            response()->redirect(url('home.forget-password', ['step' => 'step3'])->getRelativeUrlTrimmed());
                         } else {
                             $data['register_warning'] = 'خطا در ارتباط با سرور، لطفا دوباره تلاش کنید.';
                         }
@@ -190,7 +190,7 @@ class LoginController extends AbstractHomeController
                 $isValid2 = $checkStep2->handle();
                 if (!$isValid || !$isValid2) {
                     $this->removeAllForgetSessions();
-                    response()->redirect(url('home.forget-password', ['step' => 'step1'])->getOriginalUrl());
+                    response()->redirect(url('home.forget-password', ['step' => 'step1'])->getRelativeUrlTrimmed());
                 }
                 // submit new password
                 if (is_post()) {
@@ -204,7 +204,7 @@ class LoginController extends AbstractHomeController
                         // success or warning message
                         if ($res) {
                             session()->setFlash('forget.completion', 'Password changed!');
-                            response()->redirect(url('home.forget-password', ['step' => 'step4'])->getOriginalUrl());
+                            response()->redirect(url('home.forget-password', ['step' => 'step4'])->getRelativeUrlTrimmed());
                         } else {
                             $data['register_warning'] = 'خطا در ارتباط با سرور، لطفا دوباره تلاش کنید.';
                         }
@@ -220,7 +220,7 @@ class LoginController extends AbstractHomeController
                 $checkSteps = container()->get(ForgetCompletionCheckMiddleware::class);
                 $isValid = $checkSteps->handle();
                 if (!$isValid) {
-                    response()->redirect(url('home.forget-password', ['step' => 'step1'])->getOriginalUrl());
+                    response()->redirect(url('home.forget-password', ['step' => 'step1'])->getRelativeUrlTrimmed());
                 }
                 $this->removeAllForgetSessions();
                 break;

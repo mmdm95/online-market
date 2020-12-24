@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Logic\Forms;
+namespace App\Logic\Forms\Ajax;
 
 use App\Logic\Interfaces\IPageForm;
 use App\Logic\Models\NewsletterModel;

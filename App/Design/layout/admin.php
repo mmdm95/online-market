@@ -8,6 +8,10 @@
     <meta name="robots" content="noindex,nofollow">
     <title><?= $title ?? ''; ?></title>
 
+    <!-- Favicon Icon -->
+    <link rel="shortcut icon" type="image/x-icon"
+          href="<?= url('image.show') . config()->get('settings.favicon.value'); ?>">
+
     <?= $css['top'] ?? ''; ?>
     <?= $js['top'] ?? ''; ?>
 </head>

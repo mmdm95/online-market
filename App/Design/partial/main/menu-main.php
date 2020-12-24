@@ -13,7 +13,7 @@
                     <span><?= local_number(\config()->get('settings.main_phone.value')) ?></span>
                 </div>
                 <div class="product_search_form">
-                    <form action="<?= url('home.search')->getOriginalUrl(); ?>" method="get">
+                    <form action="<?= url('home.search')->getRelativeUrlTrimmed(); ?>" method="get">
                         <div class="input-group">
                             <div class="input-group-prepend">
                                 <div class="custom_select">

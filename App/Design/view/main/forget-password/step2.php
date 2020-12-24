@@ -40,7 +40,7 @@ $validator = form_validator();
                                      aria-labelledby="nav-code-tab">
                                     <form action="<?= url('home.forget-password', [
                                         'step' => 'step2'
-                                    ])->getOriginalUrl(); ?>#__forget_form_container"
+                                    ])->getRelativeUrlTrimmed(); ?>#__forget_form_container"
                                           method="post" id="__forget_form_step2_1">
                                         <?php load_partial('main/message/message-form', [
                                             'errors' => $forget_errors ?? [],
@@ -74,7 +74,7 @@ $validator = form_validator();
                                      aria-labelledby="nav-question-tab">
                                     <form action="<?= url('home.forget-password', [
                                         'step' => 'step2'
-                                    ])->getOriginalUrl(); ?>#__forget_form_container"
+                                    ])->getRelativeUrlTrimmed(); ?>#__forget_form_container"
                                           method="post" id="__forget_form_step2_2">
                                         <?php load_partial('main/message/message-form', [
                                             'errors' => $forget_errors ?? [],

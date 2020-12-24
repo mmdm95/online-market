@@ -3,9 +3,11 @@
 namespace App\Logic\Controllers;
 
 use App\Logic\Abstracts\AbstractHomeController;
+use App\Logic\Forms\Ajax\NewsletterForm as AjaxNewsletterForm;
 use App\Logic\Forms\ComplaintForm;
 use App\Logic\Forms\ContactForm;
-use App\Logic\Forms\NewsletterForm;
+use App\Logic\Handlers\GeneralAjaxFormHandler;
+use App\Logic\Handlers\GeneralFormHandler;
 use App\Logic\Handlers\ResourceHandler;
 use App\Logic\Models\FAQModel;
 use App\Logic\Models\OurTeamModel;
@@ -18,7 +20,6 @@ use Sim\Container\Exceptions\ServiceNotInstantiableException;
 use Sim\Exceptions\ConfigManager\ConfigNotRegisteredException;
 use Sim\Exceptions\Mvc\Controller\ControllerException;
 use Sim\Exceptions\PathManager\PathNotRegisteredException;
-use Sim\Form\Exceptions\FormException;
 use Sim\Interfaces\IFileNotExistsException;
 use Sim\Interfaces\IInvalidVariableNameException;
 
@@ -90,29 +91,14 @@ class PageController extends AbstractHomeController
      * @throws ServiceNotFoundException
      * @throws ServiceNotInstantiableException
      * @throws \ReflectionException
-     * @throws FormException
      */
     public function contact()
     {
         $data = [];
 
         if (is_post()) {
-            /**
-             * @var ContactForm $contactForm
-             */
-            $contactForm = container()->get(ContactForm::class);
-            [$status, $errors] = $contactForm->validate();
-            if ($status) {
-                $res = $contactForm->store();
-                // success or warning message
-                if ($res) {
-                    $data['contact_success'] = 'اطلاعات با موفقیت ثبت شد.';
-                } else {
-                    $data['contact_warning'] = 'خطا در ارتباط با سرور، لطفا دوباره تلاش کنید.';
-                }
-            } else {
-                $data['contact_errors'] = $errors;
-            }
+            $formHandler = new GeneralFormHandler();
+            $data = $formHandler->handle(ContactForm::class, 'contact');
         }
 
         $this->setLayout($this->main_layout)->setTemplate('view/main/contact');
@@ -131,29 +117,14 @@ class PageController extends AbstractHomeController
      * @throws ServiceNotFoundException
      * @throws ServiceNotInstantiableException
      * @throws \ReflectionException
-     * @throws FormException
      */
     public function complaint()
     {
         $data = [];
 
         if (is_post()) {
-            /**
-             * @var ComplaintForm $complaintForm
-             */
-            $complaintForm = container()->get(ComplaintForm::class);
-            [$status, $errors] = $complaintForm->validate();
-            if ($status) {
-                $res = $complaintForm->store();
-                // success or warning message
-                if ($res) {
-                    $data['complaint_success'] = 'اطلاعات با موفقیت ثبت شد.';
-                } else {
-                    $data['complaint_warning'] = 'خطا در ارتباط با سرور، لطفا دوباره تلاش کنید.';
-                }
-            } else {
-                $data['complaint_errors'] = $errors;
-            }
+            $formHandler = new GeneralFormHandler();
+            $data = $formHandler->handle(ComplaintForm::class, 'complaint');
         }
 
         $this->setLayout($this->main_layout)->setTemplate('view/main/complaint');
@@ -213,7 +184,6 @@ class PageController extends AbstractHomeController
      * @throws ServiceNotFoundException
      * @throws ServiceNotInstantiableException
      * @throws \ReflectionException
-     * @throws FormException
      */
     public function addNewsletter()
     {
@@ -224,27 +194,10 @@ class PageController extends AbstractHomeController
          */
         $agent = container()->get(Agent::class);
         if (!$agent->isRobot()) {
-            /**
-             * @var NewsletterForm $registerForm
-             */
-            $registerForm = container()->get(NewsletterForm::class);
-            [$status, $formattedErrors] = $registerForm->validate();
-            if ($status) {
-                $res = $registerForm->store();
-                if ($res) {
-                    $resourceHandler
-                        ->type(RESPONSE_TYPE_SUCCESS)
-                        ->data('شماره شما در خبرنامه با موفقیت ثبت شد.');
-                } else {
-                    $resourceHandler
-                        ->type(RESPONSE_TYPE_ERROR)
-                        ->errorMessage('خطا در ارتباط با سرور، لطفا دوباره تلاش کنید.');
-                }
-            } else {
-                $resourceHandler
-                    ->type(RESPONSE_TYPE_ERROR)
-                    ->errorMessage(encode_html($formattedErrors));
-            }
+            $formHandler = new GeneralAjaxFormHandler();
+            $resourceHandler = $formHandler
+                ->setSuccessMessage('شماره شما در خبرنامه با موفقیت ثبت شد.')
+                ->handle(AjaxNewsletterForm::class);
         } else {
             response()->httpCode(403);
             $resourceHandler

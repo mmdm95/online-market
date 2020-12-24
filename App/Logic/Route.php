@@ -136,6 +136,10 @@ class Route implements IInitialize
                 Router::form('/user/edit/{id}', 'Admin\UserController@edit')->where([
                     'id' => '[0-9]+',
                 ])->name('admin.user.edit');
+                Router::delete('/user/remove/{id}', 'Admin\UserController@add')->where([
+                    'id' => '[0-9]+',
+                ])->name('admin.user.remove');
+                Router::post('/user/view/dt', 'Admin\UserController@getPaginatedDatatable')->name('admin.user.dt.view');
 
                 /**
                  * Category Route
@@ -344,7 +348,6 @@ class Route implements IInitialize
              * newsletter route
              */
             Router::post('/newsletter/add', 'PageController@addNewsletter')->name('ajax.newsletter.add');
-            Router::post('/newsletter/remove', 'PageController@removeNewsletter')->name('ajax.newsletter.remove');
 
             /**
              * cart routes
@@ -385,23 +388,26 @@ class Route implements IInitialize
             ])->name('ajax.product.wishlist.remove');
 
             /**
-             * File Manager Route
-             */
-            Router::get('/file-manager/list', 'Admin\FileController@list')->name('api.file-manager.list');
-            Router::post('/file-manager/rename', 'Admin\FileController@rename')->name('api.file-manager.rename');
-            Router::post('/file-manager/delete', 'Admin\FileController@delete')->name('api.file-manager.delete');
-            Router::post('/file-manager/mkdir', 'Admin\FileController@makeDir')->name('api.file-manager.mkdir');
-            Router::post('/file-manager/mvdir', 'Admin\FileController@moveDir')->name('api.file-manager.mvdir');
-            Router::post('/file-manager/upload', 'Admin\FileController@upload')->name('api.file-manager.upload');
-            Router::get('/file-manager/download/{filename}', 'Admin\FileController@download')->where([
-                'filename' => '.+',
-            ])->name('api.file-manager.download');
-            Router::get('/file-manager/dir-tree', 'Admin\FileController@foldersTree')->name('api.file-manager.tree');
-
-            /**
              * get captcha image
              */
             Router::get('/captcha', 'CaptchaController@generateCaptcha')->name('api.captcha');
+
+            // other pages that need authentication
+            Router::group(['middleware' => AdminAuthMiddleware::class], function () {
+                /**
+                 * File Manager Route
+                 */
+                Router::get('/file-manager/list', 'Admin\FileController@list')->name('api.file-manager.list');
+                Router::post('/file-manager/rename', 'Admin\FileController@rename')->name('api.file-manager.rename');
+                Router::post('/file-manager/delete', 'Admin\FileController@delete')->name('api.file-manager.delete');
+                Router::post('/file-manager/mkdir', 'Admin\FileController@makeDir')->name('api.file-manager.mkdir');
+                Router::post('/file-manager/mvdir', 'Admin\FileController@moveDir')->name('api.file-manager.mvdir');
+                Router::post('/file-manager/upload', 'Admin\FileController@upload')->name('api.file-manager.upload');
+                Router::get('/file-manager/download/{filename}', 'Admin\FileController@download')->where([
+                    'filename' => '.+',
+                ])->name('api.file-manager.download');
+                Router::get('/file-manager/dir-tree', 'Admin\FileController@foldersTree')->name('api.file-manager.tree');
+            });
         });
     }
 

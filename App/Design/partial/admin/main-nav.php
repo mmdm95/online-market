@@ -1,8 +1,8 @@
-
 <div class="navbar navbar-expand-md navbar-dark">
     <div class="navbar-brand">
-        <a href="index.html" class="d-inline-block">
-            <img src="../../../../global_assets/images/logo_light.png" alt="">
+        <a href="<?= url('home.index'); ?>" class="d-inline-block">
+            <img src="<?= url('image.show') . config()->get('settings.logo_light.value'); ?>"
+                 alt="<?= config()->get('settings.title.value'); ?>">
         </a>
     </div>
 
@@ -53,7 +53,7 @@
                                     </div>
 
                                     <span class="text-muted">
-آیا فاکتور به شماره ۱۲۳ قابل بازگشت هست؟
+                                        آیا فاکتور به شماره ۱۲۳ قابل بازگشت هست؟
                                     </span>
                                 </div>
                             </li>
@@ -78,7 +78,7 @@
                     <a href="#" class="dropdown-item"><i class="icon-user-plus"></i>اطلاعات من</a>
                     <a href="#" class="dropdown-item"><i class="icon-coins"></i>مدیریت مالی</a>
                     <a href="#" class="dropdown-item"><i class="icon-comment-discussion"></i> فاکتورهای جدید <span
-                                class="badge badge-pill bg-blue ml-auto">۵۸</span></a>
+                                class="badge badge-pill badge-info ml-auto">۵۸</span></a>
                     <div class="dropdown-divider"></div>
                     <a href="#" class="dropdown-item"><i class="icon-cog5"></i> تنظیمات</a>
                     <a href="#" class="dropdown-item"><i class="icon-switch2"></i> خروج</a>

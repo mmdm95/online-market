@@ -33,7 +33,7 @@ class ExtendedValidator extends AbstractCustomValidation
         $this->assertRequirements();
         $name = $this->fields;
         $this->_execute($name, $message, __FUNCTION__, function ($value) {
-            return $this->_persian_alpha($value);
+            return $this->_persian_alpha(StringUtil::toPersian($value));
         }, $callback);
         return $this;
     }

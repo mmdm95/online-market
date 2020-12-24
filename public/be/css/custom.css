@@ -74,11 +74,12 @@
     -webkit-justify-content: center;
     justify-content: center;
     position: absolute;
-    width: 1.5rem;
-    height: 1.5rem;
+    width: 1.6rem;
+    height: 1.6rem;
     top: -50%;
     left: -50%;
     text-align: center;
+    color: #fff;
     -webkit-transform: translate(50%, 50%);
     -moz-transform: translate(50%, 50%);
     -ms-transform: translate(50%, 50%);

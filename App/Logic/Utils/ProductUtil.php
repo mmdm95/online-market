@@ -219,7 +219,7 @@ class ProductUtil
                 $offset
             ),
             'pagination' => [
-                'base_url' => url('home.search')->getOriginalUrl(),
+                'base_url' => url('home.search')->getRelativeUrlTrimmed(),
                 'total' => $total,
                 'first_page' => 1,
                 'last_page' => $lastPage,

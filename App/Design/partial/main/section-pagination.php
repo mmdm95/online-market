@@ -10,10 +10,10 @@
                 <ul class="pagination pagination_style1 justify-content-center">
                     <li class="page-item <?= $pagination['first_page'] == $pagination['current_page'] ? 'disabled' : ''; ?>">
                         <?php
-                        $queryArr = blog_query_string();
+                        $queryArr = http_build_query($_GET, null, '&', PHP_QUERY_RFC3986);
                         ?>
                         <a class="page-link" data-page-no="<?= $pagination['first_page']; ?>"
-                            <?= $pagination['first_page'] != $pagination['current_page'] ? 'href="' . $pagination['base_url'] . (count($queryArr) ? '?' . http_build_query($queryArr, null, '&', PHP_QUERY_RFC3986) : '') . '"' : ''; ?>
+                            <?= $pagination['first_page'] != $pagination['current_page'] ? 'href="' . $pagination['base_url'] . (!empty($queryArr) ? '?' . $queryArr : '') . '"' : ''; ?>
                            tabindex="-1">
                             <i class="linearicons-arrow-left" aria-hidden="true"></i>
                         </a>
@@ -30,10 +30,12 @@
                         <?php if ($i <= 0) continue; ?>
                         <li class="page-item <?= $pagination['current_page'] == $i ? 'active' : ''; ?>">
                             <?php
-                            $queryArr = blog_query_string();
+                            $queryArr = http_build_query(array_merge($_GET, [
+                                'page' => $i,
+                            ]), null, '&', PHP_QUERY_RFC3986);
                             ?>
                             <a class="page-link" data-page-no="<?= $i; ?>"
-                               href="<?= $pagination['base_url'] . (count($queryArr) ? '?' . http_build_query($queryArr, null, '&', PHP_QUERY_RFC3986) : '') . '"'; ?>">
+                               href="<?= $pagination['base_url'] . (!empty($queryArr) ? '?' . $queryArr : '') . '"'; ?>">
                                 <?= local_number($i); ?>
                             </a>
                         </li>
@@ -41,12 +43,12 @@
                     <?php for ($i = $pagination['current_page']; $i <= $pagination['current_page'] + $pageAfter && $i <= $pagination['last_page']; $i++): ?>
                         <li class="page-item <?= $pagination['current_page'] == $i ? 'active' : ''; ?>">
                             <?php
-                            $queryArr = blog_query_string([
+                            $queryArr = http_build_query(array_merge($_GET, [
                                 'page' => $i,
-                            ]);
+                            ]), null, '&', PHP_QUERY_RFC3986);
                             ?>
                             <a class="page-link" data-page-no="<?= $i; ?>"
-                               href="<?= $pagination['base_url'] . (count($queryArr) ? '?' . http_build_query($queryArr, null, '&', PHP_QUERY_RFC3986) : '') . '"'; ?>">
+                               href="<?= $pagination['base_url'] . (!empty($queryArr) ? '?' . $queryArr : '') . '"'; ?>">
                                 <?= local_number($i); ?>
                             </a>
                         </li>
@@ -61,10 +63,10 @@
 
                     <li class="page-item" <?= $pagination['last_page'] == $pagination['current_page'] ? 'disabled' : ''; ?>>
                         <?php
-                        $queryArr = blog_query_string();
+                        $queryArr = http_build_query($_GET, null, '&', PHP_QUERY_RFC3986);
                         ?>
                         <a class="page-link" data-page-no="<?= $pagination['last_page']; ?>"
-                            <?= $pagination['last_page'] != $pagination['current_page'] ? 'href="' . $pagination['base_url'] . (count($queryArr) ? '?' . http_build_query($queryArr, null, '&', PHP_QUERY_RFC3986) : '') . '"' : ''; ?>
+                            <?= $pagination['last_page'] != $pagination['current_page'] ? 'href="' . $pagination['base_url'] . (!empty($queryArr) ? '?' . $queryArr : '') . '"' : ''; ?>
                            tabindex="-1">
                             <i class="linearicons-arrow-right" aria-hidden="true"></i>
                         </a>

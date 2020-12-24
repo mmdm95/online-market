@@ -732,7 +732,7 @@ return [
                 'bottom' => [
                     e(
                         '<script type="text/javascript" src="' .
-                        asset_path('plugins/UriParser.js') .
+                        asset_path('plugins/UriParser.min.js') .
                         '"></script>'
                     ),
                     e(
@@ -797,7 +797,7 @@ return [
                     ),
                     e(
                         '<script type="text/javascript" src="' .
-                        asset_path('plugins/UriParser.js') .
+                        asset_path('plugins/UriParser.min.js') .
                         '"></script>'
                     ),
                     e(
