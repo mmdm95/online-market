@@ -11,7 +11,7 @@ use Sim\Exceptions\PathManager\PathNotRegisteredException;
 use Sim\Interfaces\IFileNotExistsException;
 use Sim\Interfaces\IInvalidVariableNameException;
 
-class CouponController extends AbstractAdminController
+class BrandController extends AbstractAdminController
 {
 
     /**

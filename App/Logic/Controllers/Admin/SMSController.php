@@ -11,7 +11,7 @@ use Sim\Exceptions\PathManager\PathNotRegisteredException;
 use Sim\Interfaces\IFileNotExistsException;
 use Sim\Interfaces\IInvalidVariableNameException;
 
-class CategoryController extends AbstractAdminController
+class SMSController extends AbstractAdminController
 {
     /**
      * @return string

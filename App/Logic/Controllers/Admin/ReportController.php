@@ -10,7 +10,7 @@ use Sim\Exceptions\PathManager\PathNotRegisteredException;
 use Sim\Interfaces\IFileNotExistsException;
 use Sim\Interfaces\IInvalidVariableNameException;
 
-class ComplaintsController extends AbstractAdminController
+class ReportController extends AbstractAdminController
 {
     /**
      * @param $id
