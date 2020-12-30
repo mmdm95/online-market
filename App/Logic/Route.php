@@ -163,7 +163,8 @@ class Route implements IInitialize
                 /**
                  * Color Route
                  */
-                Router::get('/color/add', 'Admin\FestivalController@add')->name('admin.color.add');
+                Router::get('/color/add', 'Admin\ColorController@add')->name('admin.color.add');
+                Router::get('/color/view', 'Admin\ColorController@view')->name('admin.color.view');
 
                 /**
                  * Festival Route
