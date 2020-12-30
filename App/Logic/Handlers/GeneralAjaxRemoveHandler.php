@@ -41,7 +41,7 @@ class GeneralAjaxRemoveHandler implements IHandler
      *      a resource handler as return array.
      *
      * @param mixed ...$_
-     * @return mixed
+     * @return ResourceHandler
      * @throws \ReflectionException
      * @throws MethodNotFoundException
      * @throws ParameterHasNoDefaultValueException
@@ -66,7 +66,7 @@ class GeneralAjaxRemoveHandler implements IHandler
                 $this->resourceHandler
                     ->type(RESPONSE_TYPE_ERROR)
                     ->errorMessage('شناسه آیتم نامعتبر است.');
-                emitter()->dispatch('remove.general.ajax:invalid_id', [&$this->resourceHandler, self::TYPE_ERROR_INVALID_ID]);
+                emitter()->dispatch('remove.general.ajax:invalid_id', [&$this->resourceHandler]);
             } else {
                 /**
                  * @var Model $model
@@ -84,7 +84,7 @@ class GeneralAjaxRemoveHandler implements IHandler
                     $this->resourceHandler
                         ->type(RESPONSE_TYPE_ERROR)
                         ->errorMessage('آیتم مورد نظر وجود ندارد.');
-                    emitter()->dispatch('remove.general.ajax:not_exists', [&$this->resourceHandler, self::TYPE_ERROR_NOT_EXISTS]);
+                    emitter()->dispatch('remove.general.ajax:not_exists', [&$this->resourceHandler]);
                 } else {
                     $delete = $model->delete();
                     $delete
@@ -100,8 +100,8 @@ class GeneralAjaxRemoveHandler implements IHandler
                     } else {
                         $this->resourceHandler
                             ->type(RESPONSE_TYPE_ERROR)
-                            ->errorMessage('عملیات با خطا مواجه شد.');
-                        emitter()->dispatch('remove.general.ajax:failed', [&$this->resourceHandler, self::TYPE_ERROR_FAILED]);
+                            ->errorMessage('امکان حذف این آیتم وجود ندارد.');
+                        emitter()->dispatch('remove.general.ajax:failed', [&$this->resourceHandler]);
                     }
                 }
             }

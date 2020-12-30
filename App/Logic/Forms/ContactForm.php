@@ -83,6 +83,11 @@ class ContactForm implements IPageForm
             ->required('{alias} ' . 'اجباری می‌باشد.')
             ->stopValidationAfterFirstError(true);
 
+        // to reset form values and not set them again
+        if ($validator->getStatus()) {
+            $validator->resetBagValues();
+        }
+
         return [
             $validator->getStatus(),
             $validator->getError(),
@@ -120,32 +125,36 @@ class ContactForm implements IPageForm
          */
         $xss = container()->get(AntiXSS::class);
 
-        $name = input()->post('inp-contact-name', '')->getValue();
-        $email = input()->post('inp-contact-email', '')->getValue();
-        $mobile = input()->post('inp-contact-mobile', '')->getValue();
-        $subject = input()->post('inp-contact-subject', '')->getValue();
-        $message = input()->post('inp-contact-message', '')->getValue();
-        // if user is logged in, fetch his info
-        if ($auth->isLoggedIn()) {
-            $userId = $auth->getCurrentUser()['id'] ?? 0;
-            $user = $userModel->get(['first_name', 'mobile', 'email']);
-            $user = count($user) ? $user[0] : [];
-            //-----
-            $name = isset($user['first_name']) && !empty($user['first_name']) ? $user['first_name'] : $name;
-            $email = isset($user['email']) && !empty($user['email']) ? $user['email'] : $email;
-            $mobile = isset($user['mobile']) && !empty($user['mobile']) ? $user['mobile'] : $mobile;
+        try {
+            $name = input()->post('inp-contact-name', '')->getValue();
+            $email = input()->post('inp-contact-email', '')->getValue();
+            $mobile = input()->post('inp-contact-mobile', '')->getValue();
+            $subject = input()->post('inp-contact-subject', '')->getValue();
+            $message = input()->post('inp-contact-message', '')->getValue();
+            // if user is logged in, fetch his info
+            if ($auth->isLoggedIn()) {
+                $userId = $auth->getCurrentUser()['id'] ?? 0;
+                $user = $userModel->get(['first_name', 'mobile', 'email']);
+                $user = count($user) ? $user[0] : [];
+                //-----
+                $name = isset($user['first_name']) && !empty($user['first_name']) ? $user['first_name'] : $name;
+                $email = isset($user['email']) && !empty($user['email']) ? $user['email'] : $email;
+                $mobile = isset($user['mobile']) && !empty($user['mobile']) ? $user['mobile'] : $mobile;
+            }
+            // insert to database
+            $res = $contactModel->insert([
+                'user_id' => $userId ?? null,
+                'title' => $xss->xss_clean($subject),
+                'name' => $xss->xss_clean($name),
+                'mobile' => $xss->xss_clean($mobile),
+                'email' => $xss->xss_clean($email),
+                'body' => $xss->xss_clean($message),
+                'status' => CONTACT_STATUS_UNREAD,
+                'created_at' => time(),
+            ]);
+        } catch (\Exception $e) {
+            return false;
         }
-        // insert to database
-        $res = $contactModel->insert([
-            'user_id' => $userId ?? null,
-            'title' => $xss->xss_clean($subject),
-            'name' => $xss->xss_clean($name),
-            'mobile' => $xss->xss_clean($mobile),
-            'email' => $xss->xss_clean($email),
-            'body' => $xss->xss_clean($message),
-            'status' => CONTACT_STATUS_UNREAD,
-            'created_at' => time(),
-        ]);
 
         return $res;
     }

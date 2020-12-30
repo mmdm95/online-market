@@ -6,7 +6,6 @@
     <div class="card">
         <?php load_partial('admin/card-header', ['header_title' => 'مشاهده کاربر']); ?>
 
-
         <div class="card-body">
             <form action="#">
                 <div class="row">
@@ -25,7 +24,7 @@
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label>نقش کاربر:</label>
-                                        <select data-placeholder="نقش کاربر در سایت"
+                                        <select data-placeholder="نقش کاربر در سایت" readonly="true"
                                                 class="form-control form-control-select2" data-fouc>
                                             <option></option>
                                             <option value="Cambodia">عادی</option>
@@ -37,14 +36,14 @@
                                 <div class="form-group col-md-6">
                                     <i class="icon icon-info3 text-info" data-toggle="popover"
                                        title="حداقل ۸ کاراکتر و شامل یک حرف"></i>
-                                    <label>رمز عبور:</label>
+                                    <label>کلمه عبور:</label>
                                     <input type="password" class="form-control"
                                            placeholder="حداقل ۸ کاراکتر و شامل یک حرف">
                                 </div>
 
                                 <div class="form-group col-md-6">
-                                    <label>تکرار رمز عبور:</label>
-                                    <input type="password" class="form-control" placeholder="تکرار رمز عبور">
+                                    <label>تکرار کلمه عبور:</label>
+                                    <input type="password" class="form-control" placeholder="تکرار کلمه عبور">
                                 </div>
 
                                 <div class="form-check form-check-switch form-check-switch-left col-md-6">
@@ -76,10 +75,12 @@
                                         </div>
 
                                         <div class="list-icons list-icons-extended ml-auto">
-                                            <a href="#" class="list-icons-item"><i
-                                                        class="icon-download top-0"></i></a>
-                                            <a href="#" class="list-icons-item"><i
-                                                        class="icon-bin top-0"></i></a>
+                                            <a href="#" class="list-icons-item">
+                                                <i class="icon-download top-0"></i>
+                                            </a>
+                                            <a href="#" class="list-icons-item">
+                                                <i class="icon-bin top-0"></i>
+                                            </a>
                                         </div>
                                     </div>
                                 </div>
@@ -135,6 +136,7 @@
                     افزودن آدرس
                     <i class="icon-truck ml-2"></i></button>
             </div>
+
             <!-- Vertical form modal -->
             <div id="modal_form_address_add" class="modal fade" tabindex="-1">
                 <div class="modal-dialog">
@@ -274,6 +276,7 @@
             </tr>
             </tbody>
         </table>
+
         <!-- Vertical form modal -->
         <div id="modal_form_address_edit" class="modal fade" tabindex="-1">
             <div class="modal-dialog">
@@ -371,6 +374,7 @@
         <!-- /vertical form modal -->
     </div>
     <!-- /highlighting rows and columns -->
+
     <!-- Highlighting rows and columns -->
     <div class="card">
         <div class="card-header header-elements-inline">

@@ -334,6 +334,10 @@
                     }).off('mouseleave').on('mouseleave', function () {
                         $(table.cells().nodes()).removeClass('active');
                     });
+                } else {
+                    table = $this.DataTable({
+                        stateSave: true,
+                    });
                 }
             });
         }

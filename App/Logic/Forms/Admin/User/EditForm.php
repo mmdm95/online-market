@@ -3,6 +3,7 @@
 namespace App\Logic\Forms\Admin\User;
 
 use App\Logic\Interfaces\IPageForm;
+use App\Logic\Models\RoleModel;
 use App\Logic\Models\UserModel;
 use App\Logic\Validations\ExtendedValidator;
 use Pecee\Http\Input\InputItem;
@@ -14,10 +15,11 @@ use Sim\Form\Exceptions\FormException;
 use Sim\Form\FormValue;
 use Sim\Form\Validations\PasswordValidation;
 
-class AddForm implements IPageForm
+class EditForm implements IPageForm
 {
     /**
-     * {@inheritdoc]
+     * {@inheritdoc}
+     * @return array
      * @throws \ReflectionException
      * @throws MethodNotFoundException
      * @throws ParameterHasNoDefaultValueException
@@ -41,7 +43,10 @@ class AddForm implements IPageForm
         // aliases
         $validator
             ->setFieldsAlias([
-                'inp-user-active-status' => 'وضعیت',
+                'inp-user-active-status' => 'وضعیت کاربر',
+                'inp-user-login-status' => 'وضعیت ورود',
+                'inp-user-ban-status' => 'وضعیت فعالیت',
+                'inp-user-ban-desc' => 'علت منع فعالیت',
                 'inp-user-mobile' => 'موبایل',
                 'inp-user-email' => 'ایمیل',
                 'inp-user-role' => 'نقش',
@@ -50,12 +55,22 @@ class AddForm implements IPageForm
                 'inp-user-first-name' => 'نام',
                 'inp-user-last-name' => 'نام خانوادگی',
             ])
+            ->setDefaultValue([
+                'inp-user-change-password' => '',
+            ])
             ->setOptionalFields([
+                'inp-user-ban-desc',
+                'inp-user-password',
                 'inp-user-email',
                 'inp-user-first-name',
                 'inp-user-last-name',
+                'inp-user-shaba',
             ]);
 
+        // ban desc
+        $validator
+            ->setFields('inp-user-ban-desc')
+            ->requiredWith('inp-user-ban-status', '{alias} ' . 'اجباری می‌باشد.');
         // mobile
         $validator
             ->setFields('inp-user-mobile')
@@ -81,21 +96,25 @@ class AddForm implements IPageForm
         $validator
             ->setFields('inp-user-password')
             ->stopValidationAfterFirstError(false)
-            ->required('{alias} ' . 'اجباری می‌باشد.')
+            ->requiredWith('inp-user-change-password', '{alias} ' . 'اجباری می‌باشد.')
             ->stopValidationAfterFirstError(true)
             ->password(PasswordValidation::STRENGTH_NORMAL, '{alias} ' . 'باید شامل حروف و اعداد باشد.')
-            ->greaterThanEqualLength(8, '{alias} ' . 'باید بیشتر از' . ' {min} ' . 'کاراکتر باشد.')
-            ->match(
+            ->greaterThanEqualLength(8, '{alias} ' . 'باید بیشتر از' . ' {min} ' . 'کاراکتر باشد.');
+        // check confirm password
+        if (!$validator->isFieldValueEmpty('inp-user-password')) {
+            $validator->match(
                 ['کلمه عبور' => 'inp-user-password'],
                 ['تایید کلمه عبور' => 'inp-user-re-password'],
                 '{first} ' . 'با' . ' {second} ' . 'یکسان نمی‌باشد.'
             );
+        }
         // role
         $validator
             ->setFields('inp-user-role')
-            ->stopValidationAfterFirstError(false)
-            ->required('{alias} ' . 'اجباری می‌باشد.')
-            ->stopValidationAfterFirstError(true)
+            ->required('{alias} ' . 'اجباری می‌باشد.');
+        // role (continue.)
+        $validator
+            ->setFields('inp-user-role.*')
             ->isIn(ROLES_ARRAY_ACCEPTABLE, '{alias} ' . 'انتخاب شده نامعتبر است!');
         // name
         $validator
@@ -114,6 +133,20 @@ class AddForm implements IPageForm
             ->persianAlpha('{alias} ' . 'باید از حروف فارسی باشد.')
             ->lessThanEqualLength(30, '{alias} ' . 'باید کمتر از' . ' {max} ' . 'کاراکتر باشد.');
 
+        // check for username(mobile) duplicate
+        $validator
+            ->setFields('inp-user-mobile')
+            ->custom(function (FormValue $value) {
+                $prevMobile = session()->getFlash('prev-username', '', false);
+                if ($prevMobile === $value->getValue()) return true;
+
+                /**
+                 * @var UserModel $userModel
+                 */
+                $userModel = container()->get(UserModel::class);
+                return $userModel->count('username=:username', ['username' => $prevMobile]) === 0;
+            }, 'این شماره موبایل فبلا ثبت شده است! دوباره امتحان کنید.');
+
         // to reset form values and not set them again
         if ($validator->getStatus()) {
             $validator->resetBagValues();
@@ -130,12 +163,12 @@ class AddForm implements IPageForm
     }
 
     /**
-     * {@inheritdoc]
+     * {@inheritdoc}
+     * @throws \ReflectionException
      * @throws MethodNotFoundException
      * @throws ParameterHasNoDefaultValueException
      * @throws ServiceNotFoundException
      * @throws ServiceNotInstantiableException
-     * @throws \ReflectionException
      */
     public function store(): bool
     {
@@ -144,8 +177,19 @@ class AddForm implements IPageForm
          */
         $userModel = container()->get(UserModel::class);
 
+        /**
+         * @var RoleModel $roleModel
+         */
+        $roleModel = container()->get(RoleModel::class);
+
         try {
+            $prevMobile = session()->getFlash('prev-username', '');
+            //-----
             $status = input()->post('inp-user-active-status', '')->getValue();
+            $loginStatus = input()->post('inp-user-login-status', '')->getValue();
+            $banStatus = input()->post('inp-user-ban-status', '')->getValue();
+            $banDesc = input()->post('inp-user-ban-desc', '')->getValue();
+            $shaba = input()->post('inp-user-shaba', '')->getValue();
             $activatedAt = is_value_checked($status) ? time() : null;
             $mobile = input()->post('inp-user-mobile', '')->getValue();
             $email = input()->post('inp-user-email', '')->getValue();
@@ -162,16 +206,37 @@ class AddForm implements IPageForm
             });
             if (!count($roles)) return false;
 
-            return $userModel->registerUser([
+            $updateArr = [
                 'username' => $mobile,
-                'password' => password_hash($password, PASSWORD_BCRYPT),
                 'first_name' => $firsName ?: null,
                 'last_name' => $lastName ?: null,
+                'shaba_number' => $shaba ?: null,
                 'email' => $email ?: null,
                 'image' => PLACEHOLDER_USER_IMAGE,
                 'is_activated' => is_value_checked($status) ? DB_YES : DB_NO,
+                'is_login_locked' => is_value_checked($loginStatus) ? DB_YES : DB_NO,
+                'ban' => is_value_checked($banStatus) ? DB_YES : DB_NO,
+                'ban_desc' => $banDesc ?: null,
                 'activated_at' => $activatedAt,
-            ], $roles);
+                'updated_at' => time(),
+            ];
+
+            if (!empty(trim($password))) {
+                $updateArr['password'] = password_hash($password, PASSWORD_BCRYPT);
+            }
+
+            $res = $roleModel->deleteUserRoles($mobile);
+            $res2 = false;
+            $res3 = false;
+            if ($res) {
+                $res2 = $userModel->update($updateArr, 'username=:username', ['username' => $prevMobile]);
+
+                if ($res2) {
+                    $res3 = $roleModel->addRolesToUser($mobile, $roles);
+                }
+            }
+
+            return $res && $res2 && $res3;
         } catch (\Exception $e) {
             return false;
         }

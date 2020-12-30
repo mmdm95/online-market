@@ -160,6 +160,43 @@ abstract class BaseModel
     }
 
     /**
+     * @param $unique_column
+     * @param array $values
+     * @param bool $get_id
+     * @return bool|int
+     */
+    public function insertIfNotExists($unique_column, array $values, bool $get_id = false)
+    {
+        // create where clause to check existence
+        $where = "{$unique_column}=:{$unique_column}0";
+        $bindValues = [];
+        $bindValues["{$unique_column}0"] = $values[$unique_column];
+
+        if ($this->count($where, $bindValues)) {
+            $insert = $this->connector->insert();
+            $insert
+                ->into($this->table)
+                ->cols($values);
+
+            $stmt = $this->db->prepare($insert->getStatement());
+            $res = $stmt->execute($insert->getBindValues());
+
+            if ($get_id) {
+                // get the last insert ID
+                $res = (int)$this->db->lastInsertId();
+            }
+        } else {
+            $res = $this->update($values, $where, $bindValues);
+
+            if ($get_id) {
+                $res = $this->getFirst(['id'], $where, $bindValues)['id'] ?? 0;
+            }
+        }
+
+        return $res;
+    }
+
+    /**
      * @param array $data
      * @param string $where
      * @param array $bind_values

@@ -43,6 +43,11 @@ class NewsletterForm implements IPageForm
             ->stopValidationAfterFirstError(true)
             ->persianMobile('{alias} ' . 'نامعتبر است.');
 
+        // to reset form values and not set them again
+        if ($validator->getStatus()) {
+            $validator->resetBagValues();
+        }
+
         return [
             $validator->getStatus(),
             $validator->getFormattedUniqueErrors('<p class="m-0">'),
@@ -68,13 +73,17 @@ class NewsletterForm implements IPageForm
          */
         $xss = container()->get(AntiXSS::class);
 
-        $mobile = input()->post('inp-newsletter-mobile', '')->getValue();
-        if (0 === $newsletterModel->count('mobile=:mobile', ['mobile' => $mobile])) {
-            // insert to database
-            $res = $newsletterModel->insert([
-                'mobile' => $xss->xss_clean($mobile),
-                'created_at' => time(),
-            ]);
+        try {
+            $mobile = input()->post('inp-newsletter-mobile', '')->getValue();
+            if (0 === $newsletterModel->count('mobile=:mobile', ['mobile' => $mobile])) {
+                // insert to database
+                $res = $newsletterModel->insert([
+                    'mobile' => $xss->xss_clean($mobile),
+                    'created_at' => time(),
+                ]);
+            }
+        } catch (\Exception $e) {
+            return false;
         }
 
         return $res ?? true;

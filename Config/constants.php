@@ -53,6 +53,7 @@ defined("COMMENT_STATUS_ACCEPT") OR define("COMMENT_STATUS_ACCEPT", 1);
 defined("COMMENT_STATUS_REJECT") OR define("COMMENT_STATUS_REJECT", 2);
 
 // default placeholders
+defined("PLACEHOLDER_USER_IMAGE") OR define("PLACEHOLDER_USER_IMAGE", __DIR__ . '/../public/image/avatars/avatars-default.png');
 defined("PLACEHOLDER_IMAGE") OR define("PLACEHOLDER_IMAGE", __DIR__ . '/../public/be/images/file-icons/image-placeholder.png');
 defined("PLACEHOLDER_VIDEO") OR define("PLACEHOLDER_VIDEO", __DIR__ . '/../public/be/images/file-icons/video-placeholder.png');
 
@@ -65,6 +66,7 @@ defined("ROLE_SUPER_USER") OR define("ROLE_SUPER_USER", 'super_user');
 defined("ROLE_ADMIN") OR define("ROLE_ADMIN", 'admin');
 defined("ROLE_COLLEAGUE") OR define("ROLE_COLLEAGUE", 'colleague');
 defined("ROLE_USER") OR define("ROLE_USER", 'user');
+defined("ROLES_ARRAY_ACCEPTABLE") OR define("ROLES_ARRAY_ACCEPTABLE", [ROLE_ADMIN, ROLE_COLLEAGUE, ROLE_USER]);
 
 // sms types
 defined("SMS_TYPE_ACTIVATION") OR define("SMS_TYPE_ACTIVATION", 'sms_activation');

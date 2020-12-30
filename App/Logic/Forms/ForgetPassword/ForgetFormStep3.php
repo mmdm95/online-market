@@ -45,10 +45,15 @@ class ForgetFormStep3 implements IPageForm
             ->password(PasswordValidation::STRENGTH_NORMAL, '{alias} ' . 'باید شامل حروف و اعداد باشد.')
             ->greaterThanEqualLength(8, '{alias} ' . 'باید بیشتر از' . ' {min} ' . 'کاراکتر باشد.')
             ->match(
-                'inp-forget-new-password',
+                ['کلمه عبور' => 'inp-forget-new-password'],
                 ['تایید کلمه عبور' => 'inp-forget-new-re-password'],
                 '{first} ' . 'با' . ' {second} ' . 'یکسان نمی‌باشد.'
             );
+
+        // to reset form values and not set them again
+        if ($validator->getStatus()) {
+            $validator->resetBagValues();
+        }
 
         return [
             $validator->getStatus(),
@@ -75,13 +80,17 @@ class ForgetFormStep3 implements IPageForm
          */
         $userModel = container()->get(UserModel::class);
 
-        $username = session()->getFlash('forget.username', '', false);
-        $password = input()->post('inp-forget-new-password', '')->getValue();
-        // insert to database
-        $res = $userModel->updateNRegisterUser($username, [
-            'password' => password_hash($password, PASSWORD_BCRYPT),
-            'forget_password_at' => time(),
-        ], 'username=:u_name', ['u_name' => $username]);
+        try {
+            $username = session()->getFlash('forget.username', '', false);
+            $password = input()->post('inp-forget-new-password', '')->getValue();
+            // insert to database
+            $res = $userModel->update([
+                'password' => password_hash($password, PASSWORD_BCRYPT),
+                'forget_password_at' => time(),
+            ], 'username=:u_name', ['u_name' => $username]);
+        } catch (\Exception $e) {
+            return false;
+        }
 
         return $res;
     }

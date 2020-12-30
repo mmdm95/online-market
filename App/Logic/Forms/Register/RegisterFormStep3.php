@@ -52,6 +52,11 @@ class RegisterFormStep3 implements IPageForm
                 '{first} ' . 'با' . ' {second} ' . 'یکسان نمی‌باشد.'
             );
 
+        // to reset form values and not set them again
+        if ($validator->getStatus()) {
+            $validator->resetBagValues();
+        }
+
         return [
             $validator->getStatus(),
             $validator->getError(),

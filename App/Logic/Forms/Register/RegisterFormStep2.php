@@ -51,7 +51,12 @@ class RegisterFormStep2 implements IPageForm
             'username=:u_name',
             ['u_name' => session()->getFlash('register.username', '', false)]);
         if (input()->post('inp-register-code', null)->getValue() !== ($code['activate_code'] ?? '')) {
-            $validator->setError('inp-register-code', 'کد وارد شده صحیح نمی‌باشد.');
+            $validator->setStatus(false)->setError('inp-register-code', 'کد وارد شده صحیح نمی‌باشد.');
+        }
+
+        // to reset form values and not set them again
+        if ($validator->getStatus()) {
+            $validator->resetBagValues();
         }
 
         return [

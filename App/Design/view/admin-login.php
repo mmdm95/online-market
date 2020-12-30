@@ -24,7 +24,7 @@
                         </div>
 
                         <div class="form-group form-group-feedback form-group-feedback-left">
-                            <input type="password" class="form-control" name="password" placeholder="رمز عبور" required>
+                            <input type="password" class="form-control" name="password" placeholder="کلمه عبور" required>
                             <div class="form-control-feedback">
                                 <i class="icon-lock2 text-muted"></i>
                             </div>

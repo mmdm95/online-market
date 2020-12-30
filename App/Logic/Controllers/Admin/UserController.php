@@ -4,13 +4,17 @@ namespace App\Logic\Controllers\Admin;
 
 use App\Logic\Abstracts\AbstractAdminController;
 use App\Logic\Forms\Admin\User\AddForm;
+use App\Logic\Forms\Admin\User\EditForm;
 use App\Logic\Handlers\DatatableHandler;
+use App\Logic\Handlers\GeneralAjaxRemoveHandler;
 use App\Logic\Handlers\GeneralFormHandler;
 use App\Logic\Handlers\ResourceHandler;
 use App\Logic\Interfaces\IDatatableController;
+use App\Logic\Models\BaseModel;
 use App\Logic\Models\RoleModel;
 use App\Logic\Models\UserModel;
 use App\Logic\Utils\Jdf;
+use function DI\get;
 use Jenssegers\Agent\Agent;
 use ReflectionException;
 use Sim\Container\Exceptions\MethodNotFoundException;
@@ -23,6 +27,7 @@ use Sim\Exceptions\Mvc\Controller\ControllerException;
 use Sim\Exceptions\PathManager\PathNotRegisteredException;
 use Sim\Interfaces\IFileNotExistsException;
 use Sim\Interfaces\IInvalidVariableNameException;
+use Sim\Utils\ArrayUtil;
 use Tests\FakeData;
 
 class UserController extends AbstractAdminController implements IDatatableController
@@ -42,6 +47,8 @@ class UserController extends AbstractAdminController implements IDatatableContro
         $data = [];
 
         if (!is_null($id)) {
+            // get user's stuffs
+
             $this->setLayout($this->main_layout)->setTemplate('view/user/user-profile');
         } else {
             $this->setLayout($this->main_layout)->setTemplate('view/user/view');
@@ -76,7 +83,7 @@ class UserController extends AbstractAdminController implements IDatatableContro
          * @var RoleModel $roleModel
          */
         $roleModel = container()->get(RoleModel::class);
-        $roles = $roleModel->get(['id', 'description', 'is_admin'], 'show_to_user=:stu', ['stu' => DB_YES]);
+        $roles = $roleModel->get(['name', 'description', 'is_admin'], 'show_to_user=:stu', ['stu' => DB_YES]);
 
         $this->setLayout($this->main_layout)->setTemplate('view/user/add');
         return $this->render(array_merge($data, [
@@ -87,23 +94,85 @@ class UserController extends AbstractAdminController implements IDatatableContro
     /**
      * @param $id
      * @return string
-     * @throws ReflectionException
      * @throws ConfigNotRegisteredException
      * @throws ControllerException
-     * @throws PathNotRegisteredException
      * @throws IFileNotExistsException
      * @throws IInvalidVariableNameException
+     * @throws MethodNotFoundException
+     * @throws ParameterHasNoDefaultValueException
+     * @throws PathNotRegisteredException
+     * @throws ReflectionException
+     * @throws ServiceNotFoundException
+     * @throws ServiceNotInstantiableException
      */
     public function edit($id)
     {
-        $this->setLayout($this->main_layout)->setTemplate('view/user/edit');
+        $data = [];
 
-        return $this->render();
+        /**
+         * @var UserModel $userModel
+         */
+        $userModel = container()->get(UserModel::class);
+
+        $user = $userModel->get(['username'], 'id=:id', ['id' => $id]);
+
+        if (0 === count($user)) {
+            return $this->show404();
+        }
+
+        // store previous username to check for duplicate
+        session()->setFlash('prev-username', $user[0]['username']);
+
+        if (is_post()) {
+            $formHandler = new GeneralFormHandler();
+            $data = $formHandler->handle(EditForm::class, 'user_edit');
+        }
+
+        $user = $userModel->getSingleUser('u.id=:id', ['id' => $id], ['u.*', 'r.id AS role_id']);
+        $userRoles = $userModel->getUserRoles($user['id'], null, [], ['r.name']);
+        $userRoles = array_map(function ($value) {
+            return $value['name'];
+        }, $userRoles);
+        $user['roles'] = $userRoles;
+
+        /**
+         * @var RoleModel $roleModel
+         */
+        $roleModel = container()->get(RoleModel::class);
+        $roles = $roleModel->get(['name', 'description', 'is_admin'], 'show_to_user=:stu', ['stu' => DB_YES]);
+
+        $this->setLayout($this->main_layout)->setTemplate('view/user/edit');
+        return $this->render(array_merge($data, [
+            'user' => $user,
+            'roles' => $roles,
+        ]));
     }
 
+    /**
+     * @param $id
+     * @throws MethodNotFoundException
+     * @throws ParameterHasNoDefaultValueException
+     * @throws ReflectionException
+     * @throws ServiceNotFoundException
+     * @throws ServiceNotInstantiableException
+     */
     public function remove($id)
     {
+        $resourceHandler = new ResourceHandler();
 
+        /**
+         * @var Agent $agent
+         */
+        $agent = container()->get(Agent::class);
+        if (!$agent->isRobot()) {
+            $handler = new GeneralAjaxRemoveHandler();
+            $resourceHandler = $handler->handle(BaseModel::TBL_USERS, $id);
+        } else {
+            response()->httpCode(403);
+            $resourceHandler->errorMessage('خطا در ارتباط با سرور، لطفا دوباره تلاش کنید.');
+        }
+
+        response()->json($resourceHandler->getReturnData());
     }
 
     /**
@@ -209,8 +278,7 @@ class UserController extends AbstractAdminController implements IDatatableContro
             }
         } catch (\Exception $e) {
             $response = [
-//                'error' => 'خطا در ارتباط با سرور، لطفا دوباره تلاش کنید.',
-                'error' => $e->getMessage(),
+                'error' => 'خطا در ارتباط با سرور، لطفا دوباره تلاش کنید.',
             ];
         }
 

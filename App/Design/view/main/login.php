@@ -40,7 +40,7 @@ $validator = form_validator();
                                             </label>
                                         </div>
                                     </div>
-                                    <a href="<?= url('home.forget-password'); ?>">رمز عبور را فراموش کرده اید؟</a>
+                                    <a href="<?= url('home.forget-password'); ?>">کلمه عبور را فراموش کرده اید؟</a>
                                 </div>
                                 <div class="row">
                                     <div class="form-group col-md-6">

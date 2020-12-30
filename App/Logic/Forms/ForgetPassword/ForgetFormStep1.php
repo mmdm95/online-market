@@ -60,7 +60,12 @@ class ForgetFormStep1 implements IPageForm
             'active' => DB_YES,
         ]);
         if (0 === $hasActiveUsername) {
-            $validator->setError('inp-forget-mobile', 'این شماره موبایل وجود ندارد!');
+            $validator->setStatus(false)->setError('inp-forget-mobile', 'این شماره موبایل وجود ندارد!');
+        }
+
+        // to reset form values and not set them again
+        if ($validator->getStatus()) {
+            $validator->resetBagValues();
         }
 
         return [
@@ -88,21 +93,25 @@ class ForgetFormStep1 implements IPageForm
          */
         $userModel = container()->get(UserModel::class);
 
-        $res = false;
-        $username = input()->post('inp-forget-mobile', '')->getValue();
-        if (!empty($username)) {
-            $code = StringUtil::randomString(6, StringUtil::RS_NUMBER);
-            // insert to database
-            $res = $userModel->update([
-                'forget_password_code' => $code,
-                'activate_code_request_free_at' => time() + TIME_ACTIVATE_CODE,
-            ], 'username=:username', [
-                'username' => $username
-            ]);
+        try {
+            $res = false;
+            $username = input()->post('inp-forget-mobile', '')->getValue();
+            if (!empty($username)) {
+                $code = StringUtil::randomString(6, StringUtil::RS_NUMBER);
+                // insert to database
+                $res = $userModel->update([
+                    'forget_password_code' => $code,
+                    'activate_code_request_free_at' => time() + TIME_ACTIVATE_CODE,
+                ], 'username=:username', [
+                    'username' => $username
+                ]);
 
-            if ($res) {
-                session()->setFlash('forget.code', $code);
+                if ($res) {
+                    session()->setFlash('forget.code', $code);
+                }
             }
+        } catch (\Exception $e) {
+            return false;
         }
 
         return $res;

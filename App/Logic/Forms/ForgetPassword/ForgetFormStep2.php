@@ -52,7 +52,12 @@ class ForgetFormStep2 implements IPageForm
             'username=:u_name',
             ['u_name' => session()->getFlash('forget.username', '', false)]);
         if (input()->post('inp-forget-code', null)->getValue() !== $code['forget_password_code'] ?? '') {
-            $validator->setError('inp-forget-code', 'کد وارد شده صحیح نمی‌باشد.');
+            $validator->setStatus(false)->setError('inp-forget-code', 'کد وارد شده صحیح نمی‌باشد.');
+        }
+
+        // to reset form values and not set them again
+        if ($validator->getStatus()) {
+            $validator->resetBagValues();
         }
 
         return [

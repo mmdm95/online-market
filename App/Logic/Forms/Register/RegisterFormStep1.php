@@ -49,6 +49,11 @@ class RegisterFormStep1 implements IPageForm
             ->stopValidationAfterFirstError(true)
             ->persianMobile('{alias} ' . 'نامعتبر است.');
 
+        // to reset form values and not set them again
+        if ($validator->getStatus()) {
+            $validator->resetBagValues();
+        }
+
         /**
          * @var UserModel $userModel
          */

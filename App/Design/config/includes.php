@@ -905,7 +905,7 @@ return [
                 ],
                 [
                     'url' => url('admin.user.view'),
-                    'text' => 'کاربران',
+                    'text' => 'مشاهده کاربران',
                     'is_active' => false,
                 ],
                 [
@@ -931,7 +931,7 @@ return [
                 ],
                 [
                     'url' => url('admin.user.view'),
-                    'text' => 'کاربران',
+                    'text' => 'مشاهده کاربران',
                     'is_active' => false,
                 ],
                 [
@@ -957,7 +957,7 @@ return [
                 ],
                 [
                     'url' => url('admin.user.view'),
-                    'text' => 'مدیریت کاربران',
+                    'text' => 'مشاهده کاربران',
                     'is_active' => false,
                 ],
                 [
@@ -1616,7 +1616,6 @@ return [
                     'is_active' => true,
                 ],
             ],
-
         ],
         'view/order/view' => [
             'title' => title_concat(\config()->get('settings.title.value'), 'لیست سفارشات'),
@@ -1639,7 +1638,6 @@ return [
                     'is_active' => true,
                 ],
             ],
-
         ],
         'view/order/order-detail' => [
             'title' => title_concat(\config()->get('settings.title.value'), 'جزئیات سفارش'),
@@ -1667,7 +1665,6 @@ return [
                     'is_active' => true,
                 ],
             ],
-
         ],
         'view/order/badges' => [
             'title' => title_concat(\config()->get('settings.title.value'), 'وضعیت سفارش'),
@@ -1690,7 +1687,6 @@ return [
                     'is_active' => true,
                 ],
             ],
-
         ],
         'view/order/return-order' => [
             'title' => title_concat(\config()->get('settings.title.value'), 'سفارشات مرجوعی'),
@@ -1713,7 +1709,6 @@ return [
                     'is_active' => true,
                 ],
             ],
-
         ],
         'view/order/return-order-detail' => [
             'title' => title_concat(\config()->get('settings.title.value'), 'سفارشات مرجوعی'),
@@ -1741,7 +1736,6 @@ return [
                     'is_active' => true,
                 ],
             ],
-
         ],
         'view/setting' => [
             'title' => title_concat(\config()->get('settings.title.value'), 'تنظیمات سایت'),
@@ -1764,7 +1758,6 @@ return [
                     'is_active' => true,
                 ],
             ],
-
         ],
         'view/file-manager/index' => [
             'title' => title_concat(\config()->get('settings.title.value'), 'مدیریت فایل‌ها'),

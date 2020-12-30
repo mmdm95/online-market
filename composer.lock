@@ -805,16 +805,16 @@
         },
         {
             "name": "mmdm/sim-form",
-            "version": "v0.1.12",
+            "version": "v0.1.19",
             "source": {
                 "type": "git",
                 "url": "https://github.com/mmdm95/sim-form.git",
-                "reference": "2a4f02c2d5411b932a240237ab1c0094c4c1ad9d"
+                "reference": "0bc3341cbb577a8ae02a521bce4102d64e6351ee"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mmdm95/sim-form/zipball/2a4f02c2d5411b932a240237ab1c0094c4c1ad9d",
-                "reference": "2a4f02c2d5411b932a240237ab1c0094c4c1ad9d",
+                "url": "https://api.github.com/repos/mmdm95/sim-form/zipball/0bc3341cbb577a8ae02a521bce4102d64e6351ee",
+                "reference": "0bc3341cbb577a8ae02a521bce4102d64e6351ee",
                 "shasum": ""
             },
             "require": {
@@ -838,7 +838,7 @@
                 }
             ],
             "description": "A simple yet nice form library",
-            "time": "2020-12-22T02:07:22+00:00"
+            "time": "2020-12-29T20:44:42+00:00"
         },
         {
             "name": "mmdm/sim-hit-counter",

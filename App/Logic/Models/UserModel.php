@@ -3,6 +3,7 @@
 namespace App\Logic\Models;
 
 use Aura\SqlQuery\Exception as AuraException;
+use Pecee\Http\Input\InputItem;
 use Sim\Auth\DBAuth as Auth;
 use Sim\Auth\Exceptions\IncorrectPasswordException;
 use Sim\Auth\Exceptions\InvalidUserException;
@@ -99,10 +100,15 @@ class UserModel extends BaseModel
          */
         $roleModel = container()->get(RoleModel::class);
 
-        $res2 = true;
+        $res2 = false;
         foreach ($roles as $role) {
+            $tmpRole = $role;
+            if ($role instanceof inputItem) {
+                $tmpRole = $role->getValue();
+            }
+
             // get role id
-            $roleId = $roleModel->getIDFromRoleName($role);
+            $roleId = $roleModel->getIDFromRoleName($tmpRole);
 
             // if there is no role with specific id
             if (empty($roleId)) {
@@ -128,9 +134,7 @@ class UserModel extends BaseModel
             }
         }
 
-        // get username from user id
-        $username = $this->getUsernameFromID($userId);
-
+        $username = $user_info['username'] ?? null;
         if (empty($username)) {
             $this->db->rollBack();
             return false;
@@ -172,6 +176,11 @@ class UserModel extends BaseModel
     {
         $this->db->beginTransaction();
 
+        if (empty($username)) {
+            $this->db->rollBack();
+            return false;
+        }
+
         // get user id from username
         $userId = $this->getIDFromUsername($username);
         /**
@@ -194,7 +203,44 @@ class UserModel extends BaseModel
             ->where($where)
             ->bindValues($bind_values);
 
-        if ($res) {
+        // get role id
+        $roleId = $roleModel->getIDFromRoleName(ROLE_USER);
+
+        // if there is no role with specific id
+        if (empty($roleId)) {
+            $this->db->rollBack();
+            return false;
+        }
+
+        // add role to user
+        $insert = $this->connector->insert();
+        $insert
+            ->into(self::TBL_USER_ROLE)
+            ->cols([
+                'user_id' => $userId,
+                'role_id' => $roleId
+            ]);
+        $stmt = $this->db->prepare($insert->getStatement());
+        $res2 = $stmt->execute($insert->getBindValues());
+
+        // if role insertion failed
+        if (!$res2) {
+            $this->db->rollBack();
+            return false;
+        }
+
+        // add wallet info
+        $insert = $this->connector->insert();
+        $insert
+            ->into(self::TBL_WALLET)
+            ->cols([
+                'username' => $username,
+                'balance' => 0,
+            ]);
+        $stmt = $this->db->prepare($insert->getStatement());
+        $res3 = $stmt->execute($insert->getBindValues());
+
+        if ($res && $res2 && $res3) {
             $this->db->commit();
             return true;
         } else {
@@ -298,15 +344,17 @@ class UserModel extends BaseModel
     }
 
     /**
+     * Use [u for users], [r for roles], [ur for user_role]
+     *
      * @param array $columns
      * @param string|null $where
      * @param array $bind_values
      * @return array
      */
     public function getSingleUser(
-        array $columns = ['u.*', 'r.id AS role_id', 'r.name AS role_name', 'r.is_admin'],
         ?string $where = null,
-        array $bind_values = []
+        array $bind_values = [],
+        array $columns = ['u.*', 'r.id AS role_id', 'r.name AS role_name', 'r.is_admin']
     ): array
     {
         $res = $this->getUsers($columns, $where, $bind_values, 1);
