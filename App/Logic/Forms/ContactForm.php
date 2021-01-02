@@ -50,7 +50,7 @@ class ContactForm implements IPageForm
         $validator
             ->setFields('inp-contact-name')
             ->stopValidationAfterFirstError(false)
-            ->required('{alias} ' . 'اجباری می‌باشد.')
+            ->required()
             ->stopValidationAfterFirstError(true)
             ->persianAlpha('{alias} ' . 'باید از حروف فارسی باشد.')
             ->lessThanEqualLength(30, '{alias} ' . 'باید کمتر از' . ' {max} ' . 'کاراکتر باشد.');
@@ -58,21 +58,21 @@ class ContactForm implements IPageForm
         $validator
             ->setFields('inp-contact-email')
             ->stopValidationAfterFirstError(false)
-            ->required('{alias} ' . 'اجباری می‌باشد.')
+            ->required()
             ->stopValidationAfterFirstError(true)
             ->email('{alias} ' . 'وارد شده نامعتبر است.');
         // mobile
         $validator
             ->setFields('inp-contact-mobile')
             ->stopValidationAfterFirstError(false)
-            ->required('{alias} ' . 'اجباری می‌باشد.')
+            ->required()
             ->stopValidationAfterFirstError(true)
             ->persianMobile('{alias} ' . 'نامعتبر است.');
         // subject
         $validator
             ->setFields('inp-contact-subject')
             ->stopValidationAfterFirstError(false)
-            ->required('{alias} ' . 'اجباری می‌باشد.')
+            ->required()
             ->stopValidationAfterFirstError(true)
             ->persianAlpha('{alias} ' . 'باید از حروف فارسی باشد.')
             ->lessThanEqualLength(250, '{alias} ' . 'باید کمتر از' . ' {max} ' . 'کاراکتر باشد.');
@@ -80,7 +80,7 @@ class ContactForm implements IPageForm
         $validator
             ->setFields('inp-contact-message')
             ->stopValidationAfterFirstError(false)
-            ->required('{alias} ' . 'اجباری می‌باشد.')
+            ->required()
             ->stopValidationAfterFirstError(true);
 
         // to reset form values and not set them again

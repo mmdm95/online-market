@@ -1,4 +1,4 @@
-<div class="navbar navbar-expand-md navbar-dark">
+<div class="navbar navbar-expand-md navbar-dark bg-indigo-800">
     <div class="navbar-brand">
         <a href="<?= url('home.index'); ?>" target="_blank" class="d-inline-block">
             <img src="<?= url('image.show') . config()->get('settings.logo_light.value'); ?>"

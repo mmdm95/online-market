@@ -39,7 +39,7 @@ class NewsletterForm implements IPageForm
         $validator
             ->setFields('inp-newsletter-mobile')
             ->stopValidationAfterFirstError(false)
-            ->required('{alias} ' . 'اجباری می‌باشد.')
+            ->required()
             ->stopValidationAfterFirstError(true)
             ->persianMobile('{alias} ' . 'نامعتبر است.');
 

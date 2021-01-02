@@ -83,6 +83,9 @@ return [
      */
     'desktop' => [
         'common' => [
+            /******************************
+             ************ User ************
+             *****************************/
             'default' => [
                 'js' => [
                     'top' => [
@@ -241,6 +244,10 @@ return [
                     ],
                 ],
             ],
+
+            /******************************
+             *********** Admin ************
+             *****************************/
             'admin-base' => [
                 'js' => [
                     'top' => [
@@ -904,7 +911,7 @@ return [
                     'is_active' => false,
                 ],
                 [
-                    'url' => url('admin.user.view'),
+                    'url' => url('admin.user.view', ''),
                     'text' => 'مشاهده کاربران',
                     'is_active' => false,
                 ],
@@ -930,7 +937,7 @@ return [
                     'is_active' => false,
                 ],
                 [
-                    'url' => url('admin.user.view'),
+                    'url' => url('admin.user.view', ''),
                     'text' => 'مشاهده کاربران',
                     'is_active' => false,
                 ],
@@ -944,6 +951,7 @@ return [
             'title' => title_concat(\config()->get('settings.title.value'), 'لیست کاربران سایت'),
             'common' => [
                 'admin-base',
+                'admin-form',
                 'admin-table',
                 'admin'
             ],
@@ -956,7 +964,7 @@ return [
                     'is_active' => false,
                 ],
                 [
-                    'url' => url('admin.user.view'),
+                    'url' => url('admin.user.view', ''),
                     'text' => 'مشاهده کاربران',
                     'is_active' => false,
                 ],
@@ -1268,6 +1276,84 @@ return [
                 ],
             ],
         ],
+        'view/blog/add' => [
+            'title' => title_concat(\config()->get('settings.title.value'), 'افزودن مطلب'),
+            'common' => [
+                'admin-base',
+                'admin-form',
+                'admin'
+            ],
+            'sub_title' => 'افزودن مطلب',
+            'breadcrumb' => [
+                [
+                    'url' => url('admin.index'),
+                    'icon' => 'icon-home2',
+                    'text' => 'خانه',
+                    'is_active' => false,
+                ],
+                [
+                    'url' => url('admin.blog.view', ''),
+                    'text' => 'مطلب',
+                    'is_active' => false,
+                ],
+                [
+                    'text' => 'افزودن مطلب',
+                    'is_active' => true,
+                ],
+            ],
+        ],
+        'view/blog/edit' => [
+            'title' => title_concat(\config()->get('settings.title.value'), 'ویرایش مطلب'),
+            'common' => [
+                'admin-base',
+                'admin-form',
+                'admin'
+            ],
+            'sub_title' => 'ویرایش مطلب',
+            'breadcrumb' => [
+                [
+                    'url' => url('admin.index'),
+                    'icon' => 'icon-home2',
+                    'text' => 'خانه',
+                    'is_active' => false,
+                ],
+                [
+                    'url' => url('admin.blog.view', ''),
+                    'text' => 'مطلب',
+                    'is_active' => false,
+                ],
+                [
+                    'text' => 'ویرایش مطلب',
+                    'is_active' => true,
+                ],
+            ],
+        ],
+        'view/blog/view' => [
+            'title' => title_concat(\config()->get('settings.title.value'), 'مشاهده مطالب'),
+            'common' => [
+                'admin-base',
+                'admin-table',
+                'admin'
+            ],
+            'sub_title' => 'مدیریت مطلب',
+            'breadcrumb' => [
+                [
+                    'url' => url('admin.index'),
+                    'icon' => 'icon-home2',
+                    'text' => 'خانه',
+                    'is_active' => false,
+                ],
+                [
+                    'url' => url('admin.blog.view', ''),
+                    'text' => 'مطلب',
+                    'is_active' => false,
+                ],
+                [
+                    'text' => 'مطالب',
+                    'is_active' => true,
+                ],
+            ],
+        ],
         'view/blog/category/add' => [
             'title' => title_concat(\config()->get('settings.title.value'), 'افزودن دسته'),
             'common' => [
@@ -1285,7 +1371,7 @@ return [
                 ],
                 [
                     'url' => url('admin.blog.view'),
-                    'text' => 'وبلاگ',
+                    'text' => 'مطلب',
                     'is_active' => false,
                 ],
                 [
@@ -1316,7 +1402,7 @@ return [
                 ],
                 [
                     'url' => url('admin.blog.view'),
-                    'text' => 'وبلاگ',
+                    'text' => 'مطلب',
                     'is_active' => false,
                 ],
                 [
@@ -1347,7 +1433,7 @@ return [
                 ],
                 [
                     'url' => url('admin.blog.view'),
-                    'text' => 'وبلاگ',
+                    'text' => 'مطلب',
                     'is_active' => false,
                 ],
                 [
@@ -1656,7 +1742,7 @@ return [
                     'is_active' => false,
                 ],
                 [
-                    'url' => url('admin.order.view'),
+                    'url' => url('admin.order.view', ''),
                     'text' => 'مدیرت سفارشات',
                     'is_active' => false,
                 ],

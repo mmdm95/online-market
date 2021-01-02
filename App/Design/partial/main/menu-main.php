@@ -126,7 +126,6 @@
                                                     <a class="dropdown-item nav-link <?= $hasChildren ? 'dropdown-toggler' : 'nav_item'; ?>"
                                                        href="#"
                                                         <?= $hasChildren ? 'data-toggle="dropdown"' : ''; ?>>
-                                                        <i class="flaticon-friendship"></i>
                                                         <span><?= $m['name']; ?></span>
                                                     </a>
 

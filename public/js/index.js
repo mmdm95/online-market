@@ -294,7 +294,6 @@
         //---------------------------------------------------------------
         // NEWSLETTER FORM
         //---------------------------------------------------------------
-
         shop.forms.submitForm('newsletter', constraints.newsletter, function (values) {
             // do ajax
             if (createLoader) {

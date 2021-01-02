@@ -16,7 +16,7 @@
                                        style="-webkit-user-select: none;-moz-user-select: none;-ms-user-select: none;user-select: none;">
                                     فایلی انتخاب نشده است
                                 </label>
-                                <label for="file-uploader" class="action btn bg-pink ml-2"
+                                <label for="file-uploader" class="action btn bg-pink text-white ml-2"
                                        style="-webkit-user-select: none;-moz-user-select: none;-ms-user-select: none;user-select: none;">
                                     انتخاب فایل
                                 </label>
@@ -105,7 +105,7 @@
             <!-- Clickable menu -->
             <ul class="fab-menu fab-menu-fixed fab-menu-bottom-right" data-fab-toggle="click">
                 <li>
-                    <a class="fab-menu-btn btn bg-dark btn-float rounded-round btn-icon">
+                    <a href="javascript:void(0);" class="fab-menu-btn btn btn-dark btn-float rounded-round btn-icon">
                         <i class="fab-icon-open icon-menu"></i>
                         <i class="fab-icon-close icon-cross2"></i>
                     </a>

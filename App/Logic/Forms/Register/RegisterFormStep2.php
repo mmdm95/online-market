@@ -38,7 +38,7 @@ class RegisterFormStep2 implements IPageForm
         $validator
             ->setFields('inp-register-code')
             ->stopValidationAfterFirstError(false)
-            ->required('{alias} ' . 'اجباری می‌باشد.')
+            ->required()
             ->stopValidationAfterFirstError(true);
 
         // validate code

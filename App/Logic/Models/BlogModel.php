@@ -19,6 +19,7 @@ class BlogModel extends BaseModel
      * @param array $bind_values
      * @param array $order_by
      * @param int|null $limit
+     * @param int $offset
      * @return array
      */
     public function getBlog(
@@ -34,13 +35,15 @@ class BlogModel extends BaseModel
         ?string $where = null,
         array $bind_values = [],
         array $order_by = ['b.id DESC'],
-        int $limit = null
+        int $limit = null,
+        int $offset = 0
     ): array
     {
         $select = $this->connector->select();
         $select
             ->from($this->table . ' AS b')
             ->cols($columns)
+            ->offset($offset)
             ->orderBy($order_by)
             ->groupBy(['b.id']);
 

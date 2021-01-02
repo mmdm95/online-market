@@ -114,19 +114,25 @@ $validator = form_validator();
                     <div class="col-lg-12">
                         <fieldset>
                             <legend class="font-weight-semibold"><i class="icon-reading mr-2"></i>
-                                اطلاعات شخصی (اختیاری)
+                                اطلاعات شخصی
                             </legend>
 
                             <div class="row">
                                 <div class="form-group col-lg-6">
-                                    <label>نام:</label>
+                                    <label>
+                                        <i class="text-danger">*</i>
+                                        نام:
+                                    </label>
                                     <input type="text" class="form-control" placeholder="فقط حروف فارسی"
                                            name="inp-user-first-name"
                                            value="<?= $validator->setInput('inp-user-first-name'); ?>">
                                 </div>
 
                                 <div class="form-group col-lg-6">
-                                    <label>نام خانوادگی:</label>
+                                    <label>
+                                        <i class="text-danger">*</i>
+                                        نام خانوادگی:
+                                    </label>
                                     <input type="text" class="form-control" placeholder="فقط حروف فارسی"
                                            name="inp-user-last-name"
                                            value="<?= $validator->setInput('inp-user-last-name'); ?>">

@@ -112,6 +112,8 @@ window.MyGlobalVariables = {
         pages: {
             get: {
                 faq: '/ajax/faq/get',
+                city: '/ajax/cities',
+                province: '/ajax/provinces',
             },
             add: {
                 contact: '/ajax/contact/add',
@@ -506,44 +508,6 @@ window.MyGlobalVariables = {
                     });
             },
 
-            /**
-             * @param url
-             * @param [successCallback]
-             * @param [options]
-             * @param [showError]
-             * @param [errorCallback]
-             */
-            deleteItem: function (url, successCallback, options, showError, errorCallback) {
-                var _ = this;
-                options = typeof options === typeof {} ? options : {};
-                if (!window.TheCore.isFunction(successCallback)) {
-                    successCallback = function () {
-                        _.toasts.toast(this.data, {
-                            type: 'success',
-                        });
-                    };
-                }
-
-                _.toasts.confirm(MyGlobalVariables.messages.confirm, function () {
-                    _.request(url, 'delete', successCallback, options, showError, errorCallback);
-                });
-            },
-
-            /**
-             * @param name
-             * @param successCallback
-             */
-            captchaReload: function (name, successCallback) {
-                var _ = this;
-                name = name && window.TheCore.isString(name) ? name : '';
-
-                _.request(window.MyGlobalVariables.url.captcha, 'get', successCallback, {
-                    params: {
-                        name: name,
-                    },
-                }, true);
-            },
-
             forms: {
                 submitForm: function (formKey, constraints, validationSuccessCallback, validationErrorCallback, check) {
                     var
@@ -606,6 +570,119 @@ window.MyGlobalVariables = {
                         timeout: null,
                     });
                 },
+            },
+
+            /**
+             * @param url
+             * @param [successCallback]
+             * @param [options]
+             * @param [showError]
+             * @param [errorCallback]
+             */
+            deleteItem: function (url, successCallback, options, showError, errorCallback) {
+                var _ = this;
+                options = typeof options === typeof {} ? options : {};
+                if (!window.TheCore.isFunction(successCallback)) {
+                    successCallback = function () {
+                        _.toasts.toast(this.data, {
+                            type: 'success',
+                        });
+                    };
+                }
+
+                _.toasts.confirm(MyGlobalVariables.messages.confirm, function () {
+                    _.request(url, 'delete', successCallback, options, showError, errorCallback);
+                });
+            },
+
+            /**
+             * @param name
+             * @param successCallback
+             */
+            captchaReload: function (name, successCallback) {
+                var _ = this;
+                name = name && window.TheCore.isString(name) ? name : '';
+
+                _.request(window.MyGlobalVariables.url.captcha, 'get', successCallback, {
+                    params: {
+                        name: name,
+                    },
+                }, true);
+            },
+
+            /**
+             * @param successCallback
+             */
+            getProvinces: function (successCallback) {
+                var _ = this;
+                _.request(window.MyGlobalVariables.url.pages.get.province, 'get', successCallback, null, false);
+            },
+
+            /**
+             * @param province_id
+             * @param successCallback
+             */
+            getCities: function (province_id, successCallback) {
+                var _ = this;
+                _.request(window.MyGlobalVariables.url.pages.get.city + '/' + province_id, 'get', successCallback, null, false);
+            },
+
+            loadProvinces: function (provincesSelect) {
+                this.getProvinces(function () {
+                    var _, $this, newOption, i, len;
+                    var currProvince;
+                    _ = this;
+                    if (provincesSelect.length) {
+                        provincesSelect.each(function () {
+                            $this = $(this);
+                            currProvince = provincesSelect.attr('data-current-province');
+                            currProvince = currProvince && !isNaN(parseInt(currProvince, 10)) ? parseInt(currProvince, 10) : null;
+                            provincesSelect.find('.__removable_province_option').remove();
+                            len = _.data.length;
+                            // append all items to select
+                            for (i = 0; i < len; ++i) {
+                                newOption = '<option class="__removable_province_option" ' + (currProvince && currProvince == _.data[i].id ? 'selected="selected" ' : '') + 'value="' + _.data[i].id + '">' + _.data[i].name + '</option>';
+                                provincesSelect.append(newOption);
+                            }
+                            // refresh select plugin if it's registered on element
+                            if ($.fn.select2 && provincesSelect.data('select2')) {
+                                provincesSelect.val(null).trigger('change');
+                            } else if ($.fn.selectric && provincesSelect.data('selectric')) {
+                                provincesSelect.selectric('refresh');
+                            }
+                            // trigger on change if there is a current province id
+                            if (currProvince) {
+                                provincesSelect.trigger('change');
+                            }
+                        });
+                    }
+                });
+            },
+
+            loadCities: function (citiesSelect, id) {
+                this.getCities(id, function () {
+                    var _ = this, currCity, newOption;
+                    var i, len;
+                    if (citiesSelect && citiesSelect.length) {
+                        citiesSelect.each(function () {
+                            currCity = citiesSelect.attr('data-current-city');
+                            currCity = currCity && !isNaN(parseInt(currCity, 10)) ? parseInt(currCity, 10) : null;
+                            citiesSelect.find('.__removable_city_option').remove();
+                            len = _.data.length;
+                            // append all items to select
+                            for (i = 0; i < len; ++i) {
+                                newOption = '<option class="__removable_city_option" ' + (currCity && currCity == _.data[i].id ? 'selected="selected" ' : '') + 'value="' + _.data[i].id + '">' + _.data[i].name + '</option>';
+                                citiesSelect.append(newOption);
+                            }
+                            // refresh select plugin if it's registered on element
+                            if ($.fn.select2 && citiesSelect.data('select2')) {
+                                citiesSelect.val(null).trigger('change');
+                            } else if ($.fn.selectric && citiesSelect.data('selectric')) {
+                                citiesSelect.selectric('refresh');
+                            }
+                        });
+                    }
+                });
             }
         });
 
@@ -617,8 +694,11 @@ window.MyGlobalVariables = {
             shop = new window.TheShopBase(),
             variables = window.MyGlobalVariables,
             core = window.TheCore,
+            //-----
             $this,
-            captchaReloadBtn = $(variables.elements.captcha.refreshBtn);
+            captchaReloadBtn = $(variables.elements.captcha.refreshBtn),
+            provincesSelect = $('.city-loader-select'),
+            citiesSelect = $(provincesSelect.attr('data-city-select-target'));
 
         //---------------------------------------------------------------
         // CAPTCHA RELOAD
@@ -638,5 +718,22 @@ window.MyGlobalVariables = {
         if ($(variables.elements.captcha.mainContainer).length) {
             captchaReloadBtn.trigger('click' + variables.namespace);
         }
+
+        //---------------------------------------------------------------
+        // LOAD CITIES ACCORDING TO PROVINCES
+        //---------------------------------------------------------------
+        provincesSelect.on('change' + variables.namespace, function () {
+            var id;
+            $this = $(this);
+            id = $this.find(':selected').val();
+            if (id) {
+                shop.loadCities(citiesSelect, id);
+            }
+        });
+
+        //---------------------------------------------------------------
+        // LOAD PROVINCES AND SELECT CURRENT IF NEEDED
+        //---------------------------------------------------------------
+        shop.loadProvinces(provincesSelect);
     });
 })(jQuery);

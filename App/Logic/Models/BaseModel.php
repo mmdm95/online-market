@@ -86,6 +86,7 @@ abstract class BaseModel
      * @param array $bind_values
      * @param array $order_by
      * @param int|null $limit
+     * @param int $offset
      * @return array
      */
     public function get(
@@ -93,13 +94,15 @@ abstract class BaseModel
         ?string $where = null,
         array $bind_values = [],
         array $order_by = ['id DESC'],
-        int $limit = null
+        int $limit = null,
+        int $offset = 0
     ): array
     {
         $select = $this->connector->select();
         $select
             ->from($this->table)
             ->cols($columns)
+            ->offset($offset)
             ->orderBy($order_by);
 
         if (!empty($where)) {

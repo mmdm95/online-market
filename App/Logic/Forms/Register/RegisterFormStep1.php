@@ -45,7 +45,7 @@ class RegisterFormStep1 implements IPageForm
         $validator
             ->setFields('inp-register-username')
             ->stopValidationAfterFirstError(false)
-            ->required('{alias} ' . 'اجباری می‌باشد.')
+            ->required()
             ->stopValidationAfterFirstError(true)
             ->persianMobile('{alias} ' . 'نامعتبر است.');
 

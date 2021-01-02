@@ -20,14 +20,14 @@ use Sim\I18n\ISOLanguageCodes;
  *     1.2.5.0 instead of 1.2.5-a
  *     1.2.5.0.1 instead of 1.2.5-a1 (I'm not sure)
  */
-defined("APP_VERSION") OR define("APP_VERSION", "0.1.9");
+defined("APP_VERSION") OR define("APP_VERSION", "0.1.10");
 
 /***************************************
  * You can add your constants here
  ***************************************/
 
 // default language
-defined("APP_LANGUAGE") OR define("APP_LANGUAGE", ISOLanguageCodes::LANGUAGE_ENGLISH);
+defined("APP_LANGUAGE") OR define("APP_LANGUAGE", ISOLanguageCodes::LANGUAGE_PERSIAN_FARSI);
 
 // some defaults for routes
 defined("NOT_FOUND_ADMIN") OR define("NOT_FOUND_ADMIN", 'admin.page.notfound');
@@ -46,11 +46,6 @@ defined("TITLE_DELIMITER") OR define("TITLE_DELIMITER", ' | ');
 // publish or true in database
 defined("DB_YES") OR define("DB_YES", 1);
 defined("DB_NO") OR define("DB_NO", 0);
-
-// comment statuses
-defined("COMMENT_STATUS_NOT_READ") OR define("COMMENT_STATUS_NOT_READ", 0);
-defined("COMMENT_STATUS_ACCEPT") OR define("COMMENT_STATUS_ACCEPT", 1);
-defined("COMMENT_STATUS_REJECT") OR define("COMMENT_STATUS_REJECT", 2);
 
 // default placeholders
 defined("PLACEHOLDER_USER_IMAGE") OR define("PLACEHOLDER_USER_IMAGE", __DIR__ . '/../public/image/avatars/avatars-default.png');
@@ -84,6 +79,25 @@ defined('SMS_REPLACEMENTS') OR define('SMS_REPLACEMENTS', [
     'balance' => '@balance@',
 ]);
 
+// order payment statuses
+defined("PAYMENT_STATUS_SUCCESS") OR define("PAYMENT_STATUS_SUCCESS", 1);
+defined("PAYMENT_STATUS_FAILED") OR define("PAYMENT_STATUS_FAILED", 0);
+defined("PAYMENT_STATUS_WAIT_VERIFY") OR define("PAYMENT_STATUS_WAIT_VERIFY", -7);
+defined("PAYMENT_STATUS_WAIT") OR define("PAYMENT_STATUS_WAIT", -8);
+defined("PAYMENT_STATUS_NOT_PAYED") OR define("PAYMENT_STATUS_NOT_PAYED", -9);
+defined('PAYMENT_STATUSES') OR define('PAYMENT_STATUSES', [
+    PAYMENT_STATUS_SUCCESS => 'پرداخت شده',
+    PAYMENT_STATUS_FAILED => 'پرداخت ناموفق',
+    PAYMENT_STATUS_WAIT_VERIFY => 'در انتظار تایید',
+    PAYMENT_STATUS_WAIT => 'در انتظار پرداخت',
+    PAYMENT_STATUS_NOT_PAYED => 'پرداخت نشده',
+]);
+
+// comment statuses
+defined("COMMENT_STATUS_NOT_READ") OR define("COMMENT_STATUS_NOT_READ", 0);
+defined("COMMENT_STATUS_ACCEPT") OR define("COMMENT_STATUS_ACCEPT", 1);
+defined("COMMENT_STATUS_REJECT") OR define("COMMENT_STATUS_REJECT", 2);
+
 // contact us statuses
 defined("CONTACT_STATUS_UNREAD") OR define("CONTACT_STATUS_UNREAD", 1);
 defined("CONTACT_STATUS_READ") OR define("CONTACT_STATUS_READ", 2);
@@ -112,3 +126,6 @@ defined("PRODUCT_ORDERINGS") OR define("PRODUCT_ORDERINGS", [
     4 => 'ارزان ترین',
     7 => 'گران ترین',
 ]);
+
+// maximum store for addresses
+defined("ADDRESS_MAX_COUNT") OR define("ADDRESS_MAX_COUNT", 10);

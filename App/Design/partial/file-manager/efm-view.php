@@ -9,7 +9,7 @@
                            style="-webkit-user-select: none;-moz-user-select: none;-ms-user-select: none;user-select: none;">
                         فایلی انتخاب نشده است
                     </label>
-                    <label for="file-uploader" class="action btn bg-pink ml-2"
+                    <label for="file-uploader" class="action btn bg-pink text-white ml-2"
                            style="-webkit-user-select: none;-moz-user-select: none;-ms-user-select: none;user-select: none;">
                         انتخاب فایل
                     </label>

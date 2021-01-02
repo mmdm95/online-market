@@ -9,8 +9,10 @@ use App\Logic\Forms\ContactForm;
 use App\Logic\Handlers\GeneralAjaxFormHandler;
 use App\Logic\Handlers\GeneralFormHandler;
 use App\Logic\Handlers\ResourceHandler;
+use App\Logic\Models\CityModel;
 use App\Logic\Models\FAQModel;
 use App\Logic\Models\OurTeamModel;
+use App\Logic\Models\ProvinceModel;
 use App\Logic\Models\StaticPageModel;
 use Jenssegers\Agent\Agent;
 use Sim\Container\Exceptions\MethodNotFoundException;
@@ -210,6 +212,82 @@ class PageController extends AbstractHomeController
     public function removeNewsletter()
     {
         // implement later if needed
+    }
+
+    /**
+     * @throws MethodNotFoundException
+     * @throws ParameterHasNoDefaultValueException
+     * @throws ServiceNotFoundException
+     * @throws ServiceNotInstantiableException
+     * @throws \ReflectionException
+     */
+    public function getProvinces()
+    {
+        $resourceHandler = new ResourceHandler();
+
+        /**
+         * @var Agent $agent
+         */
+        $agent = container()->get(Agent::class);
+        if (!$agent->isRobot()) {
+            /**
+             * @var ProvinceModel $provinceModel
+             */
+            $provinceModel = container()->get(ProvinceModel::class);
+            $resourceHandler
+                ->type(RESPONSE_TYPE_SUCCESS)
+                ->data($provinceModel->get([
+                    'id', 'name'
+                ], 'is_deleted=:del', [
+                    'del' => DB_NO,
+                ]));
+        } else {
+            response()->httpCode(403);
+            $resourceHandler
+                ->type(RESPONSE_TYPE_ERROR)
+                ->errorMessage('خطا در ارتباط با سرور، لطفا دوباره تلاش کنید.');
+        }
+
+        response()->json($resourceHandler->getReturnData());
+    }
+
+    /**
+     * @param $province_id
+     * @throws MethodNotFoundException
+     * @throws ParameterHasNoDefaultValueException
+     * @throws ServiceNotFoundException
+     * @throws ServiceNotInstantiableException
+     * @throws \ReflectionException
+     */
+    public function getCities($province_id)
+    {
+        $resourceHandler = new ResourceHandler();
+
+        /**
+         * @var Agent $agent
+         */
+        $agent = container()->get(Agent::class);
+        if (!$agent->isRobot()) {
+            /**
+             * @var CityModel $cityModel
+             */
+            $cityModel = container()->get(CityModel::class);
+            $resourceHandler
+                ->type(RESPONSE_TYPE_SUCCESS)
+                ->data($cityModel->get([
+                    'id', 'name'
+                ], 'province_id=:pId AND is_deleted=:del', [
+                    'pId' => $province_id,
+                    'del' => DB_NO,
+                ]));
+        } else {
+            response()->httpCode(403);
+            $resourceHandler
+                ->type(RESPONSE_TYPE_ERROR)
+                ->errorMessage('خطا در ارتباط با سرور، لطفا دوباره تلاش کنید.');
+        }
+
+        response()->json($resourceHandler->getReturnData());
     }
 
     /**

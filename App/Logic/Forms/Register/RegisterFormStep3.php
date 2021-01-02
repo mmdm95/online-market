@@ -42,7 +42,7 @@ class RegisterFormStep3 implements IPageForm
         $validator
             ->setFields('inp-register-password')
             ->stopValidationAfterFirstError(false)
-            ->required('{alias} ' . 'اجباری می‌باشد.')
+            ->required()
             ->stopValidationAfterFirstError(true)
             ->password(PasswordValidation::STRENGTH_NORMAL, '{alias} ' . 'باید شامل حروف و اعداد باشد.')
             ->greaterThanEqualLength(8, '{alias} ' . 'باید بیشتر از' . ' {min} ' . 'کاراکتر باشد.')

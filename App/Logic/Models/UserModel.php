@@ -371,30 +371,7 @@ class UserModel extends BaseModel
      */
     public function getUsersCount(?string $where = null, array $bindParams = []): int
     {
-        $select = $this->connector->select();
-        $select
-            ->cols(['COUNT(DISTINCT(u.id)) AS count'])
-            ->from($this->table . ' AS u');
-
-        try {
-            $select->leftJoin(
-                self::TBL_USER_ROLE . ' AS ur',
-                'ur.user_id=u.id'
-            )->leftJoin(
-                self::TBL_ROLES . ' AS r',
-                'r.id=ur.role_id'
-            );
-        } catch (AuraException $e) {
-            return 0;
-        }
-
-        if (!empty($where)) {
-            $select
-                ->where($where)
-                ->bindValues($bindParams);
-        }
-
-        $res = $this->db->fetchAll($select->getStatement(), $select->getBindValues());
+        $res = $this->getUsers(['COUNT(DISTINCT(u.id)) AS count'], $where, $bindParams);
         if (count($res)) {
             return (int)$res[0]['count'];
         }
@@ -440,85 +417,6 @@ class UserModel extends BaseModel
         }
 
         return $this->db->fetchAll($select->getStatement(), $select->getBindValues());
-    }
-
-    /**
-     * Use [u_addr for user_address], [p for provinces], [c for cities]
-     *
-     * @param int $user_id
-     * @return array
-     */
-    public function getUserAddresses(int $user_id): array
-    {
-        $select = $this->connector->select();
-        $select
-            ->from(self::TBL_USER_ADDRESS . ' AS u_addr')
-            ->cols(['u_addr.*', 'c.name AS city_name', 'p.name AS province_name'])
-            ->where('u_addr.user_id=:u_id')
-            ->bindValues([
-                'u_id' => $user_id,
-            ])
-            ->orderBy(['u_addr.id DESC']);
-
-        try {
-            $select
-                ->innerJoin(
-                    self::TBL_PROVINCES . ' AS p',
-                    'p.id=u_addr.province_id'
-                )->innerJoin(
-                    self::TBL_CITIES . ' AS c',
-                    'c.id=u_addr.city_id'
-                );
-        } catch (AuraException $e) {
-            return [];
-        }
-
-        return $this->db->fetchAll($select->getStatement(), $select->getBindValues());
-    }
-
-    /**
-     * Use [u_addr for user_address], [p for provinces], [c for cities]
-     *
-     * @param int $addr_id
-     * @param int|null $user_id
-     * @return array
-     */
-    public function getSingleUserAddress(int $addr_id, ?int $user_id = null): array
-    {
-        $select = $this->connector->select();
-        $select
-            ->from(self::TBL_USER_ADDRESS . ' AS u_addr')
-            ->cols(['u_addr.*', 'c.name AS city_name', 'p.name AS province_name'])
-            ->where('u_addr.id=:addr_id')
-            ->bindValues([
-                'addr_id' => $addr_id,
-            ])
-            ->limit(1);
-
-        if (!empty($user_id) && 0 !== $user_id) {
-            $select
-                ->where('u_addr.user_id=:u_id')
-                ->bindValues([
-                    'u_id' => $user_id,
-                ]);
-        }
-
-        try {
-            $select
-                ->innerJoin(
-                    self::TBL_PROVINCES . ' AS p',
-                    'p.id=u_addr.province_id'
-                )->innerJoin(
-                    self::TBL_CITIES . ' AS c',
-                    'c.id=u_addr.city_id'
-                );
-        } catch (AuraException $e) {
-            return [];
-        }
-
-        $res = $this->db->fetchAll($select->getStatement(), $select->getBindValues());
-        if (count($res)) return $res[0];
-        return [];
     }
 
     /**
@@ -571,43 +469,5 @@ class UserModel extends BaseModel
 
         $stmt = $this->db->prepare($deleteOrUpdate->getStatement());
         return $stmt->execute($deleteOrUpdate->getBindValues());
-    }
-
-    /**
-     * @param int $addr_id
-     * @return bool
-     */
-    public function deleteAddress(int $addr_id): bool
-    {
-        $delete = $this->connector->delete();
-        $delete
-            ->from(self::TBL_USER_ADDRESS)
-            ->where('id=:id')
-            ->bindValues([
-                'id' => $addr_id,
-            ]);
-
-        $stmt = $this->db->prepare($delete->getStatement());
-        return $stmt->execute($delete->getBindValues());
-    }
-
-    /**
-     * @param array $data
-     * @param int $addr_id
-     * @return bool
-     */
-    public function updateAddress(array $data, int $addr_id): bool
-    {
-        $update = $this->connector->update();
-        $update
-            ->table(self::TBL_USER_ADDRESS)
-            ->cols($data)
-            ->where('id=:id')
-            ->bindValues([
-                'id' => $addr_id,
-            ]);
-
-        $stmt = $this->db->prepare($update->getStatement());
-        return $stmt->execute($update->getBindValues());
     }
 }

@@ -43,7 +43,7 @@ class CommentForm implements IPageForm
         $validator
             ->setFields('inp-comment-name')
             ->stopValidationAfterFirstError(false)
-            ->required('{alias} ' . 'اجباری می‌باشد.')
+            ->required()
             ->stopValidationAfterFirstError(true)
             ->persianAlpha('{alias} ' . 'باید از حروف فارسی باشد.')
             ->lessThanEqualLength(30, '{alias} ' . 'باید کمتر از' . ' {max} ' . 'کاراکتر باشد.');
@@ -51,7 +51,7 @@ class CommentForm implements IPageForm
         $validator
             ->setFields('inp-comment-message')
             ->stopValidationAfterFirstError(false)
-            ->required('{alias} ' . 'اجباری می‌باشد.')
+            ->required()
             ->stopValidationAfterFirstError(true);
 
         /**

@@ -173,7 +173,6 @@ class DatatableHandler
                 } else {
                     if (!empty($column['db_alias'])) {
                         $row[$column['dt']] = $data[$i][$columns[$j]['db_alias']];
-
                     } else {
                         $row[$column['dt']] = "";
                     }
@@ -200,8 +199,9 @@ class DatatableHandler
             if (empty($columns[$i]['db'])) {
                 continue;
             }
+            $col = $columns[$i]['db'];
             $alias = $columns[$i]['db_alias'] ?? null;
-            $cols[$i] = $columns[$i]['db'] . (isset($alias) && !empty($alias) ? " AS {$alias}" : '');
+            $cols[$i] = $col . (!empty($alias) ? " AS {$alias}" : '');
         }
 
         return $cols;
@@ -217,7 +217,7 @@ class DatatableHandler
         $out = [];
 
         for ($i = 0, $len = count($a); $i < $len; $i++) {
-            if (empty($a[$i][$prop])) {
+            if (!isset($a[$i][$prop]) || empty($a[$i][$prop])) {
                 continue;
             }
             //removing the $out array index confuses the filter method in doing proper binding,

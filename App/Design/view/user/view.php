@@ -14,7 +14,7 @@
                data-ajax-url="<?= url('admin.user.dt.view')->getRelativeUrlTrimmed(); ?>">
             <thead>
             <tr>
-                <th>کد سیستم</th>
+                <th>#</th>
                 <th>نام</th>
                 <th>نام خانوادگی</th>
                 <th>نقش</th>
@@ -26,7 +26,7 @@
             </thead>
             <tfoot>
             <tr>
-                <th>کد سیستم</th>
+                <th>#</th>
                 <th>نام</th>
                 <th>نام خانوادگی</th>
                 <th>نقش</th>

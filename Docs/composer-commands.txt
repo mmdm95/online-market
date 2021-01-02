@@ -1,11 +1,11 @@
 // install a library
-composer require library_name
+composer require [library_name]
 
 // update libraries
 composer update
 
 // update specific library
-composer update library_name
+composer update [library_name]
 
 // create autoloader
 composer dumpautoload

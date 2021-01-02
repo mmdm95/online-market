@@ -14,6 +14,7 @@ use Sim\Container\Exceptions\ServiceNotInstantiableException;
 use Sim\Form\Exceptions\FormException;
 use Sim\Form\FormValue;
 use Sim\Form\Validations\PasswordValidation;
+use voku\helper\AntiXSS;
 
 class EditForm implements IPageForm
 {
@@ -62,8 +63,6 @@ class EditForm implements IPageForm
                 'inp-user-ban-desc',
                 'inp-user-password',
                 'inp-user-email',
-                'inp-user-first-name',
-                'inp-user-last-name',
                 'inp-user-shaba',
             ]);
 
@@ -75,7 +74,7 @@ class EditForm implements IPageForm
         $validator
             ->setFields('inp-user-mobile')
             ->stopValidationAfterFirstError(false)
-            ->required('{alias} ' . 'اجباری می‌باشد.')
+            ->required()
             ->stopValidationAfterFirstError(true)
             ->persianMobile('{alias} ' . 'نامعتبر است.')
             ->custom(function (FormValue $formValue) use ($userModel) {
@@ -89,7 +88,7 @@ class EditForm implements IPageForm
         $validator
             ->setFields('inp-user-email')
             ->stopValidationAfterFirstError(false)
-            ->required('{alias} ' . 'اجباری می‌باشد.')
+            ->required()
             ->stopValidationAfterFirstError(true)
             ->email('{alias} ' . 'وارد شده نامعتبر است.');
         // password
@@ -111,7 +110,7 @@ class EditForm implements IPageForm
         // role
         $validator
             ->setFields('inp-user-role')
-            ->required('{alias} ' . 'اجباری می‌باشد.');
+            ->required();
         // role (continue.)
         $validator
             ->setFields('inp-user-role.*')
@@ -120,7 +119,7 @@ class EditForm implements IPageForm
         $validator
             ->setFields('inp-user-first-name')
             ->stopValidationAfterFirstError(false)
-            ->required('{alias} ' . 'اجباری می‌باشد.')
+            ->required()
             ->stopValidationAfterFirstError(true)
             ->persianAlpha('{alias} ' . 'باید از حروف فارسی باشد.')
             ->lessThanEqualLength(30, '{alias} ' . 'باید کمتر از' . ' {max} ' . 'کاراکتر باشد.');
@@ -128,7 +127,7 @@ class EditForm implements IPageForm
         $validator
             ->setFields('inp-user-last-name')
             ->stopValidationAfterFirstError(false)
-            ->required('{alias} ' . 'اجباری می‌باشد.')
+            ->required()
             ->stopValidationAfterFirstError(true)
             ->persianAlpha('{alias} ' . 'باید از حروف فارسی باشد.')
             ->lessThanEqualLength(30, '{alias} ' . 'باید کمتر از' . ' {max} ' . 'کاراکتر باشد.');
@@ -181,6 +180,10 @@ class EditForm implements IPageForm
          * @var RoleModel $roleModel
          */
         $roleModel = container()->get(RoleModel::class);
+        /**
+         * @var AntiXSS $xss
+         */
+        $xss = container()->get(AntiXSS::class);
 
         try {
             $prevMobile = session()->getFlash('prev-username', '');
@@ -207,16 +210,16 @@ class EditForm implements IPageForm
             if (!count($roles)) return false;
 
             $updateArr = [
-                'username' => $mobile,
-                'first_name' => $firsName ?: null,
-                'last_name' => $lastName ?: null,
-                'shaba_number' => $shaba ?: null,
-                'email' => $email ?: null,
+                'username' => $xss->xss_clean($mobile),
+                'first_name' => $xss->xss_clean($firsName ?: null),
+                'last_name' => $xss->xss_clean($lastName ?: null),
+                'shaba_number' => $xss->xss_clean($shaba ?: null),
+                'email' => $xss->xss_clean($email ?: null),
                 'image' => PLACEHOLDER_USER_IMAGE,
                 'is_activated' => is_value_checked($status) ? DB_YES : DB_NO,
                 'is_login_locked' => is_value_checked($loginStatus) ? DB_YES : DB_NO,
                 'ban' => is_value_checked($banStatus) ? DB_YES : DB_NO,
-                'ban_desc' => $banDesc ?: null,
+                'ban_desc' => $xss->xss_clean($banDesc ?: null),
                 'activated_at' => $activatedAt,
                 'updated_at' => time(),
             ];

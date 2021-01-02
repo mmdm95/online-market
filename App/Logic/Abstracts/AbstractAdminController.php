@@ -33,4 +33,12 @@ abstract class AbstractAdminController extends AbstractController
             ],
         ]);
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function show404(array $arguments = [], ?string $layout = null, string $template = 'error/404'): string
+    {
+        return parent::show404($arguments, $layout, $template);
+    }
 }

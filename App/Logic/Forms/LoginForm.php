@@ -44,14 +44,14 @@ class LoginForm implements IPageForm
         $validator
             ->setFields('inp-login-username')
             ->stopValidationAfterFirstError(false)
-            ->required('{alias} ' . 'اجباری می‌باشد.')
+            ->required()
             ->stopValidationAfterFirstError(true)
             ->persianMobile('{alias} ' . 'نامعتبر است.');
         // password
         $validator
             ->setFields('inp-login-password')
             ->stopValidationAfterFirstError(false)
-            ->required('{alias} ' . 'اجباری می‌باشد.')
+            ->required()
             ->stopValidationAfterFirstError(true);
 
         // validate user status

@@ -13,6 +13,7 @@ use Sim\Container\Exceptions\ServiceNotInstantiableException;
 use Sim\Form\Exceptions\FormException;
 use Sim\Form\FormValue;
 use Sim\Form\Validations\PasswordValidation;
+use voku\helper\AntiXSS;
 
 class AddForm implements IPageForm
 {
@@ -52,15 +53,13 @@ class AddForm implements IPageForm
             ])
             ->setOptionalFields([
                 'inp-user-email',
-                'inp-user-first-name',
-                'inp-user-last-name',
             ]);
 
         // mobile
         $validator
             ->setFields('inp-user-mobile')
             ->stopValidationAfterFirstError(false)
-            ->required('{alias} ' . 'اجباری می‌باشد.')
+            ->required()
             ->stopValidationAfterFirstError(true)
             ->persianMobile('{alias} ' . 'نامعتبر است.')
             ->custom(function (FormValue $formValue) use ($userModel) {
@@ -74,14 +73,14 @@ class AddForm implements IPageForm
         $validator
             ->setFields('inp-user-email')
             ->stopValidationAfterFirstError(false)
-            ->required('{alias} ' . 'اجباری می‌باشد.')
+            ->required()
             ->stopValidationAfterFirstError(true)
             ->email('{alias} ' . 'وارد شده نامعتبر است.');
         // password
         $validator
             ->setFields('inp-user-password')
             ->stopValidationAfterFirstError(false)
-            ->required('{alias} ' . 'اجباری می‌باشد.')
+            ->required()
             ->stopValidationAfterFirstError(true)
             ->password(PasswordValidation::STRENGTH_NORMAL, '{alias} ' . 'باید شامل حروف و اعداد باشد.')
             ->greaterThanEqualLength(8, '{alias} ' . 'باید بیشتر از' . ' {min} ' . 'کاراکتر باشد.')
@@ -94,14 +93,14 @@ class AddForm implements IPageForm
         $validator
             ->setFields('inp-user-role')
             ->stopValidationAfterFirstError(false)
-            ->required('{alias} ' . 'اجباری می‌باشد.')
+            ->required()
             ->stopValidationAfterFirstError(true)
             ->isIn(ROLES_ARRAY_ACCEPTABLE, '{alias} ' . 'انتخاب شده نامعتبر است!');
         // name
         $validator
             ->setFields('inp-user-first-name')
             ->stopValidationAfterFirstError(false)
-            ->required('{alias} ' . 'اجباری می‌باشد.')
+            ->required()
             ->stopValidationAfterFirstError(true)
             ->persianAlpha('{alias} ' . 'باید از حروف فارسی باشد.')
             ->lessThanEqualLength(30, '{alias} ' . 'باید کمتر از' . ' {max} ' . 'کاراکتر باشد.');
@@ -109,7 +108,7 @@ class AddForm implements IPageForm
         $validator
             ->setFields('inp-user-last-name')
             ->stopValidationAfterFirstError(false)
-            ->required('{alias} ' . 'اجباری می‌باشد.')
+            ->required()
             ->stopValidationAfterFirstError(true)
             ->persianAlpha('{alias} ' . 'باید از حروف فارسی باشد.')
             ->lessThanEqualLength(30, '{alias} ' . 'باید کمتر از' . ' {max} ' . 'کاراکتر باشد.');
@@ -143,6 +142,10 @@ class AddForm implements IPageForm
          * @var UserModel $userModel
          */
         $userModel = container()->get(UserModel::class);
+        /**
+         * @var AntiXSS $xss
+         */
+        $xss = container()->get(AntiXSS::class);
 
         try {
             $status = input()->post('inp-user-active-status', '')->getValue();
@@ -163,11 +166,11 @@ class AddForm implements IPageForm
             if (!count($roles)) return false;
 
             return $userModel->registerUser([
-                'username' => $mobile,
+                'username' => $xss->xss_clean($mobile),
                 'password' => password_hash($password, PASSWORD_BCRYPT),
-                'first_name' => $firsName ?: null,
-                'last_name' => $lastName ?: null,
-                'email' => $email ?: null,
+                'first_name' => $xss->xss_clean($firsName ?: null),
+                'last_name' => $xss->xss_clean($lastName ?: null),
+                'email' => $xss->xss_clean($email ?: null),
                 'image' => PLACEHOLDER_USER_IMAGE,
                 'is_activated' => is_value_checked($status) ? DB_YES : DB_NO,
                 'activated_at' => $activatedAt,

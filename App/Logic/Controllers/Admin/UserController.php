@@ -11,6 +11,7 @@ use App\Logic\Handlers\GeneralFormHandler;
 use App\Logic\Handlers\ResourceHandler;
 use App\Logic\Interfaces\IDatatableController;
 use App\Logic\Models\BaseModel;
+use App\Logic\Models\OrderModel;
 use App\Logic\Models\RoleModel;
 use App\Logic\Models\UserModel;
 use App\Logic\Utils\Jdf;
@@ -35,19 +36,42 @@ class UserController extends AbstractAdminController implements IDatatableContro
     /**
      * @param null $id
      * @return string
-     * @throws ReflectionException
      * @throws ConfigNotRegisteredException
      * @throws ControllerException
-     * @throws PathNotRegisteredException
      * @throws IFileNotExistsException
      * @throws IInvalidVariableNameException
+     * @throws MethodNotFoundException
+     * @throws ParameterHasNoDefaultValueException
+     * @throws PathNotRegisteredException
+     * @throws ReflectionException
+     * @throws ServiceNotFoundException
+     * @throws ServiceNotInstantiableException
      */
     public function view($id = null)
     {
         $data = [];
 
         if (!is_null($id)) {
-            // get user's stuffs
+            /**
+             * @var UserModel $userModel
+             */
+            $userModel = container()->get(UserModel::class);
+
+            $user = $userModel->get(['*'], 'id=:id', ['id' => $id]);
+
+            if (!count($user)) {
+                return $this->show404();
+            }
+            $user = $user[0];
+
+            $userRoles = $userModel->getUserRoles($user['id'], null, [], ['r.description']);
+            $userRoles = array_map(function ($value) {
+                return $value['description'];
+            }, $userRoles);
+            $user['roles'] = $userRoles;
+
+            // send needed data to page
+            $data['user'] = $user;
 
             $this->setLayout($this->main_layout)->setTemplate('view/user/user-profile');
         } else {
@@ -128,7 +152,7 @@ class UserController extends AbstractAdminController implements IDatatableContro
             $data = $formHandler->handle(EditForm::class, 'user_edit');
         }
 
-        $user = $userModel->getSingleUser('u.id=:id', ['id' => $id], ['u.*', 'r.id AS role_id']);
+        $user = $userModel->get(['*'], 'id=:id', ['id' => $id])[0];
         $userRoles = $userModel->getUserRoles($user['id'], null, [], ['r.name']);
         $userRoles = array_map(function ($value) {
             return $value['name'];
@@ -176,9 +200,10 @@ class UserController extends AbstractAdminController implements IDatatableContro
     }
 
     /**
+     * @param array $_
      * @return void
      */
-    public function getPaginatedDatatable(): void
+    public function getPaginatedDatatable(...$_): void
     {
         try {
             /**
@@ -248,10 +273,11 @@ class UserController extends AbstractAdminController implements IDatatableContro
                         'db_alias' => 'is_activated',
                         'dt' => 'status',
                         'formatter' => function ($d) {
-                            $status = '<span class="badge badge-danger">غیر فعال</span>';
-                            if (DB_YES == $d) {
-                                $status = '<span class="badge badge-success">فعال</span>';
-                            }
+                            $status = $this
+                                ->setTemplate('partial/admin/badge-parser/active-status')
+                                ->render([
+                                    'status' => $d,
+                                ]);
                             return $status;
                         }
                     ],
@@ -263,7 +289,147 @@ class UserController extends AbstractAdminController implements IDatatableContro
                                 ->render([
                                     'row' => $row,
                                 ]);
+                            return $options;
+                        }
+                    ],
+                ];
 
+                $response = DatatableHandler::handle($_POST, $columns);
+            } else {
+                response()->httpCode(403);
+                $response = [
+                    'error' => 'خطا در ارتباط با سرور، لطفا دوباره تلاش کنید.',
+                ];
+            }
+        } catch (\Exception $e) {
+            $response = [
+                'error' => 'خطا در ارتباط با سرور، لطفا دوباره تلاش کنید.',
+            ];
+        }
+
+        response()->json($response);
+    }
+
+    /**
+     * @param $id
+     * @throws MethodNotFoundException
+     * @throws ParameterHasNoDefaultValueException
+     * @throws ReflectionException
+     * @throws ServiceNotFoundException
+     * @throws ServiceNotInstantiableException
+     */
+    public function removeOrder($id)
+    {
+        $resourceHandler = new ResourceHandler();
+
+        /**
+         * @var Agent $agent
+         */
+        $agent = container()->get(Agent::class);
+        if (!$agent->isRobot()) {
+            $handler = new GeneralAjaxRemoveHandler();
+            $resourceHandler = $handler->handle(BaseModel::TBL_ORDERS, $id);
+        } else {
+            response()->httpCode(403);
+            $resourceHandler->errorMessage('خطا در ارتباط با سرور، لطفا دوباره تلاش کنید.');
+        }
+
+        response()->json($resourceHandler->getReturnData());
+    }
+
+    /**
+     * @param $user_id
+     * @return void
+     */
+    public function getOrderPaginatedDatatable($user_id): void
+    {
+        try {
+            /**
+             * @var Agent $agent
+             */
+            $agent = container()->get(Agent::class);
+            if (!$agent->isRobot()) {
+                emitter()->addListener('datatable.ajax:load', function (IEvent $event, $cols, $where, $bindValues, $limit, $offset, $order) use ($user_id) {
+                    $event->stopPropagation();
+
+                    /**
+                     * @var OrderModel $orderModel
+                     */
+                    $orderModel = container()->get(OrderModel::class);
+
+                    if (!empty($where)) {
+                        $where .= ' AND (user_id=:uId)';
+                    } else {
+                        $where = 'user_id=:uId';
+                    }
+                    $bindValues = array_merge($bindValues, [
+                        'uId' => $user_id,
+                    ]);
+
+                    $cols[] = 'send_status_color';
+                    $cols[] = 'total_price';
+
+                    $data = $orderModel->get($cols, $where, $bindValues, $order, $limit, $offset);
+                    //-----
+                    $recordsFiltered = $orderModel->count($where, $bindValues);
+                    $recordsTotal = $orderModel->count();
+
+                    return [$data, $recordsFiltered, $recordsTotal];
+                });
+
+                $columns = [
+                    ['db' => 'code', 'db_alias' => 'code', 'dt' => 'code'],
+                    ['db' => 'receiver_name', 'db_alias' => 'receiver_name', 'dt' => 'name'],
+                    ['db' => 'receiver_mobile', 'db_alias' => 'receiver_mobile', 'dt' => 'mobile'],
+                    ['db' => 'CONCAT(province, ' - ', city)', 'db_alias' => 'place', 'dt' => 'place'],
+                    [
+                        'db' => 'payment_status',
+                        'db_alias' => 'payment_status',
+                        'dt' => 'pay_status',
+                        'formatter' => function ($d) {
+                            $status = $this
+                                ->setTemplate('partial/admin/badge-parser/active-status')
+                                ->render([
+                                    'status' => $d,
+                                ]);
+                            return $status;
+                        }
+                    ],
+                    [
+                        'db' => 'final_price',
+                        'db_alias' => 'final_price',
+                        'dt' => 'price',
+                        'formatter' => function ($d, $row) {
+                            $status = '<del class="text-grey m-2">' . local_number(number_format($row['total_price'])) . '</del>';
+                            $status .= '<span class="text-success">' . local_number(number_format($d)) . '</span>';
+                            return $status;
+                        }
+                    ],
+                    [
+                        'db' => 'send_status_title',
+                        'db_alias' => 'send_status_title',
+                        'dt' => 'send_status',
+                        'formatter' => function ($d, $row) {
+                            $status = '<span style="background-color: ' . $row['send_status_color'] . ';">' . $d . '</span>';
+                            return $status;
+                        }
+                    ],
+                    [
+                        'db' => 'ordered_at',
+                        'db_alias' => 'ordered_at',
+                        'dt' => 'order_date',
+                        'formatter' => function ($d) {
+                            return Jdf::jdate('j F Y', $d);
+                        }
+                    ],
+                    [
+                        'dt' => 'operations',
+                        'formatter' => function ($row) {
+                            $options = $this
+                                ->setTemplate('partial/admin/datatable/actions-user-order')
+                                ->render([
+                                    'row' => $row,
+                                ]);
                             return $options;
                         }
                     ],

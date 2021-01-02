@@ -19,7 +19,7 @@ class CustomExceptionHandler implements IExceptionHandler
         if ($request->getUrl()->contains('/api') ||
             $request->getUrl()->contains('/ajax')) {
             $resourceHandler = new ResourceHandler();
-            $resourceHandler->statusCode((int)$error->getCode())->errorMessage($error->getMessage());
+            $resourceHandler->type(RESPONSE_TYPE_ERROR)->statusCode((int)$error->getCode())->errorMessage($error->getMessage());
             response()->httpCode((int)$error->getCode())->json($resourceHandler->getReturnData());
         }
 

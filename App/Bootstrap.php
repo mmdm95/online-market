@@ -86,6 +86,7 @@ class Bootstrap
      * @throws \Pecee\SimpleRouter\Exceptions\HttpException
      * @throws \Pecee\SimpleRouter\Exceptions\NotFoundHttpException
      * @throws \ReflectionException
+     * @throws \Sim\Exceptions\ConfigManager\ConfigNotRegisteredException
      */
     public function __construct(bool $route_needed = true)
     {
@@ -313,6 +314,9 @@ class Bootstrap
     /**
      * Read routes and
      *
+     * @throws IFileNotExistsException
+     * @throws IInvalidVariableNameException
+     * @throws MethodNotFoundException
      * @throws ParameterHasNoDefaultValueException
      * @throws ServiceNotFoundException
      * @throws ServiceNotInstantiableException
@@ -321,8 +325,7 @@ class Bootstrap
      * @throws \Pecee\SimpleRouter\Exceptions\HttpException
      * @throws \Pecee\SimpleRouter\Exceptions\NotFoundHttpException
      * @throws \ReflectionException
-     * @throws MethodNotFoundException
-     * @throws \Exception
+     * @throws \Sim\Exceptions\ConfigManager\ConfigNotRegisteredException
      */
     protected function defineRoute()
     {

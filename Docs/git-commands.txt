@@ -1,4 +1,4 @@
-// get status of current branch. It show:
+// get status of current branch. It shows:
 // - current branch name
 // - staged and unstaged files
 git status

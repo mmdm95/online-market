@@ -25,7 +25,7 @@ $validator = form_validator();
                                 وضعیت‌ها
                             </legend>
                             <div class="row">
-                                <div class="col-lg-4 form-group">
+                                <div class="col-sm-4 form-group">
                                     <div class="form-check form-check-switchery form-check-switchery-double">
                                         <label class="d-block">
                                             وضعیت کاربر:
@@ -39,7 +39,7 @@ $validator = form_validator();
                                         </label>
                                     </div>
                                 </div>
-                                <div class="col-lg-4 form-group">
+                                <div class="col-sm-4 form-group">
                                     <div class="form-check form-check-switchery form-check-switchery-double">
                                         <label class="d-block">
                                             وضعیت ورود:
@@ -48,12 +48,12 @@ $validator = form_validator();
                                             باز کردن
                                             <input type="checkbox" class="form-check-input-switchery"
                                                    name="inp-user-active-status"
-                                                <?= $validator->setCheckbox('inp-user-login-status', 'on') ?: (is_value_checked($user['is_login_locked']) ? 'checked="checked"' : ''); ?>>
+                                                <?= $validator->setCheckbox('inp-user-login-status', 'on') ?: (!is_value_checked($user['is_login_locked']) ? 'checked="checked"' : ''); ?>>
                                             بستن
                                         </label>
                                     </div>
                                 </div>
-                                <div class="col-lg-4 form-group">
+                                <div class="col-sm-4 form-group">
                                     <div class="form-check form-check-switchery form-check-switchery-double">
                                         <label class="d-block">
                                             وضعیت فعالیت:
@@ -62,7 +62,7 @@ $validator = form_validator();
                                             اجازه دادن
                                             <input type="checkbox" class="form-check-input-switchery"
                                                    name="inp-user-active-status"
-                                                <?= $validator->setCheckbox('inp-user-ban-status', 'on') ?: (is_value_checked($user['ban']) ? 'checked="checked"' : ''); ?>>
+                                                <?= $validator->setCheckbox('inp-user-ban-status', 'on') ?: (!is_value_checked($user['ban']) ? 'checked="checked"' : ''); ?>>
                                             منع
                                         </label>
                                     </div>
@@ -183,14 +183,20 @@ $validator = form_validator();
 
                             <div class="row">
                                 <div class="form-group col-lg-6">
-                                    <label>نام:</label>
+                                    <label>
+                                        <i class="text-danger">*</i>
+                                        نام:
+                                    </label>
                                     <input type="text" class="form-control" placeholder="فقط حروف فارسی"
                                            name="inp-user-first-name"
                                            value="<?= $validator->setInput('inp-user-first-name') ?: $user['first_name']; ?>">
                                 </div>
 
                                 <div class="form-group col-lg-6">
-                                    <label>نام خانوادگی:</label>
+                                    <label>
+                                        <i class="text-danger">*</i>
+                                        نام خانوادگی:
+                                    </label>
                                     <input type="text" class="form-control" placeholder="فقط حروف فارسی"
                                            name="inp-user-last-name"
                                            value="<?= $validator->setInput('inp-user-last-name') ?: $user['last_name']; ?>">

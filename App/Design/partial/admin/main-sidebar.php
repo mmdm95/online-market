@@ -68,7 +68,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="<?= url('admin.user.view'); ?>" class="nav-link">
+                            <a href="<?= url('admin.user.view', ''); ?>" class="nav-link">
                                 مشاهده کاربران
                             </a>
                         </li>
@@ -91,7 +91,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="<?= url('admin.category.view'); ?>" class="nav-link">
+                            <a href="<?= url('admin.category.view', ''); ?>" class="nav-link">
                                 مشاهده دسته‌ها
                             </a>
                         </li>
@@ -107,7 +107,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="<?= url('admin.color.view'); ?>" class="nav-link">
+                            <a href="<?= url('admin.color.view', ''); ?>" class="nav-link">
                                 لیست رنگ‌ها
                             </a>
                         </li>
@@ -123,18 +123,16 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="<?= url('admin.color.view'); ?>" class="nav-link">
+                            <a href="<?= url('admin.color.view', ''); ?>" class="nav-link">
                                 لیست رنگ‌ها
                             </a>
                         </li>
                     </ul>
                 </li>
                 <li class="nav-item">
-                    <a href="<?= url('admin.unit.view'); ?>" class="nav-link">
+                    <a href="<?= url('admin.unit.view', ''); ?>" class="nav-link">
                         <i class="icon-unicode"></i>
-                        <span>
-									واحد‌ها
-                        </span>
+                        <span>واحد‌ها</span>
                     </a>
                 </li>
                 <li class="nav-item nav-item-submenu">
@@ -147,7 +145,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="<?= url('admin.coupon.view'); ?>" class="nav-link">
+                            <a href="<?= url('admin.coupon.view', ''); ?>" class="nav-link">
                                 مشاهده کوپن
                             </a>
                         </li>
@@ -165,7 +163,7 @@
 
                     <ul class="nav nav-group-sub" data-submenu-title="Layouts">
                         <li class="nav-item">
-                            <a href="<?= url('admin.wallet.view'); ?>" class="nav-link active">
+                            <a href="<?= url('admin.wallet.view', ''); ?>" class="nav-link active">
                                 مشاهده کیف پول کاربران
                             </a>
                         </li>
@@ -181,7 +179,7 @@
 
                     <ul class="nav nav-group-sub" data-submenu-title="Layouts">
                         <li class="nav-item">
-                            <a href="<?= url('admin.order.view'); ?>" class="nav-link active">
+                            <a href="<?= url('admin.order.view', ''); ?>" class="nav-link active">
                                 سفارشات ثبت شده
                             </a>
                         </li>
@@ -196,9 +194,7 @@
                 <li class="nav-item">
                     <a href="<?= url('admin.return.order'); ?>" class="nav-link">
                         <i class="icon-backspace2"></i>
-                        <span>
-									سفارشات مرجوعی
-                        </span>
+                        <span>سفارشات مرجوعی</span>
                     </a>
                 </li>
                 <!-- /financial and orders -->
@@ -209,7 +205,13 @@
                     <i class="icon-menu" title="وبلاگ"></i>
                 </li>
                 <li class="nav-item">
-                    <a href="<?= url('-'); ?>" class="nav-link">
+                    <a href="<?= url('admin.blog.view', ''); ?>" class="nav-link">
+                        <i class="icon-files-empty2"></i>
+                        <span>مطالب</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="<?= url('admin.blog.category.view', ''); ?>" class="nav-link">
                         <i class="icon-envelop3"></i>
                         <span>دسته‌بندی مطالب</span>
                     </a>
@@ -221,19 +223,19 @@
                     <i class="icon-menu" title="ارتباطات"></i>
                 </li>
                 <li class="nav-item">
-                    <a href="<?= url('admin.contact-us.view'); ?>" class="nav-link">
+                    <a href="<?= url('admin.contact-us.view', ''); ?>" class="nav-link">
                         <i class="icon-envelop3"></i>
                         <span>تماس‌ها</span>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="<?= url('admin.faq.view'); ?>" class="nav-link">
+                    <a href="<?= url('admin.faq.view', ''); ?>" class="nav-link">
                         <i class="icon-question7"></i>
                         <span>سؤالات متداول</span>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="<?= url('admin.newsletter.view'); ?>" class="nav-link">
+                    <a href="<?= url('admin.newsletter.view', ''); ?>" class="nav-link">
                         <i class="icon-newspaper2"></i>
                         <span>خبرنامه</span>
                     </a>
@@ -246,7 +248,7 @@
                     <i class="icon-menu" title="سایر"></i>
                 </li>
                 <li class="nav-item">
-                    <a href="<?= url('admin.slider.view'); ?>" class="nav-link">
+                    <a href="<?= url('admin.slider.view', ''); ?>" class="nav-link">
                         <i class="icon-image-compare"></i>
                         <span>مدیریت اسلایدشو</span>
                     </a>

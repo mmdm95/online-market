@@ -39,7 +39,7 @@ class ForgetFormStep2 implements IPageForm
         $validator
             ->setFields('inp-forget-code')
             ->stopValidationAfterFirstError(false)
-            ->required('{alias} ' . 'اجباری می‌باشد.')
+            ->required()
             ->stopValidationAfterFirstError(true);
 
         // validate code

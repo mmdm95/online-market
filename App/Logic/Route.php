@@ -129,18 +129,28 @@ class Route implements IInitialize
                 /**
                  * User Route
                  */
-                Router::get('/user/view', 'Admin\UserController@view')->name('admin.user.view');
-                Router::get('/user/view/{id}', 'Admin\UserController@view')->where([
+                Router::get('/user/view/{id?}', 'Admin\UserController@view')->where([
                     'id' => '[0-9]+',
-                ])->name('admin.user.detail');
+                ])->name('admin.user.view');
                 Router::form('/user/add', 'Admin\UserController@add')->name('admin.user.add');
                 Router::form('/user/edit/{id}', 'Admin\UserController@edit')->where([
                     'id' => '[0-9]+',
                 ])->name('admin.user.edit');
-                Router::delete('/user/remove/{id}', 'Admin\UserController@add')->where([
-                    'id' => '[0-9]+',
-                ])->name('admin.user.remove');
                 Router::post('/user/view/dt', 'Admin\UserController@getPaginatedDatatable')->name('admin.user.dt.view');
+
+                /**
+                 * Address Route
+                 */
+                Router::post('/address/view/dt/{user_id}', 'Admin\AddressController@getPaginatedDatatable')->where([
+                    'user_id' => '[0-9]+',
+                ])->name('admin.addr.dt.view');
+
+                /**
+                 * User Order Route
+                 */
+                Router::post('/address/view/dt/{user_id}', 'Admin\UserController@getOrderPaginatedDatatable')->where([
+                    'user_id' => '[0-9]+',
+                ])->name('admin.user.order.dt.view');
 
                 /**
                  * Category Route
@@ -176,13 +186,23 @@ class Route implements IInitialize
                 Router::get('/festival/view', 'Admin\FestivalController@view')->name('admin.festival.view');
 
                 /**
+                 * Blog Route
+                 */
+                Router::form('/blog/add', 'Admin\BlogController@add')->name('admin.blog.add');
+                Router::form('/blog/edit/{id}', 'Admin\BlogController@edit')->where([
+                    'id' => '[0-9]+',
+                ])->name('admin.blog.edit');
+                Router::get('blog/view', 'Admin\BlogController@view')->name('admin.blog.view');
+                Router::post('/blog/view/dt', 'Admin\BlogController@getPaginatedDatatable')->name('admin.blog.dt.view');
+
+                /**
                  * Blog Category Route
                  */
-                Router::get('/blog/category/add', 'Admin\BlogController@CategoryAdd')->name('admin.blog.category.add');
-                Router::get('/blog/category/edit/{id}', 'Admin\BlogController@CategoryEdit')->where([
+                Router::get('/blog/category/add', 'Admin\BlogCategoryController@add')->name('admin.blog.category.add');
+                Router::get('/blog/category/edit/{id}', 'Admin\BlogCategoryController@edit')->where([
                     'id' => '[0-9]+',
                 ])->name('admin.blog.category.edit');
-                Router::get('blog/category/view', 'Admin\BlogController@CategoryView')->name('admin.blog.category.view');
+                Router::get('blog/category/view', 'Admin\BlogCategoryController@view')->name('admin.blog.category.view');
 
                 /**
                  * Contact us Route
@@ -195,6 +215,7 @@ class Route implements IInitialize
                  * Unit Route
                  */
                 Router::get('/unit/view', 'Admin\UnitController@view')->name('admin.unit.view');
+                Router::post('/unit/view/dt', 'Admin\UnitController@getPaginatedDatatable')->name('admin.unit.dt.view');
 
                 /**
                  * FAQ Route
@@ -390,12 +411,79 @@ class Route implements IInitialize
             ])->name('ajax.product.wishlist.remove');
 
             /**
+             * get provinces
+             */
+            Router::get('/provinces', 'PageController@getProvinces')->name('ajax.province.get');
+
+            /**
+             * get cities
+             */
+            Router::get('/cities/{province_id}', 'PageController@getCities')->where([
+                'province_id' => '[0-9]+',
+            ])->name('ajax.city.get');
+
+            /**
              * get captcha image
              */
             Router::get('/captcha', 'CaptchaController@generateCaptcha')->name('api.captcha');
 
             // other pages that need authentication
             Router::group(['middleware' => AdminAuthMiddleware::class], function () {
+                /**
+                 * user route
+                 */
+                Router::delete('/user/remove/{id}', 'Admin\UserController@remove')->where([
+                    'id' => '[0-9]+',
+                ])->name('ajax.user.remove');
+
+                /**
+                 * address route
+                 */
+                Router::get('/address/get/{user_id}/{id}', 'Admin\AddressController@get')->where([
+                    'user_id' => '[0-9]+',
+                    'id' => '[0-9]+',
+                ])->name('ajax.admin.addr.get');
+                Router::post('/address/add/{user_id}', 'Admin\AddressController@add')->where([
+                    'user_id' => '[0-9]+',
+                ])->name('ajax.admin.addr.add');
+                Router::post('/address/edit/{user_id}/{id}', 'Admin\AddressController@edit')->where([
+                    'user_id' => '[0-9]+',
+                    'id' => '[0-9]+',
+                ])->name('ajax.admin.addr.edit');
+                Router::delete('/address/remove/{id}', 'Admin\AddressController@remove')->where([
+                    'id' => '[0-9]+',
+                ])->name('ajax.admin.addr.remove');
+
+                /**
+                 * user order route
+                 */
+                Router::delete('/user/order/remove/{id}', 'Admin\UserController@removeOrder')->where([
+                    'id' => '[0-9]+',
+                ])->name('ajax.user.order.remove');
+
+                /**
+                 * unit route
+                 */
+                Router::get('/unit/get/{id}', 'Admin\UnitController@get')->where([
+                    'id' => '[0-9]+',
+                ])->name('ajax.unit.get');
+                Router::post('/unit/add/{user_id}', 'Admin\UnitController@add')->where([
+                    'user_id' => '[0-9]+',
+                ])->name('ajax.unit.add');
+                Router::post('/unit/edit/{id}', 'Admin\UnitController@edit')->where([
+                    'id' => '[0-9]+',
+                ])->name('ajax.unit.edit');
+                Router::delete('/unit/remove/{id}', 'Admin\UnitController@remove')->where([
+                    'id' => '[0-9]+',
+                ])->name('ajax.unit.remove');
+
+                /**
+                 * blog route
+                 */
+                Router::delete('/blog/remove/{id}', 'Admin\BlogController@remove')->where([
+                    'id' => '[0-9]+',
+                ])->name('ajax.blog.remove');
+
                 /**
                  * File Manager Route
                  */
