@@ -39,6 +39,8 @@ class GeneralAjaxRemoveHandler implements IHandler
      *   1. Send a [Table_Name] as first parameter.
      *   2. Send a [id] as second parameter and get
      *      a resource handler as return array.
+     *   [3. Extra where parameter: string]
+     *   [4. Bind values for extra where parameter: array]
      *
      * @param mixed ...$_
      * @return ResourceHandler
@@ -55,6 +57,9 @@ class GeneralAjaxRemoveHandler implements IHandler
         }
 
         [$table, $id] = $_;
+
+        $where = $_[2] ?? '';
+        $bindValues = $_[3] ?? [];
 
         $canContinue = true;
         if ($this->authCallback instanceof \Closure) {
@@ -78,6 +83,13 @@ class GeneralAjaxRemoveHandler implements IHandler
                     ->cols(['COUNT(*) AS count'])
                     ->where('id=:id')
                     ->bindValue('id', $id);
+
+                if (!empty($where)) {
+                    $select
+                        ->where($where)
+                        ->bindValues($bindValues);
+                }
+
                 $res = $model->get($select);
 
                 if (!count($res) || 0 === (int)$res[0]['count']) {

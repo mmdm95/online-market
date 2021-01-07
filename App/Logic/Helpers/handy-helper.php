@@ -6,6 +6,7 @@ use Sim\Container\Exceptions\ParameterHasNoDefaultValueException;
 use Sim\Container\Exceptions\ServiceNotFoundException;
 use Sim\Container\Exceptions\ServiceNotInstantiableException;
 use Sim\Exceptions\ConfigManager\ConfigNotRegisteredException;
+use Sim\File\FileSystem;
 use Sim\Form\FormValidator;
 use Sim\Interfaces\IFileNotExistsException;
 use Sim\Interfaces\IInvalidVariableNameException;
@@ -123,4 +124,13 @@ function replaced_sms_body($type, array $placeholders = []): string
     }
 
     return message_replacer((string)$body, $placeholders);
+}
+
+/**
+ * @param string $filename
+ * @return string
+ */
+function get_image_name(string $filename): string
+{
+    return str_replace(url('image.show', '')->getRelativeUrl(), '', str_replace(['//', '\\'], '/', $filename));
 }

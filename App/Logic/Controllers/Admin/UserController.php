@@ -3,8 +3,8 @@
 namespace App\Logic\Controllers\Admin;
 
 use App\Logic\Abstracts\AbstractAdminController;
-use App\Logic\Forms\Admin\User\AddForm;
-use App\Logic\Forms\Admin\User\EditForm;
+use App\Logic\Forms\Admin\User\AddUserForm;
+use App\Logic\Forms\Admin\User\EditUserForm;
 use App\Logic\Handlers\DatatableHandler;
 use App\Logic\Handlers\GeneralAjaxRemoveHandler;
 use App\Logic\Handlers\GeneralFormHandler;
@@ -18,6 +18,7 @@ use App\Logic\Utils\Jdf;
 use function DI\get;
 use Jenssegers\Agent\Agent;
 use ReflectionException;
+use Sim\Auth\DBAuth;
 use Sim\Container\Exceptions\MethodNotFoundException;
 use Sim\Container\Exceptions\ParameterHasNoDefaultValueException;
 use Sim\Container\Exceptions\ServiceNotFoundException;
@@ -57,12 +58,11 @@ class UserController extends AbstractAdminController implements IDatatableContro
              */
             $userModel = container()->get(UserModel::class);
 
-            $user = $userModel->get(['*'], 'id=:id', ['id' => $id]);
+            $user = $userModel->getFirst(['*'], 'id=:id', ['id' => $id]);
 
             if (!count($user)) {
                 return $this->show404();
             }
-            $user = $user[0];
 
             $userRoles = $userModel->getUserRoles($user['id'], null, [], ['r.description']);
             $userRoles = array_map(function ($value) {
@@ -100,7 +100,7 @@ class UserController extends AbstractAdminController implements IDatatableContro
 
         if (is_post()) {
             $formHandler = new GeneralFormHandler();
-            $data = $formHandler->handle(AddForm::class, 'user_add');
+            $data = $formHandler->handle(AddUserForm::class, 'user_add');
         }
 
         /**
@@ -149,10 +149,10 @@ class UserController extends AbstractAdminController implements IDatatableContro
 
         if (is_post()) {
             $formHandler = new GeneralFormHandler();
-            $data = $formHandler->handle(EditForm::class, 'user_edit');
+            $data = $formHandler->handle(EditUserForm::class, 'user_edit');
         }
 
-        $user = $userModel->get(['*'], 'id=:id', ['id' => $id])[0];
+        $user = $userModel->getFirst(['*'], 'id=:id', ['id' => $id]);
         $userRoles = $userModel->getUserRoles($user['id'], null, [], ['r.name']);
         $userRoles = array_map(function ($value) {
             return $value['name'];
@@ -218,16 +218,30 @@ class UserController extends AbstractAdminController implements IDatatableContro
                      * @var UserModel $userModel
                      */
                     $userModel = container()->get(UserModel::class);
+                    /**
+                     * @var DBAuth $auth
+                     */
+                    $auth = container()->get('auth_admin');
 
                     if (!empty($where)) {
-                        $where .= ' AND (u.is_deleted<>:del AND u.is_hidden<>:hidden)';
+                        $where .= ' AND u.is_deleted<>:del';
+                        if (!$auth->hasRole(ROLE_DEVELOPER)) {
+                            $where .= ' AND u.is_hidden<>:hidden';
+                        }
                     } else {
-                        $where = 'u.is_deleted<>:del AND u.is_hidden<>:hidden';
+                        $where = 'u.is_deleted<>:del';
+                        if (!$auth->hasRole(ROLE_DEVELOPER)) {
+                            $where .= ' AND u.is_hidden<>:hidden';
+                        }
                     }
                     $bindValues = array_merge($bindValues, [
                         'del' => DB_YES,
-                        'hidden' => DB_YES,
                     ]);
+                    if (!$auth->hasRole(ROLE_DEVELOPER)) {
+                        $bindValues = array_merge($bindValues, [
+                            'hidden' => DB_YES,
+                        ]);
+                    }
 
                     $data = $userModel->getUsers($cols, $where, $bindValues, $limit, $offset, $order);
                     // get user roles and put it to user object

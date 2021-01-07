@@ -121,6 +121,7 @@ window.MyGlobalVariables = {
             },
         },
         captcha: '/ajax/captcha',
+        image: '/images',
     },
     elements: {
         captcha: {
@@ -165,6 +166,12 @@ window.MyGlobalVariables = {
                     is: 11,
                     message: '^' + 'موبایل باید عددی ۱۱ رقمی باشد.',
                 }
+            },
+            link: {
+                format: {
+                    pattern: /(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,})/gi,
+                    message: '^' + 'لینک وارد شده نامعتبر است.',
+                },
             },
         },
     },
@@ -519,7 +526,7 @@ window.MyGlobalVariables = {
 
                     validationSuccessCallback = window.TheCore.isFunction(validationSuccessCallback) ? validationSuccessCallback : null;
                     validationErrorCallback = window.TheCore.isFunction(validationErrorCallback) ? validationErrorCallback : null;
-                    check = false !== check;
+                    check = !(false === check);
 
                     form = $(window.MyGlobalVariables.elements[formKey].form);
                     form.submit(function () {

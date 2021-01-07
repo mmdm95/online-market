@@ -25,8 +25,13 @@ class CustomExceptionHandler implements IExceptionHandler
 
         /* The router will throw the NotFoundHttpException on 404 */
         if ($error instanceof NotFoundHttpException) {
-            // Render custom 404-page
-            $request->setRewriteUrl(url(NOT_FOUND));
+            if ($request->getUrl()->contains('/admin')) {
+                // Render custom admin 404-page
+                $request->setRewriteUrl(url(NOT_FOUND_ADMIN));
+            } else {
+                // Render custom 404-page
+                $request->setRewriteUrl(url(NOT_FOUND));
+            }
             return;
         } elseif ($error->getCode() == 500) {
             // Render custom 500-page

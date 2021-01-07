@@ -45,9 +45,9 @@
                     </div>
                 </div>
                 <div class="text-right">
-                    <button type="submit" class="btn btn-primary">
-                        ذخیره اطلاعات
-                        <i class="icon-floppy-disks ml-2"></i>
+                    <button type="submit" class="btn btn-success">
+                        ویرایش اطلاعات
+                        <i class="icon-checkmark3 ml-2"></i>
                     </button>
                 </div>
             </form>

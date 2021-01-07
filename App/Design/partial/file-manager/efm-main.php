@@ -79,6 +79,8 @@
         var renameModal = $('#modal_rename'),
             renameInput = $('#renameInput');
 
+        var core = window.TheCore;
+
         var mainChks = $('#chks');
 
         var chksLen = 0,
@@ -148,8 +150,6 @@
                         xsrf: XSRF,
                     },
                     success: function (response) {
-                        console.log(response);
-
                         if (null === response.error) {
                             list();
                             refreshtree();

@@ -7,7 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title><?= \translate()->translate('404.title'); ?></title>
 
-    <link href="<?= hashed_path('css', 'font.css'); ?>" rel="stylesheet">
+    <link href="<?= asset_path('css/font.css'); ?>" rel="stylesheet">
 
     <style>
         body {

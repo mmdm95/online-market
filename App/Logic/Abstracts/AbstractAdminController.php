@@ -26,6 +26,7 @@ abstract class AbstractAdminController extends AbstractController
 
         $this->setDefaultArguments([
             'the_options' => [
+                'allow_rename' => true,
                 'allow_upload' => true,
                 'allow_create_folder' => true,
                 'allow_direct_link' => true,
@@ -37,7 +38,7 @@ abstract class AbstractAdminController extends AbstractController
     /**
      * {@inheritdoc}
      */
-    public function show404(array $arguments = [], ?string $layout = null, string $template = 'error/404'): string
+    public function show404(array $arguments = [], ?string $layout = '', string $template = 'error/404'): string
     {
         return parent::show404($arguments, $layout, $template);
     }

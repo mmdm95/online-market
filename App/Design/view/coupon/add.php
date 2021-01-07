@@ -35,7 +35,8 @@
                                 <div class="form-group col-md-4">
 
                                     <label>کد کوپن تخفیف:</label>
-                                    <input type="text" class="form-control" placeholder="ترکیبی از حروف انگلیسی و اعداد">
+                                    <input type="text" class="form-control"
+                                           placeholder="ترکیبی از حروف انگلیسی و اعداد">
                                 </div>
                                 <div class="form-group col-md-4">
 
@@ -71,8 +72,10 @@
                     </div>
                 </div>
                 <div class="text-right">
-                    <button type="submit" class="btn btn-primary">ذخیره اطلاعات <i
-                                class="icon-floppy-disks ml-2"></i></button>
+                    <button type="submit" class="btn btn-primary">
+                        ذخیره اطلاعات
+                        <i class="icon-floppy-disks ml-2"></i>
+                    </button>
                 </div>
             </form>
         </div>

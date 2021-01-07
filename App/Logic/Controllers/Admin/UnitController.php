@@ -121,7 +121,7 @@ class UnitController extends AbstractAdminController implements IDatatableContro
         $agent = container()->get(Agent::class);
         if (!$agent->isRobot()) {
             $handler = new GeneralAjaxRemoveHandler();
-            $resourceHandler = $handler->handle(BaseModel::TBL_UNITS, $id);
+            $resourceHandler = $handler->handle(BaseModel::TBL_UNITS, $id, 'deletable=:del', ['del' => DB_YES]);
         } else {
             response()->httpCode(403);
             $resourceHandler
@@ -153,9 +153,8 @@ class UnitController extends AbstractAdminController implements IDatatableContro
              * @var UnitModel $unitModel
              */
             $unitModel = container()->get(UnitModel::class);
-            $res = $unitModel->get(['*'], 'id=:id', ['id' => $id]);
+            $res = $unitModel->getFirst(['*'], 'id=:id', ['id' => $id]);
             if (count($res)) {
-                $res = $res[0];
                 $resourceHandler
                     ->type(RESPONSE_TYPE_SUCCESS)
                     ->data($res);

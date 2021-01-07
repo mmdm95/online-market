@@ -50,13 +50,13 @@ class EditUnitForm implements IPageForm
             ->setFields('inp-edit-unit-sign')
             ->required();
 
+        $id = session()->getFlash('unit-edit-id', null, false);
         if (!empty($id)) {
             /**
              * @var UnitModel $unitModel
              */
             $unitModel = container()->get(UnitModel::class);
 
-            $id = session()->getFlash('unit-edit-id', null, false);
             if (0 === $unitModel->count('id=:id', ['id' => $id])) {
                 $validator->setError('inp-edit-unit-title', 'شناسه واحد مورد نظر نامعتبر است.');
             }

@@ -1,4 +1,4 @@
-<div class="row">
+<div class="row m-0">
     <?php if (isset($the_options) && isset($the_options['allow_upload']) && $the_options['allow_upload']): ?>
         <div class="form-group col-12">
             <div id="file_drop_target">
@@ -39,7 +39,7 @@
                 </div>
             </div>
 
-            <?php if ($the_options['allow_create_folder']): ?>
+            <?php if ($the_options['allow_create_folder'] ?? false): ?>
                 <div class="form-group col-lg-6 order-1">
                     <form action="?" method="post" id="mkdir">
                         <label for="dirname" class="d-block">
@@ -73,7 +73,10 @@
 </div>
 
 <div class="table-responsive">
-    <table id="table" class="table text-left">
+    <?php
+    $extraAttr = $extra_attribute ?? '';
+    ?>
+    <table id="table" class="table text-left" <?= $extraAttr; ?>>
         <thead class="bg-green-600 border-radius">
         <tr>
             <th class="sort_desc">نام</th>
@@ -88,7 +91,7 @@
     </table>
 </div>
 
-<?php if ($the_options['allow_rename']): ?>
+<?php if ($the_options['allow_rename'] ?? false): ?>
     <!-- Standard width modal -->
     <div id="modal_rename" class="modal fade">
         <div class="modal-dialog modal-md">
@@ -109,9 +112,9 @@
                 </div>
 
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-link" data-dismiss="modal">لغو</button>
-                    <button id="renameFile" type="button" class="btn btn-primary" data-dismiss="modal">تغییر
-                        نام
+                    <button type="button" class="btn btn-link" data-dismiss="modal" id="__efmModalDismiss">لغو</button>
+                    <button id="renameFile" type="button" class="btn btn-primary" data-dismiss="modal">
+                        تغییر نام
                     </button>
                 </div>
             </div>
@@ -119,3 +122,127 @@
     </div>
     <!-- /standard width modal -->
 <?php endif; ?>
+
+<script type="text/javascript">
+    (function ($) {
+        'use strict';
+
+        $(function () {
+            var
+                variables,
+                //-----
+                modal,
+                table,
+                okBtn,
+                //-----
+                picker,
+                clickedItem = null,
+                selectedItem;
+
+            var
+                clsImage = '__file_image',
+                clsVideo = '__file_video',
+                isImage = false,
+                isVideo = false;
+
+            var
+                imageExts = ['png', 'jpg', 'jpeg', 'gif', 'svg'],
+                videoExts = ['mp4', 'ogg', 'webm'];
+
+            variables = window.MyGlobalVariables;
+
+            modal = $('#modal_efm');
+            table = $('#table');
+            okBtn = $('#__pick_file_btn');
+            picker = $('.__file_picker_handler');
+
+            /**
+             * @param filename
+             */
+            function getExtension(filename) {
+                return filename.split('.').pop();
+            }
+
+            /**
+             * @param filename
+             * @returns {boolean}
+             */
+            function validateImage(filename) {
+                return $.inArray(getExtension(filename), imageExts) !== -1;
+            }
+
+            /**
+             * @param filename
+             * @returns {boolean}
+             */
+            function validateVideo(filename) {
+                return $.inArray(getExtension(filename), videoExts) !== -1;
+            }
+
+            /**
+             * @param e
+             */
+            function selectImageFromFileManager(e) {
+                if (clickedItem && clickedItem.length && selectedItem) {
+                    if ((isImage && validateImage(selectedItem)) || (isVideo && validateVideo(selectedItem))) {
+                        clickedItem
+                            .addClass('has-image')
+                            .find('.img-placeholder-image')
+                            .remove();
+                        clickedItem.append($('<img class="img-placeholder-image" src="' + selectedItem + '" alt="selected image">'));
+                        clickedItem.find('input[type="hidden"]').val(selectedItem);
+                        return true;
+                    } else {
+                        e.stopPropagation();
+                    }
+                } else {
+                    e.stopPropagation();
+                }
+            }
+
+            table.on('efm:list', function () {
+                var first = table.find('tr td.first');
+                first
+                    .off('click' + variables.namespace)
+                    .on('click' + variables.namespace, function () {
+                        if (!$(this).closest('tr').hasClass('is_dir')) {
+                            table.find('.selectable').removeClass('selectable');
+                            $(this).closest('tr').addClass('selectable');
+                            selectedItem = $(this).find('.name').attr('data-url');
+                        }
+                    });
+                first
+                    .off('dblclick' + variables.namespace)
+                    .on('dblclick' + variables.namespace, function (e) {
+                        if (selectImageFromFileManager(e)) {
+                            if (modal.length) {
+                                modal.modal('hide');
+                            }
+                        }
+                    });
+            });
+
+            picker
+                .off('click' + variables.namespace)
+                .on('click' + variables.namespace, function () {
+                    if ($(this).hasClass(clsImage) || $(this).hasClass(clsVideo)) {
+                        isImage = $(this).hasClass(clsImage);
+                        isVideo = $(this).hasClass(clsVideo);
+                        clickedItem = $(this);
+                    }
+                });
+
+            okBtn
+                .off('click')
+                .on('click', function (e) {
+                    selectImageFromFileManager(e);
+                });
+
+            $('#__efmModalDismiss').on('click', function () {
+                if (modal.length) {
+                    modal.modal('hide');
+                }
+            });
+        });
+    })(jQuery);
+</script>

@@ -33,6 +33,18 @@
             edit: '/ajax/unit/edit',
             remove: '/ajax/unit/remove',
         },
+        faq: {
+            get: '/ajax/faq/get',
+            add: '/ajax/faq/add',
+            edit: '/ajax/faq/edit',
+            remove: '/ajax/faq/remove',
+        },
+        slider: {
+            get: '/ajax/slider/get',
+            add: '/ajax/slider/add',
+            edit: '/ajax/slider/edit',
+            remove: '/ajax/slider/remove',
+        },
     });
     window.MyGlobalVariables.elements = $.extend(true, window.MyGlobalVariables.elements, {
         addAddress: {
@@ -69,6 +81,84 @@
             inputs: {
                 title: 'inp-edit-unit-title',
                 sign: 'inp-edit-unit-sign',
+            },
+        },
+        addBlog: {
+            form: '#__form_add_blog',
+            inputs: {
+                image: 'inp-add-blog-img',
+                status: 'inp-add-blog-status',
+                title: 'inp-add-blog-title',
+                category: 'inp-add-blog-category',
+                abstract: 'inp-add-blog-abs',
+                keywords: 'inp-add-blog-keywords',
+                desc: 'inp-add-blog-desc',
+            },
+        },
+        editBlog: {
+            form: '#__form_edit_blog',
+            inputs: {
+                image: 'inp-edit-blog-img',
+                status: 'inp-edit-blog-status',
+                title: 'inp-edit-blog-title',
+                category: 'inp-edit-blog-category',
+                abstract: 'inp-edit-blog-abs',
+                keywords: 'inp-edit-blog-keywords',
+                desc: 'inp-edit-blog-desc',
+            },
+        },
+        addFaq: {
+            form: '#__form_add_faq',
+            inputs: {
+                question: 'inp-add-faq-q',
+                answer: 'inp-add-faq-a',
+                tags: 'inp-add-faq-tags',
+                status: 'inp-add-faq-status',
+            },
+        },
+        editFaq: {
+            form: '#__form_edit_faq',
+            inputs: {
+                question: 'inp-edit-faq-q',
+                answer: 'inp-edit-faq-a',
+                tags: 'inp-edit-faq-tags',
+                status: 'inp-edit-faq-status',
+            },
+        },
+        addColor: {
+            form: '#__form_add_color',
+            inputs: {
+                name: 'inp-add-color-name',
+                color: 'inp-add-color-color',
+                status: 'inp-add-color-status',
+            },
+        },
+        editColor: {
+            form: '#__form_add_color',
+            inputs: {
+                name: 'inp-edit-color-name',
+                color: 'inp-edit-color-color',
+                status: 'inp-edit-color-status',
+            },
+        },
+        addSlide: {
+            form: '#__form_add_slide',
+            inputs: {
+                image: 'inp-add-slide-img',
+                title: 'inp-add-slide-title',
+                subTitle: 'inp-add-slide-sub-title',
+                link: 'inp-add-slide-sub-link',
+                priority: 'inp-add-slide-priority',
+            },
+        },
+        editSlide: {
+            form: '#__form_edit_slide',
+            inputs: {
+                image: 'inp-edit-slide-img',
+                title: 'inp-edit-slide-title',
+                subTitle: 'inp-edit-slide-sub-title',
+                link: 'inp-edit-slide-sub-link',
+                priority: 'inp-edit-slide-priority',
             },
         },
     });
@@ -151,7 +241,187 @@
                         message: '^' + 'علامت حداکثر باید ۲۵۰ کاراکتر باشد.',
                     },
                 },
-            }
+            },
+            addBlog: {
+                image: {
+                    presence: {
+                        allowEmpty: false,
+                        message: '^' + 'فیلد تصویر را خالی نگذارید.',
+                    },
+                },
+                title: {
+                    presence: {
+                        allowEmpty: false,
+                        message: '^' + 'فیلد عنوان را خالی نگذارید.',
+                    },
+                },
+                abstract: {
+                    presence: {
+                        allowEmpty: false,
+                        message: '^' + 'فیلد توضیح مختصر را خالی نگذارید.',
+                    },
+                },
+                desc: {
+                    presence: {
+                        allowEmpty: false,
+                        message: '^' + 'فیلد توضیحات را خالی نگذارید.',
+                    },
+                },
+            },
+            editBlog: {
+                image: {
+                    presence: {
+                        allowEmpty: false,
+                        message: '^' + 'فیلد تصویر را خالی نگذارید.',
+                    },
+                },
+                title: {
+                    presence: {
+                        allowEmpty: false,
+                        message: '^' + 'فیلد عنوان را خالی نگذارید.',
+                    },
+                },
+                abstract: {
+                    presence: {
+                        allowEmpty: false,
+                        message: '^' + 'فیلد توضیح مختصر را خالی نگذارید.',
+                    },
+                },
+                desc: {
+                    presence: {
+                        allowEmpty: false,
+                        message: '^' + 'فیلد توضیحات را خالی نگذارید.',
+                    },
+                },
+            },
+            addFaq: {
+                question: {
+                    presence: {
+                        allowEmpty: false,
+                        message: '^' + 'فیلد سؤال را خالی نگذارید.',
+                    },
+                },
+                answer: {
+                    presence: {
+                        allowEmpty: false,
+                        message: '^' + 'فیلد پاسخ را خالی نگذارید.',
+                    },
+                },
+                tags: {
+                    presence: {
+                        allowEmpty: false,
+                        message: '^' + 'فیلد برچسب را خالی نگذارید.',
+                    },
+                },
+            },
+            editFaq: {
+                question: {
+                    presence: {
+                        allowEmpty: false,
+                        message: '^' + 'فیلد سؤال را خالی نگذارید.',
+                    },
+                },
+                answer: {
+                    presence: {
+                        allowEmpty: false,
+                        message: '^' + 'فیلد پاسخ را خالی نگذارید.',
+                    },
+                },
+                tags: {
+                    presence: {
+                        allowEmpty: false,
+                        message: '^' + 'فیلد برچسب را خالی نگذارید.',
+                    },
+                },
+            },
+            addColor: {
+                name: {
+                    presence: {
+                        allowEmpty: false,
+                        message: '^' + 'فیلد نام را خالی نگذارید.',
+                    },
+                    length: {
+                        maximum: 250,
+                        message: '^' + 'نام رنگ حداکثر باید ۲۵۰ کاراکتر باشد.',
+                    },
+                },
+                color: {
+                    presence: {
+                        allowEmpty: false,
+                        message: '^' + 'یک رنگ انتخاب کنید.',
+                    },
+                },
+            },
+            editColor: {
+                name: {
+                    presence: {
+                        allowEmpty: false,
+                        message: '^' + 'فیلد نام را خالی نگذارید.',
+                    },
+                    length: {
+                        maximum: 250,
+                        message: '^' + 'نام رنگ حداکثر باید ۲۵۰ کاراکتر باشد.',
+                    },
+                },
+                color: {
+                    presence: {
+                        allowEmpty: false,
+                        message: '^' + 'یک رنگ انتخاب کنید.',
+                    },
+                },
+            },
+            addSlide: {
+                image: {
+                    presence: {
+                        allowEmpty: false,
+                        message: '^' + 'تصویر اسلاید را انتخاب کنید.',
+                    },
+                },
+                title: {
+                    length: {
+                        maximum: 250,
+                        message: '^' + 'عنوان حداکثر باید ۲۵۰ کاراکتر باشد.',
+                    },
+                },
+                subTitle: {
+                    length: {
+                        maximum: 250,
+                        message: '^' + 'زیر عنوان حداکثر باید ۲۵۰ کاراکتر باشد.',
+                    },
+                },
+                priority: {
+                    format: {
+                        pattern: /[0-9]+/,
+                        message: '^' + 'اولویت باید از نوع عددی باشد.',
+                    },
+                },
+            },
+            editSlide: {
+                image: {
+                    presence: {
+                        allowEmpty: false,
+                        message: '^' + 'تصویر اسلاید را انتخاب کنید.',
+                    },
+                },
+                title: {
+                    length: {
+                        maximum: 250,
+                        message: '^' + 'عنوان حداکثر باید ۲۵۰ کاراکتر باشد.',
+                    },
+                },
+                subTitle: {
+                    length: {
+                        maximum: 250,
+                        message: '^' + 'زیر عنوان حداکثر باید ۲۵۰ کاراکتر باشد.',
+                    },
+                },
+                priority: {
+                    format: {
+                        pattern: /[0-9]+/,
+                        message: '^' + 'اولویت باید از نوع عددی باشد.',
+                    },
+                },
+            },
         },
     });
 
@@ -207,7 +477,9 @@
             userIdInp,
             userId = null,
             editAddrId = null,
-            editUnitId = null;
+            editUnitId = null,
+            editFAQId = null,
+            editSlideId = null;
 
         admin = new window.TheAdmin();
 
@@ -233,11 +505,77 @@
                 title: variables.validation.constraints.addUnit.title,
                 sign: variables.validation.constraints.addUnit.sign,
             },
+            addBlog: {
+                image: variables.validation.constraints.addBlog.image,
+                title: variables.validation.constraints.addBlog.title,
+                abstract: variables.validation.constraints.addBlog.abstract,
+                desc: variables.validation.constraints.addBlog.desc,
+            },
+            editBlog: {
+                image: variables.validation.constraints.editBlog.image,
+                title: variables.validation.constraints.editBlog.title,
+                abstract: variables.validation.constraints.editBlog.abstract,
+                desc: variables.validation.constraints.editBlog.desc,
+            },
+            addFaq: {
+                question: variables.validation.constraints.addFaq.question,
+                answer: variables.validation.constraints.addFaq.answer,
+                tags: variables.validation.constraints.addFaq.tags,
+            },
+            editFaq: {
+                question: variables.validation.constraints.addFaq.question,
+                answer: variables.validation.constraints.addFaq.answer,
+                tags: variables.validation.constraints.addFaq.tags,
+            },
+            addColor: {
+                name: variables.validation.constraints.addColor.name,
+                color: variables.validation.constraints.addColor.color,
+            },
+            editColor: {
+                name: variables.validation.constraints.editColor.name,
+                color: variables.validation.constraints.editColor.color,
+            },
+            addSlide: {
+                image: variables.validation.constraints.addSlide.image,
+                title: variables.validation.constraints.addSlide.title,
+                subTitle: variables.validation.constraints.addSlide.subTitle,
+                link: variables.validation.common.link,
+                priority: variables.validation.constraints.addSlide.priority,
+            },
+            editSlide: {
+                image: variables.validation.constraints.addSlide.image,
+                title: variables.validation.constraints.addSlide.title,
+                subTitle: variables.validation.constraints.addSlide.subTitle,
+                link: variables.validation.common.link,
+                priority: variables.validation.constraints.addSlide.priority,
+            },
         };
 
         userIdInp = $('input[type="hidden"][data-user-id]');
         if (userIdInp.length) {
             userId = userIdInp.val();
+        }
+
+        /**
+         * @param el
+         * @param image
+         */
+        function addImageToPlaceholder(el, image) {
+            $(el)
+                .closest('.__file_picker_handler')
+                .addClass('has-image')
+                .append($('<img class="img-placeholder-image" src="' + variables.url.image + image + '" alt="the image">'))
+        }
+
+        /**
+         * @param el
+         */
+        function removeImageFromPlaceholder(el) {
+            $(el)
+                .closest('.__file_picker_handler')
+                .removeClass('has-image')
+                .find('.img-placeholder-image')
+                .remove();
         }
 
         /**
@@ -295,7 +633,7 @@
             id = $(btn).attr('data-edit-id');
             editModal = $('#modal_form_edit_unit');
             // clear element after each call
-            $(variables.elements.editAddress.form).reset();
+            $(variables.elements.editUnit.form).reset();
             if (id && editModal.length) {
                 admin.request(variables.url.unit.get + '/' + id, 'get', function () {
                     var _ = this;
@@ -304,6 +642,63 @@
                         //-----
                         editModal.find('[name="' + variables.elements.editUnit.inputs.title + '"]').val(_.data['title']);
                         editModal.find('[name="' + variables.elements.editUnit.inputs.sign + '"]').val(_.data['sign']);
+                    }
+                });
+            }
+        }
+
+        /**
+         * @param btn
+         * @param [table]
+         */
+        function editFAQBtnClick(btn, table) {
+            var id, editModal;
+            id = $(btn).attr('data-edit-id');
+            editModal = $('#modal_form_edit_faq');
+            // clear element after each call
+            $(variables.elements.editFaq.form).reset();
+            if (id && editModal.length) {
+                admin.request(variables.url.faq.get + '/' + id, 'get', function () {
+                    var _ = this;
+                    if (_.data.length) {
+                        editFAQId = id;
+                        //-----
+                        editModal.find('[name="' + variables.elements.editFaq.inputs.question + '"]').val(_.data['question']);
+                        editModal.find('[name="' + variables.elements.editFaq.inputs.answer + '"]').val(_.data['answer']);
+                        editModal.find('[name="' + variables.elements.editFaq.inputs.tags + '"]').val(_.data['tags']);
+                        if (core.isChecked(_.data['publish'])) {
+                            editModal.find('[name="' + variables.elements.editFaq.inputs.status + '"]')
+                                .attr('checked', 'checked')
+                                .prop('checked', 'checked');
+                        }
+                    }
+                });
+            }
+        }
+
+        /**
+         * @param btn
+         * @param [table]
+         */
+        function editSlideBtnClick(btn, table) {
+            var id, editModal;
+            id = $(btn).attr('data-edit-id');
+            editModal = $('#modal_form_edit_slide');
+            // clear element after each call
+            $(variables.elements.editSlide.form).reset();
+            if (id && editModal.length) {
+                admin.request(variables.url.slider.get + '/' + id, 'get', function () {
+                    var _ = this;
+                    if (_.data.length) {
+                        editSlideId = id;
+                        //-----
+                        var imgEl = editModal.find('[name="' + variables.elements.editSlide.inputs.image + '"]');
+                        imgEl.val(_.data['image']);
+                        addImageToPlaceholder(imgEl, _.data['image']);
+                        editModal.find('[name="' + variables.elements.editSlide.inputs.title + '"]').val(_.data['title']);
+                        editModal.find('[name="' + variables.elements.editSlide.inputs.subTitle + '"]').val(_.data['note']);
+                        editModal.find('[name="' + variables.elements.editSlide.inputs.link + '"]').val(_.data['link']);
+                        editModal.find('[name="' + variables.elements.editSlide.inputs.priority + '"]').val(_.data['priority']);
                     }
                 });
             }
@@ -354,6 +749,20 @@
                 .on('click' + variables.namespace, function () {
                     editUnitBtnClick($(this), table);
                 });
+
+            // edit faq button click event
+            $('.__item_faq_editor_btn')
+                .off('click' + variables.namespace)
+                .on('click' + variables.namespace, function () {
+                    editFAQBtnClick($(this), table);
+                });
+
+            // edit slide button click event
+            $('.__item_slider_editor_btn')
+                .off('click' + variables.namespace)
+                .on('click' + variables.namespace, function () {
+                    editSlideBtnClick($(this), table);
+                });
         }
 
         // Add bottom spacing if reached bottom,
@@ -377,7 +786,12 @@
                     cancelText: "لغو",
                     chooseText: "انتخاب",
                     preferredFormat: "hex",
-                    showInput: true
+                    showInput: true,
+                    palette: [],
+                    showPalette: true,
+                    maxSelectionSize: 5,
+                    clickoutFiresChange: false,
+                    showInitial: true,
                 })
             });
         }
@@ -397,7 +811,6 @@
             });
         }
 
-
         // uniform initialize
         if ($().uniform) {
             // Default initialization
@@ -409,13 +822,6 @@
                 filesButtonHtml: 'انتخاب فایل',
                 fileDefaultHtml: 'هیچ فایلی انتخاب نشده است',
                 resetDefaultHtml: 'بازنشانی',
-            });
-        }
-
-        // Display color formats
-        if ($().spectrum) {
-            $('.colorpicker-show-input').spectrum({
-                showInput: true
             });
         }
 
@@ -695,6 +1101,50 @@
             });
         }
 
+        if ($().tagsinput) {
+            $('.tags-input').each(function () {
+                var obj, maxTags;
+                obj = {};
+
+                // check for max tags
+                maxTags = $(this).attr('data-max-tags');
+                maxTags = maxTags && !isNaN(parseInt(maxTags, 10)) ? parseInt(maxTags, 10) : null;
+                if (maxTags) {
+                    obj['maxTags'] = maxTags;
+                }
+
+                $(this).tagsinput(obj);
+            });
+        }
+
+        // Lazy loader (pictures, videos, etc.)
+        if ($.fn.lazy) {
+            $('.lazy').lazy({
+                effect: "fadeIn",
+                effectTime: 800,
+                threshold: 50,
+                // callback
+                afterLoad: function (element) {
+                    $(element).css({'background': 'none'});
+                }
+            });
+        }
+
+        if ($().maxlength) {
+            // Basic example
+            $('.maxlength').maxlength();
+
+            $('.maxlength-textarea').maxlength({
+                alwaysShow: true,
+                warningClass: 'text-success form-text',
+                limitReachedClass: 'text-danger form-text',
+                separator: ' از ',
+                preText: 'شما دارای ',
+                postText: ' کاراکتر هستید',
+                validate: true
+            });
+        }
+
         //---------------------------------------------------------------
         // ADD ADDRESS FORM
         //---------------------------------------------------------------
@@ -806,6 +1256,168 @@
                     // clear element after success
                     $(variables.elements.editUnit.form).reset();
                     editUnitId = null;
+                    //-----
+                    admin.toasts.toast(this.data, {
+                        type: 'success',
+                    });
+                    createLoader = true;
+                }, {
+                    data: values,
+                }, true, function () {
+                    createLoader = true;
+                });
+            }
+            return false;
+        }, function (errors) {
+            admin.forms.showFormErrors(errors);
+            return false;
+        });
+
+        //---------------------------------------------------------------
+        // ADD BLOG FORM
+        //---------------------------------------------------------------
+        admin.forms.submitForm('addBlog', constraints.addBlog, function () {
+            return true;
+        }, function (errors) {
+            admin.forms.showFormErrors(errors);
+            return false;
+        });
+
+        //---------------------------------------------------------------
+        // Edit BLOG FORM
+        //---------------------------------------------------------------
+        admin.forms.submitForm('editBlog', constraints.editBlog, function () {
+            return true;
+        }, function (errors) {
+            admin.forms.showFormErrors(errors);
+            return false;
+        });
+
+        //---------------------------------------------------------------
+        // ADD FAQ FORM
+        //---------------------------------------------------------------
+        admin.forms.submitForm('addFaq', constraints.addFaq, function (values) {
+            // do ajax
+            if (createLoader) {
+                createLoader = false;
+                loaderId = admin.showLoader();
+            }
+            admin.request(variables.url.faq.add, 'post', function () {
+                admin.hideLoader(loaderId);
+                // clear element after success
+                $(variables.elements.addFaq.form).reset();
+                admin.toasts.toast(this.data, {
+                    type: 'success',
+                });
+                createLoader = true;
+            }, {
+                data: values,
+            }, true, function () {
+                createLoader = true;
+            });
+            return false;
+        }, function (errors) {
+            admin.forms.showFormErrors(errors);
+            return false;
+        });
+
+        //---------------------------------------------------------------
+        // Edit FAQ FORM
+        //---------------------------------------------------------------
+        admin.forms.submitForm('editFaq', constraints.editFaq, function (values) {
+            if (editFAQId) {
+                // do ajax
+                if (createLoader) {
+                    createLoader = false;
+                    loaderId = admin.showLoader();
+                }
+                admin.request(variables.url.faq.edit + '/' + editFAQId, 'post', function () {
+                    admin.hideLoader(loaderId);
+                    // clear element after success
+                    $(variables.elements.editFaq.form).reset();
+                    editFAQId = null;
+                    //-----
+                    admin.toasts.toast(this.data, {
+                        type: 'success',
+                    });
+                    createLoader = true;
+                }, {
+                    data: values,
+                }, true, function () {
+                    createLoader = true;
+                });
+            }
+            return false;
+        }, function (errors) {
+            admin.forms.showFormErrors(errors);
+            return false;
+        });
+
+        //---------------------------------------------------------------
+        // ADD COLOR FORM
+        //---------------------------------------------------------------
+        admin.forms.submitForm('addColor', constraints.addColor, function () {
+            return true;
+        }, function (errors) {
+            admin.forms.showFormErrors(errors);
+            return false;
+        });
+
+        //---------------------------------------------------------------
+        // Edit COLOR FORM
+        //---------------------------------------------------------------
+        admin.forms.submitForm('editColor', constraints.editColor, function () {
+            return true;
+        }, function (errors) {
+            admin.forms.showFormErrors(errors);
+            return false;
+        });
+
+        //---------------------------------------------------------------
+        // ADD SLIDER FORM
+        //---------------------------------------------------------------
+        admin.forms.submitForm('addSlide', constraints.addSlide, function (values) {
+            // do ajax
+            if (createLoader) {
+                createLoader = false;
+                loaderId = admin.showLoader();
+            }
+            admin.request(variables.url.slider.add, 'post', function () {
+                admin.hideLoader(loaderId);
+                // clear element after success
+                $(variables.elements.addSlide.form).reset();
+                removeImageFromPlaceholder($(variables.elements.addSlide.form).find('[name="' + variables.elements.addSlide.inputs.image + '"]'));
+                admin.toasts.toast(this.data, {
+                    type: 'success',
+                });
+                createLoader = true;
+            }, {
+                data: values,
+            }, true, function () {
+                createLoader = true;
+            });
+            return false;
+        }, function (errors) {
+            admin.forms.showFormErrors(errors);
+            return false;
+        });
+
+        //---------------------------------------------------------------
+        // Edit SLIDER FORM
+        //---------------------------------------------------------------
+        admin.forms.submitForm('editSlide', constraints.editSlide, function (values) {
+            if (editSlideId) {
+                // do ajax
+                if (createLoader) {
+                    createLoader = false;
+                    loaderId = admin.showLoader();
+                }
+                admin.request(variables.url.slider.edit + '/' + editSlideId, 'post', function () {
+                    admin.hideLoader(loaderId);
+                    // clear element after success
+                    $(variables.elements.editSlide.form).reset();
+                    removeImageFromPlaceholder($(variables.elements.editSlide.form).find('[name="' + variables.elements.editSlide.inputs.image + '"]'));
+                    editSlideId = null;
                     //-----
                     admin.toasts.toast(this.data, {
                         type: 'success',

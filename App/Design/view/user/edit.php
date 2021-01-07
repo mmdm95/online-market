@@ -1,5 +1,7 @@
 <?php
+
 $validator = form_validator();
+
 ?>
 
 <!-- Content area -->
@@ -10,7 +12,7 @@ $validator = form_validator();
         <?php load_partial('admin/card-header', ['header_title' => 'ویرایش کاربر']); ?>
 
         <div class="card-body">
-            <form action="<?= url('admin.user.add')->getRelativeUrlTrimmed(); ?>" method="post">
+            <form action="<?= url('admin.user.edit') . $user['id']; ?>" method="post">
                 <?php load_partial('admin/message/message-form', [
                     'errors' => $user_edit_errors ?? [],
                     'success' => $user_edit_success ?? '',
@@ -222,11 +224,10 @@ $validator = form_validator();
                         </fieldset>
                     </div>
                 </div>
-
                 <div class="text-right">
-                    <button type="submit" class="btn btn-primary">
-                        ذخیره اطلاعات
-                        <i class="icon-floppy-disks ml-2"></i>
+                    <button type="submit" class="btn btn-success">
+                        ویرایش اطلاعات
+                        <i class="icon-checkmark3 ml-2"></i>
                     </button>
                 </div>
             </form>

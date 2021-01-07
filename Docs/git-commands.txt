@@ -4,12 +4,12 @@
 git status
 
 // to add files to staged condition
-git add [filename]
+git add <filename>
 // OR to add all of files
 git add -A
 
 // reset staged files
-git reset [filename]
+git reset <filename>
 // OR to reset all of files
 git reset -A
 
@@ -27,46 +27,46 @@ git commit -m "the message" -m "long message but not needed mostly"
 
 // branch operation
 // create
-git branch [branch_name]
+git branch <branch_name>
 // -m to rename
-git branch -m [old_name] [new_name]
+git branch -m <old_name> <new_name>
 // -d for delete
-git branch -d [branch_name]
+git branch -d <branch_name>
 
 // create branch with switch to it
-git checkout -b [branch_name]
+git checkout -b <branch_name>
 
 // switch branch
-git checkout [branch_name]
+git checkout <branch_name>
 
 // pull all data from upstream
 // pull = fetch + merge
 git pull
 // if you need to pull specific data
-git pull origin [branch_name]
+git pull origin <branch_name>
 
 // push data to upstream
-git push origin [branch_name]
+git push origin <branch_name>
 
 // fetch data from upstream but nor merge it
-git fetch [name_of_your_remote]
+git fetch <name_of_your_remote>
 
 // merge current branch with another one
-git merge [name_of_your_remote]/[branch_name]
+git merge <name_of_your_remote>/<branch_name>
 
 // show all tags
 // tags are for version stuffs
 git tag
 // add new tag
-git tag [tag_name]
+git tag <tag_name>
 // delete a tag
-git tag -d [tag_name]
+git tag -d <tag_name>
 
 // delete a branch or tag from remote
-git push origin --delete [name_of_your_remote_or_your_branch]
+git push origin --delete <name_of_your_remote_or_your_branch>
 
 // show previous commits
-// to quit from logs, press [q] button
+// to quit from logs, press <q> button
 git log
 
 // show differences (mostly after a conflict)
@@ -74,7 +74,13 @@ git log
 git diff
 
 // remove a file from repository and filesystem
-git rm [filename]
+git rm <filename>
 
 // remove a file from repository but not from filesystem
-git rm --cached [filename]
+git rm --cached <filename>
+
+// to see a log that happens before
+git reflog --no-abbrev
+
+// to recover deleted branch using above command
+git checkout -b <branch> <sha>

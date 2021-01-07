@@ -136,9 +136,8 @@ class AddressController extends AbstractAdminController implements IDatatableCon
              * @var AddressModel $addressModel
              */
             $addressModel = container()->get(AddressModel::class);
-            $res = $addressModel->get(['*'], 'user_id=:uId AND id=:id', ['uId' => $user_id, 'id' => $id]);
+            $res = $addressModel->getFirst(['*'], 'user_id=:uId AND id=:id', ['uId' => $user_id, 'id' => $id]);
             if (count($res)) {
-                $res = $res[0];
                 $resourceHandler
                     ->type(RESPONSE_TYPE_SUCCESS)
                     ->data($res);

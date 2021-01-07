@@ -6,44 +6,32 @@
         <?php load_partial('admin/card-header', ['header_title' => 'لیست رنگ‌ها']); ?>
 
         <div class="card-body">
-            با استفاده از ستون عملیات می‌توانید اقدام به حذف، ویرایش و مشاهده خرید‌های کاربر کنید.
+            با استفاده از ستون عملیات می‌توانید اقدام به حذف و ویرایش رنگ‌ها کنید.
         </div>
 
-        <table class="table table-bordered table-hover datatable-highlight">
+        <table class="table table-bordered table-hover datatable-highlight"
+               data-columns='[{"data":"id"},{"data":"name"},{"data":"hex"},{"data":"show"},{"data":"status"},{"data":"operations"}]'
+               data-ajax-url="<?= url('admin.color.dt.view')->getRelativeUrlTrimmed(); ?>">
             <thead>
             <tr>
                 <th>#</th>
                 <th>نام رنگ</th>
                 <th>کد</th>
                 <th>نمایش</th>
+                <th>وضعیت نمایش</th>
                 <th class="text-center">عملیات</th>
             </tr>
             </thead>
-            <tbody>
+            <tfoot>
             <tr>
-                <td>۱</td>
-                <td>رز گلد</td>
-                <td>#fffeee</td>
-                <td>
-                    <span class="p-2 d-inline-block rounded shadow-3 border-grey-300 border-1" style="background-color: #dd4a68;"></span>
-                </td>
-                <td class="text-center">
-                    <div class="list-icons">
-                        <div class="dropdown">
-                            <a href="#" class="list-icons-item" data-toggle="dropdown">
-                                <i class="icon-menu9"></i>
-                            </a>
-
-                            <div class="dropdown-menu dropdown-menu-right">
-                                <a href="#" class="dropdown-item"><i class="icon-pencil"></i>ویرایش</a>
-                                <a href="#" class="dropdown-item"><i class="icon-trash"></i>حذف</a>
-                                <a href="#" class="dropdown-item"><i class="icon-cart"></i>خریدها</a>
-                            </div>
-                        </div>
-                    </div>
-                </td>
+                <th>#</th>
+                <th>نام رنگ</th>
+                <th>کد</th>
+                <th>نمایش</th>
+                <th>وضعیت نمایش</th>
+                <th class="text-center">عملیات</th>
             </tr>
-            </tbody>
+            </tfoot>
         </table>
     </div>
     <!-- /highlighting rows and columns -->

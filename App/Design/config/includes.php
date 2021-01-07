@@ -365,6 +365,11 @@ return [
                         ),
                         e(
                             '<script type="text/javascript" src="' .
+                            asset_path('be/js/plugins/forms/inputs/maxlength.min.js') .
+                            '"></script>'
+                        ),
+                        e(
+                            '<script type="text/javascript" src="' .
                             asset_path('be/js/plugins/forms/styling/switchery.min.js') .
                             '"></script>'
                         ),
@@ -408,6 +413,28 @@ return [
                         ),
                     ],
                 ],
+            ],
+            'admin-tags-input' => [
+                'js' => [
+                    'bottom' => [
+                        e(
+                            '<script type="text/javascript" src="' .
+                            asset_path('be/js/plugins/forms/tags/tagsinput.min.js') .
+                            '"></script>'
+                        ),
+                    ],
+                ],
+            ],
+            'admin-editor' => [
+                'js' => [
+                    'bottom' => [
+                        e(
+                            '<script type="text/javascript" src="' .
+                            asset_path('be/js/plugins/editors/tinymce/tinymce.min.js') .
+                            '"></script>'
+                        ),
+                    ],
+                ]
             ],
             'admin' => [
                 'js' => [
@@ -871,7 +898,34 @@ return [
             'title' => title_concat(\config()->get('settings.title.value'), 'صفحه ورود'),
             'common' => [
                 'admin-base',
-                'admin'
+                'admin',
+            ],
+        ],
+        'partial/editor/browser' => [
+            'title' => title_concat(\config()->get('settings.title.value'), 'انتخاب فایل'),
+            'common' => [
+                'admin-base',
+                'admin',
+            ],
+        ],
+        'view/setting/main' => [
+            'title' => title_concat(\config()->get('settings.title.value'), 'تنظیمات'),
+            'common' => [
+                'admin-base',
+                'admin',
+            ],
+            'sub_title' => 'تنظیمات',
+            'breadcrumb' => [
+                [
+                    'url' => url('admin.index'),
+                    'icon' => 'icon-home2',
+                    'text' => 'خانه',
+                    'is_active' => false,
+                ],
+                [
+                    'text' => 'تنظیمات',
+                    'is_active' => true,
+                ],
             ],
         ],
         'view/user/view' => [
@@ -879,7 +933,7 @@ return [
             'common' => [
                 'admin-base',
                 'admin-table',
-                'admin'
+                'admin',
             ],
             'sub_title' => 'مدیریت کاربران',
             'breadcrumb' => [
@@ -1281,6 +1335,8 @@ return [
             'common' => [
                 'admin-base',
                 'admin-form',
+                'admin-tags-input',
+                'admin-editor',
                 'admin'
             ],
             'sub_title' => 'افزودن مطلب',
@@ -1307,6 +1363,8 @@ return [
             'common' => [
                 'admin-base',
                 'admin-form',
+                'admin-tags-input',
+                'admin-editor',
                 'admin'
             ],
             'sub_title' => 'ویرایش مطلب',
@@ -1361,7 +1419,7 @@ return [
                 'admin-form',
                 'admin'
             ],
-            'sub_title' => 'مدیریت دسته‌بندی‌ها',
+            'sub_title' => 'افزودن دسته‌بندی مطلب‌',
             'breadcrumb' => [
                 [
                     'url' => url('admin.index'),
@@ -1371,11 +1429,11 @@ return [
                 ],
                 [
                     'url' => url('admin.blog.view'),
-                    'text' => 'مطلب',
+                    'text' => 'مطالب',
                     'is_active' => false,
                 ],
                 [
-                    'url' => url('admin.blog.category.add'),
+                    'url' => url('admin.blog.category.view'),
                     'text' => 'دسته‌بندی‌ها',
                     'is_active' => false,
                 ],
@@ -1392,7 +1450,7 @@ return [
                 'admin-form',
                 'admin'
             ],
-            'sub_title' => 'ویرایش دسته‌بندی‌',
+            'sub_title' => 'ویرایش دسته‌بندی مطلب‌',
             'breadcrumb' => [
                 [
                     'url' => url('admin.index'),
@@ -1402,12 +1460,12 @@ return [
                 ],
                 [
                     'url' => url('admin.blog.view'),
-                    'text' => 'مطلب',
+                    'text' => 'مطالب',
                     'is_active' => false,
                 ],
                 [
-                    'url' => url('admin.category.add'),
-                    'text' => 'مدیریت دسته‌بندی‌ها',
+                    'url' => url('admin.category.view'),
+                    'text' => 'دسته‌بندی‌ها',
                     'is_active' => false,
                 ],
                 [
@@ -1417,13 +1475,13 @@ return [
             ],
         ],
         'view/blog/category/view' => [
-            'title' => title_concat(\config()->get('settings.title.value'), 'مشاهده دسته‌ها'),
+            'title' => title_concat(\config()->get('settings.title.value'), 'مشاهده دسته‌های مطالب'),
             'common' => [
                 'admin-base',
                 'admin-table',
                 'admin'
             ],
-            'sub_title' => 'مدیریت دسته‌بندی‌ها',
+            'sub_title' => 'دسته‌بندی‌های مطالب',
             'breadcrumb' => [
                 [
                     'url' => url('admin.index'),
@@ -1433,12 +1491,7 @@ return [
                 ],
                 [
                     'url' => url('admin.blog.view'),
-                    'text' => 'مطلب',
-                    'is_active' => false,
-                ],
-                [
-                    'url' => url('admin.blog.category.view'),
-                    'text' => 'دسته‌بندی‌ها',
+                    'text' => 'مطالب',
                     'is_active' => false,
                 ],
                 [
@@ -1523,6 +1576,7 @@ return [
             'common' => [
                 'admin-base',
                 'admin-form',
+                'admin-tags-input',
                 'admin-table',
                 'admin'
             ],

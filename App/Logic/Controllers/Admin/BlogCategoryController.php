@@ -4,6 +4,7 @@
 namespace App\Logic\Controllers\Admin;
 
 use App\Logic\Abstracts\AbstractAdminController;
+use App\Logic\Interfaces\IDatatableController;
 use ReflectionException;
 use Sim\Exceptions\ConfigManager\ConfigNotRegisteredException;
 use Sim\Exceptions\Mvc\Controller\ControllerException;
@@ -11,7 +12,7 @@ use Sim\Exceptions\PathManager\PathNotRegisteredException;
 use Sim\Interfaces\IFileNotExistsException;
 use Sim\Interfaces\IInvalidVariableNameException;
 
-class BlogCategoryController extends AbstractAdminController
+class BlogCategoryController extends AbstractAdminController implements IDatatableController
 {
     /**
      * @return string
@@ -57,5 +58,19 @@ class BlogCategoryController extends AbstractAdminController
     {
         $this->setLayout($this->main_layout)->setTemplate('view/blog/category/edit');
         return $this->render();
+    }
+
+    public function remove($id)
+    {
+
+    }
+
+    /**
+     * @param array $_
+     * @return void
+     */
+    public function getPaginatedDatatable(...$_): void
+    {
+
     }
 }

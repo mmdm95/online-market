@@ -1,10 +1,10 @@
 <?php
 
-
 namespace App\Logic\Controllers\Admin;
 
 use App\Logic\Abstracts\AbstractAdminController;
-use App\Logic\Forms\Admin\Blog\AddForm as BlogAddForm;
+use App\Logic\Forms\Admin\Blog\AddBlogForm;
+use App\Logic\Forms\Admin\Blog\EditBlogForm;
 use App\Logic\Handlers\DatatableHandler;
 use App\Logic\Handlers\GeneralAjaxRemoveHandler;
 use App\Logic\Handlers\GeneralFormHandler;
@@ -13,6 +13,7 @@ use App\Logic\Interfaces\IDatatableController;
 use App\Logic\Models\BaseModel;
 use App\Logic\Models\BlogCategoryModel;
 use App\Logic\Models\BlogModel;
+use App\Logic\Utils\Jdf;
 use Jenssegers\Agent\Agent;
 use ReflectionException;
 use Sim\Container\Exceptions\MethodNotFoundException;
@@ -61,7 +62,7 @@ class BlogController extends AbstractAdminController implements IDatatableContro
         $data = [];
         if (is_post()) {
             $formHandler = new GeneralFormHandler();
-            $data = $formHandler->handle(BlogAddForm::class, 'blog');
+            $data = $formHandler->handle(AddBlogForm::class, 'blog_add');
         }
 
         /**
@@ -79,17 +80,46 @@ class BlogController extends AbstractAdminController implements IDatatableContro
     /**
      * @param $id
      * @return string
-     * @throws ReflectionException
      * @throws ConfigNotRegisteredException
      * @throws ControllerException
-     * @throws PathNotRegisteredException
      * @throws IFileNotExistsException
      * @throws IInvalidVariableNameException
+     * @throws MethodNotFoundException
+     * @throws ParameterHasNoDefaultValueException
+     * @throws PathNotRegisteredException
+     * @throws ReflectionException
+     * @throws ServiceNotFoundException
+     * @throws ServiceNotInstantiableException
      */
     public function edit($id)
     {
+        /**
+         * @var BlogModel $blogModel
+         */
+        $blogModel = container()->get(BlogModel::class);
+
+        $blog = $blogModel->get(['title'], 'id=:id', ['id' => $id]);
+
+        if (0 == count($blog)) {
+            return $this->show404();
+        }
+
+        // store previous title to check for duplicate
+        session()->setFlash('blog-prev-title', $blog[0]['title']);
+        session()->setFlash('blog-curr-id', $id);
+
+        $data = [];
+        if (is_post()) {
+            $formHandler = new GeneralFormHandler();
+            $data = $formHandler->handle(EditBlogForm::class, 'blog_edit');
+        }
+
+        $blog = $blogModel->getFirst(['*'], 'id=:id', ['id' => $id]);
+
         $this->setLayout($this->main_layout)->setTemplate('view/blog/edit');
-        return $this->render();
+        return $this->render(array_merge($data, [
+            'blog' => $blog,
+        ]));
     }
 
     /**
@@ -160,10 +190,28 @@ class BlogController extends AbstractAdminController implements IDatatableContro
                         }
                     ],
                     ['db' => 'b.title', 'db_alias' => 'title', 'dt' => 'title'],
-                    ['db' => 'b.publish', 'db_alias' => 'publish', 'dt' => 'pub_status'],
+                    [
+                        'db' => 'b.publish',
+                        'db_alias' => 'publish',
+                        'dt' => 'pub_status',
+                        'formatter' => function ($d) {
+                            $status = $this->setTemplate('partial/admin/badge-parser/active-status')
+                                ->render([
+                                    'status' => $d,
+                                ]);
+                            return $status;
+                        }
+                    ],
                     ['db' => 'b.writer', 'db_alias' => 'writer', 'dt' => 'writer'],
                     ['db' => 'bc.name', 'db_alias' => 'category_name', 'dt' => 'category'],
-                    ['db' => 'b.created_at', 'db_alias' => 'created_at', 'dt' => 'pub_date'],
+                    [
+                        'db' => 'b.created_at',
+                        'db_alias' => 'created_at',
+                        'dt' => 'pub_date',
+                        'formatter' => function ($d) {
+                            return Jdf::jdate('j F Y', $d);
+                        }
+                    ],
                     [
                         'dt' => 'operations',
                         'formatter' => function ($row) {

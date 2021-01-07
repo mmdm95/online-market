@@ -1,6 +1,6 @@
 <?php
 
-////Security options
+//Security options
 //$allow_delete = true; // Set to false to disable delete button and delete POST request.
 //$allow_upload = true; // Set to true to allow upload files
 //$allow_create_folder = true; // Set to false to disable folder creation

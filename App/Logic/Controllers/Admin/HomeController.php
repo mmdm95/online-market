@@ -23,7 +23,6 @@ class HomeController extends AbstractAdminController
     public function index()
     {
         $this->setTemplate('view/index');
-
         return $this->render();
     }
 
@@ -38,14 +37,34 @@ class HomeController extends AbstractAdminController
      */
     public function login()
     {
-        if(request()->getMethod() === 'post') {
+        if (is_post()) {
 
         }
 
         $this
             ->setLayout('admin-login')
             ->setTemplate('view/admin-login');
-
         return $this->render();
+    }
+
+    /**
+     * @return string
+     * @throws ConfigNotRegisteredException
+     * @throws ControllerException
+     * @throws IFileNotExistsException
+     * @throws IInvalidVariableNameException
+     * @throws PathNotRegisteredException
+     * @throws \ReflectionException
+     */
+    public function browser()
+    {
+        $this->setTemplate('partial/editor/browser');
+        return $this->render([
+            'the_options' => [
+                'allow_upload' => false,
+                'allow_create_folder' => false,
+                'allow_direct_link' => false,
+            ],
+        ]);
     }
 }

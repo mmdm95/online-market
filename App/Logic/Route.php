@@ -173,8 +173,12 @@ class Route implements IInitialize
                 /**
                  * Color Route
                  */
-                Router::get('/color/add', 'Admin\ColorController@add')->name('admin.color.add');
+                Router::form('/color/add', 'Admin\ColorController@add')->name('admin.color.add');
+                Router::form('/color/edit/{id}', 'Admin\ColorController@edit')->where([
+                    'id' => '[0-9]',
+                ])->name('admin.color.edit');
                 Router::get('/color/view', 'Admin\ColorController@view')->name('admin.color.view');
+                Router::post('/color/view/dt', 'Admin\ColorController@getPaginatedDatatable')->name('admin.color.dt.view');
 
                 /**
                  * Festival Route
@@ -198,11 +202,13 @@ class Route implements IInitialize
                 /**
                  * Blog Category Route
                  */
-                Router::get('/blog/category/add', 'Admin\BlogCategoryController@add')->name('admin.blog.category.add');
-                Router::get('/blog/category/edit/{id}', 'Admin\BlogCategoryController@edit')->where([
+                Router::form('/blog/category/add', 'Admin\BlogCategoryController@add')->name('admin.blog.category.add');
+                Router::form('/blog/category/edit/{id}', 'Admin\BlogCategoryController@edit')->where([
                     'id' => '[0-9]+',
                 ])->name('admin.blog.category.edit');
                 Router::get('blog/category/view', 'Admin\BlogCategoryController@view')->name('admin.blog.category.view');
+                Router::get('blog/category/view/dt', 'Admin\BlogCategoryController@getPaginatedDatatable')
+                    ->name('admin.blog.category.dt.view');
 
                 /**
                  * Contact us Route
@@ -221,6 +227,7 @@ class Route implements IInitialize
                  * FAQ Route
                  */
                 Router::get('/faq/view', 'Admin\FaqController@view')->name('admin.faq.view');
+                Router::post('/faq/view/dt', 'Admin\FaqController@getPaginatedDatatable')->name('admin.faq.dt.view');
 
                 /**
                  * complaints Route
@@ -259,6 +266,7 @@ class Route implements IInitialize
                  * Slider Route
                  */
                 Router::get('/slider/view', 'Admin\SliderController@view')->name('admin.slider.view');
+                Router::post('/slider/view/dt', 'Admin\SliderController@getPaginatedDatatable')->name('admin.slider.dt.view');
 
                 /**
                  * Setting Route
@@ -430,6 +438,11 @@ class Route implements IInitialize
             // other pages that need authentication
             Router::group(['middleware' => AdminAuthMiddleware::class], function () {
                 /**
+                 * editor browser route
+                 */
+                Router::get('/editor/browser', 'Admin\HomeController@browser')->name('ajax.editor.browser');
+
+                /**
                  * user route
                  */
                 Router::delete('/user/remove/{id}', 'Admin\UserController@remove')->where([
@@ -483,6 +496,45 @@ class Route implements IInitialize
                 Router::delete('/blog/remove/{id}', 'Admin\BlogController@remove')->where([
                     'id' => '[0-9]+',
                 ])->name('ajax.blog.remove');
+
+                /**
+                 * faq route
+                 */
+                Router::get('/faq/get/{id}', 'Admin\FaqController@get')->where([
+                    'id' => '[0-9]+',
+                ])->name('ajax.faq.get');
+                Router::post('/faq/add/{user_id}', 'Admin\FaqController@add')->where([
+                    'user_id' => '[0-9]+',
+                ])->name('ajax.faq.add');
+                Router::post('/faq/edit/{id}', 'Admin\FaqController@edit')->where([
+                    'id' => '[0-9]+',
+                ])->name('ajax.faq.edit');
+                Router::delete('/faq/remove/{id}', 'Admin\FaqController@remove')->where([
+                    'id' => '[0-9]+',
+                ])->name('ajax.faq.remove');
+
+                /**
+                 * color route
+                 */
+                Router::delete('/color/remove/{id}', 'Admin\ColorController@remove')->where([
+                    'id' => '[0-9]+',
+                ])->name('ajax.color.remove');
+
+                /**
+                 * slider route
+                 */
+                Router::get('/slider/get/{id}', 'Admin\SliderController@get')->where([
+                    'id' => '[0-9]+',
+                ])->name('ajax.slider.get');
+                Router::post('/slider/add/{user_id}', 'Admin\SliderController@add')->where([
+                    'user_id' => '[0-9]+',
+                ])->name('ajax.slider.add');
+                Router::post('/slider/edit/{id}', 'Admin\SliderController@edit')->where([
+                    'id' => '[0-9]+',
+                ])->name('ajax.slider.edit');
+                Router::delete('/slider/remove/{id}', 'Admin\SliderController@remove')->where([
+                    'id' => '[0-9]+',
+                ])->name('ajax.slider.remove');
 
                 /**
                  * File Manager Route

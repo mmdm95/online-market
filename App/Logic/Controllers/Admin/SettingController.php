@@ -24,8 +24,7 @@ class SettingController extends AbstractAdminController
      */
     public function view()
     {
-        $this->setLayout($this->main_layout)->setTemplate('view/setting');
-
+        $this->setLayout($this->main_layout)->setTemplate('view/setting/main');
         return $this->render();
     }
 }

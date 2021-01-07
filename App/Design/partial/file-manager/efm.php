@@ -77,6 +77,10 @@
         var renameModal = $('#modal_rename'),
             renameInput = $('#renameInput');
 
+        var
+            adminCommon = new window.TheAdmin(),
+            core = window.TheCore
+
         var XSRF = (document.cookie.match('(^|; )_sfm_xsrf=([^;]*)') || 0)[2];
         XSRF = XSRF ? XSRF : null;
         var MAX_UPLOAD_SIZE = <?= $the_options['MAX_UPLOAD_SIZE'] ?>;
@@ -85,9 +89,8 @@
         $('#table').tablesorter();
 
         $('#table').on('click', '.delete', function () {
-            var _ = this, sure;
-            sure = confirm('آیا مطمئن هستید؟');
-            if (sure) {
+            var _ = this;
+            adminCommon.toasts.confirm(null, function () {
                 $.ajax({
                     url: routes.delete,
                     method: 'POST',
@@ -100,14 +103,18 @@
                         if (null === response.error) {
                             list();
                         } else {
-                            console.warn(response.error);
+                            adminCommon.toasts.toast(response.error, {
+                                type: 'error',
+                            });
                         }
                     },
                     error: function (response) {
-                        console.warn(response.responseText);
+                        // console.warn(response.responseText);
                     },
                 });
-            }
+            }, {
+                type: 'confirm',
+            });
             return false;
         }).on('click', '.rename', function () {
             var path = $(this).attr('data-file');
@@ -123,35 +130,66 @@
             var name = $.trim(renameInput.val());
             var path = renameInput.attr('data-path');
             if ('' !== name && path) {
-                $.post(routes.rename, {
-                    file: path,
-                    newName: name,
-                    xsrf: XSRF,
-                }, function (response) {
-                    if (null === response.error) {
-                        list();
-                    } else {
-                        alert(response.error);
-                    }
-                }, 'json');
+                $.ajax({
+                    method: 'POST',
+                    url: routes.rename,
+                    dataType: 'json',
+                    data: {
+                        file: path,
+                        newName: name,
+                        xsrf: XSRF,
+                    },
+                    success: function (response) {
+                        if (null === response.error) {
+                            list();
+                        } else {
+                            adminCommon.toasts.toast(response.error, {
+                                type: 'error',
+                            });
+                        }
+                    },
+                });
             }
         });
 
-        $('#mkdir').submit(function (e) {
-            var hashval = decodeURIComponent(window.location.hash.substr(1)),
-                $dir = $(this).find('#dirname[name="name"]');
+        $('#mvdir').on('click', function (e) {
             e.preventDefault();
-            if('' !== $.trim($dir.val())) {
-                $dir.val().length && $.post(routes.mkdir, {
-                    name: $dir.val(),
-                    xsrf: XSRF,
-                    file: hashval
-                }, function (data) {
-                }, 'json');
-                $dir.val('');
-                list();
+
+            var foldersBody = $('#folders-body');
+            var newPath = foldersBody.find('.selectable').first().attr('data-path');
+
+            if (typeof newPath !== typeof undefined) {
+                $.ajax({
+                    url: routes.mvdir,
+                    method: 'POST',
+                    dataType: 'json',
+                    data: {
+                        newPath: newPath,
+                        xsrf: XSRF,
+                        file: JSON.stringify(chksPath)
+                    },
+                    success: function (response) {
+                        if (null === response.error) {
+                            if (99 == response.status_code) {
+                                alert('برخی از فایل‌ها با نام یکسان جابجا نشدند!');
+                            }
+
+                            list();
+                            foldersBody.find('.selectable').removeClass('selectable');
+                            $('#tree-refresh').trigger('click');
+                        } else {
+                            adminCommon.toasts.toast(response.error, {
+                                type: 'error',
+                            });
+                        }
+                    },
+                    error: function (response) {
+                        // console.log(response.responseText);
+                    },
+                });
+            } else {
+                e.stopPropagation();
             }
-            return false;
         });
 
         <?php if($the_options['allow_upload']): ?>
@@ -203,7 +241,9 @@
                         $row.remove();
                         list();
                     } else {
-                        console.warn(data.error);
+                        adminCommon.toasts.toast(data.error, {
+                            type: 'error',
+                        });
                     }
                 }
             };
@@ -230,6 +270,10 @@
         }
         <?php endif; ?>
 
+        var
+            lazyFirstTime = true,
+            threshold;
+
         function list() {
             var hashval = window.location.hash.substr(1);
             $.get(routes.list, {
@@ -243,15 +287,18 @@
                         $tbody.append(renderFileRow(v));
                     });
 
+                    threshold = lazyFirstTime ? 500 : 0;
                     $('.lazy').lazy({
                         effect: "fadeIn",
                         effectTime: 800,
-                        threshold: 0,
+                        threshold: threshold,
+                        appendScroll: $('#table').closest('.lazyContainer').length ? $('#table').closest('.lazyContainer') : window,
                         // callback
                         afterLoad: function (element) {
                             $(element).css({'background': 'none'});
                         }
                     });
+                    lazyFirstTime = false;
 
                     $('[data-popup=lightbox]').on('click', function (e) {
                         e.preventDefault();
@@ -264,8 +311,12 @@
                     });
 
                     !data.data.length && $tbody.append('<tr><td class="empty" colspan="5">این پوشه خالی می‌باشد</td></tr>');
+
+                    $('#table').trigger('efm:list');
                 } else {
-                    console.warn(data.error);
+                    adminCommon.toasts.toast(data.error, {
+                        type: 'error',
+                    });
                 }
                 $('#table').retablesort();
             }, 'json');
@@ -351,8 +402,7 @@
             }
 
             $link = $('<a class="name image ' + extraClass + '" />')
-                .attr('href', data.path).attr('data-url', "<?= url('image.show'); ?>" + data.path)
-                .attr('data-popup', 'lightbox')
+                .attr('href', 'javascript:void(0);').attr('data-url', "<?= url('image.show'); ?>" + data.path)
                 .append($('<span class="img-name">' + data.name + '</span>'))
                 .append($('<img class="lazy" data-src="' + dataSrc + '" alt="' + data.name + '" />'))
                 .append($('<div style="clear: both;"></div>'));
