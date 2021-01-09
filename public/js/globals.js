@@ -9,18 +9,20 @@ window.MyGlobalVariables = {
         warning: '',
         error: '',
     },
-    types: {
-        success: 'success',
-        warning: 'warning',
-        info: 'info',
-        error: 'error',
-    },
     messages: {
         request: {
             error: 'ارسال/دریافت اطلاعات با خطا روبرو شد!',
         },
     },
     toasts: {
+        types: {
+            success: 'success',
+            warning: 'warning',
+            error: 'error',
+            info: 'info',
+            alert: 'alert',
+            question: 'question',
+        },
         general: {
             confirmLabels: {
                 ok: 'باشه',
@@ -47,7 +49,15 @@ window.MyGlobalVariables = {
             }
         },
     },
-    apiCodes: {},
+    api: {
+        types: {
+            success: 'success',
+            warning: 'warning',
+            info: 'info',
+            error: 'error',
+        },
+        codes: {},
+    },
     url: {
         cart: {
             get: '/ajax/cart/get',

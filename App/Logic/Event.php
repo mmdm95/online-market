@@ -42,6 +42,13 @@ class Event
         $eventProvider->addEvent(new TheEvent('form.general:warning'));
         $eventProvider->addEvent(new TheEvent('form.general:error'));
 
+        // general ajax status change events
+        $eventProvider->addEvent(new TheEvent('status.general.ajax:auth'));
+        $eventProvider->addEvent(new TheEvent('status.general.ajax:invalid_id'));
+        $eventProvider->addEvent(new TheEvent('status.general.ajax:not_exists'));
+        $eventProvider->addEvent(new TheEvent('status.general.ajax:failed'));
+        $eventProvider->addEvent(new TheEvent('status.general.ajax:success'));
+
         return $eventProvider;
     }
 }

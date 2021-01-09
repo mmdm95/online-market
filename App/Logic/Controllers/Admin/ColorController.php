@@ -187,7 +187,7 @@ class ColorController extends AbstractAdminController implements IDatatableContr
                         'db_alias' => 'publish',
                         'dt' => 'status',
                         'formatter' => function ($d) {
-                            $status = $this->setTemplate('partial/admin/badge-parser/active-status')
+                            $status = $this->setTemplate('partial/admin/parser/active-status')
                                 ->render([
                                     'status' => $d,
                                 ]);
@@ -197,7 +197,7 @@ class ColorController extends AbstractAdminController implements IDatatableContr
                     [
                         'dt' => 'show',
                         'formatter' => function ($row) {
-                            $show = $this->setTemplate('partial/admin/badge-parser/color-shape')
+                            $show = $this->setTemplate('partial/admin/parser/color-shape')
                                 ->render([
                                     'row' => $row,
                                 ]);

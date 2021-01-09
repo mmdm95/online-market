@@ -195,7 +195,7 @@ class BlogController extends AbstractAdminController implements IDatatableContro
                         'db_alias' => 'publish',
                         'dt' => 'pub_status',
                         'formatter' => function ($d) {
-                            $status = $this->setTemplate('partial/admin/badge-parser/active-status')
+                            $status = $this->setTemplate('partial/admin/parser/active-status')
                                 ->render([
                                     'status' => $d,
                                 ]);
@@ -209,7 +209,7 @@ class BlogController extends AbstractAdminController implements IDatatableContro
                         'db_alias' => 'created_at',
                         'dt' => 'pub_date',
                         'formatter' => function ($d) {
-                            return Jdf::jdate('j F Y', $d);
+                            return Jdf::jdate(DEFAULT_TIME_FORMAT, $d);
                         }
                     ],
                     [

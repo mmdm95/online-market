@@ -29,7 +29,7 @@ use App\Logic\Utils\Jdf;
                                 </a>
                             </h6>
                             <p class="small m-0">
-                                <?= Jdf::jdate('j F Y', $item['created_at']) ?>
+                                <?= Jdf::jdate(DEFAULT_TIME_FORMAT, $item['created_at']) ?>
                             </p>
                         </div>
                     </div>

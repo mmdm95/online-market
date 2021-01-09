@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Logic\Forms\Admin\Blog;
+namespace App\Logic\Forms\Admin\Brand;
 
 use App\Logic\Interfaces\IPageForm;
 use App\Logic\Models\BlogCategoryModel;
@@ -18,7 +18,7 @@ use Sim\Form\FormValue;
 use Sim\Utils\StringUtil;
 use voku\helper\AntiXSS;
 
-class AddBlogForm implements IPageForm
+class AddBrandForm implements IPageForm
 {
     /**
      * {@inheritdoc}

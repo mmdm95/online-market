@@ -117,7 +117,7 @@ use Sim\Utils\ArrayUtil;
                                 </ul>
                             </div>
                         <?php endif; ?>
-                        <?php if (count($models ?? [])): ?>
+                        <?php if (count($sizes ?? [])): ?>
                             <div class="widget">
                                 <h5 class="widget_title">سایزها</h5>
                                 <div class="max-widget-height">

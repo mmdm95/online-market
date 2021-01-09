@@ -130,5 +130,8 @@ defined("PRODUCT_ORDERINGS") OR define("PRODUCT_ORDERINGS", [
 // maximum store for addresses
 defined("ADDRESS_MAX_COUNT") OR define("ADDRESS_MAX_COUNT", 10);
 
+// default time format
+defined("DEFAULT_TIME_FORMAT") OR define("DEFAULT_TIME_FORMAT", 'j F Y');
+
 // archive tags time format
 defined("ARCHIVE_TAGS_TIME_FORMAT") OR define("ARCHIVE_TAGS_TIME_FORMAT", 'F Y');

@@ -45,6 +45,10 @@
             edit: '/ajax/slider/edit',
             remove: '/ajax/slider/remove',
         },
+        newsletter: {
+            add: '/ajax/admin/newsletter/add',
+            remove: '/ajax/admin/newsletter/remove',
+        },
     });
     window.MyGlobalVariables.elements = $.extend(true, window.MyGlobalVariables.elements, {
         addAddress: {
@@ -159,6 +163,26 @@
                 subTitle: 'inp-edit-slide-sub-title',
                 link: 'inp-edit-slide-sub-link',
                 priority: 'inp-edit-slide-priority',
+            },
+        },
+        addBlogCategory: {
+            form: '#__form_add_blog_category',
+            inputs: {
+                name: 'inp-add-blog-category-name',
+                status: 'inp-add-blog-category-status',
+            },
+        },
+        editBlogCategory: {
+            form: '#__form_edit_blog_category',
+            inputs: {
+                name: 'inp-edit-blog-category-name',
+                status: 'inp-edit-blog-category-status',
+            },
+        },
+        addNewsletter: {
+            form: '#__form_add_newsletter',
+            inputs: {
+                mobile: 'inp-add-newsletter-mobile',
             },
         },
     });
@@ -422,6 +446,22 @@
                     },
                 },
             },
+            addBlogCategory: {
+                name: {
+                    presence: {
+                        allowEmpty: false,
+                        message: '^' + 'نام دسته‌بندی را وارد کنید.',
+                    },
+                },
+            },
+            editBlogCategory: {
+                name: {
+                    presence: {
+                        allowEmpty: false,
+                        message: '^' + 'نام دسته‌بندی را وارد کنید.',
+                    },
+                },
+            },
         },
     });
 
@@ -474,6 +514,7 @@
             loaderId,
             createLoader = true,
             //-----
+            currentTable = null,
             userIdInp,
             userId = null,
             editAddrId = null,
@@ -549,11 +590,35 @@
                 link: variables.validation.common.link,
                 priority: variables.validation.constraints.addSlide.priority,
             },
+            addBlogCategory: {
+                name: variables.validation.constraints.addBlogCategory.name,
+            },
+            editBlogCategory: {
+                name: variables.validation.constraints.editBlogCategory.name,
+            },
+            addNewsletter: {
+                mobile: variables.validation.common.mobile,
+            },
         };
 
         userIdInp = $('input[type="hidden"][data-user-id]');
         if (userIdInp.length) {
             userId = userIdInp.val();
+        }
+
+        /**
+         * Instantiate switchery plugin with prevent multiple instantiation
+         */
+        function instantiateSwitchery() {
+            if (typeof Switchery !== 'undefined') {
+                // Initialize multiple switches
+                var elems = Array.prototype.slice.call(document.querySelectorAll('.form-check-input-switchery'));
+                elems.forEach(function (html) {
+                    if (!$(html).attr('data-switchery')) {
+                        var switchery = new Switchery(html);
+                    }
+                });
+            }
         }
 
         /**
@@ -590,9 +655,47 @@
             id = $(btn).attr('data-remove-id');
 
             if (url && id) {
-                admin.deleteItem(url, null, {}, true);
+                admin.deleteItem(url + id, function () {
+                    if (table) {
+                        $(table).DataTable().ajax.reload(null, true);
+                    }
+                }, {}, true);
             }
         }
+
+        /**
+         * @param btn
+         * @param [table]
+         */
+        function changeOperation(btn, table) {
+            var url, id;
+            url = $(btn).attr('data-change-status-url');
+            id = $(btn).attr('data-change-status-id');
+
+            if (url && id) {
+                admin.request(url + id, 'post', function () {
+                    var _ = this;
+                    if (_.type === variables.api.types.warning) {
+                        admin.toasts.toast(_.data);
+                    } else {
+                        admin.toasts.toast(_.data, {
+                            type: variables.toasts.types.success,
+                        });
+                    }
+                }, {
+                    data: {
+                        'status': $(btn).is(':checked') ? 1 : 0,
+                    },
+                }, true);
+            }
+        }
+
+        // change status button click event
+        $('.__item_status_changer_btn')
+            .off('click')
+            .on('click', function () {
+                changeOperation($(this));
+            });
 
         /**
          *
@@ -611,6 +714,7 @@
                     var provincesSelect = $('select[name="' + variables.elements.editAddress.inputs.province + '"]'),
                         citiesSelect = $(provincesSelect.attr('data-city-select-target'));
                     if (_.data.length && provincesSelect.length && citiesSelect.length) {
+                        currentTable = table;
                         editAddrId = id;
                         //-----
                         admin.loadProvinces(provincesSelect.attr('data-current-province', _.data['province_id']));
@@ -638,6 +742,7 @@
                 admin.request(variables.url.unit.get + '/' + id, 'get', function () {
                     var _ = this;
                     if (_.data.length) {
+                        currentTable = table;
                         editUnitId = id;
                         //-----
                         editModal.find('[name="' + variables.elements.editUnit.inputs.title + '"]').val(_.data['title']);
@@ -661,6 +766,7 @@
                 admin.request(variables.url.faq.get + '/' + id, 'get', function () {
                     var _ = this;
                     if (_.data.length) {
+                        currentTable = table;
                         editFAQId = id;
                         //-----
                         editModal.find('[name="' + variables.elements.editFaq.inputs.question + '"]').val(_.data['question']);
@@ -690,6 +796,7 @@
                 admin.request(variables.url.slider.get + '/' + id, 'get', function () {
                     var _ = this;
                     if (_.data.length) {
+                        currentTable = table;
                         editSlideId = id;
                         //-----
                         var imgEl = editModal.find('[name="' + variables.elements.editSlide.inputs.image + '"]');
@@ -715,6 +822,9 @@
                 width: 'auto'
             });
 
+            // reInstantiate switchery plugin
+            instantiateSwitchery();
+
             // reinitialize dropdown
             $('[data-toggle="dropdown"]').dropdown();
 
@@ -734,6 +844,13 @@
                 .off('click' + variables.namespace)
                 .on('click' + variables.namespace, function () {
                     deleteOperation($(this), table);
+                });
+
+            // change status button click event
+            $('.__item_status_changer_btn')
+                .off('change')
+                .on('change', function () {
+                    changeOperation($(this), table);
                 });
 
             // edit address button click event
@@ -776,6 +893,9 @@
             }
         });
 
+        // instantiate switchery plugin
+        instantiateSwitchery();
+
         if ($().spectrum) {
             var cps = $(".colorpicker-show-input");
             cps.each(function () {
@@ -800,14 +920,6 @@
         if ($().fancybox) {
             $('[data-popup="lightbox"]').fancybox({
                 padding: 3
-            });
-        }
-
-        if (typeof Switchery !== 'undefined') {
-            // Initialize multiple switches
-            var elems = Array.prototype.slice.call(document.querySelectorAll('.form-check-input-switchery'));
-            elems.forEach(function (html) {
-                var switchery = new Switchery(html);
             });
         }
 
@@ -956,7 +1068,11 @@
                                 }
 
                                 drawCallback(json);
-                            }
+                            },
+                            // for debugging
+                            // "error": function (err) {
+                            //     console.log(err);
+                            // },
                         });
                     } else {
                         var json = $.extend(true, {}, cacheLastJson);
@@ -983,8 +1099,6 @@
                 });
             });
 
-            // Highlighting rows and columns on mouseover
-            var lastIdx = null;
             $.each($('.datatable-highlight'), function () {
                 var $this, table, url;
                 $this = $(this);
@@ -1007,9 +1121,14 @@
                 } else {
                     table = $this.DataTable({
                         stateSave: true,
+                        initComplete: function () {
+                            datatableInitCompleteActions($this);
+                        },
                     });
                 }
 
+                // Highlighting rows and columns on mouseover
+                var lastIdx = null;
                 $('.datatable-highlight tbody').off('mouseover').on('mouseover', 'td', function () {
                     if (table.cell(this).index()) {
                         var colIdx = table.cell(this).index().column;
@@ -1148,7 +1267,6 @@
         //---------------------------------------------------------------
         // ADD ADDRESS FORM
         //---------------------------------------------------------------
-        var addrDatatable = $('#__datatable_addr_view');
         admin.forms.submitForm('addAddress', constraints.addAddress, function (values) {
             // do ajax
             if (createLoader) {
@@ -1159,12 +1277,13 @@
                 admin.hideLoader(loaderId);
                 // clear element after success
                 $(variables.elements.addAddress.form).reset();
-                // reinitialize address datatable
-                if (addrDatatable.length && $.fn.DataTable.isDataTable(addrDatatable)) {
-                    addrDatatable.DataTable().ajax.reload();
+                if (currentTable) {
+                    $(currentTable).DataTable().ajax.reload(null, true);
+                    currentTable = null;
                 }
+                //-----
                 admin.toasts.toast(this.data, {
-                    type: 'success',
+                    type: variables.toasts.types.success,
                 });
                 createLoader = true;
             }, {
@@ -1196,9 +1315,13 @@
                     $('select[name="' + variables.elements.editAddress.inputs.province + '"]').removeAttr('data-current-province');
                     $('select[name="' + variables.elements.editAddress.inputs.city + '"]').removeAttr('data-current-city');
                     editAddrId = null;
+                    if (currentTable) {
+                        $(currentTable).DataTable().ajax.reload(null, true);
+                        currentTable = null;
+                    }
                     //-----
                     admin.toasts.toast(this.data, {
-                        type: 'success',
+                        type: variables.toasts.types.success,
                     });
                     createLoader = true;
                 }, {
@@ -1226,8 +1349,13 @@
                 admin.hideLoader(loaderId);
                 // clear element after success
                 $(variables.elements.addUnit.form).reset();
+                if (currentTable) {
+                    $(currentTable).DataTable().ajax.reload(null, true);
+                    currentTable = null;
+                }
+                //-----
                 admin.toasts.toast(this.data, {
-                    type: 'success',
+                    type: variables.toasts.types.success,
                 });
                 createLoader = true;
             }, {
@@ -1256,9 +1384,13 @@
                     // clear element after success
                     $(variables.elements.editUnit.form).reset();
                     editUnitId = null;
+                    if (currentTable) {
+                        $(currentTable).DataTable().ajax.reload(null, true);
+                        currentTable = null;
+                    }
                     //-----
                     admin.toasts.toast(this.data, {
-                        type: 'success',
+                        type: variables.toasts.types.success,
                     });
                     createLoader = true;
                 }, {
@@ -1294,6 +1426,26 @@
         });
 
         //---------------------------------------------------------------
+        // ADD BLOG CATEGORY FORM
+        //---------------------------------------------------------------
+        admin.forms.submitForm('addBlogCategory', constraints.addBlogCategory, function () {
+            return true;
+        }, function (errors) {
+            admin.forms.showFormErrors(errors);
+            return false;
+        });
+
+        //---------------------------------------------------------------
+        // Edit BLOG CATEGORY FORM
+        //---------------------------------------------------------------
+        admin.forms.submitForm('editBlogCategory', constraints.editBlogCategory, function () {
+            return true;
+        }, function (errors) {
+            admin.forms.showFormErrors(errors);
+            return false;
+        });
+
+        //---------------------------------------------------------------
         // ADD FAQ FORM
         //---------------------------------------------------------------
         admin.forms.submitForm('addFaq', constraints.addFaq, function (values) {
@@ -1306,8 +1458,13 @@
                 admin.hideLoader(loaderId);
                 // clear element after success
                 $(variables.elements.addFaq.form).reset();
+                if (currentTable) {
+                    $(currentTable).DataTable().ajax.reload(null, true);
+                    currentTable = null;
+                }
+                //-----
                 admin.toasts.toast(this.data, {
-                    type: 'success',
+                    type: variables.toasts.types.success,
                 });
                 createLoader = true;
             }, {
@@ -1336,9 +1493,13 @@
                     // clear element after success
                     $(variables.elements.editFaq.form).reset();
                     editFAQId = null;
+                    if (currentTable) {
+                        $(currentTable).DataTable().ajax.reload(null, true);
+                        currentTable = null;
+                    }
                     //-----
                     admin.toasts.toast(this.data, {
-                        type: 'success',
+                        type: variables.toasts.types.success,
                     });
                     createLoader = true;
                 }, {
@@ -1387,8 +1548,13 @@
                 // clear element after success
                 $(variables.elements.addSlide.form).reset();
                 removeImageFromPlaceholder($(variables.elements.addSlide.form).find('[name="' + variables.elements.addSlide.inputs.image + '"]'));
+                if (currentTable) {
+                    $(currentTable).DataTable().ajax.reload(null, true);
+                    currentTable = null;
+                }
+                //-----
                 admin.toasts.toast(this.data, {
-                    type: 'success',
+                    type: variables.toasts.types.success,
                 });
                 createLoader = true;
             }, {
@@ -1418,9 +1584,13 @@
                     $(variables.elements.editSlide.form).reset();
                     removeImageFromPlaceholder($(variables.elements.editSlide.form).find('[name="' + variables.elements.editSlide.inputs.image + '"]'));
                     editSlideId = null;
+                    if (currentTable) {
+                        $(currentTable).DataTable().ajax.reload(null, true);
+                        currentTable = null;
+                    }
                     //-----
                     admin.toasts.toast(this.data, {
-                        type: 'success',
+                        type: variables.toasts.types.success,
                     });
                     createLoader = true;
                 }, {
@@ -1429,6 +1599,39 @@
                     createLoader = true;
                 });
             }
+            return false;
+        }, function (errors) {
+            admin.forms.showFormErrors(errors);
+            return false;
+        });
+
+        //---------------------------------------------------------------
+        // ADD NEWSLETTER FORM
+        //---------------------------------------------------------------
+        admin.forms.submitForm('addNewsletter', constraints.addNewsletter, function (values) {
+            // do ajax
+            if (createLoader) {
+                createLoader = false;
+                loaderId = admin.showLoader();
+            }
+            admin.request(variables.url.newsletter.add, 'post', function () {
+                admin.hideLoader(loaderId);
+                // clear element after success
+                $(variables.elements.addNewsletter.form).reset();
+                if (currentTable) {
+                    $(currentTable).DataTable().ajax.reload(null, true);
+                    currentTable = null;
+                }
+                //-----
+                admin.toasts.toast(this.data, {
+                    type: variables.toasts.types.success,
+                });
+                createLoader = true;
+            }, {
+                data: values,
+            }, true, function () {
+                createLoader = true;
+            });
             return false;
         }, function (errors) {
             admin.forms.showFormErrors(errors);

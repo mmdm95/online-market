@@ -305,7 +305,7 @@
                 // clear element after success
                 $(variables.elements.newsletter.form).reset();
                 shop.toasts.toast(this.data, {
-                    type: 'success',
+                    type: variables.toasts.types.success,
                 });
                 createLoader = true;
             }, {
@@ -358,9 +358,9 @@
                     var type, message;
                     type = this.data.type;
                     message = this.data.message;
-                    if (type === variables.types.success) {
+                    if (type === variables.api.types.success) {
                         $this.addClass('active');
-                    } else if (type === variables.types.info) {
+                    } else if (type === variables.api.types.info) {
                         $this.removeClass('active');
                     }
                     shop.toasts.toast(message, {

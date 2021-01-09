@@ -210,7 +210,7 @@ class FaqController extends AbstractAdminController implements IDatatableControl
                         'db_alias' => 'publish',
                         'dt' => 'status',
                         'formatter' => function ($d) {
-                            $status = $this->setTemplate('partial/admin/badge-parser/active-status')
+                            $status = $this->setTemplate('partial/admin/parser/active-status')
                                 ->render([
                                     'status' => $d,
                                 ]);

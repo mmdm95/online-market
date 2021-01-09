@@ -4,7 +4,7 @@
 namespace App\Logic\Controllers\Admin;
 
 use App\Logic\Abstracts\AbstractAdminController;
-use ReflectionException as ReflectionExceptionAlias;
+use ReflectionException;
 use Sim\Exceptions\ConfigManager\ConfigNotRegisteredException;
 use Sim\Exceptions\Mvc\Controller\ControllerException;
 use Sim\Exceptions\PathManager\PathNotRegisteredException;
@@ -16,7 +16,7 @@ class CouponController extends AbstractAdminController
 
     /**
      * @return string
-     * @throws ReflectionExceptionAlias
+     * @throws ReflectionException
      * @throws ConfigNotRegisteredException
      * @throws ControllerException
      * @throws PathNotRegisteredException
@@ -33,7 +33,7 @@ class CouponController extends AbstractAdminController
     /**
      * @param $id
      * @return string
-     * @throws ReflectionExceptionAlias
+     * @throws ReflectionException
      * @throws ConfigNotRegisteredException
      * @throws ControllerException
      * @throws PathNotRegisteredException
@@ -49,7 +49,7 @@ class CouponController extends AbstractAdminController
 
     /**
      * @return string
-     * @throws ReflectionExceptionAlias
+     * @throws ReflectionException
      * @throws ConfigNotRegisteredException
      * @throws ControllerException
      * @throws PathNotRegisteredException

@@ -63,7 +63,7 @@
 
                     <ul class="nav nav-group-sub" data-submenu-title="Layouts">
                         <li class="nav-item">
-                            <a href="<?= url('admin.user.add'); ?>" class="nav-link active">
+                            <a href="<?= url('admin.user.add'); ?>" class="nav-link">
                                 افزودن کاربر
                             </a>
                         </li>
@@ -82,27 +82,11 @@
                     <i class="icon-menu" title="فروشگاه"></i>
                 </li>
                 <li class="nav-item nav-item-submenu">
-                    <a href="#" class="nav-link"><i class="icon-lan2"></i> <span>مدیریت دسته‌بندی</span></a>
-
-                    <ul class="nav nav-group-sub" data-submenu-title="Layouts">
-                        <li class="nav-item">
-                            <a href="<?= url('admin.category.add'); ?>" class="nav-link active">
-                                افزودن دسته
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="<?= url('admin.category.view', ''); ?>" class="nav-link">
-                                مشاهده دسته‌ها
-                            </a>
-                        </li>
-                    </ul>
-                </li>
-                <li class="nav-item nav-item-submenu">
                     <a href="#" class="nav-link"><i class="icon-bucket"></i> <span>رنگ‌ها</span></a>
 
                     <ul class="nav nav-group-sub" data-submenu-title="Layouts">
                         <li class="nav-item">
-                            <a href="<?= url('admin.color.add'); ?>" class="nav-link active">
+                            <a href="<?= url('admin.color.add'); ?>" class="nav-link">
                                 افزودن رنگ جدید
                             </a>
                         </li>
@@ -114,11 +98,43 @@
                     </ul>
                 </li>
                 <li class="nav-item nav-item-submenu">
+                    <a href="#" class="nav-link"><i class="icon-price-tags2"></i> <span>برندها</span></a>
+
+                    <ul class="nav nav-group-sub" data-submenu-title="Layouts">
+                        <li class="nav-item">
+                            <a href="<?= url('admin.brand.add'); ?>" class="nav-link">
+                                افزودن برند جدید
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="<?= url('admin.brand.view', ''); ?>" class="nav-link">
+                                لیست برندها
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="nav-item nav-item-submenu">
+                    <a href="#" class="nav-link"><i class="icon-lan2"></i> <span>مدیریت دسته‌بندی</span></a>
+
+                    <ul class="nav nav-group-sub" data-submenu-title="Layouts">
+                        <li class="nav-item">
+                            <a href="<?= url('admin.category.add'); ?>" class="nav-link">
+                                افزودن دسته
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="<?= url('admin.category.view', ''); ?>" class="nav-link">
+                                مشاهده دسته‌ها
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="nav-item nav-item-submenu">
                     <a href="#" class="nav-link"><i class="icon-gift"></i> <span>جشنواره‌ها</span></a>
 
                     <ul class="nav nav-group-sub" data-submenu-title="Layouts">
                         <li class="nav-item">
-                            <a href="<?= url('admin.festival.add'); ?>" class="nav-link active">
+                            <a href="<?= url('admin.festival.add'); ?>" class="nav-link">
                                 افزودن جشنواره
                             </a>
                         </li>
@@ -136,17 +152,17 @@
                     </a>
                 </li>
                 <li class="nav-item nav-item-submenu">
-                    <a href="#" class="nav-link"><i class="icon-credit-card"></i> <span>کوپن‌های تخفیف</span></a>
+                    <a href="#" class="nav-link"><i class="icon-ticket"></i> <span>کوپن‌های تخفیف</span></a>
 
                     <ul class="nav nav-group-sub" data-submenu-title="Layouts">
                         <li class="nav-item">
-                            <a href="<?= url('admin.coupon.add'); ?>" class="nav-link active">
+                            <a href="<?= url('admin.coupon.add'); ?>" class="nav-link">
                                 افزودن کوپن تخفیف
                             </a>
                         </li>
                         <li class="nav-item">
                             <a href="<?= url('admin.coupon.view', ''); ?>" class="nav-link">
-                                مشاهده کوپن
+                                مشاهده کوپن‌ها
                             </a>
                         </li>
                     </ul>
@@ -163,7 +179,7 @@
 
                     <ul class="nav nav-group-sub" data-submenu-title="Layouts">
                         <li class="nav-item">
-                            <a href="<?= url('admin.wallet.view', ''); ?>" class="nav-link active">
+                            <a href="<?= url('admin.wallet.view', ''); ?>" class="nav-link">
                                 مشاهده کیف پول کاربران
                             </a>
                         </li>
@@ -179,7 +195,7 @@
 
                     <ul class="nav nav-group-sub" data-submenu-title="Layouts">
                         <li class="nav-item">
-                            <a href="<?= url('admin.order.view', ''); ?>" class="nav-link active">
+                            <a href="<?= url('admin.order.view', ''); ?>" class="nav-link">
                                 سفارشات ثبت شده
                             </a>
                         </li>
@@ -204,18 +220,41 @@
                     <div class="text-uppercase font-size-xs line-height-xs">وبلاگ</div>
                     <i class="icon-menu" title="وبلاگ"></i>
                 </li>
-                <li class="nav-item">
-                    <a href="<?= url('admin.blog.view', ''); ?>" class="nav-link">
-                        <i class="icon-files-empty2"></i>
-                        <span>مطالب</span>
-                    </a>
+                <li class="nav-item nav-item-submenu">
+                    <a href="#" class="nav-link"><i class="icon-files-empty2"></i> <span>مطالب</span></a>
+
+                    <ul class="nav nav-group-sub" data-submenu-title="Layouts">
+                        <li class="nav-item">
+                            <a href="<?= url('admin.blog.add'); ?>" class="nav-link">
+                                افزودن مطلب
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="<?= url('admin.blog.view', ''); ?>" class="nav-link">
+                                مشاهده مطالب
+                            </a>
+                        </li>
+                    </ul>
                 </li>
-                <li class="nav-item">
-                    <a href="<?= url('admin.blog.category.view', ''); ?>" class="nav-link">
-                        <i class="icon-envelop3"></i>
-                        <span>دسته‌بندی مطالب</span>
-                    </a>
+                <!-- /Blog -->
+                <!-- Blog Category -->
+                <li class="nav-item nav-item-submenu">
+                    <a href="#" class="nav-link"><i class="icon-envelop3"></i> <span>دسته‌بندی مطالب</span></a>
+
+                    <ul class="nav nav-group-sub" data-submenu-title="Layouts">
+                        <li class="nav-item">
+                            <a href="<?= url('admin.blog.category.add'); ?>" class="nav-link">
+                                افزودن دسته‌بندی مطلب
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="<?= url('admin.blog.category.view', ''); ?>" class="nav-link">
+                                مشاهده دسته‌بندی مطالب
+                            </a>
+                        </li>
+                    </ul>
                 </li>
+                <!-- /Blog Category -->
 
                 <!-- Connection -->
                 <li class="nav-item-header">

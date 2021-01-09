@@ -16,7 +16,7 @@ use App\Logic\Utils\Jdf;
                     <p class="customer_meta">
                         <span class="review_author"><?= $comment['first_name']; ?></span>
                         <span class="comment-date">
-                            <?= Jdf::jdate('j F Y', $comment['sent_at']) ?>
+                            <?= Jdf::jdate(DEFAULT_TIME_FORMAT, $comment['sent_at']) ?>
                         </span>
                     </p>
                     <div class="description">

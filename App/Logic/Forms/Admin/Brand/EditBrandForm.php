@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Logic\Forms\Admin\Blog;
+namespace App\Logic\Forms\Admin\Brand;
 
 use App\Logic\Interfaces\IPageForm;
 use App\Logic\Models\BlogCategoryModel;
@@ -18,7 +18,7 @@ use Sim\Form\FormValue;
 use Sim\Utils\StringUtil;
 use voku\helper\AntiXSS;
 
-class AddBlogForm implements IPageForm
+class EditBrandForm implements IPageForm
 {
     /**
      * {@inheritdoc}
@@ -41,26 +41,26 @@ class AddBlogForm implements IPageForm
         // aliases
         $validator
             ->setFieldsAlias([
-                'inp-add-blog-img' => 'تصویر',
-                'inp-add-blog-title' => 'عنوان',
-                'inp-add-blog-category' => 'دسته‌بندی',
-                'inp-add-blog-abs' => 'خلاصه مطلب',
-                'inp-add-blog-desc' => 'توضیحات',
+                'inp-edit-blog-img' => 'تصویر',
+                'inp-edit-blog-title' => 'عنوان',
+                'inp-edit-blog-category' => 'دسته‌بندی',
+                'inp-edit-blog-abs' => 'خلاصه مطلب',
+                'inp-edit-blog-desc' => 'توضیحات',
             ])
             ->setOptionalFields([
-                'inp-add-blog-keywords',
+                'inp-edit-blog-keywords',
             ]);
 
         // image
         $validator
-            ->setFields('inp-add-blog-img')
+            ->setFields('inp-edit-blog-img')
             ->stopValidationAfterFirstError(false)
             ->required()
             ->stopValidationAfterFirstError(true)
             ->imageExists('{alias} ' . 'وجود ندارد!');
         // title
         $validator
-            ->setFields('inp-add-blog-title')
+            ->setFields('inp-edit-blog-title')
             ->stopValidationAfterFirstError(false)
             ->required()
             ->stopValidationAfterFirstError(true)
@@ -69,12 +69,18 @@ class AddBlogForm implements IPageForm
                  * @var BlogModel $blogModel
                  */
                 $blogModel = container()->get(BlogModel::class);
-                if ($blogModel->count('title=:title', ['title' => $value->getValue()]) === 0) return true;
-                return false;
+                $title = session()->getFlash('blog-prev-title', null);
+                if (
+                    $title != trim($value->getValue()) &&
+                    $blogModel->count('title=:title', ['title' => trim($value->getValue())]) !== 0
+                ) {
+                    return false;
+                }
+                return true;
             }, '{alias} ' . 'وارد شده تکراری می‌باشد.');
         // category
         $validator
-            ->setFields('inp-add-blog-category')
+            ->setFields('inp-edit-blog-category')
             ->stopValidationAfterFirstError(false)
             ->required()
             ->stopValidationAfterFirstError(true)
@@ -88,15 +94,31 @@ class AddBlogForm implements IPageForm
             }, '{alias} ' . 'وارد شده وجود ندارد.');
         // abstract
         $validator
-            ->setFields('inp-add-blog-abs')
+            ->setFields('inp-edit-blog-abs')
             ->stopValidationAfterFirstError(false)
             ->required()
             ->stopValidationAfterFirstError(true)
             ->lessThanEqualLength(200);
         // description
         $validator
-            ->setFields('inp-add-blog-desc')
+            ->setFields('inp-edit-blog-desc')
             ->required();
+
+        $id = session()->getFlash('blog-curr-id', null, false);
+        if (!empty($id)) {
+            /**
+             * @var BlogModel $blogModel
+             */
+            $blogModel = container()->get(BlogModel::class);
+
+            if (0 === $blogModel->count('id=:id', ['id' => $id])) {
+                $validator->setError('inp-edit-blog-title', 'شناسه مطلب نامعتبر است.');
+            }
+        } else {
+            $validator
+                ->setStatus(false)
+                ->setError('inp-edit-blog-title', 'شناسه مطلب نامعتبر است.');
+        }
 
         // to reset form values and not set them again
         if ($validator->getStatus()) {
@@ -105,8 +127,8 @@ class AddBlogForm implements IPageForm
 
         return [
             $validator->getStatus(),
-            $validator->getError(),
             $validator->getUniqueErrors(),
+            $validator->getError(),
             $validator->getFormattedError('<p class="m-0">'),
             $validator->getFormattedUniqueErrors('<p class="m-0">'),
             $validator->getRawErrors(),
@@ -141,21 +163,24 @@ class AddBlogForm implements IPageForm
         $auth = container()->get('auth_admin');
 
         try {
-            $image = input()->post('inp-add-blog-img', '')->getValue();
-            $pub = input()->post('inp-add-blog-status', '')->getValue();
-            $title = input()->post('inp-add-blog-title', '')->getValue();
-            $category = input()->post('inp-add-blog-category', '')->getValue();
-            $abstract = input()->post('inp-add-blog-abs', '')->getValue();
-            $keywords = input()->post('inp-add-blog-keywords', '')->getValue();
-            $desc = input()->post('inp-add-blog-desc', '')->getValue();
+            $image = input()->post('inp-edit-blog-img', '')->getValue();
+            $pub = input()->post('inp-edit-blog-status', '')->getValue();
+            $title = input()->post('inp-edit-blog-title', '')->getValue();
+            $category = input()->post('inp-edit-blog-category', '')->getValue();
+            $abstract = input()->post('inp-edit-blog-abs', '')->getValue();
+            $keywords = input()->post('inp-edit-blog-keywords', '')->getValue();
+            $desc = input()->post('inp-edit-blog-desc', '')->getValue();
             $writer = null;
+
+            $id = session()->getFlash('blog-curr-id', null);
+            if (is_null($id)) return false;
 
             if ($userModel->count('id=:id', ['id' => $auth->getCurrentUser()['id'] ?? 0])) {
                 $user = $userModel->getFirst(['first_name', 'last_name'], 'id=:id', ['id' => $auth->getCurrentUser()['id']]);
                 $writer = $user['first_name'] . ' ' . $user['last_name'];
             }
 
-            return $blogModel->insert([
+            return $blogModel->update([
                 'title' => $xss->xss_clean($title),
                 'fa_title' => $xss->xss_clean(StringUtil::toPersian($title)),
                 'slug' => $xss->xss_clean(StringUtil::slugify($title)),
@@ -167,9 +192,9 @@ class AddBlogForm implements IPageForm
                 'publish' => is_value_checked($pub) ? DB_YES : DB_NO,
                 'writer' => $writer,
                 'archive_tag' => Jdf::jdate(ARCHIVE_TAGS_TIME_FORMAT),
-                'created_by' => $auth->getCurrentUser()['id'] ?? null,
-                'created_at' => time(),
-            ]);
+                'updated_by' => $auth->getCurrentUser()['id'] ?? null,
+                'updated_at' => time(),
+            ], 'id=:id', ['id' => $id]);
         } catch (\Exception $e) {
             return false;
         }

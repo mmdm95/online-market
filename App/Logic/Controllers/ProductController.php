@@ -101,13 +101,11 @@ class ProductController extends AbstractHomeController
         $select = $model->select();
         $select
             ->from(BaseModel::TBL_PRODUCT_PROPERTY)
-            ->cols(['size', 'model']);
+            ->cols(['size']);
         $sizesNModels = $model->get($select);
         $sizes = [];
-        $models = [];
         foreach ($sizesNModels as $item) {
             $sizes[] = $item['size'];
-            $models[] = $item['model'];
         }
 
         // get max price
@@ -128,7 +126,6 @@ class ProductController extends AbstractHomeController
             'side_categories' => $categories,
             'max_price' => $maxPrice,
             'brands' => $brands,
-            'models' => $models,
             'sizes' => $sizes,
             'colors' => $colors,
         ]);

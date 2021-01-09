@@ -366,12 +366,12 @@ class UserModel extends BaseModel
      * Use [u for users], [r for roles], [ur for user_role]
      *
      * @param string|null $where
-     * @param array $bindParams
+     * @param array $bind_values
      * @return int
      */
-    public function getUsersCount(?string $where = null, array $bindParams = []): int
+    public function getUsersCount(?string $where = null, array $bind_values = []): int
     {
-        $res = $this->getUsers(['COUNT(DISTINCT(u.id)) AS count'], $where, $bindParams);
+        $res = $this->getUsers(['u.id', 'COUNT(DISTINCT(u.id)) AS count'], $where, $bind_values, null, 0, [], []);
         if (count($res)) {
             return (int)$res[0]['count'];
         }

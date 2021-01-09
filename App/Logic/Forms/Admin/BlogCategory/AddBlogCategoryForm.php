@@ -1,27 +1,29 @@
 <?php
 
-namespace App\Logic\Forms\Ajax;
+namespace App\Logic\Forms\Admin\BlogCategory;
 
 use App\Logic\Interfaces\IPageForm;
-use App\Logic\Models\NewsletterModel;
+use App\Logic\Models\BlogCategoryModel;
 use App\Logic\Validations\ExtendedValidator;
 use Sim\Container\Exceptions\MethodNotFoundException;
 use Sim\Container\Exceptions\ParameterHasNoDefaultValueException;
 use Sim\Container\Exceptions\ServiceNotFoundException;
 use Sim\Container\Exceptions\ServiceNotInstantiableException;
 use Sim\Form\Exceptions\FormException;
+use Sim\Form\FormValue;
 use Sim\Utils\StringUtil;
 use voku\helper\AntiXSS;
 
-class NewsletterForm implements IPageForm
+class AddBlogCategoryForm implements IPageForm
 {
     /**
      * {@inheritdoc}
-     * @throws \ReflectionException
+     * @return array
      * @throws MethodNotFoundException
      * @throws ParameterHasNoDefaultValueException
      * @throws ServiceNotFoundException
      * @throws ServiceNotInstantiableException
+     * @throws \ReflectionException
      * @throws FormException
      */
     public function validate(): array
@@ -33,16 +35,28 @@ class NewsletterForm implements IPageForm
         $validator->reset();
 
         // aliases
-        $validator->setFieldsAlias([
-            'inp-newsletter-mobile' => 'موبایل',
-        ]);
-        // username
         $validator
-            ->setFields('inp-newsletter-mobile')
+            ->setFieldsAlias([
+                'inp-add-blog-category-name' => 'نام دسته‌بندی',
+                'inp-add-blog-category-status' => 'وضعیت نمایش',
+            ]);
+
+        // name
+        $validator
+            ->setFields('inp-add-blog-category-name')
             ->stopValidationAfterFirstError(false)
             ->required()
             ->stopValidationAfterFirstError(true)
-            ->persianMobile('{alias} ' . 'نامعتبر است.');
+            ->custom(function (FormValue $value) {
+                /**
+                 * @var BlogCategoryModel $categoryModel
+                 */
+                $categoryModel = container()->get(BlogCategoryModel::class);
+                if (0 === $categoryModel->count('name=:name', ['name' => trim($value->getValue())])) {
+                    return true;
+                }
+                return false;
+            }, 'دسته‌بندی با این نام وجود دارد!');
 
         // to reset form values and not set them again
         if ($validator->getStatus()) {
@@ -51,7 +65,11 @@ class NewsletterForm implements IPageForm
 
         return [
             $validator->getStatus(),
+            $validator->getError(),
+            $validator->getUniqueErrors(),
+            $validator->getFormattedError('<p class="m-0">'),
             $validator->getFormattedUniqueErrors('<p class="m-0">'),
+            $validator->getRawErrors(),
         ];
     }
 
@@ -66,27 +84,26 @@ class NewsletterForm implements IPageForm
     public function store(): bool
     {
         /**
-         * @var NewsletterModel $newsletterModel
+         * @var BlogCategoryModel $categoryModel
          */
-        $newsletterModel = container()->get(NewsletterModel::class);
+        $categoryModel = container()->get(BlogCategoryModel::class);
         /**
          * @var AntiXSS $xss
          */
         $xss = container()->get(AntiXSS::class);
 
         try {
-            $mobile = input()->post('inp-newsletter-mobile', '')->getValue();
-            if (0 === $newsletterModel->count('mobile=:mobile', ['mobile' => StringUtil::toEnglish($mobile)])) {
-                // insert to database
-                $res = $newsletterModel->insert([
-                    'mobile' => $xss->xss_clean(StringUtil::toEnglish($mobile)),
-                    'created_at' => time(),
-                ]);
-            }
+            $name = input()->post('inp-add-blog-category-name', '')->getValue();
+            $pub = input()->post('inp-add-blog-category-status', '')->getValue();
+
+            return $categoryModel->insert([
+                'name' => $xss->xss_clean($name),
+                'publish' => is_value_checked($pub) ? DB_YES : DB_NO,
+                'slug' => $xss->xss_clean(StringUtil::slugify($name)),
+                'created_at' => time(),
+            ]);
         } catch (\Exception $e) {
             return false;
         }
-
-        return $res ?? true;
     }
 }

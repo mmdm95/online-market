@@ -1,19 +1,22 @@
 <?php
 
-namespace App\Logic\Forms\Ajax;
+namespace App\Logic\Forms\Ajax\Newsletter;
 
 use App\Logic\Interfaces\IPageForm;
 use App\Logic\Models\NewsletterModel;
+use App\Logic\Models\UnitModel;
 use App\Logic\Validations\ExtendedValidator;
+use Sim\Auth\DBAuth;
 use Sim\Container\Exceptions\MethodNotFoundException;
 use Sim\Container\Exceptions\ParameterHasNoDefaultValueException;
 use Sim\Container\Exceptions\ServiceNotFoundException;
 use Sim\Container\Exceptions\ServiceNotInstantiableException;
 use Sim\Form\Exceptions\FormException;
+use Sim\Form\FormValue;
 use Sim\Utils\StringUtil;
 use voku\helper\AntiXSS;
 
-class NewsletterForm implements IPageForm
+class AddNewsletterForm implements IPageForm
 {
     /**
      * {@inheritdoc}
@@ -33,16 +36,28 @@ class NewsletterForm implements IPageForm
         $validator->reset();
 
         // aliases
-        $validator->setFieldsAlias([
-            'inp-newsletter-mobile' => 'موبایل',
-        ]);
-        // username
         $validator
-            ->setFields('inp-newsletter-mobile')
+            ->setFieldsAlias([
+                'inp-add-newsletter-mobile' => 'موبایل',
+            ]);
+
+        // mobile
+        $validator
+            ->setFields('inp-add-newsletter-mobile')
             ->stopValidationAfterFirstError(false)
             ->required()
             ->stopValidationAfterFirstError(true)
-            ->persianMobile('{alias} ' . 'نامعتبر است.');
+            ->persianMobile()
+            ->custom(function (FormValue $value) {
+                /**
+                 * @var NewsletterModel $newsletterModel
+                 */
+                $newsletterModel = container()->get(NewsletterModel::class);
+                if (0 === $newsletterModel->count('mobile=:mobile', ['mobile' => StringUtil::toEnglish($value->getValue())])) {
+                    return true;
+                }
+                return false;
+            }, 'این' . ' {alias} ' . 'قبلا ثبت شده است.');
 
         // to reset form values and not set them again
         if ($validator->getStatus()) {
@@ -75,18 +90,15 @@ class NewsletterForm implements IPageForm
         $xss = container()->get(AntiXSS::class);
 
         try {
-            $mobile = input()->post('inp-newsletter-mobile', '')->getValue();
-            if (0 === $newsletterModel->count('mobile=:mobile', ['mobile' => StringUtil::toEnglish($mobile)])) {
-                // insert to database
-                $res = $newsletterModel->insert([
-                    'mobile' => $xss->xss_clean(StringUtil::toEnglish($mobile)),
-                    'created_at' => time(),
-                ]);
-            }
+            $mobile = input()->post('inp-add-newsletter-mobile', '')->getValue();
+            // insert to database
+            $res = $newsletterModel->insert([
+                'mobile' => $xss->xss_clean(StringUtil::toEnglish($mobile)),
+                'created_at' => time(),
+            ]);
+            return $res;
         } catch (\Exception $e) {
             return false;
         }
-
-        return $res ?? true;
     }
 }

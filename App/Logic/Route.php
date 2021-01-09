@@ -207,8 +207,19 @@ class Route implements IInitialize
                     'id' => '[0-9]+',
                 ])->name('admin.blog.category.edit');
                 Router::get('blog/category/view', 'Admin\BlogCategoryController@view')->name('admin.blog.category.view');
-                Router::get('blog/category/view/dt', 'Admin\BlogCategoryController@getPaginatedDatatable')
+                Router::post('blog/category/view/dt', 'Admin\BlogCategoryController@getPaginatedDatatable')
                     ->name('admin.blog.category.dt.view');
+
+                /**
+                 * Brand Route
+                 */
+                Router::form('/brand/add', 'Admin\BrandController@add')->name('admin.brand.add');
+                Router::form('/brand/edit/{id}', 'Admin\BrandController@edit')->where([
+                    'id' => '[0-9]+',
+                ])->name('admin.brand.edit');
+                Router::get('brand/view', 'Admin\BrandController@view')->name('admin.brand.view');
+                Router::post('brand/view/dt', 'Admin\BrandController@getPaginatedDatatable')
+                    ->name('admin.brand.dt.view');
 
                 /**
                  * Contact us Route
@@ -498,6 +509,16 @@ class Route implements IInitialize
                 ])->name('ajax.blog.remove');
 
                 /**
+                 * blog category route
+                 */
+                Router::delete('/blog/category/remove/{id}', 'Admin\BlogCategoryController@remove')->where([
+                    'id' => '[0-9]+',
+                ])->name('ajax.blog.category.remove');
+                Router::post('/blog/category/side-status/{id}', 'Admin\BlogCategoryController@sideStatusChange')->where([
+                    'id' => '[0-9]+',
+                ])->name('ajax.blog.category.side.status');
+
+                /**
                  * faq route
                  */
                 Router::get('/faq/get/{id}', 'Admin\FaqController@get')->where([
@@ -535,6 +556,23 @@ class Route implements IInitialize
                 Router::delete('/slider/remove/{id}', 'Admin\SliderController@remove')->where([
                     'id' => '[0-9]+',
                 ])->name('ajax.slider.remove');
+
+                /**
+                 * newsletter route
+                 */
+                Router::delete('/admin/newsletter/remove/{id}', 'Admin\NewsletterController@remove')->where([
+                    'id' => '[0-9]+',
+                ])->name('ajax.admin.newsletter.remove');
+                Router::post('/admin/newsletter/add/{id}', 'Admin\NewsletterController@add')->where([
+                    'id' => '[0-9]+',
+                ])->name('ajax.admin.newsletter.add');
+
+                /**
+                 * brand route
+                 */
+                Router::post('/brand/slider-status/{id}', 'Admin\BrandController@sliderStatusChange')->where([
+                    'id' => '[0-9]+',
+                ])->name('ajax.brand.slider.status');
 
                 /**
                  * File Manager Route

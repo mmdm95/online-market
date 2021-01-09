@@ -25,7 +25,7 @@ use Sim\Utils\StringUtil;
                                     'time' => $blog['created_at'],
                                 ]); ?>">
                                     <i class="ti-calendar"></i>
-                                    <?= Jdf::jdate('j F Y', $blog['created_at']); ?>
+                                    <?= Jdf::jdate(DEFAULT_TIME_FORMAT, $blog['created_at']); ?>
                                 </a>
                             </li>
                             <li>
@@ -133,7 +133,7 @@ use Sim\Utils\StringUtil;
                                                                 'time' => $item['created_at'],
                                                             ]); ?>">
                                                                 <i class="ti-calendar"></i>
-                                                                <?= Jdf::jdate('j F Y', $item['created_at']) ?>
+                                                                <?= Jdf::jdate(DEFAULT_TIME_FORMAT, $item['created_at']) ?>
                                                             </a>
                                                         </li>
                                                     </ul>

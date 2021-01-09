@@ -279,7 +279,7 @@ class UserController extends AbstractAdminController implements IDatatableContro
                         'db_alias' => 'created_at',
                         'dt' => 'created_at',
                         'formatter' => function ($d) {
-                            return Jdf::jdate('j F Y', $d);
+                            return Jdf::jdate(DEFAULT_TIME_FORMAT, $d);
                         }
                     ],
                     [
@@ -288,7 +288,7 @@ class UserController extends AbstractAdminController implements IDatatableContro
                         'dt' => 'status',
                         'formatter' => function ($d) {
                             $status = $this
-                                ->setTemplate('partial/admin/badge-parser/active-status')
+                                ->setTemplate('partial/admin/parser/active-status')
                                 ->render([
                                     'status' => $d,
                                 ]);
@@ -402,7 +402,7 @@ class UserController extends AbstractAdminController implements IDatatableContro
                         'dt' => 'pay_status',
                         'formatter' => function ($d) {
                             $status = $this
-                                ->setTemplate('partial/admin/badge-parser/active-status')
+                                ->setTemplate('partial/admin/parser/active-status')
                                 ->render([
                                     'status' => $d,
                                 ]);
@@ -433,7 +433,7 @@ class UserController extends AbstractAdminController implements IDatatableContro
                         'db_alias' => 'ordered_at',
                         'dt' => 'order_date',
                         'formatter' => function ($d) {
-                            return Jdf::jdate('j F Y', $d);
+                            return Jdf::jdate(DEFAULT_TIME_FORMAT, $d);
                         }
                     ],
                     [

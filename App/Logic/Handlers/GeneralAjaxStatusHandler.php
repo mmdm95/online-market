@@ -9,7 +9,7 @@ use Sim\Container\Exceptions\ServiceNotFoundException;
 use Sim\Container\Exceptions\ServiceNotInstantiableException;
 use Sim\Interfaces\IHandler;
 
-class GeneralAjaxRemoveHandler implements IHandler
+class GeneralAjaxStatusHandler implements IHandler
 {
     /**
      * @var \Closure|null
@@ -20,6 +20,16 @@ class GeneralAjaxRemoveHandler implements IHandler
      * @var ResourceHandler
      */
     private $resourceHandler;
+
+    /**
+     * @var string
+     */
+    private $statusCheckedMessage = 'وضعیت آیتم فعال شد.';
+
+    /**
+     * @var string
+     */
+    private $statusUncheckedMessage = 'وضعیت آیتم غیر فعال شد.';
 
     /**
      * GeneralRemoveHandler constructor.
@@ -35,8 +45,10 @@ class GeneralAjaxRemoveHandler implements IHandler
      *   1. Send a [Table_Name] as first parameter.
      *   2. Send a [id] as second parameter and get
      *      a resource handler as return array.
-     *   [3. Extra where parameter: string]
-     *   [4. Bind values for extra where parameter: array]
+     *   [3. Column of status to change: string]
+     *   [4. Status to change: int|string]
+     *   [5. Extra where parameter: string]
+     *   [6. Bind values for extra where parameter: array]
      *
      * @param mixed ...$_
      * @return ResourceHandler
@@ -48,18 +60,18 @@ class GeneralAjaxRemoveHandler implements IHandler
      */
     public function handle(...$_): ResourceHandler
     {
-        if (2 > count($_)) {
-            throw new \InvalidArgumentException("Number of arguments is invalid. Expected 2, giving " . count($_));
+        if (4 > count($_)) {
+            throw new \InvalidArgumentException("Number of arguments is invalid. Expected 4, giving " . count($_));
         }
 
-        [$table, $id] = $_;
+        [$table, $id, $column, $status] = $_;
 
-        $where = $_[2] ?? '';
-        $bindValues = $_[3] ?? [];
+        $where = $_[4] ?? '';
+        $bindValues = $_[5] ?? [];
 
         $canContinue = true;
         if ($this->authCallback instanceof \Closure) {
-            $canContinue = emitter()->dispatch('remove.general.ajax:auth', [&$this->resourceHandler])->getReturnValue();
+            $canContinue = emitter()->dispatch('status.general.ajax:auth', [&$this->resourceHandler])->getReturnValue();
         }
 
         if ($canContinue) {
@@ -67,7 +79,7 @@ class GeneralAjaxRemoveHandler implements IHandler
                 $this->resourceHandler
                     ->type(RESPONSE_TYPE_ERROR)
                     ->errorMessage('شناسه آیتم نامعتبر است.');
-                emitter()->dispatch('remove.general.ajax:invalid_id', [&$this->resourceHandler]);
+                emitter()->dispatch('status.general.ajax:invalid_id', [&$this->resourceHandler]);
             } else {
                 /**
                  * @var Model $model
@@ -92,29 +104,62 @@ class GeneralAjaxRemoveHandler implements IHandler
                     $this->resourceHandler
                         ->type(RESPONSE_TYPE_ERROR)
                         ->errorMessage('آیتم مورد نظر وجود ندارد.');
-                    emitter()->dispatch('remove.general.ajax:not_exists', [&$this->resourceHandler]);
+                    emitter()->dispatch('status.general.ajax:not_exists', [&$this->resourceHandler]);
                 } else {
-                    $delete = $model->delete();
-                    $delete
-                        ->from($table)
+                    $update = $model->update();
+                    $update
+                        ->table($table)
+                        ->cols([
+                            $column => is_value_checked($status) ? DB_YES : DB_NO,
+                        ])
                         ->where('id=:id')
                         ->bindValue('id', $id);
-                    $res = $model->execute($delete);
+                    $res = $model->execute($update);
                     if ($res) {
-                        $this->resourceHandler
-                            ->type(RESPONSE_TYPE_SUCCESS)
-                            ->data('آیتم با موفقیت حذف شد.');
-                        emitter()->dispatch('remove.general.ajax:success', [&$this->resourceHandler]);
+                        if (is_value_checked($status)) {
+                            $this->resourceHandler
+                                ->type(RESPONSE_TYPE_SUCCESS)
+                                ->data($this->statusCheckedMessage);
+                        } else {
+                            $this->resourceHandler
+                                ->type(RESPONSE_TYPE_WARNING)
+                                ->data($this->statusUncheckedMessage);
+                        }
+                        emitter()->dispatch('status.general.ajax:success', [&$this->resourceHandler]);
                     } else {
                         $this->resourceHandler
                             ->type(RESPONSE_TYPE_ERROR)
-                            ->errorMessage('امکان حذف این آیتم وجود ندارد.');
-                        emitter()->dispatch('remove.general.ajax:failed', [&$this->resourceHandler]);
+                            ->errorMessage('امکان تغییر وضعیت این آیتم وجود ندارد.');
+                        emitter()->dispatch('status.general.ajax:failed', [&$this->resourceHandler]);
                     }
                 }
             }
         }
 
         return $this->resourceHandler;
+    }
+
+    /**
+     * @param string $message
+     * @return static
+     */
+    public function setStatusCheckedMessage(string $message)
+    {
+        if (!empty($message)) {
+            $this->statusCheckedMessage = $message;
+        }
+        return $this;
+    }
+
+    /**
+     * @param string $message
+     * @return static
+     */
+    public function setStatusUncheckedMessage(string $message)
+    {
+        if (!empty($message)) {
+            $this->statusUncheckedMessage = $message;
+        }
+        return $this;
     }
 }
