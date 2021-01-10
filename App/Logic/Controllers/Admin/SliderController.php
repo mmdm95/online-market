@@ -10,6 +10,7 @@ use App\Logic\Handlers\DatatableHandler;
 use App\Logic\Handlers\GeneralAjaxFormHandler;
 use App\Logic\Handlers\GeneralAjaxRemoveHandler;
 use App\Logic\Handlers\ResourceHandler;
+use App\Logic\Interfaces\IAjaxController;
 use App\Logic\Interfaces\IDatatableController;
 use App\Logic\Models\BaseModel;
 use App\Logic\Models\SliderModel;
@@ -26,7 +27,7 @@ use Sim\Exceptions\PathManager\PathNotRegisteredException;
 use Sim\Interfaces\IFileNotExistsException;
 use Sim\Interfaces\IInvalidVariableNameException;
 
-class SliderController extends AbstractAdminController implements IDatatableController
+class SliderController extends AbstractAdminController implements IAjaxController, IDatatableController
 {
     /**
      * @return string
@@ -50,7 +51,7 @@ class SliderController extends AbstractAdminController implements IDatatableCont
      * @throws ServiceNotFoundException
      * @throws ServiceNotInstantiableException
      */
-    public function add()
+    public function add(): void
     {
         $resourceHandler = new ResourceHandler();
 
@@ -80,7 +81,7 @@ class SliderController extends AbstractAdminController implements IDatatableCont
      * @throws ServiceNotFoundException
      * @throws ServiceNotInstantiableException
      */
-    public function edit($id)
+    public function edit($id): void
     {
         $resourceHandler = new ResourceHandler();
 
@@ -111,7 +112,7 @@ class SliderController extends AbstractAdminController implements IDatatableCont
      * @throws ServiceNotFoundException
      * @throws ServiceNotInstantiableException
      */
-    public function remove($id)
+    public function remove($id): void
     {
         $resourceHandler = new ResourceHandler();
 
@@ -140,7 +141,7 @@ class SliderController extends AbstractAdminController implements IDatatableCont
      * @throws ServiceNotFoundException
      * @throws ServiceNotInstantiableException
      */
-    public function get($id)
+    public function get($id): void
     {
         $resourceHandler = new ResourceHandler();
 

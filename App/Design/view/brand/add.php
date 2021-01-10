@@ -24,15 +24,15 @@ $validator = form_validator();
                             <div class="form-group text-center text-lg-left">
                                 <label>
                                     <span class="text-danger">*</span>
-                                    انتخاب تصویر شاخص:
+                                    انتخاب تصویر برند:
                                 </label>
                                 <?php
-                                $img = $validator->setInput('inp-add-blog-img');
+                                $img = $validator->setInput('inp-add-brand-img');
                                 ?>
                                 <div class="img-placeholder-custom __file_picker_handler __file_image mx-auto ml-lg-0 mr-lg-3 mb-0 <?= !empty($img) ? 'has-image' : ''; ?>"
                                      data-toggle="modal"
                                      data-target="#modal_efm">
-                                    <input type="hidden" name="inp-add-blog-img"
+                                    <input type="hidden" name="inp-add-brand-img"
                                            value="<?= $img; ?>">
                                     <?php if (!empty($img)): ?>
                                         <img class="img-placeholder-image" src="<?= $img; ?>" alt="selected image">
@@ -50,8 +50,8 @@ $validator = form_validator();
                                     <label class="form-check-label">
                                         نمایش برند
                                         <input type="checkbox" class="form-check-input-switchery"
-                                               name="inp-add-blog-status"
-                                            <?= $validator->setCheckbox('inp-add-blog-status', 'on', true); ?>>
+                                               name="inp-add-brand-status"
+                                            <?= $validator->setCheckbox('inp-add-brand-status', 'on', true); ?>>
                                         عدم نمایش برند
                                     </label>
                                 </div>
@@ -63,34 +63,34 @@ $validator = form_validator();
                             <span class="text-danger">*</span>
                             عنوان فارسی برند:
                         </label>
-                        <input type="text" class="form-control" placeholder="وارد کنید" name="inp-add-blog-title"
-                               value="<?= $validator->setInput('inp-add-blog-title'); ?>">
+                        <input type="text" class="form-control" placeholder="وارد کنید" name="inp-add-brand-fa-title"
+                               value="<?= $validator->setInput('inp-add-brand-fa-title'); ?>">
                     </div>
                     <div class="form-group col-lg-6">
                         <label>
                             <span class="text-danger">*</span>
                             عنوان انگلیسی برند:
                         </label>
-                        <input type="text" class="form-control" placeholder="وارد کنید" name="inp-add-blog-title"
-                               value="<?= $validator->setInput('inp-add-blog-title'); ?>">
+                        <input type="text" class="form-control" placeholder="وارد کنید" name="inp-add-brand-en-title"
+                               value="<?= $validator->setInput('inp-add-brand-en-title'); ?>">
                     </div>
                     <div class="form-group col-lg-12">
                         <label>کلمات کلیدی:</label>
                         <input type="text" class="form-control tags-input" placeholder="وارد کنید"
-                               name="inp-add-blog-keywords"
-                               value="<?= $validator->setInput('inp-add-blog-keywords'); ?>">
+                               name="inp-add-brand-keywords"
+                               value="<?= $validator->setInput('inp-add-brand-keywords'); ?>">
                     </div>
                     <div class="form-group col-lg-12">
                         <label>
                             <span class="text-danger">*</span>
-                            توضیحات مطلب:
+                            توضیحات برند:
                         </label>
-                        <textarea name="inp-add-blog-desc"
+                        <textarea name="inp-add-brand-desc"
                                   cols="30"
                                   rows="10"
                                   placeholder="توضیحات خود را وارد کنید..."
                                   class="form-control cntEditor"
-                        ><?= $validator->setInput('inp-add-blog-desc'); ?></textarea>
+                        ><?= $validator->setInput('inp-add-brand-desc'); ?></textarea>
                     </div>
                 </div>
                 <div class="text-right">
@@ -112,4 +112,3 @@ $validator = form_validator();
     <?php load_partial('editor/browser-tiny-func'); ?>
 </div>
 <!-- /content area -->
-

@@ -268,16 +268,27 @@ class Route implements IInitialize
                 Router::get('/order/view/{id?}', 'Admin\OrderController@view')->where([
                     'id' => '[0-9]+',
                 ])->name('admin.order.view');
-                Router::get('/order/badges', 'Admin\OrderController@badges')->name('admin.order.badges');
                 Router::get('/order/return-order/{id?}', 'Admin\OrderController@returnOrder')->where([
                     'id' => '[0-9]+',
                 ])->name('admin.return.order');
+
+                /**
+                 * Order Badges Route
+                 */
+                Router::get('/order/badges', 'Admin\OrderBadgeController@view')->name('admin.badge.view');
+                Router::post('/order/badges/dt', 'Admin\OrderBadgeController@getPaginatedDatatable')->name('admin.badge.dt.view');
 
                 /**
                  * Slider Route
                  */
                 Router::get('/slider/view', 'Admin\SliderController@view')->name('admin.slider.view');
                 Router::post('/slider/view/dt', 'Admin\SliderController@getPaginatedDatatable')->name('admin.slider.dt.view');
+
+                /**
+                 * Instagram Route
+                 */
+                Router::get('/instagram/view', 'Admin\InstagramController@view')->name('admin.instagram.view');
+                Router::post('/instagram/view/dt', 'Admin\InstagramController@getPaginatedDatatable')->name('admin.instagram.dt.view');
 
                 /**
                  * Setting Route
@@ -573,6 +584,38 @@ class Route implements IInitialize
                 Router::post('/brand/slider-status/{id}', 'Admin\BrandController@sliderStatusChange')->where([
                     'id' => '[0-9]+',
                 ])->name('ajax.brand.slider.status');
+
+                /**
+                 * instagram route
+                 */
+                Router::get('/instagram/get/{id}', 'Admin\InstagramController@get')->where([
+                    'id' => '[0-9]+',
+                ])->name('ajax.instagram.get');
+                Router::post('/instagram/add/{user_id}', 'Admin\InstagramController@add')->where([
+                    'user_id' => '[0-9]+',
+                ])->name('ajax.instagram.add');
+                Router::post('/instagram/edit/{id}', 'Admin\InstagramController@edit')->where([
+                    'id' => '[0-9]+',
+                ])->name('ajax.instagram.edit');
+                Router::delete('/instagram/remove/{id}', 'Admin\InstagramController@remove')->where([
+                    'id' => '[0-9]+',
+                ])->name('ajax.instagram.remove');
+
+                /**
+                 * order badge route
+                 */
+                Router::get('/badge/get/{id}', 'Admin\OrderBadgeController@get')->where([
+                    'id' => '[0-9]+',
+                ])->name('ajax.badge.get');
+                Router::post('/badge/add/{user_id}', 'Admin\OrderBadgeController@add')->where([
+                    'user_id' => '[0-9]+',
+                ])->name('ajax.badge.add');
+                Router::post('/badge/edit/{id}', 'Admin\OrderBadgeController@edit')->where([
+                    'id' => '[0-9]+',
+                ])->name('ajax.badge.edit');
+                Router::delete('/badge/remove/{id}', 'Admin\OrderBadgeController@remove')->where([
+                    'id' => '[0-9]+',
+                ])->name('ajax.badge.remove');
 
                 /**
                  * File Manager Route

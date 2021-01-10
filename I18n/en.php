@@ -54,5 +54,10 @@ return [
         'url' => '{alias} is not a valid url',
         'match' => '{second} is not equal to {first}',
         'fileDuplicate' => '{alias} is already exists',
+        'persianAlpha' => '{alias} must be persian alpha',
+        'persianMobile' => '{alias} is invalid!',
+        'persianNationalCode' => '{alias} is invalid!',
+        'imageExists' => '{alias} not exists!',
+        'alphaSpace' => '{alias} should have english alpha',
     ],
 ];

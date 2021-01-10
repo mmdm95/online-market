@@ -3,8 +3,11 @@
 namespace App\Logic\Controllers\Admin;
 
 use App\Logic\Abstracts\AbstractAdminController;
+use App\Logic\Handlers\DatatableHandler;
 use App\Logic\Interfaces\IDatatableController;
+use Jenssegers\Agent\Agent;
 use ReflectionException;
+use Sim\Event\Interfaces\IEvent;
 use Sim\Exceptions\ConfigManager\ConfigNotRegisteredException;
 use Sim\Exceptions\Mvc\Controller\ControllerException;
 use Sim\Exceptions\PathManager\PathNotRegisteredException;
@@ -30,22 +33,6 @@ class OrderController extends AbstractAdminController implements IDatatableContr
         } else {
             $this->setLayout($this->main_layout)->setTemplate('view/order/view');
         }
-
-        return $this->render();
-    }
-
-    /**
-     * @return string
-     * @throws ConfigNotRegisteredException
-     * @throws ControllerException
-     * @throws IFileNotExistsException
-     * @throws IInvalidVariableNameException
-     * @throws PathNotRegisteredException
-     * @throws ReflectionException
-     */
-    public function badges()
-    {
-        $this->setLayout($this->main_layout)->setTemplate('view/order/badges');
 
         return $this->render();
     }

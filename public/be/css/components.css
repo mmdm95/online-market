@@ -4317,7 +4317,7 @@ body.trumbowyg-body-fullscreen {
   top: 0;
   left: 0;
   display: inline-block;
-  z-index: 1000;
+  z-index: 1051;
   background-color: #fff;
   border: 0 solid rgba(0, 0, 0, 0.15);
   overflow: hidden;

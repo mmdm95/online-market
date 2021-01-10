@@ -200,12 +200,11 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="<?= url('admin.order.badges'); ?>" class="nav-link">
-                                مدیریت وضیعت سفارشات
+                            <a href="<?= url('admin.badge.view'); ?>" class="nav-link">
+                                مدیریت وضعیت سفارشات
                             </a>
                         </li>
                     </ul>
-
                 </li>
                 <li class="nav-item">
                     <a href="<?= url('admin.return.order'); ?>" class="nav-link">
@@ -290,6 +289,12 @@
                     <a href="<?= url('admin.slider.view', ''); ?>" class="nav-link">
                         <i class="icon-image-compare"></i>
                         <span>مدیریت اسلایدشو</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="<?= url('admin.instagram.view', ''); ?>" class="nav-link">
+                        <i class="icon-instagram"></i>
+                        <span>مدیریت تصاویر اینستاگرام</span>
                     </a>
                 </li>
                 <li class="nav-item">

@@ -327,6 +327,8 @@
         }, function (errors) {
             shop.forms.showFormErrors(errors);
             return false;
+        }, {
+            '{{name}}': 'نام',
         });
 
         //---------------------------------------------------------------
@@ -337,6 +339,8 @@
         }, function (errors) {
             shop.forms.showFormErrors(errors);
             return false;
+        }, {
+            '{{name}}': 'نام',
         });
 
         //---------------------------------------------------------------

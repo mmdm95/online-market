@@ -49,6 +49,18 @@
             add: '/ajax/admin/newsletter/add',
             remove: '/ajax/admin/newsletter/remove',
         },
+        instagram: {
+            get: '/ajax/instagram/get',
+            add: '/ajax/instagram/add',
+            edit: '/ajax/instagram/edit',
+            remove: '/ajax/instagram/remove',
+        },
+        badge: {
+            get: '/ajax/badge/get',
+            add: '/ajax/badge/add',
+            edit: '/ajax/badge/edit',
+            remove: '/ajax/badge/remove',
+        },
     });
     window.MyGlobalVariables.elements = $.extend(true, window.MyGlobalVariables.elements, {
         addAddress: {
@@ -183,6 +195,56 @@
             form: '#__form_add_newsletter',
             inputs: {
                 mobile: 'inp-add-newsletter-mobile',
+            },
+        },
+        addBrand: {
+            form: '#__form_add_brand',
+            inputs: {
+                image: 'inp-add-brand-img',
+                status: 'inp-add-brand-status',
+                title: 'inp-add-brand-fa-title',
+                enTitle: 'inp-add-brand-en-title',
+                keywords: 'inp-add-brand-keywords',
+                desc: 'inp-add-brand-desc',
+            },
+        },
+        editBrand: {
+            form: '#__form_edit_brand',
+            inputs: {
+                image: 'inp-edit-brand-img',
+                status: 'inp-edit-brand-status',
+                title: 'inp-edit-brand-fa-title',
+                enTitle: 'inp-edit-brand-en-title',
+                keywords: 'inp-edit-brand-keywords',
+                desc: 'inp-edit-brand-desc',
+            },
+        },
+        addInstagramImage: {
+            form: '#__form_add_instagram_image',
+            inputs: {
+                image: 'inp-add-ins-img',
+                link: 'inp-add-ins-link',
+            },
+        },
+        editInstagramImage: {
+            form: '#__form_edit_instagram_image',
+            inputs: {
+                image: 'inp-edit-ins-img',
+                link: 'inp-edit-ins-link',
+            },
+        },
+        addBadge: {
+            form: '#__form_add_badge',
+            inputs: {
+                title: 'inp-add-badge-title',
+                color: 'inp-add-badge-color',
+            },
+        },
+        editBadge: {
+            form: '#__form_edit_badge',
+            inputs: {
+                title: 'inp-edit-badge-title',
+                color: 'inp-edit-badge-color',
             },
         },
     });
@@ -462,6 +524,74 @@
                     },
                 },
             },
+            addBrand: {
+                image: {
+                    presence: {
+                        allowEmpty: false,
+                        message: '^' + 'تصویر برند را انتخاب کنید.',
+                    },
+                },
+            },
+            editBrand: {
+                image: {
+                    presence: {
+                        allowEmpty: false,
+                        message: '^' + 'تصویر برند را انتخاب کنید.',
+                    },
+                },
+            },
+            addInstagramImage: {
+                image: {
+                    presence: {
+                        allowEmpty: false,
+                        message: '^' + 'تصویر را انتخاب کنید.',
+                    },
+                },
+            },
+            editInstagramImage: {
+                image: {
+                    presence: {
+                        allowEmpty: false,
+                        message: '^' + 'تصویر را انتخاب کنید.',
+                    },
+                },
+            },
+            addBadge: {
+                title: {
+                    presence: {
+                        allowEmpty: false,
+                        message: '^' + 'فیلد عنوان را خالی نگذارید.',
+                    },
+                    length: {
+                        maximum: 250,
+                        message: '^' + 'وضعیت حداکثر باید ۲۵۰ کاراکتر باشد.',
+                    },
+                },
+                color: {
+                    presence: {
+                        allowEmpty: false,
+                        message: '^' + 'یک رنگ انتخاب کنید.',
+                    },
+                },
+            },
+            editBadge: {
+                title: {
+                    presence: {
+                        allowEmpty: false,
+                        message: '^' + 'فیلد عنوان را خالی نگذارید.',
+                    },
+                    length: {
+                        maximum: 250,
+                        message: '^' + 'وضعیت حداکثر باید ۲۵۰ کاراکتر باشد.',
+                    },
+                },
+                color: {
+                    presence: {
+                        allowEmpty: false,
+                        message: '^' + 'یک رنگ انتخاب کنید.',
+                    },
+                },
+            },
         },
     });
 
@@ -520,7 +650,9 @@
             editAddrId = null,
             editUnitId = null,
             editFAQId = null,
-            editSlideId = null;
+            editSlideId = null,
+            editInstagramImageId = null,
+            editBadgeId = null;
 
         admin = new window.TheAdmin();
 
@@ -598,6 +730,32 @@
             },
             addNewsletter: {
                 mobile: variables.validation.common.mobile,
+            },
+            addBrand: {
+                image: variables.validation.constraints.addBrand.image,
+                title: variables.validation.common.name,
+                enTitle: variables.validation.common.enName,
+            },
+            editBrand: {
+                image: variables.validation.constraints.editBrand.image,
+                title: variables.validation.common.name,
+                enTitle: variables.validation.common.enName,
+            },
+            addInstagramImage: {
+                image: variables.validation.constraints.addInstagramImage.image,
+                link: variables.validation.common.link,
+            },
+            editInstagramImage: {
+                image: variables.validation.constraints.editInstagramImage.image,
+                link: variables.validation.common.link,
+            },
+            addBadge: {
+                title: variables.validation.constraints.addBadge.title,
+                color: variables.validation.constraints.addBadge.color,
+            },
+            editBadge: {
+                title: variables.validation.constraints.editBadge.title,
+                color: variables.validation.constraints.editBadge.color,
             },
         };
 
@@ -812,6 +970,55 @@
         }
 
         /**
+         * @param btn
+         * @param [table]
+         */
+        function editInsagramImageBtnClick(btn, table) {
+            var id, editModal;
+            id = $(btn).attr('data-edit-id');
+            editModal = $('#modal_form_edit_ins_image');
+            // clear element after each call
+            $(variables.elements.editInstagramImage.form).reset();
+            if (id && editModal.length) {
+                admin.request(variables.url.instagram.get + '/' + id, 'get', function () {
+                    var _ = this;
+                    if (_.data.length) {
+                        currentTable = table;
+                        editInstagramImageId = id;
+                        //-----
+                        var imgEl = editModal.find('[name="' + variables.elements.editInstagramImage.inputs.image + '"]');
+                        imgEl.val(_.data['image']);
+                        addImageToPlaceholder(imgEl, _.data['image']);
+                        editModal.find('[name="' + variables.elements.editInstagramImage.inputs.link + '"]').val(_.data['link']);
+                    }
+                });
+            }
+        }
+
+        /**
+         * @param btn
+         * @param [table]
+         */
+        function editBadgeBtnClick(btn, table) {
+            var id, editModal;
+            id = $(btn).attr('data-edit-id');
+            editModal = $('#modal_form_edit_badges');
+            // clear element after each call
+            $(variables.elements.editBadge.form).reset();
+            if (id && editModal.length) {
+                admin.request(variables.url.badge.get + '/' + id, 'get', function () {
+                    var _ = this;
+                    if (_.data.length) {
+                        currentTable = table;
+                        editBadgeId = id;
+                        //-----
+                        editModal.find('[name="' + variables.elements.editBadge.inputs.link + '"]').val(_.data['link']);
+                    }
+                });
+            }
+        }
+
+        /**
          * Actions to take after a datatable initialize(reinitialize)
          */
         function datatableInitCompleteActions(table) {
@@ -879,6 +1086,20 @@
                 .off('click' + variables.namespace)
                 .on('click' + variables.namespace, function () {
                     editSlideBtnClick($(this), table);
+                });
+
+            // edit instagram button click event
+            $('.__item_instagram_image_editor_btn')
+                .off('click' + variables.namespace)
+                .on('click' + variables.namespace, function () {
+                    editInsagramImageBtnClick($(this), table);
+                });
+
+            // edit badge button click event
+            $('.__item_badge_editor_btn')
+                .off('click' + variables.namespace)
+                .on('click' + variables.namespace, function () {
+                    editBadgeBtnClick($(this), table);
                 });
         }
 
@@ -1295,6 +1516,8 @@
         }, function (errors) {
             admin.forms.showFormErrors(errors);
             return false;
+        }, {
+            '{{name}}': 'نام',
         });
 
         //---------------------------------------------------------------
@@ -1334,6 +1557,8 @@
         }, function (errors) {
             admin.forms.showFormErrors(errors);
             return false;
+        }, {
+            '{{name}}': 'نام',
         });
 
         //---------------------------------------------------------------
@@ -1606,6 +1831,77 @@
         });
 
         //---------------------------------------------------------------
+        // ADD INSTAGRAM IMAGE FORM
+        //---------------------------------------------------------------
+        admin.forms.submitForm('addInstagramImage', constraints.addInstagramImage, function (values) {
+            // do ajax
+            if (createLoader) {
+                createLoader = false;
+                loaderId = admin.showLoader();
+            }
+            admin.request(variables.url.instagram.add, 'post', function () {
+                admin.hideLoader(loaderId);
+                // clear element after success
+                $(variables.elements.addInstagramImage.form).reset();
+                removeImageFromPlaceholder($(variables.elements.addInstagramImage.form).find('[name="' + variables.elements.addInstagramImage.inputs.image + '"]'));
+                if (currentTable) {
+                    $(currentTable).DataTable().ajax.reload(null, true);
+                    currentTable = null;
+                }
+                //-----
+                admin.toasts.toast(this.data, {
+                    type: variables.toasts.types.success,
+                });
+                createLoader = true;
+            }, {
+                data: values,
+            }, true, function () {
+                createLoader = true;
+            });
+            return false;
+        }, function (errors) {
+            admin.forms.showFormErrors(errors);
+            return false;
+        });
+
+        //---------------------------------------------------------------
+        // Edit INSTAGRAM IMAGE FORM
+        //---------------------------------------------------------------
+        admin.forms.submitForm('editInstagramImage', constraints.editInstagramImage, function (values) {
+            if (editSlideId) {
+                // do ajax
+                if (createLoader) {
+                    createLoader = false;
+                    loaderId = admin.showLoader();
+                }
+                admin.request(variables.url.instagram.edit + '/' + editInstagramImageId, 'post', function () {
+                    admin.hideLoader(loaderId);
+                    // clear element after success
+                    $(variables.elements.editInstagramImage.form).reset();
+                    removeImageFromPlaceholder($(variables.elements.editInstagramImage.form).find('[name="' + variables.elements.editInstagramImage.inputs.image + '"]'));
+                    editInstagramImageId = null;
+                    if (currentTable) {
+                        $(currentTable).DataTable().ajax.reload(null, true);
+                        currentTable = null;
+                    }
+                    //-----
+                    admin.toasts.toast(this.data, {
+                        type: variables.toasts.types.success,
+                    });
+                    createLoader = true;
+                }, {
+                    data: values,
+                }, true, function () {
+                    createLoader = true;
+                });
+            }
+            return false;
+        }, function (errors) {
+            admin.forms.showFormErrors(errors);
+            return false;
+        });
+
+        //---------------------------------------------------------------
         // ADD NEWSLETTER FORM
         //---------------------------------------------------------------
         admin.forms.submitForm('addNewsletter', constraints.addNewsletter, function (values) {
@@ -1632,6 +1928,101 @@
             }, true, function () {
                 createLoader = true;
             });
+            return false;
+        }, function (errors) {
+            admin.forms.showFormErrors(errors);
+            return false;
+        });
+
+        //---------------------------------------------------------------
+        // ADD BRAND FORM
+        //---------------------------------------------------------------
+        admin.forms.submitForm('addBrand', constraints.addBrand, function () {
+            return true;
+        }, function (errors) {
+            admin.forms.showFormErrors(errors);
+            return false;
+        }, {
+            '{{name}}': 'عنوان فارسی',
+            '{{en-name}}': 'عنوان انگلیسی',
+        });
+
+        //---------------------------------------------------------------
+        // EDIT BRAND FORM
+        //---------------------------------------------------------------
+        admin.forms.submitForm('editBrand', constraints.editBrand, function () {
+            return true;
+        }, function (errors) {
+            admin.forms.showFormErrors(errors);
+            return false;
+        }, {
+            '{{name}}': 'عنوان فارسی',
+            '{{en-name}}': 'عنوان انگلیسی',
+        });
+
+        //---------------------------------------------------------------
+        // ADD ORDER BADGE FORM
+        //---------------------------------------------------------------
+        admin.forms.submitForm('addBadge', constraints.addBadge, function (values) {
+            // do ajax
+            if (createLoader) {
+                createLoader = false;
+                loaderId = admin.showLoader();
+            }
+            admin.request(variables.url.badge.add, 'post', function () {
+                admin.hideLoader(loaderId);
+                // clear element after success
+                $(variables.elements.addBadge.form).reset();
+                if (currentTable) {
+                    $(currentTable).DataTable().ajax.reload(null, true);
+                    currentTable = null;
+                }
+                //-----
+                admin.toasts.toast(this.data, {
+                    type: variables.toasts.types.success,
+                });
+                createLoader = true;
+            }, {
+                data: values,
+            }, true, function () {
+                createLoader = true;
+            });
+            return false;
+        }, function (errors) {
+            admin.forms.showFormErrors(errors);
+            return false;
+        });
+
+        //---------------------------------------------------------------
+        // Edit ORDER BADGE FORM
+        //---------------------------------------------------------------
+        admin.forms.submitForm('editBadge', constraints.editBadge, function (values) {
+            if (editBadgeId) {
+                // do ajax
+                if (createLoader) {
+                    createLoader = false;
+                    loaderId = admin.showLoader();
+                }
+                admin.request(variables.url.badge.edit + '/' + editBadgeId, 'post', function () {
+                    admin.hideLoader(loaderId);
+                    // clear element after success
+                    $(variables.elements.editBadge.form).reset();
+                    editBadgeId = null;
+                    if (currentTable) {
+                        $(currentTable).DataTable().ajax.reload(null, true);
+                        currentTable = null;
+                    }
+                    //-----
+                    admin.toasts.toast(this.data, {
+                        type: variables.toasts.types.success,
+                    });
+                    createLoader = true;
+                }, {
+                    data: values,
+                }, true, function () {
+                    createLoader = true;
+                });
+            }
             return false;
         }, function (errors) {
             admin.forms.showFormErrors(errors);

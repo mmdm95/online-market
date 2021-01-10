@@ -54,5 +54,10 @@ return [
         'url' => '{alias} یک آدرس url نامعتبر است.',
         'match' => 'مقدار {second} با مقدار {first} برابر نیست.',
         'fileDuplicate' => 'فایل {filename} وجود دارد.',
+        'persianAlpha' => '{alias} ' . 'باید حروف فارسی باشد.',
+        'persianMobile' => '{alias} ' . 'نامعتبر است.',
+        'persianNationalCode' => '{alias} ' . 'نامعتبر است.',
+        'imageExists' => '{alias} ' . 'وجود ندارد!',
+        'alphaSpace' => '{alias} ' . 'باید از حروف انگلیسی باشد.',
     ],
 ];

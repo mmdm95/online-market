@@ -3,33 +3,52 @@
 namespace App\Logic\Controllers\Admin;
 
 use App\Logic\Abstracts\AbstractAdminController;
-use App\Logic\Forms\Ajax\Address\AddAddressForm as AjaxAddAddressForm;
-use App\Logic\Forms\Ajax\Address\EditAddressForm as AjaxEditAddressForm;
+use App\Logic\Forms\Ajax\Instagram\AddInstagramImageForm as AjaxAddInstagramImageForm;
+use App\Logic\Forms\Ajax\Instagram\EditInstagramImageForm as AjaxEditInstagramImageForm;
 use App\Logic\Handlers\DatatableHandler;
 use App\Logic\Handlers\GeneralAjaxFormHandler;
 use App\Logic\Handlers\GeneralAjaxRemoveHandler;
 use App\Logic\Handlers\ResourceHandler;
+use App\Logic\Interfaces\IAjaxController;
 use App\Logic\Interfaces\IDatatableController;
-use App\Logic\Models\AddressModel;
 use App\Logic\Models\BaseModel;
+use App\Logic\Models\InstagramImagesModel;
 use Jenssegers\Agent\Agent;
 use Sim\Container\Exceptions\MethodNotFoundException;
 use Sim\Container\Exceptions\ParameterHasNoDefaultValueException;
 use Sim\Container\Exceptions\ServiceNotFoundException;
 use Sim\Container\Exceptions\ServiceNotInstantiableException;
 use Sim\Event\Interfaces\IEvent;
+use Sim\Exceptions\ConfigManager\ConfigNotRegisteredException;
+use Sim\Exceptions\Mvc\Controller\ControllerException;
+use Sim\Exceptions\PathManager\PathNotRegisteredException;
+use Sim\Interfaces\IFileNotExistsException;
+use Sim\Interfaces\IInvalidVariableNameException;
 
-class AddressController extends AbstractAdminController implements IDatatableController
+class InstagramController extends AbstractAdminController implements IAjaxController, IDatatableController
 {
     /**
-     * @param $user_id
+     * @throws \ReflectionException
+     * @throws ConfigNotRegisteredException
+     * @throws ControllerException
+     * @throws PathNotRegisteredException
+     * @throws IFileNotExistsException
+     * @throws IInvalidVariableNameException
+     */
+    public function view()
+    {
+        $this->setLayout($this->main_layout)->setTemplate('view/instagram/view');
+        return $this->render();
+    }
+
+    /**
      * @throws \ReflectionException
      * @throws MethodNotFoundException
      * @throws ParameterHasNoDefaultValueException
      * @throws ServiceNotFoundException
      * @throws ServiceNotInstantiableException
      */
-    public function add($user_id): void
+    public function add(): void
     {
         $resourceHandler = new ResourceHandler();
 
@@ -38,11 +57,10 @@ class AddressController extends AbstractAdminController implements IDatatableCon
          */
         $agent = container()->get(Agent::class);
         if (!$agent->isRobot()) {
-            session()->setFlash('addr-add-user-id', $user_id);
             $formHandler = new GeneralAjaxFormHandler();
             $resourceHandler = $formHandler
-                ->setSuccessMessage('آدرس با موفقیت اضافه شد.')
-                ->handle(AjaxAddAddressForm::class);
+                ->setSuccessMessage('تصویر اینستاگرام با موفقیت اضافه شد.')
+                ->handle(AjaxAddInstagramImageForm::class);
         } else {
             response()->httpCode(403);
             $resourceHandler
@@ -53,7 +71,6 @@ class AddressController extends AbstractAdminController implements IDatatableCon
     }
 
     /**
-     * @param $user_id
      * @param $id
      * @throws MethodNotFoundException
      * @throws ParameterHasNoDefaultValueException
@@ -61,7 +78,7 @@ class AddressController extends AbstractAdminController implements IDatatableCon
      * @throws ServiceNotInstantiableException
      * @throws \ReflectionException
      */
-    public function edit($user_id, $id): void
+    public function edit($id): void
     {
         $resourceHandler = new ResourceHandler();
 
@@ -70,12 +87,11 @@ class AddressController extends AbstractAdminController implements IDatatableCon
          */
         $agent = container()->get(Agent::class);
         if (!$agent->isRobot()) {
-            session()->setFlash('addr-edit-user-id', $user_id);
-            session()->setFlash('addr-edit-id', $id);
+            session()->setFlash('instagram-image-edit-id', $id);
             $formHandler = new GeneralAjaxFormHandler();
             $resourceHandler = $formHandler
-                ->setSuccessMessage('آدرس با موفقیت ویرایش شد.')
-                ->handle(AjaxEditAddressForm::class);
+                ->setSuccessMessage('تصویر اینستاگرام با موفقیت ویرایش شد.')
+                ->handle(AjaxEditInstagramImageForm::class);
         } else {
             response()->httpCode(403);
             $resourceHandler
@@ -103,7 +119,7 @@ class AddressController extends AbstractAdminController implements IDatatableCon
         $agent = container()->get(Agent::class);
         if (!$agent->isRobot()) {
             $handler = new GeneralAjaxRemoveHandler();
-            $resourceHandler = $handler->handle(BaseModel::TBL_USER_ADDRESS, $id);
+            $resourceHandler = $handler->handle(BaseModel::TBL_INSTAGRAM_IMAGES, $id);
         } else {
             response()->httpCode(403);
             $resourceHandler
@@ -115,7 +131,6 @@ class AddressController extends AbstractAdminController implements IDatatableCon
     }
 
     /**
-     * @param $user_id
      * @param $id
      * @throws MethodNotFoundException
      * @throws ParameterHasNoDefaultValueException
@@ -123,7 +138,7 @@ class AddressController extends AbstractAdminController implements IDatatableCon
      * @throws ServiceNotInstantiableException
      * @throws \ReflectionException
      */
-    public function get($user_id, $id): void
+    public function get($id): void
     {
         $resourceHandler = new ResourceHandler();
 
@@ -133,10 +148,10 @@ class AddressController extends AbstractAdminController implements IDatatableCon
         $agent = container()->get(Agent::class);
         if (!$agent->isRobot()) {
             /**
-             * @var AddressModel $addressModel
+             * @var InstagramImagesModel $instagramModel
              */
-            $addressModel = container()->get(AddressModel::class);
-            $res = $addressModel->getFirst(['*'], 'user_id=:uId AND id=:id', ['uId' => $user_id, 'id' => $id]);
+            $instagramModel = container()->get(InstagramImagesModel::class);
+            $res = $instagramModel->getFirst(['*'], 'id=:id', ['id' => $id]);
             if (count($res)) {
                 $resourceHandler
                     ->type(RESPONSE_TYPE_SUCCESS)
@@ -144,7 +159,7 @@ class AddressController extends AbstractAdminController implements IDatatableCon
             } else {
                 $resourceHandler
                     ->type(RESPONSE_TYPE_ERROR)
-                    ->errorMessage('آدرس درخواست شده نامعتبر است!');
+                    ->errorMessage('اطلاعات تصویر درخواست شده وجود ندارد!');
             }
         } else {
             response()->httpCode(403);
@@ -157,7 +172,8 @@ class AddressController extends AbstractAdminController implements IDatatableCon
     }
 
     /**
-     * {@inheritdoc}
+     * @param array $_
+     * @return void
      */
     public function getPaginatedDatatable(...$_): void
     {
@@ -167,51 +183,41 @@ class AddressController extends AbstractAdminController implements IDatatableCon
              */
             $agent = container()->get(Agent::class);
             if (!$agent->isRobot()) {
-                [$userId] = $_;
-
-                emitter()->addListener('datatable.ajax:load', function (IEvent $event, $cols, $where, $bindValues, $limit, $offset, $order) use ($userId) {
+                emitter()->addListener('datatable.ajax:load', function (IEvent $event, $cols, $where, $bindValues, $limit, $offset, $order) {
                     $event->stopPropagation();
 
                     /**
-                     * @var AddressModel $addressModel
+                     * @var InstagramImagesModel $instagramModel
                      */
-                    $addressModel = container()->get(AddressModel::class);
+                    $instagramModel = container()->get(InstagramImagesModel::class);
 
-                    if (!empty($where)) {
-                        $where .= ' AND (u_addr.user_id=:uId)';
-                    } else {
-                        $where = 'u_addr.user_id=:uId';
-                    }
-                    $bindValues = array_merge($bindValues, [
-                        'uId' => $userId,
-                    ]);
-
-                    $data = $addressModel->getUserAddresses($cols, $where, $bindValues, $limit, $offset, $order);
+                    $data = $instagramModel->get($cols, $where, $bindValues, $order, $limit, $offset);
                     //-----
-                    $recordsFiltered = $addressModel->getUserAddressesCount($where, $bindValues);
-                    $recordsTotal = $addressModel->getUserAddressesCount();
+                    $recordsFiltered = $instagramModel->count($where, $bindValues);
+                    $recordsTotal = $instagramModel->count();
 
                     return [$data, $recordsFiltered, $recordsTotal];
                 });
 
                 $columns = [
-                    ['db' => 'u_addr.id', 'db_alias' => 'id', 'dt' => 'id'],
-                    ['db' => 'u_addr.full_name', 'db_alias' => 'full_name', 'dt' => 'full_name'],
-                    ['db' => 'p.name', 'db_alias' => 'province_name', 'dt' => 'province'],
-                    ['db' => 'c.name', 'db_alias' => 'city_name', 'dt' => 'city'],
-                    ['db' => 'u_addr.postal_code', 'db_alias' => 'postal_code', 'dt' => 'postal_code'],
-                    ['db' => 'u_addr.mobile', 'db_alias' => 'mobile', 'dt' => 'mobile'],
-                    ['db' => 'u_addr.address', 'db_alias' => 'address', 'dt' => 'address'],
+                    ['db' => 'id', 'db_alias' => 'id', 'dt' => 'id'],
+                    [
+                        'db' => 'image',
+                        'db_alias' => 'image',
+                        'dt' => 'image',
+                        'formatter' => function ($d, $row) {
+                            return '<img class="img-preview img-rounded lazy" data-src="' . url('image.show')->getRelativeUrl() . $d . '" alt="' . $row['title'] . '">';
+                        }
+                    ],
+                    ['db' => 'link', 'db_alias' => 'link', 'dt' => 'link'],
                     [
                         'dt' => 'operations',
                         'formatter' => function ($row) {
-                            $options = $this
-                                ->setTemplate('partial/admin/datatable/actions-user-address')
+                            $operations = $this->setTemplate('partial/admin/datatable/actions-instagram')
                                 ->render([
                                     'row' => $row,
                                 ]);
-
-                            return $options;
+                            return $operations;
                         }
                     ],
                 ];

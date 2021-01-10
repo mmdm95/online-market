@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Logic\Forms\Ajax\Unit;
+namespace App\Logic\Forms\Ajax\Badge;
 
 use App\Logic\Interfaces\IPageForm;
+use App\Logic\Models\OrderBadgeModel;
 use App\Logic\Models\UnitModel;
 use App\Logic\Validations\ExtendedValidator;
 use Sim\Auth\DBAuth;
@@ -13,7 +14,7 @@ use Sim\Container\Exceptions\ServiceNotInstantiableException;
 use Sim\Form\Exceptions\FormException;
 use voku\helper\AntiXSS;
 
-class EditUnitForm implements IPageForm
+class AddOrderBadgeForm implements IPageForm
 {
     /**
      * {@inheritdoc}
@@ -33,40 +34,26 @@ class EditUnitForm implements IPageForm
         $validator->reset();
 
         // aliases
-        $validator->setFieldsAlias([
-            'inp-edit-unit-title' => 'نام گیرنده',
-            'inp-edit-unit-sign' => 'موبایل',
-        ])->setOptionalFields([
-            'inp-edit-unit-sign'
-        ]);
+        $validator
+            ->setFieldsAlias([
+                'inp-add-badge-title' => 'عنوان وضعیت',
+                'inp-add-badge-color' => 'رنگ وضعیت',
+            ]);
 
         // title
         $validator
-            ->setFields('inp-edit-unit-title')
+            ->setFields('inp-add-badge-title')
             ->stopValidationAfterFirstError(false)
             ->required()
             ->stopValidationAfterFirstError(true)
             ->lessThanEqualLength(250);
-        // sign
+        // color
         $validator
-            ->setFields('inp-edit-unit-sign')
-            ->required();
-
-        $id = session()->getFlash('unit-edit-id', null, false);
-        if (!empty($id)) {
-            /**
-             * @var UnitModel $unitModel
-             */
-            $unitModel = container()->get(UnitModel::class);
-
-            if (0 === $unitModel->count('id=:id', ['id' => $id])) {
-                $validator->setError('inp-edit-unit-title', 'شناسه واحد مورد نظر نامعتبر است.');
-            }
-        } else {
-            $validator
-                ->setStatus(false)
-                ->setError('inp-edit-unit-title', 'شناسه واحد مورد نظر نامعتبر است.');
-        }
+            ->setFields('inp-add-badge-color')
+            ->stopValidationAfterFirstError(false)
+            ->required()
+            ->stopValidationAfterFirstError(true)
+            ->hexColor();
 
         // to reset form values and not set them again
         if ($validator->getStatus()) {
@@ -90,29 +77,23 @@ class EditUnitForm implements IPageForm
     public function store(): bool
     {
         /**
-         * @var UnitModel $unitModel
+         * @var OrderBadgeModel $badgeModel
          */
-        $unitModel = container()->get(UnitModel::class);
+        $badgeModel = container()->get(OrderBadgeModel::class);
         /**
          * @var AntiXSS $xss
          */
         $xss = container()->get(AntiXSS::class);
-        /**
-         * @var DBAuth $auth
-         */
-        $auth = container()->get('auth_admin');
 
         try {
-            $id = session()->getFlash('unit-edit-id', null);
-            $title = input()->post('inp-edit-unit-title', '')->getValue();
-            $sign = input()->post('inp-edit-unit-sign', '')->getValue();
+            $title = input()->post('inp-add-badge-title', '')->getValue();
+            $color = input()->post('inp-add-badge-color', '')->getValue();
 
-            $res = $unitModel->update([
+            $res = $badgeModel->insert([
                 'title' => $xss->xss_clean($title),
-                'sign' => $xss->xss_clean($sign),
-                'updated_at' => time(),
-                'updated_by' => $auth->getCurrentUser()['id'] ?? null,
-            ], 'id=:id', ['id' => $id]);
+                'color' => $xss->xss_clean($color),
+                'created_at' => time(),
+            ]);
             return $res;
         } catch (\Exception $e) {
             return false;

@@ -18,10 +18,27 @@ class ExtendedValidator extends AbstractCustomValidation
      * @var array
      */
     protected $extend_validator_classes = [
+        'alphaNumericSpace' => AlphaNumericSpaceValidation::class,
         'persianAlpha' => PersianAlphaValidation::class,
         'persianMobile' => PersianMobileValidation::class,
         'persianNationalCode' => PersianNationalCodeValidation::class,
     ];
+
+    /**
+     * @param string|null $message
+     * @param callable|null $callback
+     * @return $this
+     * @throws FormException
+     */
+    public function alphaNumericSpace(?string $message = null, callable $callback = null)
+    {
+        $this->assertRequirements();
+        $name = $this->fields;
+        $this->_execute($name, $message, __FUNCTION__, function ($value) {
+            return $this->_alpha_numeric_space($value);
+        }, $callback);
+        return $this;
+    }
 
     /**
      * @param string|null $message
@@ -103,6 +120,21 @@ class ExtendedValidator extends AbstractCustomValidation
             return FileSystem::fileExists($path);
         }, $callback);
         return $this;
+    }
+
+    /**
+     * @param $value
+     * @return bool
+     * @throws ValidationException
+     * @throws \ReflectionException
+     */
+    protected function _alpha_numeric_space($value): bool
+    {
+        /**
+         * @var AlphaNumericSpaceValidation $instance
+         */
+        $instance = $this->getInstanceOf('alphaNumericSpace');
+        return $instance->validate($value);
     }
 
     /**

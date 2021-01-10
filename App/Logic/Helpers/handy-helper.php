@@ -1,12 +1,12 @@
 <?php
 
+use App\Logic\Handlers\ResourceHandler;
 use App\Logic\Validations\ExtendedValidator;
 use Sim\Container\Exceptions\MethodNotFoundException;
 use Sim\Container\Exceptions\ParameterHasNoDefaultValueException;
 use Sim\Container\Exceptions\ServiceNotFoundException;
 use Sim\Container\Exceptions\ServiceNotInstantiableException;
 use Sim\Exceptions\ConfigManager\ConfigNotRegisteredException;
-use Sim\File\FileSystem;
 use Sim\Form\FormValidator;
 use Sim\Interfaces\IFileNotExistsException;
 use Sim\Interfaces\IInvalidVariableNameException;
@@ -17,6 +17,18 @@ use Sim\Interfaces\IInvalidVariableNameException;
 function is_post(): bool
 {
     return request()->getMethod() === 'post';
+}
+
+/**
+ * Not implemented response with resource
+ */
+function not_implemented_yet()
+{
+    $resourceHandler = new ResourceHandler();
+    $resourceHandler
+        ->type(RESPONSE_TYPE_ERROR)
+        ->errorMessage('Not implemented yet!');
+    response()->json($resourceHandler->getReturnData());
 }
 
 /**
@@ -133,4 +145,27 @@ function replaced_sms_body($type, array $placeholders = []): string
 function get_image_name(string $filename): string
 {
     return str_replace(url('image.show', '')->getRelativeUrl(), '', str_replace(['//', '\\'], '/', $filename));
+}
+
+/**
+ * @param string $bgColor
+ * @param string $lightColor
+ * @param string $darkColor
+ * @return string
+ */
+function get_color_from_bg(string $bgColor, string $lightColor, string $darkColor): string
+{
+    $color = ($bgColor[0] === '#') ? substr($bgColor, 1, 7) : $bgColor;
+    $r = (int)substr($color, 0, 2); // hexToR
+    $g = (int)substr($color, 2, 4); // hexToG
+    $b = (int)substr($color, 4, 6); // hexToB
+    $uiColors = [$r / 255, $g / 255, $b / 255];
+    $c = array_map(function ($col) {
+        if ($col <= 0.03928) {
+            return $col / 12.92;
+        }
+        return pow(($col + 0.055) / 1.055, 2.4);
+    }, $uiColors);
+    $L = (0.2126 * $c[0]) + (0.7152 * $c[1]) + (0.0722 * $c[2]);
+    return ($L > 0.179) ? $darkColor : $lightColor;
 }

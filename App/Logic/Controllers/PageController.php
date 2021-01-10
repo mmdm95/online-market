@@ -315,7 +315,7 @@ class PageController extends AbstractHomeController
      */
     public function adminNotFound()
     {
-        return $this->show404([], null, 'error.404');
+        return $this->show404([], '', 'error/404');
     }
 
     /**

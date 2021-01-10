@@ -91,7 +91,7 @@ class BrandController extends AbstractAdminController implements IDatatableContr
          */
         $brandModel = container()->get(BrandModel::class);
 
-        $brand = $brandModel->get(['name'], 'id=:id', ['id' => $id]);
+        $brand = $brandModel->get(['name', 'latin_name'], 'id=:id', ['id' => $id]);
 
         if (0 == count($brand)) {
             return $this->show404();
@@ -99,6 +99,7 @@ class BrandController extends AbstractAdminController implements IDatatableContr
 
         // store previous title to check for duplicate
         session()->setFlash('brand-prev-name', $brand[0]['name']);
+        session()->setFlash('brand-prev-latin_name', $brand[0]['latin_name']);
         session()->setFlash('brand-curr-id', $id);
 
         $data = [];
@@ -190,7 +191,7 @@ class BrandController extends AbstractAdminController implements IDatatableContr
      */
     public function getPaginatedDatatable(...$_): void
     {
-//        try {
+        try {
             /**
              * @var Agent $agent
              */
@@ -288,11 +289,11 @@ class BrandController extends AbstractAdminController implements IDatatableContr
                     'error' => 'خطا در ارتباط با سرور، لطفا دوباره تلاش کنید.',
                 ];
             }
-//        } catch (\Exception $e) {
-//            $response = [
-//                'error' => 'خطا در ارتباط با سرور، لطفا دوباره تلاش کنید.',
-//            ];
-//        }
+        } catch (\Exception $e) {
+            $response = [
+                'error' => 'خطا در ارتباط با سرور، لطفا دوباره تلاش کنید.',
+            ];
+        }
 
         response()->json($response);
     }

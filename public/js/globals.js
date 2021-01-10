@@ -151,11 +151,21 @@ window.MyGlobalVariables = {
             name: {
                 presence: {
                     allowEmpty: false,
-                    message: '^' + 'فیلد نام را خالی نگذارید.',
+                    message: '^' + 'فیلد ' + '{{name}}' + ' را خالی نگذارید.',
                 },
                 format: {
                     pattern: /^[پچجحخهعغفقثصضشسیبلاتنمکگوئدذرزطظژؤإأآءًٌٍَُِّ\s]+$/u,
-                    message: '^' + 'نام باید دارای حروف فارسی باشد.',
+                    message: '^' + '{{name}}' + ' باید دارای حروف فارسی باشد.',
+                },
+            },
+            enName: {
+                presence: {
+                    allowEmpty: false,
+                    message: '^' + 'فیلد ' + '{{en-name}}' + ' را خالی نگذارید.',
+                },
+                format: {
+                    pattern: /[a-zA-Z-_\s]*/,
+                    message: '^' + '{{en-name}}' + ' باید دارای حروف انگلیسی باشد.',
                 },
             },
             email: {
@@ -526,7 +536,15 @@ window.MyGlobalVariables = {
             },
 
             forms: {
-                submitForm: function (formKey, constraints, validationSuccessCallback, validationErrorCallback, check) {
+                /**
+                 * @param formKey
+                 * @param constraints
+                 * @param [validationSuccessCallback]
+                 * @param [validationErrorCallback]
+                 * @param [aliases]
+                 * @param [check]
+                 */
+                submitForm: function (formKey, constraints, validationSuccessCallback, validationErrorCallback, aliases, check) {
                     var
                         self = this,
                         //-----
@@ -542,7 +560,15 @@ window.MyGlobalVariables = {
                     form.submit(function () {
                         if (check) {
                             formValues = self.convertFormObjectNumbersToEnglish(window.validate.collectFormValues(this), formKey);
-                            formErrors = window.validate(formValues, constraints);
+                            /**
+                             * @see https://github.com/ansman/validate.js/issues/69#issuecomment-567751903
+                             * @type {ValidationResult}
+                             */
+                            formErrors = window.validate(formValues, constraints, {
+                                prettify: function prettify(string) {
+                                    return aliases[string] || validate.prettify(string);
+                                },
+                            });
                             if (!formErrors) {
                                 return validationSuccessCallback.apply(null, [formValues]);
                             }
@@ -550,6 +576,12 @@ window.MyGlobalVariables = {
                         }
                     });
                 },
+
+                /**
+                 * @param obj
+                 * @param formKey
+                 * @returns {boolean}
+                 */
                 convertFormObjectNumbersToEnglish: function (obj, formKey) {
                     var
                         keyFromVal,
@@ -567,6 +599,10 @@ window.MyGlobalVariables = {
 
                     return newFormValues;
                 },
+
+                /**
+                 * @param errors
+                 */
                 showFormErrors: function (errors) {
                     var shop = new ShopBase();
                     var s, p, a;

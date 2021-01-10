@@ -9,6 +9,7 @@ use App\Logic\Handlers\DatatableHandler;
 use App\Logic\Handlers\GeneralAjaxFormHandler;
 use App\Logic\Handlers\GeneralAjaxRemoveHandler;
 use App\Logic\Handlers\ResourceHandler;
+use App\Logic\Interfaces\IAjaxController;
 use App\Logic\Interfaces\IDatatableController;
 use App\Logic\Models\BaseModel;
 use App\Logic\Models\NewsletterModel;
@@ -26,7 +27,7 @@ use Sim\Exceptions\PathManager\PathNotRegisteredException;
 use Sim\Interfaces\IFileNotExistsException;
 use Sim\Interfaces\IInvalidVariableNameException;
 
-class NewsletterController extends AbstractAdminController implements IDatatableController
+class NewsletterController extends AbstractAdminController implements IAjaxController, IDatatableController
 {
     /**
      * @return string
@@ -50,7 +51,7 @@ class NewsletterController extends AbstractAdminController implements IDatatable
      * @throws ServiceNotFoundException
      * @throws ServiceNotInstantiableException
      */
-    public function add()
+    public function add(): void
     {
         $resourceHandler = new ResourceHandler();
 
@@ -80,7 +81,7 @@ class NewsletterController extends AbstractAdminController implements IDatatable
      * @throws ServiceNotFoundException
      * @throws ServiceNotInstantiableException
      */
-    public function remove($id)
+    public function remove($id): void
     {
         $resourceHandler = new ResourceHandler();
 
@@ -99,6 +100,24 @@ class NewsletterController extends AbstractAdminController implements IDatatable
         }
 
         response()->json($resourceHandler->getReturnData());
+    }
+
+    /**
+     * @param $id
+     * @return void
+     */
+    public function edit($id): void
+    {
+        not_implemented_yet();
+    }
+
+    /**
+     * @param $id
+     * @return void
+     */
+    public function get($id): void
+    {
+        not_implemented_yet();
     }
 
     /**

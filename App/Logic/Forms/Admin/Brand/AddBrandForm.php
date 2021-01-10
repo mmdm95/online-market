@@ -3,10 +3,7 @@
 namespace App\Logic\Forms\Admin\Brand;
 
 use App\Logic\Interfaces\IPageForm;
-use App\Logic\Models\BlogCategoryModel;
-use App\Logic\Models\BlogModel;
-use App\Logic\Models\UserModel;
-use App\Logic\Utils\Jdf;
+use App\Logic\Models\BrandModel;
 use App\Logic\Validations\ExtendedValidator;
 use Sim\Auth\DBAuth;
 use Sim\Container\Exceptions\MethodNotFoundException;
@@ -41,62 +38,47 @@ class AddBrandForm implements IPageForm
         // aliases
         $validator
             ->setFieldsAlias([
-                'inp-add-blog-img' => 'تصویر',
-                'inp-add-blog-title' => 'عنوان',
-                'inp-add-blog-category' => 'دسته‌بندی',
-                'inp-add-blog-abs' => 'خلاصه مطلب',
-                'inp-add-blog-desc' => 'توضیحات',
+                'inp-add-brand-img' => 'تصویر',
+                'inp-add-brand-fa-title' => 'عنوان فارسی',
+                'inp-add-brand-en-title' => 'عنوان انگلیسی',
             ])
             ->setOptionalFields([
-                'inp-add-blog-keywords',
+                'inp-add-brand-keywords',
+                'inp-add-brand-desc',
             ]);
 
         // image
         $validator
-            ->setFields('inp-add-blog-img')
+            ->setFields('inp-add-brand-img')
             ->stopValidationAfterFirstError(false)
             ->required()
             ->stopValidationAfterFirstError(true)
             ->imageExists('{alias} ' . 'وجود ندارد!');
         // title
         $validator
-            ->setFields('inp-add-blog-title')
+            ->setFields('inp-add-brand-fa-title')
             ->stopValidationAfterFirstError(false)
             ->required()
             ->stopValidationAfterFirstError(true)
+            ->persianAlpha();
+        // duplicate check
+        $validator
+            ->setFields([
+                'inp-add-brand-fa-title',
+                'inp-add-brand-en-title',
+            ])
             ->custom(function (FormValue $value) {
                 /**
-                 * @var BlogModel $blogModel
+                 * @var BrandModel $brandModel
                  */
-                $blogModel = container()->get(BlogModel::class);
-                if ($blogModel->count('title=:title', ['title' => $value->getValue()]) === 0) return true;
+                $brandModel = container()->get(BrandModel::class);
+                if ($value->getName() == 'inp-add-brand-en-title') {
+                    if ($brandModel->count('name=:name', ['name' => trim($value->getValue())]) === 0) return true;
+                } else {
+                    if ($brandModel->count('latin_name=:name', ['name' => trim($value->getValue())]) === 0) return true;
+                }
                 return false;
-            }, '{alias} ' . 'وارد شده تکراری می‌باشد.');
-        // category
-        $validator
-            ->setFields('inp-add-blog-category')
-            ->stopValidationAfterFirstError(false)
-            ->required()
-            ->stopValidationAfterFirstError(true)
-            ->custom(function (FormValue $value) {
-                /**
-                 * @var BlogCategoryModel $categoryModel
-                 */
-                $categoryModel = container()->get(BlogCategoryModel::class);
-                if ($categoryModel->count('id=:id', ['id' => $value->getValue()]) === 0) return true;
-                return false;
-            }, '{alias} ' . 'وارد شده وجود ندارد.');
-        // abstract
-        $validator
-            ->setFields('inp-add-blog-abs')
-            ->stopValidationAfterFirstError(false)
-            ->required()
-            ->stopValidationAfterFirstError(true)
-            ->lessThanEqualLength(200);
-        // description
-        $validator
-            ->setFields('inp-add-blog-desc')
-            ->required();
+            }, 'برند با این عنوان (فارسی/انگلیسی) وجود دارد.');
 
         // to reset form values and not set them again
         if ($validator->getStatus()) {
@@ -124,13 +106,9 @@ class AddBrandForm implements IPageForm
     public function store(): bool
     {
         /**
-         * @var BlogModel $blogModel
+         * @var BrandModel $brandModel
          */
-        $blogModel = container()->get(BlogModel::class);
-        /**
-         * @var UserModel $userModel
-         */
-        $userModel = container()->get(UserModel::class);
+        $brandModel = container()->get(BrandModel::class);
         /**
          * @var AntiXSS $xss
          */
@@ -141,32 +119,22 @@ class AddBrandForm implements IPageForm
         $auth = container()->get('auth_admin');
 
         try {
-            $image = input()->post('inp-add-blog-img', '')->getValue();
-            $pub = input()->post('inp-add-blog-status', '')->getValue();
-            $title = input()->post('inp-add-blog-title', '')->getValue();
-            $category = input()->post('inp-add-blog-category', '')->getValue();
-            $abstract = input()->post('inp-add-blog-abs', '')->getValue();
-            $keywords = input()->post('inp-add-blog-keywords', '')->getValue();
-            $desc = input()->post('inp-add-blog-desc', '')->getValue();
-            $writer = null;
+            $image = input()->post('inp-add-brand-img', '')->getValue();
+            $pub = input()->post('inp-add-brand-status', '')->getValue();
+            $name = input()->post('inp-add-brand-fa-title', '')->getValue();
+            $enName = input()->post('inp-add-brand-en-title', '')->getValue();
+            $keywords = input()->post('inp-add-brand-keywords', '')->getValue();
+            $desc = input()->post('inp-add-brand-desc', '')->getValue();
 
-            if ($userModel->count('id=:id', ['id' => $auth->getCurrentUser()['id'] ?? 0])) {
-                $user = $userModel->getFirst(['first_name', 'last_name'], 'id=:id', ['id' => $auth->getCurrentUser()['id']]);
-                $writer = $user['first_name'] . ' ' . $user['last_name'];
-            }
-
-            return $blogModel->insert([
-                'title' => $xss->xss_clean($title),
-                'fa_title' => $xss->xss_clean(StringUtil::toPersian($title)),
-                'slug' => $xss->xss_clean(StringUtil::slugify($title)),
+            return $brandModel->insert([
+                'name' => $xss->xss_clean($name),
+                'latin_name' => $xss->xss_clean($enName),
+                'fa_name' => $xss->xss_clean(StringUtil::toPersian($name)),
+                'slug' => $xss->xss_clean(StringUtil::slugify($name)),
                 'image' => $xss->xss_clean(get_image_name($image)),
-                'abstract' => $xss->xss_clean($abstract),
                 'body' => $xss->xss_clean($desc),
-                'category_id' => $category,
                 'keywords' => $xss->xss_clean($keywords),
                 'publish' => is_value_checked($pub) ? DB_YES : DB_NO,
-                'writer' => $writer,
-                'archive_tag' => Jdf::jdate(ARCHIVE_TAGS_TIME_FORMAT),
                 'created_by' => $auth->getCurrentUser()['id'] ?? null,
                 'created_at' => time(),
             ]);

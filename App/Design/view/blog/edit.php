@@ -27,7 +27,7 @@ $validator = form_validator();
                                     انتخاب تصویر شاخص:
                                 </label>
                                 <?php
-                                $img = $validator->setInput('inp-edit-blog-img') ?: $blog['image'];
+                                $img = $validator->setInput('inp-edit-blog-img') ?: (url('image.show')->getRelativeUrl() . $blog['image']);
                                 ?>
                                 <div class="img-placeholder-custom __file_picker_handler __file_image mx-auto ml-lg-0 mr-lg-3 mb-0 <?= !empty($img) ? 'has-image' : ''; ?>"
                                      data-toggle="modal"

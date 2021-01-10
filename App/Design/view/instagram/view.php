@@ -5,164 +5,147 @@
         <?php load_partial('admin/card-header', ['header_title' => 'برندها']); ?>
 
         <div class="card-body">
-            با استفاده از ستون عملیات می‌توانید اقدام به حذف، ویرایش و مشاهده خرید‌های کاربر کنید.
-            <div class="col-md-2 float-right">
+            <div class="d-flex justify-content-between">
+                <span>با استفاده از ستون عملیات می‌توانید اقدام به حذف و ویرایش تصاویر کنید.</span>
                 <button type="button" class="btn btn-success" data-toggle="modal"
-                        data-target="#modal_form_add_brand">
-                    افزودن برند جدید
+                        data-target="#modal_form_add_ins_image">
+                    افزودن تصویر جدید
                     <i class="icon-markup ml-2"></i>
                 </button>
             </div>
-            <!-- Vertical form modal -->
-            <div id="modal_form_add_brand" class="modal fade" tabindex="-1">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title">افزودن برند جدید</h5>
-                            <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        </div>
-
-                        <form action="#">
-                            <div class="modal-body">
-                                <div class="row">
-                                    <fieldset class="col-6">
-                                        <legend class="font-weight-semibold">
-                                            <i class="icon-info22 mr-2"></i>
-                                            انتخاب تصویر مطلب
-                                        </legend>
-                                        <div class="img-placeholder-group">
-                                            <div class="img-placeholder-custom">
-                                                <div class="img-placeholder-icon-container">
-                                                    <i class="img-placeholder-icon icon-image2 text-indigo"></i>
-                                                    <span class="img-placeholder-num badge badge-pill bg-warning-400"><i
-                                                                class="icon-plus2"></i></span>
-                                                </div>
-                                                <div>
-                                                    <input class="file-manager-image" type="hidden" name="" value="">
-                                                    <!-- <img src="" alt="image" class="img-placeholder-image"> -->
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </fieldset>
-                                    <fieldset class="col-6 rtl">
-                                        <legend class="font-weight-semibold">
-                                            <i class="icon-info22 mr-2"></i>
-                                            وضعیت بزند
-                                        </legend>
-                                        <div class="form-group col-12 text-right">
-                                            <div class="form-check form-check-switchery form-check-switchery-double">
-                                                <label class="form-check-label">
-                                                    انتشار
-                                                    <input type="checkbox" class="form-check-input-switchery" checked>
-                                                </label>
-                                            </div>
-                                        </div>
-                                        <div class="form-group col-12 text-right">
-                                            <div class="form-check form-check-switchery form-check-switchery-double">
-                                                <label class="form-check-label">
-                                                    نمایش اسلایدر
-                                                    <input type="checkbox" class="form-check-input-switchery" checked>
-                                                </label>
-                                            </div>
-                                        </div>
-                                    </fieldset>
-                                </div>
-                                <div class="form-group">
-                                    <div class="row">
-                                        <div class="col-sm-6">
-                                            <label>نام فارسی برند</label>
-                                            <input type="text" placeholder="وارد کنید" class="form-control">
-                                        </div>
-
-                                        <div class="col-sm-6">
-                                            <label>نام لاتین برند</label>
-                                            <input type="text" placeholder="وارد کنید" class="form-control">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-link" data-dismiss="modal">بستن</button>
-                                <button type="submit" class="btn bg-primary">افزودن</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-            <!-- /vertical form modal -->
         </div>
 
-        <table class="table table-bordered table-hover datatable-highlight">
+        <table class="table table-bordered table-hover datatable-highlight"
+               data-columns='[{"data":"id"},{"data":"image"},{"data":"link"},{"data":"created_at"},{"data":"operations"}]'
+               data-ajax-url="<?= url('admin.instagram.dt.view')->getRelativeUrlTrimmed(); ?>">
             <thead>
             <tr>
                 <th>#</th>
-                <th>تصویر برند</th>
-                <th>نام فارسی</th>
-                <th>نام انگلیسی</th>
+                <th>تصویر</th>
+                <th>لینک</th>
+                <th>اضافه شده در تاریخ</th>
                 <th class="text-center">عملیات</th>
             </tr>
             </thead>
-            <tbody>
+            <tfoot>
             <tr>
-                <td>۱</td>
-                <td>
-                    <img src="../../../../global_assets/images/placeholders/placeholder.jpg" class="rounded-circle" width="36" height="36" alt="">
-                </td>
-                <td>هوآوی</td>
-                <td>Huawei</td>
-                <td class="text-center">
-                    <div class="list-icons">
-                        <div class="dropdown">
-                            <a href="#" class="list-icons-item" data-toggle="dropdown">
-                                <i class="icon-menu9"></i>
-                            </a>
-
-                            <div class="dropdown-menu dropdown-menu-right">
-                                <a href="#modal_form_edit_unit" data-toggle="modal" class="dropdown-item">
-                                    <i class="icon-pencil"></i>ویرایش</a>
-                                <a href="#" class="dropdown-item"><i class="icon-trash"></i>حذف</a>
-                            </div>
-                        </div>
-                    </div>
-                </td>
+                <th>#</th>
+                <th>تصویر</th>
+                <th>لینک</th>
+                <th>اضافه شده در تاریخ</th>
+                <th class="text-center">عملیات</th>
             </tr>
-            </tbody>
+            </tfoot>
         </table>
-        <!-- Vertical form modal -->
-        <div id="modal_form_edit_unit" class="modal fade" tabindex="-1">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">ویرایش واحد جدید</h5>
-                        <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    </div>
+    </div>
 
-                    <form action="#">
-                        <div class="modal-body">
-                            <div class="form-group">
-                                <div class="row">
-                                    <div class="col-sm-6">
-                                        <label>نام واحد</label>
-                                        <input type="text" placeholder="وارد کنید" class="form-control">
-                                    </div>
+    <!-- Add image modal -->
+    <div id="modal_form_add_ins_image" class="modal fade" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-primary">
+                    <h5 class="modal-title">افزودن تصویر جدید</h5>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
 
-                                    <div class="col-sm-6">
-                                        <label>علامت اختصاری(انگلیسی)</label>
-                                        <input type="text" placeholder="وارد کنید" class="form-control">
+                <form action="#" id="__form_add_instagram_image">
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-12 form-group">
+                                <div class="text-center">
+                                    <label>
+                                        <span class="text-danger">*</span>
+                                        انتخاب تصویر:
+                                    </label>
+                                    <div class="img-placeholder-custom __file_picker_handler __file_image mx-auto"
+                                         data-toggle="modal"
+                                         data-target="#modal_efm">
+                                        <input type="hidden" name="inp-add-ins-img" value="">
+                                        <div class="img-placeholder-icon-container">
+                                            <i class="icon-image2 img-placeholder-icon text-grey-300"></i>
+                                            <div class="img-placeholder-num bg-warning text-white">
+                                                <i class="icon-plus2"></i>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
+                            <div class="col-lg-12 form-group">
+                                <label>
+                                    <span class="text-danger">*</span>
+                                    لینک:
+                                </label>
+                                <input type="text" placeholder="https://" class="form-control ltr"
+                                       name="inp-add-ins-link">
+                            </div>
                         </div>
+                    </div>
 
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-link" data-dismiss="modal">بستن</button>
-                            <button type="submit" class="btn bg-primary">افزودن</button>
-                        </div>
-                    </form>
-                </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-link" data-dismiss="modal">بستن</button>
+                        <button type="submit" class="btn btn-primary">افزودن تصویر</button>
+                    </div>
+                </form>
             </div>
         </div>
-        <!-- /vertical form modal -->
     </div>
+    <!-- /add image modal -->
+
+    <!-- Edit image modal -->
+    <div id="modal_form_edit_ins_image" class="modal fade" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-success">
+                    <h5 class="modal-title">ویرایش تصویر</h5>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <form action="#" id="__form_edit_instagram_image">
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-12 form-group">
+                                <div class="text-center">
+                                    <label>
+                                        <span class="text-danger">*</span>
+                                        انتخاب تصویر:
+                                    </label>
+                                    <div class="img-placeholder-custom __file_picker_handler __file_image mx-auto"
+                                         data-toggle="modal"
+                                         data-target="#modal_efm">
+                                        <input type="hidden" name="inp-edit-ins-img" value="">
+                                        <div class="img-placeholder-icon-container">
+                                            <i class="icon-image2 img-placeholder-icon text-grey-300"></i>
+                                            <div class="img-placeholder-num bg-warning text-white">
+                                                <i class="icon-plus2"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-12 form-group">
+                                <label>
+                                    <span class="text-danger">*</span>
+                                    لینک:
+                                </label>
+                                <input type="text" placeholder="https://" class="form-control ltr"
+                                       name="inp-edit-ins-link">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-link" data-dismiss="modal">بستن</button>
+                        <button type="submit" class="btn btn-success">افزودن تصویر</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- /edit image modal -->
+
+    <!-- Mini file manager modal -->
+    <?php load_partial('file-manager/modal-efm', [
+        'the_options' => $the_options ?? [],
+    ]); ?>
+    <!-- /mini file manager modal -->
 </div>
