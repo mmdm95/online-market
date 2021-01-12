@@ -3,7 +3,6 @@
 namespace App\Logic\Validations;
 
 use App\Logic\Utils\CaptchaUtil;
-use Sim\File\FileSystem;
 use Sim\Form\Exceptions\FormException;
 use Sim\Form\Exceptions\ValidationException;
 use Sim\Form\ValidationExtend\AbstractCustomValidation;
@@ -115,9 +114,7 @@ class ExtendedValidator extends AbstractCustomValidation
         $this->assertRequirements();
         $name = $this->fields;
         $this->_execute($name, $message, __FUNCTION__, function ($value) {
-            $filename = get_image_name($value);
-            $path = get_path('upload-root', $filename, false);
-            return FileSystem::fileExists($path);
+            return is_image_exists($value);
         }, $callback);
         return $this;
     }

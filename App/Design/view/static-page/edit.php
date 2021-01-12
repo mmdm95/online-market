@@ -1,6 +1,6 @@
 <!-- Content area -->
 <div class="content">
-    <div class="card col-lg-12">
+    <div class="card col-lg-10">
         <?php load_partial('admin/card-header', ['header_title' => 'افزودن مطلب جدید']); ?>
 
         <div class="card-body">

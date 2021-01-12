@@ -243,7 +243,7 @@ class BlogCategoryController extends AbstractAdminController implements IDatatab
                                     ]);
                                 return $status;
                             }
-                            return '<i class="icon-minus2 text-danger" aria-hidden="true"></i>';
+                            return $this->setTemplate('partial/admin/parser/dash-icon')->render();
                         }
                     ],
                     [
@@ -254,7 +254,7 @@ class BlogCategoryController extends AbstractAdminController implements IDatatab
                             if (DB_YES == $row['deletable']) {
                                 return Jdf::jdate(DEFAULT_TIME_FORMAT, $d);
                             }
-                            return '<i class="icon-minus2 text-danger" aria-hidden="true"></i>';
+                            return $this->setTemplate('partial/admin/parser/dash-icon')->render();
                         }
                     ],
                     [

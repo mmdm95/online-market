@@ -74,10 +74,10 @@ $validator = form_validator();
                         <select data-placeholder="دسته‌بندی را انتخاب کنید..."
                                 class="form-control form-control-select2-searchable"
                                 name="inp-add-blog-category" data-fouc>
-                            <option value="-1" disabled="disabled" selected="selected">انتخاب کنید</option>
+                            <option value="<?= DEFAULT_OPTION_VALUE; ?>" disabled="disabled" selected="selected">انتخاب کنید</option>
                             <?php foreach ($categories as $category): ?>
                                 <option value="<?= $category['id']; ?>"
-                                    <?= $validator->setSelect('inp-user-role', $category['id']); ?>><?= $category['name']; ?></option>
+                                    <?= $validator->setSelect('inp-add-blog-category', $category['id']); ?>><?= $category['name']; ?></option>
                             <?php endforeach; ?>
                         </select>
                     </div>

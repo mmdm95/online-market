@@ -7,7 +7,7 @@ $validator = form_validator();
 <!-- Content area -->
 <div class="content">
     <!-- 2 columns form -->
-    <div class="card col-lg-10">
+    <div class="card col-lg-8">
         <?php load_partial('admin/card-header', ['header_title' => 'افزودن رنگ جدید']); ?>
 
         <div class="card-body">

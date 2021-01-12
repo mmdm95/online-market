@@ -211,7 +211,11 @@ class SliderController extends AbstractAdminController implements IAjaxControlle
                         'db_alias' => 'image',
                         'dt' => 'image',
                         'formatter' => function ($d, $row) {
-                            return '<img class="img-preview img-rounded lazy" data-src="' . url('image.show')->getRelativeUrl() . $d . '" alt="' . $row['title'] . '">';
+                            return $this->setTemplate('partial/admin/parser/image-placeholder')
+                                ->render([
+                                    'img' => $d,
+                                    'alt' => $row['title'],
+                                ]);
                         }
                     ],
                     ['db' => 'link', 'db_alias' => 'link', 'dt' => 'link'],

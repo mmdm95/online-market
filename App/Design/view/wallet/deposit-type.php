@@ -7,7 +7,7 @@
         <div class="card-body">
             با استفاده از ستون عملیات می‌توانید اقدام به حذف، ویرایش و مشاهده خرید‌های کاربر کنید.
             <div class="col-md-2 float-right">
-                <button type="button" class="btn btn-success" data-toggle="modal"
+                <button type="button" class="btn btn-success ml-3" data-toggle="modal"
                         data-target="#modal_form_add_type">
                     افزودن نوع جدید
                     <i class="icon-plus2 ml-2"></i>

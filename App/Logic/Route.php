@@ -160,6 +160,14 @@ class Route implements IInitialize
                     'id' => '[0-9]+',
                 ])->name('admin.category.edit');
                 Router::get('/category/view', 'Admin\CategoryController@view')->name('admin.category.view');
+                Router::post('/category/view/dt', 'Admin\CategoryController@getPaginatedDatatable')->name('admin.category.dt.view');
+
+                /**
+                 * Category Image Route
+                 */
+                Router::get('/category/image/view', 'Admin\CategoryImageController@view')->name('admin.category.image.view');
+                Router::post('/category/image/view/dt', 'Admin\CategoryImageController@getPaginatedDatatable')
+                    ->name('admin.category.image.dt.view');
 
                 /**
                  * Coupon Route
@@ -209,6 +217,16 @@ class Route implements IInitialize
                 Router::get('blog/category/view', 'Admin\BlogCategoryController@view')->name('admin.blog.category.view');
                 Router::post('blog/category/view/dt', 'Admin\BlogCategoryController@getPaginatedDatatable')
                     ->name('admin.blog.category.dt.view');
+
+                /**
+                 * Static Page Route
+                 */
+                Router::form('/static-page/add', 'Admin\StaticPageController@add')->name('admin.static.page.add');
+                Router::form('/static-page/edit/{id}', 'Admin\StaticPageController@edit')->where([
+                    'id' => '[0-9]+',
+                ])->name('admin.static.page.edit');
+                Router::get('static-page/view', 'Admin\StaticPageController@view')->name('admin.static.page.view');
+                Router::post('/static-page/view/dt', 'Admin\StaticPageController@getPaginatedDatatable')->name('admin.static.page.dt.view');
 
                 /**
                  * Brand Route
@@ -530,6 +548,13 @@ class Route implements IInitialize
                 ])->name('ajax.blog.category.side.status');
 
                 /**
+                 * static page route
+                 */
+                Router::delete('/static-page/remove/{id}', 'Admin\StaticPageController@remove')->where([
+                    'id' => '[0-9]+',
+                ])->name('ajax.static.page.remove');
+
+                /**
                  * faq route
                  */
                 Router::get('/faq/get/{id}', 'Admin\FaqController@get')->where([
@@ -616,6 +641,32 @@ class Route implements IInitialize
                 Router::delete('/badge/remove/{id}', 'Admin\OrderBadgeController@remove')->where([
                     'id' => '[0-9]+',
                 ])->name('ajax.badge.remove');
+
+                /**
+                 * category route
+                 */
+                Router::post('/category/menu-status/{id}', 'Admin\CategoryController@menuStatusChange')->where([
+                    'id' => '[0-9]+',
+                ])->name('ajax.category.menu.status');
+
+                /**
+                 * category images route
+                 */
+                Router::post('/category/image/add/{c_id}', 'Admin\CategoryImageController@add')->where([
+                    'c_id' => '[0-9]+',
+                ])->name('ajax.category.image.add');
+                Router::post('/category/image/edit/{c_id}/{id}', 'Admin\CategoryImageController@edit')->where([
+                    'c_id' => '[0-9]+',
+                    'id' => '[0-9]+',
+                ])->name('ajax.category.image.edit');
+                Router::get('/category/image/get/{c_id}/{id}', 'Admin\CategoryImageController@get')->where([
+                    'c_id' => '[0-9]+',
+                    'id' => '[0-9]+',
+                ])->name('ajax.category.image.get');
+                Router::delete('/category/remove/{c_id}/{id}', 'Admin\CategoryImageController@remove')->where([
+                    'c_id' => '[0-9]+',
+                    'id' => '[0-9]+',
+                ])->name('ajax.category.image.remove');
 
                 /**
                  * File Manager Route

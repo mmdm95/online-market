@@ -135,3 +135,6 @@ defined("DEFAULT_TIME_FORMAT") OR define("DEFAULT_TIME_FORMAT", 'j F Y');
 
 // archive tags time format
 defined("ARCHIVE_TAGS_TIME_FORMAT") OR define("ARCHIVE_TAGS_TIME_FORMAT", 'F Y');
+
+// default select option value
+defined("DEFAULT_OPTION_VALUE") OR define("DEFAULT_OPTION_VALUE", -1);

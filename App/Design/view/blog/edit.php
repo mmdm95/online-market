@@ -74,7 +74,7 @@ $validator = form_validator();
                         <select data-placeholder="دسته‌بندی را انتخاب کنید..."
                                 class="form-control form-control-select2-searchable"
                                 name="inp-edit-blog-category" data-fouc>
-                            <option value="-1" disabled="disabled" selected="selected">انتخاب کنید</option>
+                            <option value="<?= DEFAULT_OPTION_VALUE; ?>" disabled="disabled" selected="selected">انتخاب کنید</option>
                             <?php foreach ($categories as $category): ?>
                                 <option value="<?= $category['id']; ?>"
                                     <?= $blog['category_id'] == $category['id'] ? 'selected="selected"' : ''; ?>>

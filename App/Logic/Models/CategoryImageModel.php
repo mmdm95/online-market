@@ -4,15 +4,15 @@ namespace App\Logic\Models;
 
 use Aura\SqlQuery\Exception as AuraException;
 
-class CategoryModel extends BaseModel
+class CategoryImageModel extends BaseModel
 {
     /**
      * @var string
      */
-    protected $table = self::TBL_CATEGORIES;
+    protected $table = self::TBL_CATEGORY_IMAGES;
 
     /**
-     * Use [c for categories], [cc for categories - parent info]
+     * Use [ci for category images], [c for categories]
      *
      * @param array $columns
      * @param string|null $where
@@ -20,32 +20,29 @@ class CategoryModel extends BaseModel
      * @param int|null $limit
      * @param int $offset
      * @param array $order_by
-     * @param array $group_by
      * @return array
      */
-    public function getCategories(
-        array $columns = ['c.*', 'cc.name'],
+    public function getCategoryImages(
+        array $columns = [],
         ?string $where = null,
         array $bind_values = [],
         int $limit = null,
         int $offset = 0,
-        array $order_by = ['c.id DESC'],
-        array $group_by = ['c.id']
+        array $order_by = ['ci.id DESC']
     ): array
     {
         $select = $this->connector->select();
         $select
-            ->from($this->table . ' AS c')
+            ->from($this->table . ' AS ci')
             ->cols($columns)
             ->offset($offset)
-            ->orderBy($order_by)
-            ->groupBy($group_by);
+            ->orderBy($order_by);
 
         try {
             $select
                 ->innerJoin(
-                    self::TBL_CATEGORIES . ' AS cc',
-                    'c.parent_id=cc.id'
+                    self::TBL_CATEGORIES . ' AS c',
+                    'ci.category_id=c.id'
                 );
         } catch (AuraException $e) {
             return [];
@@ -71,9 +68,9 @@ class CategoryModel extends BaseModel
      * @param array $bind_values
      * @return int
      */
-    public function getCategoriesCount(?string $where = null, array $bind_values = []): int
+    public function getCategoryImagesCount(?string $where = null, array $bind_values = []): int
     {
-        $res = $this->getCategories(['COUNT(DISTINCT(c.id)) AS count'], $where, $bind_values);
+        $res = $this->getCategoryImages(['COUNT(DISTINCT(ci.id)) AS count'], $where, $bind_values);
         if (count($res)) {
             return (int)$res[0]['count'];
         }

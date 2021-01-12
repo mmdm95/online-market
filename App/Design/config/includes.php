@@ -1037,6 +1037,7 @@ return [
             'title' => title_concat(\config()->get('settings.title.value'), 'افزودن دسته'),
             'common' => [
                 'admin-base',
+                'admin-tags-input',
                 'admin-form',
                 'admin'
             ],
@@ -1063,6 +1064,7 @@ return [
             'title' => title_concat(\config()->get('settings.title.value'), 'ویرایش دسته'),
             'common' => [
                 'admin-base',
+                'admin-tags-input',
                 'admin-form',
                 'admin'
             ],
@@ -1102,6 +1104,33 @@ return [
                 ],
                 [
                     'text' => 'دسته‌بندی‌ها',
+                    'is_active' => true,
+                ],
+            ],
+        ],
+        'view/category/image/view' => [
+            'title' => title_concat(\config()->get('settings.title.value'), 'مشاهده تصاویر دسته‌ها'),
+            'common' => [
+                'admin-base',
+                'admin-form',
+                'admin-table',
+                'admin'
+            ],
+            'sub_title' => 'مدیریت تصاویر دسته‌بندی‌ها',
+            'breadcrumb' => [
+                [
+                    'url' => url('admin.index'),
+                    'icon' => 'icon-home2',
+                    'text' => 'خانه',
+                    'is_active' => false,
+                ],
+                [
+                    'url' => url('admin.category.view'),
+                    'text' => 'مدیریت دسته‌بندی‌ها',
+                    'is_active' => false,
+                ],
+                [
+                    'text' => 'تصاویر دسته‌ها',
                     'is_active' => true,
                 ],
             ],
@@ -1431,7 +1460,7 @@ return [
                 ],
                 [
                     'url' => url('admin.blog.view', ''),
-                    'text' => 'مطلب',
+                    'text' => 'مطالب',
                     'is_active' => false,
                 ],
                 [
@@ -1459,7 +1488,7 @@ return [
                 ],
                 [
                     'url' => url('admin.blog.view', ''),
-                    'text' => 'مطلب',
+                    'text' => 'مطالب',
                     'is_active' => false,
                 ],
                 [
@@ -1481,11 +1510,6 @@ return [
                     'url' => url('admin.index'),
                     'icon' => 'icon-home2',
                     'text' => 'خانه',
-                    'is_active' => false,
-                ],
-                [
-                    'url' => url('admin.blog.view', ''),
-                    'text' => 'مطلب',
                     'is_active' => false,
                 ],
                 [
@@ -1578,6 +1602,83 @@ return [
                 ],
                 [
                     'text' => 'دسته‌بندی‌ها',
+                    'is_active' => true,
+                ],
+            ],
+        ],
+        'view/static-page/add' => [
+            'title' => title_concat(\config()->get('settings.title.value'), 'افزودن صفحه ثابت'),
+            'common' => [
+                'admin-base',
+                'admin-form',
+                'admin-tags-input',
+                'admin-editor',
+                'admin'
+            ],
+            'sub_title' => 'افزودن صفحه ثابت',
+            'breadcrumb' => [
+                [
+                    'url' => url('admin.index'),
+                    'icon' => 'icon-home2',
+                    'text' => 'خانه',
+                    'is_active' => false,
+                ],
+                [
+                    'url' => url('admin.static.page.view', ''),
+                    'text' => 'صفحات ثابت',
+                    'is_active' => false,
+                ],
+                [
+                    'text' => 'افزودن صفحه ثابت',
+                    'is_active' => true,
+                ],
+            ],
+        ],
+        'view/static-page/edit' => [
+            'title' => title_concat(\config()->get('settings.title.value'), 'ویرایش صفحه ثابت'),
+            'common' => [
+                'admin-base',
+                'admin-form',
+                'admin-tags-input',
+                'admin-editor',
+                'admin'
+            ],
+            'sub_title' => 'ویرایش صفحه ثابت',
+            'breadcrumb' => [
+                [
+                    'url' => url('admin.index'),
+                    'icon' => 'icon-home2',
+                    'text' => 'خانه',
+                    'is_active' => false,
+                ],
+                [
+                    'url' => url('admin.static.page.view', ''),
+                    'text' => 'صفحات ثابت',
+                    'is_active' => false,
+                ],
+                [
+                    'text' => 'ویرایش صفحه ثابت',
+                    'is_active' => true,
+                ],
+            ],
+        ],
+        'view/static-page/view' => [
+            'title' => title_concat(\config()->get('settings.title.value'), 'مشاهده صفحات ثابت'),
+            'common' => [
+                'admin-base',
+                'admin-table',
+                'admin'
+            ],
+            'sub_title' => 'مدیریت صفحات ثابت',
+            'breadcrumb' => [
+                [
+                    'url' => url('admin.index'),
+                    'icon' => 'icon-home2',
+                    'text' => 'خانه',
+                    'is_active' => false,
+                ],
+                [
+                    'text' => 'صفحات ثابت',
                     'is_active' => true,
                 ],
             ],

@@ -255,7 +255,7 @@
                                         data-city-select-target="#addAddressCitySelect"
                                         name="inp-add-address-province"
                                         data-fouc>
-                                    <option value="-1" disabled selected>انتخاب کنید</option>
+                                    <option value="<?= DEFAULT_OPTION_VALUE; ?>" disabled selected>انتخاب کنید</option>
                                 </select>
                             </div>
 
@@ -266,7 +266,7 @@
                                         name="inp-add-address-city"
                                         class="form-control form-control-select2-searchable"
                                         data-fouc>
-                                    <option value="-1" disabled selected>انتخاب کنید</option>
+                                    <option value="<?= DEFAULT_OPTION_VALUE; ?>" disabled selected>انتخاب کنید</option>
                                 </select>
                             </div>
 
@@ -331,7 +331,7 @@
                                         data-city-select-target="#editAddressCitySelect"
                                         name="inp-edit-address-province"
                                         data-fouc>
-                                    <option value="-1" disabled selected>انتخاب کنید</option>
+                                    <option value="<?= DEFAULT_OPTION_VALUE; ?>" disabled selected>انتخاب کنید</option>
                                 </select>
                             </div>
 
@@ -341,7 +341,7 @@
                                         id="editAddressCitySelect"
                                         name="inp-edit-address-city"
                                         class="form-control form-control-select2-searchable" data-fouc>
-                                    <option value="-1" disabled selected>انتخاب کنید</option>
+                                    <option value="<?= DEFAULT_OPTION_VALUE; ?>" disabled selected>انتخاب کنید</option>
                                 </select>
                             </div>
 

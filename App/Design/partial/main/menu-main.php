@@ -18,7 +18,7 @@
                             <div class="input-group-prepend">
                                 <div class="custom_select">
                                     <select class="first_null" name="search-categories-select-inp">
-                                        <option value="-1">همه دسته ها</option>
+                                        <option value="<?= DEFAULT_OPTION_VALUE; ?>">همه دسته ها</option>
                                         <?php foreach ($categories as $category): ?>
                                             <option value="<?= $category['id']; ?>"><?= $category['name']; ?></option>
                                         <?php endforeach; ?>

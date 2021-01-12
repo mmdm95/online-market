@@ -680,6 +680,9 @@ window.MyGlobalVariables = {
                 _.request(window.MyGlobalVariables.url.pages.get.city + '/' + province_id, 'get', successCallback, null, false);
             },
 
+            /**
+             * @param provincesSelect
+             */
             loadProvinces: function (provincesSelect) {
                 this.getProvinces(function () {
                     var _, $this, newOption, i, len;
@@ -712,6 +715,10 @@ window.MyGlobalVariables = {
                 });
             },
 
+            /**
+             * @param citiesSelect
+             * @param id
+             */
             loadCities: function (citiesSelect, id) {
                 this.getCities(id, function () {
                     var _ = this, currCity, newOption;

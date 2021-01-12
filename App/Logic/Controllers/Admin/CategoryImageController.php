@@ -1,19 +1,20 @@
 <?php
 
+
 namespace App\Logic\Controllers\Admin;
 
 use App\Logic\Abstracts\AbstractAdminController;
-use App\Logic\Forms\Ajax\Instagram\AddInstagramImageForm as AjaxAddInstagramImageForm;
-use App\Logic\Forms\Ajax\Instagram\EditInstagramImageForm as AjaxEditInstagramImageForm;
+use App\Logic\Forms\Ajax\CategoryImage\AddCategoryImageForm as AjaxAddCategoryImageForm;
+use App\Logic\Forms\Ajax\CategoryImage\EditCategoryImageForm as AjaxEditCategoryImageForm;
 use App\Logic\Handlers\DatatableHandler;
 use App\Logic\Handlers\GeneralAjaxFormHandler;
 use App\Logic\Handlers\GeneralAjaxRemoveHandler;
 use App\Logic\Handlers\ResourceHandler;
-use App\Logic\Interfaces\IAjaxController;
 use App\Logic\Interfaces\IDatatableController;
 use App\Logic\Models\BaseModel;
-use App\Logic\Models\InstagramImagesModel;
+use App\Logic\Models\CategoryImageModel;
 use Jenssegers\Agent\Agent;
+use ReflectionException;
 use Sim\Container\Exceptions\MethodNotFoundException;
 use Sim\Container\Exceptions\ParameterHasNoDefaultValueException;
 use Sim\Container\Exceptions\ServiceNotFoundException;
@@ -25,10 +26,11 @@ use Sim\Exceptions\PathManager\PathNotRegisteredException;
 use Sim\Interfaces\IFileNotExistsException;
 use Sim\Interfaces\IInvalidVariableNameException;
 
-class InstagramController extends AbstractAdminController implements IAjaxController, IDatatableController
+class CategoryImageController extends AbstractAdminController implements IDatatableController
 {
     /**
-     * @throws \ReflectionException
+     * @return string
+     * @throws ReflectionException
      * @throws ConfigNotRegisteredException
      * @throws ControllerException
      * @throws PathNotRegisteredException
@@ -37,18 +39,19 @@ class InstagramController extends AbstractAdminController implements IAjaxContro
      */
     public function view()
     {
-        $this->setLayout($this->main_layout)->setTemplate('view/instagram/view');
+        $this->setLayout($this->main_layout)->setTemplate('view/category/image/view');
         return $this->render();
     }
 
     /**
-     * @throws \ReflectionException
+     * @param $c_id
      * @throws MethodNotFoundException
      * @throws ParameterHasNoDefaultValueException
+     * @throws ReflectionException
      * @throws ServiceNotFoundException
      * @throws ServiceNotInstantiableException
      */
-    public function add(): void
+    public function add($c_id)
     {
         $resourceHandler = new ResourceHandler();
 
@@ -57,10 +60,11 @@ class InstagramController extends AbstractAdminController implements IAjaxContro
          */
         $agent = container()->get(Agent::class);
         if (!$agent->isRobot()) {
+            session()->setFlash('cat-img-add-cat-id', $c_id);
             $formHandler = new GeneralAjaxFormHandler();
             $resourceHandler = $formHandler
-                ->setSuccessMessage('تصویر اینستاگرام با موفقیت اضافه شد.')
-                ->handle(AjaxAddInstagramImageForm::class);
+                ->setSuccessMessage('تصویر با موفقیت به دسته اضافه شد.')
+                ->handle(AjaxAddCategoryImageForm::class);
         } else {
             response()->httpCode(403);
             $resourceHandler
@@ -71,14 +75,15 @@ class InstagramController extends AbstractAdminController implements IAjaxContro
     }
 
     /**
+     * @param $c_id
      * @param $id
      * @throws MethodNotFoundException
      * @throws ParameterHasNoDefaultValueException
+     * @throws ReflectionException
      * @throws ServiceNotFoundException
      * @throws ServiceNotInstantiableException
-     * @throws \ReflectionException
      */
-    public function edit($id): void
+    public function edit($c_id, $id)
     {
         $resourceHandler = new ResourceHandler();
 
@@ -87,11 +92,12 @@ class InstagramController extends AbstractAdminController implements IAjaxContro
          */
         $agent = container()->get(Agent::class);
         if (!$agent->isRobot()) {
-            session()->setFlash('instagram-image-edit-id', $id);
+            session()->setFlash('cat-img-edit-cat-id', $c_id);
+            session()->setFlash('cat-img-edit-id', $id);
             $formHandler = new GeneralAjaxFormHandler();
             $resourceHandler = $formHandler
-                ->setSuccessMessage('تصویر اینستاگرام با موفقیت ویرایش شد.')
-                ->handle(AjaxEditInstagramImageForm::class);
+                ->setSuccessMessage('تصویر دسته با موفقیت ویرایش شد.')
+                ->handle(AjaxEditCategoryImageForm::class);
         } else {
             response()->httpCode(403);
             $resourceHandler
@@ -102,14 +108,15 @@ class InstagramController extends AbstractAdminController implements IAjaxContro
     }
 
     /**
+     * @param $c_id
      * @param $id
      * @throws MethodNotFoundException
      * @throws ParameterHasNoDefaultValueException
+     * @throws ReflectionException
      * @throws ServiceNotFoundException
      * @throws ServiceNotInstantiableException
-     * @throws \ReflectionException
      */
-    public function remove($id): void
+    public function remove($c_id, $id)
     {
         $resourceHandler = new ResourceHandler();
 
@@ -119,7 +126,7 @@ class InstagramController extends AbstractAdminController implements IAjaxContro
         $agent = container()->get(Agent::class);
         if (!$agent->isRobot()) {
             $handler = new GeneralAjaxRemoveHandler();
-            $resourceHandler = $handler->handle(BaseModel::TBL_INSTAGRAM_IMAGES, $id);
+            $resourceHandler = $handler->handle(BaseModel::TBL_CATEGORY_IMAGES, $id, 'category_id=:cId', ['cId' => $c_id]);
         } else {
             response()->httpCode(403);
             $resourceHandler
@@ -131,14 +138,15 @@ class InstagramController extends AbstractAdminController implements IAjaxContro
     }
 
     /**
+     * @param $c_id
      * @param $id
      * @throws MethodNotFoundException
      * @throws ParameterHasNoDefaultValueException
+     * @throws ReflectionException
      * @throws ServiceNotFoundException
      * @throws ServiceNotInstantiableException
-     * @throws \ReflectionException
      */
-    public function get($id): void
+    public function get($c_id, $id)
     {
         $resourceHandler = new ResourceHandler();
 
@@ -148,10 +156,10 @@ class InstagramController extends AbstractAdminController implements IAjaxContro
         $agent = container()->get(Agent::class);
         if (!$agent->isRobot()) {
             /**
-             * @var InstagramImagesModel $instagramModel
+             * @var CategoryImageModel $categoryModel
              */
-            $instagramModel = container()->get(InstagramImagesModel::class);
-            $res = $instagramModel->getFirst(['*'], 'id=:id', ['id' => $id]);
+            $categoryModel = container()->get(CategoryImageModel::class);
+            $res = $categoryModel->getFirst(['*'], 'category_id=:cId AND id=:id', ['cId' => $c_id, 'id' => $id]);
             if (count($res)) {
                 $resourceHandler
                     ->type(RESPONSE_TYPE_SUCCESS)
@@ -159,7 +167,7 @@ class InstagramController extends AbstractAdminController implements IAjaxContro
             } else {
                 $resourceHandler
                     ->type(RESPONSE_TYPE_ERROR)
-                    ->errorMessage('اطلاعات تصویر درخواست شده وجود ندارد!');
+                    ->errorMessage('تصویر درخواست شده نامعتبر است!');
             }
         } else {
             response()->httpCode(403);
@@ -187,37 +195,53 @@ class InstagramController extends AbstractAdminController implements IAjaxContro
                     $event->stopPropagation();
 
                     /**
-                     * @var InstagramImagesModel $instagramModel
+                     * @var CategoryImageModel $categoryModel
                      */
-                    $instagramModel = container()->get(InstagramImagesModel::class);
+                    $categoryModel = container()->get(CategoryImageModel::class);
 
-                    $data = $instagramModel->get($cols, $where, $bindValues, $order, $limit, $offset);
+                    $cols[] = 'ci.category_id';
+
+                    $data = $categoryModel->getCategoryImages($cols, $where, $bindValues, $limit, $offset, $order);
                     //-----
-                    $recordsFiltered = $instagramModel->count($where, $bindValues);
-                    $recordsTotal = $instagramModel->count();
+                    $recordsFiltered = $categoryModel->getCategoryImagesCount($where, $bindValues);
+                    $recordsTotal = $categoryModel->getCategoryImagesCount();
 
                     return [$data, $recordsFiltered, $recordsTotal];
                 });
 
                 $columns = [
-                    ['db' => 'id', 'db_alias' => 'id', 'dt' => 'id'],
+                    ['db' => 'ci.id', 'db_alias' => 'id', 'dt' => 'id'],
+                    ['db' => 'c.name', 'db_alias' => 'name', 'dt' => 'name'],
+                    ['db' => 'ci.link', 'db_alias' => 'link', 'dt' => 'link'],
                     [
-                        'db' => 'image',
+                        'db' => 'ci.image',
                         'db_alias' => 'image',
                         'dt' => 'image',
                         'formatter' => function ($d, $row) {
-                            return $this->setTemplate('partial/admin/parser/image-placeholder')
+                            if ($row['image']) {
+                                return $this->setTemplate('partial/admin/parser/image-placeholder')
+                                    ->render([
+                                        'img' => $d,
+                                        'alt' => 'تصویر ' . $row['name'],
+                                    ]);
+                            } else {
+                                return $this->setTemplate('partial/admin/parser/dash-icon')->render();
+                            }
+                        }
+                    ],
+                    [
+                        'dt' => 'modify',
+                        'formatter' => function ($row) {
+                            return $this->setTemplate('partial/admin/datatable/category-image-btn')
                                 ->render([
-                                    'img' => $d,
-                                    'alt' => $row['title'],
+                                    'row' => $row,
                                 ]);
                         }
                     ],
-                    ['db' => 'link', 'db_alias' => 'link', 'dt' => 'link'],
                     [
                         'dt' => 'operations',
                         'formatter' => function ($row) {
-                            $operations = $this->setTemplate('partial/admin/datatable/actions-instagram')
+                            $operations = $this->setTemplate('partial/admin/datatable/actions-category')
                                 ->render([
                                     'row' => $row,
                                 ]);

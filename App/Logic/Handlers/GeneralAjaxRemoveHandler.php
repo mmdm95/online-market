@@ -35,8 +35,8 @@ class GeneralAjaxRemoveHandler implements IHandler
      *   1. Send a [Table_Name] as first parameter.
      *   2. Send a [id] as second parameter and get
      *      a resource handler as return array.
-     *   [3. Extra where parameter: string]
-     *   [4. Bind values for extra where parameter: array]
+     *   3. Extra where parameter: string
+     *   4. Bind values for extra where parameter: array
      *
      * @param mixed ...$_
      * @return ResourceHandler

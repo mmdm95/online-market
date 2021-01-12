@@ -45,10 +45,10 @@ class GeneralAjaxStatusHandler implements IHandler
      *   1. Send a [Table_Name] as first parameter.
      *   2. Send a [id] as second parameter and get
      *      a resource handler as return array.
-     *   [3. Column of status to change: string]
-     *   [4. Status to change: int|string]
-     *   [5. Extra where parameter: string]
-     *   [6. Bind values for extra where parameter: array]
+     *   3. Column of status to change: string
+     *   4. Status to change: int|string
+     *   5. Extra where parameter: string
+     *   6. Bind values for extra where parameter: array
      *
      * @param mixed ...$_
      * @return ResourceHandler

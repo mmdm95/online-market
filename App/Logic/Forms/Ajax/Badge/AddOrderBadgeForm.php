@@ -12,6 +12,7 @@ use Sim\Container\Exceptions\ParameterHasNoDefaultValueException;
 use Sim\Container\Exceptions\ServiceNotFoundException;
 use Sim\Container\Exceptions\ServiceNotInstantiableException;
 use Sim\Form\Exceptions\FormException;
+use Sim\Utils\StringUtil;
 use voku\helper\AntiXSS;
 
 class AddOrderBadgeForm implements IPageForm
@@ -86,10 +87,12 @@ class AddOrderBadgeForm implements IPageForm
         $xss = container()->get(AntiXSS::class);
 
         try {
+            $code = StringUtil::uniqidReal(12);
             $title = input()->post('inp-add-badge-title', '')->getValue();
             $color = input()->post('inp-add-badge-color', '')->getValue();
 
             $res = $badgeModel->insert([
+                'code' => $code,
                 'title' => $xss->xss_clean($title),
                 'color' => $xss->xss_clean($color),
                 'created_at' => time(),

@@ -7,7 +7,7 @@
         <div class="card-body">
             <div class="d-flex justify-content-between">
                 <span>با استفاده از ستون عملیات می‌توانید اقدام به حذف و ویرایش تصاویر کنید.</span>
-                <button type="button" class="btn btn-success" data-toggle="modal"
+                <button type="button" class="btn btn-success ml-3" data-toggle="modal"
                         data-target="#modal_form_add_ins_image">
                     افزودن تصویر جدید
                     <i class="icon-markup ml-2"></i>

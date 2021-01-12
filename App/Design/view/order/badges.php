@@ -8,7 +8,7 @@
             <div class="d-flex justify-content-between">
                 <span>با استفاده از ستون عملیات می‌توانید اقدام به حذف، ویرایش و مشاهده وضعیت‌ها کنید.</span>
                 <button type="button"
-                        class="btn btn-success"
+                        class="btn btn-success ml-3"
                         data-toggle="modal"
                         data-target="#modal_form_add_badges">
                     افزودن وضعیت جدید

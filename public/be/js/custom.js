@@ -61,6 +61,12 @@
             edit: '/ajax/badge/edit',
             remove: '/ajax/badge/remove',
         },
+        categoryImage: {
+            get: '/ajax/category/image/get',
+            add: '/ajax/category/image/add',
+            edit: '/ajax/category/image/edit',
+            remove: '/ajax/category/image/remove',
+        },
     });
     window.MyGlobalVariables.elements = $.extend(true, window.MyGlobalVariables.elements, {
         addAddress: {
@@ -245,6 +251,40 @@
             inputs: {
                 title: 'inp-edit-badge-title',
                 color: 'inp-edit-badge-color',
+            },
+        },
+        addCategory: {
+            form: '#__form_add_category',
+            inputs: {
+                status: 'inp-add-category-status',
+                name: 'inp-add-category-name',
+                parent: 'inp-add-category-parent',
+                priority: 'inp-add-category-priority',
+                keywords: 'inp-add-category-keywords',
+            },
+        },
+        editCategory: {
+            form: '#__form_edit_category',
+            inputs: {
+                status: 'inp-edit-category-status',
+                name: 'inp-edit-category-name',
+                parent: 'inp-edit-category-parent',
+                priority: 'inp-edit-category-priority',
+                keywords: 'inp-edit-category-keywords',
+            },
+        },
+        addCategoryImage: {
+            form: '#__form_add_cat_img',
+            inputs: {
+                image: 'inp-add-cat-img-img',
+                link: 'inp-add-cat-img-link',
+            },
+        },
+        editCategoryImage: {
+            form: '#__form_edit_cat_img',
+            inputs: {
+                image: 'inp-edit-cat-img-img',
+                link: 'inp-edit-cat-img-link',
             },
         },
     });
@@ -592,6 +632,90 @@
                     },
                 },
             },
+            addCategory: {
+                name: {
+                    presence: {
+                        allowEmpty: false,
+                        message: '^' + 'نام دسته‌بندی را خالی نگذارید.',
+                    },
+                    length: {
+                        maximum: 100,
+                        message: '^' + 'نام دسته‌بندی حداکثر باید ۱۰۰ کاراکتر باشد.',
+                    },
+                },
+                parent: {
+                    presence: {
+                        allowEmpty: false,
+                        message: '^' + 'والد دسته‌بندی را خالی نگذارید.',
+                    },
+                },
+                priority: {
+                    presence: {
+                        allowEmpty: false,
+                        message: '^' + 'فیلد اولویت را خالی نگذارید.',
+                    },
+                    format: {
+                        pattern: /[0-9]+/,
+                        message: '^' + 'اولویت باید از نوع عددی باشد.',
+                    },
+                },
+            },
+            editCategory: {
+                name: {
+                    presence: {
+                        allowEmpty: false,
+                        message: '^' + 'نام دسته‌بندی را خالی نگذارید.',
+                    },
+                    length: {
+                        maximum: 100,
+                        message: '^' + 'نام دسته‌بندی حداکثر باید ۱۰۰ کاراکتر باشد.',
+                    },
+                },
+                parent: {
+                    presence: {
+                        allowEmpty: false,
+                        message: '^' + 'والد دسته‌بندی را خالی نگذارید.',
+                    },
+                },
+                priority: {
+                    presence: {
+                        allowEmpty: false,
+                        message: '^' + 'فیلد اولویت را خالی نگذارید.',
+                    },
+                    format: {
+                        pattern: /[0-9]+/,
+                        message: '^' + 'اولویت باید از نوع عددی باشد.',
+                    },
+                },
+            },
+            addCategoryImage: {
+                image: {
+                    presence: {
+                        allowEmpty: false,
+                        message: '^' + 'تصویر را انتخاب کنید.',
+                    },
+                },
+                category: {
+                    presence: {
+                        allowEmpty: false,
+                        message: '^' + 'دسته‌بندی را انتخاب کنید.',
+                    },
+                },
+            },
+            editCategoryImage: {
+                image: {
+                    presence: {
+                        allowEmpty: false,
+                        message: '^' + 'تصویر را انتخاب کنید.',
+                    },
+                },
+                category: {
+                    presence: {
+                        allowEmpty: false,
+                        message: '^' + 'دسته‌بندی را انتخاب کنید.',
+                    },
+                },
+            },
         },
     });
 
@@ -645,6 +769,7 @@
             createLoader = true,
             //-----
             currentTable = null,
+            currentCategoryId = null,
             userIdInp,
             userId = null,
             editAddrId = null,
@@ -652,7 +777,9 @@
             editFAQId = null,
             editSlideId = null,
             editInstagramImageId = null,
-            editBadgeId = null;
+            editBadgeId = null,
+            addCategoryImageId = null,
+            editCategoryImageId = null;
 
         admin = new window.TheAdmin();
 
@@ -756,6 +883,24 @@
             editBadge: {
                 title: variables.validation.constraints.editBadge.title,
                 color: variables.validation.constraints.editBadge.color,
+            },
+            addCategory: {
+                name: variables.validation.constraints.addCategory.name,
+                parent: variables.validation.constraints.addCategory.parent,
+                priority: variables.validation.constraints.addCategory.priority,
+            },
+            editCategory: {
+                name: variables.validation.constraints.editCategory.name,
+                parent: variables.validation.constraints.editCategory.parent,
+                priority: variables.validation.constraints.editCategory.priority,
+            },
+            addCategoryImage: {
+                image: variables.validation.constraints.addCategoryImage.image,
+                category: variables.validation.constraints.addCategoryImage.category,
+            },
+            editCategoryImage: {
+                image: variables.validation.constraints.editCategoryImage.image,
+                category: variables.validation.constraints.editCategoryImage.category,
             },
         };
 
@@ -1012,7 +1157,54 @@
                         currentTable = table;
                         editBadgeId = id;
                         //-----
-                        editModal.find('[name="' + variables.elements.editBadge.inputs.link + '"]').val(_.data['link']);
+                        editModal.find('[name="' + variables.elements.editBadge.inputs.title + '"]').val(_.data['title']);
+                        editModal
+                            .find('[name="' + variables.elements.editBadge.inputs.color + '"]')
+                            .val(_.data['color'])
+                            .spectrum("set", _.data['color']);
+                    }
+                });
+            }
+        }
+
+        /**
+         * @param btn
+         * @param [table]
+         */
+        function addCategoryImageBtnClick(btn, table) {
+            var cId, addModal;
+            cId = $(btn).attr('data-add-category-id');
+            addModal = $('#modal_form_add_cat_img');
+            // clear element after each call
+            $(variables.elements.addCategoryImage.form).reset();
+            if (cId && addModal.length) {
+                addCategoryImageId = cId;
+            }
+        }
+
+        /**
+         * @param btn
+         * @param [table]
+         */
+        function editCategoryImageBtnClick(btn, table) {
+            var id, cId, editModal;
+            id = $(btn).attr('data-edit-id');
+            cId = $(btn).attr('data-edit-category-id');
+            editModal = $('#modal_form_edit_cat_img');
+            // clear element after each call
+            $(variables.elements.editCategoryImage.form).reset();
+            if (id && cId && editModal.length) {
+                admin.request(variables.url.categoryImage.get + '/' + cId + '/' + id, 'get', function () {
+                    var _ = this;
+                    if (_.data.length) {
+                        currentTable = table;
+                        currentCategoryId = id;
+                        editCategoryImageId = cId;
+                        //-----
+                        var imgEl = editModal.find('[name="' + variables.elements.editCategoryImage.inputs.image + '"]');
+                        imgEl.val(_.data['image']);
+                        addImageToPlaceholder(imgEl, _.data['image']);
+                        editModal.find('[name="' + variables.elements.editCategoryImage.inputs.category + '"]').val(_.data['link']);
                     }
                 });
             }
@@ -1100,6 +1292,20 @@
                 .off('click' + variables.namespace)
                 .on('click' + variables.namespace, function () {
                     editBadgeBtnClick($(this), table);
+                });
+
+            // add category image button click event
+            $('.__item_cat_img_add_btn')
+                .off('click' + variables.namespace)
+                .on('click' + variables.namespace, function () {
+                    addCategoryImageBtnClick($(this), table);
+                });
+
+            // edit category image button click event
+            $('.__item_cat_img_editor_btn')
+                .off('click' + variables.namespace)
+                .on('click' + variables.namespace, function () {
+                    editCategoryImageBtnClick($(this), table);
                 });
         }
 
@@ -2008,6 +2214,102 @@
                     // clear element after success
                     $(variables.elements.editBadge.form).reset();
                     editBadgeId = null;
+                    if (currentTable) {
+                        $(currentTable).DataTable().ajax.reload(null, true);
+                        currentTable = null;
+                    }
+                    //-----
+                    admin.toasts.toast(this.data, {
+                        type: variables.toasts.types.success,
+                    });
+                    createLoader = true;
+                }, {
+                    data: values,
+                }, true, function () {
+                    createLoader = true;
+                });
+            }
+            return false;
+        }, function (errors) {
+            admin.forms.showFormErrors(errors);
+            return false;
+        });
+
+        //---------------------------------------------------------------
+        // ADD CATEGORY FORM
+        //---------------------------------------------------------------
+        admin.forms.submitForm('addCategory', constraints.addCategory, function () {
+            return true;
+        }, function (errors) {
+            admin.forms.showFormErrors(errors);
+            return false;
+        });
+
+        //---------------------------------------------------------------
+        // EDIT CATEGORY FORM
+        //---------------------------------------------------------------
+        admin.forms.submitForm('editCategory', constraints.editCategory, function () {
+            return true;
+        }, function (errors) {
+            admin.forms.showFormErrors(errors);
+            return false;
+        }, {
+            '{{name}}': 'عنوان فارسی',
+            '{{en-name}}': 'عنوان انگلیسی',
+        });
+
+        //---------------------------------------------------------------
+        // ADD CATEGORY IMAGE FORM
+        //---------------------------------------------------------------
+        admin.forms.submitForm('addCategoryImage', constraints.addCategoryImage, function (values) {
+            if (addCategoryImageId) {
+                // do ajax
+                if (createLoader) {
+                    createLoader = false;
+                    loaderId = admin.showLoader();
+                }
+                admin.request(variables.url.categoryImage.add + '/' + addCategoryImageId, 'post', function () {
+                    admin.hideLoader(loaderId);
+                    // clear element after success
+                    $(variables.elements.addCategoryImage.form).reset();
+                    addCategoryImageId = null;
+                    if (currentTable) {
+                        $(currentTable).DataTable().ajax.reload(null, true);
+                        currentTable = null;
+                    }
+                    //-----
+                    admin.toasts.toast(this.data, {
+                        type: variables.toasts.types.success,
+                    });
+                    createLoader = true;
+                }, {
+                    data: values,
+                }, true, function () {
+                    createLoader = true;
+                });
+            }
+            return false;
+        }, function (errors) {
+            admin.forms.showFormErrors(errors);
+            return false;
+        });
+
+        //---------------------------------------------------------------
+        // Edit CATEGORY IMAGE FORM
+        //---------------------------------------------------------------
+        admin.forms.submitForm('editCategoryImage', constraints.editCategoryImage, function (values) {
+            if (editCategoryImageId) {
+                // do ajax
+                if (createLoader) {
+                    createLoader = false;
+                    loaderId = admin.showLoader();
+                }
+                admin.request(variables.url.categoryImage.edit + '/' + editCategoryImageId + '/' + currentCategoryId, 'post', function () {
+                    admin.hideLoader(loaderId);
+                    // clear element after success
+                    $(variables.elements.editCategoryImage.form).reset();
+                    currentCategoryId = null;
+                    editCategoryImageId = null;
                     if (currentTable) {
                         $(currentTable).DataTable().ajax.reload(null, true);
                         currentTable = null;

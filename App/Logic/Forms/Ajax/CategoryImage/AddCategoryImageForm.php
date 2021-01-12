@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Logic\Forms\Ajax\Badge;
+namespace App\Logic\Forms\Ajax\CategoryImage;
 
 use App\Logic\Interfaces\IPageForm;
-use App\Logic\Models\OrderBadgeModel;
-use App\Logic\Models\UnitModel;
+use App\Logic\Models\CategoryImageModel;
+use App\Logic\Models\CategoryModel;
 use App\Logic\Validations\ExtendedValidator;
 use Sim\Auth\DBAuth;
 use Sim\Container\Exceptions\MethodNotFoundException;
@@ -12,10 +12,9 @@ use Sim\Container\Exceptions\ParameterHasNoDefaultValueException;
 use Sim\Container\Exceptions\ServiceNotFoundException;
 use Sim\Container\Exceptions\ServiceNotInstantiableException;
 use Sim\Form\Exceptions\FormException;
-use Sim\Utils\StringUtil;
 use voku\helper\AntiXSS;
 
-class EditOrderBadgeForm implements IPageForm
+class AddCategoryImageForm implements IPageForm
 {
     /**
      * {@inheritdoc}
@@ -35,40 +34,41 @@ class EditOrderBadgeForm implements IPageForm
         $validator->reset();
 
         // aliases
-        $validator->setFieldsAlias([
-            'inp-edit-badge-title' => 'عنوان وضعیت',
-            'inp-edit-badge-color' => 'رنگ وضعیت',
-        ]);
-
-        // title
         $validator
-            ->setFields('inp-edit-badge-title')
+            ->setFieldsAlias([
+                'inp-add-cat-img-img' => 'تصویر',
+                'inp-add-cat-img-link' => 'لینک',
+            ])
+            ->setOptionalFields([
+                'inp-add-cat-img-link',
+            ]);
+
+        /**
+         * @var CategoryModel $categoryModel
+         */
+        $categoryModel = container()->get(CategoryModel::class);
+
+        // category
+        $validator
+            ->setFields('inp-add-cat-img-img')
             ->stopValidationAfterFirstError(false)
             ->required()
             ->stopValidationAfterFirstError(true)
-            ->lessThanEqualLength(250);
-        // color
+            ->imageExists();
+        // link
         $validator
-            ->setFields('inp-edit-badge-color')
-            ->stopValidationAfterFirstError(false)
-            ->required()
-            ->stopValidationAfterFirstError(true)
-            ->hexColor();
+            ->setFields('inp-add-cat-img-link')
+            ->url();
 
-        $id = session()->getFlash('order-badge-edit-id', null, false);
-        if (!empty($id)) {
-            /**
-             * @var UnitModel $unitModel
-             */
-            $unitModel = container()->get(UnitModel::class);
-
-            if (0 === $unitModel->count('id=:id', ['id' => $id])) {
-                $validator->setError('inp-edit-badge-title', 'شناسه وضعیت مورد نظر نامعتبر است.');
+        $category = session()->getFlash('cat-img-add-cat-id', null, false);
+        if (!empty($category)) {
+            if (0 === $categoryModel->count('id=:id', ['id' => $category])) {
+                $validator->setError('inp-add-cat-img-img', 'شناسه دسته مورد نظر نامعتبر است.');
             }
         } else {
             $validator
                 ->setStatus(false)
-                ->setError('inp-edit-badge-title', 'شناسه وضعیت مورد نظر نامعتبر است.');
+                ->setError('inp-add-cat-img-img', 'شناسه دسته مورد نظر نامعتبر است.');
         }
 
         // to reset form values and not set them again
@@ -93,24 +93,30 @@ class EditOrderBadgeForm implements IPageForm
     public function store(): bool
     {
         /**
-         * @var OrderBadgeModel $badgeModel
+         * @var CategoryImageModel $categoryModel
          */
-        $badgeModel = container()->get(OrderBadgeModel::class);
+        $categoryModel = container()->get(CategoryImageModel::class);
         /**
          * @var AntiXSS $xss
          */
         $xss = container()->get(AntiXSS::class);
+        /**
+         * @var DBAuth $auth
+         */
+        $auth = container()->get('auth_admin');
 
         try {
-            $id = session()->getFlash('order-badge-edit-id', null);
-            $title = input()->post('inp-edit-badge-title', '')->getValue();
-            $color = input()->post('inp-edit-badge-color', '')->getValue();
+            $category = session()->getFlash('cat-img-add-cat-id', null);
+            $image = input()->post('inp-add-cat-img-img', '')->getValue();
+            $link = input()->post('inp-add-cat-img-link', '')->getValue();
 
-            $res = $badgeModel->update([
-                'title' => $xss->xss_clean($title),
-                'color' => $xss->xss_clean($color),
-                'updated_at' => time(),
-            ], 'id=:id', ['id' => $id]);
+            $res = $categoryModel->insert([
+                'category_id' => $xss->xss_clean($category),
+                'image' => $xss->xss_clean(get_image_name($image)),
+                'link' => $xss->xss_clean($link) ?: null,
+                'created_at' => time(),
+                'created_by' => $auth->getCurrentUser()['id'] ?? null,
+            ]);
             return $res;
         } catch (\Exception $e) {
             return false;

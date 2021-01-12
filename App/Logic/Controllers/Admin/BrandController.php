@@ -224,9 +224,13 @@ class BrandController extends AbstractAdminController implements IDatatableContr
                         'dt' => 'image',
                         'formatter' => function ($d, $row) {
                             if (!empty($d)) {
-                                return '<img class="img-preview img-rounded lazy" data-src="' . url('image.show')->getRelativeUrl() . $d . '" alt="' . $row['name'] . '">';
+                                return $this->setTemplate('partial/admin/parser/image-placeholder')
+                                    ->render([
+                                        'img' => $d,
+                                        'alt' => $row['name'],
+                                    ]);
                             } else {
-                                return '<i class="icon-minus2 text-danger" aria-hidden="true"></i>';
+                                return $this->setTemplate('partial/admin/parser/dash-icon')->render();
                             }
                         }
                     ],
@@ -256,7 +260,7 @@ class BrandController extends AbstractAdminController implements IDatatableContr
                                     ]);
                                 return $status;
                             }
-                            return '<i class="icon-minus2 text-danger" aria-hidden="true"></i>';
+                            return $this->setTemplate('partial/admin/parser/dash-icon')->render();
                         }
                     ],
                     [
@@ -267,7 +271,7 @@ class BrandController extends AbstractAdminController implements IDatatableContr
                             if (DB_YES == $row['deletable']) {
                                 return Jdf::jdate(DEFAULT_TIME_FORMAT, $d);
                             }
-                            return '<i class="icon-minus2 text-danger" aria-hidden="true"></i>';
+                            return $this->setTemplate('partial/admin/parser/dash-icon')->render();
                         }
                     ],
                     [

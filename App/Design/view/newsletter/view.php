@@ -7,7 +7,7 @@
         <div class="card-body">
             <div class="d-flex justify-content-between">
                 <span>با استفاده از ستون عملیات می‌توانید اقدام به حذف اعضای خبرنامه کنید.</span>
-                <button type="button" class="btn btn-success" data-toggle="modal"
+                <button type="button" class="btn btn-success ml-3" data-toggle="modal"
                         data-target="#modal_form_add_newsletter">
                     افزودن موبایل
                     <i class="icon-mobile ml-2"></i>

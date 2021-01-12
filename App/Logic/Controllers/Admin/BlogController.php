@@ -186,7 +186,11 @@ class BlogController extends AbstractAdminController implements IDatatableContro
                         'db_alias' => 'image',
                         'dt' => 'image',
                         'formatter' => function ($d, $row) {
-                            return '<img class="img-preview img-rounded lazy" data-src="' . url('image.show')->getRelativeUrl() . $d . '" alt="' . $row['title'] . '">';
+                            return $this->setTemplate('partial/admin/parser/image-placeholder')
+                                ->render([
+                                    'img' => $d,
+                                    'alt' => $row['title'],
+                                ]);
                         }
                     ],
                     ['db' => 'b.title', 'db_alias' => 'title', 'dt' => 'title'],

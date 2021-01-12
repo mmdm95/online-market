@@ -69,7 +69,7 @@ class AddBlogForm implements IPageForm
                  * @var BlogModel $blogModel
                  */
                 $blogModel = container()->get(BlogModel::class);
-                if ($blogModel->count('title=:title', ['title' => $value->getValue()]) === 0) return true;
+                if ($blogModel->count('title=:title', ['title' => trim($value->getValue())]) === 0) return true;
                 return false;
             }, '{alias} ' . 'وارد شده تکراری می‌باشد.');
         // category
