@@ -225,7 +225,7 @@ class Route implements IInitialize
                 Router::form('/static-page/edit/{id}', 'Admin\StaticPageController@edit')->where([
                     'id' => '[0-9]+',
                 ])->name('admin.static.page.edit');
-                Router::get('static-page/view', 'Admin\StaticPageController@view')->name('admin.static.page.view');
+                Router::get('/static-page/view', 'Admin\StaticPageController@view')->name('admin.static.page.view');
                 Router::post('/static-page/view/dt', 'Admin\StaticPageController@getPaginatedDatatable')->name('admin.static.page.dt.view');
 
                 /**

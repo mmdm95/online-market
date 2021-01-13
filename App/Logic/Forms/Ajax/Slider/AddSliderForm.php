@@ -117,8 +117,8 @@ class AddSliderForm implements IPageForm
             $priority = input()->post('inp-add-slide-priority', '')->getValue();
 
             return $slideModel->insert([
-                'title' => $xss->xss_clean($title),
-                'note' => $xss->xss_clean($subTitle),
+                'title' => $xss->xss_clean(trim($title)),
+                'note' => $xss->xss_clean(trim($subTitle)),
                 'image' => $xss->xss_clean(get_image_name($image)),
                 'link' => $xss->xss_clean($link),
                 'priority' => $xss->xss_clean($priority),

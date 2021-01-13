@@ -10,7 +10,7 @@
         </div>
 
         <table class="table table-bordered table-hover datatable-highlight"
-               data-columns='[{"data":"id"},{"data":""},{"data":"operations"}]'
+               data-columns='[{"data":"id"},{"data":"title"},{"data":"writer"},{"data":"created_at"},{"data":"status"},{"data":"operations"}]'
                data-ajax-url="<?= url('admin.static.page.dt.view')->getRelativeUrlTrimmed(); ?>">
             <thead>
             <tr>

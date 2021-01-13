@@ -93,7 +93,7 @@ class AddOrderBadgeForm implements IPageForm
 
             $res = $badgeModel->insert([
                 'code' => $code,
-                'title' => $xss->xss_clean($title),
+                'title' => $xss->xss_clean(trim($title)),
                 'color' => $xss->xss_clean($color),
                 'created_at' => time(),
             ]);

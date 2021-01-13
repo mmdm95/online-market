@@ -107,7 +107,7 @@ class EditOrderBadgeForm implements IPageForm
             $color = input()->post('inp-edit-badge-color', '')->getValue();
 
             $res = $badgeModel->update([
-                'title' => $xss->xss_clean($title),
+                'title' => $xss->xss_clean(trim($title)),
                 'color' => $xss->xss_clean($color),
                 'updated_at' => time(),
             ], 'id=:id', ['id' => $id]);

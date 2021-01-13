@@ -1,71 +1,77 @@
+<?php
+
+$validator = form_validator();
+
+?>
+
 <!-- Content area -->
 <div class="content">
     <div class="card col-lg-10">
-        <?php load_partial('admin/card-header', ['header_title' => 'افزودن مطلب جدید']); ?>
+        <?php load_partial('admin/card-header', ['header_title' => 'افزودن صفحه ثابت جدید']); ?>
 
         <div class="card-body">
-            <form action="#">
+            <form action="<?= url('admin.static.page.add')->getRelativeUrlTrimmed(); ?>" method="post"
+                  id="__form_add_static_page">
+                <?php load_partial('admin/message/message-form', [
+                    'errors' => $static_page_add_errors ?? [],
+                    'success' => $static_page_add_success ?? '',
+                    'warning' => $static_page_add_warning ?? '',
+                ]); ?>
+
+                <input type="hidden" name="csrf_token" value="<?= csrf_token(); ?>" data-ignored>
                 <div class="row">
-                    <div class="col-md-12">
-                            <div class="row">
-                                <fieldset class="col-6">
-                                    <legend class="font-weight-semibold">
-                                        <i class="icon-info22 mr-2"></i>
-                                       انتخاب تصویر مطلب
-                                    </legend>
-                                    <div class="img-placeholder-group">
-                                        <div class="img-placeholder-custom">
-                                            <div class="img-placeholder-icon-container">
-                                                <i class="img-placeholder-icon icon-image2 text-indigo"></i>
-                                                <span class="img-placeholder-num badge badge-pill bg-warning-400"><i
-                                                            class="icon-plus2"></i></span>
-                                            </div>
-                                            <div>
-                                                <input class="file-manager-image" type="hidden" name="" value="">
-                                                <!-- <img src="" alt="image" class="img-placeholder-image"> -->
-                                            </div>
-                                        </div>
-                                    </div>
-                                </fieldset>
-                                <fieldset class="col-6">
-                                    <legend class="font-weight-semibold">
-                                        <i class="icon-info22 mr-2"></i>
-                                        وضعیت نمایش مطلب
-                                    </legend>
-                                    <div class="form-group col-12 text-right">
-                                        <div class="form-check form-check-switchery form-check-switchery-double">
-                                            <label class="form-check-label">
-                                                نمایش
-                                                <input type="checkbox" class="form-check-input-switchery" checked>
-                                                عدم نمایش
-                                            </label>
-                                        </div>
-                                    </div>
-                                </fieldset>
-                                <div class="form-group col-6">
-                                    <label>عنوان فارسی مطلب:</label>
-                                    <input type="text" class="form-control" placeholder="وارد کنید">
-                                </div>
-                                <div class="form-group col-6">
-                                    <label>دسته‌بندی مطلب:</label>
-                                    <select data-placeholder="دسته‌بندی اصلی را انتخاب کنید ..."
-                                            class="form-control form-control-select2" data-fouc>
-                                        <option></option>
-                                        <option value="Cambodia">عادی</option>
-                                        <option value="Cameroon">مدیر</option>
-                                        <option value="Canada">مدیر اصلی</option>
-                                    </select>
-                                </div>
-                                <div class="form-group row col-12">
-                                    <label class="col-form-label col-lg-12">خلاصه مطلب:</label>
-                                    <div class="col-lg-12">
-                                        <textarea rows="3" cols="3" class="form-control" placeholder="متن را اینجا وارد کنید ..."></textarea>
-                                    </div>
-                                </div>
-                                <div class="form-group row col-12">
-                                    <input type="text" value="Amsterdam,Washington,Sydney,Beijing" class="form-control tags-input" data-fouc>
-                                </div>
+                    <div class="col-12">
+                        <div class="form-group text-center text-lg-right">
+                            <div class="form-check form-check-switchery form-check-switchery-double">
+                                <label class="form-check-label">
+                                    نمایش صفحه
+                                    <input type="checkbox" class="form-check-input-switchery"
+                                           name="inp-add-static-page-status"
+                                        <?= $validator->setCheckbox('inp-add-static-page-status', 'on', true); ?>>
+                                    عدم نمایش صفحه
+                                </label>
                             </div>
+                        </div>
+                    </div>
+                    <div class="form-group col-xl-6">
+                        <label>
+                            <span class="text-danger">*</span>
+                            عنوان صفحه:
+                        </label>
+                        <input type="text" class="form-control" placeholder="وارد کنید" name="inp-add-static-page-title"
+                               value="<?= $validator->setInput('inp-add-static-page-title'); ?>">
+                    </div>
+                    <div class="form-group col-xl">
+                        <label>
+                            <span class="text-danger">*</span>
+                            آدرس صفحه:
+                        </label>
+                        <div class="d-flex ltr">
+                            <span class="form-control ltr text-grey-300 text-left d-none d-md-block" disabled="disabled">
+                                <?= get_base_url() . ltrim(url('home.pages')->getRelativeUrl(), '/'); ?>
+                            </span>
+                            <input type="text" class="form-control ltr text-right" placeholder="حروف لاتین"
+                                   name="inp-add-static-page-url"
+                                   value="<?= $validator->setInput('inp-add-static-page-url'); ?>">
+                        </div>
+                    </div>
+                    <div class="form-group col-lg-12">
+                        <label>کلمات کلیدی:</label>
+                        <input type="text" class="form-control tags-input" placeholder="وارد کنید"
+                               name="inp-add-static-page-keywords"
+                               value="<?= $validator->setInput('inp-add-static-page-keywords'); ?>">
+                    </div>
+                    <div class="form-group col-lg-12">
+                        <label>
+                            <span class="text-danger">*</span>
+                            توضیحات مطلب:
+                        </label>
+                        <textarea name="inp-add-static-page-desc"
+                                  cols="30"
+                                  rows="10"
+                                  placeholder="توضیحات خود را وارد کنید..."
+                                  class="form-control cntEditor"
+                        ><?= $validator->setInput('inp-add-static-page-desc'); ?></textarea>
                     </div>
                 </div>
                 <div class="text-right">
@@ -77,6 +83,14 @@
             </form>
         </div>
     </div>
+
+    <!-- Mini file manager modal -->
+    <?php load_partial('file-manager/modal-efm', [
+        'the_options' => $the_options ?? [],
+    ]); ?>
+    <!-- /mini file manager modal -->
+
+    <?php load_partial('editor/browser-tiny-func'); ?>
 </div>
 <!-- /content area -->
 

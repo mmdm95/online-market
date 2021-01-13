@@ -287,6 +287,26 @@
                 link: 'inp-edit-cat-img-link',
             },
         },
+        addStaticPage: {
+            form: '#__form_add_static_page',
+            inputs: {
+                status: 'inp-add-static-page-status',
+                title: 'inp-add-static-page-title',
+                url: 'inp-add-static-page-url',
+                keywords: 'inp-add-static-page-keywords',
+                desc: 'inp-add-static-page-desc',
+            },
+        },
+        editStaticPage: {
+            form: '#__form_edit_static_page',
+            inputs: {
+                status: 'inp-edit-static-page-status',
+                title: 'inp-edit-static-page-title',
+                url: 'inp-edit-static-page-url',
+                keywords: 'inp-edit-static-page-keywords',
+                desc: 'inp-edit-static-page-desc',
+            },
+        },
     });
     window.MyGlobalVariables.validation = $.extend({}, window.MyGlobalVariables.validation, {
         constraints: {
@@ -716,6 +736,54 @@
                     },
                 },
             },
+            addStaticPage: {
+                title: {
+                    presence: {
+                        allowEmpty: false,
+                        message: '^' + 'دسته‌بندی را انتخاب کنید.',
+                    },
+                    length: {
+                        maximum: 300,
+                        message: '^' + 'عنوان ضفحه حداکثر باید ۳۰۰ کاراکتر باشد.',
+                    },
+                },
+                url: {
+                    format: {
+                        pattern: /[a-zA-Z-_\/]+/,
+                        message: '^' + 'آدرس صفحه باید از حروف انگلیسی، خط تیره، آندرلاین و اسلش تشکیل شده باشد.',
+                    },
+                },
+                desc: {
+                    presence: {
+                        allowEmpty: false,
+                        message: '^' + 'دسته‌بندی را انتخاب کنید.',
+                    },
+                },
+            },
+            editStaticPage: {
+                title: {
+                    presence: {
+                        allowEmpty: false,
+                        message: '^' + 'دسته‌بندی را انتخاب کنید.',
+                    },
+                    length: {
+                        maximum: 300,
+                        message: '^' + 'عنوان ضفحه حداکثر باید ۳۰۰ کاراکتر باشد.',
+                    },
+                },
+                url: {
+                    format: {
+                        pattern: /[a-zA-Z-_\/]+/,
+                        message: '^' + 'آدرس صفحه باید از حروف انگلیسی، خط تیره، آندرلاین و اسلش تشکیل شده باشد.',
+                    },
+                },
+                desc: {
+                    presence: {
+                        allowEmpty: false,
+                        message: '^' + 'دسته‌بندی را انتخاب کنید.',
+                    },
+                },
+            },
         },
     });
 
@@ -901,6 +969,16 @@
             editCategoryImage: {
                 image: variables.validation.constraints.editCategoryImage.image,
                 category: variables.validation.constraints.editCategoryImage.category,
+            },
+            addStaticPage: {
+                title: variables.validation.constraints.addStaticPage.title,
+                url: variables.validation.constraints.addStaticPage.url,
+                desc: variables.validation.constraints.addStaticPage.desc,
+            },
+            editStaticPage: {
+                title: variables.validation.constraints.editStaticPage.title,
+                url: variables.validation.constraints.editStaticPage.url,
+                desc: variables.validation.constraints.editStaticPage.desc,
             },
         };
 
@@ -2326,6 +2404,26 @@
                 });
             }
             return false;
+        }, function (errors) {
+            admin.forms.showFormErrors(errors);
+            return false;
+        });
+
+        //---------------------------------------------------------------
+        // ADD STATIC PAGE FORM
+        //---------------------------------------------------------------
+        admin.forms.submitForm('addStaticPage', constraints.addStaticPage, function () {
+            return true;
+        }, function (errors) {
+            admin.forms.showFormErrors(errors);
+            return false;
+        });
+
+        //---------------------------------------------------------------
+        // Edit STATIC PAGE FORM
+        //---------------------------------------------------------------
+        admin.forms.submitForm('editStaticPage', constraints.editStaticPage, function () {
+            return true;
         }, function (errors) {
             admin.forms.showFormErrors(errors);
             return false;

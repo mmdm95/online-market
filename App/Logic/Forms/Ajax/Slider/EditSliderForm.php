@@ -134,7 +134,7 @@ class EditSliderForm implements IPageForm
             $priority = input()->post('inp-edit-slide-priority', '')->getValue();
 
             return $slideModel->update([
-                'title' => $xss->xss_clean($title),
+                'title' => $xss->xss_clean(trim($title)),
                 'note' => $xss->xss_clean($subTitle),
                 'image' => $xss->xss_clean(get_image_name($image)),
                 'link' => $xss->xss_clean($link),

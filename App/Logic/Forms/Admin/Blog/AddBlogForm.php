@@ -156,7 +156,7 @@ class AddBlogForm implements IPageForm
             }
 
             return $blogModel->insert([
-                'title' => $xss->xss_clean($title),
+                'title' => $xss->xss_clean(trim($title)),
                 'fa_title' => $xss->xss_clean(StringUtil::toPersian($title)),
                 'slug' => $xss->xss_clean(StringUtil::slugify($title)),
                 'image' => $xss->xss_clean(get_image_name($image)),
