@@ -67,6 +67,12 @@
             edit: '/ajax/category/image/edit',
             remove: '/ajax/category/image/remove',
         },
+        securityQuestion: {
+            get: '/ajax/sec-question/get',
+            add: '/ajax/sec-question/add',
+            edit: '/ajax/sec-question/edit',
+            remove: '/ajax/sec-question/remove',
+        },
     });
     window.MyGlobalVariables.elements = $.extend(true, window.MyGlobalVariables.elements, {
         addAddress: {
@@ -305,6 +311,50 @@
                 url: 'inp-edit-static-page-url',
                 keywords: 'inp-edit-static-page-keywords',
                 desc: 'inp-edit-static-page-desc',
+            },
+        },
+        addCoupon: {
+            form: '#__form_add_coupon',
+            inputs: {
+                status: 'inp-add-coupon-status',
+                code: 'inp-add-coupon-code',
+                title: 'inp-add-coupon-title',
+                price: 'inp-add-coupon-price',
+                minPrice: 'inp-add-coupon-min-price',
+                maxPrice: 'inp-add-coupon-max-price',
+                count: 'inp-add-coupon-count',
+                useAfter: 'inp-add-coupon-use-after',
+                start: 'inp-add-coupon-start-date',
+                end: 'inp-add-coupon-end-date',
+            },
+        },
+        editCoupon: {
+            form: '#__form_edit_coupon',
+            inputs: {
+                status: 'inp-edit-coupon-status',
+                code: 'inp-edit-coupon-code',
+                title: 'inp-edit-coupon-title',
+                price: 'inp-edit-coupon-price',
+                minPrice: 'inp-edit-coupon-min-price',
+                maxPrice: 'inp-edit-coupon-max-price',
+                count: 'inp-edit-coupon-count',
+                useAfter: 'inp-edit-coupon-use-after',
+                start: 'inp-edit-coupon-start-date',
+                end: 'inp-edit-coupon-end-date',
+            },
+        },
+        addSecurityQuestion: {
+            form: '#__form_add_sec_question',
+            inputs: {
+                status: 'inp-add-sec-question-status',
+                question: 'inp-add-sec-question-q',
+            },
+        },
+        editSecurityQuestion: {
+            form: '#__form_edit_sec_question',
+            inputs: {
+                status: 'inp-edit-sec-question-status',
+                question: 'inp-edit-sec-question-q',
             },
         },
     });
@@ -784,6 +834,174 @@
                     },
                 },
             },
+            addCoupon: {
+                code: {
+                    presence: {
+                        allowEmpty: false,
+                        message: '^' + 'عنوان کوپن را وارد کنید.',
+                    },
+                    format: {
+                        pattern: /[0-9a-zA-Z-_]+/,
+                        message: '^' + 'کد کوپن باید از حروف انگلیسی، اعداد، خط تیره و آندرلاین تشکیل شده باشد.',
+                    },
+                    length: {
+                        maximum: 20,
+                        message: '^' + 'کد کوپن حداکثر باید ۲۰ کاراکتر باشد.',
+                    },
+                },
+                title: {
+                    presence: {
+                        allowEmpty: false,
+                        message: '^' + 'عنوان کوپن را وارد کنید.',
+                    },
+                    length: {
+                        maximum: 250,
+                        message: '^' + 'عنوان کوپن حداکثر باید ۲۵۰ کاراکتر باشد.',
+                    },
+                },
+                price: {
+                    presence: {
+                        allowEmpty: false,
+                        message: '^' + 'عنوان کوپن را وارد کنید.',
+                    },
+                    format: {
+                        pattern: /[0-9]+/,
+                        message: '^' + 'قیمت باید از نوع عددی باشد.',
+                    },
+                },
+                minPrice: {
+                    format: {
+                        pattern: /[0-9]+/,
+                        message: '^' + 'کمترین قیمت اعمال موپن قیمت باید از نوع عددی باشد.',
+                    },
+                },
+                maxPrice: {
+                    format: {
+                        pattern: /[0-9]+/,
+                        message: '^' + 'بیشترین قیمت اعمال موپن قیمت باید از نوع عددی باشد.',
+                    },
+                },
+                count: {
+                    presence: {
+                        allowEmpty: false,
+                        message: '^' + 'تعداد کوپن را وارد کنید.',
+                    },
+                    format: {
+                        pattern: /[0-9]+/,
+                        message: '^' + 'تعداد باید از نوع عددی باشد.',
+                    },
+                },
+                useAfter: {
+                    format: {
+                        pattern: /[0-9]+/,
+                        message: '^' + 'استفاده بعد از تعداد روز باید از نوع عددی باشد.',
+                    },
+                },
+                start: {
+                    format: {
+                        pattern: /[0-9]+/,
+                        message: '^' + 'تاریخ شروع نامعتبر است.',
+                    },
+                },
+                end: {
+                    format: {
+                        pattern: /[0-9]+/,
+                        message: '^' + 'تاریخ پایان نامعتبر است.',
+                    },
+                },
+            },
+            editCoupon: {
+                code: {
+                    presence: {
+                        allowEmpty: false,
+                        message: '^' + 'عنوان کوپن را وارد کنید.',
+                    },
+                    format: {
+                        pattern: /[0-9a-zA-Z-_]+/,
+                        message: '^' + 'کد کوپن باید از حروف انگلیسی، اعداد، خط تیره و آندرلاین تشکیل شده باشد.',
+                    },
+                    length: {
+                        maximum: 20,
+                        message: '^' + 'کد کوپن حداکثر باید ۲۰ کاراکتر باشد.',
+                    },
+                },
+                title: {
+                    presence: {
+                        allowEmpty: false,
+                        message: '^' + 'عنوان کوپن را وارد کنید.',
+                    },
+                    length: {
+                        maximum: 250,
+                        message: '^' + 'عنوان کوپن حداکثر باید ۲۵۰ کاراکتر باشد.',
+                    },
+                },
+                price: {
+                    presence: {
+                        allowEmpty: false,
+                        message: '^' + 'عنوان کوپن را وارد کنید.',
+                    },
+                    format: {
+                        pattern: /[0-9]+/,
+                        message: '^' + 'قیمت باید از نوع عددی باشد.',
+                    },
+                },
+                minPrice: {
+                    format: {
+                        pattern: /[0-9]+/,
+                        message: '^' + 'کمترین قیمت اعمال موپن قیمت باید از نوع عددی باشد.',
+                    },
+                },
+                maxPrice: {
+                    format: {
+                        pattern: /[0-9]+/,
+                        message: '^' + 'بیشترین قیمت اعمال موپن قیمت باید از نوع عددی باشد.',
+                    },
+                },
+                count: {
+                    presence: {
+                        allowEmpty: false,
+                        message: '^' + 'تعداد کوپن را وارد کنید.',
+                    },
+                    format: {
+                        pattern: /[0-9]+/,
+                        message: '^' + 'تعداد باید از نوع عددی باشد.',
+                    },
+                },
+                useAfter: {
+                    format: {
+                        pattern: /[0-9]+/,
+                        message: '^' + 'استفاده بعد از تعداد روز باید از نوع عددی باشد.',
+                    },
+                },
+                start: {
+                    format: {
+                        pattern: /[0-9]+/,
+                        message: '^' + 'تاریخ شروع نامعتبر است.',
+                    },
+                },
+                end: {
+                    format: {
+                        pattern: /[0-9]+/,
+                        message: '^' + 'تاریخ پایان نامعتبر است.',
+                    },
+                },
+            },
+            addSecurityQuestion: {
+                question: {
+                    presence: {
+                        allowEmpty: false,
+                        message: '^' + 'متن سؤال را وارد کنید.',
+                    },
+                },
+            },
+            editSecurityQuestion: {
+                question: {
+                    presence: {
+                        allowEmpty: false,
+                        message: '^' + 'متن سؤال را وارد کنید.',
+                    },
+                },
+            },
         },
     });
 
@@ -847,7 +1065,8 @@
             editInstagramImageId = null,
             editBadgeId = null,
             addCategoryImageId = null,
-            editCategoryImageId = null;
+            editCategoryImageId = null,
+            editSecurityQuestionId = null;
 
         admin = new window.TheAdmin();
 
@@ -979,6 +1198,34 @@
                 title: variables.validation.constraints.editStaticPage.title,
                 url: variables.validation.constraints.editStaticPage.url,
                 desc: variables.validation.constraints.editStaticPage.desc,
+            },
+            addCoupon: {
+                code: variables.validation.constraints.addCoupon.code,
+                title: variables.validation.constraints.addCoupon.title,
+                price: variables.validation.constraints.addCoupon.price,
+                minPrice: variables.validation.constraints.addCoupon.minPrice,
+                maxPrice: variables.validation.constraints.addCoupon.maxPrice,
+                count: variables.validation.constraints.addCoupon.count,
+                useAfter: variables.validation.constraints.addCoupon.useAfter,
+                start: variables.validation.constraints.addCoupon.start,
+                end: variables.validation.constraints.addCoupon.end,
+            },
+            editCoupon: {
+                code: variables.validation.constraints.editCoupon.code,
+                title: variables.validation.constraints.editCoupon.title,
+                price: variables.validation.constraints.editCoupon.price,
+                minPrice: variables.validation.constraints.editCoupon.minPrice,
+                maxPrice: variables.validation.constraints.editCoupon.maxPrice,
+                count: variables.validation.constraints.editCoupon.count,
+                useAfter: variables.validation.constraints.editCoupon.useAfter,
+                start: variables.validation.constraints.editCoupon.start,
+                end: variables.validation.constraints.editCoupon.end,
+            },
+            addSecurityQuestion: {
+                question: variables.validation.constraints.addSecurityQuestion.question,
+            },
+            editSecurityQuestion: {
+                question: variables.validation.constraints.editSecurityQuestion.question,
             },
         };
 
@@ -1289,6 +1536,29 @@
         }
 
         /**
+         * @param btn
+         * @param [table]
+         */
+        function editSecurityQuestionBtnClick(btn, table) {
+            var id, editModal;
+            id = $(btn).attr('data-edit-id');
+            editModal = $('#modal_form_edit_sec_question');
+            // clear element after each call
+            $(variables.elements.editSecurityQuestion.form).reset();
+            if (id && editModal.length) {
+                admin.request(variables.url.securityQuestion.get + '/' + id, 'get', function () {
+                    var _ = this;
+                    if (_.data.length) {
+                        currentTable = table;
+                        editSecurityQuestionId = id;
+                        //-----
+                        editModal.find('[name="' + variables.elements.editSecurityQuestion.inputs.question + '"]').val(_.data['question']);
+                    }
+                });
+            }
+        }
+
+        /**
          * Actions to take after a datatable initialize(reinitialize)
          */
         function datatableInitCompleteActions(table) {
@@ -1385,6 +1655,13 @@
                 .on('click' + variables.namespace, function () {
                     editCategoryImageBtnClick($(this), table);
                 });
+
+            // edit security question button click event
+            $('.__item_sec_q_editor_btn')
+                .off('click' + variables.namespace)
+                .on('click' + variables.namespace, function () {
+                    editSecurityQuestionBtnClick($(this), table);
+                });
         }
 
         // Add bottom spacing if reached bottom,
@@ -1439,6 +1716,456 @@
                 filesButtonHtml: 'انتخاب فایل',
                 fileDefaultHtml: 'هیچ فایلی انتخاب نشده است',
                 resetDefaultHtml: 'بازنشانی',
+            });
+        }
+
+        if ($.fn.persianDatepicker) {
+            $('.myDatepickerWithEn').persianDatepicker({
+                "inline": false,
+                "format": "L",
+                "viewMode": "day",
+                "initialValue": true,
+                "minDate": 0,
+                "maxDate": 0,
+                "autoClose": false,
+                "position": "auto",
+                "onlyTimePicker": false,
+                "onlySelectOnDate": false,
+                "calendarType": "persian",
+                "inputDelay": 800,
+                "observer": true,
+                "calendar": {
+                    "persian": {
+                        "locale": "fa",
+                        "showHint": true,
+                        "leapYearMode": "algorithmic"
+                    },
+                    "gregorian": {
+                        "locale": "en",
+                        "showHint": true
+                    }
+                },
+                "navigator": {
+                    "enabled": true,
+                    "scroll": {
+                        "enabled": true
+                    },
+                    "text": {
+                        "btnNextText": "<",
+                        "btnPrevText": ">"
+                    }
+                },
+                "toolbox": {
+                    "enabled": true,
+                    "calendarSwitch": {
+                        "enabled": true,
+                        "format": "MMMM"
+                    },
+                    "todayButton": {
+                        "enabled": true,
+                        "text": {
+                            "fa": "امروز",
+                            "en": "Today"
+                        }
+                    },
+                    "submitButton": {
+                        "enabled": true,
+                        "text": {
+                            "fa": "تایید",
+                            "en": "Submit"
+                        }
+                    },
+                    "text": {
+                        "btnToday": "امروز"
+                    }
+                },
+                "timePicker": {
+                    "enabled": false,
+                    "step": 1,
+                    "hour": {
+                        "enabled": true,
+                        "step": null
+                    },
+                    "minute": {
+                        "enabled": true,
+                        "step": null
+                    },
+                    "second": {
+                        "enabled": true,
+                        "step": null
+                    },
+                    "meridian": {
+                        "enabled": true
+                    }
+                },
+                "dayPicker": {
+                    "enabled": true,
+                    "titleFormat": "YYYY MMMM"
+                },
+                "monthPicker": {
+                    "enabled": true,
+                    "titleFormat": "YYYY"
+                },
+                "yearPicker": {
+                    "enabled": true,
+                    "titleFormat": "YYYY"
+                },
+                "responsive": true
+            });
+
+            $('.myDatepicker').persianDatepicker({
+                "inline": false,
+                "format": "L",
+                "viewMode": "day",
+                "initialValue": true,
+                "minDate": 0,
+                "maxDate": 0,
+                "autoClose": false,
+                "position": "auto",
+                "onlyTimePicker": false,
+                "onlySelectOnDate": false,
+                "calendarType": "persian",
+                "inputDelay": 800,
+                "observer": true,
+                "calendar": {
+                    "persian": {
+                        "locale": "fa",
+                        "showHint": true,
+                        "leapYearMode": "algorithmic"
+                    },
+                    "gregorian": {
+                        "locale": "en",
+                        "showHint": true
+                    }
+                },
+                "navigator": {
+                    "enabled": true,
+                    "scroll": {
+                        "enabled": true
+                    },
+                    "text": {
+                        "btnNextText": "<",
+                        "btnPrevText": ">"
+                    }
+                },
+                "toolbox": {
+                    "enabled": true,
+                    "calendarSwitch": {
+                        "enabled": false,
+                        "format": "MMMM"
+                    },
+                    "todayButton": {
+                        "enabled": true,
+                        "text": {
+                            "fa": "امروز",
+                            "en": "Today"
+                        }
+                    },
+                    "submitButton": {
+                        "enabled": true,
+                        "text": {
+                            "fa": "تایید",
+                            "en": "Submit"
+                        }
+                    },
+                    "text": {
+                        "btnToday": "امروز"
+                    }
+                },
+                "timePicker": {
+                    "enabled": false,
+                    "step": 1,
+                    "hour": {
+                        "enabled": true,
+                        "step": null
+                    },
+                    "minute": {
+                        "enabled": true,
+                        "step": null
+                    },
+                    "second": {
+                        "enabled": true,
+                        "step": null
+                    },
+                    "meridian": {
+                        "enabled": true
+                    }
+                },
+                "dayPicker": {
+                    "enabled": true,
+                    "titleFormat": "YYYY MMMM"
+                },
+                "monthPicker": {
+                    "enabled": true,
+                    "titleFormat": "YYYY"
+                },
+                "yearPicker": {
+                    "enabled": true,
+                    "titleFormat": "YYYY"
+                },
+                "responsive": true
+            });
+
+            var altDP = $('.myAltDatepicker');
+            $(altDP).each(function () {
+                var $this = $(this);
+                $this.persianDatepicker({
+                    "inline": false,
+                    "format": !!$this.attr('data-format') ? $this.attr('data-format') : 'L',
+                    "viewMode": "day",
+                    "initialValue": true,
+                    "minDate": 0,
+                    "maxDate": 0,
+                    "autoClose": false,
+                    "position": "auto",
+                    "onlyTimePicker": false,
+                    "onlySelectOnDate": false,
+                    "calendarType": "persian",
+                    "altFormat": 'X',
+                    "altField": $this.attr('data-alt-field'),
+                    "inputDelay": 800,
+                    "observer": true,
+                    "calendar": {
+                        "persian": {
+                            "locale": "fa",
+                            "showHint": true,
+                            "leapYearMode": "algorithmic"
+                        },
+                        "gregorian": {
+                            "locale": "en",
+                            "showHint": true
+                        }
+                    },
+                    "navigator": {
+                        "enabled": true,
+                        "scroll": {
+                            "enabled": true
+                        },
+                        "text": {
+                            "btnNextText": "<",
+                            "btnPrevText": ">"
+                        }
+                    },
+                    "toolbox": {
+                        "enabled": true,
+                        "calendarSwitch": {
+                            "enabled": false,
+                            "format": "MMMM"
+                        },
+                        "todayButton": {
+                            "enabled": true,
+                            "text": {
+                                "fa": "امروز",
+                                "en": "Today"
+                            }
+                        },
+                        "submitButton": {
+                            "enabled": true,
+                            "text": {
+                                "fa": "تایید",
+                                "en": "Submit"
+                            }
+                        },
+                        "text": {
+                            "btnToday": "امروز"
+                        }
+                    },
+                    "timePicker": {
+                        "enabled": !!$this.attr('data-time'),
+                        "step": 1,
+                        "hour": {
+                            "enabled": true,
+                            "step": null
+                        },
+                        "minute": {
+                            "enabled": true,
+                            "step": null
+                        },
+                        "second": {
+                            "enabled": false,
+                            "step": null
+                        },
+                        "meridian": {
+                            "enabled": false
+                        }
+                    },
+                    "dayPicker": {
+                        "enabled": true,
+                        "titleFormat": "YYYY MMMM"
+                    },
+                    "monthPicker": {
+                        "enabled": true,
+                        "titleFormat": "YYYY"
+                    },
+                    "yearPicker": {
+                        "enabled": true,
+                        "titleFormat": "YYYY"
+                    },
+                    "responsive": true
+                });
+            });
+
+            var rtAll, rfAll;
+
+            rtAll = $(".range-to");
+            rfAll = $(".range-from");
+
+            rfAll.each(function (i) {
+                var to, from;
+                var rt, rf;
+
+                rt = rtAll.eq(i);
+                rf = $(this);
+
+                to = rt.persianDatepicker({
+                    inline: false,
+                    altField: rt.attr('data-alt-field'),
+                    format: !!rt.attr('data-format') ? rt.attr('data-format') : 'L',
+                    initialValue: true,
+                    onSelect: function (unix) {
+                        to.touched = true;
+                        if (from && from.options && from.options.maxDate != unix) {
+                            var cachedValue = from.getState().selected.unixDate;
+                            from.options = {maxDate: unix};
+                            if (from.touched) {
+                                from.setDate(cachedValue);
+                            }
+                        }
+                    },
+                    "minDate": 0,
+                    "maxDate": 0,
+                    "autoClose": true,
+                    "position": "auto",
+                    "onlyTimePicker": false,
+                    "onlySelectOnDate": false,
+                    "calendarType": "persian",
+                    "altFormat": 'X',
+                    "inputDelay": 800,
+                    "observer": true,
+                    "calendar": {
+                        "persian": {
+                            "locale": "fa",
+                            "showHint": true,
+                            "leapYearMode": "algorithmic"
+                        },
+                        "gregorian": {
+                            "locale": "en",
+                            "showHint": true
+                        }
+                    },
+                    "timePicker": {
+                        "enabled": !!rt.attr('data-time'),
+                        "step": 1,
+                        "hour": {
+                            "enabled": true,
+                            "step": null
+                        },
+                        "minute": {
+                            "enabled": true,
+                            "step": null
+                        },
+                        "second": {
+                            "enabled": false,
+                            "step": null
+                        },
+                        "meridian": {
+                            "enabled": false
+                        }
+                    }
+                });
+                from = rf.persianDatepicker({
+                    inline: false,
+                    altField: rf.attr('data-alt-field'),
+                    format: !!rf.attr('data-format') ? rf.attr('data-format') : 'L',
+                    initialValue: true,
+                    onSelect: function (unix) {
+                        from.touched = true;
+                        if (to && to.options && to.options.minDate != unix) {
+                            var cachedValue = to.getState().selected.unixDate;
+                            to.options = {minDate: unix};
+                            if (to.touched) {
+                                to.setDate(cachedValue);
+                            }
+                        }
+                    },
+                    "minDate": 0,
+                    "maxDate": 0,
+                    "autoClose": true,
+                    "position": "auto",
+                    "onlyTimePicker": false,
+                    "onlySelectOnDate": false,
+                    "calendarType": "persian",
+                    "altFormat": 'X',
+                    "inputDelay": 800,
+                    "observer": true,
+                    "calendar": {
+                        "persian": {
+                            "locale": "fa",
+                            "showHint": true,
+                            "leapYearMode": "algorithmic"
+                        },
+                        "gregorian": {
+                            "locale": "en",
+                            "showHint": true
+                        }
+                    },
+                    "timePicker": {
+                        "enabled": !!rf.attr('data-time'),
+                        "step": 1,
+                        "hour": {
+                            "enabled": true,
+                            "step": null
+                        },
+                        "minute": {
+                            "enabled": true,
+                            "step": null
+                        },
+                        "second": {
+                            "enabled": false,
+                            "step": null
+                        },
+                        "meridian": {
+                            "enabled": false
+                        }
+                    }
+                });
+            });
+
+
+            $('.myTimepicker').persianDatepicker({
+                "inline": false,
+                "format": "H:m:s",
+                "initialValue": true,
+                "autoClose": false,
+                "position": "auto",
+                "onlyTimePicker": true,
+                "onlySelectOnDate": false,
+                "calendarType": "persian",
+                "inputDelay": 800,
+                "observer": true,
+                "toolbox": {
+                    "enabled": false
+                },
+                "timePicker": {
+                    "enabled": false,
+                    "step": "1",
+                    "hour": {
+                        "enabled": true,
+                        "step": null
+                    },
+                    "minute": {
+                        "enabled": true,
+                        "step": null
+                    },
+                    "second": {
+                        "enabled": true,
+                        "step": null
+                    },
+                    "meridian": {
+                        "enabled": false
+                    }
+                },
+                "responsive": true
             });
         }
 
@@ -2424,6 +3151,95 @@
         //---------------------------------------------------------------
         admin.forms.submitForm('editStaticPage', constraints.editStaticPage, function () {
             return true;
+        }, function (errors) {
+            admin.forms.showFormErrors(errors);
+            return false;
+        });
+
+        //---------------------------------------------------------------
+        // ADD COUPON FORM
+        //---------------------------------------------------------------
+        admin.forms.submitForm('addCoupon', constraints.addCoupon, function () {
+            return true;
+        }, function (errors) {
+            admin.forms.showFormErrors(errors);
+            return false;
+        });
+
+        //---------------------------------------------------------------
+        // Edit COUPON FORM
+        //---------------------------------------------------------------
+        admin.forms.submitForm('editCoupon', constraints.editCoupon, function () {
+            return true;
+        }, function (errors) {
+            admin.forms.showFormErrors(errors);
+            return false;
+        });
+
+        //---------------------------------------------------------------
+        // ADD SECURITY QUESTION FORM
+        //---------------------------------------------------------------
+        admin.forms.submitForm('addSecurityQuestion', constraints.addSecurityQuestion, function (values) {
+            // do ajax
+            if (createLoader) {
+                createLoader = false;
+                loaderId = admin.showLoader();
+            }
+            admin.request(variables.url.securityQuestion.add, 'post', function () {
+                admin.hideLoader(loaderId);
+                // clear element after success
+                $(variables.elements.addSecurityQuestion.form).reset();
+                if (currentTable) {
+                    $(currentTable).DataTable().ajax.reload(null, true);
+                    currentTable = null;
+                }
+                //-----
+                admin.toasts.toast(this.data, {
+                    type: variables.toasts.types.success,
+                });
+                createLoader = true;
+            }, {
+                data: values,
+            }, true, function () {
+                createLoader = true;
+            });
+            return false;
+        }, function (errors) {
+            admin.forms.showFormErrors(errors);
+            return false;
+        });
+
+        //---------------------------------------------------------------
+        // Edit SECURITY QUESTION FORM
+        //---------------------------------------------------------------
+        admin.forms.submitForm('editSecurityQuestion', constraints.editSecurityQuestion, function (values) {
+            if (editSecurityQuestionId) {
+                // do ajax
+                if (createLoader) {
+                    createLoader = false;
+                    loaderId = admin.showLoader();
+                }
+                admin.request(variables.url.securityQuestion.edit + '/' + editSecurityQuestionId, 'post', function () {
+                    admin.hideLoader(loaderId);
+                    // clear element after success
+                    $(variables.elements.editSecurityQuestion.form).reset();
+                    editSecurityQuestionId = null;
+                    if (currentTable) {
+                        $(currentTable).DataTable().ajax.reload(null, true);
+                        currentTable = null;
+                    }
+                    //-----
+                    admin.toasts.toast(this.data, {
+                        type: variables.toasts.types.success,
+                    });
+                    createLoader = true;
+                }, {
+                    data: values,
+                }, true, function () {
+                    createLoader = true;
+                });
+            }
+            return false;
         }, function (errors) {
             admin.forms.showFormErrors(errors);
             return false;

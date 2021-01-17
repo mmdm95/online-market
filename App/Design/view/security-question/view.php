@@ -2,120 +2,122 @@
 <div class="content">
     <!-- Highlighting rows and columns -->
     <div class="card">
-        <?php load_partial('admin/card-header', ['header_title' => 'واحدها']); ?>
+        <?php load_partial('admin/card-header', ['header_title' => 'سؤالات امنیتی']); ?>
 
         <div class="card-body">
-            با استفاده از ستون عملیات می‌توانید اقدام به حذف، ویرایش و مشاهده خرید‌های کاربر کنید.
-            <div class="col-md-2 float-right">
+            <div class="d-flex justify-content-between">
+                <span>با استفاده از ستون عملیات می‌توانید اقدام به حذف، ویرایش و مشاهده سؤالات امنیتی کنید.</span>
                 <button type="button" class="btn btn-success" data-toggle="modal"
-                        data-target="#modal_form_add_unit">
-                    افزودن واحد جدید
-                    <i class="icon-unicode ml-2"></i>
+                        data-target="#modal_form_add_sec_question">
+                    افزودن سؤال جدید
+                    <i class="icon-question3 ml-2"></i>
                 </button>
             </div>
-            <!-- Vertical form modal -->
-            <div id="modal_form_add_unit" class="modal fade" tabindex="-1">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title">افزودن واحد جدید</h5>
-                            <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        </div>
-
-                        <form action="#">
-                            <div class="modal-body">
-                                <div class="form-group">
-                                    <div class="row">
-                                        <div class="col-sm-6">
-                                            <label>نام واحد</label>
-                                            <input type="text" placeholder="وارد کنید" class="form-control">
-                                        </div>
-
-                                        <div class="col-sm-6">
-                                            <label>علامت اختصاری(انگلیسی)</label>
-                                            <input type="text" placeholder="وارد کنید" class="form-control">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-link" data-dismiss="modal">بستن</button>
-                                <button type="submit" class="btn bg-primary">افزودن</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-            <!-- /vertical form modal -->
         </div>
 
-        <table class="table table-bordered table-hover datatable-highlight">
+        <table class="table table-bordered table-hover datatable-highlight"
+               data-columns='[{"data":"id"},{"data":"question"},{"data":"status"},{"data":"operations"}]'
+               data-ajax-url="<?= url('admin.sec_question.dt.view')->getRelativeUrlTrimmed(); ?>">
             <thead>
             <tr>
                 <th>#</th>
-                <th>نام</th>
-                <th>علامت اختصاری(انگلیسی)</th>
+                <th>سؤال</th>
+                <th>وضعیت</th>
                 <th class="text-center">عملیات</th>
             </tr>
             </thead>
-            <tbody>
+            <tfoot>
             <tr>
-                <td>۱</td>
-                <td>کیلوگرم</td>
-                <td>kg</td>
-                <td class="text-center">
-                    <div class="list-icons">
-                        <div class="dropdown">
-                            <a href="#" class="list-icons-item" data-toggle="dropdown">
-                                <i class="icon-menu9"></i>
-                            </a>
-
-                            <div class="dropdown-menu dropdown-menu-right">
-                                <a href="#modal_form_edit_unit" data-toggle="modal" class="dropdown-item">
-                                    <i class="icon-pencil"></i>ویرایش</a>
-                                <a href="#" class="dropdown-item"><i class="icon-trash"></i>حذف</a>
-                            </div>
-                        </div>
-                    </div>
-                </td>
+                <th>#</th>
+                <th>سؤال</th>
+                <th>وضعیت</th>
+                <th class="text-center">عملیات</th>
             </tr>
-            </tbody>
+            </tfoot>
         </table>
-        <!-- Vertical form modal -->
-        <div id="modal_form_edit_unit" class="modal fade" tabindex="-1">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">ویرایش واحد جدید</h5>
-                        <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    </div>
+    </div>
 
-                    <form action="#">
-                        <div class="modal-body">
-                            <div class="form-group">
-                                <div class="row">
-                                    <div class="col-sm-6">
-                                        <label>نام واحد</label>
-                                        <input type="text" placeholder="وارد کنید" class="form-control">
-                                    </div>
+    <!-- Add security question modal -->
+    <div id="modal_form_add_sec_question" class="modal fade" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-primary">
+                    <h5 class="modal-title">افزودن واحد جدید</h5>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
 
-                                    <div class="col-sm-6">
-                                        <label>علامت اختصاری(انگلیسی)</label>
-                                        <input type="text" placeholder="وارد کنید" class="form-control">
-                                    </div>
-                                </div>
+                <form action="#" id="__form_add_sec_question">
+                    <div class="modal-body">
+                        <div class="form-group text-right">
+                            <div class="form-check form-check-switchery form-check-switchery-double">
+                                <label class="form-check-label">
+                                    نمایش سؤال
+                                    <input type="checkbox" class="form-check-input-switchery"
+                                           checked name="inp-add-sec-question-status">
+                                    عدم نمایش سؤال
+                                </label>
                             </div>
                         </div>
-
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-link" data-dismiss="modal">بستن</button>
-                            <button type="submit" class="btn bg-primary">افزودن</button>
+                        <div class="form-group">
+                            <label>
+                                <span class="text-danger">*</span>
+                                سؤال امنیتی:
+                            </label>
+                            <input type="text"
+                                   placeholder="متن سؤال را وارد کنید"
+                                   class="form-control"
+                                   name="inp-add-sec-question-q">
                         </div>
-                    </form>
-                </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-link" data-dismiss="modal">بستن</button>
+                        <button type="submit" class="btn btn-primary">افزودن سؤال امنیتی</button>
+                    </div>
+                </form>
             </div>
         </div>
-        <!-- /vertical form modal -->
     </div>
+    <!-- /add security question modal -->
+
+    <!-- Edit security question modal -->
+    <div id="modal_form_edit_sec_question" class="modal fade" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-success">
+                    <h5 class="modal-title">ویرایش واحد جدید</h5>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <form action="#" id="__form_edit_sec_question">
+                    <div class="modal-body">
+                        <div class="form-group text-right">
+                            <div class="form-check form-check-switchery form-check-switchery-double">
+                                <label class="form-check-label">
+                                    نمایش سؤال
+                                    <input type="checkbox" class="form-check-input-switchery"
+                                           checked name="inp-edit-sec-question-status">
+                                    عدم نمایش سؤال
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>
+                                <span class="text-danger">*</span>
+                                سؤال امنیتی:
+                            </label>
+                            <input type="text"
+                                   placeholder="متن سؤال را وارد کنید"
+                                   class="form-control"
+                                   name="inp-edit-sec-question-q">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-link" data-dismiss="modal">بستن</button>
+                        <button type="submit" class="btn btn-success">ویرایش سؤال امنیتی</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- /edit security question modal -->
 </div>

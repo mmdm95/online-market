@@ -177,6 +177,17 @@ class Route implements IInitialize
                     'id' => '[0-9]+',
                 ])->name('admin.coupon.edit');
                 Router::get('/coupon/view', 'Admin\CouponController@view')->name('admin.coupon.view');
+                Router::post('/coupon/view/dt', 'Admin\CouponController@getPaginatedDatatable')->name('admin.coupon.dt.view');
+
+                /**
+                 * Payment Methods Route
+                 */
+                Router::form('/pay-method/add', 'Admin\@add')->name('admin.pay_method.add');
+                Router::form('/pay-method/edit/{id}', 'Admin\@edit')->where([
+                    'id' => '[0-9]',
+                ])->name('admin.pay_method.edit');
+                Router::get('/pay-method/view', 'Admin\@view')->name('admin.pay_method.view');
+                Router::post('/pay-method/view/dt', 'Admin\@getPaginatedDatatable')->name('admin.pay_method.dt.view');
 
                 /**
                  * Color Route
@@ -307,6 +318,12 @@ class Route implements IInitialize
                  */
                 Router::get('/instagram/view', 'Admin\InstagramController@view')->name('admin.instagram.view');
                 Router::post('/instagram/view/dt', 'Admin\InstagramController@getPaginatedDatatable')->name('admin.instagram.dt.view');
+
+                /**
+                 * Security Question Route
+                 */
+                Router::get('/sec-question/view', 'Admin\SecurityQuestionController@view')->name('admin.sec_question.view');
+                Router::post('/sec-question/view/dt', 'Admin\SecurityQuestionController@getPaginatedDatatable')->name('admin.sec_question.dt.view');
 
                 /**
                  * Setting Route
@@ -663,10 +680,33 @@ class Route implements IInitialize
                     'c_id' => '[0-9]+',
                     'id' => '[0-9]+',
                 ])->name('ajax.category.image.get');
-                Router::delete('/category/remove/{c_id}/{id}', 'Admin\CategoryImageController@remove')->where([
+                Router::delete('/category/image/remove/{c_id}/{id}', 'Admin\CategoryImageController@remove')->where([
                     'c_id' => '[0-9]+',
                     'id' => '[0-9]+',
                 ])->name('ajax.category.image.remove');
+
+                /**
+                 * coupon route
+                 */
+                Router::delete('/coupon/remove/{id}', 'Admin\CouponController@remove')->where([
+                    'id' => '[0-9]+',
+                ])->name('ajax.coupon.remove');
+
+                /**
+                 * security question route
+                 */
+                Router::post('/sec-question/add', 'Admin\SecurityQuestionController@add')->where([
+                    'c_id' => '[0-9]+',
+                ])->name('ajax.sec_question.add');
+                Router::post('/sec-question/edit/{id}', 'Admin\SecurityQuestionController@edit')->where([
+                    'id' => '[0-9]+',
+                ])->name('ajax.sec_question.edit');
+                Router::get('/sec-question/get/{id}', 'Admin\SecurityQuestionController@get')->where([
+                    'id' => '[0-9]+',
+                ])->name('ajax.sec_question.get');
+                Router::delete('/sec-question/remove/{id}', 'Admin\SecurityQuestionController@remove')->where([
+                    'id' => '[0-9]+',
+                ])->name('ajax.sec_question.remove');
 
                 /**
                  * File Manager Route

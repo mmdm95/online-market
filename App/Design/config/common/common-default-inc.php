@@ -1,0 +1,165 @@
+<?php
+
+return [
+    /******************************
+     ************ User ************
+     *****************************/
+    'default' => [
+        'js' => [
+            'top' => [
+                e(
+                    '<script type="text/javascript" src="' .
+                    asset_path('js/main.js') .
+                    '"></script>'
+                ),
+            ],
+            'bottom' => [
+                e(
+                    '<script type="text/javascript" src="' .
+                    asset_path('plugins/noty/noty.min.js') .
+                    '"></script>'
+                ),
+                e(
+                    '<script type="text/javascript" src="' .
+                    asset_path('js/cart.js') .
+                    '"></script>'
+                ),
+                e(
+                    '<script type="text/javascript" src="' .
+                    asset_path('plugins/selectric/jquery.selectric.min.js') .
+                    '"></script>'
+                ),
+                e(
+                    '<script type="text/javascript" src="' .
+                    asset_path('plugins/jquery.mswitch.js') .
+                    '"></script>'
+                ),
+            ],
+        ],
+        'css' => [
+            'top' => [
+                e(
+                    '<link href="' .
+                    'https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900&display=swap' .
+                    '" rel="stylesheet" type="text/css">'
+                ),
+                e(
+                    '<link href="' .
+                    'https://fonts.googleapis.com/css?family=Poppins:200,300,400,500,600,700,800,900&display=swap' .
+                    '" rel="stylesheet" type="text/css">'
+                ),
+                e(
+                    '<link href="' .
+                    asset_path('css/main.css') .
+                    '" rel="stylesheet" type="text/css">'
+                ),
+                e(
+                    '<link href="' .
+                    asset_path('plugins/noty/noty.css') .
+                    '" rel="stylesheet" type="text/css">'
+                ),
+                e(
+                    '<link href="' .
+                    asset_path('plugins/noty/themes/sunset.css') .
+                    '" rel="stylesheet" type="text/css">'
+                ),
+                e(
+                    '<link href="' .
+                    asset_path('css/style.css') .
+                    '" rel="stylesheet" type="text/css">'
+                ),
+                e(
+                    '<link href="' .
+                    asset_path('css/responsive.css') .
+                    '" rel="stylesheet" type="text/css">'
+                ),
+                e(
+                    '<link href="' .
+                    asset_path('css/rtl-style.css') .
+                    '" rel="stylesheet" type="text/css">'
+                ),
+            ],
+        ],
+    ],
+    'default-changeable' => [
+        'js' => [
+            'bottom' => [
+                e(
+                    '<script type="text/javascript" src="' .
+                    asset_path('js/scripts.js') .
+                    '"></script>'
+                ),
+                e(
+                    '<script type="text/javascript" src="' .
+                    asset_path('js/globals.js') .
+                    '"></script>'
+                ),
+                e(
+                    '<script type="text/javascript" src="' .
+                    asset_path('js/index.js') .
+                    '"></script>'
+                ),
+            ],
+        ],
+        'css' => [
+            'top' => [
+                e(
+                    '<link href="' .
+                    asset_path('plugins/selectric/selectric.min.css') .
+                    '" rel="stylesheet" type="text/css">'
+                ),
+            ],
+        ]
+    ],
+    'default-cart' => [
+        'js' => [
+            'bottom' => [
+                e(
+                    '<script type="text/javascript" src="' .
+                    asset_path('js/cart.js') .
+                    '"></script>'
+                ),
+            ],
+        ],
+    ],
+    'default-jquery-ui' => [
+        'js' => [
+            'bottom' => [
+                e(
+                    '<script type="text/javascript" src="' .
+                    asset_path('js/all/jquery-ui.min.js') .
+                    '"></script>'
+                ),
+            ],
+        ],
+    ],
+    'default-map' => [
+        'js' => [
+            'top' => [
+                e(
+                    '<script type="text/javascript" src="' .
+                    asset_path('plugins/leaflet/leaflet.js') .
+                    '"></script>'
+                ),
+            ],
+        ],
+        'css' => [
+            'top' => [
+                e(
+                    '<link href="' .
+                    asset_path('plugins/leaflet/leaflet.css') .
+                    '" rel="stylesheet" type="text/css">'
+                ),
+            ],
+        ],
+    ],
+    'default-google-map' => [
+        'js' => [
+            'top' => [
+                e(
+                    '<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD7TypZFTl4Z3gVtikNOdGSfNTpnmq-ahQ&amp;"></script>'
+                ),
+            ],
+        ],
+    ],
+];

@@ -53,7 +53,7 @@ class InputItem implements IInputItem
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getValue(): ?string
     {

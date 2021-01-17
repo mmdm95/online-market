@@ -6,6 +6,13 @@
         <div class="card-body">
             <form action="<?= url('admin.category.edit')->getRelativeUrl() . $category['id']; ?>" method="post"
                   id="__form_edit_category">
+                <?php load_partial('admin/message/message-form', [
+                    'errors' => $cat_edit_errors ?? [],
+                    'success' => $cat_edit_success ?? '',
+                    'warning' => $cat_edit_warning ?? '',
+                ]); ?>
+
+                <input type="hidden" name="csrf_token" value="<?= csrf_token(); ?>" data-ignored>
                 <div class="row">
                     <fieldset class="col-12">
                         <legend class="font-weight-semibold">

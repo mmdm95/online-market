@@ -12,6 +12,13 @@ $validator = form_validator();
         <div class="card-body">
             <form action="<?= url('admin.category.add')->getRelativeUrlTrimmed(); ?>" method="post"
                   id="__form_add_category">
+                <?php load_partial('admin/message/message-form', [
+                    'errors' => $cat_add_errors ?? [],
+                    'success' => $cat_add_success ?? '',
+                    'warning' => $cat_add_warning ?? '',
+                ]); ?>
+
+                <input type="hidden" name="csrf_token" value="<?= csrf_token(); ?>" data-ignored>
                 <div class="row">
                     <fieldset class="col-12">
                         <legend class="font-weight-semibold">

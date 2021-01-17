@@ -1,4 +1,4 @@
-<div class="sidebar sidebar-dark sidebar-main sidebar-expand-md sidebar-fixed">
+<div class="sidebar sidebar-dark sidebar-main sidebar-expand-md">
 
     <!-- Sidebar mobile toggler -->
     <div class="sidebar-mobile-toggler text-center">
@@ -80,6 +80,22 @@
                 <li class="nav-item-header">
                     <div class="text-uppercase font-size-xs line-height-xs">فروشگاه</div>
                     <i class="icon-menu" title="فروشگاه"></i>
+                </li>
+                <li class="nav-item nav-item-submenu">
+                    <a href="#" class="nav-link"><i class="icon-coin-dollar"></i> <span>روش‌های پرداخت</span></a>
+
+                    <ul class="nav nav-group-sub">
+                        <li class="nav-item">
+                            <a href="<?= url('admin.pay_method.add'); ?>" class="nav-link">
+                                افزودن روش پرداخت جدید
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="<?= url('admin.pay_method.view', ''); ?>" class="nav-link">
+                                لیست روش‌های پرداخت
+                            </a>
+                        </li>
+                    </ul>
                 </li>
                 <li class="nav-item nav-item-submenu">
                     <a href="#" class="nav-link"><i class="icon-bucket"></i> <span>رنگ‌ها</span></a>
@@ -309,6 +325,12 @@
                     <a href="<?= url('admin.instagram.view', ''); ?>" class="nav-link">
                         <i class="icon-instagram"></i>
                         <span>مدیریت تصاویر اینستاگرام</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="<?= url('admin.sec_question.view', ''); ?>" class="nav-link">
+                        <i class="icon-lock"></i>
+                        <span>سؤالات امنیتی</span>
                     </a>
                 </li>
                 <li class="nav-item">

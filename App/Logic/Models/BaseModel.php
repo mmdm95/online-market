@@ -36,6 +36,7 @@ abstract class BaseModel
     const TBL_ORDER_ITEMS = 'order_items';
     const TBL_ORDER_RESERVED = 'order_reserved';
     const TBL_OUR_TEAM = 'our_team';
+    const TBL_PAYMENT_METHODS = 'payment_methods';
     const TBL_PRODUCTS = 'products';
     const TBL_PRODUCT_PROPERTY = 'product_property';
     const TBL_PRODUCT_ADVANCED = 'product_advanced';
@@ -44,6 +45,7 @@ abstract class BaseModel
     const TBL_PRODUCT_RELATED = 'product_related';
     const TBL_PROVINCES = 'provinces';
     const TBL_ROLES = 'roles';
+    const TBL_SECURITY_QUESTIONS = 'security_questions';
     const TBL_STATIC_PAGES = 'static_pages';
     const TBL_STEPPED_PRICES = 'stepped_prices';
     const TBL_UNITS = 'units';
