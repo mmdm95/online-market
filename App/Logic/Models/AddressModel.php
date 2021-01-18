@@ -86,12 +86,12 @@ class AddressModel extends BaseModel
      * Use [u_addr for user_address], [p for provinces], [c for cities]
      *
      * @param string|null $where
-     * @param array $bindParams
+     * @param array $bind_values
      * @return int
      */
-    public function getUserAddressesCount(?string $where = null, array $bindParams = []): int
+    public function getUserAddressesCount(?string $where = null, array $bind_values = []): int
     {
-        $res = $this->getUserAddresses(['COUNT(DISTINCT(u.id)) AS count'], $where, $bindParams);
+        $res = $this->getUserAddresses(['COUNT(DISTINCT(u.id)) AS count'], $where, $bind_values);
         if (count($res)) {
             return (int)$res[0]['count'];
         }

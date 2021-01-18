@@ -182,12 +182,12 @@ class Route implements IInitialize
                 /**
                  * Payment Methods Route
                  */
-                Router::form('/pay-method/add', 'Admin\@add')->name('admin.pay_method.add');
-                Router::form('/pay-method/edit/{id}', 'Admin\@edit')->where([
+                Router::form('/pay-method/add', 'Admin\PaymentMethodController@add')->name('admin.pay_method.add');
+                Router::form('/pay-method/edit/{id}', 'Admin\PaymentMethodController@edit')->where([
                     'id' => '[0-9]',
                 ])->name('admin.pay_method.edit');
-                Router::get('/pay-method/view', 'Admin\@view')->name('admin.pay_method.view');
-                Router::post('/pay-method/view/dt', 'Admin\@getPaginatedDatatable')->name('admin.pay_method.dt.view');
+                Router::get('/pay-method/view', 'Admin\PaymentMethodController@view')->name('admin.pay_method.view');
+                Router::post('/pay-method/view/dt', 'Admin\PaymentMethodController@getPaginatedDatatable')->name('admin.pay_method.dt.view');
 
                 /**
                  * Color Route
@@ -215,7 +215,7 @@ class Route implements IInitialize
                 Router::form('/blog/edit/{id}', 'Admin\BlogController@edit')->where([
                     'id' => '[0-9]+',
                 ])->name('admin.blog.edit');
-                Router::get('blog/view', 'Admin\BlogController@view')->name('admin.blog.view');
+                Router::get('/blog/view', 'Admin\BlogController@view')->name('admin.blog.view');
                 Router::post('/blog/view/dt', 'Admin\BlogController@getPaginatedDatatable')->name('admin.blog.dt.view');
 
                 /**
@@ -225,8 +225,8 @@ class Route implements IInitialize
                 Router::form('/blog/category/edit/{id}', 'Admin\BlogCategoryController@edit')->where([
                     'id' => '[0-9]+',
                 ])->name('admin.blog.category.edit');
-                Router::get('blog/category/view', 'Admin\BlogCategoryController@view')->name('admin.blog.category.view');
-                Router::post('blog/category/view/dt', 'Admin\BlogCategoryController@getPaginatedDatatable')
+                Router::get('/blog/category/view', 'Admin\BlogCategoryController@view')->name('admin.blog.category.view');
+                Router::post('/blog/category/view/dt', 'Admin\BlogCategoryController@getPaginatedDatatable')
                     ->name('admin.blog.category.dt.view');
 
                 /**
@@ -246,16 +246,9 @@ class Route implements IInitialize
                 Router::form('/brand/edit/{id}', 'Admin\BrandController@edit')->where([
                     'id' => '[0-9]+',
                 ])->name('admin.brand.edit');
-                Router::get('brand/view', 'Admin\BrandController@view')->name('admin.brand.view');
-                Router::post('brand/view/dt', 'Admin\BrandController@getPaginatedDatatable')
+                Router::get('/brand/view', 'Admin\BrandController@view')->name('admin.brand.view');
+                Router::post('/brand/view/dt', 'Admin\BrandController@getPaginatedDatatable')
                     ->name('admin.brand.dt.view');
-
-                /**
-                 * Contact us Route
-                 */
-                Router::get('/contact-us/view/{id?}', 'Admin\ContactUsController@view')->where([
-                    'id' => '[0-9]+',
-                ])->name('admin.contact-us.view');
 
                 /**
                  * Unit Route
@@ -270,11 +263,31 @@ class Route implements IInitialize
                 Router::post('/faq/view/dt', 'Admin\FaqController@getPaginatedDatatable')->name('admin.faq.dt.view');
 
                 /**
-                 * complaints Route
+                 * Comment Route
                  */
-                Router::get('/complaints/view/{id?}', 'Admin\complaintsController@view')->where([
+                Router::get('/comment/view/{id?}', 'Admin\CommentController@view')->where([
+                    'id' => '[0-9]+',
+                ])->name('admin.comment.view');
+                Router::post('/comment/view/dt', 'Admin\CommentController@getPaginatedDatatable')
+                    ->name('admin.comment.dt.view');
+
+                /**
+                 * Contact Us Route
+                 */
+                Router::get('/contact-us/view/{id?}', 'Admin\ContactUsController@view')->where([
+                    'id' => '[0-9]+',
+                ])->name('admin.contact-us.view');
+                Router::post('/contact-us/view/dt', 'Admin\ContactUsController@getPaginatedDatatable')
+                    ->name('admin.contact-us.dt.view');
+
+                /**
+                 * Complaints Route
+                 */
+                Router::get('/complaints/view/{id?}', 'Admin\ComplaintsController@view')->where([
                     'id' => '[0-9]+',
                 ])->name('admin.complaints.view');
+                Router::post('/complaints/view/dt', 'Admin\ComplaintsController@getPaginatedDatatable')
+                    ->name('admin.complaints.dt.view');
 
                 /**
                  * Newsletter Route
@@ -588,6 +601,13 @@ class Route implements IInitialize
                 ])->name('ajax.faq.remove');
 
                 /**
+                 * payment method route
+                 */
+                Router::delete('/pay-method/remove/{id}', 'Admin\PaymentMethodController@remove')->where([
+                    'id' => '[0-9]+',
+                ])->name('ajax.pay_method.remove');
+
+                /**
                  * color route
                  */
                 Router::delete('/color/remove/{id}', 'Admin\ColorController@remove')->where([
@@ -707,6 +727,20 @@ class Route implements IInitialize
                 Router::delete('/sec-question/remove/{id}', 'Admin\SecurityQuestionController@remove')->where([
                     'id' => '[0-9]+',
                 ])->name('ajax.sec_question.remove');
+
+                /**
+                 * contact us route
+                 */
+                Router::delete('/contact-us/remove/{id}', 'Admin\ContactUsController@remove')->where([
+                    'id' => '[0-9]+',
+                ])->name('ajax.contact-us.remove');
+
+                /**
+                 * complaint route
+                 */
+                Router::delete('/complaints/remove/{id}', 'Admin\ComplaintsController@remove')->where([
+                    'id' => '[0-9]+',
+                ])->name('ajax.complaints.remove');
 
                 /**
                  * File Manager Route

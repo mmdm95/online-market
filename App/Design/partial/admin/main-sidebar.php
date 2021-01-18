@@ -155,8 +155,8 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="<?= url('admin.color.view', ''); ?>" class="nav-link">
-                                لیست رنگ‌ها
+                            <a href="<?= url('admin.festival.view', ''); ?>" class="nav-link">
+                                لیست جشنواره‌ها
                             </a>
                         </li>
                     </ul>
@@ -291,9 +291,21 @@
                     <i class="icon-menu" title="ارتباطات"></i>
                 </li>
                 <li class="nav-item">
+                    <a href="<?= url('admin.comment.view', ''); ?>" class="nav-link">
+                        <i class="icon-comment-discussion"></i>
+                        <span>نظرات</span>
+                    </a>
+                </li>
+                <li class="nav-item">
                     <a href="<?= url('admin.contact-us.view', ''); ?>" class="nav-link">
-                        <i class="icon-envelop3"></i>
+                        <i class="icon-envelop5"></i>
                         <span>تماس‌ها</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="<?= url('admin.complaints.view', ''); ?>" class="nav-link">
+                        <i class="icon-user-tie"></i>
+                        <span>شکایات</span>
                     </a>
                 </li>
                 <li class="nav-item">

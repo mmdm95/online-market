@@ -9,7 +9,7 @@ return [
             'admin-table',
             'admin'
         ],
-        'sub_title' => 'مشاهده تماس‌ها',
+        'sub_title' => 'مدیریت تماس‌ها',
         'breadcrumb' => [
             [
                 'url' => url('admin.index')->getRelativeUrl(),
@@ -40,7 +40,7 @@ return [
                 'is_active' => false,
             ],
             [
-                'url' => url('admin.contact-us.view')->getRelativeUrl(),
+                'url' => url('admin.contact-us.view', '')->getRelativeUrl(),
                 'text' => 'مدیریت تماس‌ها',
                 'is_active' => false,
             ],

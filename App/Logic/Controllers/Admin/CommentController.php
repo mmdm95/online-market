@@ -3,15 +3,12 @@
 namespace App\Logic\Controllers\Admin;
 
 use App\Logic\Abstracts\AbstractAdminController;
-use App\Logic\Forms\Admin\PaymentMethod\AddPaymentMethodForm;
-use App\Logic\Forms\Admin\PaymentMethod\EditPaymentMethodForm;
 use App\Logic\Handlers\DatatableHandler;
 use App\Logic\Handlers\GeneralAjaxRemoveHandler;
-use App\Logic\Handlers\GeneralFormHandler;
 use App\Logic\Handlers\ResourceHandler;
 use App\Logic\Interfaces\IDatatableController;
 use App\Logic\Models\BaseModel;
-use App\Logic\Models\PaymentMethodModel;
+use App\Logic\Utils\Jdf;
 use Jenssegers\Agent\Agent;
 use Sim\Container\Exceptions\MethodNotFoundException;
 use Sim\Container\Exceptions\ParameterHasNoDefaultValueException;
@@ -24,9 +21,10 @@ use Sim\Exceptions\PathManager\PathNotRegisteredException;
 use Sim\Interfaces\IFileNotExistsException;
 use Sim\Interfaces\IInvalidVariableNameException;
 
-class PaymentMethodController extends AbstractAdminController implements IDatatableController
+class CommentController extends AbstractAdminController implements IDatatableController
 {
     /**
+     * @param null $id
      * @return string
      * @throws \ReflectionException
      * @throws ConfigNotRegisteredException
@@ -35,77 +33,17 @@ class PaymentMethodController extends AbstractAdminController implements IDatata
      * @throws IFileNotExistsException
      * @throws IInvalidVariableNameException
      */
-    public function view()
-    {
-        $this->setLayout($this->main_layout)->setTemplate('view/payment-method/view');
-        return $this->render();
-    }
-
-    /**
-     * @return string
-     * @throws ConfigNotRegisteredException
-     * @throws ControllerException
-     * @throws IFileNotExistsException
-     * @throws IInvalidVariableNameException
-     * @throws MethodNotFoundException
-     * @throws ParameterHasNoDefaultValueException
-     * @throws PathNotRegisteredException
-     * @throws ServiceNotFoundException
-     * @throws ServiceNotInstantiableException
-     * @throws \ReflectionException
-     */
-    public function add()
+    public function view($id = null)
     {
         $data = [];
-        if (is_post()) {
-            $formHandler = new GeneralFormHandler();
-            $data = $formHandler->handle(AddPaymentMethodForm::class, 'pay_method_add');
+
+        if (!is_null($id)) {
+            $this->setLayout($this->main_layout)->setTemplate('view/comment/message');
+        } else {
+            $this->setLayout($this->main_layout)->setTemplate('view/comment/view');
         }
 
-        $this->setLayout($this->main_layout)->setTemplate('view/payment-method/add');
         return $this->render($data);
-    }
-
-    /**
-     * @param $id
-     * @return string
-     * @throws ConfigNotRegisteredException
-     * @throws ControllerException
-     * @throws IFileNotExistsException
-     * @throws IInvalidVariableNameException
-     * @throws MethodNotFoundException
-     * @throws ParameterHasNoDefaultValueException
-     * @throws PathNotRegisteredException
-     * @throws ServiceNotFoundException
-     * @throws ServiceNotInstantiableException
-     * @throws \ReflectionException
-     */
-    public function edit($id)
-    {
-        /**
-         * @var PaymentMethodModel $payModel
-         */
-        $payModel = container()->get(PaymentMethodModel::class);
-
-        if (0 == $payModel->count('id=:id', ['id' => $id])) {
-            return $this->show404();
-        }
-
-        // store previous title to check for duplicate
-        session()->setFlash('pay-method-curr-id', $id);
-
-        $data = [];
-        if (is_post()) {
-            $formHandler = new GeneralFormHandler();
-            $data = $formHandler->handle(EditPaymentMethodForm::class, 'pay_method_edit');
-        }
-
-        $payment = $payModel->getFirst(['*'], 'id=:id', ['id' => $id]);
-
-        $this->setLayout($this->main_layout)->setTemplate('view/payment-method/edit');
-        return $this->render(array_merge($data, [
-            'payment' => $payment,
-        ]));
     }
 
     /**
@@ -126,7 +64,7 @@ class PaymentMethodController extends AbstractAdminController implements IDatata
         $agent = container()->get(Agent::class);
         if (!$agent->isRobot()) {
             $handler = new GeneralAjaxRemoveHandler();
-            $resourceHandler = $handler->handle(BaseModel::TBL_PAYMENT_METHODS, $id, 'deletable=:del', ['del' => DB_YES]);
+            $resourceHandler = $handler->handle(BaseModel::TBL_COMMENTS, $id);
         } else {
             response()->httpCode(403);
             $resourceHandler
@@ -153,43 +91,50 @@ class PaymentMethodController extends AbstractAdminController implements IDatata
                     $event->stopPropagation();
 
                     /**
-                     * @var PaymentMethodModel $payModel
+                     * @var ComplaintModel $complaintModel
                      */
-                    $payModel = container()->get(PaymentMethodModel::class);
+                    $complaintModel = container()->get(ComplaintModel::class);
 
-                    $cols[] = 'deletable';
-
-                    $data = $payModel->get($cols, $where, $bindValues, $order, $limit, $offset);
+                    $data = $complaintModel->get($cols, $where, $bindValues, $order, $limit, $offset);
                     //-----
-                    $recordsFiltered = $payModel->count($where, $bindValues);
-                    $recordsTotal = $payModel->count();
+                    $recordsFiltered = $complaintModel->count($where, $bindValues);
+                    $recordsTotal = $complaintModel->count();
 
                     return [$data, $recordsFiltered, $recordsTotal];
                 });
 
                 $columns = [
                     ['db' => 'id', 'db_alias' => 'id', 'dt' => 'id'],
+                    ['db' => 'name', 'db_alias' => 'name', 'dt' => 'name'],
                     ['db' => 'title', 'db_alias' => 'title', 'dt' => 'title'],
                     [
-                        'db' => 'image',
-                        'db_alias' => 'image',
-                        'dt' => 'image',
-                        'formatter' => function ($d, $row) {
-                            return $this->setTemplate('partial/admin/parser/image-placeholder')
-                                ->render([
-                                    'img' => $d,
-                                    'alt' => $row['title'],
-                                ]);
+                        'db' => 'created_at',
+                        'db_alias' => 'created_at',
+                        'dt' => 'sent_date',
+                        'formatter' => function ($d) {
+                            return Jdf::jdate(DEFAULT_TIME_FORMAT, $d);
                         }
                     ],
                     [
-                        'db' => 'publish',
-                        'db_alias' => 'publish',
+                        'db' => 'status',
+                        'db_alias' => 'status',
                         'dt' => 'status',
                         'formatter' => function ($d) {
-                            $status = $this->setTemplate('partial/admin/parser/active-status')
+                            $status = $this->setTemplate('partial/admin/parser/status-creation')
                                 ->render([
                                     'status' => $d,
+                                    'switch' => [
+                                        [
+                                            'status' => COMPLAINT_STATUS_READ,
+                                            'text' => 'خوانده شده',
+                                            'badge' => 'badge-success',
+                                        ],
+                                        [
+                                            'status' => COMPLAINT_STATUS_UNREAD,
+                                            'text' => 'خوانده نشده',
+                                            'badge' => 'badge-danger',
+                                        ],
+                                    ],
                                 ]);
                             return $status;
                         }
@@ -197,7 +142,7 @@ class PaymentMethodController extends AbstractAdminController implements IDatata
                     [
                         'dt' => 'operations',
                         'formatter' => function ($row) {
-                            $operations = $this->setTemplate('partial/admin/datatable/actions-pay-method')
+                            $operations = $this->setTemplate('partial/admin/datatable/actions-complaint')
                                 ->render([
                                     'row' => $row,
                                 ]);

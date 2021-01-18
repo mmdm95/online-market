@@ -2,14 +2,14 @@
 
 return [
     'view/complaints/view' => [
-        'title' => title_concat(\config()->get('settings.title.value'), 'شکایت'),
+        'title' => title_concat(\config()->get('settings.title.value'), 'مدیریت شکایات'),
         'common' => [
             'admin-base',
             'admin-form',
             'admin-table',
             'admin'
         ],
-        'sub_title' => 'بررسی شکایات',
+        'sub_title' => 'مدیریت شکایات',
         'breadcrumb' => [
             [
                 'url' => url('admin.index')->getRelativeUrl(),
@@ -31,7 +31,7 @@ return [
             'admin-table',
             'admin'
         ],
-        'sub_title' => 'بررسی شکایات',
+        'sub_title' => 'بررسی شکایت',
         'breadcrumb' => [
             [
                 'url' => url('admin.index')->getRelativeUrl(),
@@ -41,7 +41,7 @@ return [
             ],
             [
                 'url' => url('admin.complaints.view')->getRelativeUrl(),
-                'text' => 'مشاهده شکایات',
+                'text' => 'مدیریت شکایات',
                 'is_active' => false,
             ],
             [

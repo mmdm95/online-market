@@ -357,6 +357,22 @@
                 question: 'inp-edit-sec-question-q',
             },
         },
+        addPaymentMethod: {
+            form: '#__form_add_pay_method',
+            inputs: {
+                status: 'inp-add-pay-method-status',
+                image: 'inp-add-pay-method-img',
+                title: 'inp-add-pay-method-title',
+            },
+        },
+        editPaymentMethod: {
+            form: '#__form_edit_pay_method',
+            inputs: {
+                status: 'inp-edit-pay-method-status',
+                image: 'inp-edit-pay-method-img',
+                title: 'inp-edit-pay-method-title',
+            },
+        },
     });
     window.MyGlobalVariables.validation = $.extend({}, window.MyGlobalVariables.validation, {
         constraints: {
@@ -1002,6 +1018,42 @@
                     },
                 },
             },
+            addPaymentMethod: {
+                image: {
+                    presence: {
+                        allowEmpty: false,
+                        message: '^' + 'تصویر روش پرداخت را انتخاب کنید.',
+                    },
+                },
+                title: {
+                    presence: {
+                        allowEmpty: false,
+                        message: '^' + 'عنوان روش پرداخت را وارد کنید.',
+                    },
+                    length: {
+                        maximum: 250,
+                        message: '^' + 'عنوان روش پرداخت حداکثر باید ۲۵۰ کاراکتر باشد.',
+                    },
+                },
+            },
+            editPaymentMethod: {
+                image: {
+                    presence: {
+                        allowEmpty: false,
+                        message: '^' + 'تصویر روش پرداخت را انتخاب کنید.',
+                    },
+                },
+                title: {
+                    presence: {
+                        allowEmpty: false,
+                        message: '^' + 'عنوان روش پرداخت را وارد کنید.',
+                    },
+                    length: {
+                        maximum: 250,
+                        message: '^' + 'عنوان روش پرداخت حداکثر باید ۲۵۰ کاراکتر باشد.',
+                    },
+                },
+            },
         },
     });
 
@@ -1226,6 +1278,14 @@
             },
             editSecurityQuestion: {
                 question: variables.validation.constraints.editSecurityQuestion.question,
+            },
+            addPaymentMethod: {
+                image: variables.validation.constraints.addPaymentMethod.image,
+                title: variables.validation.constraints.addPaymentMethod.title,
+            },
+            editPaymentMethod: {
+                image: variables.validation.constraints.editPaymentMethod.image,
+                title: variables.validation.constraints.editPaymentMethod.title,
             },
         };
 
@@ -3240,6 +3300,26 @@
                 });
             }
             return false;
+        }, function (errors) {
+            admin.forms.showFormErrors(errors);
+            return false;
+        });
+
+        //---------------------------------------------------------------
+        // ADD PAYMENT METHOD FORM
+        //---------------------------------------------------------------
+        admin.forms.submitForm('addPaymentMethod', constraints.addPaymentMethod, function () {
+            return true;
+        }, function (errors) {
+            admin.forms.showFormErrors(errors);
+            return false;
+        });
+
+        //---------------------------------------------------------------
+        // Edit PAYMENT METHOD FORM
+        //---------------------------------------------------------------
+        admin.forms.submitForm('editPaymentMethod', constraints.editPaymentMethod, function () {
+            return true;
         }, function (errors) {
             admin.forms.showFormErrors(errors);
             return false;

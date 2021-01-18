@@ -3,7 +3,7 @@
 namespace App\Logic\Forms\Admin\PaymentMethod;
 
 use App\Logic\Interfaces\IPageForm;
-use App\Logic\Models\StaticPageModel;
+use App\Logic\Models\PaymentMethodModel;
 use App\Logic\Validations\ExtendedValidator;
 use Sim\Auth\DBAuth;
 use Sim\Container\Exceptions\MethodNotFoundException;
@@ -11,7 +11,7 @@ use Sim\Container\Exceptions\ParameterHasNoDefaultValueException;
 use Sim\Container\Exceptions\ServiceNotFoundException;
 use Sim\Container\Exceptions\ServiceNotInstantiableException;
 use Sim\Form\Exceptions\FormException;
-use Sim\Form\FormValue;
+use Sim\Utils\StringUtil;
 use voku\helper\AntiXSS;
 
 class AddPaymentMethodForm implements IPageForm
@@ -37,33 +37,24 @@ class AddPaymentMethodForm implements IPageForm
         // aliases
         $validator
             ->setFieldsAlias([
-                'inp-add-static-page-title' => 'عنوان',
-                'inp-add-static-page-url' => 'آدرس',
-                'inp-add-static-page-desc' => 'توضیحات',
+                'inp-add-pay-method-img' => 'تصویر',
+                'inp-add-pay-method-title' => 'عنوان',
             ]);
 
-        /**
-         * @var StaticPageModel $pageModel
-         */
-        $pageModel = container()->get(StaticPageModel::class);
-
-        // title and description
+        // title
         $validator
-            ->setFields([
-                'inp-add-static-page-title',
-                'inp-add-static-page-desc'
-            ])
-            ->required();
-        // url
-        $validator
-            ->setFields('inp-add-static-page-url')
+            ->setFields('inp-add-pay-method-title')
             ->stopValidationAfterFirstError(false)
             ->required()
             ->stopValidationAfterFirstError(true)
-            ->custom(function (FormValue $value) use ($pageModel) {
-                if ($pageModel->count('url=:url', ['url' => trim($value->getValue())]) === 0) return true;
-                return false;
-            }, '{alias} ' . 'وارد شده تکراری می‌باشد.');
+            ->lessThanEqualLength(250);
+        // image
+        $validator
+            ->setFields('inp-add-pay-method-img')
+            ->stopValidationAfterFirstError(false)
+            ->required()
+            ->stopValidationAfterFirstError(true)
+            ->imageExists();
 
         // to reset form values and not set them again
         if ($validator->getStatus()) {
@@ -91,9 +82,9 @@ class AddPaymentMethodForm implements IPageForm
     public function store(): bool
     {
         /**
-         * @var StaticPageModel $pageModel
+         * @var PaymentMethodModel $payModel
          */
-        $pageModel = container()->get(StaticPageModel::class);
+        $payModel = container()->get(PaymentMethodModel::class);
         /**
          * @var AntiXSS $xss
          */
@@ -104,17 +95,14 @@ class AddPaymentMethodForm implements IPageForm
         $auth = container()->get('auth_admin');
 
         try {
-            $title = input()->post('inp-add-static-page-title', '')->getValue();
-            $url = input()->post('inp-add-static-page-url', '')->getValue();
-            $pub = input()->post('inp-add-static-page-status', '')->getValue();
-            $keywords = input()->post('inp-add-static-page-keywords', '')->getValue();
-            $desc = input()->post('inp-add-static-page-desc', '')->getValue();
+            $image = input()->post('inp-add-pay-method-img', '')->getValue();
+            $title = input()->post('inp-add-pay-method-title', '')->getValue();
+            $pub = input()->post('inp-add-pay-method-status', '')->getValue();
 
-            return $pageModel->insert([
+            return $payModel->insert([
+                'code' => StringUtil::uniqidReal(12),
                 'title' => $xss->xss_clean(trim($title)),
-                'url' => $xss->xss_clean(trim($url)),
-                'body' => $xss->xss_clean($desc),
-                'keywords' => $xss->xss_clean($keywords),
+                'image' => $xss->xss_clean(get_image_name($image)),
                 'publish' => is_value_checked($pub) ? DB_YES : DB_NO,
                 'created_by' => $auth->getCurrentUser()['id'] ?? null,
                 'created_at' => time(),
