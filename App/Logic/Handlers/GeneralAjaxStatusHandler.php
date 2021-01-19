@@ -106,31 +106,34 @@ class GeneralAjaxStatusHandler implements IHandler
                         ->errorMessage('آیتم مورد نظر وجود ندارد.');
                     emitter()->dispatch('status.general.ajax:not_exists', [&$this->resourceHandler]);
                 } else {
-                    $update = $model->update();
-                    $update
-                        ->table($table)
-                        ->cols([
-                            $column => is_value_checked($status) ? DB_YES : DB_NO,
-                        ])
-                        ->where('id=:id')
-                        ->bindValue('id', $id);
-                    $res = $model->execute($update);
-                    if ($res) {
-                        if (is_value_checked($status)) {
-                            $this->resourceHandler
-                                ->type(RESPONSE_TYPE_SUCCESS)
-                                ->data($this->statusCheckedMessage);
+                    $emRes = emitter()->dispatch('status.general.ajax:before_update', [&$this->resourceHandler]);
+                    if (is_null($emRes) || (bool)$emRes->getReturnValue()) {
+                        $update = $model->update();
+                        $update
+                            ->table($table)
+                            ->cols([
+                                $column => is_value_checked($status) ? DB_YES : DB_NO,
+                            ])
+                            ->where('id=:id')
+                            ->bindValue('id', $id);
+                        $res = $model->execute($update);
+                        if ($res) {
+                            if (is_value_checked($status)) {
+                                $this->resourceHandler
+                                    ->type(RESPONSE_TYPE_SUCCESS)
+                                    ->data($this->statusCheckedMessage);
+                            } else {
+                                $this->resourceHandler
+                                    ->type(RESPONSE_TYPE_WARNING)
+                                    ->data($this->statusUncheckedMessage);
+                            }
+                            emitter()->dispatch('status.general.ajax:success', [&$this->resourceHandler]);
                         } else {
                             $this->resourceHandler
-                                ->type(RESPONSE_TYPE_WARNING)
-                                ->data($this->statusUncheckedMessage);
+                                ->type(RESPONSE_TYPE_ERROR)
+                                ->errorMessage('امکان تغییر وضعیت این آیتم وجود ندارد.');
+                            emitter()->dispatch('status.general.ajax:failed', [&$this->resourceHandler]);
                         }
-                        emitter()->dispatch('status.general.ajax:success', [&$this->resourceHandler]);
-                    } else {
-                        $this->resourceHandler
-                            ->type(RESPONSE_TYPE_ERROR)
-                            ->errorMessage('امکان تغییر وضعیت این آیتم وجود ندارد.');
-                        emitter()->dispatch('status.general.ajax:failed', [&$this->resourceHandler]);
                     }
                 }
             }

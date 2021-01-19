@@ -106,6 +106,7 @@ class ColorController extends AbstractAdminController implements IDatatableContr
         }
 
         $color = $colorModel->getFirst(['*'], 'id=:id', ['id' => $id]);
+
         $this->setLayout($this->main_layout)->setTemplate('view/color/edit');
         return $this->render(array_merge($data, [
             'color' => $color,

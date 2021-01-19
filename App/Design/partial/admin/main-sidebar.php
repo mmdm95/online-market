@@ -168,7 +168,7 @@
                     </a>
                 </li>
                 <li class="nav-item nav-item-submenu">
-                    <a href="#" class="nav-link"><i class="icon-ticket"></i> <span>کوپن‌های تخفیف</span></a>
+                    <a href="#" class="nav-link"><i class="icon-percent"></i> <span>کوپن‌های تخفیف</span></a>
 
                     <ul class="nav nav-group-sub">
                         <li class="nav-item">
@@ -179,6 +179,22 @@
                         <li class="nav-item">
                             <a href="<?= url('admin.coupon.view', ''); ?>" class="nav-link">
                                 مشاهده کوپن‌ها
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="nav-item nav-item-submenu">
+                    <a href="#" class="nav-link"><i class="icon-box"></i> <span>محصولات</span></a>
+
+                    <ul class="nav nav-group-sub">
+                        <li class="nav-item">
+                            <a href="<?= url('admin.product.add'); ?>" class="nav-link">
+                                افزودن محصول جدید
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="<?= url('admin.product.view', ''); ?>" class="nav-link">
+                                مشاهده محصولات
                             </a>
                         </li>
                     </ul>
@@ -291,12 +307,6 @@
                     <i class="icon-menu" title="ارتباطات"></i>
                 </li>
                 <li class="nav-item">
-                    <a href="<?= url('admin.comment.view', ''); ?>" class="nav-link">
-                        <i class="icon-comment-discussion"></i>
-                        <span>نظرات</span>
-                    </a>
-                </li>
-                <li class="nav-item">
                     <a href="<?= url('admin.contact-us.view', ''); ?>" class="nav-link">
                         <i class="icon-envelop5"></i>
                         <span>تماس‌ها</span>
@@ -304,7 +314,7 @@
                 </li>
                 <li class="nav-item">
                     <a href="<?= url('admin.complaints.view', ''); ?>" class="nav-link">
-                        <i class="icon-user-tie"></i>
+                        <i class="icon-balance"></i>
                         <span>شکایات</span>
                     </a>
                 </li>

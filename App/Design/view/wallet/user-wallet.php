@@ -1,7 +1,47 @@
 <!-- Content area -->
 <div class="content">
-    <div class="row flex-row-reverse">
-        <div class="col-lg-8 order-1">
+    <div class="row">
+        <div class="col-lg-8">
+            <!-- 2 columns form -->
+            <div class="card">
+                <?php load_partial('admin/card-header', ['header_title' => 'شارژ کیف پول']); ?>
+
+                <div class="card-body">
+                    <form action="#">
+                        <div class="row">
+                            <div class="col-lg-12 col-xl-4 form-group">
+                                <label>
+                                    <span class="text-danger">*</span>
+                                    مبلغ:
+                                </label>
+                                <input type="text" class="form-control" placeholder="به تومان">
+                            </div>
+                            <div class="col-lg-12 col-xl-4 form-group">
+                                <label>
+                                    <span class="text-danger">*</span>
+                                    توضیح شارژ:
+                                </label>
+                                <select data-placeholder="توضیح شارژ"
+                                        class="form-control form-control-select2" data-fouc>
+                                    <option></option>
+                                    <option value="Cambodia">عادی</option>
+                                    <option value="Cameroon">مدیر</option>
+                                    <option value="Canada">مدیر اصلی</option>
+                                </select>
+                            </div>
+                            <div class="col-lg-12 col-xl-4 text-right mt-0 mt-xl-3">
+                                <button type="submit" class="btn btn-primary">
+                                    ذخیره اطلاعات
+                                    <i class="icon-floppy-disks ml-2"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <!-- /2 columns form -->
+        </div>
+        <div class="col-lg-12">
             <!-- Highlighting rows and columns -->
             <div class="card">
                 <?php load_partial('admin/card-header', ['header_title' => 'کیف پول کاربر']); ?>
@@ -127,56 +167,13 @@
                         <td>شارژ کیف پول به خاطر دادن</td>
                         <td>۸ آذر ۱۳۹۹</td>
                         <td>
-محمدمهدی دهقان منشادی
+                            محمدمهدی دهقان منشادی
                         </td>
                     </tr>
                     </tbody>
                 </table>
             </div>
             <!-- /highlighting rows and columns -->
-        </div>
-        <div class="col-lg-4 order-0">
-            <!-- 2 columns form -->
-            <div class="card">
-                <?php load_partial('admin/card-header', ['header_title' => 'شارژ کیف پول']); ?>
-
-                <div class="card-body">
-                    <form action="#">
-                        <div class="row">
-                            <div class="col-lg-12">
-                                <fieldset>
-                                    <div class="row">
-                                        <div class="form-group col-md-12">
-                                            <label>مبلغ:</label>
-                                            <input type="text" class="form-control" placeholder="به تومان">
-                                        </div>
-                                        <div class="col-md-12">
-                                            <div class="form-group">
-                                                <label>نقش کاربر:</label>
-                                                <select data-placeholder="توضیح شارژ"
-                                                        class="form-control form-control-select2" data-fouc>
-                                                    <option></option>
-                                                    <option value="Cambodia">عادی</option>
-                                                    <option value="Cameroon">مدیر</option>
-                                                    <option value="Canada">مدیر اصلی</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="text">
-                                            <button type="submit" class="btn btn-primary">
-                                                ذخیره اطلاعات
-                                                <i class="icon-floppy-disks ml-2"></i>
-                                            </button>
-                                        </div>
-                                    </div>
-
-                                </fieldset>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
-            <!-- /2 columns form -->
         </div>
     </div>
 </div>

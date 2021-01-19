@@ -56,6 +56,7 @@ $adminNewsletter = config()->getDirectly(__DIR__ . '/admin/newsletter-inc.php');
 $adminOrder = config()->getDirectly(__DIR__ . '/admin/order-inc.php');
 $adminOrderReturn = config()->getDirectly(__DIR__ . '/admin/order-return-inc.php');
 $adminPaymentMethod = config()->getDirectly(__DIR__ . '/admin/payment-method-inc.php');
+$adminProduct = config()->getDirectly(__DIR__ . '/admin/product-inc.php');
 $adminSecurityQuestion = config()->getDirectly(__DIR__ . '/admin/security-question-inc.php');
 $adminSetting = config()->getDirectly(__DIR__ . '/admin/setting-inc.php');
 $adminStaticPage = config()->getDirectly(__DIR__ . '/admin/static-page-inc.php');
@@ -191,6 +192,7 @@ return [
         $adminOrder,
         $adminOrderReturn,
         $adminPaymentMethod,
+        $adminProduct,
         $adminSecurityQuestion,
         $adminSetting,
         $adminStaticPage,

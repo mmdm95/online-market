@@ -373,6 +373,12 @@
                 title: 'inp-edit-pay-method-title',
             },
         },
+        addFestival: {
+            form: '#__form_add_festival',
+            inputs: {
+                status: 'inp-add-festival-status',
+            },
+        },
     });
     window.MyGlobalVariables.validation = $.extend({}, window.MyGlobalVariables.validation, {
         constraints: {
@@ -1360,22 +1366,25 @@
             url = $(btn).attr('data-change-status-url');
             id = $(btn).attr('data-change-status-id');
 
-            if (url && id) {
-                admin.request(url + id, 'post', function () {
-                    var _ = this;
-                    if (_.type === variables.api.types.warning) {
-                        admin.toasts.toast(_.data);
-                    } else {
-                        admin.toasts.toast(_.data, {
-                            type: variables.toasts.types.success,
-                        });
-                    }
-                }, {
-                    data: {
-                        'status': $(btn).is(':checked') ? 1 : 0,
-                    },
-                }, true);
-            }
+            admin.toasts.confirm(null, function () {
+                if (url && id) {
+                    admin.request(url + id, 'post', function () {
+                        var _ = this;
+                        if (_.type === variables.api.types.warning) {
+                            admin.toasts.toast(_.data);
+                        } else {
+                            admin.toasts.toast(_.data, {
+                                type: variables.toasts.types.success,
+                            });
+                        }
+                    }, {
+                        data: {
+                            'status': $(btn).is(':checked') ? 1 : 0,
+                        },
+                    }, true);
+                }
+            });
+
         }
 
         // change status button click event

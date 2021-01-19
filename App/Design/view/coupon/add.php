@@ -101,11 +101,11 @@ $validator = form_validator();
                                 <?php
                                 $sd = $validator->setInput('inp-add-coupon-start-date', time());
                                 ?>
-                                <input type="hidden" name="expire" id="altStartDate" value="<?= $sd; ?>">
+                                <input type="hidden" name="inp-add-coupon-start-date"
+                                       id="altStartDate" value="<?= $sd; ?>">
                                 <input type="text" class="form-control range-from"
-                                       placeholder="انتخاب تاریخ" readonly
+                                       placeholder="انتخاب تاریخ" readonly data-ignored
                                        data-alt-field="#altStartDate"
-                                       name="inp-add-coupon-start-date"
                                        value="<?= $sd; ?>">
                             </div>
                             <div class="form-group col-xl-3">
@@ -113,11 +113,11 @@ $validator = form_validator();
                                 <?php
                                 $ed = $validator->setInput('inp-add-coupon-end-date', time());
                                 ?>
-                                <input type="hidden" name="expire" id="altEndDate" value="<?= $ed; ?>">
+                                <input type="hidden" name="inp-add-coupon-end-date"
+                                       id="altEndDate" value="<?= $ed; ?>">
                                 <input type="text" class="form-control range-to"
-                                       placeholder="انتخاب تاریخ" readonly
+                                       placeholder="انتخاب تاریخ" readonly data-ignored
                                        data-alt-field="#altEndDate"
-                                       name="inp-add-coupon-end-date"
                                        value="<?= $ed; ?>">
                             </div>
                         </div>

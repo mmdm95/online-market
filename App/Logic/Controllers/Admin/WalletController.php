@@ -24,13 +24,15 @@ class WalletController extends AbstractAdminController
      */
     public function view($id = null)
     {
+        $data = [];
+
         if (!is_null($id)) {
             $this->setLayout($this->main_layout)->setTemplate('view/wallet/user-wallet');
         } else {
             $this->setLayout($this->main_layout)->setTemplate('view/wallet/view');
         }
 
-        return $this->render();
+        return $this->render($data);
     }
 
     /**
@@ -44,9 +46,7 @@ class WalletController extends AbstractAdminController
      */
     public function depositType()
     {
-
         $this->setLayout($this->main_layout)->setTemplate('view/wallet/deposit-type');
-
         return $this->render();
     }
 }

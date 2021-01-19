@@ -1,15 +1,15 @@
 <?php
 
 return [
-    'view/festival/add' => [
-        'title' => title_concat(\config()->get('settings.title.value'), 'افزودن جشنواره'),
+    'view/product/add' => [
+        'title' => title_concat(\config()->get('settings.title.value'), 'افزودن محصول جدید'),
         'common' => [
             'admin-base',
-            'admin-date',
             'admin-form',
+            'admin-editor',
             'admin'
         ],
-        'sub_title' => 'افزودن جشنواره',
+        'sub_title' => 'افزودن محصول',
         'breadcrumb' => [
             [
                 'url' => url('admin.index')->getRelativeUrl(),
@@ -18,25 +18,25 @@ return [
                 'is_active' => false,
             ],
             [
-                'url' => url('admin.festival.add')->getRelativeUrl(),
-                'text' => 'مدیریت جشنواره',
+                'url' => url('admin.product.view', '')->getRelativeUrl(),
+                'text' => 'مدیریت محصولات',
                 'is_active' => false,
             ],
             [
-                'text' => 'افزودن جشنواره',
+                'text' => 'افزودن محصول جدید',
                 'is_active' => true,
             ],
         ],
     ],
-    'view/festival/edit' => [
-        'title' => title_concat(\config()->get('settings.title.value'), 'ویرایش جشنواره'),
+    'view/product/edit' => [
+        'title' => title_concat(\config()->get('settings.title.value'), 'ویرایش محصول'),
         'common' => [
             'admin-base',
-            'admin-date',
             'admin-form',
+            'admin-editor',
             'admin'
         ],
-        'sub_title' => 'ویرایش جشنواره',
+        'sub_title' => 'ویرایش محصول',
         'breadcrumb' => [
             [
                 'url' => url('admin.index')->getRelativeUrl(),
@@ -45,24 +45,24 @@ return [
                 'is_active' => false,
             ],
             [
-                'url' => url('admin.festival.view')->getRelativeUrl(),
-                'text' => 'مدیریت جشنواره‌ها',
+                'url' => url('admin.product.view', '')->getRelativeUrl(),
+                'text' => 'مدیریت محصولات',
                 'is_active' => false,
             ],
             [
-                'text' => 'افزودن جشنواره',
+                'text' => 'ویرایش محصول',
                 'is_active' => true,
             ],
         ],
     ],
-    'view/festival/view' => [
-        'title' => title_concat(\config()->get('settings.title.value'), 'مدیریت جشنواره‌ها'),
+    'view/product/view' => [
+        'title' => title_concat(\config()->get('settings.title.value'), 'مدیریت محصولات'),
         'common' => [
             'admin-base',
             'admin-table',
             'admin'
         ],
-        'sub_title' => 'جشنواره‌ها',
+        'sub_title' => 'محصولات',
         'breadcrumb' => [
             [
                 'url' => url('admin.index')->getRelativeUrl(),
@@ -71,7 +71,7 @@ return [
                 'is_active' => false,
             ],
             [
-                'text' => 'افزودن جشنواره',
+                'text' => 'مدیریت محصولات',
                 'is_active' => true,
             ],
         ],

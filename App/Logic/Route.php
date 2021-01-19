@@ -207,6 +207,41 @@ class Route implements IInitialize
                     'id' => '[0-9]+',
                 ])->name('admin.festival.edit');
                 Router::get('/festival/view', 'Admin\FestivalController@view')->name('admin.festival.view');
+                Router::post('/festival/view/dt', 'Admin\FestivalController@getPaginatedDatatable')->name('admin.festival.dt.view');
+
+                /**
+                 * Brand Route
+                 */
+                Router::form('/brand/add', 'Admin\BrandController@add')->name('admin.brand.add');
+                Router::form('/brand/edit/{id}', 'Admin\BrandController@edit')->where([
+                    'id' => '[0-9]+',
+                ])->name('admin.brand.edit');
+                Router::get('/brand/view', 'Admin\BrandController@view')->name('admin.brand.view');
+                Router::post('/brand/view/dt', 'Admin\BrandController@getPaginatedDatatable')
+                    ->name('admin.brand.dt.view');
+
+                /**
+                 * Product Route
+                 */
+                Router::form('/product/add', 'Admin\ProductController@add')->name('admin.product.add');
+                Router::form('/product/edit/{id}', 'Admin\ProductController@edit')->where([
+                    'id' => '[0-9]+',
+                ])->name('admin.product.edit');
+                Router::get('/product/view', 'Admin\ProductController@view')->name('admin.product.view');
+                Router::post('/product/view/dt/{p_id}', 'Admin\ProductController@getPaginatedDatatable')->where([
+                    'p_id' => '[0-9]+',
+                ])->name('admin.product.dt.view');
+
+                /**
+                 * Comment Route
+                 */
+                Router::get('/comment/view/{p_id}/{id?}', 'Admin\CommentController@view')->where([
+                    'p_id' => '[0-9]+',
+                    'id' => '[0-9]+',
+                ])->name('admin.comment.view');
+                Router::post('/comment/view/dt/{p_id}', 'Admin\CommentController@getPaginatedDatatable')->where([
+                    'p_id' => '[0-9]+',
+                ])->name('admin.comment.dt.view');
 
                 /**
                  * Blog Route
@@ -240,17 +275,6 @@ class Route implements IInitialize
                 Router::post('/static-page/view/dt', 'Admin\StaticPageController@getPaginatedDatatable')->name('admin.static.page.dt.view');
 
                 /**
-                 * Brand Route
-                 */
-                Router::form('/brand/add', 'Admin\BrandController@add')->name('admin.brand.add');
-                Router::form('/brand/edit/{id}', 'Admin\BrandController@edit')->where([
-                    'id' => '[0-9]+',
-                ])->name('admin.brand.edit');
-                Router::get('/brand/view', 'Admin\BrandController@view')->name('admin.brand.view');
-                Router::post('/brand/view/dt', 'Admin\BrandController@getPaginatedDatatable')
-                    ->name('admin.brand.dt.view');
-
-                /**
                  * Unit Route
                  */
                 Router::get('/unit/view', 'Admin\UnitController@view')->name('admin.unit.view');
@@ -261,15 +285,6 @@ class Route implements IInitialize
                  */
                 Router::get('/faq/view', 'Admin\FaqController@view')->name('admin.faq.view');
                 Router::post('/faq/view/dt', 'Admin\FaqController@getPaginatedDatatable')->name('admin.faq.dt.view');
-
-                /**
-                 * Comment Route
-                 */
-                Router::get('/comment/view/{id?}', 'Admin\CommentController@view')->where([
-                    'id' => '[0-9]+',
-                ])->name('admin.comment.view');
-                Router::post('/comment/view/dt', 'Admin\CommentController@getPaginatedDatatable')
-                    ->name('admin.comment.dt.view');
 
                 /**
                  * Contact Us Route
@@ -302,7 +317,7 @@ class Route implements IInitialize
                 Router::get('/wallet/view/{id?}', 'Admin\WalletController@view')->where([
                     'id' => '[0-9]+',
                 ])->name('admin.wallet.view');
-                Router::get('/wallet/deposit-type', 'Admin\WalletController@depositType')->name('admin.wallet.deposit-type');
+                Router::form('/wallet/deposit-type', 'Admin\WalletController@depositType')->name('admin.wallet.deposit-type');
 
                 /**
                  * Order Route
@@ -615,6 +630,26 @@ class Route implements IInitialize
                 ])->name('ajax.color.remove');
 
                 /**
+                 * brand route
+                 */
+                Router::post('/brand/slider-status/{id}', 'Admin\BrandController@sliderStatusChange')->where([
+                    'id' => '[0-9]+',
+                ])->name('ajax.brand.slider.status');
+
+                /**
+                 * festival route
+                 */
+                Router::delete('/festival/{id}', 'Admin\FestivalController@remove')->where([
+                    'id' => '[0-9]+',
+                ])->name('ajax.festival.remove');
+                Router::post('/festival/pub-status/{id}', 'Admin\FestivalController@pubStatusChange')->where([
+                    'id' => '[0-9]+',
+                ])->name('ajax.festival.pub.status');
+                Router::post('/festival/main-status/{id}', 'Admin\FestivalController@mainStatusChange')->where([
+                    'id' => '[0-9]+',
+                ])->name('ajax.festival.main.status');
+
+                /**
                  * slider route
                  */
                 Router::get('/slider/get/{id}', 'Admin\SliderController@get')->where([
@@ -639,13 +674,6 @@ class Route implements IInitialize
                 Router::post('/admin/newsletter/add/{id}', 'Admin\NewsletterController@add')->where([
                     'id' => '[0-9]+',
                 ])->name('ajax.admin.newsletter.add');
-
-                /**
-                 * brand route
-                 */
-                Router::post('/brand/slider-status/{id}', 'Admin\BrandController@sliderStatusChange')->where([
-                    'id' => '[0-9]+',
-                ])->name('ajax.brand.slider.status');
 
                 /**
                  * instagram route

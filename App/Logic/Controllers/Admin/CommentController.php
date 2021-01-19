@@ -8,6 +8,7 @@ use App\Logic\Handlers\GeneralAjaxRemoveHandler;
 use App\Logic\Handlers\ResourceHandler;
 use App\Logic\Interfaces\IDatatableController;
 use App\Logic\Models\BaseModel;
+use App\Logic\Models\CommentModel;
 use App\Logic\Utils\Jdf;
 use Jenssegers\Agent\Agent;
 use Sim\Container\Exceptions\MethodNotFoundException;
@@ -82,23 +83,37 @@ class CommentController extends AbstractAdminController implements IDatatableCon
     public function getPaginatedDatatable(...$_): void
     {
         try {
+            [$product_id] = $_;
+
             /**
              * @var Agent $agent
              */
             $agent = container()->get(Agent::class);
             if (!$agent->isRobot()) {
-                emitter()->addListener('datatable.ajax:load', function (IEvent $event, $cols, $where, $bindValues, $limit, $offset, $order) {
+                emitter()->addListener('datatable.ajax:load', function (IEvent $event, $cols, $where, $bindValues, $limit, $offset, $order) use ($product_id) {
                     $event->stopPropagation();
 
                     /**
-                     * @var ComplaintModel $complaintModel
+                     * @var CommentModel $commentModel
                      */
-                    $complaintModel = container()->get(ComplaintModel::class);
+                    $commentModel = container()->get(CommentModel::class);
 
-                    $data = $complaintModel->get($cols, $where, $bindValues, $order, $limit, $offset);
+                    if (!empty($where)) {
+                        $where .= ' AND (product_id=:pId)';
+                    } else {
+                        $where = 'product_id=:pId';
+                    }
+                    $bindValues = array_merge($bindValues, [
+                        'pId' => $product_id,
+                    ]);
+
+                    // add needed product info to show to user
+                    // ...
+
+                    $data = $commentModel->getComments($where, $bindValues, $limit, $offset, $order, $cols);
                     //-----
-                    $recordsFiltered = $complaintModel->count($where, $bindValues);
-                    $recordsTotal = $complaintModel->count();
+                    $recordsFiltered = $commentModel->getCommentsCount($where, $bindValues);
+                    $recordsTotal = $commentModel->getCommentsCount('product_id=:pId', ['pId' => $product_id]);
 
                     return [$data, $recordsFiltered, $recordsTotal];
                 });

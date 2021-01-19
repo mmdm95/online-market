@@ -386,7 +386,7 @@ class UserController extends AbstractAdminController implements IDatatableContro
                     $data = $orderModel->get($cols, $where, $bindValues, $order, $limit, $offset);
                     //-----
                     $recordsFiltered = $orderModel->count($where, $bindValues);
-                    $recordsTotal = $orderModel->count();
+                    $recordsTotal = $orderModel->count('user_id=:uId', ['uId' => $user_id]);
 
                     return [$data, $recordsFiltered, $recordsTotal];
                 });

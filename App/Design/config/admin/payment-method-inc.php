@@ -6,7 +6,6 @@ return [
         'common' => [
             'admin-base',
             'admin-form',
-            'admin-editor',
             'admin'
         ],
         'sub_title' => 'افزودن روش پرداخت',

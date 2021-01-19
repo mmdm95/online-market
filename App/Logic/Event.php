@@ -48,6 +48,7 @@ class Event
         $eventProvider->addEvent(new TheEvent('status.general.ajax:not_exists'));
         $eventProvider->addEvent(new TheEvent('status.general.ajax:failed'));
         $eventProvider->addEvent(new TheEvent('status.general.ajax:success'));
+        $eventProvider->addEvent(new TheEvent('status.general.ajax:before_update'));
 
         return $eventProvider;
     }

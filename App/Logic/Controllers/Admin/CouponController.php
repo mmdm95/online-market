@@ -227,10 +227,14 @@ class CouponController extends AbstractAdminController implements IDatatableCont
                         'dt' => 'start_date',
                         'formatter' => function ($d) {
                             if (!empty($d)) {
-                                return Jdf::jdate(DEFAULT_TIME_FORMAT, $d);
+                                $date = Jdf::jdate(DEFAULT_TIME_FORMAT, $d);
+                                if ($d > time()) {
+                                    $date = "<span class='text-success'>" . $date . "</span>";
+                                }
                             } else {
-                                return $this->setTemplate('partial/admin/parser/dash-icon')->render();
+                                $date = $this->setTemplate('partial/admin/parser/dash-icon')->render();
                             }
+                            return $date;
                         }
                     ],
                     [
@@ -239,10 +243,14 @@ class CouponController extends AbstractAdminController implements IDatatableCont
                         'dt' => 'end_date',
                         'formatter' => function ($d) {
                             if (!empty($d)) {
-                                return Jdf::jdate(DEFAULT_TIME_FORMAT, $d);
+                                $date = Jdf::jdate(DEFAULT_TIME_FORMAT, $d);
+                                if ($d < time()) {
+                                    $date = "<span class='text-danger'>" . $date . "</span>";
+                                }
                             } else {
-                                return $this->setTemplate('partial/admin/parser/dash-icon')->render();
+                                $date = $this->setTemplate('partial/admin/parser/dash-icon')->render();
                             }
+                            return $date;
                         }
                     ],
                     [

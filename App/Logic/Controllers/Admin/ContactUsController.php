@@ -132,9 +132,9 @@ class ContactUsController extends AbstractAdminController implements IDatatableC
                 });
 
                 $columns = [
-                    ['db' => 'id', 'db_alias' => 'id', 'dt' => 'id'],
+                    ['db' => 'cu.id', 'db_alias' => 'id', 'dt' => 'id'],
                     [
-                        'db' => 'name',
+                        'db' => 'cu.name',
                         'db_alias' => 'name',
                         'dt' => 'name',
                         'formatter' => function ($d, $row) {
@@ -149,9 +149,9 @@ class ContactUsController extends AbstractAdminController implements IDatatableC
                             }
                         }
                     ],
-                    ['db' => 'title', 'db_alias' => 'title', 'dt' => 'title'],
+                    ['db' => 'cu.title', 'db_alias' => 'title', 'dt' => 'title'],
                     [
-                        'db' => 'created_at',
+                        'db' => 'cu.created_at',
                         'db_alias' => 'created_at',
                         'dt' => 'sent_date',
                         'formatter' => function ($d) {
@@ -159,7 +159,7 @@ class ContactUsController extends AbstractAdminController implements IDatatableC
                         }
                     ],
                     [
-                        'db' => 'status',
+                        'db' => 'cu.status',
                         'db_alias' => 'status',
                         'dt' => 'status',
                         'formatter' => function ($d) {
