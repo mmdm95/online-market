@@ -193,6 +193,13 @@ window.MyGlobalVariables = {
                     message: '^' + 'لینک وارد شده نامعتبر است.',
                 },
             },
+            percent: {
+                length: {
+                    minimum: 0,
+                    maximum: 100,
+                    message: '^' + '{percent}' + ' باید بین ۰ و ۱۰۰ باشد.',
+                },
+            }
         },
     },
 };

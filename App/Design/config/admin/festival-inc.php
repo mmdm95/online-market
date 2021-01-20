@@ -55,6 +55,31 @@ return [
             ],
         ],
     ],
+    'view/festival/detail' => [
+        'title' => title_concat(\config()->get('settings.title.value'), 'ویرایش محصولات جشنواره'),
+        'common' => [
+            'admin-base',
+            'admin-table',
+            'admin'
+        ],
+        'breadcrumb' => [
+            [
+                'url' => url('admin.index')->getRelativeUrl(),
+                'icon' => 'icon-home2',
+                'text' => 'خانه',
+                'is_active' => false,
+            ],
+            [
+                'url' => url('admin.festival.view')->getRelativeUrl(),
+                'text' => 'مدیریت جشنواره‌ها',
+                'is_active' => false,
+            ],
+            [
+                'text' => 'ویرایش محصولات جشنواره',
+                'is_active' => true,
+            ],
+        ],
+    ],
     'view/festival/view' => [
         'title' => title_concat(\config()->get('settings.title.value'), 'مدیریت جشنواره‌ها'),
         'common' => [

@@ -54,6 +54,11 @@ class AddCouponForm implements IPageForm
                 'inp-add-coupon-use-after',
                 'inp-add-coupon-start-date',
                 'inp-add-coupon-end-date',
+            ])
+            ->toEnglishValue(true, true)
+            ->toEnglishValueExceptFields([
+                'inp-edit-coupon-code',
+                'inp-edit-coupon-title',
             ]);
 
         /**
@@ -86,10 +91,6 @@ class AddCouponForm implements IPageForm
             ->stopValidationAfterFirstError(false)
             ->required()
             ->stopValidationAfterFirstError(true)
-            ->custom(function (FormValue $value) {
-                $value->replaceValue(StringUtil::toEnglish($value->getValue()));
-                return true;
-            }, '')
             ->regex('/[0-9]+/', '{alias} ' . 'باید از نوع عددی باشد.')
             ->greaterThan(0);
         // min & max price
@@ -98,10 +99,6 @@ class AddCouponForm implements IPageForm
                 'inp-add-coupon-max-price',
                 'inp-add-coupon-min-price',
             ])
-            ->custom(function (FormValue $value) {
-                $value->replaceValue(StringUtil::toEnglish($value->getValue()));
-                return true;
-            }, '')
             ->regex('/[0-9]+/', '{alias} ' . 'باید از نوع عددی باشد.')
             ->greaterThan(0);
         // min price
@@ -130,7 +127,13 @@ class AddCouponForm implements IPageForm
                 'inp-add-coupon-start-date',
                 'inp-add-coupon-end-date'
             ])
-            ->timestamp();
+            ->timestamp()
+            ->custom(function (FormValue $value) {
+                if (false === date(DEFAULT_TIME_FORMAT, $value->getValue())) {
+                    return false;
+                }
+                return true;
+            }, '{alias} ' . 'یک زمان وارد شده نامعتبر است.');
         // start date
         if ($validator->getFieldValue('inp-add-coupon-end-date', 0) > 0) {
             $validator
@@ -148,8 +151,8 @@ class AddCouponForm implements IPageForm
 
         return [
             $validator->getStatus(),
-            $validator->getError(),
             $validator->getUniqueErrors(),
+            $validator->getError(),
             $validator->getFormattedError('<p class="m-0">'),
             $validator->getFormattedUniqueErrors('<p class="m-0">'),
             $validator->getRawErrors(),

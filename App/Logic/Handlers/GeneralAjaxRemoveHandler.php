@@ -94,22 +94,25 @@ class GeneralAjaxRemoveHandler implements IHandler
                         ->errorMessage('آیتم مورد نظر وجود ندارد.');
                     emitter()->dispatch('remove.general.ajax:not_exists', [&$this->resourceHandler]);
                 } else {
-                    $delete = $model->delete();
-                    $delete
-                        ->from($table)
-                        ->where('id=:id')
-                        ->bindValue('id', $id);
-                    $res = $model->execute($delete);
-                    if ($res) {
-                        $this->resourceHandler
-                            ->type(RESPONSE_TYPE_SUCCESS)
-                            ->data('آیتم با موفقیت حذف شد.');
-                        emitter()->dispatch('remove.general.ajax:success', [&$this->resourceHandler]);
-                    } else {
-                        $this->resourceHandler
-                            ->type(RESPONSE_TYPE_ERROR)
-                            ->errorMessage('امکان حذف این آیتم وجود ندارد.');
-                        emitter()->dispatch('remove.general.ajax:failed', [&$this->resourceHandler]);
+                    $emRes = emitter()->dispatch('remove.general.ajax:custom_handler', [&$this->resourceHandler]);
+                    if (is_null($emRes) || (bool)$emRes->getReturnValue()) {
+                        $delete = $model->delete();
+                        $delete
+                            ->from($table)
+                            ->where('id=:id')
+                            ->bindValue('id', $id);
+                        $res = $model->execute($delete);
+                        if ($res) {
+                            $this->resourceHandler
+                                ->type(RESPONSE_TYPE_SUCCESS)
+                                ->data('آیتم با موفقیت حذف شد.');
+                            emitter()->dispatch('remove.general.ajax:success', [&$this->resourceHandler]);
+                        } else {
+                            $this->resourceHandler
+                                ->type(RESPONSE_TYPE_ERROR)
+                                ->errorMessage('امکان حذف این آیتم وجود ندارد.');
+                            emitter()->dispatch('remove.general.ajax:failed', [&$this->resourceHandler]);
+                        }
                     }
                 }
             }

@@ -76,7 +76,7 @@ class StaticPageModel extends BaseModel
      */
     public function getPagesCount(?string $where = null, array $bind_values = []): int
     {
-        $res = $this->getPages(['COUNT(DISCOUNT(sp.id)) AS count'], $where, $bind_values, null, 0, [], []);
+        $res = $this->getPages(['COUNT(DISTINCT(sp.id)) AS count'], $where, $bind_values, null, 0, [], []);
         if (count($res)) {
             return (int)$res[0]['count'];
         }

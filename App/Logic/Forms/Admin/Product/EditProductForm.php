@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Logic\Forms\Admin\Festival;
+namespace App\Logic\Forms\Admin\Product;
 
 use App\Logic\Interfaces\IPageForm;
 use App\Logic\Models\FestivalModel;
@@ -15,7 +15,7 @@ use Sim\Form\FormValue;
 use Sim\Utils\StringUtil;
 use voku\helper\AntiXSS;
 
-class EditFestivalForm implements IPageForm
+class EditProductForm implements IPageForm
 {
     /**
      * {@inheritdoc}

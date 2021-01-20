@@ -31,6 +31,7 @@ class Event
         $eventProvider->addEvent(new TheEvent('remove.general.ajax:not_exists'));
         $eventProvider->addEvent(new TheEvent('remove.general.ajax:failed'));
         $eventProvider->addEvent(new TheEvent('remove.general.ajax:success'));
+        $eventProvider->addEvent(new TheEvent('remove.general.ajax:custom_handler'));
 
         // general ajax form events
         $eventProvider->addEvent(new TheEvent('form.general.ajax:success'));

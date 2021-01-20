@@ -22,12 +22,12 @@ $validator = form_validator();
                 <div class="row">
                     <div class="col-12">
                         <div class="row">
-                            <fieldset class="col-12">
+                            <fieldset class="col-lg-12">
                                 <legend class="font-weight-semibold">
                                     <i class="icon-info22 mr-2"></i>
                                     وضعیت جشنواره
                                 </legend>
-                                <div class="form-group col-12 text-right">
+                                <div class="form-group text-right">
                                     <div class="form-check form-check-switchery form-check-switchery-double">
                                         <label class="form-check-label">
                                             فعال
@@ -40,21 +40,46 @@ $validator = form_validator();
                                     </div>
                                 </div>
                             </fieldset>
-                            <div class="form-group col-6">
-                                <label>نام جشنواره:</label>
-                                <input type="text" class="form-control" placeholder="وارد کنید">
+                            <div class="form-group col-lg-6">
+                                <label>
+                                    <span class="text-danger">*</span>
+                                    نام جشنواره:
+                                </label>
+                                <input type="text" class="form-control" placeholder="وارد کنید"
+                                       name="inp-add-festival-title"
+                                       value="<?= $validator->setInput('inp-add-festival-title'); ?>">
                             </div>
                         </div>
                     </div>
-                    <div class="form-group col-6">
-                        <label>تاریخ شروع:</label>
-                        <input type="text" class="form-control persian-calender" placeholder="تاریخ شمسی"
-                               readonly="readonly">
+                    <div class="form-group col-lg-6">
+                        <label>
+                            <span class="text-danger">*</span>
+                            تاریخ شروع جشنواره:
+                        </label>
+                        <?php
+                        $sd = $validator->setInput('inp-add-festival-start-date', time());
+                        ?>
+                        <input type="hidden" name="inp-add-festival-start-date"
+                               id="altStartDate" value="<?= $sd; ?>">
+                        <input type="text" class="form-control range-from"
+                               placeholder="انتخاب تاریخ" readonly data-ignored
+                               data-alt-field="#altStartDate"
+                               value="<?= $sd; ?>">
                     </div>
-                    <div class="form-group col-6">
-                        <label>تاریخ پایان جشنواره:</label>
-                        <input type="text" class="form-control persian-calender" placeholder="تاریخ شمسی"
-                               readonly="readonly">
+                    <div class="form-group col-lg-6">
+                        <label>
+                            <span class="text-danger">*</span>
+                            تاریخ پایان جشنواره:
+                        </label>
+                        <?php
+                        $ed = $validator->setInput('inp-add-festival-end-date', time());
+                        ?>
+                        <input type="hidden" name="inp-add-festival-end-date"
+                               id="altEndDate" value="<?= $ed; ?>">
+                        <input type="text" class="form-control range-to"
+                               placeholder="انتخاب تاریخ" readonly data-ignored
+                               data-alt-field="#altEndDate"
+                               value="<?= $ed; ?>">
                     </div>
                 </div>
                 <div class="text-right">

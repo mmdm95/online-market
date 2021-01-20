@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Logic\Controllers\Admin;
 
 use App\Logic\Abstracts\AbstractAdminController;
@@ -32,12 +31,12 @@ class FestivalController extends AbstractAdminController implements IDatatableCo
 {
     /**
      * @return string
-     * @throws ReflectionException
      * @throws ConfigNotRegisteredException
      * @throws ControllerException
-     * @throws PathNotRegisteredException
      * @throws IFileNotExistsException
      * @throws IInvalidVariableNameException
+     * @throws PathNotRegisteredException
+     * @throws ReflectionException
      */
     public function view()
     {

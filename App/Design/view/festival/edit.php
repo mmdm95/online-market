@@ -4,44 +4,76 @@
         <?php load_partial('admin/card-header', ['header_title' => 'ویرایش جشنواره']); ?>
 
         <div class="card-body">
-            <form action="#">
+            <form action="<?= url('admin.festival.edit')->getRelativeUrl() . $festival['id']; ?>" method="post"
+                  id="__form_edit_festival">
+                <?php load_partial('admin/message/message-form', [
+                    'errors' => $festival_edit_errors ?? [],
+                    'success' => $festival_edit_success ?? '',
+                    'warning' => $festival_edit_warning ?? '',
+                ]); ?>
+
+                <input type="hidden" name="csrf_token" value="<?= csrf_token(); ?>" data-ignored>
                 <div class="row">
-                    <div class="col-md-12">
-                        <fieldset>
-                            <div class="row">
-                                <fieldset class="col-12">
-                                    <legend class="font-weight-semibold">
-                                        <i class="icon-info22 mr-2"></i>
-                                        وضعیت جشنواره
-                                    </legend>
-                                    <div class="form-group col-12 text-right">
-                                        <div class="form-check form-check-switchery form-check-switchery-double">
-                                            <label class="form-check-label">
-                                                فعال
-                                                <input type="checkbox" class="form-check-input-switchery" checked>
-                                                غیرفعال
-                                            </label>
-                                        </div>
+                    <div class="col-12">
+                        <div class="row">
+                            <fieldset class="col-lg-12">
+                                <legend class="font-weight-semibold">
+                                    <i class="icon-info22 mr-2"></i>
+                                    وضعیت جشنواره
+                                </legend>
+                                <div class="form-group text-right">
+                                    <div class="form-check form-check-switchery form-check-switchery-double">
+                                        <label class="form-check-label">
+                                            فعال
+                                            <input type="checkbox" class="form-check-input-switchery"
+                                                   name="inp-edit-festival-status"
+                                                <?= $validator->setCheckbox('inp-edit-festival-status', 'on') ?: (is_value_checked($festival['title']) ? 'checked="checked"' : ''); ?>
+                                                   data-fouc>
+                                            غیرفعال
+                                        </label>
                                     </div>
-                                </fieldset>
-                                <div class="form-group col-6">
-                                    <label>نام جشنواره:</label>
-                                    <input type="text" class="form-control" placeholder="وارد کنید">
                                 </div>
-                                <div class="form-group col-6">
-                                    <label>کوپن جشنواره:</label>
-                                    <input type="text" class="form-control" placeholder="به طور مثال: nowrooz1400">
-                                </div>
-                                <div class="form-group col-6">
-                                    <label>تاریخ شروع:</label>
-                                    <input type="text" class="form-control persian-calender" placeholder="تاریخ شمسی" readonly="readonly">
-                                </div>
-                                <div class="form-group col-6">
-                                    <label>تاریخ پایان جشنواره:</label>
-                                    <input type="text" class="form-control persian-calender" placeholder="تاریخ شمسی" readonly="readonly">
-                                </div>
+                            </fieldset>
+                            <div class="form-group col-lg-6">
+                                <label>
+                                    <span class="text-danger">*</span>
+                                    نام جشنواره:
+                                </label>
+                                <input type="text" class="form-control" placeholder="وارد کنید"
+                                       name="inp-edit-festival-title"
+                                       value="<?= $validator->setInput('inp-edit-festival-title') ?: $festival['title']; ?>">
                             </div>
-                        </fieldset>
+                        </div>
+                    </div>
+                    <div class="form-group col-lg-6">
+                        <label>
+                            <span class="text-danger">*</span>
+                            تاریخ شروع جشنواره:
+                        </label>
+                        <?php
+                        $sd = $validator->setInput('inp-edit-festival-start-date', '') ?: ($festival['start_at'] ?: '');
+                        ?>
+                        <input type="hidden" name="inp-edit-festival-start-date"
+                               id="altStartDate" value="<?= $sd; ?>">
+                        <input type="text" class="form-control range-from"
+                               placeholder="انتخاب تاریخ" readonly data-ignored
+                               data-alt-field="#altStartDate"
+                               value="<?= $sd; ?>">
+                    </div>
+                    <div class="form-group col-lg-6">
+                        <label>
+                            <span class="text-danger">*</span>
+                            تاریخ پایان جشنواره:
+                        </label>
+                        <?php
+                        $ed = $validator->setInput('inp-edit-festival-end-date', '') ?: ($festival['expire_at'] ?: '');
+                        ?>
+                        <input type="hidden" name="inp-edit-festival-end-date"
+                               id="altEndDate" value="<?= $ed; ?>">
+                        <input type="text" class="form-control range-to"
+                               placeholder="انتخاب تاریخ" readonly data-ignored
+                               data-alt-field="#altEndDate"
+                               value="<?= $ed; ?>">
                     </div>
                 </div>
                 <div class="text-right">

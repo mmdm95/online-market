@@ -73,6 +73,12 @@
             edit: '/ajax/sec-question/edit',
             remove: '/ajax/sec-question/remove',
         },
+        productFestival: {
+            addProduct: '/ajax/product/festival/add',
+            addCategory: '/ajax/product/festival/add-category',
+            remove: '/ajax/product/festival/remove',
+            removeCategory: '/ajax/product/festival/category/remove',
+        },
     });
     window.MyGlobalVariables.elements = $.extend(true, window.MyGlobalVariables.elements, {
         addAddress: {
@@ -377,6 +383,32 @@
             form: '#__form_add_festival',
             inputs: {
                 status: 'inp-add-festival-status',
+                title: 'inp-add-festival-title',
+                start: 'inp-add-festival-start-date',
+                end: 'inp-add-festival-end-date',
+            },
+        },
+        editFestival: {
+            form: '#__form_edit_festival',
+            inputs: {
+                status: 'inp-edit-festival-status',
+                title: 'inp-edit-festival-title',
+                start: 'inp-edit-festival-start-date',
+                end: 'inp-edit-festival-end-date',
+            },
+        },
+        addProductFestival: {
+            form: '#__form_add_product_festival',
+            inputs: {
+                product: 'inp-add-product-festival-product',
+                percent: 'inp-add-product-festival-percent',
+            },
+        },
+        modifyProductFestival: {
+            form: '#__form_modify_product_festival',
+            inputs: {
+                category: 'inp-modify-product-festival-category',
+                percent: 'inp-modify-product-festival-percent',
             },
         },
     });
@@ -1060,6 +1092,86 @@
                     },
                 },
             },
+            addFestival: {
+                title: {
+                    presence: {
+                        allowEmpty: false,
+                        message: '^' + 'عنوان جشنواره را وارد کنید.',
+                    },
+                    length: {
+                        maximum: 250,
+                        message: '^' + 'عنوان جشنواره حداکثر باید ۲۵۰ کاراکتر باشد.',
+                    },
+                },
+                start: {
+                    presence: {
+                        allowEmpty: false,
+                        message: '^' + 'تاریخ شروع را انتخاب کنید.',
+                    },
+                    format: {
+                        pattern: /[0-9]+/,
+                        message: '^' + 'تاریخ شروع نامعتبر است.',
+                    },
+                },
+                end: {
+                    presence: {
+                        allowEmpty: false,
+                        message: '^' + 'تاریخ پایان را انتخاب کنید.',
+                    },
+                    format: {
+                        pattern: /[0-9]+/,
+                        message: '^' + 'تاریخ پایان نامعتبر است.',
+                    },
+                },
+            },
+            editFestival: {
+                title: {
+                    presence: {
+                        allowEmpty: false,
+                        message: '^' + 'عنوان جشنواره را وارد کنید.',
+                    },
+                    length: {
+                        maximum: 250,
+                        message: '^' + 'عنوان جشنواره حداکثر باید ۲۵۰ کاراکتر باشد.',
+                    },
+                },
+                start: {
+                    presence: {
+                        allowEmpty: false,
+                        message: '^' + 'تاریخ شروع را انتخاب کنید.',
+                    },
+                    format: {
+                        pattern: /[0-9]+/,
+                        message: '^' + 'تاریخ شروع نامعتبر است.',
+                    },
+                },
+                end: {
+                    presence: {
+                        allowEmpty: false,
+                        message: '^' + 'تاریخ پایان را انتخاب کنید.',
+                    },
+                    format: {
+                        pattern: /[0-9]+/,
+                        message: '^' + 'تاریخ پایان نامعتبر است.',
+                    },
+                },
+            },
+            addProductFestival: {
+                product: {
+                    presence: {
+                        allowEmpty: false,
+                        message: '^' + 'محصول را انتخاب کنید.',
+                    },
+                },
+            },
+            modifyProductFestival: {
+                category: {
+                    presence: {
+                        allowEmpty: false,
+                        message: '^' + 'دسته‌بندی را انتخاب کنید.',
+                    },
+                },
+            },
         },
     });
 
@@ -1112,10 +1224,13 @@
             loaderId,
             createLoader = true,
             //-----
-            currentTable = null,
-            currentCategoryId = null,
             userIdInp,
             userId = null,
+            festivalIdInp,
+            festivalId = null,
+            //-----
+            currentTable = null,
+            currentCategoryId = null,
             editAddrId = null,
             editUnitId = null,
             editFAQId = null,
@@ -1293,11 +1408,34 @@
                 image: variables.validation.constraints.editPaymentMethod.image,
                 title: variables.validation.constraints.editPaymentMethod.title,
             },
+            addFestival: {
+                title: variables.validation.constraints.addFestival.title,
+                start: variables.validation.constraints.addFestival.start,
+                end: variables.validation.constraints.addFestival.end,
+            },
+            editFestival: {
+                title: variables.validation.constraints.editFestival.title,
+                start: variables.validation.constraints.editFestival.start,
+                end: variables.validation.constraints.editFestival.end,
+            },
+            addProductFestival: {
+                product: variables.validation.constraints.addProductFestival.product,
+                percent: variables.validation.common.percent,
+            },
+            modifyProductFestival: {
+                category: variables.validation.constraints.modifyProductFestival.category,
+                percent: variables.validation.common.percent,
+            },
         };
 
         userIdInp = $('input[type="hidden"][data-user-id]');
         if (userIdInp.length) {
             userId = userIdInp.val();
+        }
+
+        festivalIdInp = $('input[type="hidden"][data-festival-id]');
+        if (festivalIdInp.length) {
+            festivalId = festivalIdInp.val();
         }
 
         /**
@@ -3332,6 +3470,143 @@
         }, function (errors) {
             admin.forms.showFormErrors(errors);
             return false;
+        });
+
+        //---------------------------------------------------------------
+        // ADD FESTIVAL FORM
+        //---------------------------------------------------------------
+        admin.forms.submitForm('addFestival', constraints.addFestival, function () {
+            return true;
+        }, function (errors) {
+            admin.forms.showFormErrors(errors);
+            return false;
+        });
+
+        //---------------------------------------------------------------
+        // Edit FESTIVAL FORM
+        //---------------------------------------------------------------
+        admin.forms.submitForm('editFestival', constraints.editFestival, function () {
+            return true;
+        }, function (errors) {
+            admin.forms.showFormErrors(errors);
+            return false;
+        });
+
+        //---------------------------------------------------------------
+        // ADD PRODUCT TO FESTIVAL FORM
+        //---------------------------------------------------------------
+        admin.forms.submitForm('addProductFestival', constraints.addProductFestival, function (values) {
+            // do ajax
+            if (createLoader) {
+                createLoader = false;
+                loaderId = admin.showLoader();
+            }
+            admin.request(variables.url.productFestival.addProduct + '/' + festivalId, 'post', function () {
+                admin.hideLoader(loaderId);
+                // clear element after success
+                $(variables.elements.addProductFestival.form).reset();
+                if (currentTable) {
+                    $(currentTable).DataTable().ajax.reload(null, true);
+                    currentTable = null;
+                }
+                //-----
+                admin.toasts.toast(this.data, {
+                    type: variables.toasts.types.success,
+                });
+                createLoader = true;
+            }, {
+                data: values,
+            }, true, function () {
+                createLoader = true;
+            });
+            return false;
+        }, function (errors) {
+            admin.forms.showFormErrors(errors);
+            return false;
+        }, {
+            '{percent}': 'درصد تخفیف',
+        });
+
+        //---------------------------------------------------------------
+        // ADD CATEGORY TO FESTIVAL FORM
+        //---------------------------------------------------------------
+        admin.forms.submitForm('modifyProductFestival', constraints.modifyProductFestival, function (values) {
+            // do ajax
+            if (createLoader) {
+                createLoader = false;
+                loaderId = admin.showLoader();
+            }
+            admin.request(variables.url.productFestival.addCategory + '/' + festivalId, 'post', function () {
+                admin.hideLoader(loaderId);
+                // clear element after success
+                $(variables.elements.modifyProductFestival.form).reset();
+                if (currentTable) {
+                    $(currentTable).DataTable().ajax.reload(null, true);
+                    currentTable = null;
+                }
+                //-----
+                admin.toasts.toast(this.data, {
+                    type: variables.toasts.types.success,
+                });
+                createLoader = true;
+            }, {
+                data: values,
+            }, true, function () {
+                createLoader = true;
+            });
+            return false;
+        }, function (errors) {
+            admin.forms.showFormErrors(errors);
+            return false;
+        }, {
+            '{percent}': 'درصد تخفیف',
+        });
+
+        //---------------------------------------------------------------
+        // REMOVE CATEGORY FROM FESTIVAL FORM
+        //---------------------------------------------------------------
+        $('#__btn_remove_product_festival').on('click' + variables.namespace, function () {
+            var formValues, formErrors, constraints, aliases;
+            aliases = {
+                '{percent}': 'درصد تخفیف',
+            };
+            constraints = {
+                category: variables.validation.constraints.modifyProductFestival.category,
+            };
+            formValues = admin.forms.convertFormObjectNumbersToEnglish(window.validate.collectFormValues(variables.elements.modifyProductFestival.form), 'modifyProductFestival');
+            formErrors = window.validate(formValues, constraints, {
+                prettify: function prettify(string) {
+                    return aliases[string] || validate.prettify(string);
+                },
+            });
+            // check form first
+            if (!formErrors) {
+                // do ajax
+                if (createLoader) {
+                    createLoader = false;
+                    loaderId = admin.showLoader();
+                }
+                admin.request(variables.url.productFestival.removeCategory + '/' + festivalId, 'post', function () {
+                    admin.hideLoader(loaderId);
+                    // clear element after success
+                    $(variables.elements.modifyProductFestival.form).reset();
+                    if (currentTable) {
+                        $(currentTable).DataTable().ajax.reload(null, true);
+                        currentTable = null;
+                    }
+                    //-----
+                    admin.toasts.toast(this.data, {
+                        type: variables.toasts.types.success,
+                    });
+                    createLoader = true;
+                }, {
+                    data: formValues,
+                }, true, function () {
+                    createLoader = true;
+                });
+            } else {
+                admin.forms.showFormErrors(formErrors);
+            }
         });
     });
 })(jQuery);

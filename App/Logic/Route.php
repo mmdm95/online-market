@@ -155,8 +155,8 @@ class Route implements IInitialize
                 /**
                  * Category Route
                  */
-                Router::get('/category/add', 'Admin\CategoryController@add')->name('admin.category.add');
-                Router::get('/category/edit/{id}', 'Admin\CategoryController@edit')->where([
+                Router::form('/category/add', 'Admin\CategoryController@add')->name('admin.category.add');
+                Router::form('/category/edit/{id}', 'Admin\CategoryController@edit')->where([
                     'id' => '[0-9]+',
                 ])->name('admin.category.edit');
                 Router::get('/category/view', 'Admin\CategoryController@view')->name('admin.category.view');
@@ -172,8 +172,8 @@ class Route implements IInitialize
                 /**
                  * Coupon Route
                  */
-                Router::get('/coupon/add', 'Admin\CouponController@add')->name('admin.coupon.add');
-                Router::get('/coupon/edit/{id}', 'Admin\CouponController@edit')->where([
+                Router::form('/coupon/add', 'Admin\CouponController@add')->name('admin.coupon.add');
+                Router::form('/coupon/edit/{id}', 'Admin\CouponController@edit')->where([
                     'id' => '[0-9]+',
                 ])->name('admin.coupon.edit');
                 Router::get('/coupon/view', 'Admin\CouponController@view')->name('admin.coupon.view');
@@ -202,12 +202,22 @@ class Route implements IInitialize
                 /**
                  * Festival Route
                  */
-                Router::get('/festival/add', 'Admin\festivalController@add')->name('admin.festival.add');
-                Router::get('/festival/edit/{id}', 'Admin\FestivalController@edit')->where([
+                Router::form('/festival/add', 'Admin\festivalController@add')->name('admin.festival.add');
+                Router::form('/festival/edit/{id}', 'Admin\FestivalController@edit')->where([
                     'id' => '[0-9]+',
                 ])->name('admin.festival.edit');
                 Router::get('/festival/view', 'Admin\FestivalController@view')->name('admin.festival.view');
                 Router::post('/festival/view/dt', 'Admin\FestivalController@getPaginatedDatatable')->name('admin.festival.dt.view');
+
+                /**
+                 * Product Festival Route
+                 */
+                Router::form('/festival/detail/{id}', 'Admin\ProductFestivalController@view')->where([
+                    'id' => '[0-9]+',
+                ])->name('admin.product.festival.detail');
+                Router::post('/product/festival/view/dt/{f_id}', 'Admin\ProductFestivalController@getPaginatedDatatable')->where([
+                    'f_id' => '[0-9]+',
+                ])->name('admin.product.festival.dt.view');
 
                 /**
                  * Brand Route
@@ -228,9 +238,7 @@ class Route implements IInitialize
                     'id' => '[0-9]+',
                 ])->name('admin.product.edit');
                 Router::get('/product/view', 'Admin\ProductController@view')->name('admin.product.view');
-                Router::post('/product/view/dt/{p_id}', 'Admin\ProductController@getPaginatedDatatable')->where([
-                    'p_id' => '[0-9]+',
-                ])->name('admin.product.dt.view');
+                Router::post('/product/view/dt', 'Admin\ProductController@getPaginatedDatatable')->name('admin.product.dt.view');
 
                 /**
                  * Comment Route
@@ -639,7 +647,7 @@ class Route implements IInitialize
                 /**
                  * festival route
                  */
-                Router::delete('/festival/{id}', 'Admin\FestivalController@remove')->where([
+                Router::delete('/festival/remove/{id}', 'Admin\FestivalController@remove')->where([
                     'id' => '[0-9]+',
                 ])->name('ajax.festival.remove');
                 Router::post('/festival/pub-status/{id}', 'Admin\FestivalController@pubStatusChange')->where([
@@ -648,6 +656,29 @@ class Route implements IInitialize
                 Router::post('/festival/main-status/{id}', 'Admin\FestivalController@mainStatusChange')->where([
                     'id' => '[0-9]+',
                 ])->name('ajax.festival.main.status');
+
+                /**
+                 * product festival route
+                 */
+                Router::post('/product/festival/add/{f_id}', 'Admin\ProductFestivalController@add')->where([
+                    'f_id' => '[0-9]+',
+                ])->name('ajax.product.festival.add');
+                Router::post('/product/festival/add-category/{f_id}', 'Admin\ProductFestivalController@addCategory')->where([
+                    'f_id' => '[0-9]+',
+                ])->name('ajax.product.festival.category.add');
+                Router::delete('/product/festival/category/remove/{f_id}', 'Admin\ProductFestivalController@removeCategory')->where([
+                    'f_id' => '[0-9]+',
+                ])->name('ajax.product.festival.category.remove');
+                Router::delete('/product/festival/remove/{id}', 'Admin\ProductFestivalController@remove')->where([
+                    'id' => '[0-9]+',
+                ])->name('ajax.product.festival.remove');
+
+                /**
+                 * product route
+                 */
+                Router::delete('/product/remove/{id}', 'Admin\ProductController@remove')->where([
+                    'id' => '[0-9]+',
+                ])->name('admin.product.remove');
 
                 /**
                  * slider route

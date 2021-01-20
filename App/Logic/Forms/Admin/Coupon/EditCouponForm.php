@@ -54,6 +54,11 @@ class EditCouponForm implements IPageForm
                 'inp-edit-coupon-use-after',
                 'inp-edit-coupon-start-date',
                 'inp-edit-coupon-end-date',
+            ])
+            ->toEnglishValue(true, true)
+            ->toEnglishValueExceptFields([
+                'inp-edit-coupon-code',
+                'inp-edit-coupon-title',
             ]);
 
         /**
@@ -92,10 +97,6 @@ class EditCouponForm implements IPageForm
             ->stopValidationAfterFirstError(false)
             ->required()
             ->stopValidationAfterFirstError(true)
-            ->custom(function (FormValue $value) {
-                $value->replaceValue(StringUtil::toEnglish($value->getValue()));
-                return true;
-            }, '')
             ->regex('/[0-9]+/', '{alias} ' . 'باید از نوع عددی باشد.')
             ->greaterThan(0);
         // min & max price
@@ -104,10 +105,6 @@ class EditCouponForm implements IPageForm
                 'inp-edit-coupon-max-price',
                 'inp-edit-coupon-min-price',
             ])
-            ->custom(function (FormValue $value) {
-                $value->replaceValue(StringUtil::toEnglish($value->getValue()));
-                return true;
-            }, '')
             ->regex('/[0-9]+/', '{alias} ' . 'باید از نوع عددی باشد.')
             ->greaterThan(0);
         // min price
@@ -136,7 +133,13 @@ class EditCouponForm implements IPageForm
                 'inp-edit-coupon-start-date',
                 'inp-edit-coupon-end-date'
             ])
-            ->timestamp();
+            ->timestamp()
+            ->custom(function (FormValue $value) {
+                if (false === date(DEFAULT_TIME_FORMAT, $value->getValue())) {
+                    return false;
+                }
+                return true;
+            }, '{alias} ' . 'یک زمان وارد شده نامعتبر است.');
         // start date
         if ($validator->getFieldValue('inp-edit-coupon-end-date', 0) > 0) {
             $validator
