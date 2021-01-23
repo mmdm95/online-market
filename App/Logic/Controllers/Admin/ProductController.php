@@ -7,11 +7,16 @@ use App\Logic\Forms\Admin\Product\AddProductForm;
 use App\Logic\Forms\Admin\Product\EditProductForm;
 use App\Logic\Handlers\DatatableHandler;
 use App\Logic\Handlers\GeneralAjaxRemoveHandler;
+use App\Logic\Handlers\GeneralAjaxStatusHandler;
 use App\Logic\Handlers\GeneralFormHandler;
 use App\Logic\Handlers\ResourceHandler;
 use App\Logic\Interfaces\IDatatableController;
 use App\Logic\Models\BaseModel;
+use App\Logic\Models\BrandModel;
+use App\Logic\Models\CategoryModel;
+use App\Logic\Models\ColorModel;
 use App\Logic\Models\ProductModel;
+use App\Logic\Models\UnitModel;
 use App\Logic\Utils\Jdf;
 use Jenssegers\Agent\Agent;
 use Sim\Container\Exceptions\MethodNotFoundException;
@@ -63,9 +68,29 @@ class ProductController extends AbstractAdminController implements IDatatableCon
             $data = $formHandler->handle(AddProductForm::class, 'product_add');
         }
 
+        /**
+         * @var BrandModel $brandModel
+         */
+        $brandModel = container()->get(BrandModel::class);
+        /**
+         * @var ColorModel $colorModel
+         */
+        $colorModel = container()->get(ColorModel::class);
+        /**
+         * @var CategoryModel $categoryModel
+         */
+        $categoryModel = container()->get(CategoryModel::class);
+        /**
+         * @var UnitModel $unitModel
+         */
+        $unitModel = container()->get(UnitModel::class);
+
         $this->setLayout($this->main_layout)->setTemplate('view/product/add');
         return $this->render(array_merge($data, [
-
+            'colors' => $colorModel->get(['hex', 'name'], 'publish=:pub', ['pub' => DB_YES]),
+            'units' => $unitModel->get(['id', 'title', 'sign']),
+            'brands' => $brandModel->get(['id', 'name'], 'publish=:pub', ['pub' => DB_YES]),
+            'categories' => $categoryModel->get(['id', 'name'], 'publish=:pub AND level=:lvl', ['pub' => DB_YES, 'lvl' => 3]),
         ]));
     }
 
@@ -150,6 +175,82 @@ class ProductController extends AbstractAdminController implements IDatatableCon
     }
 
     /**
+     * @param $id
+     */
+    public function pubStatusChange($id)
+    {
+        $resourceHandler = new ResourceHandler();
+
+        try {
+            /**
+             * @var Agent $agent
+             */
+            $agent = container()->get(Agent::class);
+            if (!$agent->isRobot()) {
+                $handler = new GeneralAjaxStatusHandler();
+                $resourceHandler = $handler
+                    ->setStatusCheckedMessage('نمایش محصول فعال شد.')
+                    ->setStatusUncheckedMessage('نمایش محصول غیر فعال شد.')
+                    ->handle(
+                        BaseModel::TBL_PRODUCTS,
+                        $id,
+                        'publish',
+                        input()->post('status')->getValue()
+                    );
+            } else {
+                response()->httpCode(403);
+                $resourceHandler
+                    ->type(RESPONSE_TYPE_ERROR)
+                    ->errorMessage('خطا در ارتباط با سرور، لطفا دوباره تلاش کنید.');
+            }
+        } catch (\Exception $e) {
+            $resourceHandler
+                ->type(RESPONSE_TYPE_ERROR)
+                ->errorMessage('خطا در ارتباط با سرور، لطفا دوباره تلاش کنید.');
+        }
+
+        response()->json($resourceHandler->getReturnData());
+    }
+
+    /**
+     * @param $id
+     */
+    public function availabilityStatusChange($id)
+    {
+        $resourceHandler = new ResourceHandler();
+
+        try {
+            /**
+             * @var Agent $agent
+             */
+            $agent = container()->get(Agent::class);
+            if (!$agent->isRobot()) {
+                $handler = new GeneralAjaxStatusHandler();
+                $resourceHandler = $handler
+                    ->setStatusCheckedMessage('موجودی محصول فعال شد.')
+                    ->setStatusUncheckedMessage('موجودی محصول غیر فعال شد.')
+                    ->handle(
+                        BaseModel::TBL_PRODUCTS,
+                        $id,
+                        'is_available',
+                        input()->post('status')->getValue()
+                    );
+            } else {
+                response()->httpCode(403);
+                $resourceHandler
+                    ->type(RESPONSE_TYPE_ERROR)
+                    ->errorMessage('خطا در ارتباط با سرور، لطفا دوباره تلاش کنید.');
+            }
+        } catch (\Exception $e) {
+            $resourceHandler
+                ->type(RESPONSE_TYPE_ERROR)
+                ->errorMessage('خطا در ارتباط با سرور، لطفا دوباره تلاش کنید.');
+        }
+
+        response()->json($resourceHandler->getReturnData());
+    }
+
+    /**
      * @param array $_
      * @return void
      */
@@ -169,33 +270,84 @@ class ProductController extends AbstractAdminController implements IDatatableCon
                      */
                     $productModel = container()->get(ProductModel::class);
 
-                    $cols[] = 'sp.deletable';
+                    $cols[] = 'pa.is_special';
 
-                    $data = $productModel->getPages($cols, $where, $bindValues, $limit, $offset, $order);
+                    $data = $productModel->getLimitedProduct($where, $bindValues, $order, $limit, $offset, [], $cols);
                     //-----
-                    $recordsFiltered = $productModel->getPagesCount($where, $bindValues);
-                    $recordsTotal = $productModel->getPagesCount();
+                    $recordsFiltered = $productModel->getLimitedProductCount($where, $bindValues);
+                    $recordsTotal = $productModel->getLimitedProductCount();
 
                     return [$data, $recordsFiltered, $recordsTotal];
                 });
 
                 $columns = [
-                    ['db' => 'sp.id', 'db_alias' => 'id', 'dt' => 'id'],
-                    ['db' => 'sp.title', 'db_alias' => 'title', 'dt' => 'title'],
+                    ['db' => 'pa.product_id', 'db_alias' => 'id', 'dt' => 'id'],
                     [
-                        'db' => 'sp.publish',
+                        'db' => 'pa.title',
+                        'db_alias' => 'title',
+                        'dt' => 'title',
+                        'formatter' => function ($d, $row) {
+                            if ($row['is_special'] == DB_YES) {
+                                return $d . "<span class='badge badge-warning'>ویژه</span>";
+                            }
+                            return $d;
+                        }
+                    ],
+                    ['db' => 'pa.brand_name', 'db_alias' => 'brand_name', 'dt' => 'brand_name'],
+                    ['db' => 'pa.category_name', 'db_alias' => 'category_name', 'dt' => 'category_name'],
+                    [
+                        'db' => 'pa.stock_count',
+                        'db_alias' => 'stock_count',
+                        'dt' => 'in_stock',
+                        'formatter' => function ($d) {
+                            if ($d < MINIMUM_WARNING_STOCK_VALUE) {
+                                return "<span class='text-danger'>{$d}</span>";
+                            }
+                            return "<span class='text-success'>{$d}</span>";
+                        }
+                    ],
+                    [
+                        'db' => 'pa.image',
+                        'db_alias' => 'image',
+                        'dt' => 'image',
+                        'formatter' => function ($d, $row) {
+                            return $this->setTemplate('partial/admin/parser/image-placeholder')
+                                ->render([
+                                    'img' => $d,
+                                    'alt' => $row['title'],
+                                ]);
+                        }
+                    ],
+                    [
+                        'db' => 'pa.publish',
                         'db_alias' => 'publish',
                         'dt' => 'status',
-                        'formatter' => function ($d) {
-                            $status = $this->setTemplate('partial/admin/parser/active-status')
+                        'formatter' => function ($d, $row) {
+                            $status = $this->setTemplate('partial/admin/parser/status-changer')
                                 ->render([
                                     'status' => $d,
+                                    'row' => $row,
+                                    'url' => url('ajax.product.status')->getRelativeUrl(),
                                 ]);
                             return $status;
                         }
                     ],
                     [
-                        'db' => 'sp.created_at',
+                        'db' => 'pa.is_available',
+                        'db_alias' => 'is_available',
+                        'dt' => 'is_available',
+                        'formatter' => function ($d, $row) {
+                            $status = $this->setTemplate('partial/admin/parser/status-changer')
+                                ->render([
+                                    'status' => $d,
+                                    'row' => $row,
+                                    'url' => url('ajax.product.availability.status')->getRelativeUrl(),
+                                ]);
+                            return $status;
+                        }
+                    ],
+                    [
+                        'db' => 'pa.created_at',
                         'db_alias' => 'created_at',
                         'dt' => 'created_at',
                         'formatter' => function ($d) {

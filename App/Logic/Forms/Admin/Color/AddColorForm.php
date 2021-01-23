@@ -11,6 +11,7 @@ use Sim\Container\Exceptions\ParameterHasNoDefaultValueException;
 use Sim\Container\Exceptions\ServiceNotFoundException;
 use Sim\Container\Exceptions\ServiceNotInstantiableException;
 use Sim\Form\Exceptions\FormException;
+use Sim\Form\FormValue;
 use voku\helper\AntiXSS;
 
 class AddColorForm implements IPageForm
@@ -53,7 +54,19 @@ class AddColorForm implements IPageForm
             ->stopValidationAfterFirstError(false)
             ->required()
             ->stopValidationAfterFirstError(true)
-            ->hexColor();
+            ->hexColor()
+            ->custom(function (FormValue $value) {
+                /**
+                 * @var ColorModel $colorModel
+                 */
+                $colorModel = container()->get(ColorModel::class);
+                if (
+                    0 !== $colorModel->count('hex=:hex', ['hex' => trim($value->getValue())])
+                ) {
+                    return false;
+                }
+                return true;
+            }, 'کد رنگی انتخاب شده وجود دارد.');
 
         // to reset form values and not set them again
         if ($validator->getStatus()) {

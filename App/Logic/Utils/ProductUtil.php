@@ -44,8 +44,11 @@ class ProductUtil
         $offset = ((int)$page - 1) * $limit;
 
         // where clause
-        $where = 'pa.publish=:pub';
-        $bindValues = ['pub' => DB_YES];
+        $where = 'pa.publish=:pub AND pa.is_deleted=:del';
+        $bindValues = [
+            'pub' => DB_YES,
+            'del' => DB_NO,
+        ];
         // query search parameter
         $q = input()->get('q', '');
         if (!is_array($q)) {
@@ -259,8 +262,11 @@ class ProductUtil
         if (empty($inClause)) return [];
 
         return $productModel->getLimitedProduct(
-            'pa.product_id IN (' . $inClause . ')',
-            $bind_values
+            'pa.product_id IN (' . $inClause . ') AND pa.publish=:pub AND pa.is_deleted=:del',
+            array_merge($bind_values, [
+                'pub' => DB_YES,
+                'del' => DB_NO,
+            ])
         );
     }
 }

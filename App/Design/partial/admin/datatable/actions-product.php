@@ -11,7 +11,7 @@
                     <i class="icon-pencil"></i>
                     ویرایش
                 </a>
-                <a href="javascript:void(0);" data-remove-url="<?= url('admin.product.remove'); ?>"
+                <a href="javascript:void(0);" data-remove-url="<?= url('ajax.product.remove'); ?>"
                    data-remove-id="<?= $row['id']; ?>"
                    class="dropdown-item text-danger __item_remover_btn">
                     <i class="icon-trash"></i>

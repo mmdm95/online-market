@@ -11,6 +11,7 @@ use Sim\Container\Exceptions\ParameterHasNoDefaultValueException;
 use Sim\Container\Exceptions\ServiceNotFoundException;
 use Sim\Container\Exceptions\ServiceNotInstantiableException;
 use Sim\Form\Exceptions\FormException;
+use Sim\Form\FormValue;
 use voku\helper\AntiXSS;
 
 class AddUnitForm implements IPageForm
@@ -48,7 +49,19 @@ class AddUnitForm implements IPageForm
             ->stopValidationAfterFirstError(false)
             ->required()
             ->stopValidationAfterFirstError(true)
-            ->lessThanEqualLength(250);
+            ->lessThanEqualLength(250)
+            ->custom(function (FormValue $value) {
+                /**
+                 * @var UnitModel $unitModel
+                 */
+                $unitModel = container()->get(UnitModel::class);
+                if (
+                    0 !== $unitModel->count('title=:title', ['title' => trim($value->getValue())])
+                ) {
+                    return false;
+                }
+                return true;
+            }, 'واحد با این عنوان وجود دارد.');
         // sign
         $validator
             ->setFields('inp-add-unit-sign')

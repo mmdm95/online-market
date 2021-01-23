@@ -11,6 +11,7 @@ use Sim\Container\Exceptions\ParameterHasNoDefaultValueException;
 use Sim\Container\Exceptions\ServiceNotFoundException;
 use Sim\Container\Exceptions\ServiceNotInstantiableException;
 use Sim\Form\Exceptions\FormException;
+use Sim\Form\FormValue;
 use voku\helper\AntiXSS;
 
 class EditUnitForm implements IPageForm
@@ -34,11 +35,17 @@ class EditUnitForm implements IPageForm
 
         // aliases
         $validator->setFieldsAlias([
-            'inp-edit-unit-title' => 'نام گیرنده',
-            'inp-edit-unit-sign' => 'موبایل',
+            'inp-add-unit-title' => 'عنوان واحد',
+            'inp-add-unit-sign' => 'علامت',
         ])->setOptionalFields([
             'inp-edit-unit-sign'
         ]);
+
+        /**
+         * @var UnitModel $unitModel
+         */
+        $unitModel = container()->get(UnitModel::class);
+        $id = session()->getFlash('unit-edit-id', null, false);
 
         // title
         $validator
@@ -46,19 +53,24 @@ class EditUnitForm implements IPageForm
             ->stopValidationAfterFirstError(false)
             ->required()
             ->stopValidationAfterFirstError(true)
-            ->lessThanEqualLength(250);
+            ->lessThanEqualLength(250)
+            ->custom(function (FormValue $value) use ($id, $unitModel) {
+                if (empty($id)) return false;
+                $prevTitle = $unitModel->getFirst(['title'], 'id=:id', ['id' => $id])['title'];
+                if (
+                    $prevTitle != trim($value->getValue()) &&
+                    0 !== $unitModel->count('title=:title', ['title' => trim($value->getValue())])
+                ) {
+                    return false;
+                }
+                return true;
+            }, 'واحد با این عنوان وجود دارد.');
         // sign
         $validator
             ->setFields('inp-edit-unit-sign')
             ->required();
 
-        $id = session()->getFlash('unit-edit-id', null, false);
         if (!empty($id)) {
-            /**
-             * @var UnitModel $unitModel
-             */
-            $unitModel = container()->get(UnitModel::class);
-
             if (0 === $unitModel->count('id=:id', ['id' => $id])) {
                 $validator->setError('inp-edit-unit-title', 'شناسه واحد مورد نظر نامعتبر است.');
             }

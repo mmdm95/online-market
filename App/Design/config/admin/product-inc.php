@@ -6,6 +6,8 @@ return [
         'common' => [
             'admin-base',
             'admin-form',
+            'admin-date',
+            'admin-tags-input',
             'admin-editor',
             'admin'
         ],
@@ -33,6 +35,8 @@ return [
         'common' => [
             'admin-base',
             'admin-form',
+            'admin-date',
+            'admin-tags-input',
             'admin-editor',
             'admin'
         ],

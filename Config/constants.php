@@ -138,3 +138,6 @@ defined("ARCHIVE_TAGS_TIME_FORMAT") OR define("ARCHIVE_TAGS_TIME_FORMAT", 'F Y')
 
 // default select option value
 defined("DEFAULT_OPTION_VALUE") OR define("DEFAULT_OPTION_VALUE", -1);
+
+// min warning stock value
+defined("MINIMUM_WARNING_STOCK_VALUE") OR define("MINIMUM_WARNING_STOCK_VALUE", 4);

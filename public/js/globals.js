@@ -396,6 +396,22 @@ window.MyGlobalVariables = {
             }
         }
     });
+
+    /**
+     * @see https://stackoverflow.com/a/30840530/12154893
+     * @param elem
+     * @param index
+     * @param val
+     * @returns {*}
+     */
+    $.expr[":"].attrFilter = function (elem, index, val) {
+        var len = $(elem.attributes).filter(function () {
+            return this.value === val[3];
+        }).length;
+        if (len > 0) {
+            return elem;
+        }
+    };
     //=========================================================================
 
     /**

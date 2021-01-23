@@ -122,6 +122,8 @@ class ProductModel extends BaseModel
     }
 
     /**
+     * Use [pa] instead of [product_advanced]
+     *
      * @param string|null $where
      * @param array $bind_values
      * @return int
@@ -131,7 +133,7 @@ class ProductModel extends BaseModel
         array $bind_values = []
     ): int
     {
-        $res = $this->getLimitedProduct($where, $bind_values, [], null, 0, [], ['COUNT(*) AS count']);
+        $res = $this->getLimitedProduct($where, $bind_values, [], null, 0, [], ['COUNT(DISTINCT(pa.product_id)) AS count']);
         if (count($res)) {
             return (int)$res[0]['count'];
         }

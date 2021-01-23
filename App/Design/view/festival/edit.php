@@ -57,6 +57,7 @@
                                id="altStartDate" value="<?= $sd; ?>">
                         <input type="text" class="form-control range-from"
                                placeholder="انتخاب تاریخ" readonly data-ignored
+                               data-time="true"
                                data-alt-field="#altStartDate"
                                value="<?= $sd; ?>">
                     </div>
@@ -72,6 +73,7 @@
                                id="altEndDate" value="<?= $ed; ?>">
                         <input type="text" class="form-control range-to"
                                placeholder="انتخاب تاریخ" readonly data-ignored
+                               data-time="true"
                                data-alt-field="#altEndDate"
                                value="<?= $ed; ?>">
                     </div>

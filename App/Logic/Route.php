@@ -678,7 +678,13 @@ class Route implements IInitialize
                  */
                 Router::delete('/product/remove/{id}', 'Admin\ProductController@remove')->where([
                     'id' => '[0-9]+',
-                ])->name('admin.product.remove');
+                ])->name('ajax.product.remove');
+                Router::post('/product/pub-status/{id}', 'Admin\ProductController@pubStatusChange')->where([
+                    'id' => '[0-9]+',
+                ])->name('ajax.product.status');
+                Router::post('/product/av-status/{id}', 'Admin\ProductController@availabilityStatusChange')->where([
+                    'id' => '[0-9]+',
+                ])->name('ajax.product.availability.status');
 
                 /**
                  * slider route
