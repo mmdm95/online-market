@@ -80,7 +80,7 @@ class BaseCsrfVerifier implements IMiddleware
             }
 
             // Refresh existing token
-            $this->tokenProvider->refresh();
+//            $this->tokenProvider->refresh();
 
         }
 

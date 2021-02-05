@@ -9,5 +9,5 @@ return [
      *
      * Default is 300s or 5min
      */
-    'expiration' => 18000, // 5 hours
+    'expiration' => 7200, // 2 hours
 ];

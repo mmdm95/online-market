@@ -24,7 +24,7 @@ class CommentUtil
 
         // where clause
         $where = 'c.status=:status';
-        $bindValues = ['status' => COMMENT_STATUS_ACCEPT];
+        $bindValues = ['status' => COMMENT_CONDITION_ACCEPT];
         // add product id to where
         $where .= ' AND c.product_id=:p_id';
         $bindValues['p_id'] = $product_id;

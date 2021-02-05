@@ -239,7 +239,7 @@
                     </ul>
                 </li>
                 <li class="nav-item">
-                    <a href="<?= url('admin.return.order'); ?>" class="nav-link">
+                    <a href="<?= url('admin.return.order.view'); ?>" class="nav-link">
                         <i class="icon-backspace2"></i>
                         <span>سفارشات مرجوعی</span>
                     </a>

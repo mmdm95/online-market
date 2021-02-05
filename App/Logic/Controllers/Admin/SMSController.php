@@ -22,44 +22,9 @@ class SMSController extends AbstractAdminController
      * @throws IFileNotExistsException
      * @throws IInvalidVariableNameException
      */
-    public function add()
-    {
-        $this->setLayout($this->main_layout)->setTemplate('view/category/add');
-
-        return $this->render();
-    }
-
-    /**
-     * @param $id
-     * @return string
-     * @throws ReflectionException
-     * @throws ConfigNotRegisteredException
-     * @throws ControllerException
-     * @throws PathNotRegisteredException
-     * @throws IFileNotExistsException
-     * @throws IInvalidVariableNameException
-     */
-    public function edit($id)
-    {
-        $this->setLayout($this->main_layout)->setTemplate('view/category/edit');
-
-        return $this->render();
-    }
-
-    /**
-     * @return string
-     * @throws ReflectionException
-     * @throws ConfigNotRegisteredException
-     * @throws ControllerException
-     * @throws PathNotRegisteredException
-     * @throws IFileNotExistsException
-     * @throws IInvalidVariableNameException
-     */
     public function view()
     {
-        $this->setLayout($this->main_layout)->setTemplate('view/category/view');
-
+        $this->setLayout($this->main_layout)->setTemplate('');
         return $this->render();
     }
-
 }

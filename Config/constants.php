@@ -95,8 +95,10 @@ defined('PAYMENT_STATUSES') OR define('PAYMENT_STATUSES', [
 
 // comment statuses
 defined("COMMENT_STATUS_NOT_READ") OR define("COMMENT_STATUS_NOT_READ", 0);
-defined("COMMENT_STATUS_ACCEPT") OR define("COMMENT_STATUS_ACCEPT", 1);
-defined("COMMENT_STATUS_REJECT") OR define("COMMENT_STATUS_REJECT", 2);
+defined("COMMENT_STATUS_READ") OR define("COMMENT_STATUS_READ", 1);
+defined("COMMENT_CONDITION_NOT_SET") OR define("COMMENT_CONDITION_NOT_SET", -1);
+defined("COMMENT_CONDITION_REJECT") OR define("COMMENT_CONDITION_REJECT", 0);
+defined("COMMENT_CONDITION_ACCEPT") OR define("COMMENT_CONDITION_ACCEPT", 1);
 
 // contact us statuses
 defined("CONTACT_STATUS_UNREAD") OR define("CONTACT_STATUS_UNREAD", 1);
@@ -141,3 +143,6 @@ defined("DEFAULT_OPTION_VALUE") OR define("DEFAULT_OPTION_VALUE", -1);
 
 // min warning stock value
 defined("MINIMUM_WARNING_STOCK_VALUE") OR define("MINIMUM_WARNING_STOCK_VALUE", 4);
+
+// max category level number
+defined("MAX_CATEGORY_LEVEL") OR define("MAX_CATEGORY_LEVEL", 3);

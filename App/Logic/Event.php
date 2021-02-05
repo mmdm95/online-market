@@ -25,6 +25,9 @@ class Event
         // datatable ajax events
         $eventProvider->addEvent(new TheEvent('datatable.ajax:load'));
 
+        // select2 ajax events
+        $eventProvider->addEvent(new TheEvent('select2.ajax:load'));
+
         // general ajax remove events
         $eventProvider->addEvent(new TheEvent('remove.general.ajax:auth'));
         $eventProvider->addEvent(new TheEvent('remove.general.ajax:invalid_id'));
@@ -50,6 +53,15 @@ class Event
         $eventProvider->addEvent(new TheEvent('status.general.ajax:failed'));
         $eventProvider->addEvent(new TheEvent('status.general.ajax:success'));
         $eventProvider->addEvent(new TheEvent('status.general.ajax:before_update'));
+
+        // general ajax multi status change events
+        $eventProvider->addEvent(new TheEvent('multi.status.general.ajax:auth'));
+        $eventProvider->addEvent(new TheEvent('multi.status.general.ajax:invalid_status'));
+        $eventProvider->addEvent(new TheEvent('multi.status.general.ajax:invalid_id'));
+        $eventProvider->addEvent(new TheEvent('multi.status.general.ajax:not_exists'));
+        $eventProvider->addEvent(new TheEvent('multi.status.general.ajax:failed'));
+        $eventProvider->addEvent(new TheEvent('multi.status.general.ajax:success'));
+        $eventProvider->addEvent(new TheEvent('multi.status.general.ajax:before_update'));
 
         return $eventProvider;
     }

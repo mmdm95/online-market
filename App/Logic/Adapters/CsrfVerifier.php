@@ -22,16 +22,19 @@ class CsrfVerifier extends BaseCsrfVerifier
      */
     public function handle(Request $request): void
     {
+        // there is no need for this for now, if needed, uncomment commented sections
         try {
             parent::handle($request);
         } catch (TokenMismatchException $e) {
             if ($request->getUrl()->contains('/api') ||
                 $request->getUrl()->contains('/ajax')) {
-                $resourceHandler = new ResourceHandler();
-                $resourceHandler->statusCode(403)->errorMessage('CSRF token mismatched!');
-                response()->httpCode(403)->json($resourceHandler->getReturnData());
+                if (!headers_sent()) {
+                    $resourceHandler = new ResourceHandler();
+                    $resourceHandler->statusCode(403)->errorMessage('CSRF token mismatched!');
+                    response()->httpCode(403)->json($resourceHandler->getReturnData());
+                }
             } else {
-                \session()->setFlash('CSRFRouteHasUndefined', 'توکن امنیتی دارای مشکل شده است، لطفا صفحه را مجددا بارگذاری نمایید.');
+                \session()->setFlash('CSRFRouteHasUndefined', 'توکن امنیتی دوباره تولید شد، لطفا عملیات را دوباره انجام دهید! نیازی به بارگذاری مجدد صفحه نمی‌باشد.');
             }
         }
     }

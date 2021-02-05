@@ -222,6 +222,26 @@ return [
             ],
         ]
     ],
+    'admin-lightbox' => [
+        'js' => [
+            'bottom' => [
+                e(
+                    '<script type="text/javascript" src="' .
+                    asset_path('be/js/plugins/media/jquery.fancybox.min.js') .
+                    '"></script>'
+                ),
+            ],
+        ],
+        'css' => [
+            'top' => [
+                e(
+                    '<link href="' .
+                    asset_path('be/css/jquery.fancybox.min.css') .
+                    '" rel="stylesheet" type="text/css">'
+                ),
+            ]
+        ]
+    ],
     'admin' => [
         'js' => [
             'bottom' => [

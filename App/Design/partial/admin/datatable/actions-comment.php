@@ -6,22 +6,12 @@
             </a>
 
             <div class="dropdown-menu dropdown-menu-left">
-                <a href="<?= url('admin.product.edit', ['id' => $row['id']]); ?>"
-                   class="dropdown-item">
-                    <i class="icon-pencil"></i>
-                    ویرایش
-                </a>
-                <a href="<?= url('admin.product.detail', ['id' => $row['id']]); ?>"
+                <a href="<?= url('admin.comment.detail', ['p_id' => $row['product_id'], 'id' => $row['id']]); ?>"
                    class="dropdown-item text-info">
                     <i class="icon-comment-discussion"></i>
-                     مشاهده
+                    مشاهده
                 </a>
-                <a href="<?= url('admin.comment.view', ['id' => $row['id']]); ?>"
-                   class="dropdown-item text-info">
-                    <i class="icon-comment-discussion"></i>
-                    نمایش نظرات
-                </a>
-                <a href="javascript:void(0);" data-remove-url="<?= url('ajax.product.remove'); ?>"
+                <a href="javascript:void(0);" data-remove-url="<?= url('ajax.comment.remove'); ?>"
                    data-remove-id="<?= $row['id']; ?>"
                    class="dropdown-item text-danger __item_remover_btn">
                     <i class="icon-trash"></i>

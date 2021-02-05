@@ -238,15 +238,41 @@ class Route implements IInitialize
                     'id' => '[0-9]+',
                 ])->name('admin.product.edit');
                 Router::get('/product/view', 'Admin\ProductController@view')->name('admin.product.view');
+                Router::get('/product/detail/{id}', 'Admin\ProductController@detail')->where([
+                    'id' => '[0-9]+',
+                ])->name('admin.product.detail');
                 Router::post('/product/view/dt', 'Admin\ProductController@getPaginatedDatatable')->name('admin.product.dt.view');
+                Router::get('/product/view/s2', 'Admin\ProductController@getPaginatedSelect2')->name('admin.product.s2.view');
+                Router::form('/product/buyer/{id}', 'Admin\ProductController@buyer')->where([
+                    'id' => '[0-9]+',
+                ])->name('admin.product.buyer');
+                Router::post('/product/buyer/users/dt/{id}', 'Admin\ProductController@getBuyerUsersPaginatedDatatable')->where([
+                    'id' => '[0-9]+',
+                ])->name('admin.product.dt.buyer.users');
+                Router::post('/product/buyer/orders/dt/{id}', 'Admin\ProductController@getBuyerOrdersPaginatedDatatable')->where([
+                    'id' => '[0-9]+',
+                ])->name('admin.product.dt.buyer.orders');
+
+                /**
+                 * Stepped Price Route
+                 */
+                Router::form('/product/stepped-price/add', 'Admin\SteppedPriceController@add')->name('admin.stepped-price.add');
+                Router::form('/product/stepped-price/edit/{id}', 'Admin\SteppedPriceController@edit')->where([
+                    'id' => '[0-9]+',
+                ])->name('admin.stepped-price.edit');
+                Router::get('/product/stepped-price/view', 'Admin\SteppedPriceController@view')->name('admin.stepped-price.view');
+                Router::post('/product/stepped-price/view/dt', 'Admin\SteppedPriceController@getPaginatedDatatable')->name('admin.stepped-price.dt.view');
 
                 /**
                  * Comment Route
                  */
-                Router::get('/comment/view/{p_id}/{id?}', 'Admin\CommentController@view')->where([
+                Router::get('/comment/view/{p_id}', 'Admin\CommentController@view')->where([
+                    'p_id' => '[0-9]+',
+                ])->name('admin.comment.view');
+                Router::get('/comment/detail/{p_id}/{id}', 'Admin\CommentController@detail')->where([
                     'p_id' => '[0-9]+',
                     'id' => '[0-9]+',
-                ])->name('admin.comment.view');
+                ])->name('admin.comment.detail');
                 Router::post('/comment/view/dt/{p_id}', 'Admin\CommentController@getPaginatedDatatable')->where([
                     'p_id' => '[0-9]+',
                 ])->name('admin.comment.dt.view');
@@ -330,12 +356,18 @@ class Route implements IInitialize
                 /**
                  * Order Route
                  */
-                Router::get('/order/view/{id?}', 'Admin\OrderController@view')->where([
+                Router::get('/order/view', 'Admin\OrderController@view')->name('admin.order.view');
+                Router::get('/order/detail/{id}', 'Admin\OrderController@detail')->where([
                     'id' => '[0-9]+',
-                ])->name('admin.order.view');
-                Router::get('/order/return-order/{id?}', 'Admin\OrderController@returnOrder')->where([
+                ])->name('admin.order.detail');
+
+                /**
+                 * Return Order Route
+                 */
+                Router::get('/order/return-order/view', 'Admin\ReturnOrderController@view')->name('admin.return.order.view');
+                Router::get('/order/return-order/detail', 'Admin\ReturnOrderController@detail')->where([
                     'id' => '[0-9]+',
-                ])->name('admin.return.order');
+                ])->name('admin.return.order.detail');
 
                 /**
                  * Order Badges Route
@@ -685,6 +717,24 @@ class Route implements IInitialize
                 Router::post('/product/av-status/{id}', 'Admin\ProductController@availabilityStatusChange')->where([
                     'id' => '[0-9]+',
                 ])->name('ajax.product.availability.status');
+
+                /**
+                 * stepped price route
+                 */
+                Router::delete('/product/stepped-price/remove/{id}', 'Admin\SteppedPriceController@remove')->where([
+                    'id' => '[0-9]+',
+                ])->name('ajax.product.stepped.remove');
+
+                /**
+                 * comment route
+                 */
+                Router::delete('/comment/remove/{id}', 'Admin\CommentController@remove')->where([
+                    'id' => '[0-9]+',
+                ])->name('ajax.comment.remove');
+                Router::post('/comment/status/{p_id}/{id}', 'Admin\CommentController@statusChange')->where([
+                    'p_id' => '[0-9]+',
+                    'id' => '[0-9]+',
+                ])->name('ajax.comment.status');
 
                 /**
                  * slider route

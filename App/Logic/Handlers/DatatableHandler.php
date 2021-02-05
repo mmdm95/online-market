@@ -6,6 +6,8 @@
 
 namespace App\Logic\Handlers;
 
+use Sim\Utils\StringUtil;
+
 class DatatableHandler
 {
     /**
@@ -13,7 +15,7 @@ class DatatableHandler
      * @param $columns
      * @return array
      */
-    public static function handle($request, $columns)
+    public static function handle($request, $columns): array
     {
         $cols = self::columnsNAliases($columns);
         [$where, $bindValues] = self::filter($request, $columns);
@@ -30,12 +32,12 @@ class DatatableHandler
         /*
          * Output
          */
-        return array(
+        return [
             "draw" => isset ($request['draw']) ? intval($request['draw']) : 0,
             "recordsTotal" => intval($recordsTotal),
             "recordsFiltered" => intval($recordsFiltered),
             "data" => self::dataOutput($columns, $data),
-        );
+        ];
     }
 
     /**
@@ -61,9 +63,22 @@ class DatatableHandler
 
                 if ($requestColumn['searchable'] == 'true') {
                     if (!empty($column['db'])) {
+                        // english
                         $binding = 'binding' . $bindCounter++;
-                        $bindValues[$binding] = '%' . $str . '%';
-                        $globalSearch[] = $column['db'] . " LIKE :" . $binding;
+                        $bindValues[$binding] = '%' . StringUtil::toEnglish($str) . '%';
+                        $phrase = '(' . $column['db'] . " LIKE :" . $binding . ' OR ';
+
+                        // persian
+                        $binding = 'binding' . $bindCounter++;
+                        $bindValues[$binding] = '%' . StringUtil::toPersian($str) . '%';
+                        $phrase .= $column['db'] . " LIKE :" . $binding . ' OR ';
+
+                        // arabic
+                        $binding = 'binding' . $bindCounter++;
+                        $bindValues[$binding] = '%' . StringUtil::toArabic($str) . '%';
+                        $phrase .= $column['db'] . " LIKE :" . $binding . ')';
+
+                        $globalSearch[] = $phrase;
                     }
                 }
             }

@@ -82,6 +82,11 @@
             remove: '/ajax/product/festival/remove',
             removeCategory: '/ajax/product/festival/category/remove',
         },
+        product: {
+            remove: '/ajax/product/remove',
+            pub: '/ajax/product/pub-status',
+            av: '/ajax/product/av-status',
+        },
     });
     window.MyGlobalVariables.elements = $.extend(true, window.MyGlobalVariables.elements, {
         addAddress: {
@@ -412,6 +417,66 @@
             inputs: {
                 category: 'inp-modify-product-festival-category',
                 percent: 'inp-modify-product-festival-percent',
+            },
+        },
+        addProduct: {
+            form: '#__form_add_product',
+            inputs: {
+                status: 'inp-add-product-status',
+                availability: 'inp-add-product-availability',
+                special: 'inp-add-product-special',
+                commenting: 'inp-add-product-commenting',
+                image: 'inp-add-product-img',
+                title: 'inp-add-product-title',
+                simpleProp: 'inp-add-product-simple-properties',
+                keywords: 'inp-add-product-keywords',
+                brand: 'inp-add-product-brand',
+                category: 'inp-add-product-category',
+                unit: 'inp-add-product-unit',
+                stockCount: 'inp-add-product-stock-count[]',
+                maxCartCount: 'inp-add-product-max-count[]',
+                color: 'inp-add-product-color[]',
+                size: 'inp-add-product-size[]',
+                guarantee: 'inp-add-product-guarantee[]',
+                price: 'inp-add-product-price[]',
+                discountPrice: 'inp-add-product-discount-price[]',
+                discountDate: 'inp-add-product-discount-date[]',
+                productAvailability: 'inp-add-product-product-availability[]',
+                gallery: 'inp-add-product-gallery-img[]',
+                desc: 'inp-add-product-desc',
+                properties: 'inp-add-product-properties',
+                alertProduct: 'inp-add-product-alert-product',
+                related: 'inp-add-product-related[]',
+            },
+        },
+        editProduct: {
+            form: '#__form_edit_product',
+            inputs: {
+                status: 'inp-edit-product-status',
+                availability: 'inp-edit-product-availability',
+                special: 'inp-edit-product-special',
+                commenting: 'inp-edit-product-commenting',
+                image: 'inp-edit-product-img',
+                title: 'inp-edit-product-title',
+                simpleProp: 'inp-edit-product-simple-properties',
+                keywords: 'inp-edit-product-keywords',
+                brand: 'inp-edit-product-brand',
+                category: 'inp-edit-product-category',
+                unit: 'inp-edit-product-unit',
+                stockCount: 'inp-edit-product-stock-count[]',
+                maxCartCount: 'inp-edit-product-max-count[]',
+                color: 'inp-edit-product-color[]',
+                size: 'inp-edit-product-size[]',
+                guarantee: 'inp-edit-product-guarantee[]',
+                price: 'inp-edit-product-price[]',
+                discountPrice: 'inp-edit-product-discount-price[]',
+                discountDate: 'inp-edit-product-discount-date[]',
+                productAvailability: 'inp-edit-product-product-availability[]',
+                gallery: 'inp-edit-product-gallery-img[]',
+                desc: 'inp-edit-product-desc',
+                properties: 'inp-edit-product-properties',
+                alertProduct: 'inp-edit-product-alert-product',
+                related: 'inp-edit-product-related[]',
             },
         },
     });
@@ -1431,7 +1496,7 @@
             },
         };
 
-        function afterCloneElement() {
+        function removeCloneElementEvent() {
             $('.__clone_remover_btn')
                 .off('click' + variables.namespace)
                 .on('click' + variables.namespace, function (e) {
@@ -1441,7 +1506,12 @@
                         $(this).remove();
                     });
                 });
+        }
 
+        removeCloneElementEvent();
+
+        function afterCloneElement() {
+            removeCloneElementEvent();
             initializeAllPlugins();
         }
 
@@ -1578,6 +1648,41 @@
         }
 
         function initializeAllPlugins() {
+            $('.__item_multi_status_changer_btn').each(function () {
+                var
+                    $this,
+                    start,
+                    min,
+                    max,
+                    labels,
+                    placeholder;
+
+                $this = $(this);
+                start = $this.attr('data-slider-start-val');
+                min = $this.attr('data-slider-min-val');
+                max = $this.attr('data-slider-max-val');
+                placeholder = $this.attr('data-slider-placeholder-element');
+                labels = JSON.parse($this.attr('data-slider-labels'));
+
+                noUiSlider.create(this, {
+                    start: [start],
+                    step: 1,
+                    range: {
+                        'min': [min],
+                        'max': [max]
+                    },
+                    direction: $('html').attr('dir') == 'rtl' ? 'rtl' : 'ltr'
+                });
+
+                // Display values
+                placeholder = $(placeholder);
+                this.noUiSlider.on('update', function (values, handle) {
+                    if (placeholder.length && labels[values[handle]]) {
+                        placeholder.val(labels[values[handle]]);
+                    }
+                });
+            });
+
             if ($().spectrum) {
                 var cps = $(".colorpicker-show-input");
                 cps.each(function () {
@@ -1595,13 +1700,6 @@
                         clickoutFiresChange: false,
                         showInitial: true,
                     })
-                });
-            }
-
-            // Image lightbox
-            if ($().fancybox) {
-                $('[data-popup="lightbox"]').fancybox({
-                    padding: 3
                 });
             }
 
@@ -2108,7 +2206,7 @@
                 });
 
                 //
-                // Select with icons
+                // Select with icons or colors
                 //
 
                 // Format icon
@@ -2122,15 +2220,50 @@
                     return $icon;
                 };
 
+                // Format color
+                var colorFormat = function (color) {
+                    var originalOption = color.element;
+                    if (!color.id) {
+                        return color.text;
+                    }
+                    var $icon = color.text;
+                    if ($(color.element).data('color')) {
+                        $icon = "<div class='d-flex align-items-center'>" +
+                            "<span class='d-inline-block mr-2 ml-1 rounded shadow-2'" +
+                            " style='padding: 8px; background-color: " + $(color.element).data('color') +
+                            "'></span>" + color.text +
+                            "</div>";
+                    }
+
+                    return $icon;
+                };
+
                 // Initialize with options
                 $('.form-control-select2-icons').each(function () {
                     var obj, parent;
                     $this = $(this);
                     obj = {
                         templateResult: iconFormat,
-                        dropdownParent: $this.closest('.modal'),
-                        minimumResultsForSearch: Infinity,
                         templateSelection: iconFormat,
+                        escapeMarkup: function (m) {
+                            return m;
+                        }
+                    };
+                    parent = $this.closest('.modal');
+                    if (parent.length) {
+                        obj['dropdownParent'] = parent;
+                    }
+                    if ($this.data('select2')) $this.select2("destroy");
+                    $this.select2(obj);
+                });
+
+                // Initialize with options
+                $('.form-control-select2-colors').each(function () {
+                    var obj, parent;
+                    $this = $(this);
+                    obj = {
+                        templateResult: colorFormat,
+                        templateSelection: colorFormat,
                         escapeMarkup: function (m) {
                             return m;
                         }
@@ -2203,10 +2336,106 @@
                     separator: ' از ',
                     preText: 'شما دارای ',
                     postText: ' کاراکتر هستید',
-                    validate: true
+                    validate: true,
                 });
             }
         }
+
+        //
+        // initialize remote select
+        //
+
+        // Format displayed data
+        function formatData(data) {
+            if (data.loading) return data.text;
+
+            var markup = '<div class="select2-result-repository clearfix">';
+
+            if (data.image) {
+                markup += '<div class="select2-result-repository__avatar"><img src="' + data.image + '" alt="' + data.text + '" /></div>';
+            }
+
+            markup += '<div class="select2-result-repository__meta">';
+            markup += '<div class="select2-result-repository__title">' + data.text + '</div>';
+            markup += '</div></div>';
+
+            return markup;
+        }
+
+        // Format selection
+        function formatDataSelection(data) {
+            return data.text;
+        }
+
+        // Initialize
+        $('.select-remote-data').each(function () {
+            var $this, placeholder, url, limit;
+
+            $this = $(this);
+            placeholder = $this.attr('data-remote-placeholder');
+            url = $this.attr('data-remote-url');
+            limit = $this.attr('data-remote-limit');
+            limit = !isNaN(parseInt(limit, 10)) ? parseInt(limit, 10) : 15;
+
+            if (url) {
+                $this.select2({
+                    ajax: {
+                        url: url,
+                        dataType: 'json',
+                        delay: 250,
+                        data: function (params) {
+                            return {
+                                q: params.term, // search term
+                                page: params.page || 1,
+                                length: limit,
+                            };
+                        },
+                        processResults: function (data, params) {
+
+                            // parse the results into the format expected by Select2
+                            // since we are using custom formatting functions we do not need to
+                            // alter the remote JSON data, except to indicate that infinite
+                            // scrolling can be used
+                            params.page = params.page || 1;
+
+                            return {
+                                results: data.items,
+                                pagination: {
+                                    more: (params.page * 30) < data.total_count
+                                }
+                            };
+                        },
+                        cache: true
+                    },
+                    escapeMarkup: function (markup) {
+                        return markup;
+                    }, // let our custom formatter work
+                    placeholder: placeholder || 'حداقل یک کاراکتر وارد کنید',
+                    minimumInputLength: 1,
+                    templateResult: formatData, // omitted for brevity, see the source of this page
+                    templateSelection: formatDataSelection, // omitted for brevity, see the source of this page
+                    language: {
+                        errorLoading: function () {
+                            return "خطا در بارگذاری آیتم‌ها."
+                        },
+                        inputTooShort: function (e) {
+                            var t = e.minimum - e.input.length,
+                                n = "لطفا حداقل " + t + " یا تعداد بیشتری کاراکتر برای انجام جستجو وارد نمایید";
+                            return n
+                        },
+                        loadingMore: function () {
+                            return "بارگذاری بیشتر…"
+                        },
+                        noResults: function () {
+                            return 'هیچ موردی پیدا نشد!';
+                        },
+                        searching: function () {
+                            return 'در حال جستجو…';
+                        },
+                    },
+                });
+            }
+        });
 
         /**
          * @param el
@@ -2259,8 +2488,8 @@
             url = $(btn).attr('data-change-status-url');
             id = $(btn).attr('data-change-status-id');
 
-            admin.toasts.confirm(null, function () {
-                if (url && id) {
+            if (url && id) {
+                admin.toasts.confirm(null, function () {
                     admin.request(url + id, 'post', function () {
                         var _ = this;
                         if (_.type === variables.api.types.warning) {
@@ -2275,9 +2504,40 @@
                             'status': $(btn).is(':checked') ? 1 : 0,
                         },
                     }, true);
-                }
-            });
+                });
+            }
+        }
 
+        /**
+         * @param handlebar
+         * @param value
+         * @param [table]
+         */
+        function changeMultiOperation(handlebar, value, table) {
+            var url, val;
+
+            url = $this.attr('data-slider-url');
+            val = parseInt(value, 10);
+
+            if (url && !isNaN(val)) {
+                admin.toasts.confirm(null, function () {
+                    // $(handlebar.target),
+                    admin.request(url, 'post', function () {
+                        var _ = this;
+                        if (_.type === variables.api.types.warning) {
+                            admin.toasts.toast(_.data);
+                        } else {
+                            admin.toasts.toast(_.data, {
+                                type: variables.toasts.types.success,
+                            });
+                        }
+                    }, {
+                        data: {
+                            'status': val,
+                        },
+                    }, true);
+                });
+            }
         }
 
         // change status button click event
@@ -2562,6 +2822,13 @@
                     changeOperation($(this), table);
                 });
 
+            // change multi status button click event
+            $('.__item_multi_status_changer_btn').each(function () {
+                this.noUiSlider.on('change', function (values, handle) {
+                    changeMultiOperation($(this), values[handle], table);
+                });
+            });
+
             // edit address button click event
             $('.__item_address_editor_btn')
                 .off('click' + variables.namespace)
@@ -2646,7 +2913,7 @@
             // Setting datatable defaults
             $.extend($.fn.dataTable.defaults, {
                 autoWidth: false,
-                dom: '<"datatable-header"fl><"datatable-scroll"t><"datatable-footer"ip>',
+                dom: '<"datatable-header"fl><"datatable-scroll-lg"t><"datatable-footer"ip>',
                 lengthMenu: [[10, 25, 50, 100], [10, 25, 50, 100]],
                 pageLength: 10,
                 language: {
@@ -2807,6 +3074,7 @@
             $.each($('.datatable-highlight'), function () {
                 var $this, table, url;
                 $this = $(this);
+
                 url = $this.attr('data-ajax-url');
                 if (url) {
                     table = $this.DataTable({

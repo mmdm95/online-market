@@ -218,10 +218,10 @@ class ProductController extends AbstractHomeController
         $select
             ->from(BaseModel::TBL_COMMENTS)
             ->cols(['COUNT(*) AS count'])
-            ->where('product_id=:p_id AND status=:status')
+            ->where('product_id=:p_id AND condition=:condition')
             ->bindValues([
                 'p_id' => $product['id'],
-                'status' => COMMENT_STATUS_ACCEPT,
+                'condition' => COMMENT_CONDITION_ACCEPT,
             ]);
         $commentsCount = $model->get($select);
         $commentsCount = count($commentsCount) ? (int)$commentsCount[0]['count'] : 0;
@@ -330,11 +330,11 @@ class ProductController extends AbstractHomeController
             $resourceHandler
                 ->type(RESPONSE_TYPE_SUCCESS)
                 ->data([
-                'html' => $this->setTemplate('partial/main/product/price')->render([
-                    'product' => $product,
-                ]),
-                'max_cart_count' => $product['max_cart_count'] ?? 0,
-            ]);
+                    'html' => $this->setTemplate('partial/main/product/price')->render([
+                        'product' => $product,
+                    ]),
+                    'max_cart_count' => $product['max_cart_count'] ?? 0,
+                ]);
         } else {
             response()->httpCode(403);
             $resourceHandler

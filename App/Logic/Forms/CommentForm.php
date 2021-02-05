@@ -131,6 +131,7 @@ class CommentForm implements IPageForm
                     'user_id' => $userId,
                     'body' => $xss->xss_clean($message),
                     'status' => COMMENT_STATUS_NOT_READ,
+                    'condition' => COMMENT_CONDITION_NOT_SET,
                     'sent_at' => time(),
                 ]);
             }

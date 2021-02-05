@@ -3,6 +3,7 @@
 namespace App\Logic\Models;
 
 use Aura\SqlQuery\Exception as AuraException;
+use Sim\Utils\StringUtil;
 
 class ProductModel extends BaseModel
 {
@@ -157,6 +158,53 @@ class ProductModel extends BaseModel
     }
 
     /**
+     * @param $product_id
+     * @param array $columns
+     * @param array $group_by
+     * @return array
+     */
+    public function getRelatedProductsWithInfo($product_id, array $columns = ['product_id'], array $group_by = ['product_id']): array
+    {
+        $ids = $this->getRelatedProductsIds($product_id);
+
+        if (!count($ids)) return [];
+
+        $inClause = '';
+        $bind_values = [];
+        foreach ($ids as $id) {
+            $inClause .= ":id{$id},";
+            $bind_values["id{$id}"] = $id;
+        }
+        $inClause = trim($inClause, ',');
+        //-----
+        if (empty($inClause)) return [];
+
+        $select = $this->connector->select();
+        $select
+            ->from(self::TBL_PRODUCT_ADVANCED)
+            ->cols($columns)
+            ->where('product_id IN (' . $inClause . ')')
+            ->groupBy($group_by);
+
+        return $this->db->fetchAll($select->getStatement(), $select->getBindValues());
+    }
+
+    /**
+     * @param $product_id
+     * @return array
+     */
+    public function getImageGallery($product_id): array
+    {
+        $select = $this->connector->select();
+        $select
+            ->from(self::TBL_PRODUCT_GALLERY)
+            ->cols(['image'])
+            ->where('product_id=:pId', ['pId' => $product_id]);
+
+        return $this->db->fetchAll($select->getStatement(), $select->getBindValues());
+    }
+
+    /**
      * @param $user_id
      * @param $product_id
      * @return array - [result, type, message] accordingly
@@ -228,5 +276,239 @@ class ProductModel extends BaseModel
         $res = $this->db->fetchAll($select->getStatement(), $select->getBindValues());
         if (count($res)) return (int)$res[0]['count'] > 0;
         return false;
+    }
+
+    /**
+     * @param array $info
+     * @param array $image_galley
+     * @param array $products
+     * @param array $related_products
+     * @return bool
+     * @throws \Exception
+     */
+    public function insertProduct(array $info, array $image_galley, array $products, array $related_products): bool
+    {
+        $this->db->beginTransaction();
+
+        $insert = $this->connector->insert();
+        $insert
+            ->into($this->table)
+            ->cols($info);
+
+        $stmt = $this->db->prepare($insert->getStatement());
+        $res = $stmt->execute($insert->getBindValues());
+
+        if (!$res) {
+            $this->db->rollBack();
+            return false;
+        }
+
+        $productId = (int)$this->db->lastInsertId();
+
+        foreach ($products as $product) {
+            $insert = $this->connector->insert();
+            $insert
+                ->into(self::TBL_PRODUCT_PROPERTY)
+                ->cols([
+                    'code' => StringUtil::uniqidReal(12),
+                    'product_id' => $productId,
+                    'stock_count' => $product['stock_count'],
+                    'max_cart_count' => $product['max_cart'],
+                    'price' => $product['price'],
+                    'discounted_price' => $product['discount_price'],
+                    'discount_until' => $product['discount_until'] ?: null,
+                    'is_available' => $product['available'],
+                    'color_hex' => $product['color_hex'],
+                    'color_name' => $product['color_name'],
+                    'size' => $product['size'] ?: null,
+                    'guarantee' => $product['guarantee'] ?: null,
+                ]);
+            $stmt = $this->db->prepare($insert->getStatement());
+            $res = $stmt->execute($insert->getBindValues());
+
+            if (!$res) break;
+        }
+
+        if (!$res) {
+            $this->db->rollBack();
+            return false;
+        }
+
+        $res2 = false;
+        foreach ($image_galley as $image) {
+            $insert = $this->connector->insert();
+            $insert
+                ->into(self::TBL_PRODUCT_GALLERY)
+                ->cols([
+                    'product_id' => $productId,
+                    'image' => get_image_name($image),
+                ]);
+            $stmt = $this->db->prepare($insert->getStatement());
+            $res2 = $stmt->execute($insert->getBindValues());
+
+            if (!$res2) break;
+        }
+
+        $res3 = true;
+        $related_products = array_unique($related_products);
+        foreach ($related_products as $related) {
+            $insert = $this->connector->insert();
+            $insert
+                ->into(self::TBL_PRODUCT_RELATED)
+                ->cols([
+                    'product_id' => $productId,
+                    'related_id' => $related,
+                ]);
+            $stmt = $this->db->prepare($insert->getStatement());
+            $res3 = $stmt->execute($insert->getBindValues());
+
+            if (!$res3) break;
+        }
+
+        if ($res && $res2 && $res3) {
+            $this->db->commit();
+            return true;
+        }
+
+        $this->db->rollBack();
+        return false;
+    }
+
+    /**
+     * @param $product_id
+     * @param array $info
+     * @param array $image_galley
+     * @param array $products
+     * @param array $related_products
+     * @return bool
+     */
+    public function updateProduct($product_id, array $info, array $image_galley, array $products, array $related_products): bool
+    {
+        $this->db->beginTransaction();
+
+        $update = $this->connector->update();
+        $update
+            ->table($this->table)
+            ->cols($info);
+
+        $stmt = $this->db->prepare($update->getStatement());
+        $res = $stmt->execute($update->getBindValues());
+
+        if (!$res) {
+            $this->db->rollBack();
+            return false;
+        }
+
+        // delete all gallery images
+        $delete = $this->connector->delete();
+        $delete
+            ->from(self::TBL_PRODUCT_GALLERY)
+            ->where('product_id=:pId', ['pId' => $product_id]);
+        $stmt = $this->db->prepare($delete->getStatement());
+        $res4 = $stmt->execute($delete->getBindValues());
+
+        // delete all related products
+        $delete = $this->connector->delete();
+        $delete
+            ->from(self::TBL_PRODUCT_RELATED)
+            ->where('product_id=:pId', ['pId' => $product_id]);
+        $stmt = $this->db->prepare($delete->getStatement());
+        $res5 = $stmt->execute($delete->getBindValues());
+
+        // delete all products
+        $delete = $this->connector->delete();
+        $delete
+            ->from(self::TBL_PRODUCT_PROPERTY)
+            ->where('product_id=:pId', ['pId' => $product_id]);
+        $stmt = $this->db->prepare($delete->getStatement());
+        $res6 = $stmt->execute($delete->getBindValues());
+
+        if (!$res4 || !$res5 || !$res6) {
+            $this->db->rollBack();
+            return false;
+        }
+
+        $res7 = false;
+        foreach ($products as $product) {
+            $insert = $this->connector->insert();
+            $insert
+                ->into(self::TBL_PRODUCT_PROPERTY)
+                ->cols([
+                    'product_id' => $product_id,
+                    'stock_count' => $product['stock_count'],
+                    'max_cart_count' => $product['max_cart'],
+                    'price' => $product['price'],
+                    'discounted_price' => $product['discount_price'],
+                    'discount_until' => $product['discount_until'] ?: null,
+                    'is_available' => $product['available'],
+                    'color_hex' => $product['color_hex'],
+                    'color_name' => $product['color_name'],
+                    'size' => $product['size'] ?: null,
+                    'guarantee' => $product['guarantee'] ?: null,
+                ]);
+            $stmt = $this->db->prepare($insert->getStatement());
+            $res7 = $stmt->execute($insert->getBindValues());
+
+            if (!$res7) break;
+        }
+
+        if (!$res7) {
+            $this->db->rollBack();
+            return false;
+        }
+
+        $res2 = false;
+        foreach ($image_galley as $image) {
+            $insert = $this->connector->insert();
+            $insert
+                ->into(self::TBL_PRODUCT_GALLERY)
+                ->cols([
+                    'product_id' => $product_id,
+                    'image' => get_image_name($image),
+                ]);
+            $stmt = $this->db->prepare($insert->getStatement());
+            $res2 = $stmt->execute($insert->getBindValues());
+
+            if (!$res2) break;
+        }
+
+        $res3 = true;
+        $related_products = array_unique($related_products);
+        foreach ($related_products as $related) {
+            $insert = $this->connector->insert();
+            $insert
+                ->into(self::TBL_PRODUCT_RELATED)
+                ->cols([
+                    'product_id' => $product_id,
+                    'related_id' => $related,
+                ]);
+            $stmt = $this->db->prepare($insert->getStatement());
+            $res3 = $stmt->execute($insert->getBindValues());
+
+            if (!$res3) break;
+        }
+
+        if ($res && $res2 && $res3) {
+            $this->db->commit();
+            return true;
+        }
+
+        $this->db->rollBack();
+        return false;
+    }
+
+    /**
+     * @param $product_id
+     * @param array $columns
+     * @return array
+     */
+    public function getProductProperty($product_id, array $columns = ['*']): array
+    {
+        $select = $this->connector->select();
+        $select
+            ->from(self::TBL_PRODUCT_PROPERTY)
+            ->cols($columns)
+            ->where('id=:id')
+            ->bindValue('id', $product_id);
     }
 }

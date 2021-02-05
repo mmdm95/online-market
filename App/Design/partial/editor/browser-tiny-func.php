@@ -32,11 +32,25 @@
                     'searchreplace wordcount visualblocks visualchars code fullscreen',
                     'insertdatetime media nonbreaking save table contextmenu directionality'
                 ],
-                toolbar: "undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | forecolor backcolor",
+                // toolbar: "undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | forecolor backcolor",
                 image_advtab: true,
                 file_picker_callback: function (callback, value, meta) {
                     myFileBrowser(callback, value, meta);
-                }
+                },
+                setup: function (ed) {
+                    if ($('#' + ed.id).attr('data-editor-readonly')) {
+                        ed.settings.readonly = true;
+                    }
+                    if ($('#' + ed.id).attr('data-editor-menubar')) {
+                        ed.settings.menubar = false;
+                    }
+                    if ($('#' + ed.id).attr('data-editor-statusbar')) {
+                        ed.settings.statusbar = false;
+                    }
+                    if ($('#' + ed.id).attr('data-editor-toolbar')) {
+                        ed.settings.toolbar = false;
+                    }
+                },
             });
         });
     })(jQuery);

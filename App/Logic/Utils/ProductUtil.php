@@ -2,8 +2,10 @@
 
 namespace App\Logic\Utils;
 
+use App\Logic\Models\ColorModel;
 use App\Logic\Models\ProductModel;
 use Pecee\Http\Input\IInputItem;
+use Pecee\Http\Input\InputItem;
 use Sim\Container\Exceptions\MethodNotFoundException;
 use Sim\Container\Exceptions\ParameterHasNoDefaultValueException;
 use Sim\Container\Exceptions\ServiceNotFoundException;
@@ -12,6 +14,7 @@ use Sim\Exceptions\ConfigManager\ConfigNotRegisteredException;
 use Sim\Interfaces\IFileNotExistsException;
 use Sim\Interfaces\IInvalidVariableNameException;
 use Sim\Utils\StringUtil;
+use voku\helper\AntiXSS;
 
 class ProductUtil
 {
@@ -268,5 +271,111 @@ class ProductUtil
                 'del' => DB_NO,
             ])
         );
+    }
+
+    /**
+     * Admin add product, create products object
+     *
+     * Use these keys for each record of array:
+     *   [
+     *     'price',
+     *     'stock_count',
+     *     'max_cart',
+     *     'discount_price',
+     *     'color_hex',
+     *     'color_name',
+     *     'size',
+     *     'guarantee',
+     *     'discount_until',
+     *     'available',
+     *   ]
+     *
+     * @return array
+     */
+    public function createProductObject(): array
+    {
+        try {
+            /**
+             * @var AntiXSS $xss
+             */
+            $xss = container()->get(AntiXSS::class);
+
+            /**
+             * @var ColorModel $colorModel
+             */
+            $colorModel = container()->get(ColorModel::class);
+
+
+            // get all products values
+            $stock = input()->post('inp-add-product-stock-count');
+            $maxCart = input()->post('inp-add-product-max-count');
+            $color = input()->post('inp-add-product-color');
+            $size = input()->post('inp-add-product-size');
+            $guarantee = input()->post('inp-add-product-guarantee');
+            $price = input()->post('inp-add-product-price');
+            $disPrice = input()->post('inp-add-product-discount-price');
+            $disDate = input()->post('inp-add-product-discount-date');
+            $pAvailability = input()->post('inp-add-product-product-availability');
+
+            // create products object
+            $productObj = [];
+            $i = 0;
+            /**
+             * @var InputItem $productPrice
+             */
+            foreach ($price as $productPrice) {
+                $s = array_shift($stock);
+                $mc = array_shift($maxCart);
+                $dp = array_shift($disPrice);
+                $c = array_shift($color);
+
+                if (!empty($s) && !empty($mc) && !empty($dp) && !empty($c)) {
+                    $colorName = $colorModel->getFirst(['name'], 'hex=:hex', ['hex' => $color])['name'];
+
+                    $productObj[$i]['price'] = $xss->xss_clean($productPrice->getValue());
+                    $productObj[$i]['stock_count'] = $xss->xss_clean($s);
+                    $productObj[$i]['max_cart'] = $xss->xss_clean($mc);
+                    $productObj[$i]['discount_price'] = $xss->xss_clean($dp);
+                    $productObj[$i]['color_hex'] = $xss->xss_clean($c);
+                    $productObj[$i]['color_name'] = $xss->xss_clean($colorName);
+                    $productObj[$i]['size'] = $xss->xss_clean(array_shift($size)) ?: null;
+                    $productObj[$i]['guarantee'] = $xss->xss_clean(array_shift($guarantee)) ?: null;
+                    $productObj[$i]['discount_until'] = $xss->xss_clean(array_shift($disDate)) ?: null;
+                    $productObj[$i]['available'] = is_value_checked(array_shift($pAvailability)) ? DB_YES : DB_NO;
+                }
+            }
+        } catch (\Exception $e) {
+            return [];
+        }
+        return $productObj;
+    }
+
+    /**
+     * @return array
+     */
+    public function createGalleryArray(): array
+    {
+        $galleryArr = [];
+        try {
+            /**
+             * @var AntiXSS $xss
+             */
+            $xss = container()->get(AntiXSS::class);
+
+            $gallery = input()->post('inp-add-product-gallery-img');
+
+            /**
+             * @var InputItem $item
+             */
+            foreach ($gallery as $item) {
+                $g = $xss->xss_clean($item->getValue());
+                if (is_image_exists(get_image_name($g))) {
+                    $galleryArr[] = $g;
+                }
+            }
+        } catch (\Exception $e) {
+            return [];
+        }
+        return $galleryArr;
     }
 }

@@ -259,12 +259,14 @@ class ErrorHandler implements IInitialize
      */
     protected function loadInternalServerErrorFile($message, $Exceptions_detail, $page)
     {
-        header('HTTP/1.1 500 Internal Server Error');
-        $content = $this->loader->setData([
-            'Exceptions_message' => $message,
-            'Exceptions_detail' => $Exceptions_detail
-        ])->getContent((error_path($page, false)));
-        echo $content;
+        if (!headers_sent()) {
+            header('HTTP/1.1 500 Internal Server Error');
+            $content = $this->loader->setData([
+                'Exceptions_message' => $message,
+                'Exceptions_detail' => $Exceptions_detail
+            ])->getContent((error_path($page, false)));
+            echo $content;
+        }
     }
 
     /**

@@ -1,5 +1,7 @@
 <?php
 
+use App\Logic\Models\ProductModel;
+
 $validator = form_validator();
 
 ?>
@@ -53,7 +55,7 @@ $validator = form_validator();
                                     </div>
                                 </div>
                             </div>
-                            <div class="form-group col-lg-8 mx-auto">
+                            <div class="form-group col-lg-7">
                                 <label>
                                     <span class="text-danger">*</span>
                                     عنوان محصول:
@@ -62,10 +64,28 @@ $validator = form_validator();
                                        name="inp-add-product-title"
                                        value="<?= $validator->setInput('inp-add-product-title'); ?>">
                             </div>
-
-                            <div class="col-12"></div>
-
-                            <div class="form-group col-lg-6">
+                            <div class="form-group col-lg-5">
+                                <label>
+                                    <span class="text-danger">*</span>
+                                    واحد:
+                                </label>
+                                <select data-placeholder="واحد کالا را انتخاب کنید..."
+                                        class="form-control form-control-select2-searchable"
+                                        name="inp-add-product-unit" data-fouc>
+                                    <option value="<?= DEFAULT_OPTION_VALUE; ?>"
+                                            disabled="disabled"
+                                            selected="selected">
+                                        انتخاب کنید
+                                    </option>
+                                    <?php foreach ($units as $unit): ?>
+                                        <option value="<?= $unit['id']; ?>"
+                                            <?= $validator->setSelect('inp-add-product-unit', $unit['id']); ?>>
+                                            <?= $unit['title'] . (!empty($unit['sign']) ? ' - ' . $unit['sign'] : ''); ?>
+                                        </option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </div>
+                            <div class="form-group col-lg-4">
                                 <label>
                                     <span class="text-danger">*</span>
                                     برند:
@@ -80,11 +100,13 @@ $validator = form_validator();
                                     </option>
                                     <?php foreach ($brands as $brand): ?>
                                         <option value="<?= $brand['id']; ?>"
-                                            <?= $validator->setSelect('inp-add-product-brand', $brand['id']); ?>><?= $brand['name']; ?></option>
+                                            <?= $validator->setSelect('inp-add-product-brand', $brand['id']); ?>>
+                                            <?= $brand['name']; ?>
+                                        </option>
                                     <?php endforeach; ?>
                                 </select>
                             </div>
-                            <div class="form-group col-lg-6">
+                            <div class="form-group col-lg-5">
                                 <label>
                                     <span class="text-danger">*</span>
                                     دسته‌بندی:
@@ -99,9 +121,17 @@ $validator = form_validator();
                                     </option>
                                     <?php foreach ($categories as $category): ?>
                                         <option value="<?= $category['id']; ?>"
-                                            <?= $validator->setSelect('inp-add-product-category', $category['id']); ?>><?= $category['name']; ?></option>
+                                            <?= $validator->setSelect('inp-add-product-category', $category['id']); ?>>
+                                            <?= $category['name']; ?>
+                                        </option>
                                     <?php endforeach; ?>
                                 </select>
+                            </div>
+                            <div class="form-group col-lg-3">
+                                <label>تعداد کالا برای هشدار:</label>
+                                <input type="text" class="form-control" placeholder="از نوع عددی"
+                                       name="inp-add-product-alert-product"
+                                       value="<?= $validator->setInput('inp-add-product-alert-product'); ?>">
                             </div>
                             <div class="form-group col-lg-12">
                                 <label>ویژگی‌های سریع:</label>
@@ -123,7 +153,7 @@ $validator = form_validator();
 
             <!-- Products property -->
             <div class="col-lg-12">
-                <div class="card">
+                <div class="card card-collapsed">
                     <div class="card-header header-elements-inline">
                         <h5 class="card-title">
                             محصولات
@@ -148,90 +178,223 @@ $validator = form_validator();
                         </button>
                     </div>
                     <div class="card-body __all_products_container">
-                        <fieldset class="position-relative form-group" id="__sample_all_product">
-                            <div class="row px-3 pb-3 m-0 border-dashed border-2 border-info rounded">
-                                <div class="mt-3 col-md-6 col-xl-2">
-                                    <label>تعداد موجود:</label>
-                                    <input type="text" class="form-control" placeholder="از نوع عددی"
-                                           name="inp-add-product-stock-count[]"
-                                           value="<?= $validator->setInput('inp-add-product-stock-count'); ?>">
-                                </div>
-                                <div class="mt-3 col-md-6 col-xl-3">
-                                    <label>بیشترین تعداد در سبد خرید:</label>
-                                    <input type="text" class="form-control" placeholder="از نوع عددی"
-                                           name="inp-add-product-max-count[]"
-                                           value="<?= $validator->setInput('inp-add-product-max-count'); ?>">
-                                </div>
-                                <div class="mt-3 col-md-6 col-xl-4">
-                                    <label>رنگ:</label>
-                                    <select data-placeholder="رنگ را انتخاب کنید..."
-                                            class="form-control form-control-select2-searchable"
-                                            name="inp-add-product-color[]" data-fouc>
-                                        <option value="<?= DEFAULT_OPTION_VALUE; ?>"
-                                                disabled="disabled"
-                                                selected="selected">
-                                            انتخاب کنید
-                                        </option>
-                                        <?php foreach ($colors as $color): ?>
-                                            <option value="<?= $color['hex']; ?>"
-                                                <?= $validator->setSelect('inp-add-product-color', $color['hex']); ?>><?= $color['name']; ?></option>
-                                        <?php endforeach; ?>
-                                    </select>
-                                </div>
-                                <div class="mt-3 col-md-6 col-xl-3">
-                                    <label>سایز:</label>
-                                    <input type="text" class="form-control" placeholder="وارد کنید"
-                                           name="inp-add-product-size[]"
-                                           value="<?= $validator->setInput('inp-add-product-size'); ?>">
-                                </div>
-                                <div class="mt-3 col-lg-4">
-                                    <label>گارانتی:</label>
-                                    <input type="text" class="form-control" placeholder="وارد کنید"
-                                           name="inp-add-product-guarantee[]"
-                                           value="<?= $validator->setInput('inp-add-product-guarantee'); ?>">
-                                </div>
-                                <div class="mt-3 col-md-6 col-lg-4">
-                                    <label>قیمت:</label>
-                                    <input type="text" class="form-control" placeholder="به تومان"
-                                           name="inp-add-product-price[]"
-                                           value="<?= $validator->setInput('inp-add-product-price'); ?>">
-                                </div>
-                                <div class="mt-3 col-md-6 col-lg-4">
-                                    <label>قیمت با تخفیف:</label>
-                                    <input type="text" class="form-control" placeholder="به تومان"
-                                           name="inp-add-product-discount-price[]"
-                                           value="<?= $validator->setInput('inp-add-product-discount-price'); ?>">
-                                </div>
-                                <div class="mt-3 col-lg-4">
-                                    <label>تخفیف تا تاریخ:</label>
-                                    <input type="text" class="form-control myDatepickerWithEn"
-                                           placeholder="انتخاب تاریخ" readonly data-ignored
-                                           name="inp-add-product-discount-date[]"
-                                           data-format="YYYY/MM/DD HH:mm"
-                                           data-time="true"
-                                           value="<?= $validator->setInput('inp-add-product-discount-date', time()) ?>">
-                                </div>
-                                <div class="mt-3 col">
-                                    <div class="form-check form-check-switchery form-check-switchery-double mt-4 text-right">
-                                        <label class="form-check-label">
-                                            موجود
-                                            <input type="checkbox" class="form-check-input-switchery"
-                                                   name="inp-add-product-product-availability[]"
-                                                <?= $validator->setCheckbox('inp-add-product-product-availability', 'on', true); ?>>
-                                            ناموجود
-                                        </label>
+                        <?php
+                        $stockCounts = input()->post('inp-add-product-stock-count');
+                        ?>
+                        <?php if (is_array($stockCounts) && count($stockCounts)): ?>
+                            <?php $counter = 0; ?>
+                            <?php foreach ($stockCounts as $count): ?>
+                                <fieldset
+                                        class="position-relative form-group" <?= 0 === $counter ? 'id="__sample_all_product"' : ''; ?>>
+                                    <div class="row px-3 pb-3 m-0 border-dashed border-2 border-info rounded">
+                                        <div class="mt-3 col-md-6 col-xl-2">
+                                            <label>تعداد موجود:</label>
+                                            <input type="text" class="form-control" placeholder="از نوع عددی"
+                                                   name="inp-add-product-stock-count[]"
+                                                   value="<?= $validator->setInput('inp-add-product-stock-count'); ?>">
+                                        </div>
+                                        <div class="mt-3 col-md-6 col-xl-3">
+                                            <label>بیشترین تعداد در سبد خرید:</label>
+                                            <input type="text" class="form-control" placeholder="از نوع عددی"
+                                                   name="inp-add-product-max-count[]"
+                                                   value="<?= $validator->setInput('inp-add-product-max-count'); ?>">
+                                        </div>
+                                        <div class="mt-3 col-md-6 col-xl-4">
+                                            <label>رنگ:</label>
+                                            <select data-placeholder="رنگ را انتخاب کنید..."
+                                                    class="form-control form-control-select2-colors"
+                                                    name="inp-add-product-color[]" data-fouc>
+                                                <option value="<?= DEFAULT_OPTION_VALUE; ?>"
+                                                        disabled="disabled"
+                                                        selected="selected">
+                                                    انتخاب کنید
+                                                </option>
+                                                <?php foreach ($colors as $color): ?>
+                                                    <option value="<?= $color['hex']; ?>"
+                                                            data-color="<?= $color['hex']; ?>"
+                                                        <?= $validator->setSelect('inp-add-product-color', $color['hex']); ?>>
+                                                        <?= $color['name']; ?>
+                                                    </option>
+                                                <?php endforeach; ?>
+                                            </select>
+                                        </div>
+                                        <div class="mt-3 col-md-6 col-xl-3">
+                                            <label>سایز:</label>
+                                            <input type="text" class="form-control" placeholder="وارد کنید"
+                                                   name="inp-add-product-size[]"
+                                                   value="<?= $validator->setInput('inp-add-product-size'); ?>">
+                                        </div>
+                                        <div class="mt-3 col-lg-4">
+                                            <label>گارانتی:</label>
+                                            <input type="text" class="form-control" placeholder="وارد کنید"
+                                                   name="inp-add-product-guarantee[]"
+                                                   value="<?= $validator->setInput('inp-add-product-guarantee'); ?>">
+                                        </div>
+                                        <div class="mt-3 col-md-6 col-lg-4">
+                                            <label>قیمت:</label>
+                                            <input type="text" class="form-control" placeholder="به تومان"
+                                                   name="inp-add-product-price[]"
+                                                   value="<?= $validator->setInput('inp-add-product-price'); ?>">
+                                        </div>
+                                        <div class="mt-3 col-md-6 col-lg-4">
+                                            <label>قیمت با تخفیف:</label>
+                                            <input type="text" class="form-control" placeholder="به تومان"
+                                                   name="inp-add-product-discount-price[]"
+                                                   value="<?= $validator->setInput('inp-add-product-discount-price'); ?>">
+                                        </div>
+                                        <div class="mt-3 col-lg-4">
+                                            <label>تخفیف تا تاریخ:</label>
+                                            <input type="text" class="form-control myDatepickerWithEn"
+                                                   placeholder="انتخاب تاریخ" readonly data-ignored
+                                                   name="inp-add-product-discount-date[]"
+                                                   data-format="YYYY/MM/DD HH:mm"
+                                                   data-time="true"
+                                                   value="<?= $validator->setInput('inp-add-product-discount-date', time()) ?>">
+                                        </div>
+                                        <div class="mt-3 col">
+                                            <div class="form-check form-check-switchery form-check-switchery-double mt-4 text-right">
+                                                <label class="form-check-label">
+                                                    موجود
+                                                    <input type="checkbox" class="form-check-input-switchery"
+                                                           name="inp-add-product-product-availability[]"
+                                                        <?= $validator->setCheckbox('inp-add-product-product-availability', 'on', true); ?>>
+                                                    ناموجود
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <?php if (0 !== $counter++): ?>
+                                        <div class="__clone_remover_btn btn btn-danger">
+                                            <i class="icon-trash" aria-hidden="true"></i>
+                                        </div>
+                                    <?php endif; ?>
+                                </fieldset>
+                            <?php endforeach; ?>
+                        <?php else: ?>
+                            <fieldset class="position-relative form-group" id="__sample_all_product">
+                                <div class="row px-3 pb-3 m-0 border-dashed border-2 border-info rounded">
+                                    <div class="mt-3 col-md-6 col-xl-2">
+                                        <label>تعداد موجود:</label>
+                                        <input type="text" class="form-control" placeholder="از نوع عددی"
+                                               name="inp-add-product-stock-count[]">
+                                    </div>
+                                    <div class="mt-3 col-md-6 col-xl-3">
+                                        <label>بیشترین تعداد در سبد خرید:</label>
+                                        <input type="text" class="form-control" placeholder="از نوع عددی"
+                                               name="inp-add-product-max-count[]">
+                                    </div>
+                                    <div class="mt-3 col-md-6 col-xl-4">
+                                        <label>رنگ:</label>
+                                        <select data-placeholder="رنگ را انتخاب کنید..."
+                                                class="form-control form-control-select2-colors"
+                                                name="inp-add-product-color[]" data-fouc>
+                                            <option value="<?= DEFAULT_OPTION_VALUE; ?>"
+                                                    disabled="disabled"
+                                                    selected="selected">
+                                                انتخاب کنید
+                                            </option>
+                                            <?php foreach ($colors as $color): ?>
+                                                <option value="<?= $color['hex']; ?>"
+                                                        data-color="<?= $color['hex']; ?>">
+                                                    <?= $color['name']; ?>
+                                                </option>
+                                            <?php endforeach; ?>
+                                        </select>
+                                    </div>
+                                    <div class="mt-3 col-md-6 col-xl-3">
+                                        <label>سایز:</label>
+                                        <input type="text" class="form-control" placeholder="وارد کنید"
+                                               name="inp-add-product-size[]">
+                                    </div>
+                                    <div class="mt-3 col-lg-4">
+                                        <label>گارانتی:</label>
+                                        <input type="text" class="form-control" placeholder="وارد کنید"
+                                               name="inp-add-product-guarantee[]">
+                                    </div>
+                                    <div class="mt-3 col-md-6 col-lg-4">
+                                        <label>قیمت:</label>
+                                        <input type="text" class="form-control" placeholder="به تومان"
+                                               name="inp-add-product-price[]">
+                                    </div>
+                                    <div class="mt-3 col-md-6 col-lg-4">
+                                        <label>قیمت با تخفیف:</label>
+                                        <input type="text" class="form-control" placeholder="به تومان"
+                                               name="inp-add-product-discount-price[]">
+                                    </div>
+                                    <div class="mt-3 col-lg-4">
+                                        <label>تخفیف تا تاریخ:</label>
+                                        <input type="text" class="form-control myDatepickerWithEn"
+                                               placeholder="انتخاب تاریخ" readonly data-ignored
+                                               name="inp-add-product-discount-date[]"
+                                               data-format="YYYY/MM/DD HH:mm"
+                                               data-time="true"
+                                               value="<?= time() ?>">
+                                    </div>
+                                    <div class="mt-3 col">
+                                        <div class="form-check form-check-switchery form-check-switchery-double mt-4 text-right">
+                                            <label class="form-check-label">
+                                                موجود
+                                                <input type="checkbox" class="form-check-input-switchery"
+                                                       name="inp-add-product-product-availability[]" checked="checked">
+                                                ناموجود
+                                            </label>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        </fieldset>
+                            </fieldset>
+                        <?php endif; ?>
                     </div>
                 </div>
             </div>
             <!-- /products property -->
 
+            <!-- Related products -->
+            <div class="col-lg-12">
+                <div class="card card-collapsed">
+                    <?php load_partial('admin/card-header', ['header_title' => 'محصولات مرتبط']); ?>
+
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-12 p-2">
+                                <div class="border p-1" style="border-radius: 50rem;">
+                                    <select class="form-control select-remote-data"
+                                            name="inp-add-product-related[]"
+                                            data-remote-placeholder="انتخاب کالا"
+                                            data-remote-url="<?= url('admin.product.s2.view')->getRelativeUrlTrimmed(); ?>"
+                                            data-remote-limit="15"
+                                            multiple
+                                            data-fouc>
+                                        <?php
+                                        /**
+                                         * @var ProductModel $productsModel
+                                         */
+                                        $productsModel = container()->get(ProductModel::class);
+                                        $items = input()->post('inp-add-product-related');
+                                        ?>
+                                        <?php if (is_array($items) && count($items)): ?>
+                                            <?php foreach ($items as $item): ?>
+                                                <?php
+                                                $p = $productsModel->getFirst(['title'], 'id=:id', ['id' => $item]);
+                                                ?>
+                                                <?php if (count($p)): ?>
+                                                    <option value="<?= $item; ?>" selected>
+                                                        <?= $p['title']; ?>
+                                                    </option>
+                                                <?php endif; ?>
+                                            <?php endforeach; ?>
+                                        <?php endif; ?>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- /related products -->
+
             <!-- Product publish -->
             <div class="col-lg-6">
-                <div class="card">
+                <div class="card card-collapsed">
                     <div class="card-header header-elements-inline">
                         <h5 class="card-title">
                             <label class="m-0 cursor-pointer" for="__pubStatus">
@@ -256,7 +419,7 @@ $validator = form_validator();
 
             <!-- Product availability -->
             <div class="col-lg-6">
-                <div class="card">
+                <div class="card card-collapsed">
                     <div class="card-header header-elements-inline">
                         <h5 class="card-title">
                             <label class="m-0 cursor-pointer" for="__avStatus">
@@ -281,7 +444,7 @@ $validator = form_validator();
 
             <!-- Product special -->
             <div class="col-lg-6">
-                <div class="card">
+                <div class="card card-collapsed">
                     <div class="card-header header-elements-inline">
                         <h5 class="card-title">
                             <label class="m-0 cursor-pointer" for="__spStatus">
@@ -306,7 +469,7 @@ $validator = form_validator();
 
             <!-- Product commenting -->
             <div class="col-lg-6">
-                <div class="card">
+                <div class="card card-collapsed">
                     <div class="card-header header-elements-inline">
                         <h5 class="card-title">
                             <label class="m-0 cursor-pointer" for="__cStatus">
@@ -331,7 +494,7 @@ $validator = form_validator();
 
             <!-- Product images -->
             <div class="col-lg-12">
-                <div class="card">
+                <div class="card card-collapsed">
                     <?php load_partial('admin/card-header', ['header_title' => 'گالری تصاویر' . '<span class="text-danger small ml-1">' . '(وارد کردن یک تصویر الزامیست) ' . '</span>']); ?>
 
                     <div class="card-body">
@@ -339,25 +502,48 @@ $validator = form_validator();
                             <div class="col">
                                 <div class="__image_gallery_container d-flex align-items-center flex-wrap">
                                     <?php
-                                    $img = $validator->setInput('inp-add-product-gallery-img');
+                                    $images = input()->post('inp-add-product-gallery-img');
                                     ?>
-                                    <div class="img-placeholder-custom __file_picker_handler __file_image <?= !empty($img) ? 'has-image' : ''; ?>"
-                                         data-toggle="modal"
-                                         data-target="#modal_efm"
-                                         id="__sample_gallery_image">
-                                        <input type="hidden" name="inp-add-product-gallery-img[]"
-                                               value="<?= $img; ?>">
-                                        <?php if (!empty($img)): ?>
-                                            <img class="img-placeholder-image" src="<?= $img; ?>"
-                                                 alt="selected image">
-                                        <?php endif; ?>
-                                        <div class="img-placeholder-icon-container">
-                                            <i class="icon-image2 img-placeholder-icon text-grey-300"></i>
-                                            <div class="img-placeholder-num bg-warning text-white">
-                                                <i class="icon-plus2"></i>
+                                    <?php if (is_array($stockCounts) && count($stockCounts)): ?>
+                                        <?php $counter = 0; ?>
+                                        <?php foreach ($images as $img): ?>
+                                            <div class="img-placeholder-custom __file_picker_handler __file_image <?= !empty($img) ? 'has-image' : ''; ?>"
+                                                 data-toggle="modal"
+                                                 data-target="#modal_efm"
+                                                <?= 0 === $counter ? 'id="__sample_gallery_image"' : ''; ?>>
+                                                <input type="hidden" name="inp-add-product-gallery-img[]"
+                                                       value="<?= $img; ?>">
+                                                <?php if (!empty($img)): ?>
+                                                    <img class="img-placeholder-image" src="<?= $img; ?>"
+                                                         alt="selected image">
+                                                <?php endif; ?>
+                                                <div class="img-placeholder-icon-container">
+                                                    <i class="icon-image2 img-placeholder-icon text-grey-300"></i>
+                                                    <div class="img-placeholder-num bg-warning text-white">
+                                                        <i class="icon-plus2"></i>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <?php if (0 !== $counter++): ?>
+                                                <div class="__clone_remover_btn btn btn-danger">
+                                                    <i class="icon-trash" aria-hidden="true"></i>
+                                                </div>
+                                            <?php endif; ?>
+                                        <?php endforeach; ?>
+                                    <?php else: ?>
+                                        <div class="img-placeholder-custom __file_picker_handler __file_image"
+                                             data-toggle="modal"
+                                             data-target="#modal_efm"
+                                             id="__sample_gallery_image">
+                                            <input type="hidden" name="inp-add-product-gallery-img[]">
+                                            <div class="img-placeholder-icon-container">
+                                                <i class="icon-image2 img-placeholder-icon text-grey-300"></i>
+                                                <div class="img-placeholder-num bg-warning text-white">
+                                                    <i class="icon-plus2"></i>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
+                                    <?php endif; ?>
                                 </div>
                             </div>
 
@@ -383,20 +569,44 @@ $validator = form_validator();
 
             <!-- Product description -->
             <div class="col-lg-12">
-                <div class="card">
-                    <?php load_partial('admin/card-header', ['header_title' => "<span class='text-danger mr-1'>*</span>" . 'ویژگی‌های محصول']); ?>
+                <div class="card card-collapsed">
+                    <?php load_partial('admin/card-header', ['header_title' => 'توضیحات محصول']); ?>
 
                     <div class="card-body">
                         <textarea name="inp-add-product-desc"
                                   cols="30"
                                   rows="10"
-                                  placeholder="ویژگی‌ها را وارد کنید..."
+                                  placeholder="توضیحات را وارد کنید..."
                                   class="form-control cntEditor"
                         ><?= $validator->setInput('inp-add-product-desc'); ?></textarea>
                     </div>
                 </div>
             </div>
             <!-- /product description -->
+
+            <!-- Product properties -->
+            <div class="col-lg-12">
+                <div class="card card-collapsed">
+                    <?php load_partial('admin/card-header', ['header_title' => "<span class='text-danger mr-1'>*</span>" . 'ویژگی‌های محصول']); ?>
+
+                    <div class="card-body">
+                        لطفا برای یکپارچه بودن ساختارها، با استفاده از
+                        <span class="text-warning">جدول</span>
+                        <span class="text-warning">(Table)</span>
+                        اقدام به ساخت ویژگی‌ها نمایید.
+                    </div>
+
+                    <div class="card-body">
+                        <textarea name="inp-add-product-properties"
+                                  cols="30"
+                                  rows="10"
+                                  placeholder="ویژگی‌ها را وارد کنید..."
+                                  class="form-control cntEditor"
+                        ><?= $validator->setInput('inp-add-product-properties'); ?></textarea>
+                    </div>
+                </div>
+            </div>
+            <!-- /product properties -->
 
             <div class="col-lg-12">
                 <div class="row flex-row-reverse">

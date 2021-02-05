@@ -575,6 +575,25 @@ window.MyGlobalVariables = {
                         formValues,
                         formErrors;
 
+                    function formatErrors(errors, mapping) {
+                        for (var attrName in errors) {
+                            if (errors.hasOwnProperty(attrName)) {
+                                for (var i = 0; i < errors[attrName].length; i++) {
+                                    (function (i) {
+                                        for (var alias in mapping) {
+                                            if (mapping.hasOwnProperty(alias)) {
+                                                errors[attrName][i] = errors[attrName][i].replace(
+                                                    alias,
+                                                    mapping[alias]);
+                                            }
+                                        }
+                                    })(i);
+                                }
+                            }
+                        }
+                        return errors;
+                    }
+
                     validationSuccessCallback = window.TheCore.isFunction(validationSuccessCallback) ? validationSuccessCallback : null;
                     validationErrorCallback = window.TheCore.isFunction(validationErrorCallback) ? validationErrorCallback : null;
                     check = !(false === check);
@@ -587,14 +606,20 @@ window.MyGlobalVariables = {
                              * @see https://github.com/ansman/validate.js/issues/69#issuecomment-567751903
                              * @type {ValidationResult}
                              */
-                            formErrors = window.validate(formValues, constraints, {
-                                prettify: function prettify(string) {
-                                    return aliases[string] || validate.prettify(string);
-                                },
-                            });
+                            formErrors = window.validate(formValues, constraints);
                             if (!formErrors) {
                                 return validationSuccessCallback.apply(null, [formValues]);
                             }
+
+                            formErrors = formatErrors(formErrors, aliases);
+
+                            // , {
+                            //         prettify: function prettify(string) {
+                            //             console.log(validate.prettify(string));
+                            //             return aliases[string] || validate.prettify(string);
+                            //         },
+                            //     }
+
                             return validationErrorCallback.apply(null, [formErrors]);
                         }
                     });

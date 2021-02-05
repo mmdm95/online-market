@@ -9,7 +9,7 @@ return [
             'admin-date',
             'admin-tags-input',
             'admin-editor',
-            'admin'
+            'admin',
         ],
         'sub_title' => 'افزودن محصول',
         'breadcrumb' => [
@@ -38,7 +38,7 @@ return [
             'admin-date',
             'admin-tags-input',
             'admin-editor',
-            'admin'
+            'admin',
         ],
         'sub_title' => 'ویرایش محصول',
         'breadcrumb' => [
@@ -64,7 +64,7 @@ return [
         'common' => [
             'admin-base',
             'admin-table',
-            'admin'
+            'admin',
         ],
         'sub_title' => 'محصولات',
         'breadcrumb' => [
@@ -78,6 +78,174 @@ return [
                 'text' => 'مدیریت محصولات',
                 'is_active' => true,
             ],
+        ],
+    ],
+    'view/product/detail' => [
+        'title' => title_concat(\config()->get('settings.title.value'), 'جزئیات محصول'),
+        'common' => [
+            'admin-base',
+            'admin-table',
+            'admin-lightbox',
+            'admin-editor',
+            'admin',
+        ],
+        'breadcrumb' => [
+            [
+                'url' => url('admin.index')->getRelativeUrl(),
+                'icon' => 'icon-home2',
+                'text' => 'خانه',
+                'is_active' => false,
+            ],
+            [
+                'url' => url('admin.product.view', '')->getRelativeUrl(),
+                'text' => 'مدیریت محصولات',
+                'is_active' => false,
+            ],
+            [
+                'text' => 'مدیریت محصولات',
+                'is_active' => true,
+            ],
+        ],
+    ],
+    'view/product/buyer/view' => [
+        'title' => title_concat(\config()->get('settings.title.value'), 'اطلاعات محصول'),
+        'common' => [
+            'admin-base',
+            'admin-table',
+            'admin',
+        ],
+        'breadcrumb' => [
+            [
+                'url' => url('admin.index')->getRelativeUrl(),
+                'icon' => 'icon-home2',
+                'text' => 'خانه',
+                'is_active' => false,
+            ],
+            [
+                'url' => url('admin.product.view', '')->getRelativeUrl(),
+                'text' => 'مدیریت محصولات',
+                'is_active' => false,
+            ],
+            [
+                'text' => 'اطلاعات محصول',
+                'is_active' => true,
+            ],
+        ],
+    ],
+    'view/product/stepped/add' => [
+        'title' => title_concat(\config()->get('settings.title.value'), 'افزودن قیمت پلکانی جدید'),
+        'common' => [
+            'admin-base',
+            'admin-form',
+            'admin-date',
+            'admin-tags-input',
+            'admin-editor',
+            'admin',
+        ],
+        'sub_title' => 'افزودن قیمت پلکانی',
+        'breadcrumb' => [
+            [
+                'url' => url('admin.index')->getRelativeUrl(),
+                'icon' => 'icon-home2',
+                'text' => 'خانه',
+                'is_active' => false,
+            ],
+            [
+                'url' => url('admin.product.view', '')->getRelativeUrl(),
+                'text' => 'مدیریت محصولات',
+                'is_active' => false,
+            ],
+            [
+                'text' => 'افزودن قیمت پلکانی جدید',
+                'is_active' => true,
+            ],
+        ],
+    ],
+    'view/product/stepped/edit' => [
+        'title' => title_concat(\config()->get('settings.title.value'), 'ویرایش قیمت پلکانی'),
+        'common' => [
+            'admin-base',
+            'admin-form',
+            'admin-date',
+            'admin-tags-input',
+            'admin-editor',
+            'admin',
+        ],
+        'sub_title' => 'ویرایش قیمت پلکانی',
+        'breadcrumb' => [
+            [
+                'url' => url('admin.index')->getRelativeUrl(),
+                'icon' => 'icon-home2',
+                'text' => 'خانه',
+                'is_active' => false,
+            ],
+            [
+                'url' => url('admin.product.view', '')->getRelativeUrl(),
+                'text' => 'مدیریت محصولات',
+                'is_active' => false,
+            ],
+            [
+                'text' => 'ویرایش محصول',
+                'is_active' => true,
+            ],
+        ],
+    ],
+    'view/product/stepped/view' => [
+        'title' => title_concat(\config()->get('settings.title.value'), 'مدیریت قیمت‌های پلکانی'),
+        'common' => [
+            'admin-base',
+            'admin-table',
+            'admin',
+        ],
+        'sub_title' => 'قیمت‌های پلکانی',
+        'breadcrumb' => [
+            [
+                'url' => url('admin.index')->getRelativeUrl(),
+                'icon' => 'icon-home2',
+                'text' => 'خانه',
+                'is_active' => false,
+            ],
+            [
+                'url' => url('admin.product.view', '')->getRelativeUrl(),
+                'text' => 'مدیریت محصولات',
+                'is_active' => false,
+            ],
+            [
+                'text' => 'مدیریت قیمت‌های پلکانی',
+                'is_active' => true,
+            ],
+        ],
+    ],
+    'view/product/comment/view' => [
+        'title' => title_concat(\config()->get('settings.title.value'), 'مدیریت نظرات محصول'),
+        'common' => [
+            'admin-base',
+            'admin-table',
+            'admin',
+        ],
+        'breadcrumb' => [
+            [
+                'url' => url('admin.index')->getRelativeUrl(),
+                'icon' => 'icon-home2',
+                'text' => 'خانه',
+                'is_active' => false,
+            ],
+            [
+                'url' => url('admin.product.view', '')->getRelativeUrl(),
+                'text' => 'مدیریت محصولات',
+                'is_active' => false,
+            ],
+            [
+                'text' => 'مدیریت نظرات',
+                'is_active' => true,
+            ],
+        ],
+    ],
+    'view/product/comment/message' => [
+        'title' => title_concat(\config()->get('settings.title.value'), 'جزئیات نظر'),
+        'common' => [
+            'admin-base',
+            'admin',
         ],
     ],
 ];
