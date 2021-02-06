@@ -5,11 +5,9 @@ namespace App\Logic\Controllers\Admin;
 use App\Logic\Abstracts\AbstractAdminController;
 use App\Logic\Forms\Admin\Stepped\AddSteppedForm;
 use App\Logic\Forms\Admin\Stepped\EditSteppedForm;
-use App\Logic\Handlers\DatatableHandler;
 use App\Logic\Handlers\GeneralAjaxRemoveHandler;
 use App\Logic\Handlers\GeneralFormHandler;
 use App\Logic\Handlers\ResourceHandler;
-use App\Logic\Interfaces\IDatatableController;
 use App\Logic\Models\BaseModel;
 use App\Logic\Models\ProductModel;
 use Jenssegers\Agent\Agent;
@@ -24,38 +22,138 @@ use Sim\Exceptions\PathManager\PathNotRegisteredException;
 use Sim\Interfaces\IFileNotExistsException;
 use Sim\Interfaces\IInvalidVariableNameException;
 
-class SteppedPriceController extends AbstractAdminController implements IDatatableController
+class SteppedPriceController extends AbstractAdminController
 {
     /**
+     * @param $p_id
      * @return string
-     * @throws \ReflectionException
      * @throws ConfigNotRegisteredException
      * @throws ControllerException
-     * @throws PathNotRegisteredException
      * @throws IFileNotExistsException
      * @throws IInvalidVariableNameException
+     * @throws MethodNotFoundException
+     * @throws ParameterHasNoDefaultValueException
+     * @throws PathNotRegisteredException
+     * @throws ServiceNotFoundException
+     * @throws ServiceNotInstantiableException
+     * @throws \ReflectionException
      */
-    public function view()
+    public function view($p_id)
     {
+        /**
+         * @var ProductModel $productModel
+         */
+        $productModel = container()->get(ProductModel::class);
+
+        $product = $productModel->getFirst(['title'], 'id=:id', ['id' => $p_id]);
+
+        if (0 === count($product)) {
+            return $this->show404();
+        }
+
+        $products = $productModel->getProductProperty($p_id);
+
         $this->setLayout($this->main_layout)->setTemplate('view/product/stepped/view');
-        return $this->render();
+        return $this->render([
+            'product_id' => $p_id,
+            'products' => $products,
+            'sub_title' => 'محصولات موجود' . '-' . $product['title'],
+        ]);
     }
 
     /**
+     * @param $code
      * @return string
      * @throws ConfigNotRegisteredException
      * @throws ControllerException
      * @throws IFileNotExistsException
      * @throws IInvalidVariableNameException
-     * @throws PathNotRegisteredException
-     * @throws \ReflectionException
      * @throws MethodNotFoundException
      * @throws ParameterHasNoDefaultValueException
+     * @throws PathNotRegisteredException
      * @throws ServiceNotFoundException
      * @throws ServiceNotInstantiableException
+     * @throws \ReflectionException
      */
-    public function add()
+    public function viewStepped($code)
     {
+        /**
+         * @var ProductModel $productModel
+         */
+        $productModel = container()->get(ProductModel::class);
+
+        $product = $productModel->getProductPropertyWithInfo(['product_id'], 'code=:code', ['code' => $code]);
+
+        if (0 === count($product)) {
+            return $this->show404();
+        }
+
+        $product = $product[0];
+        $title = $productModel->getFirst(['title'], 'id=:id', ['id' => $product['product_id']])['title'];
+
+        $products = $productModel->getSteppedPrices($code);
+
+        $this->setLayout($this->main_layout)->setTemplate('view/product/stepped/view-all');
+        return $this->render([
+            'product_code' => $code,
+            'products' => $products,
+            'sub_title' => 'قیمت‌های پلکانی' . '-' . $title,
+            'breadcrumb' => [
+                [
+                    'url' => url('admin.index')->getRelativeUrl(),
+                    'icon' => 'icon-home2',
+                    'text' => 'خانه',
+                    'is_active' => false,
+                ],
+                [
+                    'url' => url('admin.product.view', '')->getRelativeUrl(),
+                    'text' => 'مدیریت محصولات',
+                    'is_active' => false,
+                ],
+                [
+                    'url' => url('admin.stepped-price.view', ['p_id' => $product['product_id']])->getRelativeUrl(),
+                    'text' => 'محصولات موجود برای قیمت پلکانی',
+                    'is_active' => false,
+                ],
+                [
+                    'text' => 'قیمت‌های پلکانی',
+                    'is_active' => true,
+                ],
+            ],
+        ]);
+    }
+
+    /**
+     * @param $code
+     * @return string
+     * @throws ConfigNotRegisteredException
+     * @throws ControllerException
+     * @throws IFileNotExistsException
+     * @throws IInvalidVariableNameException
+     * @throws MethodNotFoundException
+     * @throws ParameterHasNoDefaultValueException
+     * @throws PathNotRegisteredException
+     * @throws ServiceNotFoundException
+     * @throws ServiceNotInstantiableException
+     * @throws \ReflectionException
+     */
+    public function add($code)
+    {
+        /**
+         * @var ProductModel $productModel
+         */
+//        $productModel = container()->get(ProductModel::class);
+//
+//        $product = $productModel->getProductPropertyWithInfo(['product_id'], 'code=:code', ['code' => $code]);
+//
+//        if (0 === count($product)) {
+//            return $this->show404();
+//        }
+//
+//        $product = $product[0];
+//        $title = $productModel->getFirst(['title'], 'id=:id', ['id' => $product['product_id']])['title'];
+        $product = [];
+
         $data = [];
         if (is_post()) {
             $formHandler = new GeneralFormHandler();
@@ -63,10 +161,36 @@ class SteppedPriceController extends AbstractAdminController implements IDatatab
         }
 
         $this->setLayout($this->main_layout)->setTemplate('view/product/stepped/add');
-        return $this->render($data);
+        return $this->render(array_merge($data, [
+            'product_code' => $code,
+            'sub_title' => 'افزودن قیمت پلکانی',// . '-' . $title,
+            'breadcrumb' => [
+                [
+                    'url' => url('admin.index')->getRelativeUrl(),
+                    'icon' => 'icon-home2',
+                    'text' => 'خانه',
+                    'is_active' => false,
+                ],
+                [
+                    'url' => url('admin.product.view', '')->getRelativeUrl(),
+                    'text' => 'مدیریت محصولات',
+                    'is_active' => false,
+                ],
+                [
+                    'url' => url('admin.stepped-price.view', ['p_id' => $product['product_id'] ?? ''])->getRelativeUrl(),
+                    'text' => 'محصولات موجود برای قیمت پلکانی',
+                    'is_active' => false,
+                ],
+                [
+                    'text' => 'افزودن قیمت پلکانی جدید',
+                    'is_active' => true,
+                ],
+            ],
+        ]));
     }
 
     /**
+     * @param $code
      * @param $id
      * @return string
      * @throws ConfigNotRegisteredException
@@ -80,18 +204,21 @@ class SteppedPriceController extends AbstractAdminController implements IDatatab
      * @throws ServiceNotInstantiableException
      * @throws \ReflectionException
      */
-    public function edit($id)
+    public function edit($code, $id)
     {
         /**
          * @var ProductModel $productModel
          */
-        $productModel = container()->get(ProductModel::class);
-
-        $count = $productModel->count('id=:id', ['id' => $id]);
-
-        if (0 == $count) {
-            return $this->show404();
-        }
+//        $productModel = container()->get(ProductModel::class);
+//
+//        $product = $productModel->getProductPropertyWithInfo(['product_id'], 'code=:code', ['code' => $code]);
+//
+//        if (0 === count($product)) {
+//            return $this->show404();
+//        }
+//
+//        $product = $product[0];
+//        $title = $productModel->getFirst(['title'], 'id=:id', ['id' => $product['product_id']])['title'];
 
         // store previous hex to check for duplicate
         session()->setFlash('stepped-curr-id', $id);
@@ -104,12 +231,34 @@ class SteppedPriceController extends AbstractAdminController implements IDatatab
 
         // get product property items
         // ...
-//        $product = $productModel->get(['*'], 'id=:id', ['id' => $id]);
         $product = [];
 
         $this->setLayout($this->main_layout)->setTemplate('view/product/stepped/edit');
         return $this->render(array_merge($data, [
             'product' => $product,
+            'sub_title' => 'ویرایش قیمت پلکانی',// . '-' . $title,
+            'breadcrumb' => [
+                [
+                    'url' => url('admin.index')->getRelativeUrl(),
+                    'icon' => 'icon-home2',
+                    'text' => 'خانه',
+                    'is_active' => false,
+                ],
+                [
+                    'url' => url('admin.product.view', '')->getRelativeUrl(),
+                    'text' => 'مدیریت محصولات',
+                    'is_active' => false,
+                ],
+                [
+                    'url' => url('admin.stepped-price.view', ['p_id' => $product['product_id'] ?? ''])->getRelativeUrl(),
+                    'text' => 'محصولات موجود برای قیمت پلکانی',
+                    'is_active' => false,
+                ],
+                [
+                    'text' => 'ویرایش قیمت پلکانی',
+                    'is_active' => true,
+                ],
+            ],
         ]));
     }
 
@@ -143,62 +292,37 @@ class SteppedPriceController extends AbstractAdminController implements IDatatab
     }
 
     /**
-     * @param array $_
-     * @return void
+     * @param $code
+     * @throws MethodNotFoundException
+     * @throws ParameterHasNoDefaultValueException
+     * @throws ServiceNotFoundException
+     * @throws ServiceNotInstantiableException
+     * @throws \ReflectionException
      */
-    public function getPaginatedDatatable(...$_): void
+    public function removeAll($code)
     {
-        try {
-            /**
-             * @var Agent $agent
-             */
-            $agent = container()->get(Agent::class);
-            if (!$agent->isRobot()) {
-                emitter()->addListener('datatable.ajax:load', function (IEvent $event, $cols, $where, $bindValues, $limit, $offset, $order) {
-                    $event->stopPropagation();
+        $resourceHandler = new ResourceHandler();
 
-                    /**
-                     * @var ColorModel $colorModel
-                     */
-                    $colorModel = container()->get(ColorModel::class);
+        /**
+         * @var Agent $agent
+         */
+        $agent = container()->get(Agent::class);
+        if (!$agent->isRobot()) {
+            emitter()->addListener('remove.general.ajax:success', function (IEvent $event, ResourceHandler $resourceHandler) {
+                $event->stopPropagation();
 
-                    $cols[] = 'deletable';
+                $resourceHandler->data('تمام آیتم‌های قیمت پلکانی با موفقیت حذف شدند.');
+            });
 
-                    $data = $colorModel->get($cols, $where, $bindValues, $order, $limit, $offset);
-                    //-----
-                    $recordsFiltered = $colorModel->count($where, $bindValues);
-                    $recordsTotal = $colorModel->count();
-
-                    return [$data, $recordsFiltered, $recordsTotal];
-                });
-
-                $columns = [
-                    ['db' => 'id', 'db_alias' => 'id', 'dt' => 'id'],
-                    [
-                        'dt' => 'operations',
-                        'formatter' => function ($row) {
-                            $operations = $this->setTemplate('partial/admin/datatable/actions-color')
-                                ->render([
-                                    'row' => $row,
-                                ]);
-                            return $operations;
-                        }
-                    ],
-                ];
-
-                $response = DatatableHandler::handle($_POST, $columns);
-            } else {
-                response()->httpCode(403);
-                $response = [
-                    'error' => 'خطا در ارتباط با سرور، لطفا دوباره تلاش کنید.',
-                ];
-            }
-        } catch (\Exception $e) {
-            $response = [
-                'error' => 'خطا در ارتباط با سرور، لطفا دوباره تلاش کنید.',
-            ];
+            $handler = new GeneralAjaxRemoveHandler();
+            $resourceHandler = $handler->handle(BaseModel::TBL_STEPPED_PRICES, null, 'product_code=:code', ['code' => $code], true);
+        } else {
+            response()->httpCode(403);
+            $resourceHandler
+                ->type(RESPONSE_TYPE_ERROR)
+                ->errorMessage('خطا در ارتباط با سرور، لطفا دوباره تلاش کنید.');
         }
 
-        response()->json($response);
+        response()->json($resourceHandler->getReturnData());
     }
 }

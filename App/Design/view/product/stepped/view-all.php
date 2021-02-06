@@ -1,6 +1,5 @@
 <?php
 
-use App\Logic\Utils\Jdf;
 use Sim\Utils\StringUtil;
 
 ?>
@@ -20,15 +19,10 @@ use Sim\Utils\StringUtil;
             <thead>
             <tr>
                 <th>#</th>
-                <th>تعداد در انبار</th>
-                <th>تعداد مجاز در سبد خرید</th>
-                <th>رنگ</th>
-                <th>سایز</th>
-                <th>گارانتی</th>
+                <th>حداقل تعداد در سبد خرید</th>
+                <th>حداکثر تعداد در سبد خرید</th>
                 <th>قیمت</th>
                 <th>قیمت با تخفیف</th>
-                <th>تخفیف تا تاریخ</th>
-                <th>وضعیت موجودی</th>
                 <th class="text-center">عملیات</th>
             </tr>
             </thead>
@@ -36,29 +30,13 @@ use Sim\Utils\StringUtil;
             <?php foreach ($products as $item): ?>
                 <tr>
                     <td><?= $item['id']; ?></td>
-                    <td><?= $item['stock_count']; ?></td>
-                    <td><?= $item['max_cart_count']; ?></td>
-                    <td>
-                        <?php load_partial('admin/parser/color-shape', ['hex' => $item['color_hex']]); ?>
-                        <span class="ml-2"><?= $item['color_name']; ?></span>
-                    </td>
-                    <td><?= $item['size']; ?></td>
-                    <td><?= $item['guarantee']; ?></td>
+                    <td><?= $item['min_count']; ?></td>
+                    <td><?= $item['max_count']; ?></td>
                     <td>
                         <?= StringUtil::toPersian(number_format(StringUtil::toEnglish($item['price']))); ?>
                     </td>
                     <td>
                         <?= StringUtil::toPersian(number_format(StringUtil::toEnglish($item['discounted_price']))); ?>
-                    </td>
-                    <td>
-                        <?= Jdf::jdate(DEFAULT_TIME_FORMAT, $item['discount_until']); ?>
-                    </td>
-                    <td>
-                        <?php load_partial('admin/parser/active-status', [
-                            'status' => $item['is_available'],
-                            'active' => 'موجود',
-                            'deactive' => 'ناموجود',
-                        ]); ?>
                     </td>
                     <td class="text-center">
                         <div class="list-icons">
@@ -68,14 +46,14 @@ use Sim\Utils\StringUtil;
                                 </a>
 
                                 <div class="dropdown-menu dropdown-menu-left">
-                                    <a href="<?= url('admin.stepped-price.view', ['code' => $item['code']]); ?>"
+                                    <a href="<?= url('admin.stepped-price.edit', ['code' => '', 'id' => '']); ?>"
                                        class="dropdown-item">
                                         <i class="icon-pencil"></i>
                                         ویرایش
                                     </a>
                                     <a href="javascript:void(0);"
-                                       data-remove-url="<?= url('ajax.product.stepped.remove.all'); ?>"
-                                       data-remove-id="<?= $item['code']; ?>"
+                                       data-remove-url="<?= url('ajax.product.stepped.remove'); ?>"
+                                       data-remove-id="<?= $item['id']; ?>"
                                        class="dropdown-item text-danger __item_remover_btn">
                                         <i class="icon-trash"></i>
                                         حذف
@@ -90,15 +68,10 @@ use Sim\Utils\StringUtil;
             <tfoot>
             <tr>
                 <th>#</th>
-                <th>تعداد در انبار</th>
-                <th>تعداد مجاز در سبد خرید</th>
-                <th>رنگ</th>
-                <th>سایز</th>
-                <th>گارانتی</th>
+                <th>حداقل تعداد در سبد خرید</th>
+                <th>حداکثر تعداد در سبد خرید</th>
                 <th>قیمت</th>
                 <th>قیمت با تخفیف</th>
-                <th>تخفیف تا تاریخ</th>
-                <th>وضعیت موجودی</th>
                 <th class="text-center">عملیات</th>
             </tr>
             </tfoot>

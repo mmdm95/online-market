@@ -479,6 +479,17 @@
                 related: 'inp-edit-product-related[]',
             },
         },
+        answerComment: {
+            inputs: {
+                desc: 'inp-ans-comment-desc',
+            },
+        },
+        addSteppedPrice: {
+            form: '#__form_add_stepped',
+            inputs: {
+                desc: '',
+            },
+        },
     });
     window.MyGlobalVariables.validation = $.extend({}, window.MyGlobalVariables.validation, {
         constraints: {
@@ -1524,6 +1535,33 @@
         if (festivalIdInp.length) {
             festivalId = festivalIdInp.val();
         }
+
+        $('.__send_data_through_request').each(function () {
+            var $this, url, status;
+
+            $this = $(this);
+            url = $this.attr('data-internal-request-url');
+            status = $this.attr('data-internal-request-status');
+
+            if (url && status) {
+                admin.toasts.confirm(null, function () {
+                    admin.request(url, 'post', function () {
+                        var _ = this;
+                        if (_.type === variables.api.types.warning) {
+                            admin.toasts.toast(_.data);
+                        } else {
+                            admin.toasts.toast(_.data, {
+                                type: variables.toasts.types.success,
+                            });
+                        }
+                    }, {
+                        data: {
+                            'status': status,
+                        },
+                    }, true);
+                });
+            }
+        });
 
         $('.__duplicator_btn').each(function (i, element) {
             $(element).on('click' + variables.namespace, function (e) {

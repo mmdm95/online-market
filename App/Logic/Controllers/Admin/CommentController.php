@@ -3,10 +3,11 @@
 namespace App\Logic\Controllers\Admin;
 
 use App\Logic\Abstracts\AbstractAdminController;
+use App\Logic\Forms\Admin\Comment\AddCommentReplyForm;
 use App\Logic\Handlers\DatatableHandler;
 use App\Logic\Handlers\GeneralAjaxMultiStatusHandler;
 use App\Logic\Handlers\GeneralAjaxRemoveHandler;
-use App\Logic\Handlers\GeneralAjaxStatusHandler;
+use App\Logic\Handlers\GeneralFormHandler;
 use App\Logic\Handlers\ResourceHandler;
 use App\Logic\Interfaces\IDatatableController;
 use App\Logic\Models\BaseModel;
@@ -81,41 +82,53 @@ class CommentController extends AbstractAdminController implements IDatatableCon
         /**
          * @var ProductModel $productModel
          */
-//        $productModel = container()->get(ProductModel::class);
-//
-//        $product = $productModel->getSingleProduct('id=:id', ['id' => $p_id], [
-//            'p.id', 'p.title', 'p.image', 'b.name AS brand_name', 'c.name AS category_name',
-//        ]);
-//
-//        if (0 === count($product)) {
-//            return $this->show404();
-//        }
+        $productModel = container()->get(ProductModel::class);
+
+        $product = $productModel->getSingleProduct('p.id=:id', ['id' => $p_id], [
+            'p.id', 'p.title', 'p.image', 'b.name AS brand_name', 'c.name AS category_name',
+        ]);
+
+        if (0 === count($product)) {
+            return $this->show404();
+        }
 
         /**
          * @var CommentModel $commentModel
          */
-//        $commentModel = container()->get(CommentModel::class);
-//
-//        $comment = $commentModel->getComments('id=:id AND product_id=:pId', ['id' => $id, 'pId' => $p_id], 1, 0, [], [
-//            'c.*', 'u.username', 'u.first_name', 'u.last_name'
-//        ]);
-//
-//        if (0 === count($comment)) {
-//            return $this->show404();
-//        }
-//        $comment = $comment[0];
-//
-//        // change comment status to read if it is not
-//        if ($comment['status'] == COMMENT_STATUS_NOT_READ) {
-//            $commentModel->update([
-//                'status' => COMMENT_STATUS_READ,
-//            ], 'id=:id AND product_id=:pId', ['id' => $id, 'pId' => $p_id]);
-//        }
+        $commentModel = container()->get(CommentModel::class);
+
+        $comment = $commentModel->getComments('c.id=:id AND c.product_id=:pId', ['id' => $id, 'pId' => $p_id], 1, 0, [], [
+            'c.*', 'u.username', 'u.first_name', 'u.last_name'
+        ]);
+
+        if (0 === count($comment)) {
+            return $this->show404();
+        }
+        $comment = $comment[0];
+
+        $data = [];
+
+        // store product and comment id to check against
+        session()->setFlash('current-comment-product-id', $p_id);
+        session()->setFlash('current-comment-id', $id);
+
+        if (is_post()) {
+            $formHandler = new GeneralFormHandler();
+            $data = $formHandler->handle(AddCommentReplyForm::class, 'comment_answer');
+        }
+
+        // change comment status to read if it is not
+        if ($comment['status'] == COMMENT_STATUS_NOT_READ) {
+            $commentModel->update([
+                'status' => COMMENT_STATUS_READ,
+            ], 'id=:id AND product_id=:pId', ['id' => $id, 'pId' => $p_id]);
+        }
 
         $this->setLayout($this->main_layout)->setTemplate('view/product/comment/message');
-        return $this->render([
+        return $this->render(array_merge($data, [
+            'comment' => $comment,
             'product_id' => $p_id,
-            'sub_title' => 'جزئیات نظر',// . '-' . $product['title'],
+            'sub_title' => 'جزئیات نظر' . '-' . $product['title'],
             'breadcrumb' => [
                 [
                     'url' => url('admin.index')->getRelativeUrl(),
@@ -130,15 +143,15 @@ class CommentController extends AbstractAdminController implements IDatatableCon
                 ],
                 [
                     'url' => url('admin.comment.view', ['p_id' => $p_id])->getRelativeUrl(),
-                    'text' => 'مدیریت نظرات محصولات',
+                    'text' => 'مدیریت نظرات محصول' . '-' . $product['title'],
                     'is_active' => false,
                 ],
                 [
-                    'text' => 'مدیریت نظرات',
+                    'text' => 'مشاهده نظر',
                     'is_active' => true,
                 ],
             ],
-        ]);
+        ]));
     }
 
     /**
@@ -174,7 +187,7 @@ class CommentController extends AbstractAdminController implements IDatatableCon
      * @param $p_id
      * @param $id
      */
-    public function statusChange($p_id, $id)
+    public function conditionChange($p_id, $id)
     {
         $resourceHandler = new ResourceHandler();
 
@@ -255,7 +268,7 @@ class CommentController extends AbstractAdminController implements IDatatableCon
                     $data = $commentModel->getComments($where, $bindValues, $limit, $offset, $order, $cols);
                     //-----
                     $recordsFiltered = $commentModel->getCommentsCount($where, $bindValues);
-                    $recordsTotal = $commentModel->getCommentsCount('product_id=:pId', ['pId' => $product_id]);
+                    $recordsTotal = $commentModel->getCommentsCount('c.product_id=:pId', ['pId' => $product_id]);
 
                     return [$data, $recordsFiltered, $recordsTotal];
                 });
@@ -275,11 +288,26 @@ class CommentController extends AbstractAdminController implements IDatatableCon
                         'db_alias' => 'status',
                         'dt' => 'status',
                         'formatter' => function ($d) {
-                            $status = $this->setTemplate('partial/admin/parser/active-status')
+                            $status = $this->setTemplate('partial/admin/parser/status-creation')
                                 ->render([
                                     'status' => $d,
-                                    'active' => 'مشاهده شده',
-                                    'deactive' => 'مشاهده نشده',
+                                    'switch' => [
+                                        [
+                                            'status' => COMMENT_STATUS_READ,
+                                            'text' => 'خوانده شده',
+                                            'badge' => 'badge-primary',
+                                        ],
+                                        [
+                                            'status' => COMMENT_STATUS_NOT_READ,
+                                            'text' => 'خوانده نشده',
+                                            'badge' => 'badge-danger',
+                                        ],
+                                        [
+                                            'status' => COMMENT_STATUS_REPLIED,
+                                            'text' => 'پاسخ داده شده',
+                                            'badge' => 'badge-success',
+                                        ],
+                                    ],
                                 ]);
                             return $status;
                         }
@@ -300,7 +328,7 @@ class CommentController extends AbstractAdminController implements IDatatableCon
                                         COMMENT_CONDITION_REJECT => 'عدم تایید',
                                         COMMENT_CONDITION_ACCEPT => 'تایید شده',
                                     ],
-                                    'url' => url('ajax.comment.status', ['p_id' => $product_id, 'id' => $row['id']])->getRelativeUrlTrimmed(),
+                                    'url' => url('ajax.comment.condition', ['p_id' => $product_id, 'id' => $row['id']])->getRelativeUrlTrimmed(),
                                 ]);
                             return $status;
                         }

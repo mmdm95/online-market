@@ -256,12 +256,19 @@ class Route implements IInitialize
                 /**
                  * Stepped Price Route
                  */
-                Router::form('/product/stepped-price/add', 'Admin\SteppedPriceController@add')->name('admin.stepped-price.add');
-                Router::form('/product/stepped-price/edit/{id}', 'Admin\SteppedPriceController@edit')->where([
+                Router::form('/product/stepped-price/add/{code}', 'Admin\SteppedPriceController@add')->where([
+                    'code' => '[a-zA-Z0-9]+',
+                ])->name('admin.stepped-price.add');
+                Router::form('/product/stepped-price/edit/{code}/{id}', 'Admin\SteppedPriceController@edit')->where([
+                    'code' => '[a-zA-Z0-9]+',
                     'id' => '[0-9]+',
                 ])->name('admin.stepped-price.edit');
-                Router::get('/product/stepped-price/view', 'Admin\SteppedPriceController@view')->name('admin.stepped-price.view');
-                Router::post('/product/stepped-price/view/dt', 'Admin\SteppedPriceController@getPaginatedDatatable')->name('admin.stepped-price.dt.view');
+                Router::get('/product/stepped-price/view/{p_id}', 'Admin\SteppedPriceController@view')->where([
+                    'p_id' => '[0-9]+',
+                ])->name('admin.stepped-price.view');
+                Router::get('/product/stepped-price/view-all/{code}', 'Admin\SteppedPriceController@viewStepped')->where([
+                    'code' => '[a-zA-Z0-9]+',
+                ])->name('admin.stepped-price.view');
 
                 /**
                  * Comment Route
@@ -269,7 +276,7 @@ class Route implements IInitialize
                 Router::get('/comment/view/{p_id}', 'Admin\CommentController@view')->where([
                     'p_id' => '[0-9]+',
                 ])->name('admin.comment.view');
-                Router::get('/comment/detail/{p_id}/{id}', 'Admin\CommentController@detail')->where([
+                Router::form('/comment/detail/{p_id}/{id}', 'Admin\CommentController@detail')->where([
                     'p_id' => '[0-9]+',
                     'id' => '[0-9]+',
                 ])->name('admin.comment.detail');
@@ -724,6 +731,9 @@ class Route implements IInitialize
                 Router::delete('/product/stepped-price/remove/{id}', 'Admin\SteppedPriceController@remove')->where([
                     'id' => '[0-9]+',
                 ])->name('ajax.product.stepped.remove');
+                Router::delete('/product/stepped-price/remove-all/{code}', 'Admin\SteppedPriceController@removeAll')->where([
+                    'code' => '[a-zA-Z0-9]+',
+                ])->name('ajax.product.stepped.remove.all');
 
                 /**
                  * comment route
@@ -731,10 +741,10 @@ class Route implements IInitialize
                 Router::delete('/comment/remove/{id}', 'Admin\CommentController@remove')->where([
                     'id' => '[0-9]+',
                 ])->name('ajax.comment.remove');
-                Router::post('/comment/status/{p_id}/{id}', 'Admin\CommentController@statusChange')->where([
+                Router::post('/comment/condition/{p_id}/{id}', 'Admin\CommentController@conditionChange')->where([
                     'p_id' => '[0-9]+',
                     'id' => '[0-9]+',
-                ])->name('ajax.comment.status');
+                ])->name('ajax.comment.condition');
 
                 /**
                  * slider route

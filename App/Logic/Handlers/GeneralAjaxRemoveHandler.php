@@ -37,6 +37,7 @@ class GeneralAjaxRemoveHandler implements IHandler
      *      a resource handler as return array.
      *   3. Extra where parameter: string
      *   4. Bind values for extra where parameter: array
+     *   5. ignore parameter to ignore id: bool
      *
      * @param mixed ...$_
      * @return ResourceHandler
@@ -56,6 +57,7 @@ class GeneralAjaxRemoveHandler implements IHandler
 
         $where = $_[2] ?? '';
         $bindValues = $_[3] ?? [];
+        $ignoreId = $_[4] ?? false;
 
         $canContinue = true;
         if ($this->authCallback instanceof \Closure) {
@@ -63,7 +65,7 @@ class GeneralAjaxRemoveHandler implements IHandler
         }
 
         if ($canContinue) {
-            if (is_null($id)) {
+            if (is_null($id) && !$ignoreId) {
                 $this->resourceHandler
                     ->type(RESPONSE_TYPE_ERROR)
                     ->errorMessage('شناسه آیتم نامعتبر است.');
@@ -76,9 +78,13 @@ class GeneralAjaxRemoveHandler implements IHandler
                 $select = $model->select();
                 $select
                     ->from($table)
-                    ->cols(['COUNT(*) AS count'])
-                    ->where('id=:id')
-                    ->bindValue('id', $id);
+                    ->cols(['COUNT(*) AS count']);
+
+                if (!$ignoreId) {
+                    $select
+                        ->where('id=:id')
+                        ->bindValue('id', $id);
+                }
 
                 if (!empty($where)) {
                     $select
@@ -98,9 +104,20 @@ class GeneralAjaxRemoveHandler implements IHandler
                     if (is_null($emRes) || (bool)$emRes->getReturnValue()) {
                         $delete = $model->delete();
                         $delete
-                            ->from($table)
-                            ->where('id=:id')
-                            ->bindValue('id', $id);
+                            ->from($table);
+
+                        if (!$ignoreId) {
+                            $delete
+                                ->where('id=:id')
+                                ->bindValue('id', $id);
+                        }
+
+                        if (!empty($where)) {
+                            $delete
+                                ->where($where)
+                                ->bindValues($bindValues);
+                        }
+                        
                         $res = $model->execute($delete);
                         if ($res) {
                             $this->resourceHandler

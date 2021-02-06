@@ -508,7 +508,73 @@ class ProductModel extends BaseModel
         $select
             ->from(self::TBL_PRODUCT_PROPERTY)
             ->cols($columns)
-            ->where('id=:id')
+            ->where('product_id=:id')
             ->bindValue('id', $product_id);
+
+        return $this->db->fetchAll($select->getStatement(), $select->getBindValues());
+    }
+
+    /**
+     * @param array $columns
+     * @param string|null $where
+     * @param array $bind_values
+     * @return array
+     */
+    public function getProductPropertyWithInfo(array $columns = ['*'], ?string $where = null, array $bind_values = []): array
+    {
+        $select = $this->connector->select();
+        $select
+            ->from(self::TBL_PRODUCT_PROPERTY)
+            ->cols($columns);
+
+        if (!empty($where)) {
+            $select
+                ->where('product_id=:id')
+                ->bindValues($bind_values);
+        }
+
+        return $this->db->fetchAll($select->getStatement(), $select->getBindValues());
+    }
+
+    /**
+     * @param $product_code
+     * @param array $columns
+     * @return array
+     */
+    public function getSteppedPrices($product_code, array $columns = ['*']): array
+    {
+        $select = $this->connector->select();
+        $select
+            ->from(self::TBL_STEPPED_PRICES)
+            ->cols($columns)
+            ->where('product_code=:code')
+            ->bindValue('code', $product_code);
+
+        return $this->db->fetchAll($select->getStatement(), $select->getBindValues());
+    }
+
+    /**
+     * @param string|null $where
+     * @param array $bind_values
+     * @return int
+     */
+    public function getSteppedPricesCount(?string $where, array $bind_values = []): int
+    {
+        $select = $this->connector->select();
+        $select
+            ->from(self::TBL_STEPPED_PRICES)
+            ->cols(['COUNT(*) AS count']);
+
+        if (!empty($where)) {
+            $select
+                ->where($where)
+                ->bindValues($bind_values);
+        }
+
+        $res = $this->db->fetchAll($select->getStatement(), $select->getBindValues());
+        if (count($res)) {
+            return (int)$res[0]['count'];
+        }
+        return 0;
     }
 }

@@ -17,9 +17,14 @@
                      مشاهده
                 </a>
                 <a href="<?= url('admin.comment.view', ['id' => $row['id']]); ?>"
-                   class="dropdown-item text-info">
+                   class="dropdown-item">
                     <i class="icon-comment-discussion"></i>
                     نمایش نظرات
+                </a>
+                <a href="<?= url('admin.stepped-price.view', ['p_id' => $row['id']]); ?>"
+                   class="dropdown-item text-warning">
+                    <i class="icon-table2"></i>
+                    مدیریت قیمت‌های پلکانی
                 </a>
                 <a href="javascript:void(0);" data-remove-url="<?= url('ajax.product.remove'); ?>"
                    data-remove-id="<?= $row['id']; ?>"

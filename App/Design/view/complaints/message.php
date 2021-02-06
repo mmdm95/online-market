@@ -31,7 +31,7 @@ use App\Logic\Utils\Jdf;
                     </li>
                 </ul>
                 <div class="p-3 bg-light">
-                    <p>
+                    <p class="mb-0">
                         <?= $complaint['body']; ?>
                     </p>
                 </div>

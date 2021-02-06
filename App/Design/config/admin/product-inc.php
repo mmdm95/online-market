@@ -142,24 +142,6 @@ return [
             'admin-editor',
             'admin',
         ],
-        'sub_title' => 'افزودن قیمت پلکانی',
-        'breadcrumb' => [
-            [
-                'url' => url('admin.index')->getRelativeUrl(),
-                'icon' => 'icon-home2',
-                'text' => 'خانه',
-                'is_active' => false,
-            ],
-            [
-                'url' => url('admin.product.view', '')->getRelativeUrl(),
-                'text' => 'مدیریت محصولات',
-                'is_active' => false,
-            ],
-            [
-                'text' => 'افزودن قیمت پلکانی جدید',
-                'is_active' => true,
-            ],
-        ],
     ],
     'view/product/stepped/edit' => [
         'title' => title_concat(\config()->get('settings.title.value'), 'ویرایش قیمت پلکانی'),
@@ -171,33 +153,14 @@ return [
             'admin-editor',
             'admin',
         ],
-        'sub_title' => 'ویرایش قیمت پلکانی',
-        'breadcrumb' => [
-            [
-                'url' => url('admin.index')->getRelativeUrl(),
-                'icon' => 'icon-home2',
-                'text' => 'خانه',
-                'is_active' => false,
-            ],
-            [
-                'url' => url('admin.product.view', '')->getRelativeUrl(),
-                'text' => 'مدیریت محصولات',
-                'is_active' => false,
-            ],
-            [
-                'text' => 'ویرایش محصول',
-                'is_active' => true,
-            ],
-        ],
     ],
     'view/product/stepped/view' => [
-        'title' => title_concat(\config()->get('settings.title.value'), 'مدیریت قیمت‌های پلکانی'),
+        'title' => title_concat(\config()->get('settings.title.value'), 'محصولات موجود'),
         'common' => [
             'admin-base',
             'admin-table',
             'admin',
         ],
-        'sub_title' => 'قیمت‌های پلکانی',
         'breadcrumb' => [
             [
                 'url' => url('admin.index')->getRelativeUrl(),
@@ -211,9 +174,17 @@ return [
                 'is_active' => false,
             ],
             [
-                'text' => 'مدیریت قیمت‌های پلکانی',
+                'text' => 'محصولات موجود برای قیمت پلکانی',
                 'is_active' => true,
             ],
+        ],
+    ],
+    'view/product/stepped/view-all' => [
+        'title' => title_concat(\config()->get('settings.title.value'), 'مدیریت قیمت‌های پلکانی'),
+        'common' => [
+            'admin-base',
+            'admin-table',
+            'admin',
         ],
     ],
     'view/product/comment/view' => [
@@ -245,6 +216,7 @@ return [
         'title' => title_concat(\config()->get('settings.title.value'), 'جزئیات نظر'),
         'common' => [
             'admin-base',
+            'admin-editor',
             'admin',
         ],
     ],

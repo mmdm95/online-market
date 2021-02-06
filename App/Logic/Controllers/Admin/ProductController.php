@@ -78,7 +78,7 @@ class ProductController extends AbstractAdminController implements IDatatableCon
             return $this->show404();
         }
 
-        $product = $productModel->getSingleProduct('id=:id', ['id' => $id]);
+        $product = $productModel->getSingleProduct('p.id=:id', ['id' => $id]);
         $related = $productModel->getRelatedProductsWithInfo($id, ['title', 'image', 'brand_name', 'category_name']);
         $gallery = $productModel->getImageGallery($id);
         $productProperty = $productModel->getProductProperty($id);
