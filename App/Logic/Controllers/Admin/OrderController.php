@@ -3,11 +3,8 @@
 namespace App\Logic\Controllers\Admin;
 
 use App\Logic\Abstracts\AbstractAdminController;
-use App\Logic\Handlers\DatatableHandler;
 use App\Logic\Interfaces\IDatatableController;
-use Jenssegers\Agent\Agent;
 use ReflectionException;
-use Sim\Event\Interfaces\IEvent;
 use Sim\Exceptions\ConfigManager\ConfigNotRegisteredException;
 use Sim\Exceptions\Mvc\Controller\ControllerException;
 use Sim\Exceptions\PathManager\PathNotRegisteredException;
@@ -44,7 +41,9 @@ class OrderController extends AbstractAdminController implements IDatatableContr
     public function detail($id)
     {
         $this->setLayout($this->main_layout)->setTemplate('view/order/detail');
-        return $this->render();
+        return $this->render([
+            'sub_title' => 'جزيیات سفارش',// . '-' . $order['code'],
+        ]);
     }
 
     /**

@@ -515,6 +515,26 @@ class ProductModel extends BaseModel
     }
 
     /**
+     * @param $product_id
+     * @return int
+     */
+    public function getProductPropertyCount($product_id): int
+    {
+        $select = $this->connector->select();
+        $select
+            ->from(self::TBL_PRODUCT_PROPERTY)
+            ->cols(['COUNT(*) AS count'])
+            ->where('product_id=:id')
+            ->bindValue('id', $product_id);
+
+        $res = $this->db->fetchAll($select->getStatement(), $select->getBindValues());
+        if (count($res)) {
+            return (int)$res[0]['count'];
+        }
+        return 0;
+    }
+
+    /**
      * @param array $columns
      * @param string|null $where
      * @param array $bind_values
@@ -529,7 +549,7 @@ class ProductModel extends BaseModel
 
         if (!empty($where)) {
             $select
-                ->where('product_id=:id')
+                ->where($where)
                 ->bindValues($bind_values);
         }
 
@@ -549,6 +569,28 @@ class ProductModel extends BaseModel
             ->cols($columns)
             ->where('product_code=:code')
             ->bindValue('code', $product_code);
+
+        return $this->db->fetchAll($select->getStatement(), $select->getBindValues());
+    }
+
+    /**
+     * @param array $columns
+     * @param string|null $where
+     * @param array $bind_values
+     * @return array
+     */
+    public function getSteppedPricesWithInfo(array $columns = ['*'], ?string $where = null, array $bind_values = []): array
+    {
+        $select = $this->connector->select();
+        $select
+            ->from(self::TBL_STEPPED_PRICES)
+            ->cols($columns);
+
+        if (!empty($where)) {
+            $select
+                ->where($where)
+                ->bindValues($bind_values);
+        }
 
         return $this->db->fetchAll($select->getStatement(), $select->getBindValues());
     }
@@ -576,5 +618,45 @@ class ProductModel extends BaseModel
             return (int)$res[0]['count'];
         }
         return 0;
+    }
+
+    /**
+     * @param array $values
+     * @return bool
+     */
+    public function insertSteppedPrice(array $values): bool
+    {
+        $insert = $this->connector->insert();
+        $insert
+            ->into(self::TBL_STEPPED_PRICES)
+            ->cols($values);
+
+        $stmt = $this->db->prepare($insert->getStatement());
+        $res = $stmt->execute($insert->getBindValues());
+
+        return $res;
+    }
+
+    /**
+     * @param array $data
+     * @param string $where
+     * @param array $bind_values
+     * @return bool
+     */
+    public function updateSteppedPrice(array $data, string $where, array $bind_values = []): bool
+    {
+        $update = $this->connector->update();
+        $update
+            ->table(self::TBL_STEPPED_PRICES)
+            ->cols($data);
+
+        if (!empty($where)) {
+            $update
+                ->where($where)
+                ->bindValues($bind_values);
+        }
+
+        $stmt = $this->db->prepare($update->getStatement());
+        return $stmt->execute($update->getBindValues());
     }
 }

@@ -353,20 +353,13 @@ class Route implements IInitialize
                 ])->name('admin.newsletter.view');
 
                 /**
-                 * Wallet Route
-                 */
-                Router::get('/wallet/view/{id?}', 'Admin\WalletController@view')->where([
-                    'id' => '[0-9]+',
-                ])->name('admin.wallet.view');
-                Router::form('/wallet/deposit-type', 'Admin\WalletController@depositType')->name('admin.wallet.deposit-type');
-
-                /**
                  * Order Route
                  */
-                Router::get('/order/view', 'Admin\OrderController@view')->name('admin.order.view');
                 Router::get('/order/detail/{id}', 'Admin\OrderController@detail')->where([
                     'id' => '[0-9]+',
                 ])->name('admin.order.detail');
+                Router::get('/order/view', 'Admin\OrderController@view')->name('admin.order.view');
+                Router::get('/order/view/dt', 'Admin\OrderController@getPaginatedDatatable')->name('admin.order.dt.view');
 
                 /**
                  * Return Order Route
@@ -381,6 +374,14 @@ class Route implements IInitialize
                  */
                 Router::get('/order/badges', 'Admin\OrderBadgeController@view')->name('admin.badge.view');
                 Router::post('/order/badges/dt', 'Admin\OrderBadgeController@getPaginatedDatatable')->name('admin.badge.dt.view');
+
+                /**
+                 * Wallet Route
+                 */
+                Router::get('/wallet/view/{id?}', 'Admin\WalletController@view')->where([
+                    'id' => '[0-9]+',
+                ])->name('admin.wallet.view');
+                Router::form('/wallet/deposit-type', 'Admin\WalletController@depositType')->name('admin.wallet.deposit-type');
 
                 /**
                  * Slider Route

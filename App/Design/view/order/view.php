@@ -9,7 +9,9 @@
             با استفاده از ستون عملیات می‌توانید اقدام به حذف، ویرایش و مشاهده خرید‌های کاربر کنید.
         </div>
 
-        <table class="table table-bordered table-hover datatable-highlight">
+        <table class="table table-bordered table-hover datatable-highlight"
+               data-columns='[{"data":"id"},{"data":""},{"data":"operations"}]'
+               data-ajax-url="<?= url('admin.order.dt.view')->getRelativeUrlTrimmed(); ?>">
             <thead>
             <tr>
                 <th>کد سیستم</th>
@@ -29,7 +31,7 @@
                 <td><a href="#">دهقان منشادی</a></td>
                 <td>
                     <button type="button" class="btn btn-dark" data-toggle="modal"
-                            data-target="#modal_form_reciver_detail">
+                            data-target="#modal_form_receiver_detail">
                         مشاهده
                     </button>
                 </td>
@@ -54,64 +56,69 @@
                     </div>
                 </td>
             </tr>
-            <!-- Vertical form modal -->
-            <div id="modal_form_reciver_detail" class="modal fade" tabindex="-1">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <!-- Multi column -->
-                        <div class="card">
-                            <div class="card-body">
-                                <h5 class="card-title">اطلاعات گیرنده</h5>
-                            </div>
-                            <ul class="list-group list-group-flush border-top">
-                                <li class="list-group-item">
-                                    <span class="font-weight-semibold">نام گیرنده:</span>
-                                    <div class="ml-auto">
-                                        محمدمهدی دهقان منشادی
-                                    </div>
-                                </li>
-                                <li class="list-group-item">
-                                    <span class="font-weight-semibold">شماره تلفن:</span>
-                                    <div class="ml-auto">
-                                        09179516271
-                                    </div>
-                                </li>
-                                <li class="list-group-item">
-                                    <span class="font-weight-semibold">
-                                        استان:
-                                    </span>
-                                    <div class="ml-auto">
-                                        یزد
-                                    </div>
-                                </li>
-                                <li class="list-group-item">
-                                    <span class="font-weight-semibold">شهر:</span>
-                                    <div class="ml-auto">
-                                        یزد
-                                    </div>
-                                </li>
-                                <li class="list-group-item">
-                                    <span class="font-weight-semibold">
-                                        آدرس کامل:
-                                    </span>
-                                    <div class="ml-auto">
-                                        خیابان کاشانی کوچه لاله پلاک 35
-                                    </div>
-                                </li>
-                            </ul>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-link" data-dismiss="modal">بستن</button>
-                            </div>
-                        </div>
-                        <!-- /multi column -->
-                    </div>
-                </div>
-            </div>
-            <!-- /vertical form modal -->
             </tbody>
         </table>
     </div>
     <!-- /highlighting rows and columns -->
+
+    <!-- Receiver information -->
+    <div id="modal_form_receiver_detail" class="modal fade" tabindex="-1">
+
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-light">
+                    <h5 class="modal-title">اطلاعات گیرنده</h5>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <div class="modal-body">
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">
+                            <div class="font-weight-semibold">نام گیرنده:</div>
+                            <div class="ml-auto text-info-800" id="__receiver_info_full_name">
+                                خطا در بارگذاری
+                            </div>
+                        </li>
+                        <li class="list-group-item">
+                            <div class="font-weight-semibold">شماره تلفن:</div>
+                            <div class="ml-auto text-info-800" id="__receiver_info_phone">
+                                خطا در بارگذاری
+                            </div>
+                        </li>
+                        <li class="list-group-item">
+                            <div class="font-weight-semibold">استان:</div>
+                            <div class="ml-auto text-info-800" id="__receiver_info_province">
+                                خطا در بارگذاری
+                            </div>
+                        </li>
+                        <li class="list-group-item">
+                            <div class="font-weight-semibold">شهر:</div>
+                            <div class="ml-auto text-info-800" id="__receiver_info_city">
+                                خطا در بارگذاری
+                            </div>
+                        </li>
+                        <li class="list-group-item">
+                            <div class="font-weight-semibold">کد پستی:</div>
+                            <div class="ml-auto text-info-800" id="__receiver_info_postal_code">
+                                خطا در بارگذاری
+                            </div>
+                        </li>
+                        <li class="list-group-item">
+                            <div class="font-weight-semibold">آدرس کامل:</div>
+                            <div class="ml-auto text-info-800" id="__receiver_info_address">
+                                خطا در بارگذاری
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary px-4" data-dismiss="modal">بستن</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /receiver information -->
 
 </div>
 <!-- /content area -->

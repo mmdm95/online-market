@@ -3,7 +3,7 @@
 namespace App\Logic\Forms\Admin\Stepped;
 
 use App\Logic\Interfaces\IPageForm;
-use App\Logic\Models\PaymentMethodModel;
+use App\Logic\Models\ProductModel;
 use App\Logic\Validations\ExtendedValidator;
 use Sim\Auth\DBAuth;
 use Sim\Container\Exceptions\MethodNotFoundException;
@@ -36,39 +36,83 @@ class EditSteppedForm implements IPageForm
         // aliases
         $validator
             ->setFieldsAlias([
-                'inp-edit-pay-method-img' => 'تصویر',
-                'inp-edit-pay-method-title' => 'عنوان',
+                'inp-add-stepped-min-count' => 'حداقل تعداد در سبد خرید',
+                'inp-add-stepped-max-count' => 'حداثر تعداد در سبد خرید',
+                'inp-add-stepped-price' => 'قیمت',
+                'inp-add-stepped-discounted-price' => 'قیمت با تخفیف',
+            ])
+            ->toEnglishValue(true, true)
+            ->setOptionalFields([
+                'inp-add-stepped-min-count',
+                'inp-add-stepped-max-count',
             ]);
 
-        // title
-        $validator
-            ->setFields('inp-edit-pay-method-title')
-            ->stopValidationAfterFirstError(false)
-            ->required()
-            ->stopValidationAfterFirstError(true)
-            ->lessThanEqualLength(250);
-        // image
-        $validator
-            ->setFields('inp-edit-pay-method-img')
-            ->stopValidationAfterFirstError(false)
-            ->required()
-            ->stopValidationAfterFirstError(true)
-            ->imageExists();
-
         /**
-         * @var PaymentMethodModel $payModel
+         * @var ProductModel $productModel
          */
-        $payModel = container()->get(PaymentMethodModel::class);
+        $productModel = container()->get(ProductModel::class);
 
-        $id = session()->getFlash('pay-method-curr-id', null, false);
-        if (!empty($id)) {
-            if (0 === $payModel->count('id=:id', ['id' => $id])) {
-                $validator->setError('inp-edit-pay-method-title', 'شناسه روش پرداخت نامعتبر است.');
+        // price & discount
+        $validator
+            ->setFields([
+                'inp-add-stepped-price',
+                'inp-add-stepped-discounted-price'
+            ])
+            ->stopValidationAfterFirstError(false)
+            ->required()
+            ->stopValidationAfterFirstError(true)
+            ->isInteger();
+
+        $min = $validator->getFieldValue('inp-add-stepped-min-count');
+        $max = $validator->getFieldValue('inp-add-stepped-max-count');
+
+        if (!is_null($min)) {
+            if ($productModel->getSteppedPricesCount('min_count=:min', ['min' => $min]) > 0) {
+                $validator
+                    ->setStatus(false)
+                    ->setError('inp-add-stepped-min-count', 'مقدار برابر با مقدار وارد شده ' . $validator->getFieldAlias('inp-add-stepped-min-count') . ' وجود دارد.');
+            }
+        }
+        if (!is_null($max)) {
+            if ($productModel->getSteppedPricesCount('max_count=:max', ['max' => $max]) > 0) {
+                $validator
+                    ->setStatus(false)
+                    ->setError('inp-add-stepped-max-count', 'مقدار برابر با مقدار وارد شده ' . $validator->getFieldAlias('inp-add-stepped-max-count') . ' وجود دارد.');
+            }
+        }
+        if (is_null($min) && is_null($max)) {
+            $validator
+                ->setStatus(false)
+                ->setError('inp-add-stepped-min-count', 'وارد کردن یکی از ' . $validator->getFieldAlias('inp-add-stepped-min-count') . ' یا ' . $validator->getFieldAlias('inp-add-stepped-max-count') . ' الزامی است.');
+        }
+        if (!is_null($min) && !is_null($max) && $min > $max) {
+            $validator
+                ->setStatus(false)
+                ->setError('inp-add-stepped-min-count', $validator->getFieldAlias('inp-add-stepped-min-count') . ' باید از ' . $validator->getFieldAlias('inp-add-stepped-max-count') . ' بیشتر باشد.');
+        }
+
+        $code = session()->getFlash('stepped-add-curr-code', null, false);
+        if (!empty($code)) {
+            $count = $productModel->getProductPropertyWithInfo(['COUNT(*) AS count'], 'code=:code', ['code' => $code]);
+            if (empty($count) || 0 === (int)$count['count']) {
+                $validator->setError('inp-add-stepped-price', 'شناسه قیمت پلکانی نامعتبر است.');
             }
         } else {
             $validator
                 ->setStatus(false)
-                ->setError('inp-edit-pay-method-title', 'شناسه روش پرداخت نامعتبر است.');
+                ->setError('inp-add-stepped-price', 'شناسه قیمت پلکانی نامعتبر است.');
+        }
+
+        $id = session()->getFlash('product-stepped-curr-id', null);
+        if (!empty($id)) {
+            $count = $productModel->getSteppedPricesWithInfo(['COUNT(*) AS count'], 'id=:id', ['id' => $id]);
+            if (empty($count) || 0 === (int)$count['count']) {
+                $validator->setError('inp-add-stepped-price', 'شناسه قیمت پلکانی نامعتبر است.');
+            }
+        } else {
+            $validator
+                ->setStatus(false)
+                ->setError('inp-add-stepped-price', 'شناسه قیمت پلکانی نامعتبر است.');
         }
 
         // to reset form values and not set them again
@@ -97,9 +141,9 @@ class EditSteppedForm implements IPageForm
     public function store(): bool
     {
         /**
-         * @var PaymentMethodModel $payModel
+         * @var ProductModel $productModel
          */
-        $payModel = container()->get(PaymentMethodModel::class);
+        $productModel = container()->get(ProductModel::class);
         /**
          * @var AntiXSS $xss
          */
@@ -110,19 +154,22 @@ class EditSteppedForm implements IPageForm
         $auth = container()->get('auth_admin');
 
         try {
-            $image = input()->post('inp-edit-pay-method-img', '')->getValue();
-            $title = input()->post('inp-edit-pay-method-title', '')->getValue();
-            $pub = input()->post('inp-edit-pay-method-status', '')->getValue();
-            $id = session()->getFlash('pay-method-curr-id', null);
-            if (is_null($id)) return false;
+            $code = session()->getFlash('stepped-add-curr-code', null);
+            $id = session()->getFlash('product-stepped-curr-id', null);
+            $min = input()->post('inp-add-stepped-min-count', '')->getValue();
+            $max = input()->post('inp-add-stepped-max-count', '')->getValue();
+            $price = input()->post('inp-add-stepped-price', '')->getValue();
+            $discount = input()->post('inp-add-stepped-discounted-price', '')->getValue();
+            if (is_null($code) || is_null($id)) return false;
 
-            return $payModel->update([
-                'title' => $xss->xss_clean(trim($title)),
-                'image' => $xss->xss_clean(get_image_name($image)),
-                'publish' => is_value_checked($pub) ? DB_YES : DB_NO,
+            return $productModel->updateSteppedPrice([
+                'min_count' => $xss->xss_clean(trim($min)),
+                'max_count' => $xss->xss_clean(trim($max)),
+                'price' => $xss->xss_clean(trim($price)),
+                'discounted_price' => $xss->xss_clean(trim($discount)),
                 'updated_by' => $auth->getCurrentUser()['id'] ?? null,
                 'updated_at' => time(),
-            ], 'id=:id', ['id' => $id]);
+            ], 'id=:id AND product_code=:code', ['id' => $id, 'code' => $code]);
         } catch (\Exception $e) {
             return false;
         }

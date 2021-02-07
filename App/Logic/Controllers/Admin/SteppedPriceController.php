@@ -142,17 +142,19 @@ class SteppedPriceController extends AbstractAdminController
         /**
          * @var ProductModel $productModel
          */
-//        $productModel = container()->get(ProductModel::class);
-//
-//        $product = $productModel->getProductPropertyWithInfo(['product_id'], 'code=:code', ['code' => $code]);
-//
-//        if (0 === count($product)) {
-//            return $this->show404();
-//        }
-//
-//        $product = $product[0];
-//        $title = $productModel->getFirst(['title'], 'id=:id', ['id' => $product['product_id']])['title'];
+        $productModel = container()->get(ProductModel::class);
+
+        $product = $productModel->getProductPropertyWithInfo(['product_id'], 'code=:code', ['code' => $code]);
+
+        if (0 === count($product)) {
+            return $this->show404();
+        }
+
+        $product = $product[0];
+        $title = $productModel->getFirst(['title'], 'id=:id', ['id' => $product['product_id']])['title'];
         $product = [];
+
+        session()->setFlash('stepped-add-curr-code', $code);
 
         $data = [];
         if (is_post()) {
@@ -163,7 +165,7 @@ class SteppedPriceController extends AbstractAdminController
         $this->setLayout($this->main_layout)->setTemplate('view/product/stepped/add');
         return $this->render(array_merge($data, [
             'product_code' => $code,
-            'sub_title' => 'افزودن قیمت پلکانی',// . '-' . $title,
+            'sub_title' => 'افزودن قیمت پلکانی' . '-' . $title,
             'breadcrumb' => [
                 [
                     'url' => url('admin.index')->getRelativeUrl(),
@@ -177,7 +179,7 @@ class SteppedPriceController extends AbstractAdminController
                     'is_active' => false,
                 ],
                 [
-                    'url' => url('admin.stepped-price.view', ['p_id' => $product['product_id'] ?? ''])->getRelativeUrl(),
+                    'url' => url('admin.stepped-price.view', ['p_id' => $product['product_id']])->getRelativeUrl(),
                     'text' => 'محصولات موجود برای قیمت پلکانی',
                     'is_active' => false,
                 ],
@@ -209,19 +211,20 @@ class SteppedPriceController extends AbstractAdminController
         /**
          * @var ProductModel $productModel
          */
-//        $productModel = container()->get(ProductModel::class);
-//
-//        $product = $productModel->getProductPropertyWithInfo(['product_id'], 'code=:code', ['code' => $code]);
-//
-//        if (0 === count($product)) {
-//            return $this->show404();
-//        }
-//
-//        $product = $product[0];
-//        $title = $productModel->getFirst(['title'], 'id=:id', ['id' => $product['product_id']])['title'];
+        $productModel = container()->get(ProductModel::class);
 
-        // store previous hex to check for duplicate
-        session()->setFlash('stepped-curr-id', $id);
+        $product = $productModel->getProductPropertyWithInfo(['product_id'], 'code=:code', ['code' => $code]);
+
+        if (0 === count($product)) {
+            return $this->show404();
+        }
+
+        $product = $product[0];
+        $title = $productModel->getFirst(['title'], 'id=:id', ['id' => $product['product_id']])['title'];
+
+        // store previous info to check for duplicate
+        session()->setFlash('product-stepped-curr-id', $id);
+        session()->setFlash('stepped-edit-curr-code', $code);
 
         $data = [];
         if (is_post()) {
@@ -229,14 +232,14 @@ class SteppedPriceController extends AbstractAdminController
             $data = $formHandler->handle(EditSteppedForm::class, 'stepped_edit');
         }
 
-        // get product property items
-        // ...
-        $product = [];
+        $product = $productModel->getSteppedPrices($code);
 
         $this->setLayout($this->main_layout)->setTemplate('view/product/stepped/edit');
         return $this->render(array_merge($data, [
+            'product_code' => $code,
+            'product_id' => $id,
             'product' => $product,
-            'sub_title' => 'ویرایش قیمت پلکانی',// . '-' . $title,
+            'sub_title' => 'ویرایش قیمت پلکانی' . '-' . $title,
             'breadcrumb' => [
                 [
                     'url' => url('admin.index')->getRelativeUrl(),
@@ -250,7 +253,7 @@ class SteppedPriceController extends AbstractAdminController
                     'is_active' => false,
                 ],
                 [
-                    'url' => url('admin.stepped-price.view', ['p_id' => $product['product_id'] ?? ''])->getRelativeUrl(),
+                    'url' => url('admin.stepped-price.view', ['p_id' => $product['product_id']])->getRelativeUrl(),
                     'text' => 'محصولات موجود برای قیمت پلکانی',
                     'is_active' => false,
                 ],

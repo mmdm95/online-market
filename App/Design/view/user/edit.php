@@ -143,9 +143,10 @@ $validator = form_validator();
                                          id="passwordContainer">
                                         <div class="row">
                                             <div class="col-12">
-                                                <div class="alert bg-info text-white">
-                                                    برای عدم تغییر کلمه عبور، فیلدهای زیر را خالی بگذارید.
-                                                </div>
+                                                <?php load_partial('admin/message/message-info', [
+                                                    'info' => 'برای عدم تغییر کلمه عبور، فیلدهای زیر را خالی بگذارید.',
+                                                    'dismissible' => false,
+                                                ]); ?>
                                             </div>
                                             <div class="form-group col-lg-6">
                                                 <label>

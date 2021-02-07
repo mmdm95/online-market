@@ -18,12 +18,12 @@ return [
                 'is_active' => false,
             ],
             [
-                'text' => 'اسلایدها',
+                'text' => 'لیست سفارشات',
                 'is_active' => true,
             ],
         ],
     ],
-    'view/order/order-detail' => [
+    'view/order/detail' => [
         'title' => title_concat(\config()->get('settings.title.value'), 'جزئیات سفارش'),
         'common' => [
             'admin-base',
@@ -31,7 +31,6 @@ return [
             'admin-form',
             'admin'
         ],
-        'sub_title' => 'سفارش',
         'breadcrumb' => [
             [
                 'url' => url('admin.index')->getRelativeUrl(),
@@ -41,11 +40,11 @@ return [
             ],
             [
                 'url' => url('admin.order.view', '')->getRelativeUrl(),
-                'text' => 'مدیرت سفارشات',
+                'text' => 'لیست سفارشات',
                 'is_active' => false,
             ],
             [
-                'text' => 'سفارش',
+                'text' => 'جزيیات سفارش',
                 'is_active' => true,
             ],
         ],

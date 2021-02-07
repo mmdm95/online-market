@@ -487,7 +487,19 @@
         addSteppedPrice: {
             form: '#__form_add_stepped',
             inputs: {
-                desc: '',
+                min: 'inp-add-stepped-min-count',
+                max: 'inp-add-stepped-max-count',
+                price: 'inp-add-stepped-price',
+                discount: 'inp-add-stepped-discounted-price',
+            },
+        },
+        editSteppedPrice: {
+            form: '#__form_edit_stepped',
+            inputs: {
+                min: 'inp-edit-stepped-min-count',
+                max: 'inp-edit-stepped-max-count',
+                price: 'inp-edit-stepped-price',
+                discount: 'inp-edit-stepped-discounted-price',
             },
         },
     });
@@ -1251,6 +1263,58 @@
                     },
                 },
             },
+            addSteppedPrice: {
+                min: {
+                    format: {
+                        pattern: /[0-9]*/,
+                        message: '^' + 'حداقل تعداد در سبد خرید باید از نوع عددی باشد.',
+                    },
+                },
+                max: {
+                    format: {
+                        pattern: /[0-9]*/,
+                        message: '^' + 'حداکثر تعداد در سبد خرید باید از نوع عددی باشد.',
+                    },
+                },
+                price: {
+                    presence: {
+                        allowEmpty: false,
+                        message: '^' + 'قیمت را وارد کنید.',
+                    },
+                },
+                discount: {
+                    presence: {
+                        allowEmpty: false,
+                        message: '^' + 'قیمت با تخفیف را وارد کنید.',
+                    },
+                },
+            },
+            editSteppedPrice: {
+                min: {
+                    format: {
+                        pattern: /[0-9]*/,
+                        message: '^' + 'حداقل تعداد در سبد خرید باید از نوع عددی باشد.',
+                    },
+                },
+                max: {
+                    format: {
+                        pattern: /[0-9]*/,
+                        message: '^' + 'حداکثر تعداد در سبد خرید باید از نوع عددی باشد.',
+                    },
+                },
+                price: {
+                    presence: {
+                        allowEmpty: false,
+                        message: '^' + 'قیمت را وارد کنید.',
+                    },
+                },
+                discount: {
+                    presence: {
+                        allowEmpty: false,
+                        message: '^' + 'قیمت با تخفیف را وارد کنید.',
+                    },
+                },
+            },
         },
     });
 
@@ -1504,6 +1568,18 @@
             modifyProductFestival: {
                 category: variables.validation.constraints.modifyProductFestival.category,
                 percent: variables.validation.common.percent,
+            },
+            addSteppedPrice: {
+                min: variables.validation.constraints.addSteppedPrice.min,
+                max: variables.validation.constraints.addSteppedPrice.max,
+                price: variables.validation.constraints.addSteppedPrice.price,
+                discount: variables.validation.constraints.addSteppedPrice.discount,
+            },
+            editSteppedPrice: {
+                min: variables.validation.constraints.editSteppedPrice.min,
+                max: variables.validation.constraints.editSteppedPrice.max,
+                price: variables.validation.constraints.editSteppedPrice.price,
+                discount: variables.validation.constraints.editSteppedPrice.discount,
             },
         };
 
@@ -4059,6 +4135,26 @@
             } else {
                 admin.forms.showFormErrors(formErrors);
             }
+        });
+
+        //---------------------------------------------------------------
+        // ADD STEPPED PRICE FORM
+        //---------------------------------------------------------------
+        admin.forms.submitForm('addSteppedPrice', constraints.addSteppedPrice, function () {
+            return true;
+        }, function (errors) {
+            admin.forms.showFormErrors(errors);
+            return false;
+        });
+
+        //---------------------------------------------------------------
+        // Edit STEPPED PRICE FORM
+        //---------------------------------------------------------------
+        admin.forms.submitForm('editSteppedPrice', constraints.editSteppedPrice, function () {
+            return true;
+        }, function (errors) {
+            admin.forms.showFormErrors(errors);
+            return false;
         });
     });
 })(jQuery);

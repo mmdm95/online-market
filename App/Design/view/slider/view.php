@@ -169,7 +169,6 @@
                         <button type="submit" class="btn btn-success">ویرایش اسلاید</button>
                     </div>
                 </form>
-
             </div>
         </div>
     </div>
