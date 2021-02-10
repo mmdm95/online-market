@@ -50,7 +50,7 @@ class PageController extends AbstractHomeController
         $ourTeamModel = \container()->get(OurTeamModel::class);
 
         return $this->render([
-            'our_team' => $ourTeamModel->get(['name', 'position', 'images', 'socials']),
+            'our_team' => $ourTeamModel->get(['name', 'position', 'image', 'socials']),
         ]);
     }
 

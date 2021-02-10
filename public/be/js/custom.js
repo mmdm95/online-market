@@ -87,6 +87,9 @@
             pub: '/ajax/product/pub-status',
             av: '/ajax/product/av-status',
         },
+        orders: {
+            info: '/ajax/order/info',
+        }
     });
     window.MyGlobalVariables.elements = $.extend(true, window.MyGlobalVariables.elements, {
         addAddress: {
@@ -387,6 +390,24 @@
                 title: 'inp-edit-pay-method-title',
             },
         },
+        addSendMethod: {
+            form: '#__form_add_send_method',
+            inputs: {
+                status: 'inp-add-send-method-status',
+                image: 'inp-add-send-method-img',
+                title: 'inp-add-send-method-title',
+                desc: 'inp-add-send-method-desc',
+            },
+        },
+        editSendMethod: {
+            form: '#__form_edit_send_method',
+            inputs: {
+                status: 'inp-edit-send-method-status',
+                image: 'inp-edit-send-method-img',
+                title: 'inp-edit-send-method-title',
+                desc: 'inp-edit-send-method-desc',
+            },
+        },
         addFestival: {
             form: '#__form_add_festival',
             inputs: {
@@ -425,6 +446,7 @@
                 status: 'inp-add-product-status',
                 availability: 'inp-add-product-availability',
                 special: 'inp-add-product-special',
+                returnable: 'inp-add-product-returnable',
                 commenting: 'inp-add-product-commenting',
                 image: 'inp-add-product-img',
                 title: 'inp-add-product-title',
@@ -455,6 +477,7 @@
                 status: 'inp-edit-product-status',
                 availability: 'inp-edit-product-availability',
                 special: 'inp-edit-product-special',
+                returnable: 'inp-edit-product-returnable',
                 commenting: 'inp-edit-product-commenting',
                 image: 'inp-edit-product-img',
                 title: 'inp-edit-product-title',
@@ -1183,6 +1206,54 @@
                     },
                 },
             },
+            addSendMethod: {
+                image: {
+                    presence: {
+                        allowEmpty: false,
+                        message: '^' + 'تصویر روش ارسال را انتخاب کنید.',
+                    },
+                },
+                title: {
+                    presence: {
+                        allowEmpty: false,
+                        message: '^' + 'عنوان روش ارسال را وارد کنید.',
+                    },
+                    length: {
+                        maximum: 250,
+                        message: '^' + 'عنوان روش ارسال حداکثر باید ۲۵۰ کاراکتر باشد.',
+                    },
+                },
+                desc: {
+                    length: {
+                        maximum: 250,
+                        message: '^' + 'توضیحات روش ارسال حداکثر باید ۲۵۰ کاراکتر باشد.',
+                    },
+                },
+            },
+            editSendMethod: {
+                image: {
+                    presence: {
+                        allowEmpty: false,
+                        message: '^' + 'تصویر روش ارسال را انتخاب کنید.',
+                    },
+                },
+                title: {
+                    presence: {
+                        allowEmpty: false,
+                        message: '^' + 'عنوان روش ارسال را وارد کنید.',
+                    },
+                    length: {
+                        maximum: 250,
+                        message: '^' + 'عنوان روش ارسال حداکثر باید ۲۵۰ کاراکتر باشد.',
+                    },
+                },
+                desc: {
+                    length: {
+                        maximum: 250,
+                        message: '^' + 'توضیحات روش ارسال حداکثر باید ۲۵۰ کاراکتر باشد.',
+                    },
+                },
+            },
             addFestival: {
                 title: {
                     presence: {
@@ -1550,6 +1621,16 @@
             editPaymentMethod: {
                 image: variables.validation.constraints.editPaymentMethod.image,
                 title: variables.validation.constraints.editPaymentMethod.title,
+            },
+            addSendMethod: {
+                image: variables.validation.constraints.addSendMethod.image,
+                title: variables.validation.constraints.addSendMethod.title,
+                desc: variables.validation.constraints.addSendMethod.desc,
+            },
+            editSendMethod: {
+                image: variables.validation.constraints.editSendMethod.image,
+                title: variables.validation.constraints.editSendMethod.title,
+                desc: variables.validation.constraints.editSendMethod.desc,
             },
             addFestival: {
                 title: variables.validation.constraints.addFestival.title,
@@ -2895,6 +2976,39 @@
         }
 
         /**
+         * @param btn
+         * @param [table]
+         */
+        function loadOrderInfo(btn, table) {
+            var id, infoModal;
+            id = $(btn).attr('data-ajax-order-info');
+            infoModal = $('#modal_form_receiver_detail');
+            // make all data to error loading
+            if (id && infoModal.length) {
+                $('#__receiver_info_full_name,#__receiver_info_phone,#__receiver_info_province,#__receiver_info_city,#__receiver_info_postal_code,#__receiver_info_address')
+                    .html('خطا در بارگذاری');
+
+                admin.request(variables.url.orders.info + '/' + id, 'get', function () {
+                    var _ = this;
+                    if (_.data.length) {
+                        infoModal.find('#__receiver_info_full_name')
+                            .val(_.data['receiver_name'] ? _.data['receiver_name'] : '<i class="icon-minus2" aria-hidden="true"></i>');
+                        infoModal.find('#__receiver_info_phone')
+                            .val(_.data['receiver_mobile'] ? _.data['receiver_mobile'] : '<i class="icon-minus2" aria-hidden="true"></i>');
+                        infoModal.find('#__receiver_info_province')
+                            .val(_.data['province'] ? _.data['province'] : '<i class="icon-minus2" aria-hidden="true"></i>');
+                        infoModal.find('#__receiver_info_city')
+                            .val(_.data['city'] ? _.data['city'] : '<i class="icon-minus2" aria-hidden="true"></i>');
+                        infoModal.find('#__receiver_info_postal_code')
+                            .val(_.data['postal_code'] ? _.data['postal_code'] : '<i class="icon-minus2" aria-hidden="true"></i>');
+                        infoModal.find('#__receiver_info_address')
+                            .val(_.data['address'] ? _.data['address'] : '<i class="icon-minus2" aria-hidden="true"></i>');
+                    }
+                });
+            }
+        }
+
+        /**
          * Actions to take after a datatable initialize(reinitialize)
          */
         function datatableInitCompleteActions(table) {
@@ -3004,6 +3118,12 @@
                 .off('click' + variables.namespace)
                 .on('click' + variables.namespace, function () {
                     editSecurityQuestionBtnClick($(this), table);
+                });
+
+            $('.__item_order_info_btn')
+                .off('click' + variables.namespace)
+                .on('click' + variables.namespace, function () {
+                    loadOrderInfo($(this), table);
                 });
         }
 
@@ -3994,6 +4114,26 @@
         // Edit PAYMENT METHOD FORM
         //---------------------------------------------------------------
         admin.forms.submitForm('editPaymentMethod', constraints.editPaymentMethod, function () {
+            return true;
+        }, function (errors) {
+            admin.forms.showFormErrors(errors);
+            return false;
+        });
+
+        //---------------------------------------------------------------
+        // ADD SEND METHOD FORM
+        //---------------------------------------------------------------
+        admin.forms.submitForm('addSendMethod', constraints.addSendMethod, function () {
+            return true;
+        }, function (errors) {
+            admin.forms.showFormErrors(errors);
+            return false;
+        });
+
+        //---------------------------------------------------------------
+        // Edit SEND METHOD FORM
+        //---------------------------------------------------------------
+        admin.forms.submitForm('editSendMethod', constraints.editSendMethod, function () {
             return true;
         }, function (errors) {
             admin.forms.showFormErrors(errors);

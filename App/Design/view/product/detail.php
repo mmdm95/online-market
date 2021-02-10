@@ -150,6 +150,22 @@ use Sim\Utils\StringUtil;
             </div>
 
             <?php
+            $isChecked = is_value_checked($product['is_returnable']);
+            ?>
+            <div class="col-lg-6 border py-2 px-3 <?= $isChecked ? 'alert-success' : 'alert-danger' ?>">
+                <div class="mb-2">
+                    امکان مرجوع کردن
+                </div>
+                <strong>
+                    <?php if ($isChecked): ?>
+                        بله
+                    <?php else: ?>
+                        خیر
+                    <?php endif; ?>
+                </strong>
+            </div>
+
+            <?php
             $isChecked = is_value_checked($product['allow_commenting']);
             ?>
             <div class="col-lg-6 border py-2 px-3 <?= $isChecked ? 'alert-success' : 'alert-danger' ?>">
@@ -203,15 +219,15 @@ use Sim\Utils\StringUtil;
                     </td>
                     <td><?= $item['size']; ?></td>
                     <td><?= $item['guarantee']; ?></td>
-                    <td>
+                    <td data-order="<?= (int)StringUtil::toEnglish($item['price']); ?>">
                         <?= StringUtil::toPersian(number_format(StringUtil::toEnglish($item['price']))); ?>
                         تومان
                     </td>
-                    <td>
+                    <td data-order="<?= (int)StringUtil::toEnglish($item['discounted_price']); ?>">
                         <?= StringUtil::toPersian(number_format(StringUtil::toEnglish($item['discounted_price']))); ?>
                         تومان
                     </td>
-                    <td>
+                    <td data-order="<?= (int)$item['discount_until']; ?>">
                         <?= Jdf::jdate(DEFAULT_TIME_FORMAT, $item['discount_until']); ?>
                     </td>
 

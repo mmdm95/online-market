@@ -154,7 +154,7 @@ class ProductController extends AbstractHomeController
         $productModel = container()->get(ProductModel::class);
 
         $product = $productModel->getSingleProduct(
-            'p.id=:p_id AND p.publish=:pub AND p.delete<>:del',
+            'p.id=:p_id AND p.publish=:pub AND p.is_deleted<>:del',
             [
                 'p_id' => (int)$id,
                 'pub' => DB_YES,

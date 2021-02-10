@@ -32,10 +32,10 @@ use Sim\Utils\StringUtil;
                     <td><?= $item['id']; ?></td>
                     <td><?= $item['min_count']; ?></td>
                     <td><?= $item['max_count']; ?></td>
-                    <td>
+                    <td data-order="<?= (int)StringUtil::toEnglish($item['price']); ?>">
                         <?= StringUtil::toPersian(number_format(StringUtil::toEnglish($item['price']))); ?>
                     </td>
-                    <td>
+                    <td data-order="<?= (int)StringUtil::toEnglish($item['discounted_price']); ?>">
                         <?= StringUtil::toPersian(number_format(StringUtil::toEnglish($item['discounted_price']))); ?>
                     </td>
                     <td class="text-center">

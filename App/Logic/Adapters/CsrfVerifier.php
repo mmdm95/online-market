@@ -30,12 +30,13 @@ class CsrfVerifier extends BaseCsrfVerifier
                 $request->getUrl()->contains('/ajax')) {
                 if (!headers_sent()) {
                     $resourceHandler = new ResourceHandler();
-                    $resourceHandler->statusCode(403)->errorMessage('CSRF token mismatched!');
+                    $resourceHandler->statusCode(403)->errorMessage('CSRF token mismatched! Do operation again.');
                     response()->httpCode(403)->json($resourceHandler->getReturnData());
                 }
-            } else {
-                \session()->setFlash('CSRFRouteHasUndefined', 'توکن امنیتی دوباره تولید شد، لطفا عملیات را دوباره انجام دهید! نیازی به بارگذاری مجدد صفحه نمی‌باشد.');
             }
+//            } else {
+//                \session()->setFlash('CSRFRouteHasUndefined', 'توکن امنیتی دوباره تولید شد، لطفا عملیات را دوباره انجام دهید! نیازی به بارگذاری مجدد صفحه نمی‌باشد.');
+//            }
         }
     }
 }

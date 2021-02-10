@@ -20,7 +20,6 @@ class EditUserForm implements IPageForm
 {
     /**
      * {@inheritdoc}
-     * @return array
      * @throws \ReflectionException
      * @throws MethodNotFoundException
      * @throws ParameterHasNoDefaultValueException

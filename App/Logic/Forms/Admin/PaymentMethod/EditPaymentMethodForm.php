@@ -10,7 +10,10 @@ use Sim\Container\Exceptions\MethodNotFoundException;
 use Sim\Container\Exceptions\ParameterHasNoDefaultValueException;
 use Sim\Container\Exceptions\ServiceNotFoundException;
 use Sim\Container\Exceptions\ServiceNotInstantiableException;
+use Sim\Exceptions\ConfigManager\ConfigNotRegisteredException;
 use Sim\Form\Exceptions\FormException;
+use Sim\Interfaces\IFileNotExistsException;
+use Sim\Interfaces\IInvalidVariableNameException;
 use voku\helper\AntiXSS;
 
 class EditPaymentMethodForm implements IPageForm
@@ -18,12 +21,15 @@ class EditPaymentMethodForm implements IPageForm
     /**
      * {@inheritdoc}
      * @return array
+     * @throws FormException
      * @throws MethodNotFoundException
      * @throws ParameterHasNoDefaultValueException
      * @throws ServiceNotFoundException
      * @throws ServiceNotInstantiableException
      * @throws \ReflectionException
-     * @throws FormException
+     * @throws ConfigNotRegisteredException
+     * @throws IFileNotExistsException
+     * @throws IInvalidVariableNameException
      */
     public function validate(): array
     {

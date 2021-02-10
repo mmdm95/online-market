@@ -98,6 +98,22 @@
                     </ul>
                 </li>
                 <li class="nav-item nav-item-submenu">
+                    <a href="#" class="nav-link"><i class="icon-box-remove"></i> <span>روش‌های ارسال</span></a>
+
+                    <ul class="nav nav-group-sub">
+                        <li class="nav-item">
+                            <a href="<?= url('admin.send_method.add'); ?>" class="nav-link">
+                                افزودن روش ارسال جدید
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="<?= url('admin.send_method.view', ''); ?>" class="nav-link">
+                                لیست روش‌های ارسال
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="nav-item nav-item-submenu">
                     <a href="#" class="nav-link"><i class="icon-bucket"></i> <span>رنگ‌ها</span></a>
 
                     <ul class="nav nav-group-sub">
@@ -245,6 +261,37 @@
                     </a>
                 </li>
                 <!-- /financial and orders -->
+
+                <!-- Report -->
+                <li class="nav-item-header">
+                    <div class="text-uppercase font-size-xs line-height-xs">گذارش‌گیری</div>
+                    <i class="icon-menu" title="گذارش‌گیری"></i>
+                </li>
+                <li class="nav-item">
+                    <a href="<?= url(''); ?>" class="nav-link">
+                        <i class="icon-file-excel"></i>
+                        <span>گذارش‌گیری از کاربران</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="<?= url(''); ?>" class="nav-link">
+                        <i class="icon-file-excel"></i>
+                        <span>گذارش‌گیری از محصولات</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="<?= url(''); ?>" class="nav-link">
+                        <i class="icon-file-excel"></i>
+                        <span>گذارش‌گیری از کیف پول</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="<?= url(''); ?>" class="nav-link">
+                        <i class="icon-file-excel"></i>
+                        <span>گذارش‌گیری از سفارشات</span>
+                    </a>
+                </li>
+                <!-- /report -->
 
                 <!-- Blog -->
                 <li class="nav-item-header">

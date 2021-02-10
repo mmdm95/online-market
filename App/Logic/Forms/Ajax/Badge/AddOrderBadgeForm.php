@@ -12,6 +12,7 @@ use Sim\Container\Exceptions\ParameterHasNoDefaultValueException;
 use Sim\Container\Exceptions\ServiceNotFoundException;
 use Sim\Container\Exceptions\ServiceNotInstantiableException;
 use Sim\Form\Exceptions\FormException;
+use Sim\Form\FormValue;
 use Sim\Utils\StringUtil;
 use voku\helper\AntiXSS;
 
@@ -41,13 +42,24 @@ class AddOrderBadgeForm implements IPageForm
                 'inp-add-badge-color' => 'رنگ وضعیت',
             ]);
 
+        /**
+         * @var OrderBadgeModel $badgeModel
+         */
+        $badgeModel = container()->get(OrderBadgeModel::class);
+
         // title
         $validator
             ->setFields('inp-add-badge-title')
             ->stopValidationAfterFirstError(false)
             ->required()
             ->stopValidationAfterFirstError(true)
-            ->lessThanEqualLength(250);
+            ->lessThanEqualLength(250)
+            ->custom(function (FormValue $value) use ($badgeModel) {
+                if(0 !== $badgeModel->count('title=:title', ['title' => trim($value->getValue())])) {
+                    return false;
+                }
+                return true;
+            }, '{alias} ' . 'تکراری می‌باشد.');
         // color
         $validator
             ->setFields('inp-add-badge-color')

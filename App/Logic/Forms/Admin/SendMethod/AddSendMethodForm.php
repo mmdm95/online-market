@@ -1,29 +1,36 @@
 <?php
 
-namespace App\Logic\Forms\Admin\StaticPage;
+namespace App\Logic\Forms\Admin\SendMethod;
 
 use App\Logic\Interfaces\IPageForm;
-use App\Logic\Models\StaticPageModel;
+use App\Logic\Models\SendMethodModel;
 use App\Logic\Validations\ExtendedValidator;
 use Sim\Auth\DBAuth;
 use Sim\Container\Exceptions\MethodNotFoundException;
 use Sim\Container\Exceptions\ParameterHasNoDefaultValueException;
 use Sim\Container\Exceptions\ServiceNotFoundException;
 use Sim\Container\Exceptions\ServiceNotInstantiableException;
+use Sim\Exceptions\ConfigManager\ConfigNotRegisteredException;
 use Sim\Form\Exceptions\FormException;
-use Sim\Form\FormValue;
+use Sim\Interfaces\IFileNotExistsException;
+use Sim\Interfaces\IInvalidVariableNameException;
+use Sim\Utils\StringUtil;
 use voku\helper\AntiXSS;
 
-class AddStaticPageForm implements IPageForm
+class AddSendMethodForm implements IPageForm
 {
     /**
      * {@inheritdoc}
+     * @return array
+     * @throws FormException
      * @throws MethodNotFoundException
      * @throws ParameterHasNoDefaultValueException
      * @throws ServiceNotFoundException
      * @throws ServiceNotInstantiableException
      * @throws \ReflectionException
-     * @throws FormException
+     * @throws ConfigNotRegisteredException
+     * @throws IFileNotExistsException
+     * @throws IInvalidVariableNameException
      */
     public function validate(): array
     {
@@ -36,33 +43,32 @@ class AddStaticPageForm implements IPageForm
         // aliases
         $validator
             ->setFieldsAlias([
-                'inp-add-static-page-title' => 'عنوان',
-                'inp-add-static-page-url' => 'آدرس',
-                'inp-add-static-page-desc' => 'توضیحات',
+                'inp-add-send-method-img' => 'تصویر',
+                'inp-add-send-method-title' => 'عنوان',
+                'inp-add-send-method-desc' => 'توضیحات',
+            ])
+            ->setOptionalFields([
+                'inp-add-send-method-desc',
             ]);
 
-        /**
-         * @var StaticPageModel $pageModel
-         */
-        $pageModel = container()->get(StaticPageModel::class);
-
-        // title and description
+        // title
         $validator
-            ->setFields([
-                'inp-add-static-page-title',
-                'inp-add-static-page-desc'
-            ])
-            ->required();
-        // url
-        $validator
-            ->setFields('inp-add-static-page-url')
+            ->setFields('inp-add-send-method-title')
             ->stopValidationAfterFirstError(false)
             ->required()
             ->stopValidationAfterFirstError(true)
-            ->custom(function (FormValue $value) use ($pageModel) {
-                if ($pageModel->count('url=:url', ['url' => trim($value->getValue())]) === 0) return true;
-                return false;
-            }, '{alias} ' . 'وارد شده تکراری می‌باشد.');
+            ->lessThanEqualLength(250);
+        // image
+        $validator
+            ->setFields('inp-add-send-method-img')
+            ->stopValidationAfterFirstError(false)
+            ->required()
+            ->stopValidationAfterFirstError(true)
+            ->imageExists();
+        // desc
+        $validator
+            ->setFields('inp-add-send-method-desc')
+            ->lessThanEqualLength(250);
 
         // to reset form values and not set them again
         if ($validator->getStatus()) {
@@ -71,8 +77,8 @@ class AddStaticPageForm implements IPageForm
 
         return [
             $validator->getStatus(),
-            $validator->getError(),
             $validator->getUniqueErrors(),
+            $validator->getError(),
             $validator->getFormattedError('<p class="m-0">'),
             $validator->getFormattedUniqueErrors('<p class="m-0">'),
             $validator->getRawErrors(),
@@ -90,9 +96,9 @@ class AddStaticPageForm implements IPageForm
     public function store(): bool
     {
         /**
-         * @var StaticPageModel $pageModel
+         * @var SendMethodModel $sendModel
          */
-        $pageModel = container()->get(StaticPageModel::class);
+        $sendModel = container()->get(SendMethodModel::class);
         /**
          * @var AntiXSS $xss
          */
@@ -103,17 +109,16 @@ class AddStaticPageForm implements IPageForm
         $auth = container()->get('auth_admin');
 
         try {
-            $title = input()->post('inp-add-static-page-title', '')->getValue();
-            $url = input()->post('inp-add-static-page-url', '')->getValue();
-            $pub = input()->post('inp-add-static-page-status', '')->getValue();
-            $keywords = input()->post('inp-add-static-page-keywords', '')->getValue();
-            $desc = input()->post('inp-add-static-page-desc', '')->getValue();
+            $image = input()->post('inp-add-send-method-img', '')->getValue();
+            $title = input()->post('inp-add-send-method-title', '')->getValue();
+            $pub = input()->post('inp-add-send-method-status', '')->getValue();
+            $desc = input()->post('inp-add-send-method-desc', '')->getValue();
 
-            return $pageModel->insert([
+            return $sendModel->insert([
+                'code' => StringUtil::uniqidReal(12),
                 'title' => $xss->xss_clean(trim($title)),
-                'url' => $xss->xss_clean(trim($url)),
-                'body' => $xss->xss_clean($desc),
-                'keywords' => $xss->xss_clean($keywords),
+                'desc' => $xss->xss_clean(trim($desc)),
+                'image' => $xss->xss_clean(get_image_name($image)),
                 'publish' => is_value_checked($pub) ? DB_YES : DB_NO,
                 'created_by' => $auth->getCurrentUser()['id'] ?? null,
                 'created_at' => time(),

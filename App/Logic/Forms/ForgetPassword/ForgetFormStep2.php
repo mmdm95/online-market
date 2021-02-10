@@ -15,7 +15,6 @@ class ForgetFormStep2 implements IPageForm
 {
     /**
      * {@inheritdoc}
-     * @return array
      * @throws \ReflectionException
      * @throws MethodNotFoundException
      * @throws ParameterHasNoDefaultValueException

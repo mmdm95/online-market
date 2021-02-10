@@ -190,6 +190,16 @@ class Route implements IInitialize
                 Router::post('/pay-method/view/dt', 'Admin\PaymentMethodController@getPaginatedDatatable')->name('admin.pay_method.dt.view');
 
                 /**
+                 * Send Methods Route
+                 */
+                Router::form('/send-method/add', 'Admin\SendMethodController@add')->name('admin.send_method.add');
+                Router::form('/send-method/edit/{id}', 'Admin\SendMethodController@edit')->where([
+                    'id' => '[0-9]',
+                ])->name('admin.send_method.edit');
+                Router::get('/send-method/view', 'Admin\SendMethodController@view')->name('admin.send_method.view');
+                Router::post('/send-method/view/dt', 'Admin\SendMethodController@getPaginatedDatatable')->name('admin.send_method.dt.view');
+
+                /**
                  * Color Route
                  */
                 Router::form('/color/add', 'Admin\ColorController@add')->name('admin.color.add');
@@ -306,6 +316,37 @@ class Route implements IInitialize
                     ->name('admin.blog.category.dt.view');
 
                 /**
+                 * Order Route
+                 */
+                Router::get('/order/view', 'Admin\OrderController@view')->name('admin.order.view');
+                Router::post('/order/view/dt', 'Admin\OrderController@getPaginatedDatatable')->name('admin.order.dt.view');
+                Router::form('/order/detail/{id}', 'Admin\OrderController@detail')->where([
+                    'id' => '[0-9]+',
+                ])->name('admin.order.detail');
+
+                /**
+                 * Return Order Route
+                 */
+                Router::get('/order/return-order/view', 'Admin\ReturnOrderController@view')->name('admin.return.order.view');
+                Router::get('/order/return-order/detail/{id}', 'Admin\ReturnOrderController@detail')->where([
+                    'id' => '[0-9]+',
+                ])->name('admin.return.order.detail');
+
+                /**
+                 * Order Badges Route
+                 */
+                Router::get('/order/badges', 'Admin\OrderBadgeController@view')->name('admin.badge.view');
+                Router::post('/order/badges/dt', 'Admin\OrderBadgeController@getPaginatedDatatable')->name('admin.badge.dt.view');
+
+                /**
+                 * Wallet Route
+                 */
+                Router::get('/wallet/view/{id?}', 'Admin\WalletController@view')->where([
+                    'id' => '[0-9]+',
+                ])->name('admin.wallet.view');
+                Router::form('/wallet/deposit-type', 'Admin\WalletController@depositType')->name('admin.wallet.deposit-type');
+
+                /**
                  * Static Page Route
                  */
                 Router::form('/static-page/add', 'Admin\StaticPageController@add')->name('admin.static.page.add');
@@ -351,37 +392,6 @@ class Route implements IInitialize
                 Router::get('/newsletter/view/{id?}', 'Admin\NewsletterController@view')->where([
                     'id' => '[0-9]+',
                 ])->name('admin.newsletter.view');
-
-                /**
-                 * Order Route
-                 */
-                Router::get('/order/detail/{id}', 'Admin\OrderController@detail')->where([
-                    'id' => '[0-9]+',
-                ])->name('admin.order.detail');
-                Router::get('/order/view', 'Admin\OrderController@view')->name('admin.order.view');
-                Router::get('/order/view/dt', 'Admin\OrderController@getPaginatedDatatable')->name('admin.order.dt.view');
-
-                /**
-                 * Return Order Route
-                 */
-                Router::get('/order/return-order/view', 'Admin\ReturnOrderController@view')->name('admin.return.order.view');
-                Router::get('/order/return-order/detail', 'Admin\ReturnOrderController@detail')->where([
-                    'id' => '[0-9]+',
-                ])->name('admin.return.order.detail');
-
-                /**
-                 * Order Badges Route
-                 */
-                Router::get('/order/badges', 'Admin\OrderBadgeController@view')->name('admin.badge.view');
-                Router::post('/order/badges/dt', 'Admin\OrderBadgeController@getPaginatedDatatable')->name('admin.badge.dt.view');
-
-                /**
-                 * Wallet Route
-                 */
-                Router::get('/wallet/view/{id?}', 'Admin\WalletController@view')->where([
-                    'id' => '[0-9]+',
-                ])->name('admin.wallet.view');
-                Router::form('/wallet/deposit-type', 'Admin\WalletController@depositType')->name('admin.wallet.deposit-type');
 
                 /**
                  * Slider Route
@@ -671,6 +681,13 @@ class Route implements IInitialize
                 ])->name('ajax.pay_method.remove');
 
                 /**
+                 * send method route
+                 */
+                Router::delete('/send-method/remove/{id}', 'Admin\SendMethodController@remove')->where([
+                    'id' => '[0-9]+',
+                ])->name('ajax.send_method.remove');
+
+                /**
                  * color route
                  */
                 Router::delete('/color/remove/{id}', 'Admin\ColorController@remove')->where([
@@ -746,6 +763,13 @@ class Route implements IInitialize
                     'p_id' => '[0-9]+',
                     'id' => '[0-9]+',
                 ])->name('ajax.comment.condition');
+
+                /**
+                 * order route
+                 */
+                Router::get('/order/info/{id}', 'Admin\OrderController@getInfo')->where([
+                    'id' => '[0-9]+',
+                ])->name('ajax.order.info');
 
                 /**
                  * slider route

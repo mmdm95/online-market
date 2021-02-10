@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'view/order/return-order' => [
+    'view/order/return-order/view' => [
         'title' => title_concat(\config()->get('settings.title.value'), 'سفارشات مرجوعی'),
         'common' => [
             'admin-base',
@@ -23,7 +23,7 @@ return [
             ],
         ],
     ],
-    'view/order/return-order-detail' => [
+    'view/order/return-order/detail' => [
         'title' => title_concat(\config()->get('settings.title.value'), 'سفارشات مرجوعی'),
         'common' => [
             'admin-base',

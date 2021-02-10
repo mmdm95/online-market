@@ -95,15 +95,28 @@ function get_percentage($num, $total, bool $low = true): int
 
 /**
  * @return FormValidator
- * @throws ReflectionException
+ * @throws ConfigNotRegisteredException
+ * @throws IFileNotExistsException
+ * @throws IInvalidVariableNameException
  * @throws MethodNotFoundException
  * @throws ParameterHasNoDefaultValueException
+ * @throws ReflectionException
  * @throws ServiceNotFoundException
  * @throws ServiceNotInstantiableException
  */
 function form_validator(): FormValidator
 {
-    return container()->get(ExtendedValidator::class);
+    /**
+     * @var FormValidator $validator
+     */
+    $validator = container()->get(ExtendedValidator::class);
+    $translateConfig = config()->get('i18n');
+    if (!is_null($translateConfig)) {
+        /** @var array $translateConfig */
+        $t = translate()->getTranslateFromFile($translateConfig['language_dir'] . '/' . $translateConfig['language'] . '.php');
+        $validator->setLang('fa')->setLangSettings($t['form_translation']);
+    }
+    return $validator;
 }
 
 /**

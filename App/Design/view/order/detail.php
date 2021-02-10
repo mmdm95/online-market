@@ -1,9 +1,101 @@
+<?php
+
+use App\Logic\Utils\Jdf;
+use Sim\Utils\StringUtil;
+
+?>
+
 <!-- Content area -->
 <div class="content">
-    <!-- Fieldset legend -->
-    <!-- 2 columns form -->
+
+    <div class="row">
+        <div class="col-lg-6">
+            <form action="<?= url('admin.order.detail', ['id' => $order_id])->getRelativeUrlTrimmed(); ?>"
+                  method="post">
+                <div class="card">
+                    <?php load_partial('admin/card-header', [
+                        'header_title' => 'تغییر وضعیت پرداخت',
+                        'collapse' => false,
+                    ]); ?>
+
+                    <div class="card-body">
+                        <?php load_partial('admin/message/message-form', [
+                            'errors' => $invoice_change_errors ?? [],
+                            'success' => $invoice_change_success ?? '',
+                            'warning' => $invoice_change_warning ?? '',
+                        ]); ?>
+
+                        <input type="hidden" name="csrf_token" value="<?= csrf_token(); ?>" data-ignored>
+                        <div class="form-group">
+                            <select data-placeholder="انتخاب وضعیت پرداخت..."
+                                    class="form-control form-control-select2-searchable"
+                                    name="inp-change-order-invoice-status" data-fouc>
+                                <option value="<?= DEFAULT_OPTION_VALUE ?>" disabled selected="selected">انتخاب کنید
+                                </option>
+                                <?php foreach (PAYMENT_STATUSES as $status => $text): ?>
+                                    <option value="<?= $status; ?>"
+                                        <?= $status === $order['payment_status'] ? 'selected="selected"' : ''; ?>>
+                                        <?= $text; ?>
+                                    </option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
+                        <div class="text-right">
+                            <button type="submit" name="changeInvoiceStatusBtn" class="btn bg-indigo-400">
+                                تغییر وضعیت پرداخت
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <div class="col-lg-6">
+            <form action="<?= url('admin.order.detail', ['id' => $order_id])->getRelativeUrlTrimmed(); ?>"
+                  method="post">
+                <div class="card">
+                    <?php load_partial('admin/card-header', [
+                        'header_title' => 'تغییر وضعیت ارسال',
+                        'collapse' => false,
+                    ]); ?>
+
+                    <div class="card-body">
+                        <?php load_partial('admin/message/message-form', [
+                            'errors' => $send_change_errors ?? [],
+                            'success' => $send_change_success ?? '',
+                            'warning' => $send_change_warning ?? '',
+                        ]); ?>
+
+                        <input type="hidden" name="csrf_token" value="<?= csrf_token(); ?>" data-ignored>
+                        <div class="form-group">
+                            <select data-placeholder="انتخاب وضعیت ارسال..."
+                                    class="form-control form-control-select2-searchable"
+                                    name="inp-change-order-send-status" data-fouc>
+                                <option value="<?= DEFAULT_OPTION_VALUE ?>" disabled selected="selected">انتخاب کنید
+                                </option>
+                                <?php foreach ($badges as $badge): ?>
+                                    <option value="<?= $badge['code']; ?>"
+                                            style="background-color: <?= $badge['color']; ?>; color: <?= get_color_from_bg($badge['color'], '#ffffff', '#000000'); ?>;"
+                                        <?= $badge['code'] === $order['send_status_code'] ? 'selected="selected"' : ''; ?>>
+                                        <?= $badge['title']; ?>
+                                    </option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
+                        <div class="text-right">
+                            <button type="submit" name="changeSendStatusBtn" class="btn bg-success-400">
+                                تغییر وضعیت ارسال
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <div class="card">
         <?php load_partial('admin/card-header', ['header_title' => 'جزئیات سفارش']); ?>
+
         <div class="card-body">
             <fieldset>
                 <legend class="font-weight-semibold">
@@ -13,18 +105,18 @@
                 <div class="row m-0">
                     <div class="col-lg-6 border py-2 px-3">
                         <div class="mb-2">
-                            نام و نام خانوادگی
+                            نام
                         </div>
                         <div class="text-info-800">
-                            سعید گرامی فر
+                            <?= $order['receiver_name']; ?>
                         </div>
                     </div>
                     <div class="col-lg-6 border py-2 px-3">
                         <div class="mb-2">
-                            شماره موبایل
+                            شماره تماس
                         </div>
                         <div class="text-info-800">
-                            ۰۹۱۳۳۵۱۸۰۷۸
+                            <?= StringUtil::toPersian($order['receiver_mobile']); ?>
                         </div>
                     </div>
                     <div class="col-lg-6 border py-2 px-3">
@@ -32,7 +124,7 @@
                             استان
                         </div>
                         <div class="text-info-800">
-                            یزد
+                            <?= $order['province']; ?>
                         </div>
                     </div>
                     <div class="col-lg-6 border py-2 px-3">
@@ -40,7 +132,7 @@
                             شهر
                         </div>
                         <div class="text-info-800">
-                            یزد
+                            <?= $order['city']; ?>
                         </div>
                     </div>
                     <div class="col-lg-6 border py-2 px-3">
@@ -48,7 +140,7 @@
                             کدپستی
                         </div>
                         <div class="text-info-800">
-                            ۸۹۱۶۷-۵۴۹۵۹
+                            <?= StringUtil::toPersian($order['postal_code']); ?>
                         </div>
                     </div>
                     <div class="col-lg-6 border py-2 px-3">
@@ -56,7 +148,7 @@
                             آدرس پستی
                         </div>
                         <div class="text-info-800">
-                            یزد خیابان کاشانی کوچه لاله پلاک ۳۵
+                            <?= $order['address']; ?>
                         </div>
                     </div>
                 </div>
@@ -74,7 +166,7 @@
                             شماره فاکتور
                         </div>
                         <div class="text-info-800">
-                            ۸۹۱۶۷-۵۴۹۵۹
+                            <?= $order['code']; ?>
                         </div>
                     </div>
                     <div class="col-lg-6 border py-2 px-3">
@@ -82,7 +174,8 @@
                             مبلغ قابل پرداخت
                         </div>
                         <div class="text-warning-400">
-                            ۸۹۰,۰۰۰ تومان
+                            <?= StringUtil::toPersian(number_format(StringUtil::toEnglish($order['final_price']))); ?>
+                            تومان
                         </div>
                     </div>
                     <div class="col-lg-6 border py-2 px-3">
@@ -90,14 +183,17 @@
                             تاریخ ثبت سفارش
                         </div>
                         <div class="text-green-800">
-                            ۵ بهمن ۱۳۹۹
+                            <?= Jdf::jdate(DEFAULT_TIME_FORMAT, $order['ordered_at']); ?>
                         </div>
                     </div>
                     <div class="col-lg-6 border py-2 px-3">
                         <div class="mb-2">
                             وضعیت سفارش
                         </div>
-                        <span class="badge-dark p-1 rounded">در صف بررسی</span>
+                        <span class="p-1 rounded"
+                              style="background-color: <?= $order['send_status_color']; ?>; color: <?= get_color_from_bg($order['send_status_color'], '#ffffff', '#000000'); ?>">
+                            <?= $order['send_status_title']; ?>
+                        </span>
                     </div>
                 </div>
             </fieldset>
@@ -113,14 +209,33 @@
                         <div class="mb-2">
                             وضعیت پرداخت
                         </div>
-                        <span class="badge-success p-1 rounded">پرداخت شده</span>
+                        <?php $text = PAYMENT_STATUSES[$order['payment_status']] ?: 'نامشخص'; ?>
+                        <?php switch ($order['payment_status']):
+                            case PAYMENT_STATUS_SUCCESS: ?>
+                                <span class="badge-success p-1 rounded"><?= $text; ?></span>
+                                <?php break; ?>
+                            <?php case PAYMENT_STATUS_WAIT_VERIFY: ?>
+                                <span class="badge-warning p-1 rounded"><?= $text; ?></span>
+                                <?php break; ?>
+                            <?php case PAYMENT_STATUS_WAIT: ?>
+                                <span class="badge-primary p-1 rounded"><?= $text; ?></span>
+                                <?php break; ?>
+                            <?php case PAYMENT_STATUS_NOT_PAYED: ?>
+                                <span class="badge-danger p-1 rounded"><?= $text; ?></span>
+                                <?php break; ?>
+                            <?php default: ?>
+                                <span class="badge-danger p-1 rounded"><?= $text; ?></span>
+                                <?php break; ?>
+                            <?php endswitch; ?>
                     </div>
                     <div class="col-lg-6 border py-2 px-3">
                         <div class="mb-2">
                             کد رهگیری
                         </div>
                         <strong class="text-danger-800">
-                            dg-19203455
+                            <?php if (!is_null($order['payment_code'])): ?>
+                                <?= StringUtil::toEnglish($order['payment_code']); ?>
+                            <?php endif; ?>
                         </strong>
                     </div>
                     <div class="col-lg-6 border py-2 px-3">
@@ -128,7 +243,11 @@
                             تاریخ پرداخت
                         </div>
                         <div class="text-green-800">
-                            ۵ بهمن ۱۳۹۹
+                            <?php if (!empty($order['payed_at'])): ?>
+                                <?= Jdf::jdate(DEFAULT_TIME_FORMAT, $order['payed_at']); ?>
+                            <?php else: ?>
+                                <i class="icon-minus2" aria-hidden="true"></i>
+                            <?php endif; ?>
                         </div>
                     </div>
                     <div class="col-lg-6 border py-2 px-3">
@@ -136,36 +255,35 @@
                             شیوه پرداخت
                         </div>
                         <div class="text-green-800">
-                            درب منزل
-                        </div>
-                    </div>
-                    <div class="col-lg-6 border py-2 px-3">
-                        <div class="mb-2">
-                            تاریخ پرداخت
-                        </div>
-                        <div class="text-danger-800">
-                            <i class="icon-minus2" aria-hidden="true"></i>
+                            <?= $order['method_title']; ?>
                         </div>
                     </div>
                 </div>
             </fieldset>
         </div>
     </div>
+
     <!-- Invoice template -->
     <div class="card">
         <div class="card-header bg-transparent header-elements-inline">
             <h6 class="card-title">آیتم‌های خریداری شده</h6>
             <div class="header-elements">
-                <button type="button" class="btn btn-sm btn-danger">
-                    <i class="icon-file-pdf mr-2"></i>
-                    دانلود فاکتور
-                </button>
-                <button type="button" class="btn btn-light btn-sm ml-3">
+                <form action="#" method="post">
+                    <input type="hidden" name="csrf_token" value="<?= csrf_token(); ?>" data-ignored>
+                    <button type="button" name=""
+                            class="btn btn-sm btn-danger">
+                        <i class="icon-file-pdf mr-2"></i>
+                        دانلود فاکتور
+                    </button>
+                </form>
+                <a href="#" target="_blank" type="button"
+                   class="btn btn-light btn-sm ml-3">
                     <i class="icon-printer mr-2"></i>
                     پرینت
-                </button>
+                </a>
             </div>
         </div>
+
         <div class="table-responsive">
             <table class="table">
                 <thead class="bg-light">
@@ -174,60 +292,97 @@
                     <th>مشخصات محصول</th>
                     <th>فی(به تومان)</th>
                     <th>تعداد</th>
+                    <th>مرجوع شده</th>
                     <th>قیمت کل(به تومان)</th>
                     <th>قیمت نهایی(به تومان)</th>
                 </tr>
                 </thead>
                 <tbody>
-                <tr>
-                    <td>۱</td>
-                    <td>
-                        <h6 class="mb-0">
-                            <strong>
-                                اسب سفید تک شاخ
-                            </strong>
-                        </h6>
-                        <span class="text-muted">
-                            رنگ آبی، با گارانتی سازگار سیستم
-                        </span>
-                    </td>
-                    <td>
-                        <strong>
-                            ۱۵,۰۰۰
-                        </strong>
-                    </td>
-                    <td>
-                        <strong>
-                            ۵
-                        </strong>
-                    </td>
-                    <td>
-                        <strong>
-                            ۹۵,۰۰۰
-                        </strong>
-                    </td>
-                    <td class="table-success">
-                        <strong>
-                            ۷۵,۰۰۰
-                        </strong>
-                    </td>
-                </tr>
+                <?php $k = 0; ?>
+                <?php foreach ($order_items as $item): ?>
+                    <tr>
+                        <td data-order="<?= $k; ?>"><?= StringUtil::toPersian(++$k); ?></td>
+                        <td>
+                            <?php load_partial('admin/parser/image-placeholder', [
+                                'img' => $item['product_image'],
+                                'alt' => $item['product_title'],
+                                'lightbox' => true,
+                            ]); ?>
+                            <div>
+                                <?php if (!empty($item['product_image'])): ?>
+                                    <a href="<?= url('admin.product.detail', ['id' => $item['product_id']])->getRelativeUrl(); ?>">
+                                        <h6 class="mb-0">
+                                            <?= $item['product_title']; ?>
+                                        </h6>
+                                    </a>
+                                <?php else: ?>
+                                    <h6 class="mb-0">
+                                        <?= $item['product_title']; ?>
+                                    </h6>
+                                <?php endif; ?>
+                                <div class="text-muted">
+                                    رنگ
+                                    <?= $item['color']; ?>
+                                    <?php if (!empty($item['size'])): ?>
+                                        ,
+                                        سایز
+                                        <?= $item['size']; ?>
+                                    <?php endif; ?>
+                                    <?php if (!empty($item['guarantee'])): ?>
+                                        ,
+                                        <?= $item['guarantee']; ?>
+                                    <?php endif; ?>
+                                </div>
+                            </div>
+                        </td>
+                        <td data-order="<?= (int)StringUtil::toEnglish($item['unit_price']); ?>">
+                            <?= StringUtil::toPersian(number_format(StringUtil::toEnglish($item['unit_price']))); ?>
+                        </td>
+                        <td data-order="<?= (int)StringUtil::toEnglish($item['product_count']); ?>">
+                            <?= StringUtil::toPersian($item['product_count']); ?>
+                        </td>
+
+                        <?php
+                        $isChecked = is_value_checked($item['is_returnable']);
+                        ?>
+                        <td class="<?= $isChecked ? 'table-success' : 'table-warning'; ?>">
+                            <?php if ($isChecked): ?>
+                                بله
+                            <?php else: ?>
+                                خیر
+                            <?php endif; ?>
+                        </td>
+                        <td data-order="<?= (int)StringUtil::toEnglish($item['price']); ?>">
+                            <?= StringUtil::toPersian(number_format(StringUtil::toEnglish($item['price']))); ?>
+                        </td>
+                        <td class="table-success"
+                            data-order="<?= (int)StringUtil::toEnglish($item['discounted_price']); ?>">
+                            <?= StringUtil::toPersian(number_format(StringUtil::toEnglish($item['discounted_price']))); ?>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
                 </tbody>
             </table>
         </div>
+
         <div class="card-body">
             <div class="d-md-flex flex-md-wrap">
-                <div class="pt-2 pr-3 mb-3">
-                    <h6 class="mb-3">کوپن تخفیف:</h6>
+                <?php if (!empty($order['coupon_price'])): ?>
+                    <div class="pt-2 pr-3 mb-3">
+                        <h6 class="mb-3">کوپن تخفیف:</h6>
 
-                    <ul class="list-unstyled text-muted">
-                        <li>
-                            <span class="badge badge-light badge-striped badge-striped-left border-left-success">
-                            عید نوروز ۷۷
-                            </span>
-                        </li>
-                    </ul>
-                </div>
+                        <ul class="list-unstyled text-muted">
+                            <li>
+                                <span class="badge badge-light badge-striped badge-striped-left border-left-success">
+                                    <?= $order['coupon_title']; ?>
+                                    -
+                                    <?= StringUtil::toPersian(number_format(StringUtil::toEnglish($order['coupon_price']))); ?>
+                                    تومان
+                                </span>
+                            </li>
+                        </ul>
+                    </div>
+                <?php endif; ?>
                 <div class="pt-2 mb-3 wmin-md-400 ml-auto">
                     <h6 class="mb-3">فاکتور نهایی:</h6>
                     <div class="table-responsive">
@@ -235,30 +390,27 @@
                             <tbody>
                             <tr>
                                 <th>مجموع مبالغ:</th>
-                                <td class="text-right">۷۵.۰۰۰ تومان</td>
-                            </tr>
-                            <tr>
-                                <th>
-                                    تخفیف:
-                                    <span class="font-weight-normal">(۱۰%)</span>
-                                </th>
                                 <td class="text-right">
-                                    ۷۵.۰۰۰ تومان
+                                    <?= StringUtil::toPersian(number_format(StringUtil::toEnglish($order['total_price']))); ?>
+                                    تومان
                                 </td>
                             </tr>
                             <tr>
                                 <th>
-                                    مالیات:
-                                    <span class="font-weight-normal">(۹% درصد مالیات بر ارزش افزوده)</span>
+                                    تخفیف:
                                 </th>
                                 <td class="text-right">
-                                    ۷۵.۰۰۰ تومان
+                                    <?= StringUtil::toPersian(number_format((float)StringUtil::toEnglish($order['discount_price']))); ?>
+                                    تومان
                                 </td>
                             </tr>
                             <tr>
                                 <th>مبلغ قابل پرداخت:</th>
                                 <td class="text-right text-primary">
-                                    <h5 class="font-weight-semibold">۷۶۰۰۰ تومان</h5>
+                                    <h5 class="font-weight-semibold">
+                                        <?= StringUtil::toPersian(number_format(StringUtil::toEnglish($order['final_price']))); ?>
+                                        تومان
+                                    </h5>
                                 </td>
                             </tr>
                             </tbody>
@@ -269,5 +421,6 @@
         </div>
     </div>
     <!-- /invoice template -->
+
 </div>
 <!-- /content area -->

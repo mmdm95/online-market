@@ -3,15 +3,15 @@
 namespace App\Logic\Controllers\Admin;
 
 use App\Logic\Abstracts\AbstractAdminController;
-use App\Logic\Forms\Admin\PaymentMethod\AddPaymentMethodForm;
-use App\Logic\Forms\Admin\PaymentMethod\EditPaymentMethodForm;
+use App\Logic\Forms\Admin\SendMethod\AddSendMethodForm;
+use App\Logic\Forms\Admin\SendMethod\EditSendMethodForm;
 use App\Logic\Handlers\DatatableHandler;
 use App\Logic\Handlers\GeneralAjaxRemoveHandler;
 use App\Logic\Handlers\GeneralFormHandler;
 use App\Logic\Handlers\ResourceHandler;
 use App\Logic\Interfaces\IDatatableController;
 use App\Logic\Models\BaseModel;
-use App\Logic\Models\PaymentMethodModel;
+use App\Logic\Models\SendMethodModel;
 use Jenssegers\Agent\Agent;
 use Sim\Container\Exceptions\MethodNotFoundException;
 use Sim\Container\Exceptions\ParameterHasNoDefaultValueException;
@@ -24,7 +24,7 @@ use Sim\Exceptions\PathManager\PathNotRegisteredException;
 use Sim\Interfaces\IFileNotExistsException;
 use Sim\Interfaces\IInvalidVariableNameException;
 
-class PaymentMethodController extends AbstractAdminController implements IDatatableController
+class SendMethodController extends AbstractAdminController implements IDatatableController
 {
     /**
      * @return string
@@ -37,7 +37,7 @@ class PaymentMethodController extends AbstractAdminController implements IDatata
      */
     public function view()
     {
-        $this->setLayout($this->main_layout)->setTemplate('view/payment-method/view');
+        $this->setLayout($this->main_layout)->setTemplate('view/send-method/view');
         return $this->render();
     }
 
@@ -59,10 +59,10 @@ class PaymentMethodController extends AbstractAdminController implements IDatata
         $data = [];
         if (is_post()) {
             $formHandler = new GeneralFormHandler();
-            $data = $formHandler->handle(AddPaymentMethodForm::class, 'pay_method_add');
+            $data = $formHandler->handle(AddSendMethodForm::class, 'send_method_add');
         }
 
-        $this->setLayout($this->main_layout)->setTemplate('view/payment-method/add');
+        $this->setLayout($this->main_layout)->setTemplate('view/send-method/add');
         return $this->render($data);
     }
 
@@ -83,28 +83,28 @@ class PaymentMethodController extends AbstractAdminController implements IDatata
     public function edit($id)
     {
         /**
-         * @var PaymentMethodModel $payModel
+         * @var SendMethodModel $sendModel
          */
-        $payModel = container()->get(PaymentMethodModel::class);
+        $sendModel = container()->get(SendMethodModel::class);
 
-        if (0 == $payModel->count('id=:id', ['id' => $id])) {
+        if (0 == $sendModel->count('id=:id', ['id' => $id])) {
             return $this->show404();
         }
 
         // store previous info to update with
-        session()->setFlash('pay-method-curr-id', $id);
+        session()->setFlash('send-method-curr-id', $id);
 
         $data = [];
         if (is_post()) {
             $formHandler = new GeneralFormHandler();
-            $data = $formHandler->handle(EditPaymentMethodForm::class, 'pay_method_edit');
+            $data = $formHandler->handle(EditSendMethodForm::class, 'send_method_edit');
         }
 
-        $payment = $payModel->getFirst(['*'], 'id=:id', ['id' => $id]);
+        $method = $sendModel->getFirst(['*'], 'id=:id', ['id' => $id]);
 
-        $this->setLayout($this->main_layout)->setTemplate('view/payment-method/edit');
+        $this->setLayout($this->main_layout)->setTemplate('view/send-method/edit');
         return $this->render(array_merge($data, [
-            'payment' => $payment,
+            'method' => $method,
         ]));
     }
 
@@ -126,7 +126,7 @@ class PaymentMethodController extends AbstractAdminController implements IDatata
         $agent = container()->get(Agent::class);
         if (!$agent->isRobot()) {
             $handler = new GeneralAjaxRemoveHandler();
-            $resourceHandler = $handler->handle(BaseModel::TBL_PAYMENT_METHODS, $id, 'deletable=:del', ['del' => DB_YES]);
+            $resourceHandler = $handler->handle(BaseModel::TBL_SEND_METHODS, $id, 'deletable=:del', ['del' => DB_YES]);
         } else {
             response()->httpCode(403);
             $resourceHandler
@@ -153,16 +153,16 @@ class PaymentMethodController extends AbstractAdminController implements IDatata
                     $event->stopPropagation();
 
                     /**
-                     * @var PaymentMethodModel $payModel
+                     * @var SendMethodModel $sendModel
                      */
-                    $payModel = container()->get(PaymentMethodModel::class);
+                    $sendModel = container()->get(SendMethodModel::class);
 
                     $cols[] = 'deletable';
 
-                    $data = $payModel->get($cols, $where, $bindValues, $order, $limit, $offset);
+                    $data = $sendModel->get($cols, $where, $bindValues, $order, $limit, $offset);
                     //-----
-                    $recordsFiltered = $payModel->count($where, $bindValues);
-                    $recordsTotal = $payModel->count();
+                    $recordsFiltered = $sendModel->count($where, $bindValues);
+                    $recordsTotal = $sendModel->count();
 
                     return [$data, $recordsFiltered, $recordsTotal];
                 });
@@ -197,7 +197,7 @@ class PaymentMethodController extends AbstractAdminController implements IDatata
                     [
                         'dt' => 'operations',
                         'formatter' => function ($row) {
-                            $operations = $this->setTemplate('partial/admin/datatable/actions-pay-method')
+                            $operations = $this->setTemplate('partial/admin/datatable/actions-send-method')
                                 ->render([
                                     'row' => $row,
                                 ]);

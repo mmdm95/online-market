@@ -12,6 +12,7 @@ use Sim\Container\Exceptions\ParameterHasNoDefaultValueException;
 use Sim\Container\Exceptions\ServiceNotFoundException;
 use Sim\Container\Exceptions\ServiceNotInstantiableException;
 use Sim\Form\Exceptions\FormException;
+use Sim\Form\FormValue;
 use Sim\Utils\StringUtil;
 use voku\helper\AntiXSS;
 
@@ -40,20 +41,10 @@ class EditOrderBadgeForm implements IPageForm
             'inp-edit-badge-color' => 'رنگ وضعیت',
         ]);
 
-        // title
-        $validator
-            ->setFields('inp-edit-badge-title')
-            ->stopValidationAfterFirstError(false)
-            ->required()
-            ->stopValidationAfterFirstError(true)
-            ->lessThanEqualLength(250);
-        // color
-        $validator
-            ->setFields('inp-edit-badge-color')
-            ->stopValidationAfterFirstError(false)
-            ->required()
-            ->stopValidationAfterFirstError(true)
-            ->hexColor();
+        /**
+         * @var OrderBadgeModel $badgeModel
+         */
+        $badgeModel = container()->get(OrderBadgeModel::class);
 
         $id = session()->getFlash('order-badge-edit-id', null, false);
         if (!empty($id)) {
@@ -64,6 +55,31 @@ class EditOrderBadgeForm implements IPageForm
 
             if (0 === $unitModel->count('id=:id', ['id' => $id])) {
                 $validator->setError('inp-edit-badge-title', 'شناسه وضعیت مورد نظر نامعتبر است.');
+            } else {
+                // title
+                $validator
+                    ->setFields('inp-edit-badge-title')
+                    ->stopValidationAfterFirstError(false)
+                    ->required()
+                    ->stopValidationAfterFirstError(true)
+                    ->lessThanEqualLength(250)
+                    ->custom(function (FormValue $value) use ($badgeModel, $id) {
+                        $title = $badgeModel->getFirst(['title'], 'id=:id', ['id' => $id])['title'];
+                        if (
+                            $title !== trim($value->getValue()) &&
+                            0 !== $badgeModel->count('title=:title', ['title' => trim($value->getValue())])
+                        ) {
+                            return false;
+                        }
+                        return true;
+                    }, '{alias} ' . 'تکراری می‌باشد.');
+                // color
+                $validator
+                    ->setFields('inp-edit-badge-color')
+                    ->stopValidationAfterFirstError(false)
+                    ->required()
+                    ->stopValidationAfterFirstError(true)
+                    ->hexColor();
             }
         } else {
             $validator

@@ -1,29 +1,35 @@
 <?php
 
-namespace App\Logic\Forms\Admin\StaticPage;
+namespace App\Logic\Forms\Admin\SendMethod;
 
 use App\Logic\Interfaces\IPageForm;
-use App\Logic\Models\StaticPageModel;
+use App\Logic\Models\SendMethodModel;
 use App\Logic\Validations\ExtendedValidator;
 use Sim\Auth\DBAuth;
 use Sim\Container\Exceptions\MethodNotFoundException;
 use Sim\Container\Exceptions\ParameterHasNoDefaultValueException;
 use Sim\Container\Exceptions\ServiceNotFoundException;
 use Sim\Container\Exceptions\ServiceNotInstantiableException;
+use Sim\Exceptions\ConfigManager\ConfigNotRegisteredException;
 use Sim\Form\Exceptions\FormException;
-use Sim\Form\FormValue;
+use Sim\Interfaces\IFileNotExistsException;
+use Sim\Interfaces\IInvalidVariableNameException;
 use voku\helper\AntiXSS;
 
-class EditStaticPageForm implements IPageForm
+class EditSendMethodForm implements IPageForm
 {
     /**
      * {@inheritdoc}
+     * @return array
+     * @throws FormException
      * @throws MethodNotFoundException
      * @throws ParameterHasNoDefaultValueException
      * @throws ServiceNotFoundException
      * @throws ServiceNotInstantiableException
      * @throws \ReflectionException
-     * @throws FormException
+     * @throws ConfigNotRegisteredException
+     * @throws IFileNotExistsException
+     * @throws IInvalidVariableNameException
      */
     public function validate(): array
     {
@@ -36,49 +42,47 @@ class EditStaticPageForm implements IPageForm
         // aliases
         $validator
             ->setFieldsAlias([
-                'inp-edit-static-page-title' => 'عنوان',
-                'inp-edit-static-page-url' => 'آدرس',
-                'inp-edit-static-page-desc' => 'توضیحات',
+                'inp-edit-send-method-img' => 'تصویر',
+                'inp-edit-send-method-title' => 'عنوان',
+                'inp-edit-send-method-desc' => 'توضیحات',
+            ])
+            ->setOptionalFields([
+                'inp-edit-send-method-desc',
             ]);
 
-        /**
-         * @var StaticPageModel $pageModel
-         */
-        $pageModel = container()->get(StaticPageModel::class);
-
-        // title and description
+        // title
         $validator
-            ->setFields([
-                'inp-edit-static-page-title',
-                'inp-edit-static-page-desc'
-            ])
-            ->required();
-        // url
-        $validator
-            ->setFields('inp-edit-static-page-url')
+            ->setFields('inp-edit-send-method-title')
             ->stopValidationAfterFirstError(false)
             ->required()
             ->stopValidationAfterFirstError(true)
-            ->custom(function (FormValue $value) use ($pageModel) {
-                $url = session()->getFlash('static-page-prev-url', null);
-                if (
-                    $url != trim($value->getValue()) &&
-                    $pageModel->count('url=:url', ['url' => trim($value->getValue())]) !== 0
-                ) {
-                    return false;
-                }
-                return true;
-            }, '{alias} ' . 'وارد شده تکراری می‌باشد.');
+            ->lessThanEqualLength(250);
+        // image
+        $validator
+            ->setFields('inp-edit-send-method-img')
+            ->stopValidationAfterFirstError(false)
+            ->required()
+            ->stopValidationAfterFirstError(true)
+            ->imageExists();
+        // desc
+        $validator
+            ->setFields('inp-edit-send-method-desc')
+            ->lessThanEqualLength(250);
 
-        $id = session()->getFlash('static-page-curr-id', null, false);
+        /**
+         * @var SendMethodModel $sendModel
+         */
+        $sendModel = container()->get(SendMethodModel::class);
+
+        $id = session()->getFlash('send-method-curr-id', null, false);
         if (!empty($id)) {
-            if (0 === $pageModel->count('id=:id', ['id' => $id])) {
-                $validator->setError('inp-edit-static-page-title', 'شناسه صفحه نامعتبر است.');
+            if (0 === $sendModel->count('id=:id', ['id' => $id])) {
+                $validator->setError('inp-edit-send-method-title', 'شناسه روش ارسال نامعتبر است.');
             }
         } else {
             $validator
                 ->setStatus(false)
-                ->setError('inp-edit-static-page-title', 'شناسه صفحه نامعتبر است.');
+                ->setError('inp-edit-send-method-title', 'شناسه روش ارسال نامعتبر است.');
         }
 
         // to reset form values and not set them again
@@ -107,9 +111,9 @@ class EditStaticPageForm implements IPageForm
     public function store(): bool
     {
         /**
-         * @var StaticPageModel $pageModel
+         * @var SendMethodModel $sendModel
          */
-        $pageModel = container()->get(StaticPageModel::class);
+        $sendModel = container()->get(SendMethodModel::class);
         /**
          * @var AntiXSS $xss
          */
@@ -120,19 +124,17 @@ class EditStaticPageForm implements IPageForm
         $auth = container()->get('auth_admin');
 
         try {
-            $title = input()->post('inp-edit-static-page-title', '')->getValue();
-            $url = input()->post('inp-edit-static-page-url', '')->getValue();
-            $pub = input()->post('inp-edit-static-page-status', '')->getValue();
-            $keywords = input()->post('inp-edit-static-page-keywords', '')->getValue();
-            $desc = input()->post('inp-edit-static-page-desc', '')->getValue();
-            $id = session()->getFlash('static-page-curr-id', null);
+            $image = input()->post('inp-edit-send-method-img', '')->getValue();
+            $title = input()->post('inp-edit-send-method-title', '')->getValue();
+            $desc = input()->post('inp-edit-send-method-desc', '')->getValue();
+            $pub = input()->post('inp-edit-send-method-status', '')->getValue();
+            $id = session()->getFlash('send-method-curr-id', null);
             if (is_null($id)) return false;
 
-            return $pageModel->update([
+            return $sendModel->update([
                 'title' => $xss->xss_clean(trim($title)),
-                'url' => $xss->xss_clean(trim($url)),
-                'body' => $xss->xss_clean($desc),
-                'keywords' => $xss->xss_clean($keywords),
+                'desc' => $xss->xss_clean(trim($desc)),
+                'image' => $xss->xss_clean(get_image_name($image)),
                 'publish' => is_value_checked($pub) ? DB_YES : DB_NO,
                 'updated_by' => $auth->getCurrentUser()['id'] ?? null,
                 'updated_at' => time(),

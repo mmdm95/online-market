@@ -1,9 +1,10 @@
 <?php
 
-namespace App\Logic\Forms\Admin\StaticPage;
+namespace App\Logic\Forms\Admin;
 
 use App\Logic\Interfaces\IPageForm;
-use App\Logic\Models\StaticPageModel;
+use App\Logic\Models\OrderBadgeModel;
+use App\Logic\Models\OrderModel;
 use App\Logic\Validations\ExtendedValidator;
 use Sim\Auth\DBAuth;
 use Sim\Container\Exceptions\MethodNotFoundException;
@@ -14,15 +15,16 @@ use Sim\Form\Exceptions\FormException;
 use Sim\Form\FormValue;
 use voku\helper\AntiXSS;
 
-class AddStaticPageForm implements IPageForm
+class ChangeSendStatus implements IPageForm
 {
     /**
      * {@inheritdoc}
+     * @return array
+     * @throws \ReflectionException
      * @throws MethodNotFoundException
      * @throws ParameterHasNoDefaultValueException
      * @throws ServiceNotFoundException
      * @throws ServiceNotInstantiableException
-     * @throws \ReflectionException
      * @throws FormException
      */
     public function validate(): array
@@ -36,33 +38,29 @@ class AddStaticPageForm implements IPageForm
         // aliases
         $validator
             ->setFieldsAlias([
-                'inp-add-static-page-title' => 'عنوان',
-                'inp-add-static-page-url' => 'آدرس',
-                'inp-add-static-page-desc' => 'توضیحات',
+                'inp-change-order-send-status' => 'وضعیت ارسال',
             ]);
 
-        /**
-         * @var StaticPageModel $pageModel
-         */
-        $pageModel = container()->get(StaticPageModel::class);
-
-        // title and description
+        // status
         $validator
-            ->setFields([
-                'inp-add-static-page-title',
-                'inp-add-static-page-desc'
-            ])
-            ->required();
-        // url
-        $validator
-            ->setFields('inp-add-static-page-url')
+            ->setFields('inp-change-order-send-status')
             ->stopValidationAfterFirstError(false)
             ->required()
             ->stopValidationAfterFirstError(true)
-            ->custom(function (FormValue $value) use ($pageModel) {
-                if ($pageModel->count('url=:url', ['url' => trim($value->getValue())]) === 0) return true;
+            ->custom(function (FormValue $value) {
+                /**
+                 * @var OrderBadgeModel $badgeModel
+                 */
+                $badgeModel = container()->get(OrderBadgeModel::class);
+
+                if (0 !== $badgeModel->count('code=:code', ['code' => $value->getValue()])) {
+                    return true;
+                }
                 return false;
-            }, '{alias} ' . 'وارد شده تکراری می‌باشد.');
+            }, '{alias} ' . 'نامعتبر است.');
+
+        // check for id is not necessary here, but you can do it when needed
+        // ...
 
         // to reset form values and not set them again
         if ($validator->getStatus()) {
@@ -71,8 +69,8 @@ class AddStaticPageForm implements IPageForm
 
         return [
             $validator->getStatus(),
-            $validator->getError(),
             $validator->getUniqueErrors(),
+            $validator->getError(),
             $validator->getFormattedError('<p class="m-0">'),
             $validator->getFormattedUniqueErrors('<p class="m-0">'),
             $validator->getRawErrors(),
@@ -90,9 +88,13 @@ class AddStaticPageForm implements IPageForm
     public function store(): bool
     {
         /**
-         * @var StaticPageModel $pageModel
+         * @var OrderModel $orderModel
          */
-        $pageModel = container()->get(StaticPageModel::class);
+        $orderModel = container()->get(OrderModel::class);
+        /**
+         * @var OrderBadgeModel $badgeModel
+         */
+        $badgeModel = container()->get(OrderBadgeModel::class);
         /**
          * @var AntiXSS $xss
          */
@@ -103,21 +105,17 @@ class AddStaticPageForm implements IPageForm
         $auth = container()->get('auth_admin');
 
         try {
-            $title = input()->post('inp-add-static-page-title', '')->getValue();
-            $url = input()->post('inp-add-static-page-url', '')->getValue();
-            $pub = input()->post('inp-add-static-page-status', '')->getValue();
-            $keywords = input()->post('inp-add-static-page-keywords', '')->getValue();
-            $desc = input()->post('inp-add-static-page-desc', '')->getValue();
+            $id = session()->getFlash('curr_order_detail_id', null);
+            $code = input()->post('inp-change-order-send-status', '')->getValue();
+            $badge = $badgeModel->getFirst(['title', 'color'], 'code=:code', ['code' => $code]);
 
-            return $pageModel->insert([
-                'title' => $xss->xss_clean(trim($title)),
-                'url' => $xss->xss_clean(trim($url)),
-                'body' => $xss->xss_clean($desc),
-                'keywords' => $xss->xss_clean($keywords),
-                'publish' => is_value_checked($pub) ? DB_YES : DB_NO,
-                'created_by' => $auth->getCurrentUser()['id'] ?? null,
-                'created_at' => time(),
-            ]);
+            return $orderModel->update([
+                'send_status_code' => $xss->xss_clean(trim($code)),
+                'send_status_title' => $xss->xss_clean(trim($badge['title'])),
+                'send_status_color' => $xss->xss_clean(trim($badge['color'])),
+                'send_status_changed_by' => $auth->getCurrentUser()['id'] ?? null,
+                'send_status_changed_at' => time(),
+            ], 'id=:id', ['id' => $id]);
         } catch (\Exception $e) {
             return false;
         }

@@ -18,7 +18,6 @@ class AddBlogCategoryForm implements IPageForm
 {
     /**
      * {@inheritdoc}
-     * @return array
      * @throws MethodNotFoundException
      * @throws ParameterHasNoDefaultValueException
      * @throws ServiceNotFoundException

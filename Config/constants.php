@@ -1,5 +1,6 @@
 <?php
 
+use App\Logic\Models\BaseModel;
 use Sim\I18n\ISOLanguageCodes;
 
 /**
@@ -20,7 +21,7 @@ use Sim\I18n\ISOLanguageCodes;
  *     1.2.5.0 instead of 1.2.5-a
  *     1.2.5.0.1 instead of 1.2.5-a1 (I'm not sure)
  */
-defined("APP_VERSION") OR define("APP_VERSION", "0.1.11");
+defined("APP_VERSION") OR define("APP_VERSION", "0.1.12");
 
 /***************************************
  * You can add your constants here
@@ -91,6 +92,20 @@ defined('PAYMENT_STATUSES') OR define('PAYMENT_STATUSES', [
     PAYMENT_STATUS_WAIT_VERIFY => 'در انتظار تایید',
     PAYMENT_STATUS_WAIT => 'در انتظار پرداخت',
     PAYMENT_STATUS_NOT_PAYED => 'پرداخت نشده',
+]);
+
+// needed payment method constants
+defined("METHOD_TYPE_OTHER") OR define("METHOD_TYPE_OTHER", 5);
+defined("METHOD_TYPE_GATEWAY_BEH_PARDAKHT") OR define("METHOD_TYPE_GATEWAY_BEH_PARDAKHT", 1);
+defined("METHOD_TYPE_GATEWAY_IDPAY") OR define("METHOD_TYPE_GATEWAY_IDPAY", 2);
+defined("METHOD_TYPE_GATEWAY_MABNA") OR define("METHOD_TYPE_GATEWAY_MABNA", 3);
+defined("METHOD_TYPE_GATEWAY_ZARINPAL") OR define("METHOD_TYPE_GATEWAY_ZARINPAL", 4);
+defined("METHOD_TYPES") OR define("METHOD_TYPES", [
+    METHOD_TYPE_OTHER => 'سایر',
+    METHOD_TYPE_GATEWAY_BEH_PARDAKHT => 'درگاه بانک - به پرداخت',
+    METHOD_TYPE_GATEWAY_IDPAY => 'درگاه بانک - آیدی پی',
+    METHOD_TYPE_GATEWAY_MABNA => 'درگاه بانک - پرداخت الکترونیک سپهر',
+    METHOD_TYPE_GATEWAY_ZARINPAL => 'درگاه بانک - زرین پال',
 ]);
 
 // comment statuses

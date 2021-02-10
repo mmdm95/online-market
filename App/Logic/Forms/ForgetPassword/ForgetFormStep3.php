@@ -16,7 +16,6 @@ class ForgetFormStep3 implements IPageForm
 {
     /**
      * {@inheritdoc}
-     * @return array
      * @throws \ReflectionException
      * @throws MethodNotFoundException
      * @throws ParameterHasNoDefaultValueException

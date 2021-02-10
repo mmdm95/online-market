@@ -19,7 +19,6 @@ class AddCouponForm implements IPageForm
 {
     /**
      * {@inheritdoc}
-     * @return array
      * @throws MethodNotFoundException
      * @throws ParameterHasNoDefaultValueException
      * @throws ServiceNotFoundException

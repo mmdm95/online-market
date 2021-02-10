@@ -26,7 +26,6 @@ class EditProductForm implements IPageForm
 {
     /**
      * {@inheritdoc}
-     * @return array
      * @throws MethodNotFoundException
      * @throws ParameterHasNoDefaultValueException
      * @throws ServiceNotFoundException
@@ -332,6 +331,7 @@ class EditProductForm implements IPageForm
             $pub = input()->post('inp-edit-product-status', '')->getValue();
             $availability = input()->post('inp-edit-product-availability', '')->getValue();
             $special = input()->post('inp-edit-product-special', '')->getValue();
+            $returnable = input()->post('inp-edit-product-returnable', '')->getValue();
             $commenting = input()->post('inp-edit-product-commenting', '')->getValue();
             $image = input()->post('inp-edit-product-img', '')->getValue();
             $title = input()->post('inp-edit-product-title', '')->getValue();
@@ -368,6 +368,7 @@ class EditProductForm implements IPageForm
                 'publish' => is_value_checked($pub) ? DB_YES : DB_NO,
                 'is_special' => is_value_checked($special) ? DB_YES : DB_NO,
                 'is_available' => is_value_checked($availability) ? DB_YES : DB_NO,
+                'is_returnable' => is_value_checked($availability) ? DB_YES : DB_NO,
                 'allow_commenting' => is_value_checked($commenting) ? DB_YES : DB_NO,
                 'created_by' => $auth->getCurrentUser()['id'] ?? null,
                 'created_at' => time(),
