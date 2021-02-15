@@ -178,7 +178,7 @@ class SimpleRouter
      * Route the given url to your callback on GET request method.
      *
      * @param string $url
-     * @param string|\Closure $callback
+     * @param string|array|\Closure $callback
      * @param array|null $settings
      *
      * @return RouteUrl
@@ -192,7 +192,7 @@ class SimpleRouter
      * Route the given url to your callback on POST request method.
      *
      * @param string $url
-     * @param string|\Closure $callback
+     * @param string|array|\Closure $callback
      * @param array|null $settings
      * @return RouteUrl
      */
@@ -205,7 +205,7 @@ class SimpleRouter
      * Route the given url to your callback on PUT request method.
      *
      * @param string $url
-     * @param string|\Closure $callback
+     * @param string|array|\Closure $callback
      * @param array|null $settings
      * @return RouteUrl
      */
@@ -218,7 +218,7 @@ class SimpleRouter
      * Route the given url to your callback on PATCH request method.
      *
      * @param string $url
-     * @param string|\Closure $callback
+     * @param string|array|\Closure $callback
      * @param array|null $settings
      * @return RouteUrl
      */
@@ -231,7 +231,7 @@ class SimpleRouter
      * Route the given url to your callback on OPTIONS request method.
      *
      * @param string $url
-     * @param string|\Closure $callback
+     * @param string|array|\Closure $callback
      * @param array|null $settings
      * @return RouteUrl
      */
@@ -244,7 +244,7 @@ class SimpleRouter
      * Route the given url to your callback on DELETE request method.
      *
      * @param string $url
-     * @param string|\Closure $callback
+     * @param string|array|\Closure $callback
      * @param array|null $settings
      * @return RouteUrl
      */
@@ -322,7 +322,7 @@ class SimpleRouter
      * Route the given url to your callback on POST and GET request method.
      *
      * @param string $url
-     * @param string|\Closure $callback
+     * @param string|array|\Closure $callback
      * @param array|null $settings
      * @see SimpleRouter::form
      * @return RouteUrl
@@ -337,7 +337,7 @@ class SimpleRouter
      *
      * @param array $requestMethods
      * @param string $url
-     * @param string|\Closure $callback
+     * @param string|array|\Closure $callback
      * @param array|null $settings
      * @return RouteUrl|IRoute
      */

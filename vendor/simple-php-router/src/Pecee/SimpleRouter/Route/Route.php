@@ -91,7 +91,8 @@ abstract class Route implements IRoute
         }
 
         /* Render callback function */
-        if (\is_callable($callback) === true) {
+//        if (\is_callable($callback) === true) {
+        if ($callback instanceof \Closure) {
             $router->debug('Executing callback');
 
             /* When the callback is a function */
@@ -100,7 +101,11 @@ abstract class Route implements IRoute
         }
 
         /* When the callback is a class + method */
-        $controller = explode('@', $callback);
+        if (is_array($callback) && 2 == count($callback)) {
+            $controller = $callback;
+        } else {
+            $controller = explode('@', $callback);
+        }
 
         $namespace = $this->getNamespace();
 

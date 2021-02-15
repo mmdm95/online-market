@@ -89,7 +89,13 @@
         },
         orders: {
             info: '/ajax/order/info',
-        }
+        },
+        depositType: {
+            get: '/ajax/deposit-type/get',
+            add: '/ajax/deposit-type/add',
+            edit: '/ajax/deposit-type/edit',
+            remove: '/ajax/deposit-type/remove',
+        },
     });
     window.MyGlobalVariables.elements = $.extend(true, window.MyGlobalVariables.elements, {
         addAddress: {
@@ -380,6 +386,13 @@
                 status: 'inp-add-pay-method-status',
                 image: 'inp-add-pay-method-img',
                 title: 'inp-add-pay-method-title',
+                method: 'inp-add-pay-method-method',
+                behPardakhtTerminal: 'inp-add-pay-method-beh-pardakht-terminal',
+                behPardakhtUsername: 'inp-add-pay-method-beh-pardakht-username',
+                behPardakhtPassword: 'inp-add-pay-method-beh-pardakht-password',
+                idpayApiKey: 'inp-add-pay-method-idpay-api-key',
+                mabnaTerminal: 'inp-add-pay-method-mabna-terminal',
+                zarinpalMerchant: 'inp-add-pay-method-zarinpal-merchant',
             },
         },
         editPaymentMethod: {
@@ -388,6 +401,13 @@
                 status: 'inp-edit-pay-method-status',
                 image: 'inp-edit-pay-method-img',
                 title: 'inp-edit-pay-method-title',
+                method: 'inp-edit-pay-method-method',
+                behPardakhtTerminal: 'inp-edit-pay-method-beh-pardakht-terminal',
+                behPardakhtUsername: 'inp-edit-pay-method-beh-pardakht-username',
+                behPardakhtPassword: 'inp-edit-pay-method-beh-pardakht-password',
+                idpayApiKey: 'inp-edit-pay-method-idpay-api-key',
+                mabnaTerminal: 'inp-edit-pay-method-mabna-terminal',
+                zarinpalMerchant: 'inp-edit-pay-method-zarinpal-merchant',
             },
         },
         addSendMethod: {
@@ -525,6 +545,25 @@
                 discount: 'inp-edit-stepped-discounted-price',
             },
         },
+        addDepositType: {
+            form: '#__form_add_deposit_type',
+            inputs: {
+                title: 'inp-add-deposit-type-title',
+            },
+        },
+        editDepositType: {
+            form: '#__form_edit_deposit_type',
+            inputs: {
+                title: 'inp-edit-deposit-type-title',
+            },
+        },
+        chargeWallet: {
+            form: '#__form_charge_wallet',
+            inputs: {
+                price: 'inp-charge-wallet-price',
+                desc: 'inp-charge-wallet-desc',
+            },
+        },
     });
     window.MyGlobalVariables.validation = $.extend({}, window.MyGlobalVariables.validation, {
         constraints: {
@@ -596,13 +635,13 @@
                     },
                     length: {
                         maximum: 250,
-                        message: '^' + 'عنوان حداکثر باید ۲۵۰ کاراکتر باشد.',
+                        message: '^' + 'عنوان باید حداکثر ۲۵۰ کاراکتر باشد.',
                     },
                 },
                 sign: {
                     length: {
                         maximum: 250,
-                        message: '^' + 'علامت حداکثر باید ۲۵۰ کاراکتر باشد.',
+                        message: '^' + 'علامت باید حداکثر ۲۵۰ کاراکتر باشد.',
                     },
                 },
             },
@@ -706,7 +745,7 @@
                     },
                     length: {
                         maximum: 250,
-                        message: '^' + 'نام رنگ حداکثر باید ۲۵۰ کاراکتر باشد.',
+                        message: '^' + 'نام رنگ باید حداکثر ۲۵۰ کاراکتر باشد.',
                     },
                 },
                 color: {
@@ -724,7 +763,7 @@
                     },
                     length: {
                         maximum: 250,
-                        message: '^' + 'نام رنگ حداکثر باید ۲۵۰ کاراکتر باشد.',
+                        message: '^' + 'نام رنگ باید حداکثر ۲۵۰ کاراکتر باشد.',
                     },
                 },
                 color: {
@@ -744,13 +783,13 @@
                 title: {
                     length: {
                         maximum: 250,
-                        message: '^' + 'عنوان حداکثر باید ۲۵۰ کاراکتر باشد.',
+                        message: '^' + 'عنوان باید حداکثر ۲۵۰ کاراکتر باشد.',
                     },
                 },
                 subTitle: {
                     length: {
                         maximum: 250,
-                        message: '^' + 'زیر عنوان حداکثر باید ۲۵۰ کاراکتر باشد.',
+                        message: '^' + 'زیر عنوان باید حداکثر ۲۵۰ کاراکتر باشد.',
                     },
                 },
                 priority: {
@@ -770,13 +809,13 @@
                 title: {
                     length: {
                         maximum: 250,
-                        message: '^' + 'عنوان حداکثر باید ۲۵۰ کاراکتر باشد.',
+                        message: '^' + 'عنوان باید حداکثر ۲۵۰ کاراکتر باشد.',
                     },
                 },
                 subTitle: {
                     length: {
                         maximum: 250,
-                        message: '^' + 'زیر عنوان حداکثر باید ۲۵۰ کاراکتر باشد.',
+                        message: '^' + 'زیر عنوان باید حداکثر ۲۵۰ کاراکتر باشد.',
                     },
                 },
                 priority: {
@@ -842,7 +881,7 @@
                     },
                     length: {
                         maximum: 250,
-                        message: '^' + 'وضعیت حداکثر باید ۲۵۰ کاراکتر باشد.',
+                        message: '^' + 'وضعیت باید حداکثر ۲۵۰ کاراکتر باشد.',
                     },
                 },
                 color: {
@@ -860,7 +899,7 @@
                     },
                     length: {
                         maximum: 250,
-                        message: '^' + 'وضعیت حداکثر باید ۲۵۰ کاراکتر باشد.',
+                        message: '^' + 'وضعیت باید حداکثر ۲۵۰ کاراکتر باشد.',
                     },
                 },
                 color: {
@@ -878,7 +917,7 @@
                     },
                     length: {
                         maximum: 100,
-                        message: '^' + 'نام دسته‌بندی حداکثر باید ۱۰۰ کاراکتر باشد.',
+                        message: '^' + 'نام دسته‌بندی باید حداکثر ۱۰۰ کاراکتر باشد.',
                     },
                 },
                 parent: {
@@ -906,7 +945,7 @@
                     },
                     length: {
                         maximum: 100,
-                        message: '^' + 'نام دسته‌بندی حداکثر باید ۱۰۰ کاراکتر باشد.',
+                        message: '^' + 'نام دسته‌بندی باید حداکثر ۱۰۰ کاراکتر باشد.',
                     },
                 },
                 parent: {
@@ -962,7 +1001,7 @@
                     },
                     length: {
                         maximum: 300,
-                        message: '^' + 'عنوان ضفحه حداکثر باید ۳۰۰ کاراکتر باشد.',
+                        message: '^' + 'عنوان ضفحه باید حداکثر ۳۰۰ کاراکتر باشد.',
                     },
                 },
                 url: {
@@ -986,7 +1025,7 @@
                     },
                     length: {
                         maximum: 300,
-                        message: '^' + 'عنوان ضفحه حداکثر باید ۳۰۰ کاراکتر باشد.',
+                        message: '^' + 'عنوان ضفحه باید حداکثر ۳۰۰ کاراکتر باشد.',
                     },
                 },
                 url: {
@@ -1014,7 +1053,7 @@
                     },
                     length: {
                         maximum: 20,
-                        message: '^' + 'کد کوپن حداکثر باید ۲۰ کاراکتر باشد.',
+                        message: '^' + 'کد کوپن باید حداکثر ۲۰ کاراکتر باشد.',
                     },
                 },
                 title: {
@@ -1024,7 +1063,7 @@
                     },
                     length: {
                         maximum: 250,
-                        message: '^' + 'عنوان کوپن حداکثر باید ۲۵۰ کاراکتر باشد.',
+                        message: '^' + 'عنوان کوپن باید حداکثر ۲۵۰ کاراکتر باشد.',
                     },
                 },
                 price: {
@@ -1090,7 +1129,7 @@
                     },
                     length: {
                         maximum: 20,
-                        message: '^' + 'کد کوپن حداکثر باید ۲۰ کاراکتر باشد.',
+                        message: '^' + 'کد کوپن باید حداکثر ۲۰ کاراکتر باشد.',
                     },
                 },
                 title: {
@@ -1100,7 +1139,7 @@
                     },
                     length: {
                         maximum: 250,
-                        message: '^' + 'عنوان کوپن حداکثر باید ۲۵۰ کاراکتر باشد.',
+                        message: '^' + 'عنوان کوپن باید حداکثر ۲۵۰ کاراکتر باشد.',
                     },
                 },
                 price: {
@@ -1184,7 +1223,13 @@
                     },
                     length: {
                         maximum: 250,
-                        message: '^' + 'عنوان روش پرداخت حداکثر باید ۲۵۰ کاراکتر باشد.',
+                        message: '^' + 'عنوان روش پرداخت باید حداکثر ۲۵۰ کاراکتر باشد.',
+                    },
+                },
+                method: {
+                    presence: {
+                        allowEmpty: false,
+                        message: '^' + 'نوع روش پرداخت را وارد کنید.',
                     },
                 },
             },
@@ -1202,7 +1247,13 @@
                     },
                     length: {
                         maximum: 250,
-                        message: '^' + 'عنوان روش پرداخت حداکثر باید ۲۵۰ کاراکتر باشد.',
+                        message: '^' + 'عنوان روش پرداخت باید حداکثر ۲۵۰ کاراکتر باشد.',
+                    },
+                },
+                method: {
+                    presence: {
+                        allowEmpty: false,
+                        message: '^' + 'نوع روش پرداخت را وارد کنید.',
                     },
                 },
             },
@@ -1220,13 +1271,13 @@
                     },
                     length: {
                         maximum: 250,
-                        message: '^' + 'عنوان روش ارسال حداکثر باید ۲۵۰ کاراکتر باشد.',
+                        message: '^' + 'عنوان روش ارسال باید حداکثر ۲۵۰ کاراکتر باشد.',
                     },
                 },
                 desc: {
                     length: {
                         maximum: 250,
-                        message: '^' + 'توضیحات روش ارسال حداکثر باید ۲۵۰ کاراکتر باشد.',
+                        message: '^' + 'توضیحات روش ارسال باید حداکثر ۲۵۰ کاراکتر باشد.',
                     },
                 },
             },
@@ -1244,13 +1295,13 @@
                     },
                     length: {
                         maximum: 250,
-                        message: '^' + 'عنوان روش ارسال حداکثر باید ۲۵۰ کاراکتر باشد.',
+                        message: '^' + 'عنوان روش ارسال باید حداکثر ۲۵۰ کاراکتر باشد.',
                     },
                 },
                 desc: {
                     length: {
                         maximum: 250,
-                        message: '^' + 'توضیحات روش ارسال حداکثر باید ۲۵۰ کاراکتر باشد.',
+                        message: '^' + 'توضیحات روش ارسال باید حداکثر ۲۵۰ کاراکتر باشد.',
                     },
                 },
             },
@@ -1262,7 +1313,7 @@
                     },
                     length: {
                         maximum: 250,
-                        message: '^' + 'عنوان جشنواره حداکثر باید ۲۵۰ کاراکتر باشد.',
+                        message: '^' + 'عنوان جشنواره باید حداکثر ۲۵۰ کاراکتر باشد.',
                     },
                 },
                 start: {
@@ -1294,7 +1345,7 @@
                     },
                     length: {
                         maximum: 250,
-                        message: '^' + 'عنوان جشنواره حداکثر باید ۲۵۰ کاراکتر باشد.',
+                        message: '^' + 'عنوان جشنواره باید حداکثر ۲۵۰ کاراکتر باشد.',
                     },
                 },
                 start: {
@@ -1386,6 +1437,50 @@
                     },
                 },
             },
+            addDepositType: {
+                title: {
+                    presence: {
+                        allowEmpty: false,
+                        message: '^' + 'عنوان نوع تراکنش با تخفیف را وارد کنید.',
+                    },
+                    length: {
+                        maximum: 250,
+                        message: '^' + 'عنوان نوع تراکنش باید حداکثر ۲۵۰ کاراکتر باشد.',
+                    },
+                },
+                desc: {
+                    presence: {
+                        allowEmpty: false,
+                        message: '^' + 'توضیح نوع تراکنش با تخفیف را وارد کنید.',
+                    },
+                    length: {
+                        maximum: 250,
+                        message: '^' + 'توضیح نوع تراکنش باید حداکثر ۲۵۰ کاراکتر باشد.',
+                    },
+                },
+            },
+            editDepositType: {
+                title: {
+                    presence: {
+                        allowEmpty: false,
+                        message: '^' + 'عنوان نوع تراکنش با تخفیف را وارد کنید.',
+                    },
+                    length: {
+                        maximum: 250,
+                        message: '^' + 'عنوان نوع تراکنش باید حداکثر ۲۵۰ کاراکتر باشد.',
+                    },
+                },
+                desc: {
+                    presence: {
+                        allowEmpty: false,
+                        message: '^' + 'توضیح نوع تراکنش با تخفیف را وارد کنید.',
+                    },
+                    length: {
+                        maximum: 250,
+                        message: '^' + 'توضیح نوع تراکنش باید حداکثر ۲۵۰ کاراکتر باشد.',
+                    },
+                },
+            },
         },
     });
 
@@ -1453,7 +1548,8 @@
             editBadgeId = null,
             addCategoryImageId = null,
             editCategoryImageId = null,
-            editSecurityQuestionId = null;
+            editSecurityQuestionId = null,
+            editDepositTypeId = null;
 
         admin = new window.TheAdmin();
 
@@ -1617,10 +1713,12 @@
             addPaymentMethod: {
                 image: variables.validation.constraints.addPaymentMethod.image,
                 title: variables.validation.constraints.addPaymentMethod.title,
+                method: variables.validation.constraints.addPaymentMethod.method,
             },
             editPaymentMethod: {
                 image: variables.validation.constraints.editPaymentMethod.image,
                 title: variables.validation.constraints.editPaymentMethod.title,
+                method: variables.validation.constraints.editPaymentMethod.method,
             },
             addSendMethod: {
                 image: variables.validation.constraints.addSendMethod.image,
@@ -1661,6 +1759,14 @@
                 max: variables.validation.constraints.editSteppedPrice.max,
                 price: variables.validation.constraints.editSteppedPrice.price,
                 discount: variables.validation.constraints.editSteppedPrice.discount,
+            },
+            addDepositType: {
+                title: variables.validation.constraints.addDepositType.title,
+                desc: variables.validation.constraints.addDepositType.desc,
+            },
+            editDepositType: {
+                title: variables.validation.constraints.editDepositType.title,
+                desc: variables.validation.constraints.editDepositType.desc,
             },
         };
 
@@ -2979,6 +3085,30 @@
          * @param btn
          * @param [table]
          */
+        function editDepositTypeBtnClick(btn, table) {
+            var id, editModal;
+            id = $(btn).attr('data-edit-id');
+            editModal = $('#modal_form_edit_type');
+            // clear element after each call
+            $(variables.elements.editDepositType.form).reset();
+            if (id && editModal.length) {
+                admin.request(variables.url.depositType.get + '/' + id, 'get', function () {
+                    var _ = this;
+                    if (_.data.length) {
+                        currentTable = table;
+                        editDepositTypeId = id;
+                        //-----
+                        editModal.find('[name="' + variables.elements.editDepositType.inputs.title + '"]').val(_.data['title']);
+                        editModal.find('[name="' + variables.elements.editDepositType.inputs.desc + '"]').val(_.data['desc']);
+                    }
+                });
+            }
+        }
+
+        /**
+         * @param btn
+         * @param [table]
+         */
         function loadOrderInfo(btn, table) {
             var id, infoModal;
             id = $(btn).attr('data-ajax-order-info');
@@ -3120,10 +3250,18 @@
                     editSecurityQuestionBtnClick($(this), table);
                 });
 
+            // show order information in a modal
             $('.__item_order_info_btn')
                 .off('click' + variables.namespace)
                 .on('click' + variables.namespace, function () {
                     loadOrderInfo($(this), table);
+                });
+
+            // edit deposit type button click event
+            $('.__item_deposit_type_editor_btn')
+                .off('click' + variables.namespace)
+                .on('click' + variables.namespace, function () {
+                    editDepositTypeBtnClick($(this), table);
                 });
         }
 
@@ -3377,6 +3515,7 @@
                 data: values,
             }, true, function () {
                 createLoader = true;
+                admin.hideLoader(loaderId);
             });
             return false;
         }, function (errors) {
@@ -3417,6 +3556,7 @@
                     data: values,
                 }, true, function () {
                     createLoader = true;
+                    admin.hideLoader(loaderId);
                 });
             }
             return false;
@@ -3453,6 +3593,7 @@
                 data: values,
             }, true, function () {
                 createLoader = true;
+                admin.hideLoader(loaderId);
             });
             return false;
         }, function (errors) {
@@ -3488,6 +3629,7 @@
                     data: values,
                 }, true, function () {
                     createLoader = true;
+                    admin.hideLoader(loaderId);
                 });
             }
             return false;
@@ -3562,6 +3704,7 @@
                 data: values,
             }, true, function () {
                 createLoader = true;
+                admin.hideLoader(loaderId);
             });
             return false;
         }, function (errors) {
@@ -3597,6 +3740,7 @@
                     data: values,
                 }, true, function () {
                     createLoader = true;
+                    admin.hideLoader(loaderId);
                 });
             }
             return false;
@@ -3652,6 +3796,7 @@
                 data: values,
             }, true, function () {
                 createLoader = true;
+                admin.hideLoader(loaderId);
             });
             return false;
         }, function (errors) {
@@ -3688,6 +3833,7 @@
                     data: values,
                 }, true, function () {
                     createLoader = true;
+                    admin.hideLoader(loaderId);
                 });
             }
             return false;
@@ -3723,6 +3869,7 @@
                 data: values,
             }, true, function () {
                 createLoader = true;
+                admin.hideLoader(loaderId);
             });
             return false;
         }, function (errors) {
@@ -3759,6 +3906,7 @@
                     data: values,
                 }, true, function () {
                     createLoader = true;
+                    admin.hideLoader(loaderId);
                 });
             }
             return false;
@@ -3793,6 +3941,7 @@
                 data: values,
             }, true, function () {
                 createLoader = true;
+                admin.hideLoader(loaderId);
             });
             return false;
         }, function (errors) {
@@ -3852,6 +4001,7 @@
                 data: values,
             }, true, function () {
                 createLoader = true;
+                admin.hideLoader(loaderId);
             });
             return false;
         }, function (errors) {
@@ -3887,6 +4037,7 @@
                     data: values,
                 }, true, function () {
                     createLoader = true;
+                    admin.hideLoader(loaderId);
                 });
             }
             return false;
@@ -3946,6 +4097,7 @@
                     data: values,
                 }, true, function () {
                     createLoader = true;
+                    admin.hideLoader(loaderId);
                 });
             }
             return false;
@@ -3983,6 +4135,7 @@
                     data: values,
                 }, true, function () {
                     createLoader = true;
+                    admin.hideLoader(loaderId);
                 });
             }
             return false;
@@ -4057,6 +4210,7 @@
                 data: values,
             }, true, function () {
                 createLoader = true;
+                admin.hideLoader(loaderId);
             });
             return false;
         }, function (errors) {
@@ -4092,6 +4246,7 @@
                     data: values,
                 }, true, function () {
                     createLoader = true;
+                    admin.hideLoader(loaderId);
                 });
             }
             return false;
@@ -4186,6 +4341,7 @@
                 data: values,
             }, true, function () {
                 createLoader = true;
+                admin.hideLoader(loaderId);
             });
             return false;
         }, function (errors) {
@@ -4221,6 +4377,7 @@
                 data: values,
             }, true, function () {
                 createLoader = true;
+                admin.hideLoader(loaderId);
             });
             return false;
         }, function (errors) {
@@ -4271,6 +4428,7 @@
                     data: formValues,
                 }, true, function () {
                     createLoader = true;
+                    admin.hideLoader(loaderId);
                 });
             } else {
                 admin.forms.showFormErrors(formErrors);
@@ -4292,6 +4450,77 @@
         //---------------------------------------------------------------
         admin.forms.submitForm('editSteppedPrice', constraints.editSteppedPrice, function () {
             return true;
+        }, function (errors) {
+            admin.forms.showFormErrors(errors);
+            return false;
+        });
+
+        //---------------------------------------------------------------
+        // ADD DEPOSIT TYPE FORM
+        //---------------------------------------------------------------
+        admin.forms.submitForm('addDepositType', constraints.addDepositType, function (values) {
+            // do ajax
+            if (createLoader) {
+                createLoader = false;
+                loaderId = admin.showLoader();
+            }
+            admin.request(variables.url.depositType.add, 'post', function () {
+                admin.hideLoader(loaderId);
+                // clear element after success
+                $(variables.elements.addDepositType.form).reset();
+                if (currentTable) {
+                    $(currentTable).DataTable().ajax.reload(null, true);
+                    currentTable = null;
+                }
+                //-----
+                admin.toasts.toast(this.data, {
+                    type: variables.toasts.types.success,
+                });
+                createLoader = true;
+            }, {
+                data: values,
+            }, true, function () {
+                createLoader = true;
+                admin.hideLoader(loaderId);
+            });
+            return false;
+        }, function (errors) {
+            admin.forms.showFormErrors(errors);
+            return false;
+        });
+
+        //---------------------------------------------------------------
+        // Edit DEPOSIT TYPE FORM
+        //---------------------------------------------------------------
+        admin.forms.submitForm('editDepositType', constraints.editDepositType, function (values) {
+            if (editDepositTypeId) {
+                // do ajax
+                if (createLoader) {
+                    createLoader = false;
+                    loaderId = admin.showLoader();
+                }
+                admin.request(variables.url.depositType.edit + '/' + editDepositTypeId, 'post', function () {
+                    admin.hideLoader(loaderId);
+                    // clear element after success
+                    $(variables.elements.editDepositType.form).reset();
+                    editDepositTypeId = null;
+                    if (currentTable) {
+                        $(currentTable).DataTable().ajax.reload(null, true);
+                        currentTable = null;
+                    }
+                    //-----
+                    admin.toasts.toast(this.data, {
+                        type: variables.toasts.types.success,
+                    });
+                    createLoader = true;
+                }, {
+                    data: values,
+                }, true, function () {
+                    createLoader = true;
+                    admin.hideLoader(loaderId);
+                });
+            }
+            return false;
         }, function (errors) {
             admin.forms.showFormErrors(errors);
             return false;

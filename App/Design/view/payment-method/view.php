@@ -10,13 +10,14 @@
         </div>
 
         <table class="table table-bordered table-hover datatable-highlight"
-               data-columns='[{"data":"id"},{"data":"image"},{"data":"title"},{"data":"status"},{"data":"operations"}]'
+               data-columns='[{"data":"id"},{"data":"image"},{"data":"title"},{"data":"type"},{"data":"status"},{"data":"operations"}]'
                data-ajax-url="<?= url('admin.pay_method.dt.view')->getRelativeUrlTrimmed(); ?>">
             <thead>
             <tr>
                 <th>#</th>
                 <th>تصویر</th>
                 <th>عنوان</th>
+                <th>نوع روش پرداخت</th>
                 <th>وضعیت نمایش</th>
                 <th class="text-center">عملیات</th>
             </tr>
@@ -26,6 +27,7 @@
                 <th>#</th>
                 <th>تصویر</th>
                 <th>عنوان</th>
+                <th>نوع روش پرداخت</th>
                 <th>وضعیت نمایش</th>
                 <th class="text-center">عملیات</th>
             </tr>

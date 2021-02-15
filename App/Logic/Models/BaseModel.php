@@ -48,6 +48,8 @@ abstract class BaseModel
     const TBL_PRODUCT_GALLERY = 'product_gallery';
     const TBL_PRODUCT_RELATED = 'product_related';
     const TBL_PROVINCES = 'provinces';
+    const TBL_RETURN_ORDERS = 'return_orders';
+    const TBL_RETURN_ORDER_ITEMS = 'return_order_items';
     const TBL_ROLES = 'roles';
     const TBL_SECURITY_QUESTIONS = 'security_questions';
     const TBL_SEND_METHODS = 'send_methods';

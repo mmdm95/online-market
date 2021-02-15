@@ -59,13 +59,195 @@ $validator = form_validator();
                             </div>
                         </div>
                     </div>
-                    <div class="form-group col-lg-8">
+                    <div class="form-group col-lg-12">
                         <label>
                             <span class="text-danger">*</span>
                             عنوان روش پرداخت:
                         </label>
                         <input type="text" class="form-control" placeholder="وارد کنید" name="inp-add-pay-method-title"
                                value="<?= $validator->setInput('inp-add-pay-method-title'); ?>">
+                    </div>
+
+                    <div class="form-group col-lg-12 border border-info p-3 rounded accordion" id="radioAccordion">
+                        <label>
+                            <span class="text-danger">*</span>
+                            انتخاب نوع روش پرداخت:
+                        </label>
+
+                        <div class="accordion" id="radioAccordion">
+                            <div class="card">
+                                <div class="card-header" id="behPardakhtHeading">
+                                    <div class="form-check form-check-inline">
+                                        <label class="form-check-label align-items-center">
+                                            <input type="radio"
+                                                   checked="checked"
+                                                   data-toggle="collapse"
+                                                   aria-expanded="false"
+                                                   class="form-check-input-styled"
+                                                   data-target="#collapseBehPardakht"
+                                                   aria-controls="collapseBehPardakht"
+                                                   value="<?= METHOD_TYPE_GATEWAY_BEH_PARDAKHT; ?>"
+                                                   name="inp-add-pay-method-method"
+                                                   data-fouc>
+                                            <img src="<?= asset_path('image/gateways/beh-pardakht.png', false); ?>"
+                                                 alt="به پرداخت" class="rounded mr-2"
+                                                 width="auto" height="40">
+                                            <?= METHOD_TYPES[METHOD_TYPE_GATEWAY_BEH_PARDAKHT]; ?>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="form-group collapse" id="collapseBehPardakht"
+                                     aria-labelledby="behPardakhtHeading" data-parent="#radioAccordion">
+                                    <div class="row m-0">
+                                        <div class="col-lg-4 mb-3">
+                                            <label>
+                                                <span class="text-danger">*</span>
+                                                شماره ترمینال:
+                                            </label>
+                                            <input type="text"
+                                                   class="form-control"
+                                                   placeholder=""
+                                                   name="inp-add-pay-method-beh-pardakht-terminal">
+                                        </div>
+                                        <div class="col-lg-4 mb-3">
+                                            <label>
+                                                <span class="text-danger">*</span>
+                                                نام کاربری:
+                                            </label>
+                                            <input type="text"
+                                                   class="form-control"
+                                                   placeholder=""
+                                                   name="inp-add-pay-method-beh-pardakht-username">
+                                        </div>
+                                        <div class="col-lg-4 mb-3">
+                                            <label>
+                                                <span class="text-danger">*</span>
+                                                کلمه عبور:
+                                            </label>
+                                            <input type="password"
+                                                   class="form-control"
+                                                   placeholder=""
+                                                   name="inp-add-pay-method-beh-pardakht-password">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card">
+                                <div class="card-header" id="idpayHeading">
+                                    <div class="form-check form-check-inline">
+                                        <label class="form-check-label align-items-center">
+                                            <input type="radio"
+                                                   data-toggle="collapse"
+                                                   aria-expanded="false"
+                                                   class="form-check-input-styled"
+                                                   data-target="#collapseIdpay"
+                                                   aria-controls="collapseIdpay"
+                                                   value="<?= METHOD_TYPE_GATEWAY_IDPAY; ?>"
+                                                   name="inp-add-pay-method-method"
+                                                   data-fouc>
+                                            <img src="<?= asset_path('image/gateways/Idpay.png', false); ?>"
+                                                 alt="آی‌دی پی" class="rounded mr-2"
+                                                 width="auto" height="40">
+                                            <?= METHOD_TYPES[METHOD_TYPE_GATEWAY_IDPAY]; ?>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="form-group collapse" id="collapseIdpay"
+                                     aria-labelledby="idpayHeading" data-parent="#radioAccordion">
+                                    <div class="row m-0">
+                                        <div class="col-lg-12 mb-3">
+                                            <label>
+                                                <span class="text-danger">*</span>
+                                                کلید API:
+                                            </label>
+                                            <input type="text"
+                                                   class="form-control"
+                                                   placeholder=""
+                                                   name="inp-add-pay-method-idpay-api-key">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card">
+                                <div class="card-header" id="mabnaHeading">
+                                    <div class="form-check form-check-inline">
+                                        <label class="form-check-label align-items-center">
+                                            <input type="radio"
+                                                   data-toggle="collapse"
+                                                   aria-expanded="false"
+                                                   class="form-check-input-styled"
+                                                   data-target="#collapseMabna"
+                                                   aria-controls="collapseMabna"
+                                                   value="<?= METHOD_TYPE_GATEWAY_MABNA; ?>"
+                                                   name="inp-add-pay-method-method"
+                                                   data-fouc>
+                                            <img src="<?= asset_path('image/gateways/mabna.png', false); ?>"
+                                                 alt="مبنا" class="rounded mr-2"
+                                                 width="auto" height="40">
+                                            <?= METHOD_TYPES[METHOD_TYPE_GATEWAY_MABNA]; ?>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="form-group collapse" id="collapseMabna"
+                                     aria-labelledby="mabnaHeading" data-parent="#radioAccordion">
+                                    <div class="row m-0">
+                                        <div class="col-lg-12 mb-3">
+                                            <label>
+                                                <span class="text-danger">*</span>
+                                                شماره ترمینال:
+                                            </label>
+                                            <input type="text"
+                                                   class="form-control"
+                                                   placeholder=""
+                                                   name="inp-add-pay-method-mabna-terminal">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card">
+                                <div class="card-header" id="zarinpalHeading">
+                                    <div class="form-check form-check-inline">
+                                        <label class="form-check-label align-items-center">
+                                            <input type="radio"
+                                                   data-toggle="collapse"
+                                                   aria-expanded="false"
+                                                   class="form-check-input-styled"
+                                                   data-target="#collapseZarinpal"
+                                                   aria-controls="collapseZarinpal"
+                                                   value="<?= METHOD_TYPE_GATEWAY_ZARINPAL; ?>"
+                                                   name="inp-add-pay-method-method"
+                                                   data-fouc>
+                                            <img src="<?= asset_path('image/gateways/zarinpal.png', false); ?>"
+                                                 alt="زرین پال" class="rounded mr-2"
+                                                 width="auto" height="40">
+                                            <?= METHOD_TYPES[METHOD_TYPE_GATEWAY_ZARINPAL]; ?>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="form-group collapse" id="collapseZarinpal"
+                                     aria-labelledby="zarinpalHeading" data-parent="#radioAccordion">
+                                    <div class="row m-0">
+                                        <div class="col-lg-12 mb-3">
+                                            <label>
+                                                <span class="text-danger">*</span>
+                                                شماره مرچنت:
+                                            </label>
+                                            <input type="text"
+                                                   class="form-control"
+                                                   placeholder=""
+                                                   name="inp-add-pay-method-zarinpal-merchant">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="text-right">
@@ -77,13 +259,5 @@ $validator = form_validator();
             </form>
         </div>
     </div>
-
-    <!-- Mini file manager modal -->
-    <?php load_partial('file-manager/modal-efm', [
-        'the_options' => $the_options ?? [],
-    ]); ?>
-    <!-- /mini file manager modal -->
-
-    <?php load_partial('editor/browser-tiny-func'); ?>
 </div>
 <!-- /content area -->

@@ -101,6 +101,7 @@ class PaymentMethodController extends AbstractAdminController implements IDatata
         }
 
         $payment = $payModel->getFirst(['*'], 'id=:id', ['id' => $id]);
+        $payment['meta_parameters'] = '' != $payment['meta_parameters'] ? (json_decode($payment['meta_parameters']) ?: []) : [];
 
         $this->setLayout($this->main_layout)->setTemplate('view/payment-method/edit');
         return $this->render(array_merge($data, [
@@ -180,6 +181,16 @@ class PaymentMethodController extends AbstractAdminController implements IDatata
                                     'img' => $d,
                                     'alt' => $row['title'],
                                 ]);
+                        }
+                    ],
+                    [
+                        'db' => 'method_type',
+                        'db_alias' => 'method_type',
+                        'dt' => 'type',
+                        'formatter' => function ($d) {
+                            return load_partial('admin/parser/payment-method-type', [
+                                'type' => $d,
+                            ]);
                         }
                     ],
                     [

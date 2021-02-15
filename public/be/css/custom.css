@@ -254,7 +254,8 @@
     cursor: pointer;
 }
 
-#table th#chks .uniform-checker span, .uniform-choice span {
+#table th#chks .uniform-checker span,
+#table th#chks .uniform-choice span {
     color: #fff;
     border-color: #fff;
 }

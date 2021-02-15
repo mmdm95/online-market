@@ -223,7 +223,8 @@ class OrderController extends AbstractAdminController implements IDatatableContr
                         'db_alias' => 'payment_status',
                         'dt' => 'order_status',
                         'formatter' => function ($d) {
-                            return load_partial('admin/parser/status-creation', [
+                            $this->setTemplate('partial/admin/parser/status-creation');
+                            return $this->render([
                                 'status' => $d,
                                 'switch' => [
                                     [
@@ -282,7 +283,8 @@ class OrderController extends AbstractAdminController implements IDatatableContr
                                 return $arr;
                             }, $badges);
 
-                            return load_partial('admin/parser/status-creation', [
+                            $this->setTemplate('partial/admin/parser/status-creation');
+                            return $this->render([
                                 'status' => $row['send_status_code'],
                                 'switch' => [$badges],
                                 'default' => [

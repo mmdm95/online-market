@@ -8,155 +8,153 @@
         <div class="card-body">
             <form action="#">
                 <div class="row">
-                    <div class="col-md-6">
+                    <div class="col-xl-6">
                         <fieldset>
-                            <legend class="font-weight-semibold"><i class="icon-user mr-2"></i>
+                            <legend class="font-weight-semibold">
+                                <i class="icon-user mr-2"></i>
                                 اطلاعات درخواست کننده
                             </legend>
                             <div class="row">
-                                <div class="form-group col-md-6">
+                                <div class="form-group col-lg-6">
                                     <label>نام و نام خانوادگی:</label>
-                                    <span class="text-info-800">
-سعید گرامی فر
-                                   </span>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label>شماره موبایل:</label>
-                                        <span class="text-info-800">
-                                            ۰۹۱۳۳۵۱۸۰۷۸
-                                        </span>
+                                    <div class="text-info-800">
+                                        سعید گرامی فر
                                     </div>
                                 </div>
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label>استان:</label>
-                                        <span class="text-info-800">
-                                            یزد
-                                        </span>
+                                <div class="form-group col-lg-6">
+                                    <label>شماره موبایل:</label>
+                                    <div class="text-info-800">
+                                        ۰۹۱۳۳۵۱۸۰۷۸
                                     </div>
                                 </div>
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label>شهر:</label>
-                                        <span class="text-info-800">
-                                            یزد
-                                        </span>
+                                <div class="form-group col-lg-6">
+                                    <label>استان:</label>
+                                    <div class="text-info-800">
+                                        یزد
                                     </div>
                                 </div>
-                                <div class="form-group col-md-6">
+                                <div class="form-group col-lg-6">
+                                    <label>شهر:</label>
+                                    <div class="text-info-800">
+                                        یزد
+                                    </div>
+                                </div>
+                                <div class="form-group col-lg-6">
                                     <label>کدپستی:</label>
-                                    <span class="text-info-800">
-۸۹۱۶۷-۵۴۹۵۹
-                                    </span>
+                                    <div class="text-info-800">
+                                        ۸۹۱۶۷-۵۴۹۵۹
+                                    </div>
                                 </div>
-                                <div class="form-group col-md-6">
+                                <div class="form-group col-lg-6">
                                     <label>آدرس پستی:</label>
                                     <p class="text-info-800">
                                         یزد خیابان کاشانی کوچه لاله پلاک ۳۵
                                     </p>
                                 </div>
                             </div>
-
                         </fieldset>
                     </div>
-                    <div class="col-md-6">
+
+                    <div class="col-xl-6">
                         <fieldset>
-                            <legend class="font-weight-semibold"><i class="icon-backspace2 mr-2"></i>
+                            <legend class="font-weight-semibold">
+                                <i class="icon-backspace2 mr-2"></i>
                                 جزئیات ارجاع
                             </legend>
 
                             <div class="row">
-                                <div class="form-group col-md-6">
+                                <div class="form-group col-lg-6">
                                     <label>شماره فاکتور:</label>
-                                    <span class="text-info-800">
+                                    <div class="text-info-800">
                                         <strong>
-۸۹۱۶۷-۵۴۹۵۹
+                                            ۸۹۱۶۷-۵۴۹۵۹
                                         </strong>
-                                    </span>
+                                    </div>
                                 </div>
-                                <div class="form-group col-md-6">
+                                <div class="form-group col-lg-6">
                                     <label>مبلغ آیتم‌های بازگشتی:</label>
-                                    <span class="text-warning-400">
+                                    <div class="text-warning-400">
                                         <strong>
-۸۹۰.۰۰۰ تومان
+                                            ۸۹۰.۰۰۰ تومان
                                         </strong>
-                                    </span>
+                                    </div>
                                 </div>
-                                <div class="form-group col-md-6">
+                                <div class="form-group col-lg-6">
                                     <label>تاریخ ثبت سفارش:</label>
-                                    <span class="text-green-800">
-۵ بهمن ۱۳۹۹
-                                    </span>
+                                    <div class="text-green-800">
+                                        ۵ بهمن ۱۳۹۹
+                                    </div>
                                 </div>
-                                <div class="form-group col-md-6">
+                                <div class="form-group col-lg-6">
                                     <label>تاریخ درخواست مرجوعی:</label>
-                                    <span class="text-danger-800">
+                                    <div class="text-danger-800">
                                         <strong>
-۵ بهمن ۱۳۹۹
+                                            ۵ بهمن ۱۳۹۹
                                         </strong>
-                                    </span>
+                                    </div>
                                 </div>
-                                <div class="form-group col-md-6">
+                                <div class="form-group col-lg-12">
                                     <label>وضعیت ارجاع:</label>
-                                    <span class="badge-dark p-1 rounded">
-در صف بررسی
-                                    </span>
+                                    <div class="badge badge-dark rounded">
+                                        در صف بررسی
+                                    </div>
                                 </div>
                             </div>
                         </fieldset>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-6">
+
+                    <div class="col-xl-6">
                         <fieldset>
-                            <legend class="font-weight-semibold"><i class="icon-credit-card mr-2"></i>
-                                وضعیت مالی:
+                            <legend class="font-weight-semibold">
+                                <i class="icon-credit-card mr-2"></i>
+                                وضعیت مالی
                             </legend>
 
                             <div class="row">
-                                <div class="form-group col-md-6">
+                                <div class="form-group col-lg-6">
                                     <label>وضعیت پرداخت:</label>
-                                    <span class="badge-success p-1 rounded">
-پرداخت شده
-                                    </span>
+                                    <div class="badge badge-success rounded">
+                                        پرداخت شده
+                                    </div>
                                 </div>
-                                <div class="form-group col-md-6">
+                                <div class="form-group col-lg-6">
                                     <label>کد رهگیری:</label>
-                                    <span class="text-danger-800">
+                                    <div class="text-danger-800">
                                         <strong>
                                             dg-19203455
                                         </strong>
-                                    </span>
+                                    </div>
                                 </div>
-                                <div class="form-group col-md-6">
+                                <div class="form-group col-lg-6">
                                     <label>تاریخ پرداخت:</label>
-                                    <span class="text-green-800">
-۵ بهمن ۱۳۹۹
-                                    </span>
+                                    <div class="text-green-800">
+                                        ۵ بهمن ۱۳۹۹
+                                    </div>
                                 </div>
-                                <div class="form-group col-md-6">
+                                <div class="form-group col-lg-6">
                                     <label>شیوه پرداخت:</label>
-                                    <span class="text-green-800">
-درب منزل
-                                    </span>
+                                    <div class="text-green-800">
+                                        درب منزل
+                                    </div>
                                 </div>
-                                <div class="form-group col-md-6">
+                                <div class="form-group col-lg-12">
                                     <label>تاریخ پرداخت:</label>
-                                    <span class="text-danger-800">
--
-                                    </span>
+                                    <div class="text-danger-800">
+                                        -
+                                    </div>
                                 </div>
                             </div>
                         </fieldset>
                     </div>
-                    <div class="col-md-6">
+
+                    <div class="col-xl-6">
                         <fieldset>
-                            <legend class="font-weight-semibold"><i class="icon-backspace2 mr-2"></i>
-                                توضیحات کاربر:
+                            <legend class="font-weight-semibold">
+                                <i class="icon-backspace2 mr-2"></i>
+                                توضیحات کاربر
                             </legend>
 
-                            <div class="row">
+                            <div class="form-group">
                                 <p class="p-2 bg-grey-800">
                                     با سلام به علت خط و خشی که روی گوشی بود تصمیم گرفتم کالا را مرجوع کنم.
                                 </p>

@@ -9,7 +9,10 @@ use Sim\Container\Exceptions\MethodNotFoundException;
 use Sim\Container\Exceptions\ParameterHasNoDefaultValueException;
 use Sim\Container\Exceptions\ServiceNotFoundException;
 use Sim\Container\Exceptions\ServiceNotInstantiableException;
+use Sim\Exceptions\ConfigManager\ConfigNotRegisteredException;
 use Sim\Form\Exceptions\FormException;
+use Sim\Interfaces\IFileNotExistsException;
+use Sim\Interfaces\IInvalidVariableNameException;
 use Sim\Utils\StringUtil;
 use voku\helper\AntiXSS;
 
@@ -17,12 +20,15 @@ class NewsletterForm implements IPageForm
 {
     /**
      * {@inheritdoc}
-     * @throws \ReflectionException
+     * @throws FormException
      * @throws MethodNotFoundException
      * @throws ParameterHasNoDefaultValueException
      * @throws ServiceNotFoundException
      * @throws ServiceNotInstantiableException
-     * @throws FormException
+     * @throws \ReflectionException
+     * @throws ConfigNotRegisteredException
+     * @throws IFileNotExistsException
+     * @throws IInvalidVariableNameException
      */
     public function validate(): array
     {

@@ -20,7 +20,6 @@ class EditSendMethodForm implements IPageForm
 {
     /**
      * {@inheritdoc}
-     * @return array
      * @throws FormException
      * @throws MethodNotFoundException
      * @throws ParameterHasNoDefaultValueException

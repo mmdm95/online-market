@@ -75,7 +75,7 @@ class OrderModel extends BaseModel
      */
     public function getOrdersCount(?string $where = null, array $bind_values = []): int
     {
-        $res = $this->getOrders($where, $bind_values, [], null, 0, ['COUNT(DISTINCT(*)) AS count']);
+        $res = $this->getOrders($where, $bind_values, [], null, 0, ['COUNT(DISTINCT(o.id)) AS count']);
         if (count($res)) return (int)$res[0]['count'];
         return 0;
     }

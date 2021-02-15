@@ -1,4 +1,3 @@
-
 <!-- Content area -->
 <div class="content">
 
@@ -7,43 +6,30 @@
         <?php load_partial('admin/card-header', ['header_title' => 'کیف پول']); ?>
 
         <div class="card-body">
-            با استفاده از ستون عملیات می‌توانید اقدام به حذف، ویرایش و مشاهده خرید‌های کاربر کنید.
+            با استفاده از ستون عملیات می‌توانید اقدام به حذف، ویرایش و مشاهده کیف پول کاربر کنید.
         </div>
 
-        <table class="table table-bordered table-hover datatable-highlight">
+        <table class="table table-bordered table-hover datatable-highlight"
+               data-columns='[{"data":"id"},{"data":"user"},{"data":"balance"},{"data":"is_available"},{"data":"operations"}]'
+               data-ajax-url="<?= url('admin.wallet.dt.view')->getRelativeUrlTrimmed(); ?>">
             <thead>
             <tr>
-                <th>کد سیستم</th>
-                <th>نام</th>
-                <th>نام خانوادگی</th>
-                <th>مانده</th>
+                <th>#</th>
+                <th>کاربر</th>
+                <th>مبلغ کیف پول (تومان)</th>
+                <th>دسترسی</th>
                 <th class="text-center">عملیات</th>
             </tr>
             </thead>
-            <tbody>
+            <tfoot>
             <tr>
-                <td>۱</td>
-                <td>محمدمهدی</td>
-                <td>دهقان منشادی</td>
-                <td>
-                    <span class="text-info-800">25.000.000</span>
-                    تومان
-                </td>
-                <td class="text-center">
-                    <div class="list-icons">
-                        <div class="dropdown">
-                            <a href="#" class="list-icons-item" data-toggle="dropdown">
-                                <i class="icon-menu9"></i>
-                            </a>
-
-                            <div class="dropdown-menu dropdown-menu-right">
-                                <a href="#" class="dropdown-item"><i class="icon-eye"></i>مشاهده</a>
-                            </div>
-                        </div>
-                    </div>
-                </td>
+                <th>#</th>
+                <th>کاربر</th>
+                <th>مبلغ کیف پول (تومان)</th>
+                <th>دسترسی</th>
+                <th class="text-center">عملیات</th>
             </tr>
-            </tbody>
+            </tfoot>
         </table>
     </div>
     <!-- /highlighting rows and columns -->

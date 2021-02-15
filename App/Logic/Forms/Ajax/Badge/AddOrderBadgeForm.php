@@ -11,8 +11,11 @@ use Sim\Container\Exceptions\MethodNotFoundException;
 use Sim\Container\Exceptions\ParameterHasNoDefaultValueException;
 use Sim\Container\Exceptions\ServiceNotFoundException;
 use Sim\Container\Exceptions\ServiceNotInstantiableException;
+use Sim\Exceptions\ConfigManager\ConfigNotRegisteredException;
 use Sim\Form\Exceptions\FormException;
 use Sim\Form\FormValue;
+use Sim\Interfaces\IFileNotExistsException;
+use Sim\Interfaces\IInvalidVariableNameException;
 use Sim\Utils\StringUtil;
 use voku\helper\AntiXSS;
 
@@ -20,12 +23,15 @@ class AddOrderBadgeForm implements IPageForm
 {
     /**
      * {@inheritdoc}
-     * @throws \ReflectionException
+     * @throws FormException
      * @throws MethodNotFoundException
      * @throws ParameterHasNoDefaultValueException
      * @throws ServiceNotFoundException
      * @throws ServiceNotInstantiableException
-     * @throws FormException
+     * @throws \ReflectionException
+     * @throws ConfigNotRegisteredException
+     * @throws IFileNotExistsException
+     * @throws IInvalidVariableNameException
      */
     public function validate(): array
     {
@@ -99,12 +105,11 @@ class AddOrderBadgeForm implements IPageForm
         $xss = container()->get(AntiXSS::class);
 
         try {
-            $code = StringUtil::uniqidReal(12);
             $title = input()->post('inp-add-badge-title', '')->getValue();
             $color = input()->post('inp-add-badge-color', '')->getValue();
 
             $res = $badgeModel->insert([
-                'code' => $code,
+                'code' => StringUtil::uniqidReal(12),
                 'title' => $xss->xss_clean(trim($title)),
                 'color' => $xss->xss_clean($color),
                 'created_at' => time(),

@@ -232,7 +232,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="<?= url('admin.wallet.deposit-type'); ?>" class="nav-link">
+                            <a href="<?= url('admin.deposit-type.view'); ?>" class="nav-link">
                                 مدیریت انواع تراکنش ها
                             </a>
                         </li>
@@ -409,7 +409,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="<?= url('admin.setting'); ?>" class="nav-link">
+                    <a href="<?= url('admin.setting.main'); ?>" class="nav-link">
                         <i class="icon-cog"></i>
                         <span>تنظیمات</span>
                     </a>

@@ -24,14 +24,13 @@ return [
         ],
     ],
     'view/order/return-order/detail' => [
-        'title' => title_concat(\config()->get('settings.title.value'), 'سفارشات مرجوعی'),
+        'title' => title_concat(\config()->get('settings.title.value'), 'جزئیات سفارش مرجوعی'),
         'common' => [
             'admin-base',
             'admin-table',
             'admin-form',
             'admin'
         ],
-        'sub_title' => 'مشاهده سفارشات مرجوعی',
         'breadcrumb' => [
             [
                 'url' => url('admin.index')->getRelativeUrl(),
@@ -40,12 +39,12 @@ return [
                 'is_active' => false,
             ],
             [
-                'url' => url('admin.order.return')->getRelativeUrl(),
+                'url' => url('admin.order.return', '')->getRelativeUrl(),
                 'text' => 'مدیریت سفارشات مرجوعی',
                 'is_active' => false,
             ],
             [
-                'text' => 'سفارشات مرجوعی',
+                'text' => 'جزئیات سفارش مرجوعی',
                 'is_active' => true,
             ],
         ],
