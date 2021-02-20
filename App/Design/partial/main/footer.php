@@ -149,7 +149,7 @@ use App\Logic\Utils\Jdf;
                         <?= Jdf::jdate('Y'); ?>
                         کلیه حقوق این سایت متعلق به
                         <?= \config()->get('settings.title.value'); ?>
-                        است
+                        است.
                     </p>
                 </div>
             </div>

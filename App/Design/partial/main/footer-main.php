@@ -12,50 +12,56 @@ use App\Logic\Utils\Jdf;
                     <div class="shopping_info">
                         <div class="row justify-content-center">
                             <?php
-                            $features = \config()->get('settings.features.value');
-                            $feature1 = $features[0];
-                            $feature2 = $features[1];
-                            $feature3 = $features[2];
+                            $features = \config()->get('settings.features.value') ?: [];
+                            $feature1 = $features[0] ?? [];
+                            $feature2 = $features[1] ?? [];
+                            $feature3 = $features[2] ?? [];
                             ?>
-                            <div class="col-md-4">
-                                <div class="icon_box icon_box_style2">
-                                    <div class="icon">
-                                        <i class="flaticon-shipped"></i>
-                                    </div>
-                                    <div class="icon_box_content">
-                                        <h5><?= $feature1['title']; ?></h5>
-                                        <?php if (!empty($feature1['sub_title'])): ?>
-                                            <p><?= $feature1['sub_title']; ?></p>
-                                        <?php endif; ?>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="icon_box icon_box_style2">
-                                    <div class="icon">
-                                        <i class="flaticon-money-back"></i>
-                                    </div>
-                                    <div class="icon_box_content">
-                                        <h5><?= $feature2['title']; ?></h5>
-                                        <?php if (!empty($feature1['sub_title'])): ?>
-                                            <p><?= $feature2['sub_title']; ?></p>
-                                        <?php endif; ?>
+                            <?php if (count($feature1) && isset($feature1) && '' != $feature1['title']): ?>
+                                <div class="col-md-4">
+                                    <div class="icon_box icon_box_style2">
+                                        <div class="icon">
+                                            <i class="flaticon-shipped"></i>
+                                        </div>
+                                        <div class="icon_box_content">
+                                            <h5><?= $feature1['title']; ?></h5>
+                                            <?php if (!empty($feature1['sub_title'])): ?>
+                                                <p><?= $feature1['sub_title']; ?></p>
+                                            <?php endif; ?>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="icon_box icon_box_style2">
-                                    <div class="icon">
-                                        <i class="flaticon-support"></i>
-                                    </div>
-                                    <div class="icon_box_content">
-                                        <h5><?= $feature3['title']; ?></h5>
-                                        <?php if (!empty($feature1['sub_title'])): ?>
-                                            <p><?= $feature3['sub_title']; ?></p>
-                                        <?php endif; ?>
+                            <?php endif; ?>
+                            <?php if (count($feature2) && isset($feature2) && '' != $feature2['title']): ?>
+                                <div class="col-md-4">
+                                    <div class="icon_box icon_box_style2">
+                                        <div class="icon">
+                                            <i class="flaticon-money-back"></i>
+                                        </div>
+                                        <div class="icon_box_content">
+                                            <h5><?= $feature2['title']; ?></h5>
+                                            <?php if (!empty($feature1['sub_title'])): ?>
+                                                <p><?= $feature2['sub_title']; ?></p>
+                                            <?php endif; ?>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
+                            <?php endif; ?>
+                            <?php if (count($feature3) && isset($feature3) && '' != $feature3['title']): ?>
+                                <div class="col-md-4">
+                                    <div class="icon_box icon_box_style2">
+                                        <div class="icon">
+                                            <i class="flaticon-support"></i>
+                                        </div>
+                                        <div class="icon_box_content">
+                                            <h5><?= $feature3['title']; ?></h5>
+                                            <?php if (!empty($feature1['sub_title'])): ?>
+                                                <p><?= $feature3['sub_title']; ?></p>
+                                            <?php endif; ?>
+                                        </div>
+                                    </div>
+                                </div>
+                            <?php endif; ?>
                         </div>
                     </div>
                 </div>
@@ -86,7 +92,7 @@ use App\Logic\Utils\Jdf;
                             $phones = \config()->get('settings.phones.value');
                             $phones = explode(',', $phones);
                             $phones = array_filter($phones, function ($val) {
-                                if(is_string($val) && !empty(trim($val))) return true;
+                                if (is_string($val) && !empty(trim($val))) return true;
                                 return false;
                             });
                             $email = \config()->get('settings.email.value');
@@ -123,7 +129,10 @@ use App\Logic\Utils\Jdf;
                 $section1 = \config()->get('settings.footer_section_1.value');
                 $section2 = \config()->get('settings.footer_section_2.value');
                 ?>
-                <?php if (count($section1['links'])): ?>
+                <?php if (count($section1['links'] ?? [])): ?>
+                    <?php
+                    ksort($section1['links']);
+                    ?>
                     <div class="col-lg-2 col-md-4 col-sm-6">
                         <div class="widget">
                             <h6 class="widget_title"><?= $section1['title']; ?></h6>
@@ -135,7 +144,10 @@ use App\Logic\Utils\Jdf;
                         </div>
                     </div>
                 <?php endif; ?>
-                <?php if (count($section2['links'])): ?>
+                <?php if (count($section2['links'] ?? [])): ?>
+                    <?php
+                    ksort($section2['links']);
+                    ?>
                     <div class="col-lg-2 col-md-4 col-sm-6">
                         <div class="widget">
                             <h6 class="widget_title"><?= $section2['title']; ?></h6>
@@ -149,24 +161,18 @@ use App\Logic\Utils\Jdf;
                 <?php endif; ?>
 
                 <?php
-                $namad1 = \config()->get('settings.footer_namad_1.value');
-                $namad2 = \config()->get('settings.footer_namad_2.value');
+                $namads = \config()->get('settings.footer_namads.value') ?: [];
                 ?>
-                <?php if (!empty($namad1) || !empty($namad2)): ?>
+                <?php if (!empty($namads)): ?>
                     <div class="col-lg-4 col-md-4 col-sm-12">
                         <div class="widget">
                             <h6 class="widget_title">نمادها</h6>
                             <ul class="widget_instafeed namad_img">
-                                <?php if (!empty($namad1)): ?>
+                                <?php foreach ($namads as $namad): ?>
                                     <li>
-                                        <?= $namad1; ?>
+                                        <?= $namad; ?>
                                     </li>
-                                <?php endif; ?>
-                                <?php if (!empty($namad2)): ?>
-                                    <li>
-                                        <?= $namad2; ?>
-                                    </li>
-                                <?php endif; ?>
+                                <?php endforeach; ?>
                             </ul>
                         </div>
                     </div>
@@ -184,7 +190,7 @@ use App\Logic\Utils\Jdf;
                         <?= Jdf::jdate('Y'); ?>
                         کلیه حقوق این سایت متعلق به
                         <?= \config()->get('settings.title.value'); ?>
-                        است
+                        است.
                     </p>
                 </div>
                 <?php

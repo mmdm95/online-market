@@ -36,7 +36,7 @@ $validator = form_validator();
                                     <input type="hidden" name="inp-edit-brand-img"
                                            value="<?= $img; ?>">
                                     <?php if (!empty($img)): ?>
-                                        <img class="img-placeholder-image" src="<?= $img; ?>" alt="selected image">
+                                        <img class="img-placeholder-image" src="<?= url('image.show') . $img; ?>" alt="selected image">
                                     <?php endif; ?>
                                     <div class="img-placeholder-icon-container">
                                         <i class="icon-image2 img-placeholder-icon text-grey-300"></i>

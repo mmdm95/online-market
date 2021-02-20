@@ -5,6 +5,8 @@ return [
         'title' => title_concat(\config()->get('settings.title.value'), 'تنظیمات اصلی'),
         'common' => [
             'admin-base',
+            'admin-form',
+            'admin-tags-input',
             'admin',
         ],
         'sub_title' => 'تنظیمات اصلی',
@@ -21,10 +23,43 @@ return [
             ],
         ],
     ],
+    'view/setting/top-menu' => [
+        'title' => title_concat(\config()->get('settings.title.value'), 'تنظیمات منوی بالای صفحه'),
+        'common' => [
+            'admin-base',
+            'admin-form',
+            'admin-tags-input',
+            'admin-fab',
+            'admin',
+        ],
+        'sub_title' => 'تنظیمات منوی بالای صفحه',
+        'breadcrumb' => [
+            [
+                'url' => url('admin.index')->getRelativeUrl(),
+                'icon' => 'icon-home2',
+                'text' => 'خانه',
+                'is_active' => false,
+            ],
+            [
+                'text' => 'تنظیمات منوی بالای صفحه',
+                'is_active' => true,
+            ],
+        ],
+        'js' => [
+            'bottom' => [
+                e(
+                    '<script type="text/javascript" src="' .
+                    asset_path('be/js/top-menu.js') .
+                    '"></script>'
+                ),
+            ],
+        ],
+    ],
     'view/setting/sms' => [
         'title' => title_concat(\config()->get('settings.title.value'), 'تنظیمات پیامک'),
         'common' => [
             'admin-base',
+            'admin-form',
             'admin',
         ],
         'sub_title' => 'تنظیمات پیامک',
@@ -45,6 +80,8 @@ return [
         'title' => title_concat(\config()->get('settings.title.value'), 'تنظیمات تماس'),
         'common' => [
             'admin-base',
+            'admin-form',
+            'admin-tags-input',
             'admin',
         ],
         'sub_title' => 'تنظیمات تماس',
@@ -65,6 +102,8 @@ return [
         'title' => title_concat(\config()->get('settings.title.value'), 'تنظیمات شبکه‌های اجتماعی'),
         'common' => [
             'admin-base',
+            'admin-form',
+            'admin-tags-input',
             'admin',
         ],
         'sub_title' => 'تنظیمات شبکه‌های اجتماعی',
@@ -85,6 +124,7 @@ return [
         'title' => title_concat(\config()->get('settings.title.value'), 'تنظیمات فوتر'),
         'common' => [
             'admin-base',
+            'admin-form',
             'admin',
         ],
         'sub_title' => 'تنظیمات فوتر/پاورقی',
@@ -105,6 +145,7 @@ return [
         'title' => title_concat(\config()->get('settings.title.value'), 'تنظیمات صفحه اصلی'),
         'common' => [
             'admin-base',
+            'admin-form',
             'admin',
         ],
         'sub_title' => 'تنظیمات صفحه اصلی',
@@ -125,6 +166,8 @@ return [
         'title' => title_concat(\config()->get('settings.title.value'), 'تنظیمات صفحه درباره'),
         'common' => [
             'admin-base',
+            'admin-form',
+            'admin-editor',
             'admin',
         ],
         'sub_title' => 'تنظیمات صفحه درباره',
@@ -145,6 +188,7 @@ return [
         'title' => title_concat(\config()->get('settings.title.value'), 'سایر تنظیمات'),
         'common' => [
             'admin-base',
+            'admin-form',
             'admin',
         ],
         'sub_title' => 'سایر تنظیمات',

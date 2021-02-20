@@ -39,6 +39,12 @@
                         <a href="#" class="text-white"><i class="icon-cog3"></i></a>
                     </div>
                 </div>
+
+                <a href="<?= url('home.index')->getRelativeUrl(); ?>"
+                   target="_blank"
+                   class="btn border text-white btn-block mt-3">
+                    نمایش سایت
+                </a>
             </div>
         </div>
         <!-- /user menu -->
@@ -53,7 +59,10 @@
                     <i class="icon-menu" title="اصلی"></i>
                 </li>
                 <li class="nav-item">
-                    <a href="<?= url('admin.index'); ?>" class="nav-link">
+                    <a href="<?= url('admin.index'); ?>" class="nav-link"
+                       data-popup="tooltip"
+                       data-original-title="میز کار"
+                       data-placement="left">
                         <i class="icon-home4"></i>
                         <span>میز کار</span>
                     </a>
@@ -178,7 +187,10 @@
                     </ul>
                 </li>
                 <li class="nav-item">
-                    <a href="<?= url('admin.unit.view', ''); ?>" class="nav-link">
+                    <a href="<?= url('admin.unit.view', ''); ?>" class="nav-link"
+                       data-popup="tooltip"
+                       data-original-title="واحد‌ها"
+                       data-placement="left">
                         <i class="icon-unicode"></i>
                         <span>واحد‌ها</span>
                     </a>
@@ -255,7 +267,10 @@
                     </ul>
                 </li>
                 <li class="nav-item">
-                    <a href="<?= url('admin.return.order.view'); ?>" class="nav-link">
+                    <a href="<?= url('admin.return.order.view'); ?>" class="nav-link"
+                       data-popup="tooltip"
+                       data-original-title="سفارشات مرجوعی"
+                       data-placement="left">
                         <i class="icon-backspace2"></i>
                         <span>سفارشات مرجوعی</span>
                     </a>
@@ -264,31 +279,43 @@
 
                 <!-- Report -->
                 <li class="nav-item-header">
-                    <div class="text-uppercase font-size-xs line-height-xs">گذارش‌گیری</div>
-                    <i class="icon-menu" title="گذارش‌گیری"></i>
+                    <div class="text-uppercase font-size-xs line-height-xs">گزارش‌گیری</div>
+                    <i class="icon-menu" title="گزارش‌گیری"></i>
                 </li>
                 <li class="nav-item">
-                    <a href="<?= url(''); ?>" class="nav-link">
-                        <i class="icon-file-excel"></i>
-                        <span>گذارش‌گیری از کاربران</span>
+                    <a href="<?= url(''); ?>" class="nav-link"
+                       data-popup="tooltip"
+                       data-original-title="گزارش‌گیری از کاربران"
+                       data-placement="left">
+                        <i class="icon-archive"></i>
+                        <span>گزارش‌گیری از کاربران</span>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="<?= url(''); ?>" class="nav-link">
-                        <i class="icon-file-excel"></i>
-                        <span>گذارش‌گیری از محصولات</span>
+                    <a href="<?= url(''); ?>" class="nav-link"
+                       data-popup="tooltip"
+                       data-original-title="گزارش‌گیری از محصولات"
+                       data-placement="left">
+                        <i class="icon-archive"></i>
+                        <span>گزارش‌گیری از محصولات</span>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="<?= url(''); ?>" class="nav-link">
-                        <i class="icon-file-excel"></i>
-                        <span>گذارش‌گیری از کیف پول</span>
+                    <a href="<?= url(''); ?>" class="nav-link"
+                       data-popup="tooltip"
+                       data-original-title="گزارش‌گیری از کیف پول"
+                       data-placement="left">
+                        <i class="icon-archive"></i>
+                        <span>گزارش‌گیری از کیف پول</span>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="<?= url(''); ?>" class="nav-link">
-                        <i class="icon-file-excel"></i>
-                        <span>گذارش‌گیری از سفارشات</span>
+                    <a href="<?= url(''); ?>" class="nav-link"
+                       data-popup="tooltip"
+                       data-original-title="گزارش‌گیری از سفارشات"
+                       data-placement="left">
+                        <i class="icon-archive"></i>
+                        <span>گزارش‌گیری از سفارشات</span>
                     </a>
                 </li>
                 <!-- /report -->
@@ -354,25 +381,37 @@
                     <i class="icon-menu" title="ارتباطات"></i>
                 </li>
                 <li class="nav-item">
-                    <a href="<?= url('admin.contact-us.view', ''); ?>" class="nav-link">
+                    <a href="<?= url('admin.contact-us.view', ''); ?>" class="nav-link"
+                       data-popup="tooltip"
+                       data-original-title="تماس‌ها"
+                       data-placement="left">
                         <i class="icon-envelop5"></i>
                         <span>تماس‌ها</span>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="<?= url('admin.complaints.view', ''); ?>" class="nav-link">
+                    <a href="<?= url('admin.complaints.view', ''); ?>" class="nav-link"
+                       data-popup="tooltip"
+                       data-original-title="شکایات"
+                       data-placement="left">
                         <i class="icon-balance"></i>
                         <span>شکایات</span>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="<?= url('admin.faq.view', ''); ?>" class="nav-link">
+                    <a href="<?= url('admin.faq.view', ''); ?>" class="nav-link"
+                       data-popup="tooltip"
+                       data-original-title="سؤالات متداول"
+                       data-placement="left">
                         <i class="icon-question7"></i>
                         <span>سؤالات متداول</span>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="<?= url('admin.newsletter.view', ''); ?>" class="nav-link">
+                    <a href="<?= url('admin.newsletter.view', ''); ?>" class="nav-link"
+                       data-popup="tooltip"
+                       data-original-title="خبرنامه"
+                       data-placement="left">
                         <i class="icon-newspaper2"></i>
                         <span>خبرنامه</span>
                     </a>
@@ -385,33 +424,57 @@
                     <i class="icon-menu" title="سایر"></i>
                 </li>
                 <li class="nav-item">
-                    <a href="<?= url('admin.slider.view', ''); ?>" class="nav-link">
+                    <a href="<?= url('admin.slider.view', ''); ?>" class="nav-link"
+                       data-popup="tooltip"
+                       data-original-title="مدیریت اسلایدشو"
+                       data-placement="left">
                         <i class="icon-image-compare"></i>
                         <span>مدیریت اسلایدشو</span>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="<?= url('admin.instagram.view', ''); ?>" class="nav-link">
+                    <a href="<?= url('admin.instagram.view', ''); ?>" class="nav-link"
+                       data-popup="tooltip"
+                       data-original-title="مدیریت تصاویر اینستاگرام"
+                       data-placement="left">
                         <i class="icon-instagram"></i>
                         <span>مدیریت تصاویر اینستاگرام</span>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="<?= url('admin.sec_question.view', ''); ?>" class="nav-link">
+                    <a href="<?= url('admin.sec_question.view', ''); ?>" class="nav-link"
+                       data-popup="tooltip"
+                       data-original-title="سؤالات امنیتی"
+                       data-placement="left">
                         <i class="icon-lock"></i>
                         <span>سؤالات امنیتی</span>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="<?= url('admin.file-manager'); ?>" class="nav-link">
+                    <a href="<?= url('admin.file-manager'); ?>" class="nav-link"
+                       data-popup="tooltip"
+                       data-original-title="مدیریت فایل‌ها"
+                       data-placement="left">
                         <i class="icon-files-empty"></i>
                         <span>مدیریت فایل‌ها</span>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="<?= url('admin.setting.main'); ?>" class="nav-link">
+                    <a href="<?= url('admin.setting.main'); ?>" class="nav-link"
+                       data-popup="tooltip"
+                       data-original-title="تنظیمات"
+                       data-placement="left">
                         <i class="icon-cog"></i>
                         <span>تنظیمات</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="<?= url('admin.logout'); ?>" class="nav-link"
+                       data-popup="tooltip"
+                       data-original-title="خروج"
+                       data-placement="left">
+                        <i class="icon-switch2"></i>
+                        <span>خروج</span>
                     </a>
                 </li>
                 <!-- /others -->

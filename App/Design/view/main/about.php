@@ -5,7 +5,7 @@
 <!-- START MAIN CONTENT -->
 <div class="main_content">
 
-    <!-- STAT SECTION ABOUT -->
+    <!-- START SECTION ABOUT -->
     <div class="section">
         <div class="container">
             <div class="row align-items-center">
@@ -30,60 +30,6 @@
         </div>
     </div>
     <!-- END SECTION ABOUT -->
-
-    <!-- START SECTION WHY CHOOSE -->
-    <div class="section bg_light_blue2 pb_70">
-        <div class="container">
-            <div class="row justify-content-center">
-                <div class="col-lg-6 col-md-8">
-                    <div class="heading_s1 text-center">
-                        <h2>چرا ما را انتخاب کنید؟</h2>
-                    </div>
-                    <p class="text-center leads">لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ، و با استفاده
-                        از طراحان گرافیک است.</p>
-                </div>
-            </div>
-            <div class="row justify-content-center">
-                <div class="col-lg-4 col-sm-6">
-                    <div class="icon_box icon_box_style4 box_shadow1">
-                        <div class="icon">
-                            <i class="ti-pencil-alt"></i>
-                        </div>
-                        <div class="icon_box_content">
-                            <h5>طراحی خلاقانه</h5>
-                            <p>لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ، و با استفاده از طراحان گرافیک
-                                است، چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-4 col-sm-6">
-                    <div class="icon_box icon_box_style4 box_shadow1">
-                        <div class="icon">
-                            <i class="ti-layers"></i>
-                        </div>
-                        <div class="icon_box_content">
-                            <h5>طرح بندی انعطاف پذیر</h5>
-                            <p>لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ، و با استفاده از طراحان گرافیک
-                                است، چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-4 col-sm-6">
-                    <div class="icon_box icon_box_style4 box_shadow1">
-                        <div class="icon">
-                            <i class="ti-email"></i>
-                        </div>
-                        <div class="icon_box_content">
-                            <h5>بازاریابی ایمیلی</h5>
-                            <p>لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ، و با استفاده از طراحان گرافیک
-                                است، چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- END SECTION WHY CHOOSE -->
 
     <!-- START SECTION TEAM -->
     <?php if (count($our_team ?? [])): ?>
@@ -152,10 +98,10 @@
         <div class="container">
             <div class="row no-gutters">
                 <?php
-                $features = \config()->get('settings.features.value');
-                $feature1 = $features[0];
-                $feature2 = $features[1];
-                $feature3 = $features[2];
+                $features = \config()->get('settings.features.value') ?: [];
+                $feature1 = $features[0] ?? ['title' => '', 'sub_title' => ''];
+                $feature2 = $features[1] ?? ['title' => '', 'sub_title' => ''];
+                $feature3 = $features[2] ?? ['title' => '', 'sub_title' => ''];
                 ?>
                 <div class="col-lg-4">
                     <div class="icon_box icon_box_style1">

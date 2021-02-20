@@ -49,7 +49,7 @@
                 <div class="collapse navbar-collapse justify-content-end" id="navbarSupportedContent">
                     <ul class="navbar-nav">
                         <?php
-                        $topMenu = \config()->get('settings.top_menu.value') ?? [];
+                        $topMenu = \config()->get('settings.top_menu.value') ?: [];
                         ?>
 
                         <?php foreach ($topMenu as $t): ?>

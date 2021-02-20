@@ -67,4 +67,12 @@ class HomeController extends AbstractAdminController
             ],
         ]);
     }
+
+    /**
+     * Logout from system
+     */
+    public function logout()
+    {
+        response()->redirect(url('admin.login')->getRelativeUrl(), 301);
+    }
 }

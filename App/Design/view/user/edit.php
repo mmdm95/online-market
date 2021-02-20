@@ -101,7 +101,7 @@ $validator = form_validator();
                                                name="inp-user-mobile"
                                                value="<?= $validator->setInput('inp-user-mobile') ?: $user['username']; ?>">
                                         <button type="button"
-                                                class="btn btn-outline-success btn-icon ml-2 icon icon-info3"
+                                                class="btn btn-outline-success btn-icon ml-2 icon-info3"
                                                 data-popup="popover"
                                                 data-trigger="focus" data-placement="right"
                                                 data-content="موبایل به عنوان نام کاربری خواهد بود."></button>
@@ -157,7 +157,7 @@ $validator = form_validator();
                                                            name="inp-user-password"
                                                            placeholder="حداقل ۸ کاراکتر و شامل یک حرف">
                                                     <button type="button"
-                                                            class="btn btn-outline-success btn-icon ml-2 icon icon-info3"
+                                                            class="btn btn-outline-success btn-icon ml-2 icon-info3"
                                                             data-popup="popover"
                                                             data-trigger="focus" data-placement="right"
                                                             data-content="حداقل ۸ کاراکتر و شامل یک حرف"></button>

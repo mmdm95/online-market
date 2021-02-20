@@ -48,6 +48,60 @@ class MenuUtil
         return $this->main_menu_items;
     }
 
+    /**
+     * @param $menu
+     * @param $sub_menu
+     * @return array
+     */
+    public function assembleTopMenu($menu, $sub_menu): array
+    {
+        try {
+            $assembledMenu = [];
+            $counter = 0;
+            foreach ($menu as $k => $main) {
+                $children = [];
+                $title = $main['title']->getValue();
+                if ('' != trim($title)) {
+                    $link = $main['link']->getValue();
+                    $priority = $main['priority']->getValue();
+
+                    foreach ($sub_menu[$k] as $sub) {
+                        $subTitle = $sub['sub-title']->getValue();
+                        if ('' != trim($subTitle)) {
+                            $subLink = $sub['sub-link']->getValue();
+                            $subPriority = $sub['sub-priority']->getValue();
+
+                            if (is_numeric($subPriority)) {
+                                $children[(int)$subPriority] = [
+                                    'name' => $subTitle,
+                                    'link' => $subLink,
+                                ];
+                            } else {
+                                $children[] = [
+                                    'name' => $subTitle,
+                                    'link' => $subLink,
+                                ];
+                            }
+                        }
+                    }
+
+                    if (is_numeric($priority)) {
+                        $counter = (int)$priority;
+                    }
+                    $assembledMenu[$counter] = [
+                        'name' => $title,
+                        'link' => $link,
+                    ];
+                    $assembledMenu[$counter]['children'] = $children;
+                    $counter++;
+                }
+            }
+            return $assembledMenu;
+        } catch (\Exception $e) {
+            return [];
+        }
+    }
+
     //----------------------------------------------------------------------------------------
     // Extra functionality - Menu
     //----------------------------------------------------------------------------------------

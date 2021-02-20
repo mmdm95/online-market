@@ -40,6 +40,7 @@ use App\Logic\Controllers\CompareController;
 use App\Logic\Controllers\HomeController;
 use App\Logic\Controllers\LoginController;
 use App\Logic\Controllers\PageController;
+use App\Logic\Controllers\Admin\ProductController as AdminProductController;
 use App\Logic\Controllers\ProductController;
 use App\Logic\Controllers\RegisterController;
 use App\Logic\Controllers\User\AddressController;
@@ -163,6 +164,7 @@ class Route implements IInitialize
             //==========================
             // admin login page
             Router::form('/admin/login', [AdminHomeController::class, 'login'])->name('admin.login');
+            Router::get('/admin/logout', [AdminHomeController::class, 'logout'])->name('admin.logout');
 
             // other pages that need authentication
             Router::group(['prefix' => '/admin/', 'middleware' => AdminAuthMiddleware::class], function () {
@@ -285,23 +287,23 @@ class Route implements IInitialize
                 /**
                  * Product Route
                  */
-                Router::form('/product/add', [ProductController::class, 'add'])->name('admin.product.add');
-                Router::form('/product/edit/{id}', [ProductController::class, 'edit'])->where([
+                Router::form('/product/add', [AdminProductController::class, 'add'])->name('admin.product.add');
+                Router::form('/product/edit/{id}', [AdminProductController::class, 'edit'])->where([
                     'id' => '[0-9]+',
                 ])->name('admin.product.edit');
-                Router::get('/product/view', [ProductController::class, 'view'])->name('admin.product.view');
-                Router::get('/product/detail/{id}', [ProductController::class, 'detail'])->where([
+                Router::get('/product/view', [AdminProductController::class, 'view'])->name('admin.product.view');
+                Router::get('/product/detail/{id}', [AdminProductController::class, 'detail'])->where([
                     'id' => '[0-9]+',
                 ])->name('admin.product.detail');
-                Router::post('/product/view/dt', [ProductController::class, 'getPaginatedDatatable'])->name('admin.product.dt.view');
-                Router::get('/product/view/s2', [ProductController::class, 'getPaginatedSelect2'])->name('admin.product.s2.view');
-                Router::form('/product/buyer/{id}', [ProductController::class, 'buyer'])->where([
+                Router::post('/product/view/dt', [AdminProductController::class, 'getPaginatedDatatable'])->name('admin.product.dt.view');
+                Router::get('/product/view/s2', [AdminProductController::class, 'getPaginatedSelect2'])->name('admin.product.s2.view');
+                Router::form('/product/buyer/{id}', [AdminProductController::class, 'buyer'])->where([
                     'id' => '[0-9]+',
                 ])->name('admin.product.buyer');
-                Router::post('/product/buyer/users/dt/{id}', [ProductController::class, 'getBuyerUsersPaginatedDatatable'])->where([
+                Router::post('/product/buyer/users/dt/{id}', [AdminProductController::class, 'getBuyerUsersPaginatedDatatable'])->where([
                     'id' => '[0-9]+',
                 ])->name('admin.product.dt.buyer.users');
-                Router::post('/product/buyer/orders/dt/{id}', [ProductController::class, 'getBuyerOrdersPaginatedDatatable'])->where([
+                Router::post('/product/buyer/orders/dt/{id}', [AdminProductController::class, 'getBuyerOrdersPaginatedDatatable'])->where([
                     'id' => '[0-9]+',
                 ])->name('admin.product.dt.buyer.orders');
 
@@ -470,14 +472,15 @@ class Route implements IInitialize
                 /**
                  * Setting Route
                  */
-                Router::get('/setting/main', [SettingController::class, 'main'])->name('admin.setting.main');
-                Router::get('/setting/sms', [SettingController::class, 'sms'])->name('admin.setting.sms');
-                Router::get('/setting/contact', [SettingController::class, 'contact'])->name('admin.setting.contact');
-                Router::get('/setting/social', [SettingController::class, 'social'])->name('admin.setting.social');
-                Router::get('/setting/footer', [SettingController::class, 'footer'])->name('admin.setting.footer');
-                Router::get('/setting/pages/index', [SettingController::class, 'indexPage'])->name('admin.setting.pages.index');
-                Router::get('/setting/pages/about', [SettingController::class, 'aboutPage'])->name('admin.setting.pages.about');
-                Router::get('/setting/other', [SettingController::class, 'other'])->name('admin.setting.other');
+                Router::form('/setting/main', [SettingController::class, 'main'])->name('admin.setting.main');
+                Router::form('/setting/top-menu', [SettingController::class, 'topMenu'])->name('admin.setting.top-menu');
+                Router::form('/setting/sms', [SettingController::class, 'sms'])->name('admin.setting.sms');
+                Router::form('/setting/contact', [SettingController::class, 'contact'])->name('admin.setting.contact');
+                Router::form('/setting/social', [SettingController::class, 'social'])->name('admin.setting.social');
+                Router::form('/setting/footer', [SettingController::class, 'footer'])->name('admin.setting.footer');
+                Router::form('/setting/pages/index', [SettingController::class, 'indexPage'])->name('admin.setting.pages.index');
+                Router::form('/setting/pages/about', [SettingController::class, 'aboutPage'])->name('admin.setting.pages.about');
+                Router::form('/setting/other', [SettingController::class, 'other'])->name('admin.setting.other');
                 /**
                  * File Manager Route
                  */
@@ -796,13 +799,13 @@ class Route implements IInitialize
                 /**
                  * product route
                  */
-                Router::delete('/product/remove/{id}', [ProductController::class, 'remove'])->where([
+                Router::delete('/product/remove/{id}', [AdminProductController::class, 'remove'])->where([
                     'id' => '[0-9]+',
                 ])->name('ajax.product.remove');
-                Router::post('/product/pub-status/{id}', [ProductController::class, 'pubStatusChange'])->where([
+                Router::post('/product/pub-status/{id}', [AdminProductController::class, 'pubStatusChange'])->where([
                     'id' => '[0-9]+',
                 ])->name('ajax.product.status');
-                Router::post('/product/av-status/{id}', [ProductController::class, 'availabilityStatusChange'])->where([
+                Router::post('/product/av-status/{id}', [AdminProductController::class, 'availabilityStatusChange'])->where([
                     'id' => '[0-9]+',
                 ])->name('ajax.product.availability.status');
 

@@ -22,7 +22,7 @@ class HomeController extends AbstractUserController
      */
     public function index()
     {
-        $this->setLayout($this->main_layout)->setTemplate('view/user/index');
+        $this->setLayout($this->main_layout)->setTemplate('view/main/user/index');
         return $this->render();
     }
 }

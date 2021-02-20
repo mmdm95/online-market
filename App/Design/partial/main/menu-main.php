@@ -203,7 +203,8 @@
                         <div class="collapse navbar-collapse mobile_side_menu" id="navbarSidetoggle">
                             <ul class="navbar-nav">
                                 <?php
-                                $topMenu = \config()->get('settings.top_menu.value') ?? [];
+                                $topMenu = \config()->get('settings.top_menu.value') ?: [];
+                                ksort($topMenu);
                                 ?>
 
                                 <?php foreach ($topMenu as $t): ?>

@@ -36,7 +36,7 @@ $validator = form_validator();
                                     <input type="hidden" name="inp-add-send-method-img"
                                            value="<?= $img; ?>">
                                     <?php if (!empty($img)): ?>
-                                        <img class="img-placeholder-image" src="<?= $img; ?>" alt="selected image">
+                                        <img class="img-placeholder-image" src="<?= url('image.show') . $img; ?>" alt="selected image">
                                     <?php endif; ?>
                                     <div class="img-placeholder-icon-container">
                                         <i class="icon-image2 img-placeholder-icon text-grey-300"></i>
@@ -72,7 +72,7 @@ $validator = form_validator();
                             <span class="text-danger">*</span>
                             توضیحات مختصر روش ارسال:
                         </label>
-                        <input type="text" class="form-control maxlength-textarea"
+                        <input type="text" class="form-control maxlength-placeholder"
                                placeholder="وارد کنید"
                                maxlength="250"
                                name="inp-add-send-method-desc"

@@ -564,6 +564,44 @@
                 desc: 'inp-charge-wallet-desc',
             },
         },
+        settingMain: {
+            form: '#__form_setting_main',
+            inputs: {
+                logo: 'inp-setting-logo-img',
+                logoWhite: 'inp-setting-logo-light-img',
+                fav: 'inp-setting-fav-img',
+                title: 'inp-setting-title',
+                desc: 'inp-setting-desc',
+                tags: 'inp-setting-tags',
+            },
+        },
+        settingSMS: {
+            form: '#__form_setting_sms',
+            inputs: {
+                activation: 'inp-setting-sms-activation',
+                recoverPass: 'inp-setting-sms-recover-pass',
+                buy: 'inp-setting-sms-buy',
+                orderStatus: 'inp-setting-sms-order-status',
+                walletCharge: 'inp-setting-sms-wallet-charge',
+            },
+        },
+        settingContact: {
+            form: '#__form_setting_contact',
+            inputs: {
+                mainPhone: 'inp-setting-main-phone',
+                address: 'inp-setting-address',
+                phones: 'inp-setting-phones',
+                featuresTitle: 'inp-setting-features-title[]',
+                featuresSubTitle: 'inp-setting-features-sub-title[]',
+            },
+        },
+        settingOther: {
+            form: '#__form_setting_other',
+            inputs: {
+                productPagination: 'inp-setting-product-pagination',
+                blogPagination: 'inp-setting-blog-pagination',
+            },
+        },
     });
     window.MyGlobalVariables.validation = $.extend({}, window.MyGlobalVariables.validation, {
         constraints: {
@@ -1441,7 +1479,7 @@
                 title: {
                     presence: {
                         allowEmpty: false,
-                        message: '^' + 'عنوان نوع تراکنش با تخفیف را وارد کنید.',
+                        message: '^' + 'عنوان نوع تراکنش را وارد کنید.',
                     },
                     length: {
                         maximum: 250,
@@ -1451,7 +1489,7 @@
                 desc: {
                     presence: {
                         allowEmpty: false,
-                        message: '^' + 'توضیح نوع تراکنش با تخفیف را وارد کنید.',
+                        message: '^' + 'توضیح نوع تراکنش را وارد کنید.',
                     },
                     length: {
                         maximum: 250,
@@ -1463,7 +1501,7 @@
                 title: {
                     presence: {
                         allowEmpty: false,
-                        message: '^' + 'عنوان نوع تراکنش با تخفیف را وارد کنید.',
+                        message: '^' + 'عنوان نوع تراکنش را وارد کنید.',
                     },
                     length: {
                         maximum: 250,
@@ -1473,11 +1511,95 @@
                 desc: {
                     presence: {
                         allowEmpty: false,
-                        message: '^' + 'توضیح نوع تراکنش با تخفیف را وارد کنید.',
+                        message: '^' + 'توضیح نوع تراکنش را وارد کنید.',
                     },
                     length: {
                         maximum: 250,
                         message: '^' + 'توضیح نوع تراکنش باید حداکثر ۲۵۰ کاراکتر باشد.',
+                    },
+                },
+            },
+            settingMain: {
+                logo: {
+                    presence: {
+                        allowEmpty: false,
+                        message: '^' + 'تصویر لوگو را انتخاب کنید.',
+                    },
+                },
+                logoWhite: {
+                    presence: {
+                        allowEmpty: false,
+                        message: '^' + 'تصویر لوگوی سفید را انتخاب کنید.',
+                    },
+                },
+                fav: {
+                    presence: {
+                        allowEmpty: false,
+                        message: '^' + 'تصویر فاو آیکون را انتخاب کنید.',
+                    },
+                },
+                title: {
+                    presence: {
+                        allowEmpty: false,
+                        message: '^' + 'عنوان سایت را وارد کنید.',
+                    },
+                    length: {
+                        maximum: 50,
+                        message: '^' + 'عنوان سایت باید حداکثر ۵۰ کاراکتر باشد.',
+                    },
+                },
+            },
+            settingSMS: {
+                activation: {
+                    presence: {
+                        allowEmpty: false,
+                        message: '^' + 'متن پیامک فعالسازی حساب اجباری است.',
+                    },
+                },
+                recoverPass: {
+                    presence: {
+                        allowEmpty: false,
+                        message: '^' + 'متن پیامک بازیابی کلمه عبور اجباری است.',
+                    },
+                },
+                buy: {
+                    presence: {
+                        allowEmpty: false,
+                        message: '^' + 'متن پیامک خرید کالا اجباری است.',
+                    },
+                },
+                orderStatus: {
+                    presence: {
+                        allowEmpty: false,
+                        message: '^' + 'متن پیامک تغییر وضعیت سفارش اجباری است.',
+                    },
+                },
+                walletCharge: {
+                    presence: {
+                        allowEmpty: false,
+                        message: '^' + 'متن پیامک شارژ حساب کاربری اجباری است.',
+                    },
+                },
+            },
+            settingOther: {
+                productPagination: {
+                    presence: {
+                        allowEmpty: false,
+                        message: '^' + 'تعداد کالا در هر صفحه اجباری است.',
+                    },
+                    format: {
+                        pattern: /[0-9]*/,
+                        message: '^' + 'تعداد کالا در هر صفحه باید از نوع عددی باشد.',
+                    },
+                },
+                blogPagination: {
+                    presence: {
+                        allowEmpty: false,
+                        message: '^' + 'تعداد بلاگ در هر صفحه اجباری است.',
+                    },
+                    format: {
+                        pattern: /[0-9]*/,
+                        message: '^' + 'تعداد بلاگ در هر صفحه باید از نوع عددی باشد.',
                     },
                 },
             },
@@ -1768,7 +1890,40 @@
                 title: variables.validation.constraints.editDepositType.title,
                 desc: variables.validation.constraints.editDepositType.desc,
             },
+            settingMain: {
+                logo: variables.validation.constraints.settingMain.logo,
+                logoWhite: variables.validation.constraints.settingMain.logoWhite,
+                fav: variables.validation.constraints.settingMain.fav,
+                title: variables.validation.constraints.settingMain.title,
+            },
+            settingSMS: {
+                activation: variables.validation.constraints.settingSMS.activation,
+                recoverPass: variables.validation.constraints.settingSMS.recoverPass,
+                buy: variables.validation.constraints.settingSMS.buy,
+                orderStatus: variables.validation.constraints.settingSMS.orderStatus,
+                walletCharge: variables.validation.constraints.settingSMS.walletCharge,
+            },
+            settingOther: {
+                productPagination: variables.validation.constraints.settingOther.productPagination,
+                blogPagination: variables.validation.constraints.settingOther.blogPagination,
+            },
         };
+
+        $('.date_cleaner').each(function () {
+            var mainElement, element;
+            mainElement = $(this).attr('data-date-clean-element');
+            mainElement = $(`[${mainElement}]`);
+
+            $(this).on('click' + variables.namespace, function () {
+                if ($(mainElement).length) {
+                    element = $(mainElement).attr('data-alt-field');
+                    if ($(element).length) {
+                        $(mainElement).val('');
+                        $(element).val('');
+                    }
+                }
+            });
+        });
 
         function removeCloneElementEvent() {
             $('.__clone_remover_btn')
@@ -1862,17 +2017,21 @@
                     container = $(container);
                     sample = $(sample);
                     if (container.length && sample.length) {
+                        copy = sample.clone(!!$(this).attr('data-deep-copy'));
+                        copy.removeAttr('id');
+
+                        // clear element value inside cloned element
                         if (clearableElements) {
                             var i, len, el;
                             len = clearableElements.length;
                             for (i = 0; i < len; ++i) {
-                                el = $('[name="' + clearableElements[i] + '"]');
+                                el = copy.find('[name="' + clearableElements[i] + '"]');
                                 if (el.length) {
                                     el.each(function (i, elem) {
                                         if ($(elem).is(':radio')) {
                                             el.attr('checked', false).prop('checked', false);
                                             el.first().attr('checked', true).prop('checked', true);
-                                        } else if ($(elem).is('input') && !$(elem).is(':checkbox')) {
+                                        } else if (($(elem).is('input') || $(elem).is('textarea')) && !$(elem).is(':checkbox')) {
                                             $(elem).val('');
                                         } else if ($(elem).is('select')) {
                                             $(elem)
@@ -1882,9 +2041,6 @@
                                 }
                             }
                         }
-
-                        copy = sample.clone(!!$(this).attr('data-deep-copy'));
-                        copy.removeAttr('id');
 
                         // remove removable elements
                         if (removableElements) {
@@ -1928,6 +2084,8 @@
 
                         container.append(copy);
                         afterCloneElement();
+
+                        $.trigger('cloner:after-clone', [copy, sample, container]);
                     }
                 }
             });
@@ -2630,7 +2788,7 @@
                 // Basic example
                 $('.maxlength').maxlength();
 
-                $('.maxlength-textarea').maxlength({
+                $('.maxlength-placeholder').maxlength({
                     alwaysShow: true,
                     warningClass: 'text-success form-text',
                     limitReachedClass: 'text-danger form-text',
@@ -4521,6 +4679,36 @@
                 });
             }
             return false;
+        }, function (errors) {
+            admin.forms.showFormErrors(errors);
+            return false;
+        });
+
+        //---------------------------------------------------------------
+        // SETTING MAIN FORM
+        //---------------------------------------------------------------
+        admin.forms.submitForm('settingMain', constraints.settingMain, function () {
+            return true;
+        }, function (errors) {
+            admin.forms.showFormErrors(errors);
+            return false;
+        });
+
+        //---------------------------------------------------------------
+        // SETTING SMS FORM
+        //---------------------------------------------------------------
+        admin.forms.submitForm('settingSMS', constraints.settingSMS, function () {
+            return true;
+        }, function (errors) {
+            admin.forms.showFormErrors(errors);
+            return false;
+        });
+
+        //---------------------------------------------------------------
+        // SETTING OTHER FORM
+        //---------------------------------------------------------------
+        admin.forms.submitForm('settingOther', constraints.settingOther, function () {
+            return true;
         }, function (errors) {
             admin.forms.showFormErrors(errors);
             return false;

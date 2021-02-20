@@ -55,6 +55,39 @@ defined("PLACEHOLDER_VIDEO") OR define("PLACEHOLDER_VIDEO", __DIR__ . '/../publi
 // public access directory name
 defined("PUBLIC_ACCESS_DIR") OR define("PUBLIC_ACCESS_DIR", 'public-access');
 
+// setting keys
+defined("SETTING_LOGO") OR define("SETTING_LOGO", 'logo');
+defined("SETTING_LOGO_LIGHT") OR define("SETTING_LOGO_LIGHT", 'logo_light');
+defined("SETTING_FAVICON") OR define("SETTING_FAVICON", 'favicon');
+defined("SETTING_TITLE") OR define("SETTING_TITLE", 'title');
+defined("SETTING_DESCRIPTION") OR define("SETTING_DESCRIPTION", 'description');
+defined("SETTING_KEYWORDS") OR define("SETTING_KEYWORDS", 'keywords');
+defined("SETTING_SMS_ACTIVATION") OR define("SETTING_SMS_ACTIVATION", 'sms_activation');
+defined("SETTING_SMS_RECOVER_PASS") OR define("SETTING_SMS_RECOVER_PASS", 'sms_recover_pass');
+defined("SETTING_SMS_BUY") OR define("SETTING_SMS_BUY", 'sms_buy');
+defined("SETTING_SMS_ORDER_STATUS") OR define("SETTING_SMS_ORDER_STATUS", 'sms_order_status');
+defined("SETTING_SMS_WALLET_CHARGE") OR define("SETTING_SMS_WALLET_CHARGE", 'sms_wallet_charge');
+defined("SETTING_FEATURES") OR define("SETTING_FEATURES", 'features');
+defined("SETTING_ADDRESS") OR define("SETTING_ADDRESS", 'address');
+defined("SETTING_PHONES") OR define("SETTING_PHONES", 'phones');
+defined("SETTING_MAIN_PHONE") OR define("SETTING_MAIN_PHONE", 'main_phone');
+defined("SETTING_EMAIL") OR define("SETTING_EMAIL", 'email');
+defined("SETTING_LAT_LNG") OR define("SETTING_LAT_LNG", 'lat_lng');
+defined("SETTING_OUR_TEAM") OR define("SETTING_OUR_TEAM", 'our_team');
+defined("SETTING_SOCIAL_TELEGRAM") OR define("SETTING_SOCIAL_TELEGRAM", 'social_telegram');
+defined("SETTING_SOCIAL_INSTAGRAM") OR define("SETTING_SOCIAL_INSTAGRAM", 'social_instagram');
+defined("SETTING_SOCIAL_WHATSAPP") OR define("SETTING_SOCIAL_WHATSAPP", 'social_whatsapp');
+defined("SETTING_FOOTER_TINY_DESC") OR define("SETTING_FOOTER_TINY_DESC", 'footer_tiny_desc');
+defined("SETTING_FOOTER_SECTION_1") OR define("SETTING_FOOTER_SECTION_1", 'footer_section_1');
+defined("SETTING_FOOTER_SECTION_2") OR define("SETTING_FOOTER_SECTION_2", 'footer_section_2');
+defined("SETTING_FOOTER_NAMADS") OR define("SETTING_FOOTER_NAMADS", 'footer_namads');
+defined("SETTING_BLOG_EACH_PAGE") OR define("SETTING_BLOG_EACH_PAGE", 'blog_each_page');
+defined("SETTING_PRODUCT_EACH_PAGE") OR define("SETTING_PRODUCT_EACH_PAGE", 'product_each_page');
+defined("SETTING_INDEX_3_IMAGES") OR define("SETTING_INDEX_3_IMAGES", 'index_3_images');
+defined("SETTING_INDEX_TABBED_SLIDER") OR define("SETTING_INDEX_TABBED_SLIDER", 'index_tabbed_slider');
+defined("SETTING_ABOUT_SECTION") OR define("SETTING_ABOUT_SECTION", 'about_section');
+defined("SETTING_TOP_MENU") OR define("SETTING_TOP_MENU", 'top_menu');
+
 // define all roles
 defined("ROLE_DEVELOPER") OR define("ROLE_DEVELOPER", 'developer');
 defined("ROLE_SUPER_USER") OR define("ROLE_SUPER_USER", 'super_user');

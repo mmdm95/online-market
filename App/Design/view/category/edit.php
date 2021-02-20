@@ -69,7 +69,7 @@
                                    name="inp-edit-category-priority"
                                    value="<?= $validator->setInput('inp-edit-category-priority') ?: $category['priority']; ?>">
                             <button type="button"
-                                    class="btn btn-outline-success btn-icon ml-2 icon icon-info3"
+                                    class="btn btn-outline-success btn-icon ml-2 icon-info3"
                                     data-popup="popover"
                                     data-trigger="focus" data-placement="right"
                                     data-content="اولویت، محل نمایش دسته را در منو مشخص خواهد کرد."></button>

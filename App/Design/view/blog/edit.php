@@ -35,7 +35,7 @@ $validator = form_validator();
                                     <input type="hidden" name="inp-edit-blog-img"
                                            value="<?= $img; ?>">
                                     <?php if (!empty($img)): ?>
-                                        <img class="img-placeholder-image" src="<?= $img; ?>" alt="selected image">
+                                        <img class="img-placeholder-image" src="<?= url('image.show') . $img; ?>" alt="selected image">
                                     <?php endif; ?>
                                     <div class="img-placeholder-icon-container">
                                         <i class="icon-image2 img-placeholder-icon text-grey-300"></i>
@@ -93,7 +93,7 @@ $validator = form_validator();
                                   rows="10"
                                   maxlength="200"
                                   placeholder="توضیحات مختصر درباره مطلب"
-                                  class="form-control form-control-min-height maxlength-textarea"
+                                  class="form-control form-control-min-height maxlength-placeholder"
                         ><?= $validator->setInput('inp-edit-blog-abs') ?: $blog['abstract']; ?></textarea>
                     </div>
                     <div class="form-group col-lg-12">

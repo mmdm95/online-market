@@ -412,15 +412,8 @@ class FakeData
                     'desc' => null,
                 ],
                 [
-                    'setting_name' => 'footer_namad_1',
-                    'setting_value' => '',
-                    'group_name' => 'footer',
-                    'default_value' => '',
-                    'desc' => null,
-                ],
-                [
-                    'setting_name' => 'footer_namad_2',
-                    'setting_value' => '',
+                    'setting_name' => 'footer_namads',
+                    'setting_value' => json_encode([]),
                     'group_name' => 'footer',
                     'default_value' => '',
                     'desc' => null,

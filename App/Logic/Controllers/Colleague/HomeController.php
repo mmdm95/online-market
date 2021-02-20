@@ -22,7 +22,7 @@ class HomeController extends AbstractColleagueController
      */
     public function index()
     {
-        $this->setLayout($this->main_layout)->setTemplate('view/colleague/index');
+        $this->setLayout($this->main_layout)->setTemplate('view/main/colleague/index');
         return $this->render();
     }
 }

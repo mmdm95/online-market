@@ -97,10 +97,18 @@
                                 ?>
                                 <input type="hidden" name="inp-edit-coupon-start-date"
                                        id="altStartDate" value="<?= $sd; ?>">
-                                <input type="text" class="form-control range-from"
-                                       placeholder="انتخاب تاریخ" readonly data-ignored
-                                       data-alt-field="#altStartDate"
-                                       value="<?= $sd; ?>">
+                                <div class="d-flex">
+                                    <input type="text" class="form-control range-from"
+                                           placeholder="انتخاب تاریخ" readonly data-ignored
+                                           data-alt-field="#altStartDate"
+                                           value="<?= $sd; ?>">
+                                    <button type="button"
+                                            class="btn btn-outline-danger btn-icon ml-2 icon-cross2 date_cleaner"
+                                            data-date-clean-element='data-alt-field="#altStartDate"'
+                                            data-popup="tooltip"
+                                            data-placement="right"
+                                            data-original-title="حذف تاریخ"></button>
+                                </div>
                             </div>
                             <div class="form-group col-xl-3">
                                 <label>تاریخ پایان استفاده:</label>
@@ -109,10 +117,18 @@
                                 ?>
                                 <input type="hidden" name="inp-edit-coupon-end-date"
                                        id="altEndDate" value="<?= $ed; ?>">
-                                <input type="text" class="form-control range-to"
-                                       placeholder="انتخاب تاریخ" readonly data-ignored
-                                       data-alt-field="#altEndDate"
-                                       value="<?= $ed; ?>">
+                                <div class="d-flex">
+                                    <input type="text" class="form-control range-to"
+                                           placeholder="انتخاب تاریخ" readonly data-ignored
+                                           data-alt-field="#altEndDate"
+                                           value="<?= $ed; ?>">
+                                    <button type="button"
+                                            class="btn btn-outline-danger btn-icon ml-2 icon-cross2 date_cleaner"
+                                            data-date-clean-element='data-alt-field="#altEndDate"'
+                                            data-popup="tooltip"
+                                            data-placement="right"
+                                            data-original-title="حذف تاریخ"></button>
+                                </div>
                             </div>
                         </div>
                     </div>

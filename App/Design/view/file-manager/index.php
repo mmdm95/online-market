@@ -153,7 +153,8 @@
 
                         <div class="modal-footer">
                             <button type="button" class="btn btn-link" data-dismiss="modal">لغو</button>
-                            <button id="mvdir" type="button" class="btn btn-primary" data-dismiss="modal">جابجایی
+                            <button id="mvdir" type="button" class="btn btn-primary" data-dismiss="modal">
+                                جابجایی
                             </button>
                         </div>
                     </div>
