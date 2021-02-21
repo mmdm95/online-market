@@ -39,8 +39,8 @@ abstract class AbstractMainController extends AbstractController
          */
         $cartUtil = \container()->get(CartUtil::class);
 
-        $this->setDefaultArguments([
+        $this->setDefaultArguments(array_merge($this->getDefaultArguments(), [
             'cart_section' => $cartUtil->getCartSection(),
-        ]);
+        ]));
     }
 }

@@ -47,12 +47,17 @@ class LoginController extends AbstractHomeController
      */
     public function index()
     {
+        /**
+         * @var DBAuth $auth
+         */
+        $auth = container()->get('auth_home');
+
+        if ($auth->isLoggedIn()) {
+            response()->redirect(url('home.index')->getRelativeUrl(), 301);
+        }
+
         $data = [];
         if (is_post()) {
-            /**
-             * @var DBAuth $auth
-             */
-            $auth = container()->get('auth_home');
             try {
                 /**
                  * @var LoginForm $loginForm
@@ -93,6 +98,25 @@ class LoginController extends AbstractHomeController
 
         $this->setLayout($this->main_layout)->setTemplate('view/main/login');
         return $this->render($data);
+    }
+
+    /**
+     * @throws IDBException
+     * @throws MethodNotFoundException
+     * @throws ParameterHasNoDefaultValueException
+     * @throws ServiceNotFoundException
+     * @throws ServiceNotInstantiableException
+     * @throws \ReflectionException
+     */
+    public function logout()
+    {
+        /**
+         * @var DBAuth $auth
+         */
+        $auth = container()->get('auth_home');
+        $auth->logout();
+
+        response()->redirect(url('home.login')->getRelativeUrl(), 301);
     }
 
     /**

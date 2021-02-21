@@ -20,7 +20,7 @@ use Sim\I18n\ISOLanguageCodes;
  *     1.2.5.0 instead of 1.2.5-a
  *     1.2.5.0.1 instead of 1.2.5-a1 (I'm not sure)
  */
-defined("APP_VERSION") OR define("APP_VERSION", "0.1.12");
+defined("APP_VERSION") OR define("APP_VERSION", "0.1.13");
 
 /***************************************
  * You can add your constants here
@@ -48,7 +48,7 @@ defined("DB_YES") OR define("DB_YES", 1);
 defined("DB_NO") OR define("DB_NO", 0);
 
 // default placeholders
-defined("PLACEHOLDER_USER_IMAGE") OR define("PLACEHOLDER_USER_IMAGE", __DIR__ . '/../public/image/avatars/avatars-default.png');
+defined("PLACEHOLDER_USER_IMAGE") OR define("PLACEHOLDER_USER_IMAGE", 'avatars-default.png');
 defined("PLACEHOLDER_IMAGE") OR define("PLACEHOLDER_IMAGE", __DIR__ . '/../public/be/images/file-icons/image-placeholder.png');
 defined("PLACEHOLDER_VIDEO") OR define("PLACEHOLDER_VIDEO", __DIR__ . '/../public/be/images/file-icons/video-placeholder.png');
 

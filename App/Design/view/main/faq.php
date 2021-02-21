@@ -1,7 +1,3 @@
-<!-- Home Popup Section -->
-<?php load_partial('main/message/popup-newsletter'); ?>
-<!-- End Screen Load Popup Section -->
-
 <!-- START MAIN CONTENT -->
 <div class="main_content">
     <?php if (count($faq ?? [])): ?>
@@ -42,8 +38,8 @@
         </div>
         <!-- END SECTION FAQ -->
     <?php else: ?>
-        <div class="product text-center">
-            <p>
+        <div class="product text-center mt-3 py-2">
+            <p class="m-0">
                 موردی یافت نشد.
             </p>
         </div>

@@ -1,7 +1,3 @@
-<!-- Home Popup Section -->
-<?php load_partial('main/message/popup-newsletter'); ?>
-<!-- End Screen Load Popup Section -->
-
 <!-- START SECTION BANNER -->
 <?php load_partial('main/slider-main', [
     'main_slider' => $main_slider ?? [],

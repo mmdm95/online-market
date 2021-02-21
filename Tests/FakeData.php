@@ -602,8 +602,10 @@ class FakeData
 
             $userModel->registerUser([
                 'username' => $this->faker->mobileNumber,
+                'password' => password_hash('123456789', PASSWORD_BCRYPT),
                 'first_name' => $this->faker->firstName,
                 'last_name' => $this->faker->lastName,
+                'image' => PLACEHOLDER_USER_IMAGE,
                 'is_activated' => $rndActive,
                 'activated_at' => $activatedAt,
                 'created_at' => time(),

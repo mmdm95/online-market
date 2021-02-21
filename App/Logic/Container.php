@@ -3,6 +3,7 @@
 namespace App\Logic;
 
 use Sim\Auth\Interfaces\IAuth;
+use Sim\Captcha\CaptchaFactory;
 use Sim\Form\FormValidator;
 use Sim\I18n\Translate as Translate;
 use Sim\Interfaces\IInitialize;
@@ -72,7 +73,16 @@ class Container implements IInitialize
 
         // simple captcha class
         \container()->set('captcha-simple', function () {
-            return \captcha();
+            $captchaConfig = config()->get('captcha');
+            $cp = \captcha();
+            $cp->setExpiration($captchaConfig['expiration'] ?? 600)
+                ->setLength($captchaConfig['length'] ?: 6)
+                ->setDifficulty($captchaConfig['difficulty'] ?? CaptchaFactory::DIFFICULTY_NORMAL)
+                ->addNoise($captchaConfig['noise'] ?? false);
+            if (!empty($captchaConfig['font'])) {
+                $cp->setFont($captchaConfig['font']);
+            }
+            return $cp;
         });
 
         // sms panel

@@ -303,7 +303,7 @@ class UserModel extends BaseModel
         array $columns = ['u.*', 'r.id AS role_id', 'r.name AS role_name', 'r.is_admin'],
         ?string $where = null,
         array $bind_values = [],
-        int $limit = null,
+        ?int $limit = null,
         int $offset = 0,
         array $order_by = ['u.id DESC'],
         array $group_by = ['u.id']
@@ -451,7 +451,7 @@ class UserModel extends BaseModel
             $deleteOrUpdate
                 ->table($this->table)
                 ->cols([
-                    'delete' => 1,
+                    'is_deleted' => DB_YES,
                 ])
                 ->where('id=:id')
                 ->bindValues([

@@ -2,10 +2,6 @@
 $validator = form_validator();
 ?>
 
-<!-- Home Popup Section -->
-<?php load_partial('main/message/popup-newsletter'); ?>
-<!-- End Screen Load Popup Section -->
-
 <!-- START MAIN COMPLAINT -->
 <div class="main_content">
     <!-- START SECTION COMPLAINT -->

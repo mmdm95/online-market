@@ -1,10 +1,8 @@
 <?php
-$validator = form_validator();
-?>
 
-<!-- Home Popup Section -->
-<?php load_partial('main/message/popup-newsletter'); ?>
-<!-- End Screen Load Popup Section -->
+$validator = form_validator();
+
+?>
 
 <!-- START MAIN CONTENT -->
 <div class="main_content">
@@ -12,45 +10,54 @@ $validator = form_validator();
     <!-- START SECTION CONTACT -->
     <div class="section pb_70">
         <div class="container">
-            <div class="row">
+            <div class="row justify-content-center">
                 <?php
                 $address = \config()->get('settings.address.value');
                 $email = \config()->get('settings.email.value');
                 $phone = \config()->get('settings.main_phone.value');
                 ?>
-                <div class="col-xl-4 col-md-12 stretch-card">
-                    <div class="contact_wrap contact_style3 w-100">
-                        <div class="contact_icon">
-                            <i class="linearicons-map2"></i>
-                        </div>
-                        <div class="contact_text">
-                            <span>آدرس</span>
-                            <p><?= $address; ?></p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-xl-4 col-md-6 stretch-card">
-                    <div class="contact_wrap contact_style3 w-100">
-                        <div class="contact_icon">
-                            <i class="linearicons-envelope-open"></i>
-                        </div>
-                        <div class="contact_text">
-                            <span>آدرس ایمیل</span>
-                            <a href="mailto:<?= hexentities($email); ?>"><?= hexentities($email); ?> </a>
+
+                <?php if (!empty($address)): ?>
+                    <div class="col-xl-4 col-md-12 stretch-card">
+                        <div class="contact_wrap contact_style3 w-100">
+                            <div class="contact_icon">
+                                <i class="linearicons-map2"></i>
+                            </div>
+                            <div class="contact_text">
+                                <span>آدرس</span>
+                                <p><?= $address; ?></p>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="col-xl-4 col-md-6 stretch-card">
-                    <div class="contact_wrap contact_style3 w-100">
-                        <div class="contact_icon">
-                            <i class="linearicons-tablet2"></i>
-                        </div>
-                        <div class="contact_text">
-                            <span>تلفن</span>
-                            <p><?= local_number($phone); ?></p>
+                <?php endif; ?>
+
+                <?php if (!empty($email)): ?>
+                    <div class="col-xl-4 col-md-6 stretch-card">
+                        <div class="contact_wrap contact_style3 w-100">
+                            <div class="contact_icon">
+                                <i class="linearicons-envelope-open"></i>
+                            </div>
+                            <div class="contact_text">
+                                <span>آدرس ایمیل</span>
+                                <a href="mailto:<?= hexentities($email); ?>"><?= hexentities($email); ?> </a>
+                            </div>
                         </div>
                     </div>
-                </div>
+                <?php endif; ?>
+
+                <?php if (!empty($phone)): ?>
+                    <div class="col-xl-4 col-md-6 stretch-card">
+                        <div class="contact_wrap contact_style3 w-100">
+                            <div class="contact_icon">
+                                <i class="linearicons-tablet2"></i>
+                            </div>
+                            <div class="contact_text">
+                                <span>تلفن</span>
+                                <p><?= local_number($phone); ?></p>
+                            </div>
+                        </div>
+                    </div>
+                <?php endif; ?>
             </div>
         </div>
     </div>
@@ -75,8 +82,8 @@ $validator = form_validator();
                                 'success' => $contact_success ?? '',
                                 'warning' => $contact_warning ?? '',
                             ]); ?>
+                            <input type="hidden" name="csrf_token" value="<?= csrf_token(); ?>" data-ignored>
                             <div class="row">
-                                <input type="hidden" name="csrf_token" value="<?= csrf_token(); ?>" data-ignored>
                                 <div class="form-group col-md-6">
                                     <input placeholder="نام را وارد کنید *"
                                            class="form-control" name="inp-contact-name" type="text" required

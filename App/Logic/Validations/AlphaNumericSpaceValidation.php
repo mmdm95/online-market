@@ -6,7 +6,7 @@ use Sim\Form\Abstracts\AbstractValidation;
 
 class AlphaNumericSpaceValidation extends AbstractValidation
 {
-    protected $error_message = 'You should just use alpha, dash, underline and space.';
+    protected $error_message = 'You should just use alpha, number, dash, underline and space.';
 
     /**
      * Please specify [scalar value] to validate

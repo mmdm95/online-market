@@ -52,9 +52,9 @@ class CaptchaController extends AbstractHomeController
             $name = input()->post('name', '')->getValue();
         }
         $captcha = '';
-        $inp = input()->post('captcha', '');
+        $inp = input()->post('inp-captcha-name', '');
         if (!is_array($inp) && !empty($inp)) {
-            $captcha = input()->post('captcha', '')->getValue();
+            $captcha = input()->post('inp-captcha-name', '')->getValue();
         }
         $res = CaptchaUtil::verify($captcha, $name);
 

@@ -4,7 +4,6 @@ namespace App\Logic\Controllers;
 
 use App\Logic\Abstracts\AbstractHomeController;
 use App\Logic\Handlers\ResourceHandler;
-use App\Logic\Utils\CartUtil;
 use Jenssegers\Agent\Agent;
 use Sim\Container\Exceptions\MethodNotFoundException;
 use Sim\Container\Exceptions\ParameterHasNoDefaultValueException;

@@ -55,18 +55,25 @@ $validator = form_validator();
                                 </div>
                             </div>
                             <label class="form-text text-info">
+                                <span class="text-danger">*</span>
                                 انتخاب تصویر درباره
                             </label>
                         </div>
                         <div class="form-group">
-                            <label>عنوان درباره:</label>
+                            <label>
+                                <span class="text-danger">*</span>
+                                عنوان درباره:
+                            </label>
                             <input type="text" class="form-control"
                                    placeholder="از نوع عددی"
                                    name="inp-setting-title"
                                    value="<?= $validator->setInput('inp-setting-title') ?: ($aboutSec['title'] ?? ''); ?>">
                         </div>
                         <div class="form-group">
-                            <label>توضیحات درباره:</label>
+                            <label>
+                                <span class="text-danger">*</span>
+                                توضیحات درباره:
+                            </label>
                             <textarea
                                     class="form-control cntEditor"
                                     name="inp-setting-desc"

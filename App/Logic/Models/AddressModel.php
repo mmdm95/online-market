@@ -26,7 +26,7 @@ class AddressModel extends BaseModel
         array $columns = ['u_addr.*', 'c.name AS city_name', 'p.name AS province_name'],
         ?string $where = null,
         array $bind_values = [],
-        int $limit = null,
+        ?int $limit = null,
         int $offset = 0,
         array $order_by = ['u_addr.id DESC']): array
     {

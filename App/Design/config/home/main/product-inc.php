@@ -8,6 +8,7 @@ return [
             'default-jquery-ui',
             'default-changeable',
             'default-cart',
+            'default-theia-sticky-sidebar',
         ],
         'sub_title' => 'محصولات',
         'breadcrumb' => [
@@ -24,16 +25,6 @@ return [
         ],
         'js' => [
             'bottom' => [
-                e(
-                    '<script type="text/javascript" src="' .
-                    asset_path('plugins/theia/ResizeSensor.min.js') .
-                    '"></script>'
-                ),
-                e(
-                    '<script type="text/javascript" src="' .
-                    asset_path('plugins/theia/theia-sticky-sidebar.min.js') .
-                    '"></script>'
-                ),
                 e(
                     '<script type="text/javascript" src="' .
                     asset_path('plugins/UriParser.min.js') .

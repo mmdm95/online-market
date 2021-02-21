@@ -37,7 +37,7 @@ class CaptchaUtil
 
     /**
      * @param string $input
-     * @param string $name
+     * @param string|null $name
      * @return bool
      * @throws ICaptchaException
      * @throws MethodNotFoundException
@@ -46,12 +46,16 @@ class CaptchaUtil
      * @throws ServiceNotInstantiableException
      * @throws \ReflectionException
      */
-    public static function verify(string $input = '', string $name = ''): bool
+    public static function verify(string $input = '', ?string $name = ''): bool
     {
         /**
          * @var Captcha $captcha
          */
         $captcha = \container()->get('captcha-simple');
-        return $captcha->useEnglishNumbersToVerify(true)->setName(trim($name))->verify($input);
+        try {
+            return $captcha->useEnglishNumbersToVerify(true)->setName(trim((string)$name))->verify($input);
+        } catch (\Exception $e) {
+            return false;
+        }
     }
 }

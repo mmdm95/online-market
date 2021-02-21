@@ -26,7 +26,12 @@ $homeStaticPage = config()->getDirectly(__DIR__ . '/home/main/static-page-inc.ph
 /***********************************
  ************** User ***************
  ***********************************/
+$userAddress = config()->getDirectly(__DIR__ . '/home/user/address-inc.php');
+$userComment = config()->getDirectly(__DIR__ . '/home/user/comment-inc.php');
 $userIndex = config()->getDirectly(__DIR__ . '/home/user/index-inc.php');
+$userOrder = config()->getDirectly(__DIR__ . '/home/user/order-inc.php');
+$userReturnOrder = config()->getDirectly(__DIR__ . '/home/user/return-order-inc.php');
+$userWallet = config()->getDirectly(__DIR__ . '/home/user/wallet-inc.php');
 
 /***********************************
  ************ Colleague *************
@@ -167,7 +172,12 @@ return [
         $homeStaticPage,
 
         // user
+        $userAddress,
+        $userComment,
         $userIndex,
+        $userOrder,
+        $userReturnOrder,
+        $userWallet,
 
         // colleague
         $colleagueIndex,

@@ -212,7 +212,7 @@ class CommentController extends AbstractAdminController implements IDatatableCon
                     ->handle(
                         BaseModel::TBL_COMMENTS,
                         $id,
-                        'status',
+                        'the_condition',
                         input()->post('status')->getValue(),
                         'product_id=:pId',
                         ['pId' => $p_id]
@@ -313,8 +313,8 @@ class CommentController extends AbstractAdminController implements IDatatableCon
                         }
                     ],
                     [
-                        'db' => 'c.condition',
-                        'db_alias' => 'condition',
+                        'db' => 'c.the_condition',
+                        'db_alias' => 'the_condition',
                         'dt' => 'accept_status',
                         'formatter' => function ($d, $row) use ($product_id) {
                             $status = $this->setTemplate('partial/admin/parser/multi-status-changer')

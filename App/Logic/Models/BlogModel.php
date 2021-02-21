@@ -35,7 +35,7 @@ class BlogModel extends BaseModel
         ?string $where = null,
         array $bind_values = [],
         array $order_by = ['b.id DESC'],
-        int $limit = null,
+        ?int $limit = null,
         int $offset = 0
     ): array
     {
@@ -199,7 +199,7 @@ class BlogModel extends BaseModel
     public function getSiblings(
         ?string $where = null,
         array $bind_values = [],
-        int $limit = null,
+        ?int $limit = null,
         array $order_by = ['id DESC'],
         array $columns = ['id', 'slug', 'title']
     ): array

@@ -233,7 +233,72 @@
             },
         };
 
-        wishListBtn = $('.add_wishlist');
+        /**
+         * Delete anything from a specific url
+         *
+         * @param btn
+         * @param [onSuccess]
+         */
+        function deleteOperation(btn, onSuccess) {
+            var url, id;
+            url = $(btn).attr('data-remove-url');
+            id = $(btn).attr('data-remove-id');
+
+            if (url && id) {
+                shop.deleteItem(url + id, function () {
+                    if (core.types.function === typeof onSuccess) {
+                        onSuccess.apply(this);
+                    }
+                }, {}, true);
+            }
+        }
+
+        if ($.fn.theiaStickySidebar) {
+            $('#__theia_sticky_sidebar').theiaStickySidebar({
+                containerSelector: '#__theia_sticky_sidebar_container',
+                additionalMarginTop: 90,
+                additionalMarginBottom: 20,
+            });
+        }
+
+        // delete button click event
+        $('.__item_remover_btn')
+            .off('click' + variables.namespace)
+            .on('click' + variables.namespace, function () {
+                var $this = $(this);
+                deleteOperation($this, function () {
+                    $this.closest('tr').fadeOut(300, function () {
+                        $(this).remove();
+                    });
+                });
+            });
+
+        $('.__send_data_through_request').each(function () {
+            var $this, url, status;
+
+            $this = $(this);
+            url = $this.attr('data-internal-request-url');
+            status = $this.attr('data-internal-request-status');
+
+            if (url && status) {
+                shop.toasts.confirm(null, function () {
+                    shop.request(url, 'post', function () {
+                        var _ = this;
+                        if (_.type === variables.api.types.warning) {
+                            shop.toasts.toast(_.data);
+                        } else {
+                            shop.toasts.toast(_.data, {
+                                type: variables.toasts.types.success,
+                            });
+                        }
+                    }, {
+                        data: {
+                            'status': status,
+                        },
+                    }, true);
+                });
+            }
+        });
 
         //---------------------------------------------------------------
         // CHECK SCROLL TO ELEMENT
@@ -346,6 +411,7 @@
         //---------------------------------------------------------------
         // ADD TO WISH LIST
         //---------------------------------------------------------------
+        wishListBtn = $('.add_wishlist');
         wishListBtn.on('click' + variables.namespace, function (e) {
             e.preventDefault();
 

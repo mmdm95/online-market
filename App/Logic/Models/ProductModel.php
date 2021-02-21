@@ -279,6 +279,24 @@ class ProductModel extends BaseModel
     }
 
     /**
+     * @param $user_id
+     * @return int
+     */
+    public function userFavoriteProductCount($user_id): int
+    {
+        $select = $this->connector->select();
+        $select
+            ->from(self::TBL_FAVORITE_USER_PRODUCT)
+            ->cols(['COUNT(*) AS count'])
+            ->where('user_id=:u_id')
+            ->bindValue('u_id', $user_id);
+
+        $res = $this->db->fetchAll($select->getStatement(), $select->getBindValues());
+        if (count($res)) return (int)$res[0]['count'];
+        return 0;
+    }
+
+    /**
      * @param array $info
      * @param array $image_galley
      * @param array $products

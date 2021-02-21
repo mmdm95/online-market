@@ -5,10 +5,6 @@ use Sim\Utils\StringUtil;
 
 ?>
 
-<!-- Home Popup Section -->
-<?php load_partial('main/message/popup-newsletter'); ?>
-<!-- End Screen Load Popup Section -->
-
 <!-- START MAIN CONTENT -->
 <div class="main_content">
 

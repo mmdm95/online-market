@@ -153,7 +153,7 @@ $validator = form_validator();
                                 <div class="row border border-info m-0 px-2 py-3 rounded">
                                     <div class="col-12">
                                         <?php load_partial('admin/message/message-info', [
-                                            'info' => 'از نقشه گوگل کمک بگیرید و <code>lng</code> و <code>lat</code> یا همان طول و عرض جغرافیفایی آدرس خود را وارد کنید.',
+                                            'info' => 'از نقشه گوگل یا پارسی مپ کمک بگیرید و <code>lng</code> و <code>lat</code> یا همان طول و عرض جغرافیفایی آدرس خود را وارد کنید.',
                                             'dismissible' => false,
                                         ]); ?>
                                     </div>

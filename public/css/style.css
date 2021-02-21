@@ -130,6 +130,10 @@ video {
     width: 100%;
 }
 
+.en-font {
+    font-family: Arial, sans-serif;
+}
+
 .icon-2x {
     font-size: 26px !important;
 }
@@ -8565,6 +8569,27 @@ blockquote p:last-child {
     z-index: 9999;
 }
 
+.user_mini_info {
+    position: relative;
+}
+
+.user_mini_info .card-body {
+    padding: 3rem 0 0;
+}
+
+.user_mini_info img {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 5rem;
+    height: 5rem;
+    -webkit-transform: translate(-50%, -45%);
+    -moz-transform: translate(-50%, -45%);
+    -ms-transform: translate(-50%, -45%);
+    -o-transform: translate(-50%, -45%);
+    transform: translate(-50%, -45%);
+}
+
 .dashboard_menu {
     box-shadow: 0 0px 4px 0 #e9e9e9;
 }
@@ -8588,7 +8613,7 @@ blockquote p:last-child {
 }
 
 .dashboard_content {
-    margin: 0;
+    margin: 0 0 1.875rem;
 }
 
 .dashboard_content .card-header {
@@ -8878,6 +8903,10 @@ body.switch-open {
   MY CUSTOM ELEMENT(S)
 *===================================*/
 
+.default-gap {
+    margin-bottom: 1.875rem;
+}
+
 .btn.disabled, .btn:disabled {
     cursor: default;
 }
@@ -8888,6 +8917,12 @@ body.switch-open {
     -ms-user-select: none !important;
     user-select: none !important;
 }
+
+.card-icon-big {
+    font-size: 2.5rem;
+}
+
+/* BOOTSTRAP TOOLTIP */
 
 .tooltip {
     font-family: inherit;

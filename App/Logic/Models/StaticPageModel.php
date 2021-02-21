@@ -30,7 +30,7 @@ class StaticPageModel extends BaseModel
         ],
         ?string $where = null,
         array $bind_values = [],
-        int $limit = null,
+        ?int $limit = null,
         int $offset = 0,
         array $order_by = ['sp.id DESC'],
         array $group_by = ['sp.id']

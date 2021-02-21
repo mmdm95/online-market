@@ -65,12 +65,15 @@ class CommentController extends AbstractHomeController
 
     /**
      * @param $product_id
+     * @throws ConfigNotRegisteredException
+     * @throws FormException
+     * @throws IFileNotExistsException
+     * @throws IInvalidVariableNameException
      * @throws MethodNotFoundException
      * @throws ParameterHasNoDefaultValueException
      * @throws ServiceNotFoundException
      * @throws ServiceNotInstantiableException
      * @throws \ReflectionException
-     * @throws FormException
      */
     public function saveComment($product_id)
     {

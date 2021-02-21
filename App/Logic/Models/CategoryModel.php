@@ -27,7 +27,7 @@ class CategoryModel extends BaseModel
         array $columns = ['c.*', 'cc.name'],
         ?string $where = null,
         array $bind_values = [],
-        int $limit = null,
+        ?int $limit = null,
         int $offset = 0,
         array $order_by = ['c.id DESC'],
         array $group_by = ['c.id']

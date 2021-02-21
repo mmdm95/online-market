@@ -368,8 +368,8 @@ window.MyGlobalVariables = {
             },
             getCaptchaName: function (btn) {
                 var _ = this, val;
-                val = $(btn).find('.inp-captcha-name').val();
-                val = _.isString(val) && trim(val).length ? val : '';
+                val = $(btn).find('[name="inp-captcha-name"]').val();
+                val = _.isString(val) && _.trim(val).length ? val : '';
                 return val;
             },
             noop: function () {

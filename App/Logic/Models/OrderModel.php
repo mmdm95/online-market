@@ -26,7 +26,7 @@ class OrderModel extends BaseModel
         ?string $where = null,
         array $bind_values = [],
         array $order_by = ['o.id DESC'],
-        int $limit = null,
+        ?int $limit = null,
         int $offset = 0,
         array $columns = [
             'o.*',

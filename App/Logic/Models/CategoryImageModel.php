@@ -26,7 +26,7 @@ class CategoryImageModel extends BaseModel
         array $columns = [],
         ?string $where = null,
         array $bind_values = [],
-        int $limit = null,
+        ?int $limit = null,
         int $offset = 0,
         array $order_by = ['ci.id DESC']
     ): array
