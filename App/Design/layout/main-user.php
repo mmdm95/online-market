@@ -44,7 +44,25 @@
 ]); ?>
 <!-- END SECTION BREADCRUMB -->
 
-<?= $content; ?>
+<!-- START MAIN CONTENT -->
+<div class="main_content">
+
+    <!-- START SECTION SHOP -->
+    <div class="section">
+        <div class="container">
+            <div class="row" id="__theia_sticky_sidebar_container">
+                <!-- START DASHBOARD MENU -->
+                <?php load_partial('main/user/dashboard-menu', ['user' => $user]); ?>
+                <!-- END DASHBOARD MENU -->
+
+                <div class="col-lg-9 col-md-8">
+                    <?= $content; ?>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- END SECTION SHOP -->
+</div>
 
 <!-- START FOOTER -->
 <?php load_partial('main/footer'); ?>

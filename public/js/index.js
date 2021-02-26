@@ -2,6 +2,14 @@
     'use strict';
 
     // add/change global variable
+    window.MyGlobalVariables.url = $.extend(true, window.MyGlobalVariables.url, {
+        address: {
+            get: '/ajax/user/address/get',
+            add: '/ajax/user/address/add',
+            edit: '/ajax/user/address/edit',
+            remove: '/ajax/user/address/remove',
+        },
+    });
     window.MyGlobalVariables.elements = $.extend(true, window.MyGlobalVariables.elements, {
         cart: {
             container: '#__cart_main_container',
@@ -60,6 +68,51 @@
                 subject: 'inp-complaint-subject',
                 message: 'inp-complaint-message',
                 captcha: 'inp-complaint-captcha',
+            },
+        },
+        addAddress: {
+            form: '#__form_add_address',
+            inputs: {
+                fullName: 'inp-address-add-full-name',
+                mobile: 'inp-address-add-mobile',
+                province: 'inp-address-add-province',
+                city: 'inp-address-add-city',
+                postalCode: 'inp-address-add-postal-code',
+                address: 'inp-address-add-address',
+            },
+        },
+        editAddress: {
+            form: '#__form_edit_address',
+            inputs: {
+                fullName: 'inp-address-edit-full-name',
+                mobile: 'inp-address-edit-mobile',
+                province: 'inp-address-edit-province',
+                city: 'inp-address-edit-city',
+                postalCode: 'inp-address-edit-postal-code',
+                address: 'inp-address-edit-address',
+            },
+        },
+        changeUserInfo: {
+            form: '#__form_change_info',
+            inputs: {
+                firstName: 'inp-info-first-name',
+                lastName: 'inp-info-last-name',
+                email: 'inp-info-email',
+                shabaNum: 'inp-info-shaba-num',
+            },
+        },
+        changeUserPassword: {
+            form: '#__form_change_password',
+            inputs: {
+                prevPassword: 'inp-pass-prev-password',
+                password: 'inp-pass-password',
+                rePassword: 'inp-pass-re-password',
+            },
+        },
+        recoverType: {
+            form: '#__form_change_recover_type',
+            inputs: {
+                recoverType: 'inp-recover-type',
             },
         },
     });
@@ -131,6 +184,115 @@
                     },
                 },
             },
+            addAddress: {
+                province: {
+                    presence: {
+                        allowEmpty: false,
+                        message: '^' + 'فیلد استان را خالی نگذارید.',
+                    },
+                },
+                city: {
+                    presence: {
+                        allowEmpty: false,
+                        message: '^' + 'فیلد شهر را خالی نگذارید.',
+                    },
+                },
+                postalCode: {
+                    presence: {
+                        allowEmpty: false,
+                        message: '^' + 'فیلد کد پستی را خالی نگذارید.',
+                    },
+                    format: {
+                        pattern: /^\d{1,10}$/,
+                        message: '^' + 'کد پستی باید از نوع عددی و دارای حداکثر ۱۰ رقم باشد.',
+                    },
+                },
+                address: {
+                    presence: {
+                        allowEmpty: false,
+                        message: '^' + 'فیلد آدرس را خالی نگذارید.',
+                    },
+                },
+            },
+            editAddress: {
+                province: {
+                    presence: {
+                        allowEmpty: false,
+                        message: '^' + 'فیلد استان را خالی نگذارید.',
+                    },
+                },
+                city: {
+                    presence: {
+                        allowEmpty: false,
+                        message: '^' + 'فیلد شهر را خالی نگذارید.',
+                    },
+                },
+                postalCode: {
+                    presence: {
+                        allowEmpty: false,
+                        message: '^' + 'فیلد کد پستی را خالی نگذارید.',
+                    },
+                    format: {
+                        pattern: /^\d{1,10}$/,
+                        message: '^' + 'کد پستی باید از نوع عددی و دارای حداکثر ۱۰ رقم باشد.',
+                    },
+                },
+                address: {
+                    presence: {
+                        allowEmpty: false,
+                        message: '^' + 'فیلد آدرس را خالی نگذارید.',
+                    },
+                },
+            },
+            changeUserInfo: {
+                shabaNum: {
+                    format: {
+                        pattern: /^[0-9]*$/,
+                        message: '^' + 'کد شبا باید از نوع عددی باشد.',
+                    },
+                },
+            },
+            changeUserPassword: {
+                prevPassword: {
+                    presence: {
+                        allowEmpty: false,
+                        message: '^' + 'فیلد کلمه عبور قبلی اجباری می‌باشد.',
+                    },
+                    length: {
+                        minimum: 8,
+                        message: '^' + 'فیلد کلمه عبور باید حداقل دارای ۸ کاراکتر باشد.',
+                    }
+                },
+                password: {
+                    presence: {
+                        allowEmpty: false,
+                        message: '^' + 'فیلد کلمه عبور جدید اجباری می‌باشد.',
+                    },
+                    length: {
+                        minimum: 8,
+                        message: '^' + 'فیلد کلمه عبور باید حداقل دارای ۸ کاراکتر باشد.',
+                    }
+                },
+                rePassword: {
+                    presence: {
+                        allowEmpty: false,
+                        message: '^' + 'فیلد تکرار کلمه عبور اجباری می‌باشد.',
+                    },
+                    equality: "password",
+                },
+            },
+            recoverType: {
+                recoverType: {
+                    presence: {
+                        allowEmpty: false,
+                        message: '^' + 'فیلد نوع بازگردانی کلمه عبور را انتخاب کنید.',
+                    },
+                    format: {
+                        pattern: /^[0-9]*$/,
+                        message: '^' + 'نوع بازگردانی کلمه عبور باید از نوع عددی باشد.',
+                    },
+                },
+            },
         },
     });
 
@@ -191,7 +353,9 @@
             loaderId,
             wishListBtn,
             //-----
-            createLoader = true;
+            createLoader = true,
+            //
+            editAddrId = null;
 
         shop = new window.TheShop();
 
@@ -230,6 +394,36 @@
                 subject: variables.validation.constraints.complaint.subject,
                 message: variables.validation.constraints.complaint.message,
                 captcha: variables.validation.common.captcha,
+            },
+            addAddress: {
+                name: variables.validation.common.name,
+                mobile: variables.validation.common.mobile,
+                province: variables.validation.constraints.addAddress.province,
+                city: variables.validation.constraints.addAddress.city,
+                postalCode: variables.validation.constraints.addAddress.postalCode,
+                address: variables.validation.constraints.addAddress.address,
+            },
+            editAddress: {
+                name: variables.validation.common.name,
+                mobile: variables.validation.common.mobile,
+                province: variables.validation.constraints.editAddress.province,
+                city: variables.validation.constraints.editAddress.city,
+                postalCode: variables.validation.constraints.editAddress.postalCode,
+                address: variables.validation.constraints.editAddress.address,
+            },
+            changeUserInfo: {
+                firstName: variables.validation.common.name,
+                lastName: variables.validation.common.lastName,
+                email: variables.validation.common.email,
+                shabaNum: variables.validation.constraints.changeUserInfo.shabaNum,
+            },
+            changeUserPassword: {
+                prevPassword: variables.validation.constraints.changeUserPassword.prevPassword,
+                password: variables.validation.constraints.changeUserPassword.password,
+                rePassword: variables.validation.constraints.changeUserPassword.rePassword,
+            },
+            recoverType: {
+                recoverType: variables.validation.constraints.recoverType.recoverType,
             },
         };
 
@@ -273,6 +467,18 @@
                 });
             });
 
+        // custom delete button click event
+        $('.__item_custom_remover_btn')
+            .off('click' + variables.namespace)
+            .on('click' + variables.namespace, function () {
+                var $this = $(this);
+                deleteOperation($this, function () {
+                    $this.closest('.remove-element-item').fadeOut(300, function () {
+                        $(this).remove();
+                    });
+                });
+            });
+
         $('.__send_data_through_request').each(function () {
             var $this, url, status;
 
@@ -301,6 +507,43 @@
         });
 
         //---------------------------------------------------------------
+        // Events
+        //---------------------------------------------------------------
+
+        /**
+         *
+         * @param btn
+         */
+        function editAddressBtnClick(btn) {
+            var id, editModal;
+            id = $(btn).attr('data-edit-id');
+            editModal = $('#modal_form_address_edit');
+            // clear element after each call
+            $(variables.elements.editAddress.form).reset();
+            if (id && editModal.length) {
+                shop.request(variables.url.address.get + '/' + id, 'get', function () {
+                    var _ = this;
+                    var provincesSelect = $('select[name="' + variables.elements.editAddress.inputs.province + '"]'),
+                        citiesSelect = $(provincesSelect.attr('data-city-select-target'));
+                    if (_.data.length && provincesSelect.length && citiesSelect.length) {
+                        editAddrId = id;
+                        //-----
+                        shop.loadProvinces(provincesSelect.attr('data-current-province', _.data['province_id']));
+                        shop.loadCities(citiesSelect.attr('data-current-city', _.data['city_id']));
+                        editModal.find('[name="' + variables.elements.editAddress.inputs.province + '"]').val(_.data['full_name']);
+                        editModal.find('[name="' + variables.elements.editAddress.inputs.mobile + '"]').val(_.data['mobile']);
+                        editModal.find('[name="' + variables.elements.editAddress.inputs.postalCode + '"]').val(_.data['postal_code']);
+                        editModal.find('[name="' + variables.elements.editAddress.inputs.address + '"]').val(_.data['address']);
+                    }
+                });
+            }
+        }
+
+        $('.edit-element-item').on('click' + variables.namespace, function () {
+            editAddressBtnClick(this);
+        });
+
+        //---------------------------------------------------------------
         // CHECK SCROLL TO ELEMENT
         //---------------------------------------------------------------
         var
@@ -310,10 +553,18 @@
                 '__register_form_container',
                 '__forget_form_container',
             ],
-            modalsHash = [];
+            modalsHash = [],
+            tabsHash = [
+                'changeInfo',
+                'changePassword',
+                'changeOther',
+            ];
 
         if ($.inArray(hashval, elementsHash) !== -1) {
             core.scrollTo('#' + hashval, 140);
+        }
+        if ($.inArray(hashval, tabsHash) !== -1) {
+            $('[data-toggle="tab"][href="' + '#' + hashval + '"]').tab('show');
         }
 
         //---------------------------------------------------------------
@@ -445,6 +696,113 @@
                     createLoader = true;
                 });
             }
+        });
+
+        //---------------------------------------------------------------
+        // ADD ADDRESS
+        //---------------------------------------------------------------
+        shop.forms.submitForm('addAddress', constraints.addAddress, function (values) {
+            // do ajax
+            if (createLoader) {
+                createLoader = false;
+                loaderId = shop.showLoader();
+            }
+            shop.request(variables.url.address.add, 'post', function () {
+                shop.hideLoader(loaderId);
+                // clear element after success
+                $(variables.elements.addAddress.form).reset();
+                //-----
+                shop.toasts.toast(this.data, {
+                    type: variables.toasts.types.success,
+                });
+                createLoader = true;
+            }, {
+                data: values,
+            }, true, function () {
+                createLoader = true;
+                shop.hideLoader(loaderId);
+            });
+            return false;
+        }, function (errors) {
+            shop.forms.showFormErrors(errors);
+            return false;
+        }, {
+            '{{name}}': 'نام',
+        });
+
+        //---------------------------------------------------------------
+        // EDIT ADDRESS
+        //---------------------------------------------------------------
+        shop.forms.submitForm('editAddress', constraints.editAddress, function (values) {
+            if (editAddrId) {
+                // do ajax
+                if (createLoader) {
+                    createLoader = false;
+                    loaderId = shop.showLoader();
+                }
+                shop.request(variables.url.address.edit + '/' + editAddrId, 'post', function () {
+                    shop.hideLoader(loaderId);
+                    // clear element after success
+                    $(variables.elements.editAddress.form).reset();
+                    // remove current id for province and city and reset current address id
+                    $('select[name="' + variables.elements.editAddress.inputs.province + '"]').removeAttr('data-current-province');
+                    $('select[name="' + variables.elements.editAddress.inputs.city + '"]').removeAttr('data-current-city');
+                    editAddrId = null;
+                    //-----
+                    shop.toasts.toast(this.data, {
+                        type: variables.toasts.types.success,
+                    });
+                    createLoader = true;
+
+                    // append created address to address container
+                    var addr = $('');
+                    $('.address-elements-container').append(addr);
+                }, {
+                    data: values,
+                }, true, function () {
+                    createLoader = true;
+                    shop.hideLoader(loaderId);
+                });
+            }
+            return false;
+        }, function (errors) {
+            shop.forms.showFormErrors(errors);
+            return false;
+        }, {
+            '{{name}}': 'نام',
+        });
+
+        //---------------------------------------------------------------
+        // CHANGE USER INFO FORM
+        //---------------------------------------------------------------
+        shop.forms.submitForm('changeUserInfo', constraints.changeUserInfo, function () {
+            return true;
+        }, function (errors) {
+            shop.forms.showFormErrors(errors);
+            return false;
+        }, {
+            '{{name}}': 'نام',
+            '{{last-name}}': 'نام خانوادگی',
+        });
+
+        //---------------------------------------------------------------
+        // CHANGE USER PASSWORD FORM
+        //---------------------------------------------------------------
+        shop.forms.submitForm('changeUserPassword', constraints.changeUserPassword, function () {
+            return true;
+        }, function (errors) {
+            shop.forms.showFormErrors(errors);
+            return false;
+        });
+
+        //---------------------------------------------------------------
+        // CHANGE USER OTHER SETTING FORM
+        //---------------------------------------------------------------
+        shop.forms.submitForm('recoverType', constraints.recoverType, function () {
+            return true;
+        }, function (errors) {
+            shop.forms.showFormErrors(errors);
+            return false;
         });
     });
 })(jQuery);

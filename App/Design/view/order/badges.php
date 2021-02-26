@@ -17,13 +17,14 @@
         </div>
 
         <table class="table table-bordered table-hover datatable-highlight"
-               data-columns='[{"data":"id"},{"data":"title"},{"data":"color"},{"data":"operations"}]'
+               data-columns='[{"data":"id"},{"data":"title"},{"data":"color"},{"data":"allow_return"},{"data":"operations"}]'
                data-ajax-url="<?= url('admin.badge.dt.view')->getRelativeUrlTrimmed(); ?>">
             <thead>
             <tr>
                 <th>#</th>
                 <th>عنوان وضعیت</th>
                 <th>رنگ</th>
+                <th>امکان مرجوعی</th>
                 <th class="text-center">عملیات</th>
             </tr>
             </thead>
@@ -32,6 +33,7 @@
                 <th>#</th>
                 <th>عنوان وضعیت</th>
                 <th>رنگ</th>
+                <th>امکان مرجوعی</th>
                 <th class="text-center">عملیات</th>
             </tr>
             </tfoot>
@@ -66,6 +68,23 @@
                                     <input type="text" class="form-control colorpicker-show-input"
                                            name="inp-add-badge-color"
                                            data-fouc>
+                                </div>
+                            </div>
+                            <div class="col-sm-6 form-group">
+                                <label class="d-block">
+                                    امکان مرجوع کردن کالا در این مرحله:
+                                </label>
+                                <div class="d-inline-block">
+                                    <div class="form-group col-md-6">
+                                        <div class="form-check form-check-switchery form-check-switchery-double mt-2">
+                                            <label class="form-check-label">
+                                                بله
+                                                <input type="checkbox" class="form-check-input-switchery"
+                                                       name="inp-add-badge-allow-return" checked="checked">
+                                                خیر
+                                            </label>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -110,6 +129,23 @@
                                     <input type="text" class="form-control colorpicker-show-input"
                                            name="inp-edit-badge-color"
                                            data-fouc>
+                                </div>
+                            </div>
+                            <div class="col-sm-6 form-group">
+                                <label class="d-block">
+                                    امکان مرجوع کردن کالا در این مرحله:
+                                </label>
+                                <div class="d-inline-block">
+                                    <div class="form-group col-md-6">
+                                        <div class="form-check form-check-switchery form-check-switchery-double mt-2">
+                                            <label class="form-check-label">
+                                                بله
+                                                <input type="checkbox" class="form-check-input-switchery"
+                                                       name="inp-edit-badge-allow-return" checked="checked">
+                                                خیر
+                                            </label>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>

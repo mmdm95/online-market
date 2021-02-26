@@ -94,6 +94,38 @@ function get_percentage($num, $total, bool $low = true): int
 }
 
 /**
+ * @param array $item
+ * @return array
+ */
+function get_discount_price(array $item): array
+{
+    $hasDiscount = false;
+    $discountPrice = number_format($item['price']);
+
+    if (!empty($item['festival_expire']) && $item['festival_expire'] > time() && isset($item['festival_discount']) && 0 != $item['festival_discount']) {
+        $hasDiscount = true;
+        $discountPrice = number_format($item['price'] * (int)$item['festival_discount']);
+    } elseif (isset($item['discount_until']) && $item['discount_until'] >= time()) {
+        $hasDiscount = true;
+        $discountPrice = number_format($item['discounted_price']);
+    }
+
+    return [$discountPrice, $hasDiscount];
+}
+
+/**
+ * @param array $item
+ * @return bool
+ */
+function get_product_availability(array $item): bool
+{
+    return $item['product_availability'] &&
+        $item['is_available'] &&
+        ((int)$item['stock_count'] > 0) &&
+        ((int)$item['max_cart_count'] > 0);
+}
+
+/**
  * @return FormValidator
  * @throws ConfigNotRegisteredException
  * @throws IFileNotExistsException

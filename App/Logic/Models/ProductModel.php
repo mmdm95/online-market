@@ -205,6 +205,70 @@ class ProductModel extends BaseModel
     }
 
     /**
+     * Use [fp for favorite_user_product], [pa for product_advanced]
+     *
+     * @param string|null $where
+     * @param array $bind_values
+     * @param array $order_by
+     * @param int|null $limit
+     * @param int $offset
+     * @param array $columns
+     * @return array
+     */
+    public function getUserFavoriteProducts(
+        ?string $where = null,
+        array $bind_values = [],
+        array $order_by = ['fp.product_id DESC'],
+        ?int $limit = null,
+        int $offset = 0,
+        array $columns = [
+            'fp.id AS favorite_id',
+            'fp.product_id',
+            'pa.slug',
+            'pa.title',
+            'pa.image',
+            'pa.code',
+            'pa.price',
+            'pa.discount_until',
+            'pa.discounted_price',
+            'pa.festival_expire',
+            'pa.max_cart_count',
+            'pa.stock_count',
+            'pa.color_name',
+            'pa.size',
+            'pa.guarantee',
+            'pa.product_availability',
+            'pa.is_available',
+        ]
+    ): array
+    {
+        $select = $this->connector->select();
+        $select
+            ->from(self::TBL_FAVORITE_USER_PRODUCT . ' AS fp')
+            ->cols($columns)
+            ->offset($offset)
+            ->orderBy($order_by);
+        if (!empty($where)) {
+            $select
+                ->where($where)
+                ->bindValues($bind_values);
+        }
+
+        try {
+            $select
+                ->innerJoin(self::TBL_PRODUCT_ADVANCED . ' AS pa', 'fp.product_id=pa.product_id');
+        } catch (AuraException $e) {
+            return [];
+        }
+
+        if (!empty($limit) && $limit > 0) {
+            $select->limit($limit);
+        }
+
+        return $this->db->fetchAll($select->getStatement(), $select->getBindValues());
+    }
+
+    /**
      * @param $user_id
      * @param $product_id
      * @return array - [result, type, message] accordingly

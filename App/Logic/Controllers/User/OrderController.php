@@ -69,12 +69,26 @@ class OrderController extends AbstractUserController
      * @throws ControllerException
      * @throws IFileNotExistsException
      * @throws IInvalidVariableNameException
+     * @throws MethodNotFoundException
+     * @throws ParameterHasNoDefaultValueException
      * @throws PathNotRegisteredException
+     * @throws ServiceNotFoundException
+     * @throws ServiceNotInstantiableException
      * @throws \ReflectionException
      */
     public function detail($id)
     {
+        /**
+         * @var OrderModel $orderModel
+         */
+        $orderModel = container()->get(OrderModel::class);
+
+        $order = [];
+
         $this->setLayout($this->main_layout)->setTemplate('view/main/user/order/detail');
-        return $this->render();
+        return $this->render([
+            'order' => $order,
+            'sub_title' => 'جزئیات سفارش'// . '-' . $order['code'],
+        ]);
     }
 }

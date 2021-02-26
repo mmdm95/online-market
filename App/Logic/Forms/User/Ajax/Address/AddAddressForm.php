@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Logic\Forms\Ajax\Address;
+namespace App\Logic\Forms\User\Ajax\Address;
 
 use App\Logic\Interfaces\IPageForm;
 use App\Logic\Models\AddressModel;
@@ -81,7 +81,7 @@ class AddAddressForm implements IPageForm
             ->required();
 
         // check if user is exists
-        $userId = session()->getFlash('addr-add-user-id', null, false);
+        $userId = session()->getFlash('user-address-add-id', null, false);
         if (!empty($userId)) {
             /**
              * @var UserModel $userModel
@@ -142,7 +142,7 @@ class AddAddressForm implements IPageForm
         $xss = container()->get(AntiXSS::class);
 
         try {
-            $userId = session()->getFlash('addr-add-user-id', null);
+            $userId = session()->getFlash('user-address-add-id', null);
             $name = input()->post('inp-add-address-full-name', '')->getValue();
             $mobile = input()->post('inp-add-address-mobile', '')->getValue();
             $province = input()->post('inp-add-address-province', '')->getValue();

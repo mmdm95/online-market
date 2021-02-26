@@ -65,6 +65,11 @@ return [
                 ),
                 e(
                     '<link href="' .
+                    asset_path('plugins/selectric/selectric.min.css') .
+                    '" rel="stylesheet" type="text/css">'
+                ),
+                e(
+                    '<link href="' .
                     asset_path('css/style.css') .
                     '" rel="stylesheet" type="text/css">'
                 ),
@@ -101,15 +106,6 @@ return [
                 ),
             ],
         ],
-        'css' => [
-            'top' => [
-                e(
-                    '<link href="' .
-                    asset_path('plugins/selectric/selectric.min.css') .
-                    '" rel="stylesheet" type="text/css">'
-                ),
-            ],
-        ]
     ],
     'default-cart' => [
         'js' => [

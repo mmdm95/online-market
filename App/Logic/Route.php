@@ -201,7 +201,7 @@ class Route implements IInitialize
                 /**
                  * User Order Route
                  */
-                Router::post('/address/view/dt/{user_id}', [AdminUserController::class, 'getOrderPaginatedDatatable'])->where([
+                Router::post('/user/order/view/dt/{user_id}', [AdminUserController::class, 'getOrderPaginatedDatatable'])->where([
                     'user_id' => '[0-9]+',
                 ])->name('admin.user.order.dt.view');
 
@@ -704,11 +704,28 @@ class Route implements IInitialize
             // user pages that need authentication
             Router::group(['middleware' => AuthMiddleware::class], function () {
                 /**
+                 * favorite route
+                 */
+                Router::delete('/user/favorite/remove/{id}', [UserHomeController::class, 'removeFavorite'])->where([
+                    'id' => '[0-9]+',
+                ])->name('ajax.user.favorite.remove');
+
+                /**
                  * comment route
                  */
                 Router::delete('/user/comment/remove/{id}', [UserCommentController::class, 'remove'])->where([
                     'id' => '[0-9]+',
                 ])->name('ajax.user.comment.remove');
+
+                /**
+                 * address route
+                 */
+                Router::get('/user/address/get/{id}', [UserAddressController::class, 'get'])->where([
+                    'id' => '[0-9]+',
+                ])->name('ajax..user.address.get');
+                Router::delete('/user/address/remove/{id}', [UserAddressController::class, 'remove'])->where([
+                    'id' => '[0-9]+',
+                ])->name('ajax.user.address.remove');
             });
 
             // other pages that need authentication
@@ -721,7 +738,7 @@ class Route implements IInitialize
                 /**
                  * user route
                  */
-                Router::delete('/user/remove/{id}', [AdminUserController::class, 'remoce'])->where([
+                Router::delete('/user/remove/{id}', [AdminUserController::class, 'remove'])->where([
                     'id' => '[0-9]+',
                 ])->name('ajax.user.remove');
 

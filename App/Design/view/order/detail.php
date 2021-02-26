@@ -201,7 +201,7 @@ use Sim\Utils\StringUtil;
             <fieldset class="mt-3">
                 <legend class="font-weight-semibold">
                     <i class="icon-credit-card mr-2"></i>
-                    وضعیت مالی:
+                    وضعیت مالی
                 </legend>
 
                 <div class="row m-0">
@@ -210,23 +210,7 @@ use Sim\Utils\StringUtil;
                             وضعیت پرداخت
                         </div>
                         <?php $text = PAYMENT_STATUSES[$order['payment_status']] ?: 'نامشخص'; ?>
-                        <?php switch ($order['payment_status']):
-                            case PAYMENT_STATUS_SUCCESS: ?>
-                                <span class="badge-success p-1 rounded"><?= $text; ?></span>
-                                <?php break; ?>
-                            <?php case PAYMENT_STATUS_WAIT_VERIFY: ?>
-                                <span class="badge-warning p-1 rounded"><?= $text; ?></span>
-                                <?php break; ?>
-                            <?php case PAYMENT_STATUS_WAIT: ?>
-                                <span class="badge-primary p-1 rounded"><?= $text; ?></span>
-                                <?php break; ?>
-                            <?php case PAYMENT_STATUS_NOT_PAYED: ?>
-                                <span class="badge-danger p-1 rounded"><?= $text; ?></span>
-                                <?php break; ?>
-                            <?php default: ?>
-                                <span class="badge-danger p-1 rounded"><?= $text; ?></span>
-                                <?php break; ?>
-                            <?php endswitch; ?>
+                        <?php load_partial('admin/parser/payment-status', ['status' => $order['payment_status']]); ?>
                     </div>
                     <div class="col-lg-6 border py-2 px-3">
                         <div class="mb-2">

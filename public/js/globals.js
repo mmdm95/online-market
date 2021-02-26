@@ -158,6 +158,16 @@ window.MyGlobalVariables = {
                     message: '^' + '{{name}}' + ' باید دارای حروف فارسی باشد.',
                 },
             },
+            lastName: {
+                presence: {
+                    allowEmpty: false,
+                    message: '^' + 'فیلد ' + '{{last-name}}' + ' را خالی نگذارید.',
+                },
+                format: {
+                    pattern: /^[پچجحخهعغفقثصضشسیبلاتنمکگوئدذرزطظژؤإأآءًٌٍَُِّ\s]+$/u,
+                    message: '^' + '{{last-name}}' + ' باید دارای حروف فارسی باشد.',
+                },
+            },
             enName: {
                 presence: {
                     allowEmpty: false,

@@ -126,8 +126,8 @@ class AddUserForm implements IPageForm
 
         return [
             $validator->getStatus(),
-            $validator->getError(),
             $validator->getUniqueErrors(),
+            $validator->getError(),
             $validator->getFormattedError('<p class="m-0">'),
             $validator->getFormattedUniqueErrors('<p class="m-0">'),
             $validator->getRawErrors(),

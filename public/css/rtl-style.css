@@ -792,7 +792,7 @@ body[dir="rtl"] .alert .close {
 
 .custome-radio input[type="radio"] + .form-check-label::after {
     left: auto;
-    right: 3px;
+    right: 4px;
 }
 
 .comment_img {

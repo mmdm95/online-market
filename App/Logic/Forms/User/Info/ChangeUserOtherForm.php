@@ -1,10 +1,12 @@
 <?php
 
-namespace App\Logic\Forms\Ajax\Badge;
+namespace App\Logic\Forms\User\Info;
 
 use App\Logic\Interfaces\IPageForm;
-use App\Logic\Models\OrderBadgeModel;
-use App\Logic\Models\UnitModel;
+use App\Logic\Models\BlogCategoryModel;
+use App\Logic\Models\BlogModel;
+use App\Logic\Models\UserModel;
+use App\Logic\Utils\Jdf;
 use App\Logic\Validations\ExtendedValidator;
 use Sim\Auth\DBAuth;
 use Sim\Container\Exceptions\MethodNotFoundException;
@@ -19,7 +21,7 @@ use Sim\Interfaces\IInvalidVariableNameException;
 use Sim\Utils\StringUtil;
 use voku\helper\AntiXSS;
 
-class AddOrderBadgeForm implements IPageForm
+class ChangeUserOtherForm implements IPageForm
 {
     /**
      * {@inheritdoc}
@@ -44,35 +46,16 @@ class AddOrderBadgeForm implements IPageForm
         // aliases
         $validator
             ->setFieldsAlias([
-                'inp-add-badge-title' => 'عنوان وضعیت',
-                'inp-add-badge-color' => 'رنگ وضعیت',
+                'inp-recover-type' => 'نوع بازگردانی کلمه عبور',
             ]);
 
-        /**
-         * @var OrderBadgeModel $badgeModel
-         */
-        $badgeModel = container()->get(OrderBadgeModel::class);
-
-        // title
+        // recover type
         $validator
-            ->setFields('inp-add-badge-title')
+            ->setFields('inp-recover-type')
             ->stopValidationAfterFirstError(false)
             ->required()
             ->stopValidationAfterFirstError(true)
-            ->lessThanEqualLength(250)
-            ->custom(function (FormValue $value) use ($badgeModel) {
-                if (0 !== $badgeModel->count('title=:title', ['title' => trim($value->getValue())])) {
-                    return false;
-                }
-                return true;
-            }, '{alias} ' . 'تکراری می‌باشد.');
-        // color
-        $validator
-            ->setFields('inp-add-badge-color')
-            ->stopValidationAfterFirstError(false)
-            ->required()
-            ->stopValidationAfterFirstError(true)
-            ->hexColor();
+            ->isIn([RECOVER_PASS_TYPE_SMS, RECOVER_PASS_TYPE_SECURITY_QUESTION], '{alias} ' . 'انتخاب شده نامعتبر است.');
 
         // to reset form values and not set them again
         if ($validator->getStatus()) {
@@ -81,7 +64,11 @@ class AddOrderBadgeForm implements IPageForm
 
         return [
             $validator->getStatus(),
+            $validator->getUniqueErrors(),
+            $validator->getError(),
+            $validator->getFormattedError('<p class="m-0">'),
             $validator->getFormattedUniqueErrors('<p class="m-0">'),
+            $validator->getRawErrors(),
         ];
     }
 
@@ -96,27 +83,24 @@ class AddOrderBadgeForm implements IPageForm
     public function store(): bool
     {
         /**
-         * @var OrderBadgeModel $badgeModel
+         * @var UserModel $userModel
          */
-        $badgeModel = container()->get(OrderBadgeModel::class);
+        $userModel = container()->get(UserModel::class);
         /**
          * @var AntiXSS $xss
          */
         $xss = container()->get(AntiXSS::class);
 
         try {
-            $title = input()->post('inp-add-badge-title', '')->getValue();
-            $color = input()->post('inp-add-badge-color', '')->getValue();
-            $allowReturn = input()->post('inp-add-badge-allow-return', '')->getValue();
+            $recoverType = input()->post('inp-recover-type', '')->getValue();
+            $id = session()->getFlash('the-current-user-id');
 
-            $res = $badgeModel->insert([
-                'code' => StringUtil::uniqidReal(12),
-                'title' => $xss->xss_clean(trim($title)),
-                'color' => $xss->xss_clean($color),
-                'allow_return_order' => is_value_checked($allowReturn) ? DB_YES : DB_NO,
-                'created_at' => time(),
-            ]);
-            return $res;
+            if (empty($id)) return false;
+
+            return $userModel->update([
+                'recover_password_type' => $xss->xss_clean(trim($recoverType)),
+                'updated_at' => time(),
+            ], 'id=:id', ['id' => $id]);
         } catch (\Exception $e) {
             return false;
         }

@@ -273,6 +273,7 @@
             inputs: {
                 title: 'inp-add-badge-title',
                 color: 'inp-add-badge-color',
+                allowReturn: 'inp-add-badge-allow-return',
             },
         },
         editBadge: {
@@ -280,6 +281,7 @@
             inputs: {
                 title: 'inp-edit-badge-title',
                 color: 'inp-edit-badge-color',
+                allowReturn: 'inp-edit-badge-allow-return',
             },
         },
         addCategory: {
@@ -3168,6 +3170,11 @@
                             .find('[name="' + variables.elements.editBadge.inputs.color + '"]')
                             .val(_.data['color'])
                             .spectrum("set", _.data['color']);
+                        if (core.isChecked(_.data['allow_return_order'])) {
+                            editModal.find('[name="' + variables.elements.editBadge.inputs.allowReturn + '"]')
+                                .attr('checked', 'checked')
+                                .prop('checked', 'checked');
+                        }
                     }
                 });
             }

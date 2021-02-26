@@ -3,12 +3,20 @@
 namespace App\Logic\Controllers\User;
 
 use App\Logic\Abstracts\AbstractUserController;
+use App\Logic\Forms\User\Info\ChangeUserInfoForm;
+use App\Logic\Forms\User\Info\ChangeUserOtherForm;
+use App\Logic\Forms\User\Info\ChangeUserPasswordForm;
+use App\Logic\Handlers\GeneralAjaxRemoveHandler;
+use App\Logic\Handlers\GeneralFormHandler;
+use App\Logic\Handlers\ResourceHandler;
+use App\Logic\Models\BaseModel;
 use App\Logic\Models\CommentModel;
 use App\Logic\Models\OrderModel;
 use App\Logic\Models\ProductModel;
 use App\Logic\Models\ReturnOrderModel;
 use App\Logic\Models\WalletFlowModel;
 use App\Logic\Models\WalletModel;
+use Jenssegers\Agent\Agent;
 use Sim\Container\Exceptions\MethodNotFoundException;
 use Sim\Container\Exceptions\ParameterHasNoDefaultValueException;
 use Sim\Container\Exceptions\ServiceNotFoundException;
@@ -119,13 +127,42 @@ class HomeController extends AbstractUserController
      * @throws ControllerException
      * @throws IFileNotExistsException
      * @throws IInvalidVariableNameException
+     * @throws MethodNotFoundException
+     * @throws ParameterHasNoDefaultValueException
      * @throws PathNotRegisteredException
+     * @throws ServiceNotFoundException
+     * @throws ServiceNotInstantiableException
      * @throws \ReflectionException
      */
     public function info()
     {
+        $user = $this->getDefaultArguments()['user'];
+
+        $data = [];
+        if (is_post()) {
+            session()->setFlash('the-current-user-id', $user['id']);
+
+            if (!is_null(input()->post('infoSubmit')->getValue())) {
+                $formHandler = new GeneralFormHandler();
+                $data = $formHandler->handle(ChangeUserInfoForm::class, 'info_change');
+            } elseif (!is_null(input()->post('passwordSubmit')->getValue())) {
+
+
+                $formHandler = new GeneralFormHandler();
+                $data = $formHandler->handle(ChangeUserPasswordForm::class, 'password_change');
+
+                // logout to check new password
+                if ($data['password_change_success']) {
+                    response()->redirect(url('home.logout')->getRelativeUrl());
+                }
+            } elseif (!is_null(input()->post('otherSubmit')->getValue())) {
+                $formHandler = new GeneralFormHandler();
+                $data = $formHandler->handle(ChangeUserOtherForm::class, 'other_change');
+            }
+        }
+
         $this->setLayout($this->main_layout)->setTemplate('view/main/user/info');
-        return $this->render();
+        return $this->render($data);
     }
 
     /**
@@ -134,12 +171,60 @@ class HomeController extends AbstractUserController
      * @throws ControllerException
      * @throws IFileNotExistsException
      * @throws IInvalidVariableNameException
+     * @throws MethodNotFoundException
+     * @throws ParameterHasNoDefaultValueException
      * @throws PathNotRegisteredException
+     * @throws ServiceNotFoundException
+     * @throws ServiceNotInstantiableException
      * @throws \ReflectionException
      */
     public function favorite()
     {
+        /**
+         * @var ProductModel $productModel
+         */
+        $productModel = container()->get(ProductModel::class);
+
+        $user = $this->getDefaultArguments()['user'];
+
+        $favorites = $productModel->getUserFavoriteProducts('fp.user_id=:id', [
+            'id' => $user['id'],
+        ]);
+
         $this->setLayout($this->main_layout)->setTemplate('view/main/user/favorite');
-        return $this->render();
+        return $this->render([
+            'favorites' => $favorites,
+        ]);
+    }
+
+    /**
+     * @param $id
+     * @throws MethodNotFoundException
+     * @throws ParameterHasNoDefaultValueException
+     * @throws ServiceNotFoundException
+     * @throws ServiceNotInstantiableException
+     * @throws \ReflectionException
+     */
+    public function removeFavorite($id)
+    {
+        $resourceHandler = new ResourceHandler();
+
+        /**
+         * @var Agent $agent
+         */
+        $agent = container()->get(Agent::class);
+        if (!$agent->isRobot()) {
+            $user = $this->getDefaultArguments()['user'];
+
+            $handler = new GeneralAjaxRemoveHandler();
+            $resourceHandler = $handler->handle(BaseModel::TBL_FAVORITE_USER_PRODUCT, $id, 'user_id=:uId', ['uId' => $user['id']]);
+        } else {
+            response()->httpCode(403);
+            $resourceHandler
+                ->type(RESPONSE_TYPE_ERROR)
+                ->errorMessage('خطا در ارتباط با سرور، لطفا دوباره تلاش کنید.');
+        }
+
+        response()->json($resourceHandler->getReturnData());
     }
 }

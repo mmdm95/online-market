@@ -20,7 +20,7 @@ use Sim\I18n\ISOLanguageCodes;
  *     1.2.5.0 instead of 1.2.5-a
  *     1.2.5.0.1 instead of 1.2.5-a1 (I'm not sure)
  */
-defined("APP_VERSION") OR define("APP_VERSION", "0.1.13");
+defined("APP_VERSION") OR define("APP_VERSION", "0.1.14");
 
 /***************************************
  * You can add your constants here
@@ -46,6 +46,10 @@ defined("TITLE_DELIMITER") OR define("TITLE_DELIMITER", ' | ');
 // publish or true in database
 defined("DB_YES") OR define("DB_YES", 1);
 defined("DB_NO") OR define("DB_NO", 0);
+
+// recover password type
+defined("RECOVER_PASS_TYPE_SMS") OR define("RECOVER_PASS_TYPE_SMS", 1);
+defined("RECOVER_PASS_TYPE_SECURITY_QUESTION") OR define("RECOVER_PASS_TYPE_SECURITY_QUESTION", 2);
 
 // default placeholders
 defined("PLACEHOLDER_USER_IMAGE") OR define("PLACEHOLDER_USER_IMAGE", 'avatars-default.png');

@@ -52,7 +52,10 @@ class EditAddressForm implements IPageForm
         // full name
         $validator
             ->setFields('inp-edit-address-full-name')
-            ->required();
+            ->stopValidationAfterFirstError(false)
+            ->required()
+            ->stopValidationAfterFirstError(true)
+            ->persianAlpha();
         // mobile
         $validator
             ->setFields('inp-edit-address-mobile')
