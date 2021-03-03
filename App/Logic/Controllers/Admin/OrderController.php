@@ -9,6 +9,7 @@ use App\Logic\Handlers\DatatableHandler;
 use App\Logic\Handlers\GeneralFormHandler;
 use App\Logic\Handlers\ResourceHandler;
 use App\Logic\Interfaces\IDatatableController;
+use App\Logic\Models\GatewayModel;
 use App\Logic\Models\OrderBadgeModel;
 use App\Logic\Models\OrderModel;
 use App\Logic\Utils\Jdf;
@@ -84,15 +85,18 @@ class OrderController extends AbstractAdminController implements IDatatableContr
          * @var OrderBadgeModel $badgeModel
          */
         $badgeModel = container()->get(OrderBadgeModel::class);
+        /**
+         * @var GatewayModel $gatewayModel
+         */
+        $gatewayModel = container()->get(GatewayModel::class);
 
-        $order = $orderModel->getOrders('id=:id', ['id' => $id])[0];
+        $order = $orderModel->getOrders('o.id=:id', ['id' => $id])[0];
         $orderItems = $orderModel->getOrderItems([
             'oi.*', 'p.image AS product_image'
         ], 'code=:code', ['code' => $order['code']]);
+        $order['payment_code'] = $gatewayModel->getFirst(['payment_code'], 'method_type=:mt', ['mt' => $order['method_type']])['payment_code'] ?? null;
 
         $badges = $badgeModel->get(['code', 'title', 'color'], 'is_deleted:del', ['del' => DB_NO]);
-
-        $order['payment_code'] = $orderModel->getPaymentCodeFromType($order['method_type']);
 
         $this->setLayout($this->main_layout)->setTemplate('view/order/detail');
         return $this->render(array_merge($data, [
@@ -279,7 +283,7 @@ class OrderController extends AbstractAdminController implements IDatatableContr
                                 $arr = [];
                                 $arr['status'] = $value['code'];
                                 $arr['text'] = $value['title'];
-                                $arr['style'] = 'background-color: ' . $value['color'] . '; color:' . get_color_from_bg($value['color'], '#ffffff', '#000000');
+                                $arr['style'] = 'background-color: ' . $value['color'] . '; color:' . get_color_from_bg($value['color']);
                                 return $arr;
                             }, $badges);
 
@@ -289,7 +293,7 @@ class OrderController extends AbstractAdminController implements IDatatableContr
                                 'switch' => [$badges],
                                 'default' => [
                                     'text' => $d,
-                                    'style' => 'background-color: ' . $row['send_status_color'] . '; color:' . get_color_from_bg($row['send_status_color'], '#ffffff', '#000000'),
+                                    'style' => 'background-color: ' . $row['send_status_color'] . '; color:' . get_color_from_bg($row['send_status_color']),
                                 ],
                             ]);
                         }

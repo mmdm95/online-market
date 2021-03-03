@@ -52,7 +52,7 @@ use Sim\Utils\StringUtil;
                         </div>
                         <h4 class="mt-3 mb-0">
                             <?= number_format(StringUtil::toEnglish($wallet_balance)); ?>
-                            تومان
+                            <small>تومان</small>
                         </h4>
                     </div>
                 </div>
@@ -151,7 +151,7 @@ use Sim\Utils\StringUtil;
                             <td><?= $order['method_title']; ?></td>
                             <td>
                                 <?= number_format(StringUtil::toEnglish($order['final_price'])); ?>
-                                تومان
+                                <small>تومان</small>
                             </td>
                             <td>
                                 <a href="<?= url('user.order.detail')->getRelativeUrl(); ?>"
@@ -196,7 +196,7 @@ use Sim\Utils\StringUtil;
                             <td><?= $flow['deposit_type_title']; ?></td>
                             <td>
                                 <?= number_format(StringUtil::toEnglish($flow['deposit_price'])); ?>
-                                تومان
+                                <small>تومان</small>
                             </td>
                         </tr>
                     <?php endforeach; ?>

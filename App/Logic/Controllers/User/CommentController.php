@@ -3,10 +3,13 @@
 namespace App\Logic\Controllers\User;
 
 use App\Logic\Abstracts\AbstractUserController;
+use App\Logic\Forms\User\Comment\CommentUserForm;
 use App\Logic\Handlers\GeneralAjaxRemoveHandler;
+use App\Logic\Handlers\GeneralFormHandler;
 use App\Logic\Handlers\ResourceHandler;
 use App\Logic\Models\BaseModel;
 use App\Logic\Models\CommentModel;
+use App\Logic\Models\ProductModel;
 use Jenssegers\Agent\Agent;
 use Sim\Container\Exceptions\MethodNotFoundException;
 use Sim\Container\Exceptions\ParameterHasNoDefaultValueException;
@@ -66,18 +69,84 @@ class CommentController extends AbstractUserController
 
     /**
      * @param $id
+     * @throws MethodNotFoundException
+     * @throws ParameterHasNoDefaultValueException
+     * @throws ServiceNotFoundException
+     * @throws ServiceNotInstantiableException
+     * @throws \ReflectionException
+     */
+    public function decider($id)
+    {
+        if (is_post()) {
+            $user = $this->getDefaultArguments()['user'];
+
+            /**
+             * @var CommentModel $commentModel
+             */
+            $commentModel = container()->get(CommentModel::class);
+            $comment = $commentModel->getComments('product_id=:pId AND user_id=:uId', ['pId' => $id, 'uId' => $user['id']]);
+
+            if (count($comment)) {
+                response()->redirect(url('user.comment.edit', ['id' => $id])->getRelativeUrl());
+            } else {
+                response()->redirect(url('home.product.show', ['id' => $id])->getRelativeUrlTrimmed() . '#Reviews');
+            }
+        }
+        response()->redirect(url('user.comments')->getRelativeUrl());
+    }
+
+    /**
+     * @param $id
      * @return string
      * @throws ConfigNotRegisteredException
      * @throws ControllerException
      * @throws IFileNotExistsException
      * @throws IInvalidVariableNameException
+     * @throws MethodNotFoundException
+     * @throws ParameterHasNoDefaultValueException
      * @throws PathNotRegisteredException
+     * @throws ServiceNotFoundException
+     * @throws ServiceNotInstantiableException
      * @throws \ReflectionException
      */
     public function edit($id)
     {
+        $user = $this->getDefaultArguments()['user'];
+
+        /**
+         * @var CommentModel $commentModel
+         */
+        $commentModel = container()->get(CommentModel::class);
+
+        if (0 === $commentModel->count('id=:id AND user_id=:uId', ['id' => '', 'uId' => $user['id']])) {
+            return $this->show404();
+        }
+
+        $data = [];
+        if (is_post()) {
+            session()->setFlash('the-current-user-id', $user['id']);
+            session()->setFlash('the-current-comment-id', $id);
+
+            $formHandler = new GeneralFormHandler();
+            $data = $formHandler->handle(CommentUserForm::class, 'update_comment');
+        }
+
+        /**
+         * @var ProductModel $productModel
+         */
+        $productModel = container()->get(ProductModel::class);
+
+        $comment = $commentModel->getFirst(['product_id', 'body'], 'id=:id AND user_id=:uId', ['id' => $id, 'uId' => $user['id']]);
+        $product = $productModel->getFirst(['title', 'slug', 'image', 'is_available']);
+        $price = $productModel->getProductPropertyWithInfo(['MIN(price) AS min_price', 'MAX(price) AS max_price'], 'product_id=:pId AND is_available=:av', ['pId' => $comment['product_id'], 'av' => DB_YES]);
+
         $this->setLayout($this->main_layout)->setTemplate('view/main/user/comment/edit');
-        return $this->render();
+        return $this->render(array_merge($data, [
+            'comment' => $comment,
+            'product' => $product,
+            'price' => $price,
+            'comment_id' => $id,
+        ]));
     }
 
     /**

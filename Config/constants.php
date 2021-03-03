@@ -20,7 +20,7 @@ use Sim\I18n\ISOLanguageCodes;
  *     1.2.5.0 instead of 1.2.5-a
  *     1.2.5.0.1 instead of 1.2.5-a1 (I'm not sure)
  */
-defined("APP_VERSION") OR define("APP_VERSION", "0.1.14");
+defined("APP_VERSION") OR define("APP_VERSION", "0.1.15");
 
 /***************************************
  * You can add your constants here
@@ -145,13 +145,17 @@ defined("METHOD_TYPES") OR define("METHOD_TYPES", [
     METHOD_TYPE_GATEWAY_ZARINPAL => 'درگاه بانک - زرین پال',
 ]);
 
+// deposit type codes
+defined("DEPOSIT_TYPE_PAYED") OR define("DEPOSIT_TYPE_PAYED", "a1b2c3d4e5f6");
+
 // return order statuses
 defined("RETURN_ORDER_STATUS_CHECKING") OR define("RETURN_ORDER_STATUS_CHECKING", 1);
-defined("RETURN_ORDER_STATUS_ACCEPT") OR define("RETURN_ORDER_STATUS_ACCEPT", 2);
-defined("RETURN_ORDER_STATUS_DENIED") OR define("RETURN_ORDER_STATUS_DENIED", 3);
-defined("RETURN_ORDER_STATUS_SENDING") OR define("RETURN_ORDER_STATUS_SENDING", 4);
-defined("RETURN_ORDER_STATUS_RECEIVED") OR define("RETURN_ORDER_STATUS_RECEIVED", 5);
-defined("RETURN_ORDER_STATUS_MONEY_RETURNED") OR define("RETURN_ORDER_STATUS_MONEY_RETURNED", 6);
+defined("RETURN_ORDER_STATUS_DENIED_BY_USER") OR define("RETURN_ORDER_STATUS_DENIED_BY_USER", 2);
+defined("RETURN_ORDER_STATUS_ACCEPT") OR define("RETURN_ORDER_STATUS_ACCEPT", 3);
+defined("RETURN_ORDER_STATUS_DENIED") OR define("RETURN_ORDER_STATUS_DENIED", 4);
+defined("RETURN_ORDER_STATUS_SENDING") OR define("RETURN_ORDER_STATUS_SENDING", 5);
+defined("RETURN_ORDER_STATUS_RECEIVED") OR define("RETURN_ORDER_STATUS_RECEIVED", 6);
+defined("RETURN_ORDER_STATUS_MONEY_RETURNED") OR define("RETURN_ORDER_STATUS_MONEY_RETURNED", 7);
 
 // comment statuses
 defined("COMMENT_STATUS_NOT_READ") OR define("COMMENT_STATUS_NOT_READ", 0);

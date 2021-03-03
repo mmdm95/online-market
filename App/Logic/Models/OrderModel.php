@@ -115,6 +115,57 @@ class OrderModel extends BaseModel
     }
 
     /**
+     * Use [oi for order_items], [roi for return_order_items],
+     * [ro for return_orders], [p for products], [pp for product_property]
+     *
+     * @param array $columns
+     * @param string|null $where
+     * @param array $bind_values
+     * @return array
+     */
+    public function getOrderItemsWithReturnOrderItems(
+        array $columns,
+        ?string $where = null,
+        array $bind_values = []
+    ): array
+    {
+        $select = $this->connector->select();
+        $select
+            ->from(self::TBL_ORDER_ITEMS . ' AS oi')
+            ->cols($columns);
+
+        try {
+            $select
+                ->leftJoin(
+                    self::TBL_PRODUCTS . ' AS p',
+                    'p.id=oi.product_id'
+                )
+                ->leftJoin(
+                    self::TBL_PRODUCT_PROPERTY . ' AS pp',
+                    'pp.code=oi.product_code'
+                )
+                ->leftJoin(
+                    self::TBL_RETURN_ORDERS . ' AS ro',
+                    'ro.order_code=oi.order_code'
+                )
+                ->leftJoin(
+                    self::TBL_RETURN_ORDER_ITEMS . ' AS roi',
+                    'roi.return_code=ro.code'
+                );
+        } catch (AuraException $e) {
+            return [];
+        }
+
+        if (!empty($where)) {
+            $select
+                ->where($where)
+                ->bindValues($bind_values);
+        }
+
+        return $this->db->fetchAll($select->getStatement(), $select->getBindValues());
+    }
+
+    /**
      * Use [u for users], [o for orders], [oi for order_items]
      *
      * @param $product_id
@@ -191,40 +242,5 @@ class OrderModel extends BaseModel
             return (int)$res[0]['count'];
         }
         return 0;
-    }
-
-    /**
-     * @param $type
-     * @return string|null
-     */
-    public function getPaymentCodeFromType($type): ?string
-    {
-        $tbl = null;
-        switch ($type) {
-            case METHOD_TYPE_GATEWAY_BEH_PARDAKHT:
-                $tbl = self::TBL_GATEWAY_BEH_PARDAKHT;
-                break;
-            case METHOD_TYPE_GATEWAY_IDPAY:
-                $tbl = self::TBL_GATEWAY_IDPAY;
-                break;
-            case METHOD_TYPE_GATEWAY_MABNA:
-                $tbl = self::TBL_GATEWAY_MABNA;
-                break;
-            case METHOD_TYPE_GATEWAY_ZARINPAL:
-                $tbl = self::TBL_GATEWAY_ZARINPAL;
-                break;
-        }
-
-        if (!empty($tbl)) {
-            $select = $this->connector->select();
-            $select
-                ->from($tbl)
-                ->cols(['payment_code']);
-
-            $res = $this->db->fetchAll($select->getStatement(), $select->getBindValues());
-            $res = count($res) ? $res[0]['payment_code'] : null;
-        }
-
-        return $res ?? $tbl;
     }
 }

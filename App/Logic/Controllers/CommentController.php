@@ -3,7 +3,7 @@
 namespace App\Logic\Controllers;
 
 use App\Logic\Abstracts\AbstractHomeController;
-use App\Logic\Forms\CommentForm;
+use App\Logic\Forms\CommentUserForm;
 use App\Logic\Handlers\ResourceHandler;
 use App\Logic\Utils\CommentUtil;
 use Jenssegers\Agent\Agent;
@@ -87,9 +87,9 @@ class CommentController extends AbstractHomeController
         $agent = container()->get(Agent::class);
         if (!$agent->isRobot()) {
             /**
-             * @var CommentForm $commentForm
+             * @var CommentUserForm $commentForm
              */
-            $commentForm = container()->get(CommentForm::class);
+            $commentForm = container()->get(CommentUserForm::class);
             [$status, $formattedErrors] = $commentForm->validate();
             if ($status) {
                 $res = $commentForm->store();

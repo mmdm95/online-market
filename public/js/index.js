@@ -115,6 +115,12 @@
                 recoverType: 'inp-recover-type',
             },
         },
+        userEditComment: {
+            form: '#__form_edit_comment',
+            inputs: {
+                message: 'inp-comment-message',
+            },
+        },
     });
     window.MyGlobalVariables.validation = $.extend({}, window.MyGlobalVariables.validation, {
         constraints: {
@@ -293,6 +299,14 @@
                     },
                 },
             },
+            userEditComment: {
+                message: {
+                    presence: {
+                        allowEmpty: false,
+                        message: '^' + 'فیلد متن نظر اجباری می‌باشد.',
+                    },
+                },
+            },
         },
     });
 
@@ -425,6 +439,9 @@
             recoverType: {
                 recoverType: variables.validation.constraints.recoverType.recoverType,
             },
+            userEditComment: {
+                message: variables.validation.constraints.userEditComment.message,
+            },
         };
 
         /**
@@ -552,12 +569,16 @@
                 '__contact_form_container',
                 '__register_form_container',
                 '__forget_form_container',
+                //-----
+                'Reviews',
             ],
             modalsHash = [],
             tabsHash = [
                 'changeInfo',
                 'changePassword',
                 'changeOther',
+                //-----
+                'Reviews',
             ];
 
         if ($.inArray(hashval, elementsHash) !== -1) {
@@ -799,6 +820,16 @@
         // CHANGE USER OTHER SETTING FORM
         //---------------------------------------------------------------
         shop.forms.submitForm('recoverType', constraints.recoverType, function () {
+            return true;
+        }, function (errors) {
+            shop.forms.showFormErrors(errors);
+            return false;
+        });
+
+        //---------------------------------------------------------------
+        // EDIT USER COMMENT FORM
+        //---------------------------------------------------------------
+        shop.forms.submitForm('userEditComment', constraints.userEditComment, function () {
             return true;
         }, function (errors) {
             shop.forms.showFormErrors(errors);

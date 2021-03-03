@@ -15,6 +15,7 @@ use Sim\Form\Exceptions\FormException;
 use Sim\Form\FormValue;
 use Sim\Interfaces\IFileNotExistsException;
 use Sim\Interfaces\IInvalidVariableNameException;
+use Sim\Utils\StringUtil;
 use voku\helper\AntiXSS;
 
 class AddDepositTypeForm implements IPageForm
@@ -106,6 +107,7 @@ class AddDepositTypeForm implements IPageForm
             $title = input()->post('inp-add-deposit-type-title', '')->getValue();
 
             return $depositModel->insert([
+                'code' => StringUtil::uniqidReal(12),
                 'title' => $xss->xss_clean(trim($title)),
                 'created_by' => $auth->getCurrentUser()['id'] ?? null,
                 'created_at' => time(),

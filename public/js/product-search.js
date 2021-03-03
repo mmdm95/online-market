@@ -267,7 +267,7 @@
             // brands checkboxes
             if (obj['brands'] && core.isArray(obj['brands'])) {
                 $('.list_brand input[type="checkbox"]').each(function () {
-                    if ($.inArray($(this).val(), obj['brands'])) {
+                    if (-1 !== $.inArray($(this).val(), obj['brands'])) {
                         $(this).attr('checked', 'checked').prop('checked', true);
                     } else {
                         $(this).removeAttr('checked', 'checked').prop('checked', false);
@@ -275,7 +275,11 @@
                 });
             } else {
                 $('.list_brand input[type="checkbox"]').each(function () {
-                    $(this).removeAttr('checked', 'checked').prop('checked', false);
+                    if (core.isString(obj['brands']) && $(this).val() == obj['brands']) {
+                        $(this).attr('checked', 'checked').prop('checked', true);
+                    } else {
+                        $(this).removeAttr('checked', 'checked').prop('checked', false);
+                    }
                 });
             }
             // sizes activate
@@ -283,7 +287,7 @@
                 sizeChk.each(function () {
                     el = $(this).find('span');
                     if (el.length) {
-                        if ($.inArray(el.attr('data-value'), obj['size'])) {
+                        if (-1 !== $.inArray(el.attr('data-value'), obj['size'])) {
                             el.addClass('active');
                         } else {
                             el.removeClass('active');
@@ -294,7 +298,11 @@
                 sizeChk.each(function () {
                     el = $(this).find('span');
                     if (el.length) {
-                        el.removeClass('active');
+                        if (core.isString(obj['size']) && el.attr('data-value') == obj['size']) {
+                            el.addClass('active');
+                        } else {
+                            el.removeClass('active');
+                        }
                     }
                 });
             }
@@ -303,7 +311,7 @@
                 colorChk.each(function () {
                     el = $(this).find('span');
                     if (el.length) {
-                        if ($.inArray(el.attr('data-color'), obj['color'])) {
+                        if (-1 !== $.inArray(el.attr('data-color'), obj['color'])) {
                             el.addClass('active');
                         } else {
                             el.removeClass('active');
@@ -314,7 +322,11 @@
                 colorChk.each(function () {
                     el = $(this).find('span');
                     if (el.length) {
-                        el.removeClass('active');
+                        if (core.isString(obj['color']) && el.attr('data-color') == obj['color']) {
+                            el.addClass('active');
+                        } else {
+                            el.removeClass('active');
+                        }
                     }
                 });
             }

@@ -75,7 +75,7 @@ use Sim\Utils\StringUtil;
                                 </option>
                                 <?php foreach ($badges as $badge): ?>
                                     <option value="<?= $badge['code']; ?>"
-                                            style="background-color: <?= $badge['color']; ?>; color: <?= get_color_from_bg($badge['color'], '#ffffff', '#000000'); ?>;"
+                                            style="background-color: <?= $badge['color']; ?>; color: <?= get_color_from_bg($badge['color']); ?>;"
                                         <?= $badge['code'] === $order['send_status_code'] ? 'selected="selected"' : ''; ?>>
                                         <?= $badge['title']; ?>
                                     </option>
@@ -191,7 +191,7 @@ use Sim\Utils\StringUtil;
                             وضعیت سفارش
                         </div>
                         <span class="p-1 rounded"
-                              style="background-color: <?= $order['send_status_color']; ?>; color: <?= get_color_from_bg($order['send_status_color'], '#ffffff', '#000000'); ?>">
+                              style="background-color: <?= $order['send_status_color']; ?>; color: <?= get_color_from_bg($order['send_status_color']); ?>">
                             <?= $order['send_status_title']; ?>
                         </span>
                     </div>

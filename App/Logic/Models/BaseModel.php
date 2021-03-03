@@ -29,6 +29,7 @@ abstract class BaseModel
     const TBL_FAVORITE_USER_PRODUCT = 'favorite_user_product';
     const TBL_FESTIVALS = 'festivals';
     const TBL_GATEWAY_BEH_PARDAKHT = 'gateway_beh_pardakht';
+    const TBL_GATEWAY_FLOW = 'gateway_flow';
     const TBL_GATEWAY_IDPAY = 'gateway_idpay';
     const TBL_GATEWAY_MABNA = 'gateway_mabna';
     const TBL_GATEWAY_ZARINPAL = 'gateway_zarinpal';
@@ -132,15 +133,17 @@ abstract class BaseModel
      * @param array $columns
      * @param string|null $where
      * @param array $bind_values
+     * @param array $order_by
      * @return array
      */
     public function getFirst(
         array $columns = ['*'],
         ?string $where = null,
-        array $bind_values = []
+        array $bind_values = [],
+        array $order_by = []
     ): array
     {
-        $res = $this->get($columns, $where, $bind_values, []);
+        $res = $this->get($columns, $where, $bind_values, $order_by);
         if (count($res)) return $res[0];
         return [];
     }

@@ -45,7 +45,7 @@ class DatatableHandler
      * @param $columns
      * @return array
      */
-    private static function filter($request, $columns)
+    private static function filter($request, $columns): array
     {
         $globalSearch = [];
         $columnSearch = [];
@@ -124,7 +124,7 @@ class DatatableHandler
      * @param $request
      * @return array
      */
-    private static function limit($request)
+    private static function limit($request): array
     {
         $limit = [null, 0];
 
@@ -135,7 +135,12 @@ class DatatableHandler
         return $limit;
     }
 
-    private static function order($request, $columns)
+    /**
+     * @param $request
+     * @param $columns
+     * @return array
+     */
+    private static function order($request, $columns): array
     {
         $orderBy = [];
 
@@ -168,7 +173,7 @@ class DatatableHandler
      * @param $data
      * @return array
      */
-    private static function dataOutput($columns, $data)
+    private static function dataOutput($columns, $data): array
     {
         $out = [];
 
@@ -206,7 +211,7 @@ class DatatableHandler
      * @param $columns
      * @return array
      */
-    private static function columnsNAliases($columns)
+    private static function columnsNAliases($columns): array
     {
         $cols = [];
 
@@ -227,7 +232,7 @@ class DatatableHandler
      * @param $prop
      * @return array
      */
-    private static function pluck($a, $prop)
+    private static function pluck($a, $prop): array
     {
         $out = [];
 

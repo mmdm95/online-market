@@ -35,6 +35,7 @@ use App\Logic\Controllers\Admin\{BlogController as AdminBlogController,
     WalletController as AdminWalletController,
     ProductController as AdminProductController,
     AddressController as AdminAddressController};
+use App\Logic\Controllers\CheckoutController;
 use App\Logic\Controllers\User\{AddressController as UserAddressController,
     CommentController as UserCommentController,
     HomeController as UserHomeController,
@@ -57,6 +58,7 @@ use App\Logic\Handlers\CustomExceptionHandler;
 use App\Logic\Middlewares\AdminAuthMiddleware;
 use App\Logic\Middlewares\ApiVerifierMiddleware;
 use App\Logic\Middlewares\AuthMiddleware;
+use App\Logic\Middlewares\CheckoutMiddleware;
 use App\Logic\Middlewares\WalletAccessMiddleware;
 use App\Logic\Utils\ConfigUtil;
 use Pecee\SimpleRouter\Event\EventArgument;
@@ -516,6 +518,9 @@ class Route implements IInitialize
                  * comment routes
                  */
                 Router::get('/comments', [UserCommentController::class, 'index'])->name('user.comments');
+                Router::post('/comment/decider/{id}', [UserCommentController::class, 'decider'])->where([
+                    'id' => '[0-9]+',
+                ])->name('user.comment.decider');
                 Router::form('/comment/edit/{id}', [UserCommentController::class, 'edit'])->where([
                     'id' => '[0-9]+',
                 ])->name('user.comment.edit');
@@ -602,6 +607,9 @@ class Route implements IInitialize
              * cart routes
              */
             Router::get('/cart', [CartController::class, 'index'])->name('home.cart');
+            Router::group(['middleware' => CheckoutMiddleware::class], function () {
+                Router::get('/checkout', [CheckoutController::class, 'checkout'])->name('home.checkout');
+            });
 
             /**
              * product routes

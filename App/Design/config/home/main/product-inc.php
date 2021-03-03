@@ -66,4 +66,29 @@ return [
             ],
         ],
     ],
+    'view/main/product/compare' => [
+        'title' => title_concat(\config()->get('settings.title.value'), 'مقایسه'),
+        'common' => [
+            'default',
+            'default-changeable',
+            'default-cart',
+        ],
+        'sub_title' => 'مقایسه',
+        'breadcrumb' => [
+            [
+                'url' => url('home.index')->getRelativeUrl(),
+                'text' => 'خانه',
+                'is_active' => false,
+            ],
+            [
+                'url' => url('home.search')->getRelativeUrl(),
+                'text' => 'محصولات',
+                'is_active' => false,
+            ],
+            [
+                'text' => 'مقایسه',
+                'is_active' => true,
+            ],
+        ],
+    ],
 ];

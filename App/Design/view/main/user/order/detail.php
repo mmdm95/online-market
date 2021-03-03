@@ -14,7 +14,7 @@ use Sim\Utils\StringUtil;
         <div class="row m-0">
             <div class="col-lg-12 border border-light px-3 py-2 text-center">
                 <label class="m-0">
-                    محمد مهدی دهقان منشادی
+                    <?= $order['receiver_name']; ?>
                 </label>
             </div>
             <div class="col-lg-6 border border-light px-3 py-2">
@@ -22,7 +22,7 @@ use Sim\Utils\StringUtil;
                     استان:
                 </small>
                 <label class="mb-1">
-                    فارس
+                    <?= $order['province']; ?>
                 </label>
             </div>
             <div class="col-lg-6 border border-light px-3 py-2">
@@ -30,7 +30,7 @@ use Sim\Utils\StringUtil;
                     شهر:
                 </small>
                 <label class="mb-1">
-                    آباده
+                    <?= $order['city']; ?>
                 </label>
             </div>
             <div class="col-lg-6 border border-light px-3 py-2">
@@ -38,7 +38,7 @@ use Sim\Utils\StringUtil;
                     شماره تماس:
                 </small>
                 <label class="mb-1">
-                    09179516271
+                    <?= $order['receiver_mobile']; ?>
                 </label>
             </div>
             <div class="col-lg-6 border border-light px-3 py-2">
@@ -46,12 +46,12 @@ use Sim\Utils\StringUtil;
                     کد پستی:
                 </small>
                 <label class="mb-1">
-                    0123456789
+                    <?= $order['postal_code']; ?>
                 </label>
             </div>
             <div class="col-lg-12 border border-light px-3 py-2 text-center">
                 <label class="m-0">
-                    ۴۵ متری شهید چمران، خیابان جام جم، کوچه سوم انتهای کوچه سمت راست
+                    <?= $order['address']; ?>
                 </label>
             </div>
         </div>
@@ -66,12 +66,12 @@ use Sim\Utils\StringUtil;
             <h3>جزئیات سفارش</h3>
         </div>
         <div class="row m-0">
-            <div class="col-lg-12">
+            <div class="col-lg-12 text-center">
                 <small class="mb-1">
                     شماره فاکتور:
                 </small>
                 <label class="mb-1 en-font">
-                    05512935867
+                    <?= $order['code']; ?>
                 </label>
             </div>
             <div class="col-lg-6 border border-light px-3 py-2">
@@ -79,8 +79,50 @@ use Sim\Utils\StringUtil;
                     مبلغ قابل پرداخت:
                 </small>
                 <label class="mb-1 text-success">
-                    <?= StringUtil::toPersian(number_format(StringUtil::toEnglish('55000'))); ?>
+                    <?= StringUtil::toPersian(number_format(StringUtil::toEnglish($order['final_price']))); ?>
                     <small>تومان</small>
+                </label>
+            </div>
+            <div class="col-lg-6 border border-light px-3 py-2">
+                <small class="mb-1">
+                    طریقه ارسال:
+                </small>
+                <label class="mb-1">
+                    <?= $order['send_method_title']; ?>
+                </label>
+            </div>
+            <div class="col-lg-6 border border-light px-3 py-2">
+                <small class="mb-1">
+                    هزینه ارسال:
+                </small>
+                <label class="mb-1">
+                    <?= StringUtil::toPersian(number_format(StringUtil::toEnglish($order['shipping_price']))); ?>
+                    <small>تومان</small>
+                </label>
+            </div>
+            <div class="col-lg-6 border border-light px-3 py-2">
+                <small class="mb-1">
+                    عنوان کوپن:
+                </small>
+                <label class="mb-1">
+                    <?php if (!empty($order['coupon_title'])): ?>
+                        <?= $order['coupon_title']; ?>
+                    <?php else: ?>
+                        <i class="linearicons-minus" aria-hidden="true"></i>
+                    <?php endif; ?>
+                </label>
+            </div>
+            <div class="col-lg-6 border border-light px-3 py-2">
+                <small class="mb-1">
+                    مبلغ کوپن:
+                </small>
+                <label class="mb-1">
+                    <?php if (!empty($order['coupon_price'])): ?>
+                        <?= StringUtil::toPersian(number_format(StringUtil::toEnglish($order['coupon_price']))); ?>
+                        <small>تومان</small>
+                    <?php else: ?>
+                        <i class="linearicons-minus" aria-hidden="true"></i>
+                    <?php endif; ?>
                 </label>
             </div>
             <div class="col-lg-6 border border-light px-3 py-2">
@@ -88,15 +130,16 @@ use Sim\Utils\StringUtil;
                     تاریخ ثبت سفارش:
                 </small>
                 <label class="mb-1">
-                    <?= Jdf::jdate(DEFAULT_TIME_FORMAT, time()); ?>
+                    <?= Jdf::jdate(DEFAULT_TIME_FORMAT, $order['ordered_at']); ?>
                 </label>
             </div>
             <div class="col-lg-12 border border-light px-3 py-2">
                 <small class="d-block text-center mb-1">
                     وضعیت سفارش
                 </small>
-                <label class="d-block text-center p-2 rounded bg-warning text-white">
-                    نامشخص
+                <label class="d-block text-center p-2 rounded"
+                       style="background-color: <?= $order['send_status_color']; ?>; color: <?= get_color_from_bg($order['send_status_color']); ?>;">
+                    <?= $order['send_status_title']; ?>
                 </label>
             </div>
         </div>
@@ -117,37 +160,67 @@ use Sim\Utils\StringUtil;
                 </small>
                 <label class="mb-1">
                     <?php load_partial('admin/parser/payment-status', [
-                        'status' => 12,
+                        'status' => $order['payment_status'],
                         'extra_padding' => true,
                     ]); ?>
                 </label>
             </div>
-            <div class="col-lg-6 border border-light px-3 py-2">
-                <small class="mb-1">
-                    کد رهگیری:
-                </small>
-                <label class="mb-1 text-danger">
-                    <i class="linearicons-minus" aria-hidden="true"></i>
-                </label>
-            </div>
-            <div class="col-lg-6 border border-light px-3 py-2">
-                <small class="mb-1">
-                    تاریخ پرداخت:
-                </small>
-                <label class="mb-1">
-                    <?= Jdf::jdate(DEFAULT_TIME_FORMAT, time()); ?>
-                </label>
-            </div>
+
+            <?php if (!empty($order['receipt_code'])): ?>
+                <div class="col-lg-6 border border-light px-3 py-2">
+                    <small class="mb-1">
+                        کد رسید:
+                    </small>
+                    <label class="mb-1">
+                        <?= $order['receipt_code']; ?>
+                    </label>
+                </div>
+                <div class="col-lg-6 border border-light px-3 py-2">
+                    <small class="mb-1">
+                        تاریخ رسید:
+                    </small>
+                    <label class="mb-1">
+                        <?= Jdf::jdate(DEFAULT_TIME_FORMAT, $order['receipt_date']); ?>
+                    </label>
+                </div>
+            <?php else: ?>
+                <div class="col-lg-6 border border-light px-3 py-2">
+                    <small class="mb-1">
+                        کد رهگیری:
+                    </small>
+                    <label class="mb-1 text-danger">
+                        <?php if (!empty($order['payment_code'])): ?>
+                            <?= $order['payment_code']; ?>
+                        <?php else: ?>
+                            <i class="linearicons-minus" aria-hidden="true"></i>
+                        <?php endif; ?>
+                    </label>
+                </div>
+                <div class="col-lg-6 border border-light px-3 py-2">
+                    <small class="mb-1">
+                        تاریخ پرداخت:
+                    </small>
+                    <label class="mb-1">
+                        <?php if (!empty($order['payed_at'])): ?>
+                            <?= Jdf::jdate(DEFAULT_TIME_FORMAT, $order['payed_at']); ?>
+                        <?php else: ?>
+                            <i class="linearicons-minus" aria-hidden="true"></i>
+                        <?php endif; ?>
+                    </label>
+                </div>
+            <?php endif; ?>
+
             <div class="col-lg-6 border border-light px-3 py-2">
                 <small class="mb-1">
                     شیوه پرداخت:
                 </small>
                 <label class="mb-1">
-                    <?php load_partial('admin/parser/payment-method-type', ['type' => 12]); ?>
+                    <?= $order['method_title']; ?>
                 </label>
             </div>
-            <div class="col-lg-12 border border-light px-3 py-2 text-center">
-                <button class="btn p-0" data-toggle="collapse" data-target="#paymentHistory">
+            <div class="col-lg-12 border border-light px-3 py-2 text-center"
+                 data-toggle="collapse" data-target="#paymentHistory">
+                <button class="btn p-0">
                     تاریخچه تراکنش
                     <i class="linearicons-chevron-down ml-2 mr-0" aria-hidden="true"></i>
                 </button>
@@ -161,30 +234,116 @@ use Sim\Utils\StringUtil;
                         <tr>
                             <th>تاریخ</th>
                             <th>توضیحات</th>
-                            <th>درگاه</th>
+                            <th>طریقه پرداخت</th>
                             <th>وضعیت</th>
+                            <th>شماره پیگیری</th>
                             <th>مبلغ</th>
                         </tr>
                         </thead>
                         <tbody>
-                        <tr>
-                            <td>
-                                <?= Jdf::jdate(DEFAULT_TIME_FORMAT, time()); ?>
-                            </td>
-                            <td>
-                                پرداخت موفق
-                            </td>
-                            <td>
-                                بانک ملی
-                            </td>
-                            <td>
-                                <i class="linearicons-checkmark-circle text-success icon-2x" aria-hidden="true"></i>
-                            </td>
-                            <td>
-                                <?= StringUtil::toPersian(number_format(StringUtil::toEnglish('55000'))); ?>
-                                <small>تومان</small>
-                            </td>
-                        </tr>
+                        <?php if (!empty($payment_success['payment_date'])): ?>
+                            <tr>
+                                <td>
+                                    <?= Jdf::jdate(DEFAULT_TIME_FORMAT, $payment_success['payment_date']); ?>
+                                </td>
+                                <td>
+                                    <?= $payment_success['msg']; ?>
+                                </td>
+                                <td>
+                                    <?php load_partial('admin/parser/payment-method-type', ['type' => $payment_success['method_type']]); ?>
+                                </td>
+                                <td>
+                                    <?php if (DB_YES == $payment_success['is_success']): ?>
+                                        <i class="linearicons-checkmark-circle text-success icon-2x"
+                                           aria-hidden="true"></i>
+                                    <?php else: ?>
+                                        <i class="linearicons-cross-circle text-danger icon-2x"
+                                           aria-hidden="true"></i>
+                                    <?php endif; ?>
+                                </td>
+                                <td>
+                                    <?= $payment_success['payment_code']; ?>
+                                </td>
+                                <td>
+                                    <?php if (!empty($payment_success['price'])): ?>
+                                        <?= StringUtil::toPersian(number_format(StringUtil::toEnglish($payment_success['price']))); ?>
+                                        <small>تومان</small>
+                                    <?php else: ?>
+                                        <i class="linearicons-minus" aria-hidden="true"></i>
+                                    <?php endif; ?>
+                                </td>
+                            </tr>
+                        <?php endif; ?>
+
+                        <?php foreach ($payment_info['wallet_flow'] as $wallet): ?>
+                            <tr>
+                                <td>
+                                    <?= Jdf::jdate(DEFAULT_TIME_FORMAT, $wallet['deposit_at']); ?>
+                                </td>
+                                <td>
+                                    <?= $wallet['deposit_type_title']; ?>
+                                </td>
+                                <td>
+                                    <?php load_partial('admin/parser/payment-method-type', ['type' => METHOD_TYPE_WALLET]); ?>
+                                </td>
+                                <td>
+                                    <i class="linearicons-checkmark-circle text-success icon-2x" aria-hidden="true"></i>
+                                </td>
+                                <td>
+                                    <i class="linearicons-minus" aria-hidden="true"></i>
+                                </td>
+                                <td>
+                                    <?php if (!empty($wallet['deposit_price'])): ?>
+                                        <?= StringUtil::toPersian(number_format(StringUtil::toEnglish($wallet['deposit_price']))); ?>
+                                        <small>تومان</small>
+                                    <?php else: ?>
+                                        <i class="linearicons-minus" aria-hidden="true"></i>
+                                    <?php endif; ?>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+
+                        <?php foreach ($payment_info['gateway_flow'] as $payment): ?>
+                            <tr>
+                                <td>
+                                    <?php if (!empty($payment['payment_date'])): ?>
+                                        <?= Jdf::jdate(DEFAULT_TIME_FORMAT, $payment['payment_date']); ?>
+                                    <?php else: ?>
+                                        <i class="linearicons-minus" aria-hidden="true"></i>
+                                    <?php endif; ?>
+                                </td>
+                                <td>
+                                    <?= $payment['msg']; ?>
+                                </td>
+                                <td>
+                                    <?php load_partial('admin/parser/payment-method-type', ['type' => $payment['method_type']]); ?>
+                                </td>
+                                <td>
+                                    <?php if (DB_YES == $payment['is_success']): ?>
+                                        <i class="linearicons-checkmark-circle text-success icon-2x"
+                                           aria-hidden="true"></i>
+                                    <?php else: ?>
+                                        <i class="linearicons-cross-circle text-danger icon-2x"
+                                           aria-hidden="true"></i>
+                                    <?php endif; ?>
+                                </td>
+                                <td>
+                                    <?php if (!empty($payment['payment_code'])): ?>
+                                        <?= $payment['payment_code']; ?>
+                                    <?php else: ?>
+                                        <i class="linearicons-minus" aria-hidden="true"></i>
+                                    <?php endif; ?>
+                                </td>
+                                <td>
+                                    <?php if (!empty($payment['price'])): ?>
+                                        <?= StringUtil::toPersian(number_format(StringUtil::toEnglish($payment['price']))); ?>
+                                        <small>تومان</small>
+                                    <?php else: ?>
+                                        <i class="linearicons-minus" aria-hidden="true"></i>
+                                    <?php endif; ?>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
                         </tbody>
                     </table>
                 </div>
@@ -201,156 +360,125 @@ use Sim\Utils\StringUtil;
         <div class="card-header">
             <h3>آیتم‌های سفارش</h3>
         </div>
-        <div class="card-body position-relative">
-            <div class="order-detail-order-items-more">
-                <button class="btn pl-3 pb-3 pr-0 pt-0 dropdown-toggle no-icon" data-toggle="dropdown">
-                    <i class="ti-more-alt fa-rotate-90 m-0" aria-hidden="true"></i>
-                </button>
-                <div class="dropdown-menu px-3">
-                    <div>
-                        <a href="#" class="d-block p-2">
-                            خرید مجدد کالا
-                        </a>
-                    </div>
-                </div>
-            </div>
-            <div class="d-block d-lg-flex m-0 align-items-start">
-                <div>
-                    <a href="#">
-                        <img src="<?= url('image.show', ['filename' => 'products/1.jpg']); ?>"
-                             alt=""
-                             class="mx-0 mx-lg-3"
-                             width="160px" height="auto">
-                    </a>
-                </div>
-                <div class="col">
-                    <div>
-                        <div class="d-flex justify-content-between pr-4">
-                            <a href="#">
-                                <h6>
-                                    ماگ سفری بارک مدل SK520
-                                </h6>
-                            </a>
+        <?php if (count($order_items)): ?>
+            <?php $k = 0; ?>
+            <?php foreach ($order_items as $item): ?>
+                <div class="card-body position-relative <?= 0 != $k++ ? 'border-top' : ''; ?>">
+                    <?php if (!empty($item['main_product_code'])): ?>
+                        <div class="order-detail-order-items-more">
+                            <button class="btn pl-3 pb-3 pr-0 pt-0 dropdown-toggle no-icon" data-toggle="dropdown">
+                                <i class="ti-more-alt fa-rotate-90 m-0" aria-hidden="true"></i>
+                            </button>
+                            <div class="dropdown-menu px-3">
+                                <div>
+                                    <?php if (DB_YES == $item['allow_commenting']): ?>
+                                        <a href="<?= url('user.comment.decider', ['id' => $item['product_id']])->getRelativeUrl(); ?>"
+                                           class="d-block p-2">
+                                            ثبت نظر
+                                        </a>
+                                        <div class="dropdown-divider"></div>
+                                    <?php endif; ?>
+                                    <a href="javascript:void(0);"
+                                       class="d-block p-2 __add_to_cart_btn"
+                                       data-cart-item-code="<?= $item['main_product_code']; ?>">
+                                        خرید مجدد کالا
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    <?php endif; ?>
+                    <div class="d-block d-lg-flex m-0 align-items-start">
+                        <?php if (!empty($item['product_image'])): ?>
                             <div>
-                                <span class="badge badge-danger px-2 py-1">مرجوع شده</span>
+                                <a href="<?= url('home.product.show', [
+                                    'id' => $item['product_id'],
+                                    'slug' => $item['product_slug'],
+                                ]); ?>">
+                                    <img src="<?= url('image.show', ['filename' => $item['product_image']]); ?>"
+                                         alt="<?= $item['product_title']; ?>"
+                                         class="mx-0 mx-lg-3"
+                                         width="160px" height="auto">
+                                </a>
                             </div>
-                        </div>
-                        <div class="d-flex align-items-center">
-                            <div class="product_color_badge">
-                                <span class="mr-2" style="background-color: #000"></span>
-                                <div class="d-inline-block">مشکی</div>
-                            </div>
-                        </div>
-                        <div class="d-flex align-items-center mt-1">
-                            <i class="icon-size-fullscreen mr-2 ml-1" aria-hidden="true"></i>
-                            ایکس لارج
-                        </div>
-                        <div class="d-flex align-items-center mt-1">
-                            <i class="linearicons-shield-check mr-2 ml-1" aria-hidden="true"></i>
-                            گارانتی اصالت و سلامت فیزیکی کالا
-                        </div>
-                    </div>
-                    <ul class="list-inline list-inline-dotted my-3">
-                        <li class="list-inline-item my-1">
-                            <small>قیمت واحد:</small>
-                            <label class="m-0">
-                                250,000
-                                <small>تومان</small>
-                            </label>
-                        </li>
-                        <li class="list-inline-item my-1">
-                            <small>تعداد:</small>
-                            <label class="m-0">
-                                2
-                            </label>
-                        </li>
-                        <li class="list-inline-item my-1">
-                            <small>تخفیف:</small>
-                            <label class="m-0">
-                                20,000
-                                <small>تومان</small>
-                            </label>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </div>
+                        <?php endif; ?>
+                        <div class="col">
+                            <div>
+                                <div class="d-flex justify-content-between pr-4">
+                                    <?php if (!empty($item['product_image'])): ?>
+                                        <a href="<?= url('home.product.show', [
+                                            'id' => $item['product_id'],
+                                            'slug' => $item['product_slug'],
+                                        ]); ?>">
+                                            <h6>
+                                                <?= $item['product_title']; ?>
+                                            </h6>
+                                        </a>
+                                    <?php else: ?>
+                                        <h6>
+                                            <?= $item['product_title']; ?>
+                                        </h6>
+                                    <?php endif; ?>
 
-        <div class="card-body position-relative border-top">
-            <div class="order-detail-order-items-more">
-                <button class="btn pl-3 pb-3 pr-0 pt-0 dropdown-toggle no-icon" data-toggle="dropdown">
-                    <i class="ti-more-alt fa-rotate-90 m-0" aria-hidden="true"></i>
-                </button>
-                <div class="dropdown-menu px-3">
-                    <div>
-                        <a href="#" class="d-block p-2">
-                            ثبت نظر
-                        </a>
-                        <div class="dropdown-divider"></div>
-                        <a href="#" class="d-block p-2">
-                            خرید مجدد کالا
-                        </a>
-                    </div>
-                </div>
-            </div>
-            <div class="d-block d-lg-flex m-0 align-items-start">
-                <div>
-                    <a href="#">
-                        <img src="<?= url('image.show', ['filename' => 'products/1.jpg']); ?>"
-                             alt=""
-                             class="mx-0 mx-lg-3"
-                             width="160px" height="auto">
-                    </a>
-                </div>
-                <div class="col">
-                    <div>
-                        <div class="d-flex justify-content-between pr-4">
-                            <a href="#">
-                                <h6>
-                                    ماگ سفری بارک مدل SK520
-                                </h6>
-                            </a>
-                        </div>
-                        <div class="d-flex align-items-center">
-                            <div class="product_color_badge">
-                                <span class="mr-2" style="background-color: #000"></span>
-                                <div class="d-inline-block">مشکی</div>
+                                    <?php if (!empty($item['order_item_id'])): ?>
+                                        <div>
+                                            <span class="badge badge-danger px-2 py-1">مرجوع شده</span>
+                                        </div>
+                                    <?php endif; ?>
+                                </div>
+
+                                <?php if (!empty($item['color'])): ?>
+                                    <div class="d-flex align-items-center">
+                                        <div class="product_color_badge">
+                                            <span class="mr-2" style="background-color: <?= $item['color']; ?>;"></span>
+                                            <div class="d-inline-block"><?= $item['color_name']; ?></div>
+                                        </div>
+                                    </div>
+                                <?php endif; ?>
+
+                                <?php if (!empty($item['size'])): ?>
+                                    <div class="d-flex align-items-center mt-1">
+                                        <i class="icon-size-fullscreen mr-2 ml-1" aria-hidden="true"></i>
+                                        <?= $item['size']; ?>
+                                    </div>
+                                <?php endif; ?>
+
+                                <?php if (!empty($item['guarantee'])): ?>
+                                    <div class="d-flex align-items-center mt-1">
+                                        <i class="linearicons-shield-check mr-2 ml-1" aria-hidden="true"></i>
+                                        <?= $item['guarantee']; ?>
+                                    </div>
+                                <?php endif; ?>
                             </div>
-                        </div>
-                        <div class="d-flex align-items-center mt-1">
-                            <i class="icon-size-fullscreen mr-2 ml-1" aria-hidden="true"></i>
-                            ایکس لارج
-                        </div>
-                        <div class="d-flex align-items-center mt-1">
-                            <i class="linearicons-shield-check mr-2 ml-1" aria-hidden="true"></i>
-                            گارانتی اصالت و سلامت فیزیکی کالا
+
+                            <ul class="list-inline list-inline-dotted my-3">
+                                <li class="list-inline-item my-1">
+                                    <small>قیمت واحد:</small>
+                                    <label class="m-0">
+                                        <?= StringUtil::toPersian(number_format(StringUtil::toEnglish($item['unit_price']))); ?>
+                                        <small>تومان</small>
+                                    </label>
+                                </li>
+                                <li class="list-inline-item my-1">
+                                    <small>تعداد:</small>
+                                    <label class="m-0">
+                                        <?= $item['product_count']; ?>
+                                    </label>
+                                </li>
+                                <li class="list-inline-item my-1">
+                                    <small>تخفیف:</small>
+                                    <label class="m-0">
+                                        <?= StringUtil::toPersian(number_format(StringUtil::toEnglish(((float)$item['price'] - (float)$item['discounted_price'])))); ?>
+                                        <small>تومان</small>
+                                    </label>
+                                </li>
+                            </ul>
                         </div>
                     </div>
-                    <ul class="list-inline list-inline-dotted my-3">
-                        <li class="list-inline-item my-1">
-                            <small>قیمت واحد:</small>
-                            <label class="m-0">
-                                250,000
-                                <small>تومان</small>
-                            </label>
-                        </li>
-                        <li class="list-inline-item my-1">
-                            <small>تعداد:</small>
-                            <label class="m-0">
-                                2
-                            </label>
-                        </li>
-                        <li class="list-inline-item my-1">
-                            <small>تخفیف:</small>
-                            <label class="m-0">
-                                20,000
-                                <small>تومان</small>
-                            </label>
-                        </li>
-                    </ul>
                 </div>
-            </div>
-        </div>
+            <?php endforeach; ?>
+        <?php else: ?>
+            <?php load_partial('main/not-found-rows', ['show_border' => false]); ?>
+        <?php endif; ?>
     </div>
 </div>
 <!-- /order items -->

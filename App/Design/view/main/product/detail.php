@@ -284,7 +284,8 @@
                                                 <form class="row mt-3" id="__form_product_detail_comment">
                                                     <div class="form-group col-md-6">
                                                         <input required="required" placeholder="نام خود را وارد کنید *"
-                                                               class="form-control" name="inp-comment-name" type="text">
+                                                               class="form-control" name="inp-comment-name"
+                                                               type="text" value="<?= $user['first_name'] ?: ''; ?>">
                                                     </div>
                                                     <div class="form-group col-12">
                                                         <textarea required="required" placeholder="نظر شما *"

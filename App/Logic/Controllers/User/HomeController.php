@@ -146,8 +146,6 @@ class HomeController extends AbstractUserController
                 $formHandler = new GeneralFormHandler();
                 $data = $formHandler->handle(ChangeUserInfoForm::class, 'info_change');
             } elseif (!is_null(input()->post('passwordSubmit')->getValue())) {
-
-
                 $formHandler = new GeneralFormHandler();
                 $data = $formHandler->handle(ChangeUserPasswordForm::class, 'password_change');
 

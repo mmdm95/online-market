@@ -57,7 +57,7 @@ use Sim\Utils\ArrayUtil;
                                     <input class="form-control" placeholder="جستجو..."
                                            type="text" name="inp-product-search-side"
                                            value="<?= ArrayUtil::get($_GET, 'q', ''); ?>">
-                                    <button type="submit" title="Subscribe" class="btn icon_search"
+                                    <button type="submit" title="جستجو" class="btn icon_search"
                                             name="submit" value="Submit">
                                         <i class="ion-ios-search-strong"></i>
                                     </button>
@@ -96,15 +96,16 @@ use Sim\Utils\ArrayUtil;
                                 <ul class="list_brand max-widget-height">
                                     <?php
                                     $previousBrands = ArrayUtil::get($_GET, 'brands', []);
+                                    $previousBrands = !is_array($previousBrands) ? [] : $previousBrands;
                                     ?>
                                     <?php foreach ($brands as $id => $brand): ?>
                                         <li>
                                             <div class="custome-checkbox">
                                                 <input class="form-check-input product_brand_switch"
-                                                       type="checkbox" id="<?= $brand['name'] . $id; ?>"
+                                                       type="checkbox" id="<?= 'brand_num_' . $id; ?>"
                                                        value="<?= $brand['id']; ?>"
                                                     <?= in_array($brand['id'], $previousBrands) ? 'checked="checked"' : ''; ?>>
-                                                <label class="form-check-label" for="<?= $brand['name'] . $id; ?>">
+                                                <label class="form-check-label" for="<?= 'brand_num_' . $id; ?>">
                                                     <span><?= $brand['name']; ?></span>
                                                 </label>
                                             </div>

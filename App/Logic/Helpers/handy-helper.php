@@ -210,7 +210,7 @@ function is_image_exists(string $filename): bool
  * @param string $darkColor
  * @return string
  */
-function get_color_from_bg(string $bgColor, string $lightColor, string $darkColor): string
+function get_color_from_bg(string $bgColor, string $lightColor = '#ffffff', string $darkColor = '#000000'): string
 {
     $color = ($bgColor[0] === '#') ? substr($bgColor, 1, 7) : $bgColor;
     $r = (int)substr($color, 0, 2); // hexToR
