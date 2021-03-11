@@ -47,10 +47,10 @@
              *************************************************************/
 
             /**
-             * @param $successCallback
+             * @param successCallback
              */
-            _.get = function ($successCallback) {
-                shop.request(variables.url.cart.get, 'get', $successCallback, {}, true);
+            _.get = function (successCallback) {
+                shop.request(variables.url.cart.get, 'get', successCallback, {}, true);
             };
 
             /**
@@ -65,8 +65,8 @@
             /**
              * Delete a cart from database
              */
-            _.delete = function () {
-                shop.request(variables.url.cart.delete, 'delete', function () {
+            _.delete = function (id) {
+                shop.request(variables.url.cart.delete + '/' + id, 'delete', function () {
                     // do other stuffs to handle data items
                 }, {}, true);
             };
@@ -101,10 +101,31 @@
                 }, {}, true);
             };
 
+            /**
+             * it'll place the cart items info cart container
+             */
             _.getNPlaceCart = function () {
                 _.get(function () {
                     cartContainer.html(this.data);
                 });
+            };
+
+            _.getCartItems = function (successCallback) {
+                shop.request(variables.url.cart.getItemsTable, 'get', successCallback, {}, true);
+            };
+
+            /**
+             * @param successCallback
+             */
+            _.getTotalCartInfo = function (successCallback) {
+                shop.request(variables.url.cart.getTotalInfo, 'get', successCallback, {}, true);
+            };
+
+            /**
+             * @param successCallback
+             */
+            _.checkCoupon = function (successCallback) {
+                shop.request(variables.url.cart.checkCoupon, 'post', successCallback, {}, true);
             };
 
             return _;
@@ -113,9 +134,8 @@
         var
             $this,
             cart,
-            addToCartBtn;
-
-        var
+            addToCartBtn,
+            //-----
             dataItemCode = 'data-cart-item-code',
             dataItemQnt = 'data-cart-item-quantity';
 

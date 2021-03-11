@@ -1,5 +1,6 @@
 <?php
 $cart = cart();
+$items = $cart->getItems();
 ?>
 
 <!-- START MAIN CONTENT -->
@@ -8,100 +9,30 @@ $cart = cart();
     <!-- START SECTION SHOP -->
     <div class="section">
         <div class="container">
-            <?php if (count($cart->getItems())): ?>
+            <?php if (count($items) || 1): ?>
                 <!-- START CART ITEMS -->
                 <div class="row">
                     <div class="col-12">
                         <div class="table-responsive shop_cart_table">
-                            <table class="table">
-                                <thead>
-                                <tr>
-                                    <th class="product-thumbnail">&nbsp;</th>
-                                    <th class="product-name">محصول</th>
-                                    <th class="product-price">قیمت</th>
-                                    <th class="product-quantity">تعداد</th>
-                                    <th class="product-subtotal">جمع</th>
-                                    <th class="product-remove">حذف</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <tr>
-                                    <td class="product-thumbnail"><a href="#"><img src="assets/images/product_img1.jpg"
-                                                                                   alt="product1"></a></td>
-                                    <td class="product-name" data-title="محصول"><a href="#">لباس آبی زنانه</a></td>
-                                    <td class="product-price" data-title="قیمت">45000 تومان</td>
-                                    <td class="product-quantity" data-title="تعداد">
-                                        <div class="quantity">
-                                            <input type="button" value="-" class="minus">
-                                            <input type="text" name="quantity" value="2" title="Qty" class="qty"
-                                                   size="4">
-                                            <input type="button" value="+" class="plus">
-                                        </div>
-                                    </td>
-                                    <td class="product-subtotal" data-title="جمع">90000 تومان</td>
-                                    <td class="product-remove" data-title="حذف"><a href="#"><i class="ti-close"></i></a>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="product-thumbnail"><a href="#"><img src="assets/images/product_img2.jpg"
-                                                                                   alt="product2"></a></td>
-                                    <td class="product-name" data-title="محصول"><a href="#">چرم خاکستری</a></td>
-                                    <td class="product-price" data-title="قیمت">55000 تومان</td>
-                                    <td class="product-quantity" data-title="تعداد">
-                                        <div class="quantity">
-                                            <input type="button" value="-" class="minus">
-                                            <input type="text" name="quantity" value="1" title="Qty" class="qty"
-                                                   size="4">
-                                            <input type="button" value="+" class="plus">
-                                        </div>
-                                    </td>
-                                    <td class="product-subtotal" data-title="جمع">55000 تومان</td>
-                                    <td class="product-remove" data-title="حذف"><a href="#"><i class="ti-close"></i></a>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="product-thumbnail"><a href="#"><img src="assets/images/product_img3.jpg"
-                                                                                   alt="product3"></a></td>
-                                    <td class="product-name" data-title="محصول"><a href="#">لباس کامل زنانه</a></td>
-                                    <td class="product-price" data-title="قیمت">68000 تومان</td>
-                                    <td class="product-quantity" data-title="تعداد">
-                                        <div class="quantity">
-                                            <input type="button" value="-" class="minus">
-                                            <input type="text" name="quantity" value="3" title="Qty" class="qty"
-                                                   size="4">
-                                            <input type="button" value="+" class="plus">
-                                        </div>
-                                    </td>
-                                    <td class="product-subtotal" data-title="جمع">204000 تومان</td>
-                                    <td class="product-remove" data-title="حذف"><a href="#"><i class="ti-close"></i></a>
-                                    </td>
-                                </tr>
-                                </tbody>
-                                <tfoot>
-                                <tr>
-                                    <td colspan="6" class="px-0">
-                                        <div class="row no-gutters align-items-center">
+                        </div>
 
-                                            <div class="col-lg-4 col-md-6 mb-3 mb-md-0">
-                                                <div class="coupon field_form input-group">
-                                                    <input type="text" value="" class="form-control form-control-sm"
-                                                           placeholder="شماره کوپن را وارد کنید...">
-                                                    <div class="input-group-append">
-                                                        <button class="btn btn-fill-out btn-sm" type="submit">کوپن
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-8 col-md-6 text-left text-md-right">
-                                                <button class="btn btn-line-fill btn-sm" type="submit">به روز رسانی سبد
-                                                    خرید
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
-                                </tfoot>
-                            </table>
+                        <div class="row no-gutters align-items-center mt-3">
+                            <div class="col-lg-4 col-md-6 mb-3 mb-md-0">
+                                <div class="coupon field_form input-group">
+                                    <input type="text" value="" class="form-control form-control-sm"
+                                           placeholder="شماره کوپن را وارد کنید...">
+                                    <div class="input-group-append">
+                                        <button class="btn btn-fill-out btn-sm" type="submit">
+                                            کوپن
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-8 col-md-6 text-left text-md-right">
+                                <button class="btn btn-line-fill btn-sm" type="button">
+                                    بروزرسانی سبد خرید
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -210,28 +141,13 @@ $cart = cart();
                             </div>
                         </form>
                     </div>
+
                     <div class="col-md-6">
                         <div class="border p-3 p-md-4">
                             <div class="heading_s1 mb-3">
                                 <h6>جمع سبد خرید</h6>
                             </div>
-                            <div class="table-responsive">
-                                <table class="table">
-                                    <tbody>
-                                    <tr>
-                                        <td class="cart_total_label">جمع سبد خرید</td>
-                                        <td class="cart_total_amount">349000 تومان</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="cart_total_label">هزینه ارسال</td>
-                                        <td class="cart_total_amount">ارسال رایگان</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="cart_total_label">جمع</td>
-                                        <td class="cart_total_amount"><strong>349000 تومان</strong></td>
-                                    </tr>
-                                    </tbody>
-                                </table>
+                            <div class="shop-cart-info-table">
                             </div>
                             <a href="#" class="btn btn-fill-out">ادامه</a>
                         </div>

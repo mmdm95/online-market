@@ -66,6 +66,9 @@ window.MyGlobalVariables = {
             add: '/ajax/cart/add',
             update: '/ajax/cart/update',
             remove: '/ajax/cart/remove',
+            getItemsTable: '/ajax/cart/items-table',
+            getTotalInfo: '/ajax/cart/total-info',
+            checkCoupon: '/ajax/cart/check-coupon',
         },
         newsletter: {
             add: '/ajax/newsletter/add',

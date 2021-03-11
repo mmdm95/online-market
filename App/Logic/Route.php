@@ -666,6 +666,9 @@ class Route implements IInitialize
             Router::post('/cart/remove/{product_code}', [CartController::class, 'removeFromCart'])->where([
                 'product_code' => '\w+',
             ])->name('ajax.cart.remove');
+            Router::get('/cart/items-table', [CartController::class, 'getCartProducts'])->name('ajax.cart.items');
+            Router::get('/cart/total-info', [CartController::class, 'getCartProductsInfo'])->name('ajax.cart.total.items.info');
+            Router::post('/cart/check-coupon', [CartController::class, 'checkCoupon'])->name('ajax.cart.check.coupon');
 
             /**
              * blog route

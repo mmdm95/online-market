@@ -111,6 +111,72 @@ class CartController extends AbstractHomeController
     }
 
     /**
+     * @throws ConfigNotRegisteredException
+     * @throws ControllerException
+     * @throws IFileNotExistsException
+     * @throws IInvalidVariableNameException
+     * @throws MethodNotFoundException
+     * @throws ParameterHasNoDefaultValueException
+     * @throws PathNotRegisteredException
+     * @throws ServiceNotFoundException
+     * @throws ServiceNotInstantiableException
+     * @throws \ReflectionException
+     */
+    public function getCartProducts()
+    {
+        $resourceHandler = new ResourceHandler();
+
+        /**
+         * @var Agent $agent
+         */
+        $agent = container()->get(Agent::class);
+        if (!$agent->isRobot()) {
+            $resourceHandler
+                ->type(RESPONSE_TYPE_SUCCESS)
+                ->data($this->setTemplate('partial/main/ajax/cart-items')->render());
+        } else {
+            response()->httpCode(403);
+            $resourceHandler
+                ->type(RESPONSE_TYPE_ERROR)
+                ->errorMessage('خطا در ارتباط با سرور، لطفا دوباره تلاش کنید.');
+        }
+        response()->json($resourceHandler->getReturnData());
+    }
+
+    /**
+     * @throws ConfigNotRegisteredException
+     * @throws ControllerException
+     * @throws IFileNotExistsException
+     * @throws IInvalidVariableNameException
+     * @throws MethodNotFoundException
+     * @throws ParameterHasNoDefaultValueException
+     * @throws PathNotRegisteredException
+     * @throws ServiceNotFoundException
+     * @throws ServiceNotInstantiableException
+     * @throws \ReflectionException
+     */
+    public function getCartProductsInfo()
+    {
+        $resourceHandler = new ResourceHandler();
+
+        /**
+         * @var Agent $agent
+         */
+        $agent = container()->get(Agent::class);
+        if (!$agent->isRobot()) {
+            $resourceHandler
+                ->type(RESPONSE_TYPE_SUCCESS)
+                ->data($this->setTemplate('partial/main/ajax/cart-items-info')->render());
+        } else {
+            response()->httpCode(403);
+            $resourceHandler
+                ->type(RESPONSE_TYPE_ERROR)
+                ->errorMessage('خطا در ارتباط با سرور، لطفا دوباره تلاش کنید.');
+        }
+        response()->json($resourceHandler->getReturnData());
+    }
+
+    /**
      * @throws MethodNotFoundException
      * @throws ParameterHasNoDefaultValueException
      * @throws ServiceNotFoundException

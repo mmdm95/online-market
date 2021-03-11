@@ -2,6 +2,8 @@
 
 namespace App\Logic;
 
+use App\Logic\Controllers\CartController;
+use DI\ContainerBuilder;
 use Sim\Auth\Interfaces\IAuth;
 use Sim\Captcha\CaptchaFactory;
 use Sim\Form\FormValidator;

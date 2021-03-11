@@ -20,6 +20,15 @@ return [
                 'is_active' => true,
             ],
         ],
+        'js' => [
+            'bottom' => [
+                e(
+                    '<script type="text/javascript" src="' .
+                    asset_path('js/order-preparation.js') .
+                    '"></script>'
+                ),
+            ],
+        ],
     ],
     'view/main/order/checkout' => [
         'title' => title_concat(\config()->get('settings.title.value'), 'بررسی'),

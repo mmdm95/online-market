@@ -341,6 +341,7 @@
                 );
                 return id;
             },
+
             hideLoader: function (id) {
                 if (id) {
                     id = $('#' + id);
@@ -350,6 +351,24 @@
                         });
                     }
                 }
+            },
+
+            showLoaderInsideElement: function (el) {
+                $(el)
+                    .addClass('inside-loader-parent')
+                    .append(
+                        $('<div class="inside-loader-container" />')
+                            .append($('<div class="inside-loader" />'))
+                    );
+            },
+
+            hideLoaderFromInsideElement: function (el) {
+                $(el)
+                    .removeClass('inside-loader-parent')
+                    .find('.inside-loader-container')
+                    .fadeOut(function () {
+                        $(this).remove();
+                    });
             },
         });
 
