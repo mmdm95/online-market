@@ -5,7 +5,6 @@ namespace App\Logic\Forms\Ajax\CategoryImage;
 use App\Logic\Interfaces\IPageForm;
 use App\Logic\Models\CategoryImageModel;
 use App\Logic\Models\CategoryModel;
-use App\Logic\Models\UnitModel;
 use App\Logic\Validations\ExtendedValidator;
 use Sim\Auth\DBAuth;
 use Sim\Container\Exceptions\MethodNotFoundException;

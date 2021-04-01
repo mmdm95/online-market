@@ -17,14 +17,13 @@
         </div>
 
         <table class="table table-bordered table-hover datatable-highlight"
-               data-columns='[{"data":"id"},{"data":"title"},{"data":"color"},{"data":"allow_return"},{"data":"operations"}]'
+               data-columns='[{"data":"id"},{"data":"title"},{"data":"color"},{"data":"operations"}]'
                data-ajax-url="<?= url('admin.badge.dt.view')->getRelativeUrlTrimmed(); ?>">
             <thead>
             <tr>
                 <th>#</th>
                 <th>عنوان وضعیت</th>
                 <th>رنگ</th>
-                <th>امکان مرجوعی</th>
                 <th class="text-center">عملیات</th>
             </tr>
             </thead>
@@ -33,7 +32,6 @@
                 <th>#</th>
                 <th>عنوان وضعیت</th>
                 <th>رنگ</th>
-                <th>امکان مرجوعی</th>
                 <th class="text-center">عملیات</th>
             </tr>
             </tfoot>

@@ -29,7 +29,6 @@ return [
             'admin-base',
             'admin-form',
             'admin-tags-input',
-            'admin-fab',
             'admin',
         ],
         'sub_title' => 'تنظیمات منوی بالای صفحه',
@@ -52,6 +51,27 @@ return [
                     asset_path('be/js/top-menu.js') .
                     '"></script>'
                 ),
+            ],
+        ],
+    ],
+    'view/setting/buy' => [
+        'title' => title_concat(\config()->get('settings.title.value'), 'تنظیمات خرید'),
+        'common' => [
+            'admin-base',
+            'admin-form',
+            'admin',
+        ],
+        'sub_title' => 'تنظیمات خرید',
+        'breadcrumb' => [
+            [
+                'url' => url('admin.index')->getRelativeUrl(),
+                'icon' => 'icon-home2',
+                'text' => 'خانه',
+                'is_active' => false,
+            ],
+            [
+                'text' => 'تنظیمات خرید',
+                'is_active' => true,
             ],
         ],
     ],

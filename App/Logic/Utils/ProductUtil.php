@@ -305,13 +305,13 @@ class ProductUtil
              */
             $colorModel = container()->get(ColorModel::class);
 
-
             // get all products values
             $stock = input()->post('inp-add-product-stock-count');
             $maxCart = input()->post('inp-add-product-max-count');
             $color = input()->post('inp-add-product-color');
             $size = input()->post('inp-add-product-size');
             $guarantee = input()->post('inp-add-product-guarantee');
+            $weight = input()->post('inp-add-product-weight');
             $price = input()->post('inp-add-product-price');
             $disPrice = input()->post('inp-add-product-discount-price');
             $disDate = input()->post('inp-add-product-discount-date');
@@ -340,6 +340,7 @@ class ProductUtil
                     $productObj[$i]['color_name'] = $xss->xss_clean($colorName);
                     $productObj[$i]['size'] = $xss->xss_clean(array_shift($size)) ?: null;
                     $productObj[$i]['guarantee'] = $xss->xss_clean(array_shift($guarantee)) ?: null;
+                    $productObj[$i]['weight'] = $xss->xss_clean(array_shift($weight)) ?: null;
                     $productObj[$i]['discount_until'] = $xss->xss_clean(array_shift($disDate)) ?: null;
                     $productObj[$i]['available'] = is_value_checked(array_shift($pAvailability)) ? DB_YES : DB_NO;
                 }
@@ -377,5 +378,44 @@ class ProductUtil
             return [];
         }
         return $galleryArr;
+    }
+
+    /**
+     * @param $properties
+     * @param $sub_properties
+     * @return array
+     */
+    public function assembleProductProperties($properties, $sub_properties): array
+    {
+        try {
+            $assembledProperties = [];
+            $counter = 0;
+            foreach ($properties as $k => $main) {
+                $children = [];
+                $title = $main['title']->getValue();
+                if ('' != trim($title)) {
+                    foreach ($sub_properties[$k] as $sub) {
+                        $subTitle = $sub['sub-title']->getValue();
+                        if ('' != trim($subTitle)) {
+                            $subProperties = $sub['sub-properties']->getValue();
+
+                            $children[] = [
+                                'title' => $subTitle,
+                                'properties' => $subProperties,
+                            ];
+                        }
+                    }
+
+                    $assembledProperties[$counter] = [
+                        'title' => $title,
+                    ];
+                    $assembledProperties[$counter]['children'] = $children;
+                    $counter++;
+                }
+            }
+            return $assembledProperties;
+        } catch (\Exception $e) {
+            return [];
+        }
     }
 }

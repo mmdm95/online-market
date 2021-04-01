@@ -342,15 +342,7 @@ use Sim\Utils\StringUtil;
         <?php load_partial('admin/card-header', ['header_title' => 'ویژگی‌های محصول']); ?>
 
         <div class="card-body">
-            <textarea cols="30"
-                      rows="10"
-                      placeholder="ویژگی‌های محصول..."
-                      class="form-control cntEditor"
-                      data-editor-readonly="true"
-                      data-editor-menubar="false"
-                      data-editor-statusbar="false"
-                      data-editor-toolbar="false"
-            ><?= $product['properties']; ?></textarea>
+
         </div>
     </div>
     <!-- /highlighting rows and columns -->

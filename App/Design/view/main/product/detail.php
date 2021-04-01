@@ -107,10 +107,11 @@
                                     <i class="icon-basket-loaded"></i>
                                     افزودن به سبد خرید
                                 </button>
-                                <a class="add_compare" href="<?= url('home.compare'); ?>"
-                                   data-toggle="tooltip" data-placement="top" title="لیست مقایسه">
-                                    <i class="linearicons-shuffle"></i>
-                                </a>
+                                <!--                                <a class="add_compare" href=""-->
+                                <!--                                   data-toggle="tooltip" data-placement="top" title="لیست مقایسه">-->
+                                <?= '';//url('home.compare');  ?>
+                                <!--                                    <i class="linearicons-shuffle"></i>-->
+                                <!--                                </a>-->
                                 <a class="add_wishlist <?= $is_in_wishlist ? 'active' : ''; ?>"
                                    href="javascript:void(0);" data-toggle="tooltip"
                                    data-placement="top" title="لیست علاقه مندی ها"
@@ -169,7 +170,7 @@
                             $shareLink = url('home.product.show', [
                                 'id' => $product['id'],
                                 'slug' => $product['slug'],
-                            ]);
+                            ])->getRelativeUrl();
                             ?>
                             <ul class="social_icons">
                                 <li>
@@ -265,7 +266,44 @@
                             <!-- START PRODUCT PROPERTIES -->
                             <div class="tab-pane fade" id="Additional-info" role="tabpanel"
                                  aria-labelledby="Additional-info-tab">
-                                <?= $product['properties']; ?>
+                                <?php
+                                $properties = json_decode($product['properties']);
+                                $properties = is_array($properties) ? $properties : [];
+                                ?>
+
+                                <?php if (count($properties)): ?>
+                                    <?php foreach ($properties as $property): ?>
+                                        <h5 class="mt-5 mb-3 text-info"><?= $property['title']; ?></h5>
+
+                                        <?php if (isset($property['children']) && is_array($property['children']) && count($property['children']) > 0): ?>
+                                            <?php $counter = 0; ?>
+                                            <?php foreach ($property['children'] as $child): ?>
+                                                <table class="table table-bordered">
+                                                    <tr>
+                                                        <td>
+                                                            <?= $child['title']; ?>
+                                                        </td>
+                                                        <td class="p-0">
+                                                            <div class="p-2 <?= 0 != $counter ? 'border-bottom' : ''; ?>">
+                                                                <?php if (trim($child['properties']) != ''): ?>
+                                                                    <?= $child['properties']; ?>
+                                                                <?php else: ?>
+                                                                    <div class="p-2">
+                                                                        <i class="linearicons-minus"
+                                                                           aria-hidden="true"></i>
+                                                                    </div>
+                                                                <?php endif; ?>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                                <?php ++$counter; ?>
+                                            <?php endforeach; ?>
+                                        <?php endif; ?>
+                                    <?php endforeach; ?>
+                                <?php else: ?>
+                                    <span class="text-info">هیچ ویژگی‌ای یافت نشد.</span>
+                                <?php endif; ?>
                             </div>
                             <!-- END PRODUCT PROPERTIES -->
 

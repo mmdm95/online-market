@@ -143,7 +143,7 @@ class WalletCharge implements IPageForm
                 'username' => $xss->xss_clean(trim($username)),
                 'balance' => 'balance+' . (int)$xss->xss_clean(trim($price)),
             ], [
-                'deposit_code' => StringUtil::uniqidReal(12),
+                'order_code' => StringUtil::uniqidReal(12),
                 'username' => $xss->xss_clean(trim($username)),
                 'deposit_price' => $xss->xss_clean(trim($price)),
                 'deposit_type_title' => $xss->xss_clean(trim($desc)),

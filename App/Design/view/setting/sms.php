@@ -39,7 +39,7 @@ $validator = form_validator();
                                     cols="30"
                                     rows="10"
                                     placeholder="متن پیامک را وارد کنید..."
-                            ><?= $validator->setInput('inp-setting-sms-activation') ?: config()->get('settings.sms_activation.value'); ?></textarea>
+                            ><?= !$validator->getStatus() ? ($validator->setInput('inp-setting-sms-activation') ?: config()->get('settings.sms_activation.value')) : config()->get('settings.sms_activation.value'); ?></textarea>
                             <label class="form-text">
                                 می‌توانید از
                                 <code>@code@</code>
@@ -59,7 +59,7 @@ $validator = form_validator();
                                     cols="30"
                                     rows="10"
                                     placeholder="متن پیامک را وارد کنید..."
-                            ><?= $validator->setInput('inp-setting-sms-recover-pass') ?: config()->get('settings.sms_recover_pass.value'); ?></textarea>
+                            ><?= !$validator->getStatus() ? ($validator->setInput('inp-setting-sms-recover-pass') ?: config()->get('settings.sms_recover_pass.value')) : config()->get('settings.sms_recover_pass.value'); ?></textarea>
                             <label class="form-text">
                                 می‌توانید از
                                 <code>@code@</code>
@@ -79,7 +79,7 @@ $validator = form_validator();
                                     cols="30"
                                     rows="10"
                                     placeholder="متن پیامک را وارد کنید..."
-                            ><?= $validator->setInput('inp-setting-sms-buy') ?: config()->get('settings.sms_buy.value'); ?></textarea>
+                            ><?= !$validator->getStatus() ? ($validator->setInput('inp-setting-sms-buy') ?: config()->get('settings.sms_buy.value')) : config()->get('settings.sms_buy.value'); ?></textarea>
                             <label class="form-text">
                                 می‌توانید از
                                 <code>@orderCode@</code>
@@ -99,7 +99,7 @@ $validator = form_validator();
                                     cols="30"
                                     rows="10"
                                     placeholder="متن پیامک را وارد کنید..."
-                            ><?= $validator->setInput('inp-setting-sms-order-status') ?: config()->get('settings.sms_order_status.value'); ?></textarea>
+                            ><?= !$validator->getStatus() ? ($validator->setInput('inp-setting-sms-order-status') ?: config()->get('settings.sms_order_status.value')) : config()->get('settings.sms_order_status.value'); ?></textarea>
                             <label class="form-text">
                                 می‌توانید از
                                 <code>@orderCode@</code>
@@ -121,7 +121,7 @@ $validator = form_validator();
                                     cols="30"
                                     rows="10"
                                     placeholder="متن پیامک را وارد کنید..."
-                            ><?= $validator->setInput('inp-setting-sms-wallet-charge') ?: config()->get('settings.sms_wallet_charge.value'); ?></textarea>
+                            ><?= !$validator->getStatus() ? ($validator->setInput('inp-setting-sms-wallet-charge') ?: config()->get('settings.sms_wallet_charge.value')) : config()->get('settings.sms_wallet_charge.value'); ?></textarea>
                             <label class="form-text">
                                 می‌توانید از
                                 <code>@mobile@</code>

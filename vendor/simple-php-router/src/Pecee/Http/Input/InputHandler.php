@@ -193,18 +193,22 @@ class InputHandler
      */
     public function find(string $index, ...$methods)
     {
-        $element = null;
+        $element = new InputItem($index, null);
 
-        if (\count($methods) === 0 || \in_array('get', $methods, true) === true) {
-            $element = $this->get($index);
-        }
+        try {
+            if (\count($methods) === 0 || \in_array('get', $methods, true) === true) {
+                $element = $this->get($index);
+            }
 
-        if (($element === null && \count($methods) === 0) || (\count($methods) !== 0 && \in_array('post', $methods, true) === true)) {
-            $element = $this->post($index);
-        }
+            if (($element === null && \count($methods) === 0) || (\count($methods) !== 0 && \in_array('post', $methods, true) === true)) {
+                $element = $this->post($index);
+            }
 
-        if (($element === null && \count($methods) === 0) || (\count($methods) !== 0 && \in_array('file', $methods, true) === true)) {
-            $element = $this->file($index);
+            if (($element === null && \count($methods) === 0) || (\count($methods) !== 0 && \in_array('file', $methods, true) === true)) {
+                $element = $this->file($index);
+            }
+        } catch (\Exception $e) {
+            // do nothing
         }
 
         return $element;

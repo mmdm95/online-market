@@ -54,6 +54,7 @@ $adminEditor = config()->getDirectly(__DIR__ . '/admin/editor-inc.php');
 $adminFaq = config()->getDirectly(__DIR__ . '/admin/faq-inc.php');
 $adminFestival = config()->getDirectly(__DIR__ . '/admin/festival-inc.php');
 $adminFileManager = config()->getDirectly(__DIR__ . '/admin/file-manager-inc.php');
+$adminIndex = config()->getDirectly(__DIR__ . '/admin/index-inc.php');
 $adminInstagramImage = config()->getDirectly(__DIR__ . '/admin/instagram-image-inc.php');
 $adminLogin = config()->getDirectly(__DIR__ . '/admin/login-inc.php');
 $adminMainSlider = config()->getDirectly(__DIR__ . '/admin/main-slider-inc.php');
@@ -196,6 +197,7 @@ return [
         $adminFaq,
         $adminFestival,
         $adminFileManager,
+        $adminIndex,
         $adminInstagramImage,
         $adminLogin,
         $adminMainSlider,

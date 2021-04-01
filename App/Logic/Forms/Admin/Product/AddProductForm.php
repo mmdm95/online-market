@@ -61,13 +61,13 @@ class AddProductForm implements IPageForm
                 'inp-add-product-color.*' => 'رنگ',
                 'inp-add-product-size.*' => 'سایز',
                 'inp-add-product-guarantee.*' => 'گارانتی',
+                'inp-add-product-weight.*' => 'وزن',
                 'inp-add-product-price.*' => 'قیمت کالا',
                 'inp-add-product-discount-price.*' => 'قیمت تخفیف کالا',
                 'inp-add-product-discount-date.*' => 'تاریخ اتمام تخفیف',
                 'inp-add-product-product-availability.*' => 'موجودی کالا',
                 'inp-add-product-gallery-img.*' => 'تصویر گالری',
                 'inp-add-product-desc' => 'توضیحات',
-                'inp-add-product-properties' => 'ویژگی‌ها',
                 'inp-add-product-alert-product' => 'تعداد کالا برای هشدار',
                 'inp-add-product-related.*' => 'محصولات مرتبط',
             ])
@@ -144,13 +144,14 @@ class AddProductForm implements IPageForm
                 }
                 return true;
             }, '{alias} ' . 'انتخاب شده نامعتبر است.');
-        // stock count, max cart count, price, discount price
+        // stock count, max cart count, price, discount price, weight
         $validator
             ->setFields([
                 'inp-add-product-stock-count.*',
                 'inp-add-product-max-count.*',
                 'inp-add-product-price.*',
-                'inp-add-product-discount-price.*'
+                'inp-add-product-discount-price.*',
+                'inp-add-product-weight.*',
             ])
             ->stopValidationAfterFirstError(false)
             ->required()
@@ -160,10 +161,6 @@ class AddProductForm implements IPageForm
         $validator
             ->setFields('inp-add-product-alert-product')
             ->isInteger();
-        // properties
-        $validator
-            ->setFields('inp-add-product-properties')
-            ->required();
         // related products
         $validator
             ->setFields('inp-add-product-related.*')
@@ -245,6 +242,16 @@ class AddProductForm implements IPageForm
                 }
                 return true;
             }, '{alias} ' . 'یک زمان وارد شده نامعتبر است.');
+        // properties
+        $properties = input()->post('inp-item-product-properties');
+        $subProperties = input()->post('inp-item-product-sub-properties');
+        /**
+         * @var ProductUtil $productUtil
+         */
+        $productUtil = container()->get(ProductUtil::class);
+        $theProperties = $productUtil->assembleProductProperties($properties, $subProperties);
+
+        session()->setFlash('product-properties-assembled', $theProperties);
 
         if (!count($validator->getUniqueErrors())) {
             /**
@@ -328,7 +335,6 @@ class AddProductForm implements IPageForm
             $keywords = input()->post('inp-add-product-keywords', '')->getValue();
             $brand = input()->post('inp-add-product-brand', '')->getValue();
             $category = input()->post('inp-add-product-category', '')->getValue();
-            $properties = input()->post('inp-add-product-properties', '')->getValue();
             $desc = input()->post('inp-add-product-desc', '')->getValue();
             $alertProduct = input()->post('inp-add-product-alert-product', '')->getValue();
             $relatedProducts = input()->post('inp-add-product-related');
@@ -339,6 +345,9 @@ class AddProductForm implements IPageForm
             $unit = input()->post('inp-add-product-unit', '')->getValue();
             $unitInfo = $unitModel->getFirst(['title', 'sign'], 'id=:id', ['id' => $unit]);
 
+            $theProperties = json_encode(session()->getFlash('product-properties-assembled') ?: []);
+            if (is_null($theProperties)) return false;
+
             // insert all products and main product information
             return $productModel->insertProduct([
                 'title' => $xss->xss_clean(trim($title)),
@@ -348,7 +357,7 @@ class AddProductForm implements IPageForm
                 'brand_id' => $brand,
                 'category_id' => $category,
                 'body' => $xss->xss_clean($desc) ?: null,
-                'properties' => $xss->xss_clean($properties) ?: null,
+                'properties' => $xss->xss_clean($theProperties) ?: null,
                 'baby_property' => $xss->xss_clean($simpleProp) ?: null,
                 'unit_title' => $unitInfo['title'],
                 'unit_sign' => $unitInfo['sign'],

@@ -36,6 +36,7 @@ use App\Logic\Controllers\Admin\{BlogController as AdminBlogController,
     ProductController as AdminProductController,
     AddressController as AdminAddressController};
 use App\Logic\Controllers\CheckoutController;
+use App\Logic\Controllers\OrderResult;
 use App\Logic\Controllers\User\{AddressController as UserAddressController,
     CommentController as UserCommentController,
     HomeController as UserHomeController,
@@ -59,7 +60,6 @@ use App\Logic\Middlewares\AdminAuthMiddleware;
 use App\Logic\Middlewares\ApiVerifierMiddleware;
 use App\Logic\Middlewares\AuthMiddleware;
 use App\Logic\Middlewares\CheckoutMiddleware;
-use App\Logic\Middlewares\WalletAccessMiddleware;
 use App\Logic\Utils\ConfigUtil;
 use Pecee\SimpleRouter\Event\EventArgument;
 use Pecee\SimpleRouter\Handlers\EventHandler;
@@ -247,12 +247,12 @@ class Route implements IInitialize
                 /**
                  * Send Methods Route
                  */
-                Router::form('/send-method/add', [AdminSendMethodController::class, 'add'])->name('admin.send_method.add');
-                Router::form('/send-method/edit/{id}', [AdminSendMethodController::class, 'edit'])->where([
-                    'id' => '[0-9]',
-                ])->name('admin.send_method.edit');
-                Router::get('/send-method/view', [AdminSendMethodController::class, 'view'])->name('admin.send_method.view');
-                Router::post('/send-method/view/dt', [AdminSendMethodController::class, 'getPaginatedDatatable'])->name('admin.send_method.dt.view');
+//                Router::form('/send-method/add', [AdminSendMethodController::class, 'add'])->name('admin.send_method.add');
+//                Router::form('/send-method/edit/{id}', [AdminSendMethodController::class, 'edit'])->where([
+//                    'id' => '[0-9]',
+//                ])->name('admin.send_method.edit');
+//                Router::get('/send-method/view', [AdminSendMethodController::class, 'view'])->name('admin.send_method.view');
+//                Router::post('/send-method/view/dt', [AdminSendMethodController::class, 'getPaginatedDatatable'])->name('admin.send_method.dt.view');
 
                 /**
                  * Color Route
@@ -382,11 +382,11 @@ class Route implements IInitialize
                 /**
                  * Return Order Route
                  */
-                Router::get('/return-order/detail/{id}', [AdminReturnOrderController::class, 'detail'])->where([
-                    'id' => '[0-9]+',
-                ])->name('admin.return.order.detail');
-                Router::get('/return-order/view', [AdminReturnOrderController::class, 'view'])->name('admin.return.order.view');
-                Router::post('/return-order/view/dt', [AdminReturnOrderController::class, 'getPaginatedDatatable'])->name('admin.return.order.dt.view');
+//                Router::get('/return-order/detail/{id}', [AdminReturnOrderController::class, 'detail'])->where([
+//                    'id' => '[0-9]+',
+//                ])->name('admin.return.order.detail');
+//                Router::get('/return-order/view', [AdminReturnOrderController::class, 'view'])->name('admin.return.order.view');
+//                Router::post('/return-order/view/dt', [AdminReturnOrderController::class, 'getPaginatedDatatable'])->name('admin.return.order.dt.view');
 
                 /**
                  * Order Badges Route
@@ -485,6 +485,7 @@ class Route implements IInitialize
                  */
                 Router::form('/setting/main', [AdminSettingController::class, 'main'])->name('admin.setting.main');
                 Router::form('/setting/top-menu', [AdminSettingController::class, 'topMenu'])->name('admin.setting.top-menu');
+                Router::form('/setting/buy', [AdminSettingController::class, 'buy'])->name('admin.setting.buy');
                 Router::form('/setting/sms', [AdminSettingController::class, 'sms'])->name('admin.setting.sms');
                 Router::form('/setting/contact', [AdminSettingController::class, 'contact'])->name('admin.setting.contact');
                 Router::form('/setting/social', [AdminSettingController::class, 'social'])->name('admin.setting.social');
@@ -545,11 +546,11 @@ class Route implements IInitialize
                 /**
                  * return order routes
                  */
-                Router::form('/return-order', [UserReturnOrderController::class, 'index'])->name('user.return-order');
-                Router::get('/return-order/detail/{id}', [UserReturnOrderController::class, 'detail'])->where([
-                    'id' => '[0-9]+',
-                ])->name('user.return-order.detail');
-                Router::get('/return-order/add', [UserReturnOrderController::class, 'add'])->name('user.return-order.add');
+//                Router::form('/return-order', [UserReturnOrderController::class, 'index'])->name('user.return-order');
+//                Router::get('/return-order/detail/{id}', [UserReturnOrderController::class, 'detail'])->where([
+//                    'id' => '[0-9]+',
+//                ])->name('user.return-order.detail');
+//                Router::get('/return-order/add', [UserReturnOrderController::class, 'add'])->name('user.return-order.add');
 
                 /**
                  * wallet routes
@@ -607,9 +608,14 @@ class Route implements IInitialize
              * cart routes
              */
             Router::get('/cart', [CartController::class, 'index'])->name('home.cart');
-            Router::group(['middleware' => CheckoutMiddleware::class], function () {
-                Router::get('/checkout', [CheckoutController::class, 'checkout'])->name('home.checkout');
+            Router::group(['middleware' => AuthMiddleware::class], function () {
+                Router::group(['middleware' => CheckoutMiddleware::class], function () {
+                    Router::get('/checkout', [CheckoutController::class, 'checkout'])->name('home.checkout');
+                });
             });
+            Router::get('/finish/{type}', [OrderResult::class, 'index'])->where([
+                'type' => '[a-zA-Z0-9]+',
+            ])->name('home.finish');
 
             /**
              * product routes
@@ -620,15 +626,15 @@ class Route implements IInitialize
             Router::get('/product/{id}/{slug?}', [ProductController::class, 'show'])->where([
                 'id' => '[0-9]+',
             ])->name('home.product.show');
-            Router::get('/compare', [CompareController::class, 'compare'])->name('home.compare');
+//            Router::get('/compare', [CompareController::class, 'compare'])->name('home.compare');
 
             /**
              * brand routes
              */
-            Router::get('/brands', [BrandController::class, 'index'])->name('home.brands');
-            Router::get('/brand/{id}/{slug?}', [BrandController::class, 'show'])->where([
-                'id' => '[0-9]+'
-            ])->name('home.brand.show');
+//            Router::get('/brands', [BrandController::class, 'index'])->name('home.brands');
+//            Router::get('/brand/{id}/{slug?}', [BrandController::class, 'show'])->where([
+//                'id' => '[0-9]+'
+//            ])->name('home.brand.show');
 
             /**
              * blog routes
@@ -660,15 +666,20 @@ class Route implements IInitialize
             Router::post('/cart/add/{product_code}', [CartController::class, 'addToCart'])->where([
                 'product_code' => '\w+',
             ])->name('ajax.cart.add');
-            Router::post('/cart/update/{product_code}', [CartController::class, 'updateCart'])->where([
+            Router::put('/cart/update/{product_code}', [CartController::class, 'updateCart'])->where([
                 'product_code' => '\w+',
             ])->name('ajax.cart.update');
-            Router::post('/cart/remove/{product_code}', [CartController::class, 'removeFromCart'])->where([
+            Router::delete('/cart/remove/{product_code}', [CartController::class, 'removeFromCart'])->where([
                 'product_code' => '\w+',
             ])->name('ajax.cart.remove');
             Router::get('/cart/items-table', [CartController::class, 'getCartProducts'])->name('ajax.cart.items');
-            Router::get('/cart/total-info', [CartController::class, 'getCartProductsInfo'])->name('ajax.cart.total.items.info');
-            Router::post('/cart/check-coupon', [CartController::class, 'checkCoupon'])->name('ajax.cart.check.coupon');
+            Router::get('/cart/total-items-info', [CartController::class, 'getCartProductsInfo'])->name('ajax.cart.total.items.info');
+            Router::get('/cart/total-info', [CartController::class, 'getCartProductsTotalInfo'])->name('ajax.cart.total.info');
+            Router::post('/cart/check-coupon/{coupon_code}', [CartController::class, 'checkCoupon'])->where([
+                'coupon_code' => '[\w-]+',
+            ])->name('ajax.cart.check.coupon');
+            Router::post('/cart/check-stored-coupon', [CartController::class, 'checkStoredCoupon'])->name('ajax.cart.check.stored.coupon');
+            Router::post('/cart/check-post-price', [CheckoutController::class, 'calculateSendPrice'])->name('ajax.cart.check.post.price');
 
             /**
              * blog route
@@ -844,9 +855,9 @@ class Route implements IInitialize
                 /**
                  * send method route
                  */
-                Router::delete('/send-method/remove/{id}', [AdminSendMethodController::class, 'remove'])->where([
-                    'id' => '[0-9]+',
-                ])->name('ajax.send_method.remove');
+//                Router::delete('/send-method/remove/{id}', [AdminSendMethodController::class, 'remove'])->where([
+//                    'id' => '[0-9]+',
+//                ])->name('ajax.send_method.remove');
 
                 /**
                  * color route

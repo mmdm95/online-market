@@ -55,7 +55,7 @@ class HomeController extends AbstractUserController
         /**
          * @var ReturnOrderModel $returnModel
          */
-        $returnModel = container()->get(ReturnOrderModel::class);
+//        $returnModel = container()->get(ReturnOrderModel::class);
         /**
          * @var WalletModel $walletModel
          */
@@ -74,7 +74,7 @@ class HomeController extends AbstractUserController
         $walletBalance = $walletModel->getFirst(['balance'], 'username=:username', ['username' => $user['username']])['balance'];
         $favoriteCount = $productModel->userFavoriteProductCount($user['id']);
         $orderCount = $orderModel->count('user_id=:id', ['id' => $user['id']]);
-        $returnCount = $returnModel->count('user_id=:id', ['id' => $user['id']]);
+//        $returnCount = $returnModel->count('user_id=:id', ['id' => $user['id']]);
         $accCommentCount = $commentModel->count('user_id=:id AND the_condition=:condition', ['id' => $user['id'], 'condition' => COMMENT_CONDITION_ACCEPT]);
         $naccCommentCount = $commentModel->count('user_id=:id AND the_condition=:condition', ['id' => $user['id'], 'condition' => COMMENT_CONDITION_REJECT]);
         //
@@ -96,7 +96,7 @@ class HomeController extends AbstractUserController
         );
         $lastWalletFlow = $walletFlowModel->get(
             [
-                'deposit_code',
+                'order_code',
                 'deposit_price',
                 'deposit_type_title',
                 'deposit_at',
@@ -110,7 +110,7 @@ class HomeController extends AbstractUserController
         $this->setLayout($this->main_layout)->setTemplate('view/main/user/index');
         return $this->render([
             'order_count' => $orderCount,
-            'return_order_count' => $returnCount,
+//            'return_order_count' => $returnCount,
             'wallet_balance' => $walletBalance,
             'favorite_count' => $favoriteCount,
             'accept_comment_count' => $accCommentCount,

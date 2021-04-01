@@ -100,14 +100,14 @@ function get_percentage($num, $total, bool $low = true): int
 function get_discount_price(array $item): array
 {
     $hasDiscount = false;
-    $discountPrice = number_format($item['price']);
+    $discountPrice = (float)$item['price'];
 
     if (!empty($item['festival_expire']) && $item['festival_expire'] > time() && isset($item['festival_discount']) && 0 != $item['festival_discount']) {
         $hasDiscount = true;
-        $discountPrice = number_format($item['price'] * (int)$item['festival_discount']);
+        $discountPrice = (float)$item['price'] * (float)$item['festival_discount'];
     } elseif (isset($item['discount_until']) && $item['discount_until'] >= time()) {
         $hasDiscount = true;
-        $discountPrice = number_format($item['discounted_price']);
+        $discountPrice = (float)$item['discounted_price'];
     }
 
     return [$discountPrice, $hasDiscount];
@@ -205,6 +205,8 @@ function is_image_exists(string $filename): bool
 }
 
 /**
+ * @see https://betterprogramming.pub/generate-contrasting-text-for-your-random-background-color-ac302dc87b4
+ *
  * @param string $bgColor
  * @param string $lightColor
  * @param string $darkColor
@@ -212,17 +214,19 @@ function is_image_exists(string $filename): bool
  */
 function get_color_from_bg(string $bgColor, string $lightColor = '#ffffff', string $darkColor = '#000000'): string
 {
-    $color = ($bgColor[0] === '#') ? substr($bgColor, 1, 7) : $bgColor;
-    $r = (int)substr($color, 0, 2); // hexToR
-    $g = (int)substr($color, 2, 4); // hexToG
-    $b = (int)substr($color, 4, 6); // hexToB
-    $uiColors = [$r / 255, $g / 255, $b / 255];
-    $c = array_map(function ($col) {
-        if ($col <= 0.03928) {
-            return $col / 12.92;
+    $color = ($bgColor[0] === '#') ? substr($bgColor, 1) : $bgColor;
+    if (strlen($color) === 3) {
+        $colorArr = array_map(function ($value) {
+            return $value . $value;
+        }, str_split($color));
+        $color = '';
+        foreach ($colorArr as $c) {
+            $color .= $c;
         }
-        return pow(($col + 0.055) / 1.055, 2.4);
-    }, $uiColors);
-    $L = (0.2126 * $c[0]) + (0.7152 * $c[1]) + (0.0722 * $c[2]);
-    return ($L > 0.179) ? $darkColor : $lightColor;
+    }
+    $r = hexdec(substr($color, 0, 2)); // hexToR
+    $g = hexdec(substr($color, 2, 2)); // hexToG
+    $b = hexdec(substr($color, 4, 2)); // hexToB
+    $brightness = round((($r * 299) + ($g * 587) + ($b * 114)) / 1000);
+    return $brightness > 150 ? $darkColor : $lightColor;
 }

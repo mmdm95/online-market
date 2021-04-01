@@ -9,7 +9,7 @@ use Sim\Exceptions\PathManager\PathNotRegisteredException;
 use Sim\Interfaces\IFileNotExistsException;
 use Sim\Interfaces\IInvalidVariableNameException;
 
-class CompareController extends AbstractHomeController
+class OrderResult extends AbstractHomeController
 {
     /**
      * @return string
@@ -20,11 +20,9 @@ class CompareController extends AbstractHomeController
      * @throws IFileNotExistsException
      * @throws IInvalidVariableNameException
      */
-    public function compare()
+    public function index()
     {
-
-
-        $this->setLayout($this->main_layout)->setTemplate('view/main/product/compare');
+        $this->setLayout($this->main_layout)->setTemplate('view/main/order/order-completed');
         return $this->render();
     }
 }

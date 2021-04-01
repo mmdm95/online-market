@@ -41,6 +41,25 @@ class SettingModel extends BaseModel
      * @param array $info
      * @return bool
      */
+    public function updateBuySetting(array $info): bool
+    {
+        $res1 = $this->update([
+            'setting_value' => $info[SETTING_STORE_PROVINCE],
+        ], 'setting_name=:name', ['name' => SETTING_STORE_PROVINCE]);
+        $res2 = $this->update([
+            'setting_value' => $info[SETTING_STORE_CITY],
+        ], 'setting_name=:name', ['name' => SETTING_STORE_CITY]);
+        $res3 = $this->update([
+            'setting_value' => $info[SETTING_CURRENT_CITY_POST_PRICE],
+        ], 'setting_name=:name', ['name' => SETTING_CURRENT_CITY_POST_PRICE]);
+
+        return $res1 && $res2 && $res3;
+    }
+
+    /**
+     * @param array $info
+     * @return bool
+     */
     public function updateSMSSetting(array $info): bool
     {
         $res1 = $this->update([
@@ -137,7 +156,10 @@ class SettingModel extends BaseModel
         $res2 = $this->update([
             'setting_value' => $info[SETTING_BLOG_EACH_PAGE],
         ], 'setting_name=:name', ['name' => SETTING_BLOG_EACH_PAGE]);
+        $res3 = $this->update([
+            'setting_value' => $info[SETTING_STORE_PROVINCE],
+        ], 'setting_name=:name', ['name' => SETTING_STORE_PROVINCE]);
 
-        return $res1 && $res2;
+        return $res1 && $res2 && $res3;
     }
 }

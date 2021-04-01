@@ -28,7 +28,7 @@ class AdminAuthMiddleware implements IMiddleware
 //        $auth = container()->get('auth_admin');
 //
 //        if (!$auth->isLoggedIn()) {
-//            \response()->redirect(\url('admin.login'));
+//            response()->redirect(url('admin.login'));
 //        }
     }
 }

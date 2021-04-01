@@ -10,7 +10,10 @@
         <ul class="cart_list">
             <?php foreach ($items ?? [] as $item): ?>
                 <li>
-                    <a href="javascript:void(0);" class="item_remove"><i class="ion-close"></i></a>
+                    <a href="javascript:void(0);" class="__remove_from_cart_btn"
+                       data-cart-item-code<?= $item['code']; ?>>
+                        <i class="ion-close"></i>
+                    </a>
                     <?php if (isset($item['title']) || isset($item['image'])): ?>
                         <a href="<?= url('home.product.show', [
                             'id' => $item['product_id'],

@@ -4,7 +4,10 @@ namespace App\Logic\Controllers;
 
 use App\Logic\Abstracts\AbstractHomeController;
 use App\Logic\Handlers\ResourceHandler;
+use App\Logic\Models\ProductModel;
+use App\Logic\Utils\CouponUtil;
 use Jenssegers\Agent\Agent;
+use Sim\Cart\Interfaces\IDBException as ICartDBException;
 use Sim\Container\Exceptions\MethodNotFoundException;
 use Sim\Container\Exceptions\ParameterHasNoDefaultValueException;
 use Sim\Container\Exceptions\ServiceNotFoundException;
@@ -33,13 +36,15 @@ class CartController extends AbstractHomeController
     }
 
     /**
+     * @param $product_code
+     * @throws ICartDBException
      * @throws MethodNotFoundException
      * @throws ParameterHasNoDefaultValueException
      * @throws ServiceNotFoundException
      * @throws ServiceNotInstantiableException
      * @throws \ReflectionException
      */
-    public function addToCart()
+    public function addToCart($product_code)
     {
         $resourceHandler = new ResourceHandler();
 
@@ -48,7 +53,37 @@ class CartController extends AbstractHomeController
          */
         $agent = container()->get(Agent::class);
         if (!$agent->isRobot()) {
+            /**
+             * @var ProductModel $productModel
+             */
+            $productModel = container()->get(ProductModel::class);
+            $extraInfo = $productModel->getLimitedProduct(
+                'pa.code=:code AND pa.is_deleted!=:del AND pa.publish=:pub AND pa.is_available=:avl ' .
+                'AND pa.product_availability=:pAvl AND pa.stock_count>:sc AND pa.max_cart_count>:mcc', [
+                'code' => $product_code,
+                'del' => DB_YES,
+                'pub' => DB_YES,
+                'avl' => DB_YES,
+                'pAvl' => DB_YES,
+                'sc' => 0,
+                'mcc' => 0
+            ], [], 1, 0, [], [
+                    'pa.image', 'pa.brand_fa_name', 'pa.festival_discount', 'pa.festival_expire',
+                    'pa.category_name', 'pa.title', 'pa.slug', 'pa.category_id',
+                ]
+            );
 
+            if (count($extraInfo)) {
+                cart()->add($product_code, $extraInfo[0]);
+                $resourceHandler
+                    ->type(RESPONSE_TYPE_SUCCESS)
+                    ->errorMessage('محصول به سبد اضافه شد.');
+                CouponUtil::checkCoupon(CouponUtil::getStoredCouponCode());
+            } else {
+                $resourceHandler
+                    ->type(RESPONSE_TYPE_ERROR)
+                    ->errorMessage('محصول مورد نظر موجود نمی‌باشد!');
+            }
         } else {
             response()->httpCode(403);
             $resourceHandler
@@ -59,39 +94,78 @@ class CartController extends AbstractHomeController
     }
 
     /**
-     * @throws MethodNotFoundException
-     * @throws ParameterHasNoDefaultValueException
-     * @throws ServiceNotFoundException
-     * @throws ServiceNotInstantiableException
-     * @throws \ReflectionException
+     * @param $product_code
+     * @throws ICartDBException
      */
-    public function updateCart()
+    public function updateCart($product_code)
     {
         $resourceHandler = new ResourceHandler();
 
-        /**
-         * @var Agent $agent
-         */
-        $agent = container()->get(Agent::class);
-        if (!$agent->isRobot()) {
-
-        } else {
+        try {
+            /**
+             * @var Agent $agent
+             */
+            $agent = container()->get(Agent::class);
+            if (!$agent->isRobot()) {
+                /**
+                 * @var ProductModel $productModel
+                 */
+                $productModel = container()->get(ProductModel::class);
+                $qnt = input()->post('qnt')->getValue();
+                if ($productModel->getLimitedProductCount(
+                    'pa.code=:code AND pa.is_deleted!=:del AND pa.publish=:pub AND pa.is_available=:avl ' .
+                    'AND pa.product_availability=:pAvl AND pa.stock_count>:sc AND pa.max_cart_count>:mcc', [
+                    'code' => $product_code,
+                    'del' => DB_YES,
+                    'pub' => DB_YES,
+                    'avl' => DB_YES,
+                    'pAvl' => DB_YES,
+                    'sc' => 0,
+                    'mcc' => 0
+                ])
+                ) {
+                    if ($qnt > 0) {
+                        cart()->update($product_code, [
+                            'qnt' => $qnt,
+                        ]);
+                        $resourceHandler
+                            ->type(RESPONSE_TYPE_SUCCESS)
+                            ->errorMessage('تعداد محصول در سبد، بروزرسانی شد.');
+                        CouponUtil::checkCoupon(CouponUtil::getStoredCouponCode());
+                    } else {
+                        $resourceHandler
+                            ->type(RESPONSE_TYPE_ERROR)
+                            ->errorMessage('تعداد وارد شده نامعتبر است.');
+                    }
+                } else {
+                    $resourceHandler
+                        ->type(RESPONSE_TYPE_ERROR)
+                        ->errorMessage('محصول مورد نظر موجود نمی‌باشد!');
+                }
+            } else {
+                response()->httpCode(403);
+                $resourceHandler
+                    ->type(RESPONSE_TYPE_ERROR)
+                    ->errorMessage('خطا در ارتباط با سرور، لطفا دوباره تلاش کنید.');
+            }
+            response()->json($resourceHandler->getReturnData());
+        } catch (\Exception $e) {
             response()->httpCode(403);
             $resourceHandler
                 ->type(RESPONSE_TYPE_ERROR)
                 ->errorMessage('خطا در ارتباط با سرور، لطفا دوباره تلاش کنید.');
         }
-        response()->json($resourceHandler->getReturnData());
     }
 
     /**
+     * @param $product_code
      * @throws MethodNotFoundException
      * @throws ParameterHasNoDefaultValueException
      * @throws ServiceNotFoundException
      * @throws ServiceNotInstantiableException
      * @throws \ReflectionException
      */
-    public function removeFromCart()
+    public function removeFromCart($product_code)
     {
         $resourceHandler = new ResourceHandler();
 
@@ -100,7 +174,16 @@ class CartController extends AbstractHomeController
          */
         $agent = container()->get(Agent::class);
         if (!$agent->isRobot()) {
-
+            if (cart()->remove($product_code)) {
+                $resourceHandler
+                    ->type(RESPONSE_TYPE_SUCCESS)
+                    ->errorMessage('محصول از سبد خرید حذف شد.');
+                CouponUtil::checkCoupon(CouponUtil::getStoredCouponCode());
+            } else {
+                $resourceHandler
+                    ->type(RESPONSE_TYPE_ERROR)
+                    ->errorMessage('خظا در حذف محصول از سبد خرید!');
+            }
         } else {
             response()->httpCode(403);
             $resourceHandler
@@ -164,9 +247,84 @@ class CartController extends AbstractHomeController
          */
         $agent = container()->get(Agent::class);
         if (!$agent->isRobot()) {
+            $couponCode = CouponUtil::getStoredCouponCode();
             $resourceHandler
                 ->type(RESPONSE_TYPE_SUCCESS)
-                ->data($this->setTemplate('partial/main/ajax/cart-items-info')->render());
+                ->data($this->setTemplate('partial/main/ajax/cart-items-info')->render([
+                    'couponCode' => $couponCode,
+                ]));
+        } else {
+            response()->httpCode(403);
+            $resourceHandler
+                ->type(RESPONSE_TYPE_ERROR)
+                ->errorMessage('خطا در ارتباط با سرور، لطفا دوباره تلاش کنید.');
+        }
+        response()->json($resourceHandler->getReturnData());
+    }
+
+    /**
+     * @throws ConfigNotRegisteredException
+     * @throws ControllerException
+     * @throws IFileNotExistsException
+     * @throws IInvalidVariableNameException
+     * @throws MethodNotFoundException
+     * @throws ParameterHasNoDefaultValueException
+     * @throws PathNotRegisteredException
+     * @throws ServiceNotFoundException
+     * @throws ServiceNotInstantiableException
+     * @throws \ReflectionException
+     */
+    public function getCartProductsTotalInfo()
+    {
+        $resourceHandler = new ResourceHandler();
+
+        /**
+         * @var Agent $agent
+         */
+        $agent = container()->get(Agent::class);
+        if (!$agent->isRobot()) {
+            $couponCode = CouponUtil::getStoredCouponCode();
+            $resourceHandler
+                ->type(RESPONSE_TYPE_SUCCESS)
+                ->data($this->setTemplate('partial/main/ajax/cart-items-total-info')->render([
+                    'couponCode' => $couponCode,
+                ]));
+        } else {
+            response()->httpCode(403);
+            $resourceHandler
+                ->type(RESPONSE_TYPE_ERROR)
+                ->errorMessage('خطا در ارتباط با سرور، لطفا دوباره تلاش کنید.');
+        }
+        response()->json($resourceHandler->getReturnData());
+    }
+
+    /**
+     * @param $coupon_code
+     * @throws MethodNotFoundException
+     * @throws ParameterHasNoDefaultValueException
+     * @throws ServiceNotFoundException
+     * @throws ServiceNotInstantiableException
+     * @throws \ReflectionException
+     */
+    public function checkCoupon($coupon_code)
+    {
+        $resourceHandler = new ResourceHandler();
+
+        /**
+         * @var Agent $agent
+         */
+        $agent = container()->get(Agent::class);
+        if (!$agent->isRobot()) {
+            $res = CouponUtil::checkCoupon($coupon_code);
+            if ($res[0]) {
+                $resourceHandler
+                    ->type(RESPONSE_TYPE_SUCCESS)
+                    ->errorMessage($res[1]);
+            } else {
+                $resourceHandler
+                    ->type(RESPONSE_TYPE_ERROR)
+                    ->errorMessage($res[1]);
+            }
         } else {
             response()->httpCode(403);
             $resourceHandler
@@ -183,22 +341,8 @@ class CartController extends AbstractHomeController
      * @throws ServiceNotInstantiableException
      * @throws \ReflectionException
      */
-    public function checkCoupon()
+    public function checkStoredCoupon()
     {
-        $resourceHandler = new ResourceHandler();
-
-        /**
-         * @var Agent $agent
-         */
-        $agent = container()->get(Agent::class);
-        if (!$agent->isRobot()) {
-
-        } else {
-            response()->httpCode(403);
-            $resourceHandler
-                ->type(RESPONSE_TYPE_ERROR)
-                ->errorMessage('خطا در ارتباط با سرور، لطفا دوباره تلاش کنید.');
-        }
-        response()->json($resourceHandler->getReturnData());
+        $this->checkCoupon(CouponUtil::getStoredCouponCode());
     }
 }

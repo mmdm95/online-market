@@ -36,7 +36,7 @@ $validator = form_validator();
 
                         <div class="form-group text-center ml-sm-0 mr-sm-3 mb-0">
                             <?php
-                            $img = $validator->setInput('inp-setting-img') ?: ($aboutSec['image'] ?? '');
+                            $img = !$validator->getStatus() ? ($validator->setInput('inp-setting-img') ?: ($aboutSec['image'] ?? '')) : ($aboutSec['image'] ?? '');
                             ?>
                             <div class="img-placeholder-custom __file_picker_handler __file_image mx-auto <?= !empty($img) ? 'has-image' : ''; ?>"
                                  data-toggle="modal"
@@ -67,7 +67,7 @@ $validator = form_validator();
                             <input type="text" class="form-control"
                                    placeholder="از نوع عددی"
                                    name="inp-setting-title"
-                                   value="<?= $validator->setInput('inp-setting-title') ?: ($aboutSec['title'] ?? ''); ?>">
+                                   value="<?= !$validator->getStatus() ? ($validator->setInput('inp-setting-title') ?: ($aboutSec['title'] ?? '')) : ($aboutSec['title'] ?? ''); ?>">
                         </div>
                         <div class="form-group">
                             <label>
@@ -80,7 +80,7 @@ $validator = form_validator();
                                     cols="30"
                                     rows="10"
                                     placeholder=""
-                            ><?= $validator->setInput('inp-setting-desc') ?: ($aboutSec['desc'] ?? ''); ?></textarea>
+                            ><?= !$validator->getStatus() ? ($validator->setInput('inp-setting-desc') ?: ($aboutSec['desc'] ?? '')) : ($aboutSec['desc'] ?? ''); ?></textarea>
                         </div>
                     </div>
 

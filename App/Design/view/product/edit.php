@@ -174,7 +174,7 @@ $validator = form_validator();
                         <button type="button" class="btn btn-primary flat-icon __duplicator_btn"
                                 data-container-element=".__all_products_container"
                                 data-sample-element="#__sample_all_product"
-                                data-clearable-elements='["inp-edit-product-stock-count[]","inp-edit-product-max-count[]","inp-edit-product-color[]","inp-edit-product-size[]","inp-edit-product-guarantee[]","inp-edit-product-price[]","inp-edit-product-discount-price[]","inp-edit-product-discount-date[]","inp-edit-product-product-availability[]"]'
+                                data-clearable-elements='["inp-edit-product-stock-count[]","inp-edit-product-max-count[]","inp-edit-product-color[]","inp-edit-product-size[]","inp-edit-product-weight[]","inp-edit-product-guarantee[]","inp-edit-product-price[]","inp-edit-product-discount-price[]","inp-edit-product-discount-date[]","inp-edit-product-product-availability[]"]'
                                 data-edit-remove="true">
                             افزودن محصول جدید
                             <i class="icon-plus2 ml-2" aria-hidden="true"></i>
@@ -218,19 +218,25 @@ $validator = form_validator();
                                            name="inp-edit-product-size[]"
                                            value="<?= $validator->setInput('inp-edit-product-size'); ?>">
                                 </div>
-                                <div class="mt-3 col-lg-4">
+                                <div class="mt-3 col-md-6 col-xl-3">
                                     <label>گارانتی:</label>
                                     <input type="text" class="form-control" placeholder="وارد کنید"
                                            name="inp-edit-product-guarantee[]"
                                            value="<?= $validator->setInput('inp-edit-product-guarantee'); ?>">
                                 </div>
-                                <div class="mt-3 col-md-6 col-lg-4">
+                                <div class="mt-3 col-md-6 col-xl-3">
+                                    <label>وزن با بسته‌بندی(گرم):</label>
+                                    <input type="text" class="form-control" placeholder="از نوع عددی"
+                                           name="inp-edit-product-weight[]"
+                                           value="<?= $validator->setInput('inp-edit-product-weight'); ?>">
+                                </div>
+                                <div class="mt-3 col-md-6 col-xl-3">
                                     <label>قیمت:</label>
                                     <input type="text" class="form-control" placeholder="به تومان"
                                            name="inp-edit-product-price[]"
                                            value="<?= $validator->setInput('inp-edit-product-price'); ?>">
                                 </div>
-                                <div class="mt-3 col-md-6 col-lg-4">
+                                <div class="mt-3 col-md-6 col-xl-3">
                                     <label>قیمت با تخفیف:</label>
                                     <input type="text" class="form-control" placeholder="به تومان"
                                            name="inp-edit-product-discount-price[]"
@@ -530,19 +536,247 @@ $validator = form_validator();
                     <?php load_partial('admin/card-header', ['header_title' => "<span class='text-danger mr-1'>*</span>" . 'ویژگی‌های محصول']); ?>
 
                     <div class="card-body">
-                        لطفا برای یکپارچه بودن ساختارها، با استفاده از
-                        <span class="text-warning">جدول</span>
-                        <span class="text-warning">(Table)</span>
-                        اقدام به ساخت ویژگی‌ها نمایید.
+                        مواردی که
+                        <span class="badge badge-info">عنوان اصلی ویژگی</span>
+                        یا
+                        <span class="badge badge-warning">عنوان زیر ویژگی</span>
+                        آن‌ها خالی است، در نظر گرفته نمیشود.
                     </div>
 
                     <div class="card-body">
-                        <textarea name="inp-edit-product-properties"
-                                  cols="30"
-                                  rows="10"
-                                  placeholder="ویژگی‌ها را وارد کنید..."
-                                  class="form-control cntEditor"
-                        ><?= $validator->setInput('inp-edit-product-properties') ?: $product['properties']; ?></textarea>
+                        <?php
+                        $properties = input()->post('inp-item-product-properties');
+                        $subProperties = input()->post('inp-item-product-sub-properties');
+                        $dbProperties = json_decode($product['properties']);
+                        $dbProperties = is_array($dbProperties) ? $dbProperties : [];
+                        ?>
+
+                        <div class="__all_properties_container">
+                            <?php if (!$validator->getStatus()): ?>
+                                <?php foreach ($properties as $k => $main): ?>
+                                    <div class="border-success border-2 border-dashed rounded p-2 mb-3 position-relative __product_properties __sample_product_property">
+                                        <div class="row m-0">
+                                            <div class="col-lg-6 form-group">
+                                                <label>
+                                                    عنوان اصلی ویژگی
+                                                </label>
+                                                <input type="text"
+                                                       class="form-control"
+                                                       placeholder="وارد کنید"
+                                                       name="inp-item-product-properties[<?= $k; ?>][title]"
+                                                       value="<?= $main['title']->getValue(); ?>">
+                                            </div>
+                                        </div>
+
+                                        <div class="__all_sub_property_container">
+                                            <?php if (($subProperties[$k] ?? [])): ?>
+                                                <?php foreach (($subProperties[$k]) as $k2 => $sub): ?>
+                                                    <div class="row m-0 position-relative border-warning border-2 border-dashed rounded p-2 my-3 __sub_product_properties __sample_sub_product_property">
+                                                        <div class="col-lg-4 form-group">
+                                                            <label>
+                                                                عنوان زیر ویژگی
+                                                            </label>
+                                                            <input type="text"
+                                                                   class="form-control"
+                                                                   placeholder="وارد کنید"
+                                                                   name="inp-item-product-sub-properties[<?= $k; ?>][<?= $k2; ?>][sub-title]"
+                                                                   value="<?= $sub['sub-title']->getValue(); ?>">
+                                                        </div>
+                                                        <div class="col-lg-8 form-group">
+                                                            <label>
+                                                                ویژگی‌ها
+                                                            </label>
+                                                            <input type="text"
+                                                                   class="form-control tags-input"
+                                                                   placeholder="وارد کنید"
+                                                                   name="inp-item-product-sub-properties[<?= $k; ?>][<?= $k2; ?>][sub-properties]"
+                                                                   value="<?= $sub['sub-properties']->getValue(); ?>">
+                                                        </div>
+                                                    </div>
+                                                <?php endforeach; ?>
+                                            <?php else: ?>
+                                                <div class="row m-0 position-relative border-warning border-2 border-dashed rounded p-2 my-3 __sub_product_properties __sample_sub_product_property">
+                                                    <div class="col-lg-4 form-group">
+                                                        <label>
+                                                            عنوان زیر ویژگی
+                                                        </label>
+                                                        <input type="text"
+                                                               class="form-control"
+                                                               placeholder="وارد کنید"
+                                                               name="inp-item-product-sub-properties[<?= $k; ?>][0][sub-title]">
+                                                    </div>
+                                                    <div class="col-lg-8 form-group">
+                                                        <label>
+                                                            ویژگی‌ها
+                                                        </label>
+                                                        <input type="text"
+                                                               class="form-control tags-input"
+                                                               placeholder="وارد کنید"
+                                                               name="inp-item-product-sub-properties[<?= $k; ?>][0][sub-properties]">
+                                                    </div>
+                                                </div>
+                                            <?php endif; ?>
+                                        </div>
+
+                                        <div class="row mt-3">
+                                            <div class="col-md-7 col-lg-5 ml-auto">
+                                                <button type="button"
+                                                        class="btn bg-white btn-block border-warning border-3 __sub_property_cloner">
+                                                    زیر ویژگی جدید
+                                                    <i class="icon-plus2 text-dark ml-2" aria-hidden="true"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                <?php endforeach; ?>
+                            <?php elseif (count($dbProperties) > 0): ?>
+                                <?php
+                                $counter = 0;
+                                ?>
+                                <?php foreach ($dbProperties as $main): ?>
+                                    <div class="border-success border-2 border-dashed rounded p-2 mb-3 position-relative __product_properties __sample_product_property">
+                                        <div class="row m-0">
+                                            <div class="col-lg-6 form-group">
+                                                <label>
+                                                    عنوان اصلی ویژگی
+                                                </label>
+                                                <input type="text"
+                                                       class="form-control"
+                                                       placeholder="وارد کنید"
+                                                       name="inp-item-product-properties[<?= $counter; ?>][title]"
+                                                       value="<?= $main['title']->getValue(); ?>">
+                                            </div>
+                                        </div>
+
+                                        <div class="__all_sub_property_container">
+                                            <?php if (($subProperties[$counter] ?? [])): ?>
+                                                <?php
+                                                $counter2 = 0;
+                                                ?>
+                                                <?php foreach (($subProperties[$counter]) as $sub): ?>
+                                                    <div class="row m-0 position-relative border-warning border-2 border-dashed rounded p-2 my-3 __sub_product_properties __sample_sub_product_property">
+                                                        <div class="col-lg-4 form-group">
+                                                            <label>
+                                                                عنوان زیر ویژگی
+                                                            </label>
+                                                            <input type="text"
+                                                                   class="form-control"
+                                                                   placeholder="وارد کنید"
+                                                                   name="inp-item-product-sub-properties[<?= $counter; ?>][<?= $counter2; ?>][sub-title]"
+                                                                   value="<?= $sub['sub-title']->getValue(); ?>">
+                                                        </div>
+                                                        <div class="col-lg-8 form-group">
+                                                            <label>
+                                                                ویژگی‌ها
+                                                            </label>
+                                                            <input type="text"
+                                                                   class="form-control tags-input"
+                                                                   placeholder="وارد کنید"
+                                                                   name="inp-item-product-sub-properties[<?= $counter; ?>][<?= $counter2; ?>][sub-properties]"
+                                                                   value="<?= $sub['sub-properties']->getValue(); ?>">
+                                                        </div>
+                                                    </div>
+                                                    <?php
+                                                    ++$counter2;
+                                                    ?>
+                                                <?php endforeach; ?>
+                                            <?php else: ?>
+                                                <div class="row m-0 position-relative border-warning border-2 border-dashed rounded p-2 my-3 __sub_product_properties __sample_sub_product_property">
+                                                    <div class="col-lg-4 form-group">
+                                                        <label>
+                                                            عنوان زیر ویژگی
+                                                        </label>
+                                                        <input type="text"
+                                                               class="form-control"
+                                                               placeholder="وارد کنید"
+                                                               name="inp-item-product-sub-properties[<?= $counter; ?>][0][sub-title]">
+                                                    </div>
+                                                    <div class="col-lg-8 form-group">
+                                                        <label>
+                                                            ویژگی‌ها
+                                                        </label>
+                                                        <input type="text"
+                                                               class="form-control tags-input"
+                                                               placeholder="وارد کنید"
+                                                               name="inp-item-product-sub-properties[<?= $counter; ?>][0][sub-properties]">
+                                                    </div>
+                                                </div>
+                                            <?php endif; ?>
+                                        </div>
+
+                                        <div class="row mt-3">
+                                            <div class="col-md-7 col-lg-5 ml-auto">
+                                                <button type="button"
+                                                        class="btn bg-white btn-block border-warning border-3 __sub_property_cloner">
+                                                    زیر ویژگی جدید
+                                                    <i class="icon-plus2 text-dark ml-2" aria-hidden="true"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <?php
+                                    ++$counter;
+                                    ?>
+                                <?php endforeach; ?>
+                            <?php else: ?>
+                                <div class="border-success border-2 border-dashed rounded p-2 mb-3 position-relative __product_properties __sample_product_property">
+                                    <div class="row m-0">
+                                        <div class="col-lg-6 form-group">
+                                            <label>
+                                                عنوان اصلی ویژگی
+                                            </label>
+                                            <input type="text"
+                                                   class="form-control"
+                                                   placeholder="وارد کنید"
+                                                   name="inp-item-product-properties[0][title]">
+                                        </div>
+                                    </div>
+
+                                    <div class="__all_sub_property_container">
+                                        <div class="row m-0 position-relative border-warning border-2 border-dashed rounded p-2 my-3 __sub_product_properties __sample_sub_product_property">
+                                            <div class="col-lg-4 form-group">
+                                                <label>
+                                                    عنوان زیر ویژگی
+                                                </label>
+                                                <input type="text"
+                                                       class="form-control"
+                                                       placeholder="وارد کنید"
+                                                       name="inp-item-product-sub-properties[0][0][sub-title]">
+                                            </div>
+                                            <div class="col-lg-8 form-group">
+                                                <label>
+                                                    ویژگی‌ها
+                                                </label>
+                                                <input type="text"
+                                                       class="form-control tags-input"
+                                                       placeholder="وارد کنید"
+                                                       name="inp-item-product-sub-properties[0][0][sub-properties]">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row mt-3">
+                                        <div class="col-md-7 col-lg-5 ml-auto">
+                                            <button type="button"
+                                                    class="btn bg-white btn-block border-warning border-3 __sub_property_cloner">
+                                                زیر ویژگی جدید
+                                                <i class="icon-plus2 text-dark ml-2" aria-hidden="true"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            <?php endif; ?>
+                        </div>
+
+                        <div class="row mt-3">
+                            <div class="col-md-8 col-lg-6 mx-auto">
+                                <button type="button" id="__property_cloner"
+                                        class="btn bg-white btn-block border-success border-3">
+                                    ویژگی جدید
+                                    <i class="icon-plus2 text-dark ml-2" aria-hidden="true"></i>
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

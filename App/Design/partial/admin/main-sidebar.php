@@ -17,34 +17,31 @@
     <div class="sidebar-content">
 
         <!-- User menu -->
-        <div class="sidebar-user">
-            <div class="card-body">
-                <div class="media">
-                    <div class="mr-3">
-                        <a href="#">
-                            <img src="../../../../global_assets/images/placeholders/placeholder.jpg" width="38"
-                                 height="38" class="rounded-circle" alt="">
-                        </a>
-                    </div>
-
-                    <div class="media-body">
-                        <div class="media-title font-weight-semibold">وحید ضیایی</div>
-                        <div class="font-size-xs opacity-50 iransans-regular">
-                            <i class="icon-user font-size-sm mr-1"></i>
-                            مدیر سایت
+        <div class="sidebar-user-material">
+            <div class="sidebar-user-material-body">
+                <div class="card-body text-center">
+                    <a href="#">
+                        <img src="<?= asset_path('image/avatars/avatars-default.png', false); ?>"
+                             class="img-fluid rounded-circle shadow-1 mb-3" width="80" height="80" alt="">
+                    </a>
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <h6 class="mb-0 text-white text-shadow-dark">وحید ضیایی</h6>
+                            <span class="font-size-sm text-white text-shadow-dark">مدیر سایت</span>
+                        </div>
+                        <div class="ml-3 align-self-center">
+                            <a href="<?= url('admin.setting.main')->getRelativeUrl(); ?>" class="text-white">
+                                <i class="icon-cog3"></i>
+                            </a>
                         </div>
                     </div>
 
-                    <div class="ml-3 align-self-center">
-                        <a href="#" class="text-white"><i class="icon-cog3"></i></a>
-                    </div>
+                    <a href="<?= url('home.index')->getRelativeUrl(); ?>"
+                       target="_blank"
+                       class="btn border text-white btn-block mt-3">
+                        نمایش سایت
+                    </a>
                 </div>
-
-                <a href="<?= url('home.index')->getRelativeUrl(); ?>"
-                   target="_blank"
-                   class="btn border text-white btn-block mt-3">
-                    نمایش سایت
-                </a>
             </div>
         </div>
         <!-- /user menu -->
@@ -59,7 +56,8 @@
                     <i class="icon-menu" title="اصلی"></i>
                 </li>
                 <li class="nav-item">
-                    <a href="<?= url('admin.index'); ?>" class="nav-link"
+                    <a href="<?= url('admin.index'); ?>"
+                       class="nav-link <?= url()->contains(url('admin.index')->getRelativeUrlTrimmed()) ? 'active' : ''; ?>"
                        data-popup="tooltip"
                        data-original-title="میز کار"
                        data-placement="left">
@@ -72,12 +70,14 @@
 
                     <ul class="nav nav-group-sub">
                         <li class="nav-item">
-                            <a href="<?= url('admin.user.add'); ?>" class="nav-link">
+                            <a href="<?= url('admin.user.add'); ?>"
+                               class="nav-link <?= url()->contains(url('admin.user.add')->getRelativeUrlTrimmed()) ? 'active' : ''; ?>">
                                 افزودن کاربر
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="<?= url('admin.user.view', ''); ?>" class="nav-link">
+                            <a href="<?= url('admin.user.view', ''); ?>"
+                               class="nav-link <?= url()->contains(url('admin.user.view', '')->getRelativeUrlTrimmed()) ? 'active' : ''; ?>">
                                 مشاهده کاربران
                             </a>
                         </li>
@@ -95,44 +95,50 @@
 
                     <ul class="nav nav-group-sub">
                         <li class="nav-item">
-                            <a href="<?= url('admin.pay_method.add'); ?>" class="nav-link">
+                            <a href="<?= url('admin.pay_method.add'); ?>"
+                               class="nav-link <?= url()->contains(url('admin.pay_method.add')->getRelativeUrlTrimmed()) ? 'active' : ''; ?>">
                                 افزودن روش پرداخت جدید
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="<?= url('admin.pay_method.view', ''); ?>" class="nav-link">
+                            <a href="<?= url('admin.pay_method.view', ''); ?>"
+                               class="nav-link <?= url()->contains(url('admin.pay_method.view', '')->getRelativeUrlTrimmed()) ? 'active' : ''; ?>">
                                 لیست روش‌های پرداخت
                             </a>
                         </li>
                     </ul>
                 </li>
-                <li class="nav-item nav-item-submenu">
-                    <a href="#" class="nav-link"><i class="icon-box-remove"></i> <span>روش‌های ارسال</span></a>
-
-                    <ul class="nav nav-group-sub">
-                        <li class="nav-item">
-                            <a href="<?= url('admin.send_method.add'); ?>" class="nav-link">
-                                افزودن روش ارسال جدید
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="<?= url('admin.send_method.view', ''); ?>" class="nav-link">
-                                لیست روش‌های ارسال
-                            </a>
-                        </li>
-                    </ul>
-                </li>
+                <!--                <li class="nav-item nav-item-submenu">-->
+                <!--                    <a href="#" class="nav-link"><i class="icon-box-remove"></i> <span>روش‌های ارسال</span></a>-->
+                <!---->
+                <!--                    <ul class="nav nav-group-sub">-->
+                <!--                        <li class="nav-item">-->
+                <!--                            <a href="" class="nav-link">-->
+                <?= '';//url('admin.send_method.add');        ?>
+                <!--                                افزودن روش ارسال جدید-->
+                <!--                            </a>-->
+                <!--                        </li>-->
+                <!--                        <li class="nav-item">-->
+                <!--                            <a href="" class="nav-link">-->
+                <?= '';//url('admin.send_method.view', '');        ?>
+                <!--                                لیست روش‌های ارسال-->
+                <!--                            </a>-->
+                <!--                        </li>-->
+                <!--                    </ul>-->
+                <!--                </li>-->
                 <li class="nav-item nav-item-submenu">
                     <a href="#" class="nav-link"><i class="icon-bucket"></i> <span>رنگ‌ها</span></a>
 
                     <ul class="nav nav-group-sub">
                         <li class="nav-item">
-                            <a href="<?= url('admin.color.add'); ?>" class="nav-link">
+                            <a href="<?= url('admin.color.add'); ?>"
+                               class="nav-link <?= url()->contains(url('admin.color.add')->getRelativeUrlTrimmed()) ? 'active' : ''; ?>">
                                 افزودن رنگ جدید
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="<?= url('admin.color.view', ''); ?>" class="nav-link">
+                            <a href="<?= url('admin.color.view', ''); ?>"
+                               class="nav-link <?= url()->contains(url('admin.color.view', '')->getRelativeUrlTrimmed()) ? 'active' : ''; ?>">
                                 لیست رنگ‌ها
                             </a>
                         </li>
@@ -143,12 +149,14 @@
 
                     <ul class="nav nav-group-sub">
                         <li class="nav-item">
-                            <a href="<?= url('admin.brand.add'); ?>" class="nav-link">
+                            <a href="<?= url('admin.brand.add'); ?>"
+                               class="nav-link <?= url()->contains(url('admin.brand.add')->getRelativeUrlTrimmed()) ? 'active' : ''; ?>">
                                 افزودن برند جدید
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="<?= url('admin.brand.view', ''); ?>" class="nav-link">
+                            <a href="<?= url('admin.brand.view', ''); ?>"
+                               class="nav-link <?= url()->contains(url('admin.brand.view', '')->getRelativeUrlTrimmed()) ? 'active' : ''; ?>">
                                 لیست برندها
                             </a>
                         </li>
@@ -159,12 +167,14 @@
 
                     <ul class="nav nav-group-sub">
                         <li class="nav-item">
-                            <a href="<?= url('admin.category.add'); ?>" class="nav-link">
+                            <a href="<?= url('admin.category.add'); ?>"
+                               class="nav-link <?= url()->contains(url('admin.category.add')->getRelativeUrlTrimmed()) ? 'active' : ''; ?>">
                                 افزودن دسته
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="<?= url('admin.category.view', ''); ?>" class="nav-link">
+                            <a href="<?= url('admin.category.view', ''); ?>"
+                               class="nav-link <?= url()->contains(url('admin.category.view', '')->getRelativeUrlTrimmed()) ? 'active' : ''; ?>">
                                 مشاهده دسته‌ها
                             </a>
                         </li>
@@ -175,12 +185,14 @@
 
                     <ul class="nav nav-group-sub">
                         <li class="nav-item">
-                            <a href="<?= url('admin.festival.add'); ?>" class="nav-link">
+                            <a href="<?= url('admin.festival.add'); ?>"
+                               class="nav-link <?= url()->contains(url('admin.festival.add')->getRelativeUrlTrimmed()) ? 'active' : ''; ?>">
                                 افزودن جشنواره
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="<?= url('admin.festival.view', ''); ?>" class="nav-link">
+                            <a href="<?= url('admin.festival.view', ''); ?>"
+                               class="nav-link <?= url()->contains(url('admin.festival.view', '')->getRelativeUrlTrimmed()) ? 'active' : ''; ?>">
                                 لیست جشنواره‌ها
                             </a>
                         </li>
@@ -200,12 +212,14 @@
 
                     <ul class="nav nav-group-sub">
                         <li class="nav-item">
-                            <a href="<?= url('admin.coupon.add'); ?>" class="nav-link">
+                            <a href="<?= url('admin.coupon.add'); ?>"
+                               class="nav-link <?= url()->contains(url('admin.coupon.add')->getRelativeUrlTrimmed()) ? 'active' : ''; ?>">
                                 افزودن کوپن تخفیف
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="<?= url('admin.coupon.view', ''); ?>" class="nav-link">
+                            <a href="<?= url('admin.coupon.view', ''); ?>"
+                               class="nav-link <?= url()->contains(url('admin.coupon.view', '')->getRelativeUrlTrimmed()) ? 'active' : ''; ?>">
                                 مشاهده کوپن‌ها
                             </a>
                         </li>
@@ -216,12 +230,14 @@
 
                     <ul class="nav nav-group-sub">
                         <li class="nav-item">
-                            <a href="<?= url('admin.product.add'); ?>" class="nav-link">
+                            <a href="<?= url('admin.product.add'); ?>"
+                               class="nav-link <?= url()->contains(url('admin.product.add')->getRelativeUrlTrimmed()) ? 'active' : ''; ?>">
                                 افزودن محصول جدید
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="<?= url('admin.product.view', ''); ?>" class="nav-link">
+                            <a href="<?= url('admin.product.view', ''); ?>"
+                               class="nav-link <?= url()->contains(url('admin.product.view', '')->getRelativeUrlTrimmed()) ? 'active' : ''; ?>">
                                 مشاهده محصولات
                             </a>
                         </li>
@@ -239,12 +255,14 @@
 
                     <ul class="nav nav-group-sub">
                         <li class="nav-item">
-                            <a href="<?= url('admin.wallet.view', ''); ?>" class="nav-link">
+                            <a href="<?= url('admin.wallet.view', ''); ?>"
+                               class="nav-link <?= url()->contains(url('admin.wallet.view', '')->getRelativeUrlTrimmed()) ? 'active' : ''; ?>">
                                 مشاهده کیف پول کاربران
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="<?= url('admin.deposit-type.view'); ?>" class="nav-link">
+                            <a href="<?= url('admin.deposit-type.view'); ?>"
+                               class="nav-link <?= url()->contains(url('admin.deposit-type.view')->getRelativeUrlTrimmed()) ? 'active' : ''; ?>">
                                 مدیریت انواع تراکنش ها
                             </a>
                         </li>
@@ -255,26 +273,29 @@
 
                     <ul class="nav nav-group-sub">
                         <li class="nav-item">
-                            <a href="<?= url('admin.order.view', ''); ?>" class="nav-link">
+                            <a href="<?= url('admin.order.view', ''); ?>"
+                               class="nav-link <?= url()->contains(url('admin.order.view', '')->getRelativeUrlTrimmed()) ? 'active' : ''; ?>">
                                 سفارشات ثبت شده
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="<?= url('admin.badge.view'); ?>" class="nav-link">
+                            <a href="<?= url('admin.badge.view'); ?>"
+                               class="nav-link <?= url()->contains(url('admin.badge.view')->getRelativeUrlTrimmed()) ? 'active' : ''; ?>">
                                 مدیریت وضعیت سفارشات
                             </a>
                         </li>
                     </ul>
                 </li>
-                <li class="nav-item">
-                    <a href="<?= url('admin.return.order.view'); ?>" class="nav-link"
-                       data-popup="tooltip"
-                       data-original-title="سفارشات مرجوعی"
-                       data-placement="left">
-                        <i class="icon-backspace2"></i>
-                        <span>سفارشات مرجوعی</span>
-                    </a>
-                </li>
+                <!--                <li class="nav-item">-->
+                <!--                    <a href="" class="nav-link"-->
+                <?= '';//url('admin.return.order.view');    ?>
+                <!--                       data-popup="tooltip"-->
+                <!--                       data-original-title="سفارشات مرجوعی"-->
+                <!--                       data-placement="left">-->
+                <!--                        <i class="icon-backspace2"></i>-->
+                <!--                        <span>سفارشات مرجوعی</span>-->
+                <!--                    </a>-->
+                <!--                </li>-->
                 <!-- /financial and orders -->
 
                 <!-- Report -->
@@ -330,12 +351,14 @@
 
                     <ul class="nav nav-group-sub">
                         <li class="nav-item">
-                            <a href="<?= url('admin.blog.add'); ?>" class="nav-link">
+                            <a href="<?= url('admin.blog.add'); ?>"
+                               class="nav-link <?= url()->contains(url('admin.blog.add')->getRelativeUrlTrimmed()) ? 'active' : ''; ?>">
                                 افزودن مطلب
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="<?= url('admin.blog.view', ''); ?>" class="nav-link">
+                            <a href="<?= url('admin.blog.view', ''); ?>"
+                               class="nav-link <?= url()->contains(url('admin.blog.view', '')->getRelativeUrlTrimmed()) ? 'active' : ''; ?>">
                                 مشاهده مطالب
                             </a>
                         </li>
@@ -346,12 +369,14 @@
 
                     <ul class="nav nav-group-sub">
                         <li class="nav-item">
-                            <a href="<?= url('admin.blog.category.add'); ?>" class="nav-link">
+                            <a href="<?= url('admin.blog.category.add'); ?>"
+                               class="nav-link <?= url()->contains(url('admin.blog.category.add')->getRelativeUrlTrimmed()) ? 'active' : ''; ?>">
                                 افزودن دسته‌بندی مطلب
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="<?= url('admin.blog.category.view', ''); ?>" class="nav-link">
+                            <a href="<?= url('admin.blog.category.view', ''); ?>"
+                               class="nav-link <?= url()->contains(url('admin.blog.category.view')->getRelativeUrlTrimmed()) ? 'active' : ''; ?>">
                                 مشاهده دسته‌بندی مطالب
                             </a>
                         </li>
@@ -362,12 +387,14 @@
 
                     <ul class="nav nav-group-sub">
                         <li class="nav-item">
-                            <a href="<?= url('admin.static.page.add'); ?>" class="nav-link">
+                            <a href="<?= url('admin.static.page.add'); ?>"
+                               class="nav-link <?= url()->contains(url('admin.static.page.add')->getRelativeUrlTrimmed()) ? 'active' : ''; ?>">
                                 افزودن صفحه ثابت
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="<?= url('admin.static.page.view', ''); ?>" class="nav-link">
+                            <a href="<?= url('admin.static.page.view', ''); ?>"
+                               class="nav-link <?= url()->contains(url('admin.static.page.view', '')->getRelativeUrlTrimmed()) ? 'active' : ''; ?>">
                                 مشاهده صفحات ثابت
                             </a>
                         </li>
@@ -381,7 +408,8 @@
                     <i class="icon-menu" title="ارتباطات"></i>
                 </li>
                 <li class="nav-item">
-                    <a href="<?= url('admin.contact-us.view', ''); ?>" class="nav-link"
+                    <a href="<?= url('admin.contact-us.view', ''); ?>"
+                       class="nav-link <?= url()->contains(url('admin.contact-us.view', '')->getRelativeUrlTrimmed()) ? 'active' : ''; ?>"
                        data-popup="tooltip"
                        data-original-title="تماس‌ها"
                        data-placement="left">
@@ -390,7 +418,8 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="<?= url('admin.complaints.view', ''); ?>" class="nav-link"
+                    <a href="<?= url('admin.complaints.view', ''); ?>"
+                       class="nav-link <?= url()->contains(url('admin.complaints.view', '')->getRelativeUrlTrimmed()) ? 'active' : ''; ?>"
                        data-popup="tooltip"
                        data-original-title="شکایات"
                        data-placement="left">
@@ -399,7 +428,8 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="<?= url('admin.faq.view', ''); ?>" class="nav-link"
+                    <a href="<?= url('admin.faq.view', ''); ?>"
+                       class="nav-link <?= url()->contains(url('admin.faq.view', '')->getRelativeUrlTrimmed()) ? 'active' : ''; ?>"
                        data-popup="tooltip"
                        data-original-title="سؤالات متداول"
                        data-placement="left">
@@ -408,7 +438,8 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="<?= url('admin.newsletter.view', ''); ?>" class="nav-link"
+                    <a href="<?= url('admin.newsletter.view', ''); ?>"
+                       class="nav-link <?= url()->contains(url('admin.newsletter.view', '')->getRelativeUrlTrimmed()) ? 'active' : ''; ?>"
                        data-popup="tooltip"
                        data-original-title="خبرنامه"
                        data-placement="left">
@@ -424,7 +455,8 @@
                     <i class="icon-menu" title="سایر"></i>
                 </li>
                 <li class="nav-item">
-                    <a href="<?= url('admin.slider.view', ''); ?>" class="nav-link"
+                    <a href="<?= url('admin.slider.view', ''); ?>"
+                       class="nav-link <?= url()->contains(url('admin.slider.view', '')->getRelativeUrlTrimmed()) ? 'active' : ''; ?>"
                        data-popup="tooltip"
                        data-original-title="مدیریت اسلایدشو"
                        data-placement="left">
@@ -433,7 +465,8 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="<?= url('admin.instagram.view', ''); ?>" class="nav-link"
+                    <a href="<?= url('admin.instagram.view', ''); ?>"
+                       class="nav-link <?= url()->contains(url('admin.instagram.view', '')->getRelativeUrlTrimmed()) ? 'active' : ''; ?>"
                        data-popup="tooltip"
                        data-original-title="مدیریت تصاویر اینستاگرام"
                        data-placement="left">
@@ -442,7 +475,8 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="<?= url('admin.sec_question.view', ''); ?>" class="nav-link"
+                    <a href="<?= url('admin.sec_question.view', ''); ?>"
+                       class="nav-link <?= url()->contains(url('admin.sec_question.view', '')->getRelativeUrlTrimmed()) ? 'active' : ''; ?>"
                        data-popup="tooltip"
                        data-original-title="سؤالات امنیتی"
                        data-placement="left">
@@ -451,7 +485,8 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="<?= url('admin.file-manager'); ?>" class="nav-link"
+                    <a href="<?= url('admin.file-manager'); ?>"
+                       class="nav-link <?= url()->contains(url('admin.file-manager')->getRelativeUrlTrimmed()) ? 'active' : ''; ?>"
                        data-popup="tooltip"
                        data-original-title="مدیریت فایل‌ها"
                        data-placement="left">
@@ -460,7 +495,8 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="<?= url('admin.setting.main'); ?>" class="nav-link"
+                    <a href="<?= url('admin.setting.main'); ?>"
+                       class="nav-link <?= url()->contains(url('admin.setting.main')->getRelativeUrlTrimmed()) ? 'active' : ''; ?>"
                        data-popup="tooltip"
                        data-original-title="تنظیمات"
                        data-placement="left">
@@ -469,7 +505,8 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="<?= url('admin.logout'); ?>" class="nav-link"
+                    <a href="<?= url('admin.logout'); ?>"
+                       class="nav-link"
                        data-popup="tooltip"
                        data-original-title="خروج"
                        data-placement="left">

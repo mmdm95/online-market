@@ -51,7 +51,7 @@
             cloned.removeClass('__sample_sub_menu_item');
             cloned.find('input').val('');
             //-----
-            lastIndex = menuContainer.find('.__menu_items').last().index() + 1;
+            lastIndex = $(btn).closest('.__menu_items').index();
             currContainer = $(btn).closest('.__menu_items').find('.__all_sub_menu_container');
             lastSubIndex = currContainer.find('.__sub_menu_items').last().index() + 1;
 

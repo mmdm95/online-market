@@ -256,14 +256,15 @@ abstract class BaseModel
     /**
      * @param string|null $where
      * @param array $bindParams
+     * @param string|null $table
      * @return int
      */
-    public function count(?string $where = null, array $bindParams = []): int
+    public function count(?string $where = null, array $bindParams = [], ?string $table = null): int
     {
         $select = $this->connector->select();
         $select
             ->cols(['COUNT(DISTINCT(id)) AS count'])
-            ->from($this->table);
+            ->from((!empty($table) ? $table : $this->table));
 
         if (!empty($where)) {
             $select

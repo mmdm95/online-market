@@ -34,11 +34,12 @@
                                         </a>
                                         <div class="product_action_box">
                                             <ul class="list_none pr_action_btn">
-                                                <li>
-                                                    <a href="<?= url('home.compare'); ?>">
-                                                        <i class="icon-shuffle"></i>
-                                                    </a>
-                                                </li>
+                                                <!--                                                <li>-->
+                                                <!--                                                    <a href="">-->
+                                                <?= '';//url('home.compare');  ?>
+                                                <!--                                                        <i class="icon-shuffle"></i>-->
+                                                <!--                                                    </a>-->
+                                                <!--                                                </li>-->
                                                 <li>
                                                     <a href="<?= url('home.product.show', [
                                                         'id' => $item['product_id'],

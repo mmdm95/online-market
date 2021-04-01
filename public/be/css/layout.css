@@ -1053,7 +1053,7 @@ body {
     border-right-width: 1px; }
 
 .sidebar-user-material .sidebar-user-material-body {
-  background: url(../../../../../../global_assets/images/backgrounds/user_bg3.jpg) center center no-repeat;
+  background: url("../images/backgrounds/user_bg1.png") center center no-repeat;
   background-size: cover; }
 
 .sidebar-dark .sidebar-user-material .collapse {

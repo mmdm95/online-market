@@ -217,7 +217,7 @@ class StringUtil
                 return $newArr;
             }
 
-            if (is_string($str)) {
+            if (is_string($str) || is_scalar($str)) {
                 $str = str_replace(self::$english_numbers, self::$persian_numbers, $str);
                 $str = str_replace(self::$arabic_numbers, self::$persian_numbers, $str);
                 $str = str_replace(self::$arabic_decimal, self::$persian_numbers, $str);
@@ -231,7 +231,7 @@ class StringUtil
                 return $newArr;
             }
 
-            if (is_string($str)) {
+            if (is_string($str) || is_scalar($str)) {
                 $str = str_replace(self::$arabic_special_characters, self::$persian_special_characters, $str);
             }
         }
@@ -258,7 +258,7 @@ class StringUtil
                 return $newArr;
             }
 
-            if (is_string($str)) {
+            if (is_string($str) || is_scalar($str)) {
                 $str = str_replace(self::$english_numbers, self::$arabic_numbers, $str);
                 $str = str_replace(self::$persian_numbers, self::$arabic_numbers, $str);
                 $str = str_replace(self::$persian_decimal, self::$arabic_numbers, $str);
@@ -272,7 +272,7 @@ class StringUtil
                 return $newArr;
             }
 
-            if (is_string($str)) {
+            if (is_string($str) || is_scalar($str)) {
                 $str = str_replace(self::$persian_special_characters, self::$arabic_special_characters, $str);
             }
         }
@@ -296,7 +296,7 @@ class StringUtil
             return $newArr;
         }
 
-        if (is_string($str)) {
+        if (is_string($str) || is_scalar($str)) {
             $str = str_replace(self::$arabic_numbers, self::$english_numbers, $str);
             $str = str_replace(self::$persian_numbers, self::$english_numbers, $str);
             $str = str_replace(self::$persian_decimal, self::$english_numbers, $str);

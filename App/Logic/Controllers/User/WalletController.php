@@ -40,7 +40,7 @@ class WalletController extends AbstractUserController
 
         $wallet_flow = $walletFlowModel->get(
             [
-                'deposit_code',
+                'order_code',
                 'deposit_price',
                 'deposit_type_title',
                 'deposit_at',

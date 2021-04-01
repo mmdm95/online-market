@@ -30,6 +30,7 @@ $validator = form_validator();
                     <?php load_partial('admin/setting-header', ['header_title' => 'سایر تنظیمات']); ?>
 
                     <div class="card-body">
+                        <?php load_partial('admin/section-header', ['header_title' => 'تعداد نمایش آیتم‌ها']); ?>
                         <div class="row">
                             <div class="col-lg-6 form-group">
                                 <label>
@@ -39,7 +40,7 @@ $validator = form_validator();
                                 <input type="text" class="form-control"
                                        placeholder="از نوع عددی"
                                        name="inp-setting-product-pagination"
-                                       value="<?= $validator->setInput('inp-setting-product-pagination') ?: config()->get('settings.product_each_page.value'); ?>">
+                                       value="<?= !$validator->getStatus() ? ($validator->setInput('inp-setting-product-pagination') ?: config()->get('settings.product_each_page.value')) : config()->get('settings.product_each_page.value'); ?>">
                             </div>
                             <div class="col-lg-6 form-group">
                                 <label>
@@ -49,7 +50,7 @@ $validator = form_validator();
                                 <input type="text" class="form-control"
                                        placeholder="از نوع عددی"
                                        name="inp-setting-blog-pagination"
-                                       value="<?= $validator->setInput('inp-setting-blog-pagination') ?: config()->get('settings.blog_each_page.value'); ?>">
+                                       value="<?= !$validator->getStatus() ? ($validator->setInput('inp-setting-blog-pagination') ?: config()->get('settings.blog_each_page.value')) : config()->get('settings.blog_each_page.value'); ?>">
                             </div>
                         </div>
                     </div>

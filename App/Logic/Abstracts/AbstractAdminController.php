@@ -3,6 +3,11 @@
 namespace App\Logic\Abstracts;
 
 use Sim\Abstracts\Mvc\Controller\AbstractController;
+use Sim\Auth\DBAuth;
+use Sim\Container\Exceptions\MethodNotFoundException;
+use Sim\Container\Exceptions\ParameterHasNoDefaultValueException;
+use Sim\Container\Exceptions\ServiceNotFoundException;
+use Sim\Container\Exceptions\ServiceNotInstantiableException;
 use Sim\Exceptions\ConfigManager\ConfigNotRegisteredException;
 use Sim\Interfaces\IFileNotExistsException;
 use Sim\Interfaces\IInvalidVariableNameException;
@@ -19,6 +24,11 @@ abstract class AbstractAdminController extends AbstractController
      * @throws ConfigNotRegisteredException
      * @throws IFileNotExistsException
      * @throws IInvalidVariableNameException
+     * @throws \ReflectionException
+     * @throws MethodNotFoundException
+     * @throws ParameterHasNoDefaultValueException
+     * @throws ServiceNotFoundException
+     * @throws ServiceNotInstantiableException
      */
     public function __construct()
     {
@@ -33,6 +43,12 @@ abstract class AbstractAdminController extends AbstractController
                 'MAX_UPLOAD_SIZE' => max_upload_size(),
             ],
         ]);
+
+        /**
+         * @var DBAuth $auth
+         */
+        $auth = container()->get('auth_admin');
+        $auth->resume()->isLoggedIn();
     }
 
     /**

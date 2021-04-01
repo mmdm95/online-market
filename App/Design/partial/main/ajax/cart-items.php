@@ -1,5 +1,7 @@
 <?php
 
+use Sim\Utils\StringUtil;
+
 $cart = cart();
 $items = $cart->getItems();
 
@@ -17,56 +19,72 @@ $items = $cart->getItems();
     </tr>
     </thead>
     <tbody>
-    <tr>
-        <td class="product-thumbnail"><a href="#"><img src="assets/images/product_img1.jpg"
-                                                       alt="product1"></a></td>
-        <td class="product-name" data-title="محصول"><a href="#">لباس آبی زنانه</a></td>
-        <td class="product-price" data-title="قیمت">45000 تومان</td>
-        <td class="product-quantity" data-title="تعداد">
-            <div class="quantity">
-                <input type="button" value="-" class="minus">
-                <input type="text" name="quantity" value="2" title="Qty" class="qty"
-                       size="4">
-                <input type="button" value="+" class="plus">
-            </div>
-        </td>
-        <td class="product-subtotal" data-title="جمع">90000 تومان</td>
-        <td class="product-remove" data-title="حذف"><a href="#"><i class="ti-close"></i></a>
-        </td>
-    </tr>
-    <tr>
-        <td class="product-thumbnail"><a href="#"><img src="assets/images/product_img2.jpg"
-                                                       alt="product2"></a></td>
-        <td class="product-name" data-title="محصول"><a href="#">چرم خاکستری</a></td>
-        <td class="product-price" data-title="قیمت">55000 تومان</td>
-        <td class="product-quantity" data-title="تعداد">
-            <div class="quantity">
-                <input type="button" value="-" class="minus">
-                <input type="text" name="quantity" value="1" title="Qty" class="qty"
-                       size="4">
-                <input type="button" value="+" class="plus">
-            </div>
-        </td>
-        <td class="product-subtotal" data-title="جمع">55000 تومان</td>
-        <td class="product-remove" data-title="حذف"><a href="#"><i class="ti-close"></i></a>
-        </td>
-    </tr>
-    <tr>
-        <td class="product-thumbnail"><a href="#"><img src="assets/images/product_img3.jpg"
-                                                       alt="product3"></a></td>
-        <td class="product-name" data-title="محصول"><a href="#">لباس کامل زنانه</a></td>
-        <td class="product-price" data-title="قیمت">68000 تومان</td>
-        <td class="product-quantity" data-title="تعداد">
-            <div class="quantity">
-                <input type="button" value="-" class="minus">
-                <input type="text" name="quantity" value="3" title="Qty" class="qty"
-                       size="4">
-                <input type="button" value="+" class="plus">
-            </div>
-        </td>
-        <td class="product-subtotal" data-title="جمع">204000 تومان</td>
-        <td class="product-remove" data-title="حذف"><a href="#"><i class="ti-close"></i></a>
-        </td>
-    </tr>
+    <?php foreach ($items as $item): ?>
+        <?php $price = (float)get_discount_price($item)[0]; ?>
+        <tr>
+            <td class="product-thumbnail">
+                <a href="<?= url('home.product.show', [
+                    'id' => $item['product_id'],
+                    'slug' => $item['slug'],
+                ])->getRelativeUrl(); ?>">
+                    <img src="<?= url('image.show', ['filename' => $item['image']])->getRelativeUrl(); ?>"
+                         alt="<?= $item['title']; ?>">
+                </a>
+            </td>
+            <td class="product-name" data-title="محصول">
+                <a href="<?= url('home.product.show', [
+                    'id' => $item['product_id'],
+                    'slug' => $item['slug'],
+                ])->getRelativeUrl(); ?>">
+                    <?= $item['title']; ?>
+                </a>
+
+                <br>
+
+                <small class="mx-1">در دسته</small>
+                <a href="<?= url('home.search', [
+                    'category' => $item['category_id'],
+                    'category_slug' => StringUtil::slugify($item['category_name']),
+                ])->getRelativeUrl(); ?>" class="mr-4">
+                    <?= $item['category_name'] ?>
+                </a>
+
+                <small class="mx-1">برند</small>
+                <span><?= $item['brand_fa_name']; ?></span>
+            </td>
+            <td class="product-price" data-title="قیمت">
+                <?php if (0 != $price): ?>
+                    <?= number_format(StringUtil::toEnglish($price)); ?>
+                    <small>تومان</small>
+                <?php else: ?>
+                    رایگان
+                <?php endif; ?>
+            </td>
+            <td class="product-quantity" data-title="تعداد">
+                <div class="quantity">
+                    <input type="button" value="-" class="minus">
+                    <input type="text" name="quantity" value="<?= $item['qnt'] ?>"
+                           data-max-cart-count="<?= $item['max_cart_count']; ?>"
+                           data-cart-item-code="<?= $item['code']; ?>"
+                           title="Qty" class="qty ltr" size="4">
+                    <input type="button" value="+" class="plus">
+                </div>
+            </td>
+            <td class="product-subtotal" data-title="جمع">
+                <?php if (0 != $price): ?>
+                    <?= number_format(StringUtil::toEnglish($item['qnt'] * $price)); ?>
+                    <small>تومان</small>
+                <?php else: ?>
+                    رایگان
+                <?php endif; ?>
+            </td>
+            <td class="product-remove" data-title="حذف">
+                <a href="javascript:void(0);" class="__remove_from_cart_btn"
+                   data-cart-item-code="<?= $item['code']; ?>">
+                    <i class="ti-close"></i>
+                </a>
+            </td>
+        </tr>
+    <?php endforeach; ?>
     </tbody>
 </table>

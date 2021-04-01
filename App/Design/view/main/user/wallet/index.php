@@ -55,7 +55,7 @@ use Sim\Utils\StringUtil;
                     <tbody>
                     <?php foreach ($wallet_flow as $flow): ?>
                         <tr>
-                            <td class="en-font"><?= $flow['deposit_code']; ?></td>
+                            <td class="en-font"><?= $flow['order_code']; ?></td>
                             <td><?= Jdf::jdate(DEFAULT_TIME_FORMAT, $flow['deposit_at']); ?></td>
                             <td><?= $flow['deposit_type_title']; ?></td>
                             <td>

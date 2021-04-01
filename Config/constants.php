@@ -20,7 +20,7 @@ use Sim\I18n\ISOLanguageCodes;
  *     1.2.5.0 instead of 1.2.5-a
  *     1.2.5.0.1 instead of 1.2.5-a1 (I'm not sure)
  */
-defined("APP_VERSION") OR define("APP_VERSION", "0.1.15");
+defined("APP_VERSION") OR define("APP_VERSION", "0.1.17");
 
 /***************************************
  * You can add your constants here
@@ -86,6 +86,10 @@ defined("SETTING_FOOTER_SECTION_1") OR define("SETTING_FOOTER_SECTION_1", 'foote
 defined("SETTING_FOOTER_SECTION_2") OR define("SETTING_FOOTER_SECTION_2", 'footer_section_2');
 defined("SETTING_FOOTER_NAMADS") OR define("SETTING_FOOTER_NAMADS", 'footer_namads');
 defined("SETTING_BLOG_EACH_PAGE") OR define("SETTING_BLOG_EACH_PAGE", 'blog_each_page');
+defined("SETTING_STORE_PROVINCE") OR define("SETTING_STORE_PROVINCE", 'store_province');
+defined("SETTING_STORE_CITY") OR define("SETTING_STORE_CITY", 'store_city');
+defined("SETTING_CURRENT_CITY_POST_PRICE") OR define("SETTING_CURRENT_CITY_POST_PRICE", 'current_city_post_price');
+defined("SETTING_MIN_FREE_PRICE") OR define("SETTING_MIN_FREE_PRICE", 'min_free_price');
 defined("SETTING_PRODUCT_EACH_PAGE") OR define("SETTING_PRODUCT_EACH_PAGE", 'product_each_page');
 defined("SETTING_INDEX_3_IMAGES") OR define("SETTING_INDEX_3_IMAGES", 'index_3_images');
 defined("SETTING_INDEX_TABBED_SLIDER") OR define("SETTING_INDEX_TABBED_SLIDER", 'index_tabbed_slider');
@@ -98,7 +102,9 @@ defined("ROLE_SUPER_USER") OR define("ROLE_SUPER_USER", 'super_user');
 defined("ROLE_ADMIN") OR define("ROLE_ADMIN", 'admin');
 defined("ROLE_COLLEAGUE") OR define("ROLE_COLLEAGUE", 'colleague');
 defined("ROLE_USER") OR define("ROLE_USER", 'user');
-defined("ROLES_ARRAY_ACCEPTABLE") OR define("ROLES_ARRAY_ACCEPTABLE", [ROLE_ADMIN, ROLE_COLLEAGUE, ROLE_USER]);
+defined("ROLE_WRITER") OR define("ROLE_WRITER", 'writer');
+defined("ROLE_SHOP_ADMIN") OR define("ROLE_SHOP_ADMIN", 'shop_admin');
+defined("ROLES_ARRAY_ACCEPTABLE") OR define("ROLES_ARRAY_ACCEPTABLE", [ROLE_ADMIN, ROLE_USER, ROLE_WRITER, ROLE_SHOP_ADMIN]);
 
 // sms types
 defined("SMS_TYPE_ACTIVATION") OR define("SMS_TYPE_ACTIVATION", 'sms_activation');
@@ -212,3 +218,8 @@ defined("MINIMUM_WARNING_STOCK_VALUE") OR define("MINIMUM_WARNING_STOCK_VALUE", 
 
 // max category level number
 defined("MAX_CATEGORY_LEVEL") OR define("MAX_CATEGORY_LEVEL", 3);
+
+// coupon code session key constant
+defined("SESSION_APPLIED_COUPON_CODE") OR define("SESSION_APPLIED_COUPON_CODE", 'session_applied_coupon_code');
+// post price session key constant
+defined("SESSION_APPLIED_POST_PRICE") OR define("SESSION_APPLIED_POST_PRICE", 'session_applied_post_price');

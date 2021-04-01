@@ -69,8 +69,8 @@
 
             <li class="nav-item dropdown dropdown-user">
                 <a href="#" class="navbar-nav-link dropdown-toggle" data-toggle="dropdown">
-                    <img src="../../../../global_assets/images/placeholders/placeholder.jpg" class="rounded-circle"
-                         alt="">
+                    <img src="<?= asset_path('image/avatars/avatars-default.png', false); ?>"
+                         class="rounded-circle" alt="">
                     <span>وحید ضیایی</span>
                 </a>
 

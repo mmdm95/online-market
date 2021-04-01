@@ -189,7 +189,7 @@ abstract class AbstractController implements ITemplateFactory, ITemplateRenderer
                 }
             }
         } elseif (\is_string($middleWares)) {
-            if (!\in_array($middleWare, $this->middlewares)) {
+            if (!\in_array($middleWares, $this->middlewares)) {
                 $this->middlewares[] = $middleWares;
             }
         }

@@ -3,8 +3,9 @@
 namespace Sim\Abstracts\Patterns;
 
 use Sim\Exceptions\Patterns\SingletonException;
+use Sim\Interfaces\Patterns\ISingleton;
 
-abstract class AbstractSingleton
+abstract class AbstractSingleton implements ISingleton
 {
     private static $instances = [];
 

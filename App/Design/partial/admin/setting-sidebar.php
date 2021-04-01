@@ -29,6 +29,12 @@
                         </a>
                     </li>
                     <li class="nav-item">
+                        <a href="<?= url('admin.setting.buy')->getRelativeUrl(); ?>" class="nav-link">
+                            <i class="icon-box"></i>
+                            خرید
+                        </a>
+                    </li>
+                    <li class="nav-item">
                         <a href="<?= url('admin.setting.sms')->getRelativeUrl(); ?>" class="nav-link">
                             <i class="icon-envelop4"></i>
                             پیامک

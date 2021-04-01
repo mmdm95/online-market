@@ -1,65 +1,35 @@
+<?php
+
+$validator = form_validator();
+
+?>
+
 <!-- START MAIN CONTENT -->
 <div class="main_content">
 
     <!-- START SECTION SHOP -->
     <div class="section">
         <div class="container">
-            <div class="row">
-                <div class="col-lg-6">
-                    <div class="toggle_info">
-                        <span><i class="fas fa-user"></i>مشتری برگشتی؟ <a href="#loginform" data-toggle="collapse"
-                                                                          class="collapsed" aria-expanded="false">برای ورود اینجا کلیک کنید</a></span>
-                    </div>
-                    <div class="panel-collapse collapse login_form" id="loginform">
-                        <div class="panel-body">
-                            <p>لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ، و با استفاده از طراحان گرافیک
-                                است، چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است.</p>
-                            <form method="post">
-                                <div class="form-group">
-                                    <input type="text" required="" class="form-control" name="email"
-                                           placeholder="نام کاربری یا ایمیل">
-                                </div>
-                                <div class="form-group">
-                                    <input class="form-control" required="" type="password" name="password"
-                                           placeholder="کلمه عبور">
-                                </div>
-                                <div class="login_footer form-group">
-                                    <div class="chek-form">
-                                        <div class="custome-checkbox">
-                                            <input class="form-check-input" type="checkbox" name="checkbox"
-                                                   id="remember" value="">
-                                            <label class="form-check-label"
-                                                   for="remember"><span>مرا به خاطر بسپار</span></label>
-                                        </div>
-                                    </div>
-                                    <a href="#">کلمه عبور را فراموش کرده اید؟</a>
-                                </div>
-                                <div class="form-group">
-                                    <button type="submit" class="btn btn-fill-out btn-block" name="login">ورود</button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-6">
-                    <div class="toggle_info">
-                        <span><i class="fas fa-tag"></i>کوپن تخفیف دارید؟ <a href="#coupon" data-toggle="collapse"
-                                                                             class="collapsed" aria-expanded="false">برای وارد کردن کد خود اینجا را کلیک کنید</a></span>
-                    </div>
-                    <div class="panel-collapse collapse coupon_form" id="coupon">
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <div class="coupon_form" id="coupon">
                         <div class="panel-body">
                             <p>اگر کد کوپن دارید ، لطفاً آن را در اینجا وارد کنید.</p>
                             <div class="coupon field_form input-group">
-                                <input type="text" value="" class="form-control"
-                                       placeholder="شماره کوپن را وارد کنید...">
+                                <input type="text" value=""
+                                       class="form-control __coupon_field_inp"
+                                       placeholder="کد کوپن را وارد کنید...">
                                 <div class="input-group-append">
-                                    <button class="btn btn-fill-out btn-sm" type="submit">کوپن</button>
+                                    <button class="btn btn-fill-out btn-sm __apply_coupon" type="button">
+                                        اعمال کوپن
+                                    </button>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+
             <div class="row">
                 <div class="col-12">
                     <div class="medium_divider"></div>
@@ -67,320 +37,198 @@
                     <div class="medium_divider"></div>
                 </div>
             </div>
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="heading_s1">
-                        <h4>جزئیات صورتحساب</h4>
-                    </div>
-                    <form method="post">
-                        <div class="form-group">
-                            <input type="text" required class="form-control" name="fname" placeholder="نام *">
+
+            <form action="<?= url('home.checkout')->getRelativeUrlTrimmed(); ?>"
+                  method="post" id="__checkout_payment_gateway">
+                <div class="row" id="__theia_sticky_sidebar_container">
+                    <div class="col-md-6">
+                        <div class="heading_s1">
+                            <h4>جزئیات صورتحساب</h4>
                         </div>
-                        <div class="form-group">
-                            <input type="text" required class="form-control" name="lname" placeholder="نام خانوادگی *">
-                        </div>
-                        <div class="form-group">
-                            <input class="form-control" required type="text" name="cname" placeholder="نام شرکت">
-                        </div>
-                        <div class="form-group">
-                            <div class="custom_select">
-                                <select class="form-control">
-                                    <option value="">یک گزینه را انتخاب کنید ...</option>
-                                    <option value="AX"> جزایر آلند</option>
-                                    <option value="AF"> افغانستان</option>
-                                    <option value="AL"> آلبانی</option>
-                                    <option value="DZ"> الجزایر</option>
-                                    <option value="AO"> آنگولا</option>
-                                    <option value="AI"> آنگولا</option>
-                                    <option value="AQ"> قطب جنوب</option>
-                                    <option value="AG"> آنتیگوا و باربودا</option>
-                                    <option value="AR"> آرژانتین</option>
-                                    <option value="AM"> ارمنستان</option>
-                                    <option value="AW"> آروبا</option>
-                                    <option value="AU"> استرالیا</option>
-                                    <option value="AT"> اتریش</option>
-                                    <option value="AZ"> آذربایجان</option>
-                                    <option value="BH"> بحرین</option>
-                                    <option value="BD"> بنگلادش</option>
-                                    <option value="BB"> باربادوس</option>
-                                    <option value="BY"> بلاروس</option>
-                                    <option value="BE"> بلژیک</option>
-                                    <option value="BZ"> بلیز</option>
-                                    <option value="BJ"> بنین</option>
-                                    <option value="BM"> برمودا</option>
-                                    <option value="BT"> بوتان</option>
-                                    <option value="BO"> بولیوی</option>
-                                    <option value="BA"> بوسنی و هرزگوین</option>
-                                    <option value="BW"> بوتسوانا</option>
-                                    <option value="BR"> برزیل</option>
-                                    <option value="IO"> قلمرو اقیانوس هند بریتانیا</option>
-                                    <option value="VG"> جزایر ویرجین بریتانیا</option>
-                                    <option value="BN"> برونئی</option>
-                                    <option value="BG"> بلغارستان</option>
-                                    <option value="BI"> بوروندی</option>
-                                    <option value="KH"> کامبوج</option>
-                                    <option value="CM"> کامرون</option>
-                                    <option value="CA"> کانادا</option>
-                                    <option value="CV"> کیپ ورد</option>
-                                    <option value="KY"> جزایر کیمن</option>
-                                    <option value="CF"> جمهوری آفریقای مرکزی</option>
-                                    <option value="TD"> چاد</option>
-                                    <option value="CL"> شیلی</option>
-                                    <option value="CN"> چین</option>
-                                    <option value="CX"> جزیره کریسمس</option>
-                                    <option value="CC"> جزایر کوکوس</option>
-                                    <option value="CO"> کلمبیا</option>
-                                    <option value="KM"> کومور</option>
-                                    <option value="CG"> کنگو</option>
-                                    <option value="CD"> کنگو</option>
-                                    <option value="CK"> جزایر کوک</option>
-                                    <option value="CR"> کاستاریکا</option>
-                                    <option value="HR"> کرواسی</option>
-                                    <option value="CU"> کوبا</option>
-                                    <option value="CW"> کورااائو</option>
-                                    <option value="CY"> قبرس</option>
-                                    <option value="CZ"> جمهوری چک</option>
-                                    <option value="DK"> دانمارک</option>
-                                    <option value="DJ"> جیبوتی</option>
-                                    <option value="DM"> دومینیکا</option>
-                                    <option value="DO"> جمهوری دومنیکن</option>
-                                    <option value="EC"> اکوادور</option>
-                                    <option value="EG"> مصر</option>
-                                    <option value="SV"> السالوادور</option>
+                        <form method="post">
+                            <div class="form-group">
+                                <label>
+                                    <span class="text-danger" aria-hidden="true">*</span>
+                                    نام:
+                                </label>
+                                <input type="text" required class="form-control" name="fname"
+                                       placeholder="حروف فارسی" value="<?= $validator->setInput('fname'); ?>">
+                            </div>
+                            <div class="form-group">
+                                <label>
+                                    <span class="text-danger" aria-hidden="true">*</span>
+                                    نام خانوادگی:
+                                </label>
+                                <input type="text" required class="form-control" name="lname"
+                                       placeholder="حروف فارسی" value="<?= $validator->setInput('lname'); ?>">
+                            </div>
+
+                            <div class="medium_divider"></div>
+
+                            <div class="form-group">
+                                <button type="button" class="btn btn-light btn-block"
+                                        id="__user_addr_choose_btn"
+                                        data-toggle="modal" data-target="#__user_addr_choose_modal">
+                                    انتخاب آدرس
+                                </button>
+                            </div>
+                            <div class="form-group">
+                                <label>
+                                    <span class="text-danger" aria-hidden="true">*</span>
+                                    نام گیرنده:
+                                </label>
+                                <input class="form-control" required type="text"
+                                       placeholder="حروف فارسی" name="inp-addr-full-name"
+                                       value="<?= $validator->setInput('inp-addr-full-name'); ?>">
+                            </div>
+                            <div class="form-group">
+                                <label>
+                                    <span class="text-danger" aria-hidden="true">*</span>
+                                    موبایل گیرنده:
+                                </label>
+                                <input class="form-control" required type="text"
+                                       placeholder="یازده رقم" name="inp-addr-mobile"
+                                       value="<?= $validator->setInput('inp-addr-mobile'); ?>">
+                            </div>
+                            <div class="form-group">
+                                <label>
+                                    <span class="text-danger" aria-hidden="true">*</span>
+                                    استان:
+                                </label>
+                                <select name="inp-addr-province"
+                                        class="selectric_dropdown city-loader-select"
+                                        data-current-province="<?= $validator->setInput('inp-addr-province'); ?>"
+                                        data-city-select-target="#addAddressCitySelect">
+                                    <option value="<?= DEFAULT_OPTION_VALUE ?>"
+                                            selected="selected"
+                                            disabled="disabled">
+                                        انتخاب کنید
+                                    </option>
                                 </select>
                             </div>
-                        </div>
-                        <div class="form-group">
-                            <input type="text" class="form-control" name="billing_address" required=""
-                                   placeholder="آدرس *">
-                        </div>
-                        <div class="form-group">
-                            <input type="text" class="form-control" name="billing_address2" required=""
-                                   placeholder="آدرس 2">
-                        </div>
-                        <div class="form-group">
-                            <input class="form-control" required type="text" name="city" placeholder="شهر *">
-                        </div>
-                        <div class="form-group">
-                            <input class="form-control" required type="text" name="state" placeholder="کشور *">
-                        </div>
-                        <div class="form-group">
-                            <input class="form-control" required type="text" name="zipcode" placeholder="کد پستی *">
-                        </div>
-                        <div class="form-group">
-                            <input class="form-control" required type="text" name="phone" placeholder="تلفن *">
-                        </div>
-                        <div class="form-group">
-                            <input class="form-control" required type="text" name="email" placeholder="آدرس ایمیل *">
-                        </div>
-                        <div class="form-group">
-                            <div class="chek-form">
-                                <div class="custome-checkbox">
-                                    <input class="form-check-input" type="checkbox" name="checkbox" id="createaccount">
-                                    <label class="form-check-label label_info" for="createaccount"><span>ایجاد یک حساب کاربری؟</span></label>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group create-account">
-                            <input class="form-control" required type="password" placeholder="کلمه عبور"
-                                   name="password">
-                        </div>
-                        <div class="ship_detail">
                             <div class="form-group">
-                                <div class="chek-form">
-                                    <div class="custome-checkbox">
-                                        <input class="form-check-input" type="checkbox" name="checkbox"
-                                               id="differentaddress">
-                                        <label class="form-check-label label_info" for="differentaddress"><span>حمل به آدرس دیگری؟</span></label>
-                                    </div>
-                                </div>
+                                <label>
+                                    <span class="text-danger" aria-hidden="true">*</span>
+                                    شهر:
+                                </label>
+                                <select name="inp-addr-city"
+                                        class="selectric_dropdown"
+                                        data-current-city="<?= $validator->setInput('inp-addr-city'); ?>"
+                                        id="addAddressCitySelect">
+                                    <option value="<?= DEFAULT_OPTION_VALUE ?>"
+                                            selected="selected"
+                                            disabled="disabled">
+                                        انتخاب کنید
+                                    </option>
+                                </select>
                             </div>
-                            <div class="different_address">
-                                <div class="form-group">
-                                    <input type="text" required class="form-control" name="fname" placeholder="نام *">
-                                </div>
-                                <div class="form-group">
-                                    <input type="text" required class="form-control" name="lname"
-                                           placeholder="نام خانوادگی *">
-                                </div>
-                                <div class="form-group">
-                                    <input class="form-control" required type="text" name="cname"
-                                           placeholder="نام شرکت">
-                                </div>
-                                <div class="form-group">
-                                    <div class="custom_select">
-                                        <select class="form-control">
-                                            <option value="">یک گزینه را انتخاب کنید ...</option>
-                                            <option value="AX"> جزایر آلند</option>
-                                            <option value="AF"> افغانستان</option>
-                                            <option value="AL"> آلبانی</option>
-                                            <option value="DZ"> الجزایر</option>
-                                            <option value="AO"> آنگولا</option>
-                                            <option value="AI"> آنگولا</option>
-                                            <option value="AQ"> قطب جنوب</option>
-                                            <option value="AG"> آنتیگوا و باربودا</option>
-                                            <option value="AR"> آرژانتین</option>
-                                            <option value="AM"> ارمنستان</option>
-                                            <option value="AW"> آروبا</option>
-                                            <option value="AU"> استرالیا</option>
-                                            <option value="AT"> اتریش</option>
-                                            <option value="AZ"> آذربایجان</option>
-                                            <option value="BH"> بحرین</option>
-                                            <option value="BD"> بنگلادش</option>
-                                            <option value="BB"> باربادوس</option>
-                                            <option value="BY"> بلاروس</option>
-                                            <option value="BE"> بلژیک</option>
-                                            <option value="BZ"> بلیز</option>
-                                            <option value="BJ"> بنین</option>
-                                            <option value="BM"> برمودا</option>
-                                            <option value="BT"> بوتان</option>
-                                            <option value="BO"> بولیوی</option>
-                                            <option value="BA"> بوسنی و هرزگوین</option>
-                                            <option value="BW"> بوتسوانا</option>
-                                            <option value="BR"> برزیل</option>
-                                            <option value="IO"> قلمرو اقیانوس هند بریتانیا</option>
-                                            <option value="VG"> جزایر ویرجین بریتانیا</option>
-                                            <option value="BN"> برونئی</option>
-                                            <option value="BG"> بلغارستان</option>
-                                            <option value="BI"> بوروندی</option>
-                                            <option value="KH"> کامبوج</option>
-                                            <option value="CM"> کامرون</option>
-                                            <option value="CA"> کانادا</option>
-                                            <option value="CV"> کیپ ورد</option>
-                                            <option value="KY"> جزایر کیمن</option>
-                                            <option value="CF"> جمهوری آفریقای مرکزی</option>
-                                            <option value="TD"> چاد</option>
-                                            <option value="CL"> شیلی</option>
-                                            <option value="CN"> چین</option>
-                                            <option value="CX"> جزیره کریسمس</option>
-                                            <option value="CC"> جزایر کوکوس</option>
-                                            <option value="CO"> کلمبیا</option>
-                                            <option value="KM"> کومور</option>
-                                            <option value="CG"> کنگو</option>
-                                            <option value="CD"> کنگو</option>
-                                            <option value="CK"> جزایر کوک</option>
-                                            <option value="CR"> کاستاریکا</option>
-                                            <option value="HR"> کرواسی</option>
-                                            <option value="CU"> کوبا</option>
-                                            <option value="CW"> کورااائو</option>
-                                            <option value="CY"> قبرس</option>
-                                            <option value="CZ"> جمهوری چک</option>
-                                            <option value="DK"> دانمارک</option>
-                                            <option value="DJ"> جیبوتی</option>
-                                            <option value="DM"> دومینیکا</option>
-                                            <option value="DO"> جمهوری دومنیکن</option>
-                                            <option value="EC"> اکوادور</option>
-                                            <option value="EG"> مصر</option>
-                                            <option value="SV"> السالوادور</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <input type="text" class="form-control" name="billing_address" required=""
-                                           placeholder="آدرس *">
-                                </div>
-                                <div class="form-group">
-                                    <input type="text" class="form-control" name="billing_address2" required=""
-                                           placeholder="آدرس 2">
-                                </div>
-                                <div class="form-group">
-                                    <input class="form-control" required type="text" name="city" placeholder="شهر *">
-                                </div>
-                                <div class="form-group">
-                                    <input class="form-control" required type="text" name="state" placeholder="کشور *">
-                                </div>
-                                <div class="form-group">
-                                    <input class="form-control" required type="text" name="zipcode"
-                                           placeholder="کد پستی *">
-                                </div>
+                            <div class="form-group">
+                                <label>
+                                    <span class="text-danger" aria-hidden="true">*</span>
+                                    آدرس:
+                                </label>
+                                <textarea
+                                        type="text"
+                                        class="form-control form-control-min-height"
+                                        name="inp-addr-address"
+                                        required=""
+                                        placeholder=""
+                                ><?= $validator->setInput('inp-addr-address'); ?></textarea>
                             </div>
-                        </div>
-                        <div class="heading_s1">
-                            <h4>اطلاعات اضافی</h4>
-                        </div>
-                        <div class="form-group mb-0">
-                            <textarea rows="5" class="form-control" placeholder="یادداشت های سفارش"></textarea>
-                        </div>
-                    </form>
-                </div>
-                <div class="col-md-6">
-                    <div class="order_review">
-                        <div class="heading_s1">
-                            <h4>سفارشات شما</h4>
-                        </div>
-                        <div class="table-responsive order_table">
-                            <table class="table">
-                                <thead>
-                                <tr>
-                                    <th>محصول</th>
-                                    <th>جمع</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <tr>
-                                    <td>لباس آبی زنانه <span class="product-qty">x 2</span></td>
-                                    <td>90000 تومان</td>
-                                </tr>
-                                <tr>
-                                    <td>چرم خاکستری <span class="product-qty">x 1</span></td>
-                                    <td>55000 تومان</td>
-                                </tr>
-                                <tr>
-                                    <td>لباس کامل زن <span class="product-qty">x 3</span></td>
-                                    <td>204000 تومان</td>
-                                </tr>
-                                </tbody>
-                                <tfoot>
-                                <tr>
-                                    <th>جمع</th>
-                                    <td class="product-subtotal">349000 تومان</td>
-                                </tr>
-                                <tr>
-                                    <th>هزینه ارسال</th>
-                                    <td>ارسال رایگان</td>
-                                </tr>
-                                <tr>
-                                    <th>جمع</th>
-                                    <td class="product-subtotal">349000 تومان</td>
-                                </tr>
-                                </tfoot>
-                            </table>
-                        </div>
-                        <div class="payment_method">
+                            <div class="form-group">
+                                <label>
+                                    <span class="text-danger" aria-hidden="true">*</span>
+                                    کد پستی:
+                                </label>
+                                <input class="form-control" required type="text"
+                                       placeholder="از نوع عددی" name="inp-addr-postal-code"
+                                       value="<?= $validator->setInput('inp-addr-postal-code'); ?>">
+                            </div>
+                        </form>
+                    </div>
+                    <div class="col-md-6" id="__theia_sticky_sidebar">
+                        <div class="order_review">
                             <div class="heading_s1">
-                                <h4>پرداخت</h4>
+                                <h4>سفارشات شما</h4>
                             </div>
-                            <div class="payment_option">
-                                <div class="custome-radio">
-                                    <input class="form-check-input" required="" type="radio" name="payment_option"
-                                           id="exampleRadios3" value="option3" checked="">
-                                    <label class="form-check-label" for="exampleRadios3">انتقال مستقیم بانکی</label>
-                                    <p data-method="option3" class="payment-text">لورم ایپسوم متن ساختگی با تولید سادگی
-                                        نامفهوم از صنعت چاپ، و با استفاده از طراحان گرافیک است. </p>
+                            <div class="shop-cart-info-table">
+                            </div>
+                            <div class="payment_method">
+                                <div class="heading_s1">
+                                    <h4>روش پرداخت</h4>
                                 </div>
-                                <div class="custome-radio">
-                                    <input class="form-check-input" type="radio" name="payment_option"
-                                           id="exampleRadios4" value="option4">
-                                    <label class="form-check-label" for="exampleRadios4">پرداخت را بررسی کنید</label>
-                                    <p data-method="option4" class="payment-text">لورم ایپسوم متن ساختگی با تولید سادگی
-                                        نامفهوم از صنعت چاپ، و با استفاده از طراحان گرافیک است.</p>
+                                <div class="payment_option">
+                                    <?php if (count($payment_methods)): ?>
+                                        <?php $counter = 0; ?>
+                                        <?php foreach ($payment_methods as $k => $method): ?>
+                                            <div class="d-flex align-items-center">
+                                                <div class="custome-radio">
+                                                    <input class="form-check-input" required=""
+                                                        <?= 0 == $counter++ ? 'checked="checked"' : ''; ?>
+                                                           type="radio" name="payment_method_option"
+                                                           id="method<?= $k; ?>" value="<?= $method['code']; ?>">
+                                                    <label class="form-check-label" for="method<?= $k; ?>">
+                                                        <img src="<?= url('image.show', ['filename' => $method['image']])->getRelativeUrl(); ?>"
+                                                             alt="<?= $method['title']; ?>" width="100px" height="auto">
+                                                        <?= $method['title']; ?>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        <?php endforeach; ?>
+                                    <?php else: ?>
+                                        هیچ روش پرداختی وجود ندارد.
+                                    <?php endif; ?>
                                 </div>
-                                <div class="custome-radio">
-                                    <input class="form-check-input" type="radio" name="payment_option"
-                                           id="exampleRadios5" value="option5">
-                                    <label class="form-check-label" for="exampleRadios5">پی پال</label>
-                                    <p data-method="option5" class="payment-text">لورم ایپسوم متن ساختگی با تولید سادگی
-                                        نامفهوم از صنعت چاپ، و با استفاده از طراحان گرافیک است.</p>
+                            </div>
+                            <button type="submit" class="btn btn-fill-out btn-block">پرداخت و ثبت سفارش</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!-- END SECTION SHOP -->
+
+
+    <!-- START ADD ADDRESS MODAL -->
+    <div class="modal fade subscribe_popup" id="__user_addr_choose_modal" tabindex="-1" role="dialog"
+         aria-hidden="true">
+        <div class="modal-dialog modal-md modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true"><i class="ion-ios-close-empty"></i></span>
+                    </button>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="popup_content text-left">
+                                <div class="popup-text">
+                                    <div class="heading_s3 text-left">
+                                        <h4>انتخاب آدرس گیرنده</h4>
+                                    </div>
+                                </div>
+
+                                <div id="__address_choise_container">
+                                    <?php load_partial('main/ajax/user-addresses', [
+                                        'addresses' => $addresses,
+                                    ]); ?>
+                                </div>
+
+                                <div>
+                                    <button class="btn btn-primary btn-block text-uppercase"
+                                            id="__address_choise_button"
+                                            title="اشتراک" type="button">
+                                        انتخاب آدرس
+                                    </button>
                                 </div>
                             </div>
                         </div>
-                        <a href="#" class="btn btn-fill-out btn-block">ترتیب سفارش</a>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <!-- END SECTION SHOP -->
+    <!-- END ADD ADDRESS MODAL -->
 
     <!-- START SECTION SUBSCRIBE NEWSLETTER -->
     <?php load_partial('main/newsletter'); ?>

@@ -18,7 +18,9 @@
         window.TheCart = (function () {
             var
                 _ = this,
-                cartContainer = $(variables.elements.cart.container);
+                cartContainer = $(variables.elements.cart.container),
+                dataItemCode = 'data-cart-item-code',
+                dataItemQnt = 'data-cart-item-quantity';
 
             /*************************************************************
              ********************* Private Functions *********************
@@ -32,11 +34,10 @@
              * @param successCallback
              */
             function addORUpdate(url, method, code, qnt, successCallback) {
-                shop.request(url, method, function () {
+                shop.request(url + '/' + code, method, function () {
                     successCallback.call(this);
                 }, {
                     data: {
-                        code: code,
                         qnt: qnt ? qnt : 1,
                     },
                 }, true);
@@ -47,7 +48,7 @@
              *************************************************************/
 
             /**
-             * @param successCallback
+             * @param [successCallback]
              */
             _.get = function (successCallback) {
                 shop.request(variables.url.cart.get, 'get', successCallback, {}, true);
@@ -64,6 +65,8 @@
 
             /**
              * Delete a cart from database
+             *
+             * @param id
              */
             _.delete = function (id) {
                 shop.request(variables.url.cart.delete + '/' + id, 'delete', function () {
@@ -73,7 +76,7 @@
 
             /**
              * @param code
-             * @param successCallback
+             * @param [successCallback]
              */
             _.add = function (code, successCallback) {
                 if (core.isDefined(code)) {
@@ -84,7 +87,7 @@
             /**
              * @param code
              * @param qnt
-             * @param successCallback
+             * @param [successCallback]
              */
             _.update = function (code, qnt, successCallback) {
                 if (core.isDefined(code)) {
@@ -110,22 +113,58 @@
                 });
             };
 
+            /**
+             * @param btn
+             */
+            _.removeNPlaceCartFunctionality = function (btn) {
+                var code;
+                btn = $(btn);
+                code = btn.attr(dataItemCode);
+                if (code) {
+                    cart.remove(code, function () {
+                        cart.getNPlaceCart();
+                    });
+                } else {
+                    shop.toasts.toast('لطفا محصول مورد نظر خود را انتخاب کنید.', {
+                        type: 'warning',
+                    });
+                }
+            };
+
+            /**
+             * @param [successCallback]
+             */
             _.getCartItems = function (successCallback) {
                 shop.request(variables.url.cart.getItemsTable, 'get', successCallback, {}, true);
             };
 
             /**
-             * @param successCallback
+             * @param [successCallback]
+             */
+            _.getTotalCartItemsInfo = function (successCallback) {
+                shop.request(variables.url.cart.getTotalItemsInfo, 'get', successCallback, {}, true);
+            };
+
+            /**
+             * @param [successCallback]
              */
             _.getTotalCartInfo = function (successCallback) {
                 shop.request(variables.url.cart.getTotalInfo, 'get', successCallback, {}, true);
             };
 
             /**
-             * @param successCallback
+             * @param [coupon]
+             * @param [successCallback]
+             * @param [showError]
              */
-            _.checkCoupon = function (successCallback) {
-                shop.request(variables.url.cart.checkCoupon, 'post', successCallback, {}, true);
+            _.checkCoupon = function (coupon, successCallback, showError) {
+                var url;
+                if (coupon) {
+                    url = variables.url.cart.checkCoupon + '/' + coupon;
+                } else {
+                    url = variables.url.cart.checkStoredCoupon;
+                }
+                shop.request(url, 'post', successCallback, {}, false !== showError);
             };
 
             return _;
@@ -135,12 +174,14 @@
             $this,
             cart,
             addToCartBtn,
+            removeFromCartBtn,
             //-----
             dataItemCode = 'data-cart-item-code',
             dataItemQnt = 'data-cart-item-quantity';
 
         cart = new window.TheCart();
         addToCartBtn = $(variables.elements.cart.addBtn);
+        removeFromCartBtn = $(variables.elements.cart.removeBtn);
 
         /**
          * Cart add or update button click event
@@ -172,6 +213,14 @@
                     type: 'warning',
                 });
             }
+        });
+
+        /**
+         * Cart remove button click event
+         */
+        removeFromCartBtn.on('click' + variables.namespace + ' touchend' + variables.namespace, function (e) {
+            e.preventDefault();
+            cart.removeNPlaceCartFunctionality($(this));
         });
     });
 })(jQuery);

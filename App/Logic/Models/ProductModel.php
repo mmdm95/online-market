@@ -404,6 +404,7 @@ class ProductModel extends BaseModel
                     'color_name' => $product['color_name'],
                     'size' => $product['size'] ?: null,
                     'guarantee' => $product['guarantee'] ?: null,
+                    'weight' => $product['weight'],
                 ]);
             $stmt = $this->db->prepare($insert->getStatement());
             $res = $stmt->execute($insert->getBindValues());
@@ -527,6 +528,7 @@ class ProductModel extends BaseModel
                     'color_name' => $product['color_name'],
                     'size' => $product['size'] ?: null,
                     'guarantee' => $product['guarantee'] ?: null,
+                    'weight' => $product['weight'],
                 ]);
             $stmt = $this->db->prepare($insert->getStatement());
             $res7 = $stmt->execute($insert->getBindValues());

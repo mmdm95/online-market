@@ -8,6 +8,12 @@ use App\Logic\Models\UserModel;
 use Aura\SqlQuery\Mysql\Insert;
 use Faker\Factory;
 use Faker\Generator;
+use Sim\Auth\DBAuth;
+use Sim\Auth\Interfaces\IAuth;
+use Sim\Auth\Interfaces\IAuthenticator;
+use Sim\Auth\Interfaces\IAuthorizer;
+use Sim\Auth\Interfaces\IAuthValidator;
+use Sim\Auth\Interfaces\IAuthVerifier;
 use Sim\Container\Exceptions\MethodNotFoundException;
 use Sim\Container\Exceptions\ParameterHasNoDefaultValueException;
 use Sim\Container\Exceptions\ServiceNotFoundException;
@@ -610,6 +616,144 @@ class FakeData
                 'activated_at' => $activatedAt,
                 'created_at' => time(),
             ], $roleSubset);
+        }
+    }
+
+    public function definePageResPerm()
+    {
+        $structure = [
+            ROLE_DEVELOPER => [
+                'user',
+                'pay_method',
+                'color',
+                'brand',
+                'category',
+                'festival',
+                'unit',
+                'coupon',
+                'product',
+                'wallet',
+                'order',
+                'report_user',
+                'report_product',
+                'report_wallet',
+                'report_order',
+                'blog',
+                'blog_category',
+                'static_page',
+                'contact_us',
+                'complaint',
+                'faq',
+                'newsletter',
+                'slideshow',
+                'instagram',
+                'sec_question',
+                'filemanager',
+                'setting',
+            ],
+            ROLE_SUPER_USER => [
+                'user',
+                'pay_method',
+                'color',
+                'brand',
+                'category',
+                'festival',
+                'unit',
+                'coupon',
+                'product',
+                'wallet',
+                'order',
+                'report_user',
+                'report_product',
+                'report_wallet',
+                'report_order',
+                'blog',
+                'blog_category',
+                'static_page',
+                'contact_us',
+                'complaint',
+                'faq',
+                'newsletter',
+                'slideshow',
+                'instagram',
+                'sec_question',
+                'filemanager',
+                'setting',
+            ],
+            ROLE_ADMIN => [
+                'pay_method',
+                'color',
+                'brand',
+                'category',
+                'festival',
+                'unit',
+                'coupon',
+                'product',
+                'wallet',
+                'order',
+                'report_user',
+                'report_product',
+                'report_wallet',
+                'report_order',
+                'blog',
+                'blog_category',
+                'static_page',
+                'contact_us',
+                'complaint',
+                'faq',
+                'newsletter',
+                'slideshow',
+                'instagram',
+                'sec_question',
+                'filemanager',
+                'setting',
+            ],
+            ROLE_SHOP_ADMIN => [
+                'color',
+                'brand',
+                'category',
+                'festival',
+                'unit',
+                'coupon',
+                'product',
+                'wallet',
+                'order',
+                'report_product',
+                'report_wallet',
+                'report_order',
+                'filemanager',
+            ],
+            ROLE_WRITER => [
+                'blog',
+                'blog_category',
+                'static_page',
+                'filemanager',
+            ],
+        ];
+
+        /**
+         * @var DBAuth $auth
+         */
+        $auth = container()->get('auth_home');
+        $roles = $auth->getRoles();
+        $resources = $auth->getResources();
+        $permissions = [
+            IAuth::PERMISSION_CREATE,
+            IAuth::PERMISSION_READ,
+            IAuth::PERMISSION_UPDATE,
+            IAuth::PERMISSION_DELETE
+        ];
+
+        foreach ($structure as $role => $resName) {
+            $resId = '';
+
+            /**
+             * @var Insert $insert
+             */
+            $insert = $this->model->insert();
+            $insert
+                ->into('role_res_perm');
+            $this->model->execute($insert);
         }
     }
 

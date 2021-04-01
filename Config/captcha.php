@@ -26,7 +26,7 @@ return [
      *
      * Default is 6 characters
      */
-    'length' => 5,
+    'length' => 6,
 
     /**
      * Difficulty of generating captcha
@@ -38,7 +38,7 @@ return [
      *
      * Default is \Sim\Captcha\CaptchaFactory::DIFFICULTY_NORMAL
      */
-    'difficulty' => \Sim\Captcha\CaptchaFactory::DIFFICULTY_NORMAL,
+    'difficulty' => \Sim\Captcha\CaptchaFactory::DIFFICULTY_EASY,
 
     /**
      * Add noise to make it harder to read

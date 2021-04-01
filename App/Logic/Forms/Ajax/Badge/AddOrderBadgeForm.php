@@ -107,13 +107,11 @@ class AddOrderBadgeForm implements IPageForm
         try {
             $title = input()->post('inp-add-badge-title', '')->getValue();
             $color = input()->post('inp-add-badge-color', '')->getValue();
-            $allowReturn = input()->post('inp-add-badge-allow-return', '')->getValue();
 
             $res = $badgeModel->insert([
                 'code' => StringUtil::uniqidReal(12),
                 'title' => $xss->xss_clean(trim($title)),
                 'color' => $xss->xss_clean($color),
-                'allow_return_order' => is_value_checked($allowReturn) ? DB_YES : DB_NO,
                 'created_at' => time(),
             ]);
             return $res;

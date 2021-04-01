@@ -67,8 +67,11 @@ window.MyGlobalVariables = {
             update: '/ajax/cart/update',
             remove: '/ajax/cart/remove',
             getItemsTable: '/ajax/cart/items-table',
+            getTotalItemsInfo: '/ajax/cart/total-items-info',
             getTotalInfo: '/ajax/cart/total-info',
             checkCoupon: '/ajax/cart/check-coupon',
+            checkStoredCoupon: '/ajax/cart/check-stored-coupon',
+            checkPostPrice: '/ajax/cart/check-post-price',
         },
         newsletter: {
             add: '/ajax/newsletter/add',
@@ -763,7 +766,7 @@ window.MyGlobalVariables = {
                             }
                             // refresh select plugin if it's registered on element
                             if ($.fn.select2 && provincesSelect.data('select2')) {
-                                provincesSelect.val(null).trigger('change');
+                                provincesSelect.trigger('change');
                             } else if ($.fn.selectric && provincesSelect.data('selectric')) {
                                 provincesSelect.selectric('refresh');
                             }
@@ -797,7 +800,7 @@ window.MyGlobalVariables = {
                             }
                             // refresh select plugin if it's registered on element
                             if ($.fn.select2 && citiesSelect.data('select2')) {
-                                citiesSelect.val(null).trigger('change');
+                                citiesSelect.trigger('change');
                             } else if ($.fn.selectric && citiesSelect.data('selectric')) {
                                 citiesSelect.selectric('refresh');
                             }

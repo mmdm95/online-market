@@ -62,13 +62,13 @@ class EditProductForm implements IPageForm
                 'inp-edit-product-color.*' => 'رنگ',
                 'inp-edit-product-size.*' => 'سایز',
                 'inp-edit-product-guarantee.*' => 'گارانتی',
+                'inp-edit-product-weight.*' => 'وزن',
                 'inp-edit-product-price.*' => 'قیمت کالا',
                 'inp-edit-product-discount-price.*' => 'قیمت تخفیف کالا',
                 'inp-edit-product-discount-date.*' => 'تاریخ اتمام تخفیف',
                 'inp-edit-product-product-availability.*' => 'موجودی کالا',
                 'inp-edit-product-gallery-img.*' => 'تصویر گالری',
                 'inp-edit-product-desc' => 'توضیحات',
-                'inp-edit-product-properties' => 'ویژگی‌ها',
                 'inp-edit-product-alert-product' => 'تعداد کالا برای هشدار',
                 'inp-edit-product-related.*' => 'محصولات مرتبط',
             ])
@@ -149,13 +149,14 @@ class EditProductForm implements IPageForm
                 }
                 return true;
             }, '{alias} ' . 'انتخاب شده نامعتبر است.');
-        // stock count, max cart count, price, discount price
+        // stock count, max cart count, price, discount price, weight
         $validator
             ->setFields([
                 'inp-edit-product-stock-count.*',
                 'inp-edit-product-max-count.*',
                 'inp-edit-product-price.*',
-                'inp-edit-product-discount-price.*'
+                'inp-edit-product-discount-price.*',
+                'inp-edit-product-weight.*',
             ])
             ->stopValidationAfterFirstError(false)
             ->required()
@@ -165,10 +166,6 @@ class EditProductForm implements IPageForm
         $validator
             ->setFields('inp-edit-product-alert-product')
             ->isInteger();
-        // properties
-        $validator
-            ->setFields('inp-edit-product-properties')
-            ->required();
         // related products
         $validator
             ->setFields('inp-edit-product-related.*')
@@ -250,6 +247,16 @@ class EditProductForm implements IPageForm
                 }
                 return true;
             }, '{alias} ' . 'یک زمان وارد شده نامعتبر است.');
+        // properties
+        $properties = input()->post('inp-item-product-properties');
+        $subProperties = input()->post('inp-item-product-sub-properties');
+        /**
+         * @var ProductUtil $productUtil
+         */
+        $productUtil = container()->get(ProductUtil::class);
+        $theProperties = $productUtil->assembleProductProperties($properties, $subProperties);
+
+        session()->setFlash('product-properties-in-edit-assembled', $theProperties);
 
         if (!count($validator->getUniqueErrors())) {
             /**
@@ -345,7 +352,6 @@ class EditProductForm implements IPageForm
             $keywords = input()->post('inp-edit-product-keywords', '')->getValue();
             $brand = input()->post('inp-edit-product-brand', '')->getValue();
             $category = input()->post('inp-edit-product-category', '')->getValue();
-            $properties = input()->post('inp-edit-product-properties', '')->getValue();
             $desc = input()->post('inp-edit-product-desc', '')->getValue();
             $alertProduct = input()->post('inp-edit-product-alert-product', '')->getValue();
             $relatedProducts = input()->post('inp-edit-product-related');
@@ -356,6 +362,9 @@ class EditProductForm implements IPageForm
             $unit = input()->post('inp-edit-product-unit', '')->getValue();
             $unitInfo = $unitModel->getFirst(['title', 'sign'], 'id=:id', ['id' => $unit]);
 
+            $theProperties = json_encode(session()->getFlash('product-properties-in-edit-assembled') ?: []);
+            if (is_null($theProperties)) return false;
+
             // insert all products and main product information
             return $productModel->updateProduct($id, [
                 'title' => $xss->xss_clean(trim($title)),
@@ -365,7 +374,7 @@ class EditProductForm implements IPageForm
                 'brand_id' => $brand,
                 'category_id' => $category,
                 'body' => $xss->xss_clean($desc) ?: null,
-                'properties' => $xss->xss_clean($properties) ?: null,
+                'properties' => $xss->xss_clean($theProperties) ?: null,
                 'baby_property' => $xss->xss_clean($simpleProp) ?: null,
                 'unit_title' => $unitInfo['title'],
                 'unit_sign' => $unitInfo['sign'],
@@ -374,7 +383,7 @@ class EditProductForm implements IPageForm
                 'publish' => is_value_checked($pub) ? DB_YES : DB_NO,
                 'is_special' => is_value_checked($special) ? DB_YES : DB_NO,
                 'is_available' => is_value_checked($availability) ? DB_YES : DB_NO,
-                'is_returnable' => is_value_checked($availability) ? DB_YES : DB_NO,
+                'is_returnable' => is_value_checked($returnable) ? DB_YES : DB_NO,
                 'allow_commenting' => is_value_checked($commenting) ? DB_YES : DB_NO,
                 'created_by' => $auth->getCurrentUser()['id'] ?? null,
                 'created_at' => time(),

@@ -19,6 +19,10 @@
     background-size: 30px 30px;
 }
 
+.icon-half-x {
+    font-size: 1.5rem !important;
+}
+
 .form-control-min-height {
     min-height: 60px;
     height: 90px;
@@ -144,6 +148,11 @@
 
 .img-placeholder-custom.img-placeholder-custom-sm .img-placeholder-icon {
     font-size: 2.3rem;
+}
+
+.count-square-icon {
+    width: 24px;
+    height: 24px;
 }
 
 /* clone remover button */

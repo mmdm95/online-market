@@ -127,12 +127,10 @@ class EditOrderBadgeForm implements IPageForm
             $id = session()->getFlash('order-badge-edit-id', null);
             $title = input()->post('inp-edit-badge-title', '')->getValue();
             $color = input()->post('inp-edit-badge-color', '')->getValue();
-            $allowReturn = input()->post('inp-edit-badge-allow-return', '')->getValue();
 
             $res = $badgeModel->update([
                 'title' => $xss->xss_clean(trim($title)),
                 'color' => $xss->xss_clean($color),
-                'allow_return_order' => is_value_checked($allowReturn) ? DB_YES : DB_NO,
                 'updated_at' => time(),
             ], 'id=:id', ['id' => $id]);
             return $res;

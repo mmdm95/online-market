@@ -38,7 +38,7 @@ $validator = form_validator();
                                       placeholder="تا ۲۵۰ کاراکتر"
                                       maxlength="250"
                                       name="inp-setting-desc"
-                            ><?= $validator->setInput('inp-setting-desc') ?: config()->get('settings.footer_tiny_desc.value'); ?></textarea>
+                            ><?= !$validator->getStatus() ? ($validator->setInput('inp-setting-desc') ?: config()->get('settings.footer_tiny_desc.value')) : config()->get('settings.footer_tiny_desc.value'); ?></textarea>
                         </div>
                         <!-- /tiny description -->
 
@@ -61,7 +61,7 @@ $validator = form_validator();
                                    placeholder="تا ۵۰ کاراکتر"
                                    maxlength="50"
                                    name="inp-setting-sec1-title"
-                                   value="<?= $validator->setInput('inp-setting-sec1-title') ?: ($footerSection1['title'] ?? ''); ?>">
+                                   value="<?= !$validator->getStatus() ? ($validator->setInput('inp-setting-sec1-title') ?: ($footerSection1['title'] ?? '')) : ($footerSection1['title'] ?? ''); ?>">
                         </div>
                         <div class="d-flex align-items-end">
                             <div class="col __footer_sec1_container">
@@ -181,7 +181,7 @@ $validator = form_validator();
                                    placeholder="تا ۵۰ کاراکتر"
                                    maxlength="50"
                                    name="inp-setting-sec2-title"
-                                   value="<?= $validator->setInput('inp-setting-sec2-title') ?: ($footerSection1['title'] ?? ''); ?>">
+                                   value="<?= !$validator->getStatus() ? ($validator->setInput('inp-setting-sec2-title') ?: ($footerSection1['title'] ?? '')) : ($footerSection1['title'] ?? ''); ?>">
                         </div>
                         <div class="d-flex align-items-end">
                             <div class="col __footer_sec2_container">

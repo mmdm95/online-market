@@ -34,7 +34,7 @@ $validator = form_validator();
                         <div class="d-block d-sm-flex justify-content-center flex-wrap">
                             <div class="form-group text-center ml-sm-0 mr-sm-3 mb-0">
                                 <?php
-                                $img = $validator->setInput('inp-setting-logo-img') ?: config()->get('settings.logo.value');
+                                $img = !$validator->getStatus() ? ($validator->setInput('inp-setting-logo-img') ?: config()->get('settings.logo.value')) : config()->get('settings.logo.value');
                                 ?>
                                 <div class="img-placeholder-custom __file_picker_handler __file_image mx-auto <?= !empty($img) ? 'has-image' : ''; ?>"
                                      data-toggle="modal"
@@ -42,7 +42,8 @@ $validator = form_validator();
                                     <input type="hidden" name="inp-setting-logo-img"
                                            value="<?= $img; ?>">
                                     <?php if (!empty($img)): ?>
-                                        <img class="img-placeholder-image" src="<?= url('image.show') . $img; ?>" alt="selected image">
+                                        <img class="img-placeholder-image" src="<?= url('image.show') . $img; ?>"
+                                             alt="selected image">
                                     <?php endif; ?>
                                     <div class="img-placeholder-icon-container">
                                         <i class="icon-image2 img-placeholder-icon text-grey-300"></i>
@@ -58,7 +59,7 @@ $validator = form_validator();
 
                             <div class="form-group text-center ml-sm-0 mr-sm-3 mb-0">
                                 <?php
-                                $img = $validator->setInput('inp-setting-logo-light-img') ?: config()->get('settings.logo_light.value');
+                                $img = !$validator->getStatus() ? ($validator->setInput('inp-setting-logo-light-img') ?: config()->get('settings.logo_light.value')) : config()->get('settings.logo_light.value');
                                 ?>
                                 <div class="img-placeholder-custom __file_picker_handler __file_image mx-auto <?= !empty($img) ? 'has-image' : ''; ?>"
                                      data-toggle="modal"
@@ -66,7 +67,8 @@ $validator = form_validator();
                                     <input type="hidden" name="inp-setting-logo-light-img"
                                            value="<?= $img; ?>">
                                     <?php if (!empty($img)): ?>
-                                        <img class="img-placeholder-image" src="<?= url('image.show') . $img; ?>" alt="selected image">
+                                        <img class="img-placeholder-image" src="<?= url('image.show') . $img; ?>"
+                                             alt="selected image">
                                     <?php endif; ?>
                                     <div class="img-placeholder-icon-container">
                                         <i class="icon-image2 img-placeholder-icon text-grey-300"></i>
@@ -82,7 +84,7 @@ $validator = form_validator();
 
                             <div class="form-group text-center ml-sm-0 mr-sm-3 mb-0">
                                 <?php
-                                $img = $validator->setInput('inp-setting-fav-img') ?: config()->get('settings.favicon.value');
+                                $img = !$validator->getStatus() ? ($validator->setInput('inp-setting-fav-img') ?: config()->get('settings.favicon.value')) : config()->get('settings.favicon.value');
                                 ?>
                                 <div class="img-placeholder-custom __file_picker_handler __file_image mx-auto <?= !empty($img) ? 'has-image' : ''; ?>"
                                      data-toggle="modal"
@@ -90,7 +92,8 @@ $validator = form_validator();
                                     <input type="hidden" name="inp-setting-fav-img"
                                            value="<?= $img; ?>">
                                     <?php if (!empty($img)): ?>
-                                        <img class="img-placeholder-image" src="<?= url('image.show') . $img; ?>" alt="selected image">
+                                        <img class="img-placeholder-image" src="<?= url('image.show') . $img; ?>"
+                                             alt="selected image">
                                     <?php endif; ?>
                                     <div class="img-placeholder-icon-container">
                                         <i class="icon-image2 img-placeholder-icon text-grey-300"></i>
@@ -117,7 +120,7 @@ $validator = form_validator();
                                    placeholder="تا ۵۰ کاراکتر"
                                    maxlength="50"
                                    name="inp-setting-title"
-                                   value="<?= $validator->setInput('inp-setting-title') ?: config()->get('settings.title.value'); ?>">
+                                   value="<?= !$validator->getStatus() ? ($validator->setInput('inp-setting-title') ?: config()->get('settings.title.value')): config()->get('settings.title.value'); ?>">
                         </div>
                         <div class="form-group">
                             <label>توضیحات مختصر:</label>
@@ -125,13 +128,13 @@ $validator = form_validator();
                                       placeholder="تا ۲۵۰ کاراکتر"
                                       maxlength="250"
                                       name="inp-setting-desc"
-                            ><?= $validator->setInput('inp-setting-desc') ?: config()->get('settings.description.value'); ?></textarea>
+                            ><?= !$validator->getStatus() ? ($validator->setInput('inp-setting-desc') ?: config()->get('settings.description.value')): config()->get('settings.description.value'); ?></textarea>
                         </div>
                         <div class="form-group">
                             <label>کلمات کلیدی:</label>
                             <input type="text" class="form-control tags-input" placeholder="وارد کنید"
                                    name="inp-setting-tags"
-                                   value="<?= $validator->setInput('inp-setting-tags') ?: config()->get('settings.keywords.value'); ?>">
+                                   value="<?= !$validator->getStatus() ? ($validator->setInput('inp-setting-tags') ?: config()->get('settings.keywords.value')): config()->get('settings.keywords.value'); ?>">
                         </div>
                     </div>
 

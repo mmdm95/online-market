@@ -99,7 +99,8 @@ class Router implements IRouter
      * @param string $route
      * @param callable|string $callback
      * @return Router
-     * @throws RouterException
+     * @throws MethodNotAllowedException
+     * @throws \Exception
      */
     public function any(string $route, $callback)
     {
@@ -112,7 +113,8 @@ class Router implements IRouter
      * @param array|string $route
      * @param \Closure|string $callback
      * @return Router
-     * @throws RouterException
+     * @throws MethodNotAllowedException
+     * @throws \Exception
      */
     public function addRoute($method, $route, $callback)
     {
@@ -150,7 +152,6 @@ class Router implements IRouter
      * Match current url to all routes
      *
      * @throws ReflectionException
-     * @throws RouterException
      */
     public function match()
     {
@@ -206,7 +207,8 @@ class Router implements IRouter
      * @param $name
      * @param $args
      * @return Router
-     * @throws RouterException
+     * @throws MethodNotAllowedException
+     * @throws \Exception
      */
     public function __call($name, $args)
     {
@@ -259,7 +261,8 @@ class Router implements IRouter
      * @param $method
      * @param $route
      * @param $callback
-     * @throws RouterException
+     * @throws MethodNotAllowedException
+     * @throws \Exception
      */
     protected function prepareParameters($method, $route, $callback)
     {
@@ -313,14 +316,13 @@ class Router implements IRouter
         }
 
         // validate callback string/closure
-        if (!$callback instanceof \Closure) {
-            if ((is_string($callback) && 2 != count(explode('@', $callback))) || !is_string($callback)) {
+        if (is_array($callback)) {
+            if ((2 != count($callback))) {
                 $this->errors['callback'] = "Callback must be type of callable or string, " . gettype($callback) . " given";
                 $is_ok = false;
-            } elseif (is_string($callback)) {
-                $split = explode('@', $callback);
-                $parameters['callback']['controller'] = $split[0] ?? null;
-                $parameters['callback']['method'] = $split[1] ?? null;
+            } else {
+                $parameters['callback']['controller'] = $callback[0] ?? null;
+                $parameters['callback']['method'] = $callback[1] ?? null;
             }
         } else {
             $parameters['callback'] = $callback;
@@ -331,7 +333,7 @@ class Router implements IRouter
             foreach ($this->errors as $error) {
                 $messages .= $error . PHP_EOL;
             }
-            throw new RouterException("Please check following error(s): \n" . $messages);
+            throw new \Exception("Please check following error(s): \n" . $messages);
         }
 
         // store detected values to its method variable
@@ -433,18 +435,15 @@ class Router implements IRouter
     protected function middlewareResult(): bool
     {
         if (!count($this->middleware)) return true;
-        return $this->middleware_bottleneck->handle($this->request);
+        return $this->middleware_bottleneck->process($this->request);
     }
 
     /**
      * @param \Closure $closure
-     * @throws ReflectionException
      */
     protected function closureRunner(\Closure $closure)
     {
-        $reflection = new ReflectionFunction($closure);
-
-        $call_result = call_user_func_array($closure, [$arguments]);
+        $call_result = call_user_func_array($closure, []);
         $this->response->setContent($call_result)->send();
     }
 
@@ -452,7 +451,7 @@ class Router implements IRouter
      * @param $class
      * @param $method
      * @throws ReflectionException
-     * @throws RouterException
+     * @throws \Exception
      */
     protected function classRunner($class, $method)
     {
@@ -474,18 +473,18 @@ class Router implements IRouter
      *
      * @param $entry
      * @return ReflectionClass
-     * @throws RouterException
+     * @throws \Exception
      */
     protected function getReflector($entry)
     {
         try {
             $reflector = new ReflectionClass($entry);
             if (!$reflector->isInstantiable()) { // Check if class is instantiable
-                throw new RouterException($entry);
+                throw new \Exception($entry);
             }
             return $reflector; // Return class reflector
         } catch (ReflectionException $ex) {
-            throw new RouterException($entry);
+            throw new \Exception($entry);
         }
     }
 
@@ -512,10 +511,12 @@ class Router implements IRouter
 
     /**
      * Set header with status 405 method not allowed
+     * @throws MethodNotAllowedException
      */
     protected function invalidMethodHandler()
     {
         header('HTTP/' . $this->response->getProtocolVersion() . ' ' . $this->response::HTTP_METHOD_NOT_ALLOWED . ' Method Not Allowed');
+        throw new MethodNotAllowedException($this->response::HTTP_METHOD_NOT_ALLOWED . ' Method Not Allowed');
     }
 
     /**

@@ -39,7 +39,7 @@ trait TraitGeneral
      */
     protected function isValidName($name): bool
     {
-        return preg_match('/[a-zA-Z_][a-zA-Z0-9_]*/', $name);
+        return preg_match('/^[a-zA-Z_][a-zA-Z0-9_]*/', $name);
     }
 
     /**

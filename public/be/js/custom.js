@@ -273,7 +273,6 @@
             inputs: {
                 title: 'inp-add-badge-title',
                 color: 'inp-add-badge-color',
-                allowReturn: 'inp-add-badge-allow-return',
             },
         },
         editBadge: {
@@ -281,7 +280,6 @@
             inputs: {
                 title: 'inp-edit-badge-title',
                 color: 'inp-edit-badge-color',
-                allowReturn: 'inp-edit-badge-allow-return',
             },
         },
         addCategory: {
@@ -482,13 +480,15 @@
                 color: 'inp-add-product-color[]',
                 size: 'inp-add-product-size[]',
                 guarantee: 'inp-add-product-guarantee[]',
+                weight: 'inp-add-product-weight[]',
                 price: 'inp-add-product-price[]',
                 discountPrice: 'inp-add-product-discount-price[]',
                 discountDate: 'inp-add-product-discount-date[]',
                 productAvailability: 'inp-add-product-product-availability[]',
                 gallery: 'inp-add-product-gallery-img[]',
                 desc: 'inp-add-product-desc',
-                properties: 'inp-add-product-properties',
+                properties: 'inp-item-product-properties',
+                subProperties: 'inp-item-product-sub-properties',
                 alertProduct: 'inp-add-product-alert-product',
                 related: 'inp-add-product-related[]',
             },
@@ -513,13 +513,15 @@
                 color: 'inp-edit-product-color[]',
                 size: 'inp-edit-product-size[]',
                 guarantee: 'inp-edit-product-guarantee[]',
+                weight: 'inp-edit-product-weight[]',
                 price: 'inp-edit-product-price[]',
                 discountPrice: 'inp-edit-product-discount-price[]',
                 discountDate: 'inp-edit-product-discount-date[]',
                 productAvailability: 'inp-edit-product-product-availability[]',
                 gallery: 'inp-edit-product-gallery-img[]',
                 desc: 'inp-edit-product-desc',
-                properties: 'inp-edit-product-properties',
+                properties: 'inp-item-product-properties',
+                subProperties: 'inp-item-product-sub-properties',
                 alertProduct: 'inp-edit-product-alert-product',
                 related: 'inp-edit-product-related[]',
             },
@@ -577,6 +579,15 @@
                 tags: 'inp-setting-tags',
             },
         },
+        settingBuy: {
+            form: '#__form_setting_buy',
+            inputs: {
+                province: 'inp-setting-store-province',
+                city: 'inp-setting-store-city',
+                currCityPostPrice: 'inp-setting-current-city-post-price',
+                minFreePrice: 'inp-setting-min-free-price',
+            },
+        },
         settingSMS: {
             form: '#__form_setting_sms',
             inputs: {
@@ -600,6 +611,7 @@
         settingOther: {
             form: '#__form_setting_other',
             inputs: {
+                storeProvince: 'inp-setting-store-province',
                 productPagination: 'inp-setting-product-pagination',
                 blogPagination: 'inp-setting-blog-pagination',
             },
@@ -1551,6 +1563,20 @@
                     },
                 },
             },
+            settingBuy: {
+                province: {
+                    presence: {
+                        allowEmpty: false,
+                        message: '^' + 'انتخاب استان محل فروشگاه اجباری است.',
+                    },
+                },
+                city: {
+                    presence: {
+                        allowEmpty: false,
+                        message: '^' + 'انتخاب شهر محل فروشگاه اجباری است.',
+                    },
+                },
+            },
             settingSMS: {
                 activation: {
                     presence: {
@@ -1584,6 +1610,12 @@
                 },
             },
             settingOther: {
+                storeProvince: {
+                    presence: {
+                        allowEmpty: false,
+                        message: '^' + 'استان محل فروشگاه اجباری است.',
+                    },
+                },
                 productPagination: {
                     presence: {
                         allowEmpty: false,
@@ -1898,6 +1930,10 @@
                 fav: variables.validation.constraints.settingMain.fav,
                 title: variables.validation.constraints.settingMain.title,
             },
+            settingBuy: {
+                province: variables.validation.constraints.settingBuy.province,
+                city: variables.validation.constraints.settingBuy.city,
+            },
             settingSMS: {
                 activation: variables.validation.constraints.settingSMS.activation,
                 recoverPass: variables.validation.constraints.settingSMS.recoverPass,
@@ -1906,6 +1942,7 @@
                 walletCharge: variables.validation.constraints.settingSMS.walletCharge,
             },
             settingOther: {
+                storeProvince: variables.validation.constraints.settingOther.storeProvince,
                 productPagination: variables.validation.constraints.settingOther.productPagination,
                 blogPagination: variables.validation.constraints.settingOther.blogPagination,
             },
@@ -1941,9 +1978,16 @@
 
         removeCloneElementEvent();
 
-        function afterCloneElement() {
+        function afterCloneElement(copy) {
             removeCloneElementEvent();
             initializeAllPlugins();
+
+            copy = $(copy);
+            if (copy.length) {
+                var switchery = copy.find('.form-check-input-switchery');
+                switchery.removeAttr('data-switchery').parent().find('.switchery').remove();
+                new Switchery(switchery.get(0));
+            }
         }
 
         userIdInp = $('input[type="hidden"][data-user-id]');
@@ -2085,9 +2129,7 @@
                         copy.find('.bootstrap-tagsinput').remove();
 
                         container.append(copy);
-                        afterCloneElement();
-
-                        $.trigger('cloner:after-clone', [copy, sample, container]);
+                        afterCloneElement(copy);
                     }
                 }
             });
@@ -2769,7 +2811,9 @@
                     }
 
                     if ($this.data('tagsinput')) $this.tagsinput("destroy");
-                    $this.tagsinput(obj);
+                    setTimeout(function () {
+                        $this.tagsinput(obj);
+                    }, 1);
                 });
             }
 
@@ -3170,11 +3214,6 @@
                             .find('[name="' + variables.elements.editBadge.inputs.color + '"]')
                             .val(_.data['color'])
                             .spectrum("set", _.data['color']);
-                        if (core.isChecked(_.data['allow_return_order'])) {
-                            editModal.find('[name="' + variables.elements.editBadge.inputs.allowReturn + '"]')
-                                .attr('checked', 'checked')
-                                .prop('checked', 'checked');
-                        }
                     }
                 });
             }
@@ -4695,6 +4734,16 @@
         // SETTING MAIN FORM
         //---------------------------------------------------------------
         admin.forms.submitForm('settingMain', constraints.settingMain, function () {
+            return true;
+        }, function (errors) {
+            admin.forms.showFormErrors(errors);
+            return false;
+        });
+
+        //---------------------------------------------------------------
+        // SETTING BUY FORM
+        //---------------------------------------------------------------
+        admin.forms.submitForm('settingBuy', constraints.settingBuy, function () {
             return true;
         }, function (errors) {
             admin.forms.showFormErrors(errors);

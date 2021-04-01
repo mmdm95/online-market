@@ -29,6 +29,15 @@ return [
                 'is_active' => true,
             ],
         ],
+        'js' => [
+            'bottom' => [
+                e(
+                    '<script type="text/javascript" src="' .
+                    asset_path('be/js/product-properties.js') .
+                    '"></script>'
+                ),
+            ],
+        ],
     ],
     'view/product/edit' => [
         'title' => title_concat(\config()->get('settings.title.value'), 'ویرایش محصول'),
@@ -56,6 +65,15 @@ return [
             [
                 'text' => 'ویرایش محصول',
                 'is_active' => true,
+            ],
+        ],
+        'js' => [
+            'bottom' => [
+                e(
+                    '<script type="text/javascript" src="' .
+                    asset_path('be/js/product-properties.js') .
+                    '"></script>'
+                ),
             ],
         ],
     ],

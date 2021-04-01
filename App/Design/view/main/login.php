@@ -15,7 +15,8 @@ $validator = form_validator();
                             <div class="heading_s1">
                                 <h3>ورود</h3>
                             </div>
-                            <form action="<?= url('home.login')->getRelativeUrlTrimmed(); ?>" method="post" id="__form_login">
+                            <form action="<?= url('home.login', null, ['back_url' => $_GET['back_url'] ?? ''])->getRelativeUrlTrimmed(); ?>"
+                                  method="post" id="__form_login">
                                 <?php load_partial('main/message/message-form', [
                                     'errors' => $login_errors ?? [],
                                     'warning' => $login_warning ?? '',

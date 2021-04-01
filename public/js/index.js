@@ -14,6 +14,7 @@
         cart: {
             container: '#__cart_main_container',
             addBtn: '.__add_to_cart_btn',
+            removeBtn: '.__remove_from_cart_btn',
         },
         register: {
             form: '#__form_register',

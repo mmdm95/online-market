@@ -40,7 +40,7 @@ $validator = form_validator();
                             <input type="text" class="form-control"
                                    placeholder="وارد کنید"
                                    name="inp-setting-main-phone"
-                                   value="<?= $validator->setInput('inp-setting-main-phone') ?: config()->get('settings.main_phone.value'); ?>">
+                                   value="<?= !$validator->getStatus() ? ($validator->setInput('inp-setting-main-phone') ?: config()->get('settings.main_phone.value')) : config()->get('settings.main_phone.value'); ?>">
                         </div>
                         <div class="form-group">
                             <label>
@@ -52,7 +52,7 @@ $validator = form_validator();
                                     cols="30"
                                     rows="10"
                                     placeholder="متن پیامک را وارد کنید..."
-                            ><?= $validator->setInput('inp-setting-address') ?: config()->get('settings.address.value'); ?></textarea>
+                            ><?= !$validator->getStatus() ? ($validator->setInput('inp-setting-address') ?: config()->get('settings.address.value')) : config()->get('settings.address.value'); ?></textarea>
                         </div>
                         <div class="form-group">
                             <label>
@@ -61,7 +61,7 @@ $validator = form_validator();
                             <input type="text" class="form-control tags-input"
                                    placeholder="وارد کنید"
                                    name="inp-setting-phones"
-                                   value="<?= $validator->setInput('inp-setting-phones') ?: config()->get('settings.phones.value'); ?>">
+                                   value="<?= !$validator->getStatus() ? ($validator->setInput('inp-setting-phones') ?: config()->get('settings.phones.value')) : config()->get('settings.phones.value'); ?>">
                         </div>
                         <!-- /main info -->
 
@@ -82,7 +82,7 @@ $validator = form_validator();
                                        class="form-control"
                                        placeholder=""
                                        name="inp-setting-features-title[]"
-                                       value="<?= $validator->setInput('inp-setting-features-title') ?: $feature1['title']; ?>">
+                                       value="<?= !$validator->getStatus() ? ($validator->setInput('inp-setting-features-title') ?: $feature1['title']) : $feature1['title']; ?>">
                             </div>
                             <div class="col-lg-7 form-group">
                                 <label>
@@ -92,7 +92,7 @@ $validator = form_validator();
                                        class="form-control"
                                        placeholder=""
                                        name="inp-setting-features-sub-title[]"
-                                       value="<?= $validator->setInput('inp-setting-features-sub-title') ?: $feature1['sub_title']; ?>">
+                                       value="<?= !$validator->getStatus() ? ($validator->setInput('inp-setting-features-sub-title') ?: $feature1['sub_title']) : $feature1['sub_title']; ?>">
                             </div>
                             <div class="col-lg-5 form-group">
                                 <label>
@@ -102,7 +102,7 @@ $validator = form_validator();
                                        class="form-control"
                                        placeholder=""
                                        name="inp-setting-features-title[]"
-                                       value="<?= $validator->setInput('inp-setting-features-title') ?: $feature2['title']; ?>">
+                                       value="<?= !$validator->getStatus() ? ($validator->setInput('inp-setting-features-title') ?: $feature2['title']) : $feature2['title']; ?>">
                             </div>
                             <div class="col-lg-7 form-group">
                                 <label>
@@ -112,7 +112,7 @@ $validator = form_validator();
                                        class="form-control"
                                        placeholder=""
                                        name="inp-setting-features-sub-title[]"
-                                       value="<?= $validator->setInput('inp-setting-features-sub-title') ?: $feature2['sub_title']; ?>">
+                                       value="<?= !$validator->getStatus() ? ($validator->setInput('inp-setting-features-sub-title') ?: $feature2['sub_title']) : $feature2['sub_title']; ?>">
                             </div>
                             <div class="col-lg-5 form-group">
                                 <label>
@@ -121,7 +121,7 @@ $validator = form_validator();
                                 <input type="text" class="form-control"
                                        placeholder=""
                                        name="inp-setting-features-title[]"
-                                       value="<?= $validator->setInput('inp-setting-features-title') ?: $feature3['title']; ?>">
+                                       value="<?= !$validator->getStatus() ? ($validator->setInput('inp-setting-features-title') ?: $feature3['title']) : $feature3['title']; ?>">
                             </div>
                             <div class="col-lg-7 form-group">
                                 <label>
@@ -131,7 +131,7 @@ $validator = form_validator();
                                        class="form-control"
                                        placeholder=""
                                        name="inp-setting-features-sub-title[]"
-                                       value="<?= $validator->setInput('inp-setting-features-sub-title') ?: $feature3['sub_title']; ?>">
+                                       value="<?= !$validator->getStatus() ? ($validator->setInput('inp-setting-features-sub-title') ?: $feature3['sub_title']) : $feature3['sub_title']; ?>">
                             </div>
                         </div>
                         <!-- /properties -->
@@ -146,7 +146,7 @@ $validator = form_validator();
                                 <input type="text" class="form-control"
                                        placeholder=""
                                        name="inp-setting-email"
-                                       value="<?= $validator->setInput('inp-setting-email') ?: config()->get('settings.email.value'); ?>">
+                                       value="<?= !$validator->getStatus() ? ($validator->setInput('inp-setting-email') ?: config()->get('settings.email.value')) : config()->get('settings.email.value'); ?>">
                             </div>
 
                             <div class="col-12">
@@ -170,7 +170,7 @@ $validator = form_validator();
                                         <input type="text" class="form-control"
                                                placeholder=""
                                                name="inp-setting-lng"
-                                               value="<?= $validator->setInput('inp-setting-lng') ?: $lng; ?>">
+                                               value="<?= !$validator->getStatus() ? ($validator->setInput('inp-setting-lng') ?: $lng) : $lng; ?>">
                                     </div>
                                     <div class="col-lg-6 form-group">
                                         <label>
@@ -179,7 +179,7 @@ $validator = form_validator();
                                         <input type="text" class="form-control"
                                                placeholder=""
                                                name="inp-setting-lat"
-                                               value="<?= $validator->setInput('inp-setting-lat') ?: $lat; ?>">
+                                               value="<?= !$validator->getStatus() ? ($validator->setInput('inp-setting-lat') ?: $lat) : $lat; ?>">
                                     </div>
                                 </div>
                             </div>

@@ -37,7 +37,7 @@ $validator = form_validator();
                             <input type="text" class="form-control tags-input"
                                    placeholder="وارد کنید"
                                    name="inp-setting-telegram"
-                                   value="<?= $validator->setInput('inp-setting-telegram') ?: config()->get('settings.social_telegram.value'); ?>">
+                                   value="<?= !$validator->getStatus() ? ($validator->setInput('inp-setting-telegram') ?: config()->get('settings.social_telegram.value')) : config()->get('settings.social_telegram.value'); ?>">
                         </div>
                         <div class="form-group">
                             <label>
@@ -46,7 +46,7 @@ $validator = form_validator();
                             <input type="text" class="form-control tags-input"
                                    placeholder="وارد کنید"
                                    name="inp-setting-instagram"
-                                   value="<?= $validator->setInput('inp-setting-instagram') ?: config()->get('settings.social_instagram.value'); ?>">
+                                   value="<?= !$validator->getStatus() ? ($validator->setInput('inp-setting-instagram') ?: config()->get('settings.social_instagram.value')) : config()->get('settings.social_instagram.value'); ?>">
                         </div>
                         <div class="form-group">
                             <label>
@@ -55,7 +55,7 @@ $validator = form_validator();
                             <input type="text" class="form-control tags-input"
                                    placeholder="وارد کنید"
                                    name="inp-setting-whatsapp"
-                                   value="<?= $validator->setInput('inp-setting-whatsapp') ?: config()->get('settings.social_whatsapp.value'); ?>">
+                                   value="<?= !$validator->getStatus() ? ($validator->setInput('inp-setting-whatsapp') ?: config()->get('settings.social_whatsapp.value')) : config()->get('settings.social_whatsapp.value'); ?>">
                         </div>
                     </div>
 

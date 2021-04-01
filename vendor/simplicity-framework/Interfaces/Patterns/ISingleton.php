@@ -6,5 +6,5 @@ interface ISingleton {
     /**
      * @return mixed
      */
-    public function getInstance();
+    public static function getInstance();
 }
