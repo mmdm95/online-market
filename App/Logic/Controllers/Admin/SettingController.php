@@ -10,6 +10,7 @@ use App\Logic\Forms\Admin\Setting\SettingFooterForm;
 use App\Logic\Forms\Admin\Setting\SettingMainForm;
 use App\Logic\Forms\Admin\Setting\SettingOtherForm;
 use App\Logic\Forms\Admin\Setting\SettingPageAboutForm;
+use App\Logic\Forms\Admin\Setting\SettingPageIndexForm;
 use App\Logic\Forms\Admin\Setting\SettingSMSForm;
 use App\Logic\Forms\Admin\Setting\SettingSocialForm;
 use App\Logic\Forms\Admin\Setting\SettingTopMenuForm;
@@ -216,13 +217,24 @@ class SettingController extends AbstractAdminController
      * @throws ControllerException
      * @throws IFileNotExistsException
      * @throws IInvalidVariableNameException
+     * @throws MethodNotFoundException
+     * @throws ParameterHasNoDefaultValueException
      * @throws PathNotRegisteredException
      * @throws ReflectionException
+     * @throws ServiceNotFoundException
+     * @throws ServiceNotInstantiableException
      */
     public function indexPage()
     {
+        $data = [];
+//        if (is_post()) {
+//            $this->settingRewriteEvent();
+//            $formHandler = new GeneralFormHandler();
+//            $data = $formHandler->handle(SettingPageIndexForm::class, 'setting_index');
+//        }
+
         $this->setLayout($this->main_layout)->setTemplate('view/setting/index-page');
-        return $this->render();
+        return $this->render($data);
     }
 
     /**

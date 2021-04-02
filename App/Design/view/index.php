@@ -156,17 +156,19 @@ use Sim\Utils\StringUtil;
 
             <?php foreach ($order_badges_count as $value): ?>
                 <div class="col-sm-6 col-lg-4">
-                    <div class="card" style="background-color: <?= $value['color']; ?>;">
+                    <div class="card">
                         <a href="#"
-                           class="p-3" style="color: <?= get_color_from_bg($value['color']); ?>;">
-                            <div class="d-block d-sm-flex d-md-block d-xl-flex align-items-center justify-content-between">
-                                <div>
-                                    <h4 class="font-weight-semibold mb-0">
-                                        <?= StringUtil::toPersian($value['count']); ?>
-                                    </h4>
-                                </div>
-                                <div>
-                                    <span class="font-size-sm"><?= $value['title']; ?></span>
+                           class="p-1 border-2 rounded" style="color: <?= get_color_from_bg($value['color']); ?>; border-color: <?= $value['color']; ?> !important;">
+                            <div class="p-2 rounded" style="background-color: <?= $value['color']; ?>;">
+                                <div class="d-block d-sm-flex d-md-block d-xl-flex align-items-center justify-content-between">
+                                    <div>
+                                        <h4 class="font-weight-semibold mb-0">
+                                            <?= StringUtil::toPersian($value['count']); ?>
+                                        </h4>
+                                    </div>
+                                    <div>
+                                        <span class="font-size-sm"><?= $value['title']; ?></span>
+                                    </div>
                                 </div>
                             </div>
                         </a>

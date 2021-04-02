@@ -57,7 +57,7 @@
                 </li>
                 <li class="nav-item">
                     <a href="<?= url('admin.index'); ?>"
-                       class="nav-link <?= url()->contains(url('admin.index')->getRelativeUrlTrimmed()) ? 'active' : ''; ?>"
+                       class="nav-link <?= url()->getRelativeUrlTrimmed() == url('admin.index')->getRelativeUrlTrimmed() ? 'active' : ''; ?>"
                        data-popup="tooltip"
                        data-original-title="میز کار"
                        data-placement="left">

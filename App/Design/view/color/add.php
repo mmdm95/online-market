@@ -11,7 +11,8 @@ $validator = form_validator();
         <?php load_partial('admin/card-header', ['header_title' => 'افزودن رنگ جدید']); ?>
 
         <div class="card-body">
-            <form action="<?= url('admin.color.add')->getRelativeUrlTrimmed(); ?>" id="__form_add_color">
+            <form action="<?= url('admin.color.add')->getRelativeUrlTrimmed(); ?>"
+                  method="post" id="__form_add_color">
                 <?php load_partial('admin/message/message-form', [
                     'errors' => $color_add_errors ?? [],
                     'success' => $color_add_success ?? '',

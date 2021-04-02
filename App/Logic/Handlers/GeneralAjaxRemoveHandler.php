@@ -101,7 +101,8 @@ class GeneralAjaxRemoveHandler implements IHandler
                     emitter()->dispatch('remove.general.ajax:not_exists', [&$this->resourceHandler]);
                 } else {
                     $emRes = emitter()->dispatch('remove.general.ajax:custom_handler', [&$this->resourceHandler]);
-                    if (is_null($emRes) || (bool)$emRes->getReturnValue()) {
+
+                    if (is_null($emRes->getReturnValue()) || (bool)$emRes->getReturnValue()) {
                         $delete = $model->delete();
                         $delete
                             ->from($table);
@@ -117,7 +118,7 @@ class GeneralAjaxRemoveHandler implements IHandler
                                 ->where($where)
                                 ->bindValues($bindValues);
                         }
-                        
+
                         $res = $model->execute($delete);
                         if ($res) {
                             $this->resourceHandler

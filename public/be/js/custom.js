@@ -185,7 +185,7 @@
             },
         },
         editColor: {
-            form: '#__form_add_color',
+            form: '#__form_edit_color',
             inputs: {
                 name: 'inp-edit-color-name',
                 color: 'inp-edit-color-color',
@@ -1964,6 +1964,217 @@
             });
         });
 
+        function createDatatable () {
+            if ($().DataTable) {
+                // Setting datatable defaults
+                $.extend($.fn.dataTable.defaults, {
+                    destroy: true,
+                    autoWidth: false,
+                    dom: '<"datatable-header"fl><"datatable-scroll-lg"t><"datatable-footer"ip>',
+                    lengthMenu: [[10, 25, 50, 100], [10, 25, 50, 100]],
+                    pageLength: 10,
+                    language: {
+                        processing: "در حال بارگذاری...",
+                        search: '<span>جست‌و‌جو:</span> _INPUT_',
+                        searchPlaceholder: 'کلمه مورد نظر را تایپ کنید ...',
+                        lengthMenu: '<span>نمایش:</span> _MENU_',
+                        paginate: {
+                            'first': 'صفحه اول',
+                            'last': 'صفحه آخر',
+                            'next': $('html').attr('dir') == 'rtl' ? '&larr;' : '&rarr;',
+                            'previous': $('html').attr('dir') == 'rtl' ? '&rarr;' : '&larr;'
+                        },
+                        emptyTable: 'موردی یافت نشد.',
+                        zeroRecords: 'مورد جستجو شده وجود ندارد.',
+                        info: 'نمایش' + '<span class="text-primary ml-1 mr-1">_START_</span>' + 'تا' +
+                            '<span class="text-primary ml-1 mr-1">_END_</span>' + 'از' + 'مجموع' + '<span class="text-primary ml-1 mr-1">_TOTAL_</span>' + 'رکورد',
+                        infoEmpty: 'نمایش' + '<span class="text-primary ml-1 mr-1">0</span>' + 'تا' +
+                            '<span class="text-primary ml-1 mr-1">0</span>' + 'از' + 'مجموع' + '<span class="text-primary ml-1 mr-1">0</span>' + 'رکورد',
+                        infoFiltered: '(' + 'فیلتر شده از مجموع' + ' _MAX_ ' + 'رکورد' + ')',
+                    }
+                });
+
+                /**
+                 * Pipelining function for DataTables. To be used to the `ajax` option of DataTables
+                 *
+                 * @see https://datatables.net/examples/server_side/pipeline.html
+                 * @param [opts]
+                 * @returns {Function}
+                 */
+                $.fn.dataTable.pipeline = function (opts) {
+                    // Configuration options
+                    var conf = $.extend({
+                        pages: 5,     // number of pages to cache
+                        url: '',      // script url
+                        data: null,   // function or object with parameters to send to the server
+                                      // matching how `ajax.data` works in DataTables
+                        method: 'GET' // Ajax HTTP method
+                    }, opts);
+
+                    // Private variables for storing the cache
+                    var
+                        cacheLower = -1,
+                        cacheUpper = null,
+                        cacheLastRequest = null,
+                        cacheLastJson = null;
+
+                    return function (request, drawCallback, settings) {
+                        var
+                            ajax = false,
+                            requestStart = request.start,
+                            drawStart = request.start,
+                            requestLength = request.length,
+                            requestEnd = requestStart + requestLength;
+
+                        if (settings.clearCache) {
+                            // API requested that the cache be cleared
+                            ajax = true;
+                            settings.clearCache = false;
+                        } else if (cacheLower < 0 || requestStart < cacheLower || requestEnd > cacheUpper) {
+                            // outside cached data - need to make a request
+                            ajax = true;
+                        } else if (JSON.stringify(request.order) !== JSON.stringify(cacheLastRequest.order) ||
+                            JSON.stringify(request.columns) !== JSON.stringify(cacheLastRequest.columns) ||
+                            JSON.stringify(request.search) !== JSON.stringify(cacheLastRequest.search)
+                        ) {
+                            // properties changed (ordering, columns, searching)
+                            ajax = true;
+                        }
+
+                        // Store the request for checking next time around
+                        cacheLastRequest = $.extend(true, {}, request);
+
+                        if (ajax) {
+                            // Need data from the server
+                            if (requestStart < cacheLower) {
+                                requestStart = requestStart - (requestLength * (conf.pages - 1));
+
+                                if (requestStart < 0) {
+                                    requestStart = 0;
+                                }
+                            }
+
+                            cacheLower = requestStart;
+                            cacheUpper = requestStart + (requestLength * conf.pages);
+
+                            request.start = requestStart;
+                            request.length = requestLength * conf.pages;
+
+                            // Provide the same `data` options as DataTables.
+                            if (typeof conf.data === 'function') {
+                                // As a function it is executed with the data object as an arg
+                                // for manipulation. If an object is returned, it is used as the
+                                // data object to submit
+                                var d = conf.data(request);
+                                if (d) {
+                                    $.extend(request, d);
+                                }
+                            } else if ($.isPlainObject(conf.data)) {
+                                // As an object, the data given extends the default
+                                $.extend(request, conf.data);
+                            }
+
+                            return $.ajax({
+                                "type": conf.method,
+                                "url": conf.url,
+                                "data": request,
+                                "dataType": "json",
+                                "cache": false,
+                                "success": function (json) {
+                                    cacheLastJson = $.extend(true, {}, json);
+
+                                    if (json.data) {
+                                        if (cacheLower != drawStart) {
+                                            json.data.splice(0, drawStart - cacheLower);
+                                        }
+                                        if (requestLength >= -1) {
+                                            json.data.splice(requestLength, json.data.length);
+                                        }
+                                    } else {
+                                        json.data = [];
+                                        json.recordsFiltered = 0;
+                                        json.recordsTotal = 0;
+                                    }
+
+                                    drawCallback(json);
+                                },
+                                // for debugging
+                                // "error": function (err) {
+                                //     console.log(err);
+                                // },
+                            });
+                        } else {
+                            var json = $.extend(true, {}, cacheLastJson);
+                            json.draw = request.draw; // Update the echo for each response
+                            if (json.data) {
+                                json.data.splice(0, requestStart - cacheLower);
+                                json.data.splice(requestLength, json.data.length);
+                            } else {
+                                json.data = [];
+                                json.recordsFiltered = 0;
+                                json.recordsTotal = 0;
+                            }
+
+                            drawCallback(json);
+                        }
+                    }
+                };
+
+                // Register an API method that will empty the pipelined data, forcing an Ajax
+                // fetch on the next draw (i.e. `table.clearPipeline().draw()`)
+                $.fn.dataTable.Api.register('clearPipeline()', function () {
+                    return this.iterator('table', function (settings) {
+                        settings.clearCache = true;
+                    });
+                });
+
+                $.each($('.datatable-highlight'), function () {
+                    var $this, table, url;
+                    $this = $(this);
+
+                    url = $this.attr('data-ajax-url');
+                    if (url) {
+                        table = $this.DataTable({
+                            stateSave: true,
+                            processing: true,
+                            serverSide: true,
+                            ajax: $.fn.dataTable.pipeline({
+                                url: url,
+                                method: 'POST',
+                                pages: 5, // number of pages to cache
+                            }),
+                            deferRender: true,
+                            initComplete: function () {
+                                datatableInitCompleteActions($this);
+                            },
+                        });
+                    } else {
+                        table = $this.DataTable({
+                            stateSave: true,
+                            initComplete: function () {
+                                datatableInitCompleteActions($this);
+                            },
+                        });
+                    }
+
+                    // Highlighting rows and columns on mouseover
+                    var lastIdx = null;
+                    $('.datatable-highlight tbody').off('mouseover').on('mouseover', 'td', function () {
+                        if (table.cell(this).index()) {
+                            var colIdx = table.cell(this).index().column;
+
+                            if (colIdx !== lastIdx) {
+                                $(table.cells().nodes()).removeClass('active');
+                                $(table.column(colIdx).nodes()).addClass('active');
+                            }
+                        }
+                    }).off('mouseleave').on('mouseleave', function () {
+                        $(table.cells().nodes()).removeClass('active');
+                    });
+                });
+            }
+        }
+
         function removeCloneElementEvent() {
             $('.__clone_remover_btn')
                 .off('click' + variables.namespace)
@@ -2978,7 +3189,10 @@
             if (url && id) {
                 admin.deleteItem(url + id, function () {
                     if (table) {
-                        $(table).DataTable().ajax.reload(null, true);
+                        $(table).DataTable().ajax.reload();
+                        console.log($(table).DataTable());
+                        createDatatable();
+                        // datatableInitCompleteActions(table);
                     }
                 }, {}, true);
             }
@@ -3485,213 +3699,7 @@
 
         initializeAllPlugins();
 
-        if ($().DataTable) {
-            // Setting datatable defaults
-            $.extend($.fn.dataTable.defaults, {
-                autoWidth: false,
-                dom: '<"datatable-header"fl><"datatable-scroll-lg"t><"datatable-footer"ip>',
-                lengthMenu: [[10, 25, 50, 100], [10, 25, 50, 100]],
-                pageLength: 10,
-                language: {
-                    processing: "در حال بارگذاری...",
-                    search: '<span>جست‌و‌جو:</span> _INPUT_',
-                    searchPlaceholder: 'کلمه مورد نظر را تایپ کنید ...',
-                    lengthMenu: '<span>نمایش:</span> _MENU_',
-                    paginate: {
-                        'first': 'صفحه اول',
-                        'last': 'صفحه آخر',
-                        'next': $('html').attr('dir') == 'rtl' ? '&larr;' : '&rarr;',
-                        'previous': $('html').attr('dir') == 'rtl' ? '&rarr;' : '&larr;'
-                    },
-                    emptyTable: 'موردی یافت نشد.',
-                    zeroRecords: 'مورد جستجو شده وجود ندارد.',
-                    info: 'نمایش' + '<span class="text-primary ml-1 mr-1">_START_</span>' + 'تا' +
-                        '<span class="text-primary ml-1 mr-1">_END_</span>' + 'از' + 'مجموع' + '<span class="text-primary ml-1 mr-1">_TOTAL_</span>' + 'رکورد',
-                    infoEmpty: 'نمایش' + '<span class="text-primary ml-1 mr-1">0</span>' + 'تا' +
-                        '<span class="text-primary ml-1 mr-1">0</span>' + 'از' + 'مجموع' + '<span class="text-primary ml-1 mr-1">0</span>' + 'رکورد',
-                    infoFiltered: '(' + 'فیلتر شده از مجموع' + ' _MAX_ ' + 'رکورد' + ')',
-                }
-            });
-
-            /**
-             * Pipelining function for DataTables. To be used to the `ajax` option of DataTables
-             *
-             * @see https://datatables.net/examples/server_side/pipeline.html
-             * @param [opts]
-             * @returns {Function}
-             */
-            $.fn.dataTable.pipeline = function (opts) {
-                // Configuration options
-                var conf = $.extend({
-                    pages: 5,     // number of pages to cache
-                    url: '',      // script url
-                    data: null,   // function or object with parameters to send to the server
-                                  // matching how `ajax.data` works in DataTables
-                    method: 'GET' // Ajax HTTP method
-                }, opts);
-
-                // Private variables for storing the cache
-                var
-                    cacheLower = -1,
-                    cacheUpper = null,
-                    cacheLastRequest = null,
-                    cacheLastJson = null;
-
-                return function (request, drawCallback, settings) {
-                    var
-                        ajax = false,
-                        requestStart = request.start,
-                        drawStart = request.start,
-                        requestLength = request.length,
-                        requestEnd = requestStart + requestLength;
-
-                    if (settings.clearCache) {
-                        // API requested that the cache be cleared
-                        ajax = true;
-                        settings.clearCache = false;
-                    } else if (cacheLower < 0 || requestStart < cacheLower || requestEnd > cacheUpper) {
-                        // outside cached data - need to make a request
-                        ajax = true;
-                    } else if (JSON.stringify(request.order) !== JSON.stringify(cacheLastRequest.order) ||
-                        JSON.stringify(request.columns) !== JSON.stringify(cacheLastRequest.columns) ||
-                        JSON.stringify(request.search) !== JSON.stringify(cacheLastRequest.search)
-                    ) {
-                        // properties changed (ordering, columns, searching)
-                        ajax = true;
-                    }
-
-                    // Store the request for checking next time around
-                    cacheLastRequest = $.extend(true, {}, request);
-
-                    if (ajax) {
-                        // Need data from the server
-                        if (requestStart < cacheLower) {
-                            requestStart = requestStart - (requestLength * (conf.pages - 1));
-
-                            if (requestStart < 0) {
-                                requestStart = 0;
-                            }
-                        }
-
-                        cacheLower = requestStart;
-                        cacheUpper = requestStart + (requestLength * conf.pages);
-
-                        request.start = requestStart;
-                        request.length = requestLength * conf.pages;
-
-                        // Provide the same `data` options as DataTables.
-                        if (typeof conf.data === 'function') {
-                            // As a function it is executed with the data object as an arg
-                            // for manipulation. If an object is returned, it is used as the
-                            // data object to submit
-                            var d = conf.data(request);
-                            if (d) {
-                                $.extend(request, d);
-                            }
-                        } else if ($.isPlainObject(conf.data)) {
-                            // As an object, the data given extends the default
-                            $.extend(request, conf.data);
-                        }
-
-                        return $.ajax({
-                            "type": conf.method,
-                            "url": conf.url,
-                            "data": request,
-                            "dataType": "json",
-                            "cache": false,
-                            "success": function (json) {
-                                cacheLastJson = $.extend(true, {}, json);
-
-                                if (json.data) {
-                                    if (cacheLower != drawStart) {
-                                        json.data.splice(0, drawStart - cacheLower);
-                                    }
-                                    if (requestLength >= -1) {
-                                        json.data.splice(requestLength, json.data.length);
-                                    }
-                                } else {
-                                    json.data = [];
-                                    json.recordsFiltered = 0;
-                                    json.recordsTotal = 0;
-                                }
-
-                                drawCallback(json);
-                            },
-                            // for debugging
-                            // "error": function (err) {
-                            //     console.log(err);
-                            // },
-                        });
-                    } else {
-                        var json = $.extend(true, {}, cacheLastJson);
-                        json.draw = request.draw; // Update the echo for each response
-                        if (json.data) {
-                            json.data.splice(0, requestStart - cacheLower);
-                            json.data.splice(requestLength, json.data.length);
-                        } else {
-                            json.data = [];
-                            json.recordsFiltered = 0;
-                            json.recordsTotal = 0;
-                        }
-
-                        drawCallback(json);
-                    }
-                }
-            };
-
-            // Register an API method that will empty the pipelined data, forcing an Ajax
-            // fetch on the next draw (i.e. `table.clearPipeline().draw()`)
-            $.fn.dataTable.Api.register('clearPipeline()', function () {
-                return this.iterator('table', function (settings) {
-                    settings.clearCache = true;
-                });
-            });
-
-            $.each($('.datatable-highlight'), function () {
-                var $this, table, url;
-                $this = $(this);
-
-                url = $this.attr('data-ajax-url');
-                if (url) {
-                    table = $this.DataTable({
-                        stateSave: true,
-                        processing: true,
-                        serverSide: true,
-                        ajax: $.fn.dataTable.pipeline({
-                            url: url,
-                            method: 'POST',
-                            pages: 5, // number of pages to cache
-                        }),
-                        deferRender: true,
-                        initComplete: function () {
-                            datatableInitCompleteActions($this);
-                        },
-                    });
-                } else {
-                    table = $this.DataTable({
-                        stateSave: true,
-                        initComplete: function () {
-                            datatableInitCompleteActions($this);
-                        },
-                    });
-                }
-
-                // Highlighting rows and columns on mouseover
-                var lastIdx = null;
-                $('.datatable-highlight tbody').off('mouseover').on('mouseover', 'td', function () {
-                    if (table.cell(this).index()) {
-                        var colIdx = table.cell(this).index().column;
-
-                        if (colIdx !== lastIdx) {
-                            $(table.cells().nodes()).removeClass('active');
-                            $(table.column(colIdx).nodes()).addClass('active');
-                        }
-                    }
-                }).off('mouseleave').on('mouseleave', function () {
-                    $(table.cells().nodes()).removeClass('active');
-                });
-            });
-        }
+        createDatatable();
 
         //---------------------------------------------------------------
         // ADD ADDRESS FORM
@@ -3707,7 +3715,7 @@
                 // clear element after success
                 $(variables.elements.addAddress.form).reset();
                 if (currentTable) {
-                    $(currentTable).DataTable().ajax.reload(null, true);
+                    $(currentTable).DataTable().ajax.reload();
                     currentTable = null;
                 }
                 //-----
@@ -3748,7 +3756,7 @@
                     $('select[name="' + variables.elements.editAddress.inputs.city + '"]').removeAttr('data-current-city');
                     editAddrId = null;
                     if (currentTable) {
-                        $(currentTable).DataTable().ajax.reload(null, true);
+                        $(currentTable).DataTable().ajax.reload();
                         currentTable = null;
                     }
                     //-----
@@ -3785,7 +3793,7 @@
                 // clear element after success
                 $(variables.elements.addUnit.form).reset();
                 if (currentTable) {
-                    $(currentTable).DataTable().ajax.reload(null, true);
+                    $(currentTable).DataTable().ajax.reload();
                     currentTable = null;
                 }
                 //-----
@@ -3821,7 +3829,7 @@
                     $(variables.elements.editUnit.form).reset();
                     editUnitId = null;
                     if (currentTable) {
-                        $(currentTable).DataTable().ajax.reload(null, true);
+                        $(currentTable).DataTable().ajax.reload();
                         currentTable = null;
                     }
                     //-----
@@ -3896,7 +3904,7 @@
                 // clear element after success
                 $(variables.elements.addFaq.form).reset();
                 if (currentTable) {
-                    $(currentTable).DataTable().ajax.reload(null, true);
+                    $(currentTable).DataTable().ajax.reload();
                     currentTable = null;
                 }
                 //-----
@@ -3932,7 +3940,7 @@
                     $(variables.elements.editFaq.form).reset();
                     editFAQId = null;
                     if (currentTable) {
-                        $(currentTable).DataTable().ajax.reload(null, true);
+                        $(currentTable).DataTable().ajax.reload();
                         currentTable = null;
                     }
                     //-----
@@ -3988,7 +3996,7 @@
                 $(variables.elements.addSlide.form).reset();
                 removeImageFromPlaceholder($(variables.elements.addSlide.form).find('[name="' + variables.elements.addSlide.inputs.image + '"]'));
                 if (currentTable) {
-                    $(currentTable).DataTable().ajax.reload(null, true);
+                    $(currentTable).DataTable().ajax.reload();
                     currentTable = null;
                 }
                 //-----
@@ -4025,7 +4033,7 @@
                     removeImageFromPlaceholder($(variables.elements.editSlide.form).find('[name="' + variables.elements.editSlide.inputs.image + '"]'));
                     editSlideId = null;
                     if (currentTable) {
-                        $(currentTable).DataTable().ajax.reload(null, true);
+                        $(currentTable).DataTable().ajax.reload();
                         currentTable = null;
                     }
                     //-----
@@ -4061,7 +4069,7 @@
                 $(variables.elements.addInstagramImage.form).reset();
                 removeImageFromPlaceholder($(variables.elements.addInstagramImage.form).find('[name="' + variables.elements.addInstagramImage.inputs.image + '"]'));
                 if (currentTable) {
-                    $(currentTable).DataTable().ajax.reload(null, true);
+                    $(currentTable).DataTable().ajax.reload();
                     currentTable = null;
                 }
                 //-----
@@ -4098,7 +4106,7 @@
                     removeImageFromPlaceholder($(variables.elements.editInstagramImage.form).find('[name="' + variables.elements.editInstagramImage.inputs.image + '"]'));
                     editInstagramImageId = null;
                     if (currentTable) {
-                        $(currentTable).DataTable().ajax.reload(null, true);
+                        $(currentTable).DataTable().ajax.reload();
                         currentTable = null;
                     }
                     //-----
@@ -4133,7 +4141,7 @@
                 // clear element after success
                 $(variables.elements.addNewsletter.form).reset();
                 if (currentTable) {
-                    $(currentTable).DataTable().ajax.reload(null, true);
+                    $(currentTable).DataTable().ajax.reload();
                     currentTable = null;
                 }
                 //-----
@@ -4193,7 +4201,7 @@
                 // clear element after success
                 $(variables.elements.addBadge.form).reset();
                 if (currentTable) {
-                    $(currentTable).DataTable().ajax.reload(null, true);
+                    $(currentTable).DataTable().ajax.reload();
                     currentTable = null;
                 }
                 //-----
@@ -4229,7 +4237,7 @@
                     $(variables.elements.editBadge.form).reset();
                     editBadgeId = null;
                     if (currentTable) {
-                        $(currentTable).DataTable().ajax.reload(null, true);
+                        $(currentTable).DataTable().ajax.reload();
                         currentTable = null;
                     }
                     //-----
@@ -4289,7 +4297,7 @@
                     $(variables.elements.addCategoryImage.form).reset();
                     addCategoryImageId = null;
                     if (currentTable) {
-                        $(currentTable).DataTable().ajax.reload(null, true);
+                        $(currentTable).DataTable().ajax.reload();
                         currentTable = null;
                     }
                     //-----
@@ -4327,7 +4335,7 @@
                     currentCategoryId = null;
                     editCategoryImageId = null;
                     if (currentTable) {
-                        $(currentTable).DataTable().ajax.reload(null, true);
+                        $(currentTable).DataTable().ajax.reload();
                         currentTable = null;
                     }
                     //-----
@@ -4402,7 +4410,7 @@
                 // clear element after success
                 $(variables.elements.addSecurityQuestion.form).reset();
                 if (currentTable) {
-                    $(currentTable).DataTable().ajax.reload(null, true);
+                    $(currentTable).DataTable().ajax.reload();
                     currentTable = null;
                 }
                 //-----
@@ -4438,7 +4446,7 @@
                     $(variables.elements.editSecurityQuestion.form).reset();
                     editSecurityQuestionId = null;
                     if (currentTable) {
-                        $(currentTable).DataTable().ajax.reload(null, true);
+                        $(currentTable).DataTable().ajax.reload();
                         currentTable = null;
                     }
                     //-----
@@ -4533,7 +4541,7 @@
                 // clear element after success
                 $(variables.elements.addProductFestival.form).reset();
                 if (currentTable) {
-                    $(currentTable).DataTable().ajax.reload(null, true);
+                    $(currentTable).DataTable().ajax.reload();
                     currentTable = null;
                 }
                 //-----
@@ -4569,7 +4577,7 @@
                 // clear element after success
                 $(variables.elements.modifyProductFestival.form).reset();
                 if (currentTable) {
-                    $(currentTable).DataTable().ajax.reload(null, true);
+                    $(currentTable).DataTable().ajax.reload();
                     currentTable = null;
                 }
                 //-----
@@ -4620,7 +4628,7 @@
                     // clear element after success
                     $(variables.elements.modifyProductFestival.form).reset();
                     if (currentTable) {
-                        $(currentTable).DataTable().ajax.reload(null, true);
+                        $(currentTable).DataTable().ajax.reload();
                         currentTable = null;
                     }
                     //-----
@@ -4673,7 +4681,7 @@
                 // clear element after success
                 $(variables.elements.addDepositType.form).reset();
                 if (currentTable) {
-                    $(currentTable).DataTable().ajax.reload(null, true);
+                    $(currentTable).DataTable().ajax.reload();
                     currentTable = null;
                 }
                 //-----
@@ -4709,7 +4717,7 @@
                     $(variables.elements.editDepositType.form).reset();
                     editDepositTypeId = null;
                     if (currentTable) {
-                        $(currentTable).DataTable().ajax.reload(null, true);
+                        $(currentTable).DataTable().ajax.reload();
                         currentTable = null;
                     }
                     //-----

@@ -200,7 +200,7 @@ class ColorController extends AbstractAdminController implements IDatatableContr
                         'formatter' => function ($row) {
                             $show = $this->setTemplate('partial/admin/parser/color-shape')
                                 ->render([
-                                    'row' => $row,
+                                    'hex' => $row['hex'],
                                 ]);
                             return $show;
                         }

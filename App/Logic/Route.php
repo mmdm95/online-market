@@ -795,9 +795,7 @@ class Route implements IInitialize
                 Router::get('/unit/get/{id}', [AdminUnitController::class, 'get'])->where([
                     'id' => '[0-9]+',
                 ])->name('ajax.unit.get');
-                Router::post('/unit/add/{user_id}', [AdminUnitController::class, 'add'])->where([
-                    'user_id' => '[0-9]+',
-                ])->name('ajax.unit.add');
+                Router::post('/unit/add', [AdminUnitController::class, 'add'])->name('ajax.unit.add');
                 Router::post('/unit/edit/{id}', [AdminUnitController::class, 'edit'])->where([
                     'id' => '[0-9]+',
                 ])->name('ajax.unit.edit');

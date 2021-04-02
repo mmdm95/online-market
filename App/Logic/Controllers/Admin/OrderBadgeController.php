@@ -214,10 +214,10 @@ class OrderBadgeController extends AbstractAdminController implements IAjaxContr
                         'db' => 'color',
                         'db_alias' => 'color',
                         'dt' => 'color',
-                        'formatter' => function ($row) {
+                        'formatter' => function ($d) {
                             $show = $this->setTemplate('partial/admin/parser/color-shape')
                                 ->render([
-                                    'row' => $row,
+                                    'hex' => $d,
                                 ]);
                             return $show;
                         }

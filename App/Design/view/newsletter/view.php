@@ -45,7 +45,7 @@
                     <h5 class="modal-title">افزودن موبایل جدید</h5>
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                 </div>
-                <form action="#" id="">
+                <form action="#" id="__form_add_newsletter">
                     <div class="modal-body">
                         <div class="row">
                             <div class="col-sm-12 form-group">
