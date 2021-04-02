@@ -45,6 +45,9 @@ $validator = form_validator();
 
                         <div class="__all_menu_container">
                             <?php if (!$validator->getStatus()): ?>
+                                <?php
+                                $counter = 0;
+                                ?>
                                 <?php foreach ($menu as $k => $main): ?>
                                     <div class="border-info border-2 border-dashed rounded p-2 mb-3 position-relative __menu_items __sample_menu_item">
                                         <div class="row m-0">
@@ -82,6 +85,9 @@ $validator = form_validator();
 
                                         <div class="__all_sub_menu_container">
                                             <?php if (($subMenu[$k] ?? [])): ?>
+                                                <?php
+                                                $counter2 = 0;
+                                                ?>
                                                 <?php foreach (($subMenu[$k]) as $k2 => $sub): ?>
                                                     <div class="row m-0 position-relative border-violet border-2 border-dashed rounded p-2 my-3 __sub_menu_items __sample_sub_menu_item">
                                                         <div class="col-lg-4 form-group">
@@ -115,6 +121,9 @@ $validator = form_validator();
                                                                    value="<?= $sub['sub-priority']->getValue(); ?>">
                                                         </div>
                                                     </div>
+                                                    <?php if (0 != $counter2++): ?>
+                                                        <?php load_partial('admin/parser/dynamic-remover-btn'); ?>
+                                                    <?php endif; ?>
                                                 <?php endforeach; ?>
                                             <?php else: ?>
                                                 <div class="row m-0 position-relative border-violet border-2 border-dashed rounded p-2 my-3 __sub_menu_items __sample_sub_menu_item">
@@ -159,6 +168,7 @@ $validator = form_validator();
                                             </div>
                                         </div>
                                     </div>
+                                    <?php $counter++; ?>
                                 <?php endforeach; ?>
                             <?php elseif (count($topMenu)): ?>
                                 <?php
@@ -236,8 +246,10 @@ $validator = form_validator();
                                                                    name="inp-setting-sub-menu[<?= $counter; ?>][<?= $counter2; ?>][sub-priority]"
                                                                    value="<?= $k2; ?>">
                                                         </div>
+                                                        <?php if (0 != $counter2++): ?>
+                                                            <?php load_partial('admin/parser/dynamic-remover-btn'); ?>
+                                                        <?php endif; ?>
                                                     </div>
-                                                    <?php $counter2++; ?>
                                                 <?php endforeach; ?>
                                             <?php else: ?>
                                                 <div class="row m-0 position-relative border-violet border-2 border-dashed rounded p-2 my-3 __sub_menu_items __sample_sub_menu_item">
@@ -281,8 +293,10 @@ $validator = form_validator();
                                                 </button>
                                             </div>
                                         </div>
+                                        <?php if (0 != $counter++): ?>
+                                            <?php load_partial('admin/parser/dynamic-remover-btn'); ?>
+                                        <?php endif; ?>
                                     </div>
-                                    <?php $counter++; ?>
                                 <?php endforeach; ?>
                             <?php else: ?>
                                 <div class="border-info border-2 border-dashed rounded p-2 mb-3 position-relative __menu_items __sample_menu_item">

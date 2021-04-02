@@ -5,6 +5,7 @@ namespace App\Logic\Forms\Admin\Setting;
 use App\Logic\Interfaces\IPageForm;
 use App\Logic\Models\SettingModel;
 use App\Logic\Validations\ExtendedValidator;
+use Pecee\Http\Input\InputItem;
 use Sim\Container\Exceptions\MethodNotFoundException;
 use Sim\Container\Exceptions\ParameterHasNoDefaultValueException;
 use Sim\Container\Exceptions\ServiceNotFoundException;
@@ -62,11 +63,14 @@ class SettingContactForm implements IPageForm
         $featuresTitle = is_array($featuresTitle) ? $featuresTitle : [];
         $featuresSubTitle = is_array($featuresSubTitle) ? $featuresSubTitle : [];
 
+        /**
+         * @var InputItem $title
+         */
         foreach ($featuresTitle as $k => $title) {
-            if ('' != trim($title)) {
+            if ('' != trim($title->getValue())) {
                 $features[] = [
-                    'title' => $title,
-                    'sub_title' => $featuresSubTitle[$k] ?? '',
+                    'title' => $title->getValue(),
+                    'sub_title' => $featuresSubTitle[$k]->getValue() ?? '',
                 ];
             }
         }

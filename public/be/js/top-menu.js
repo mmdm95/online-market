@@ -7,8 +7,8 @@
             menuContainer = $('.__all_menu_container'),
             subMenuContainer = $('.__all_sub_menu_container'),
             //-----
-            menuSample = menuContainer.find('.__sample_menu_item'),
-            subMenuSample = subMenuContainer.find('.__sample_sub_menu_item'),
+            menuSample = menuContainer.find('.__sample_menu_item').first(),
+            subMenuSample = subMenuContainer.find('.__sample_sub_menu_item').first(),
             //-----
             inputNameStart = 'inp-setting-menu[',
             subInputNameStart = 'inp-setting-sub-menu[',
@@ -64,12 +64,13 @@
         }
 
         $('#__menu_cloner').off('click').on('click', function () {
-            var cloned, lastIndex;
+            var cloned, lastIndex, firstSample;
 
             cloned = menuSample.clone(true);
             cloned.removeClass('__sample_menu_items');
+            firstSample = cloned.find('.__sub_menu_items.__sample_sub_menu_item').first();
             cloned.find('.__sub_menu_items').each(function () {
-                if (!$(this).hasClass('__sample_sub_menu_item')) {
+                if (!$(this).not(firstSample)) {
                     $(this).remove();
                 }
             });

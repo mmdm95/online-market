@@ -120,9 +120,7 @@ $validator = form_validator();
                                                        value="<?= $k; ?>">
                                             </div>
                                             <?php if (0 != $counter++): ?>
-                                                <div class="__clone_remover_btn btn btn-danger">
-                                                    <i class="icon-trash" aria-hidden="true"></i>
-                                                </div>
+                                                <?php load_partial('admin/parser/dynamic-remover-btn'); ?>
                                             <?php endif; ?>
                                         </div>
                                     <?php endforeach; ?>
@@ -240,9 +238,7 @@ $validator = form_validator();
                                                        value="<?= $k; ?>">
                                             </div>
                                             <?php if (0 != $counter++): ?>
-                                                <div class="__clone_remover_btn btn btn-danger">
-                                                    <i class="icon-trash" aria-hidden="true"></i>
-                                                </div>
+                                                <?php load_partial('admin/parser/dynamic-remover-btn'); ?>
                                             <?php endif; ?>
                                         </div>
                                     <?php endforeach; ?>
@@ -312,9 +308,7 @@ $validator = form_validator();
                                         ><?= $namad->getValue(); ?></textarea>
                                     </div>
                                     <?php if (0 != $counter++): ?>
-                                        <div class="__clone_remover_btn btn btn-danger">
-                                            <i class="icon-trash" aria-hidden="true"></i>
-                                        </div>
+                                        <?php load_partial('admin/parser/dynamic-remover-btn'); ?>
                                     <?php endif; ?>
                                 <?php endforeach; ?>
                             <?php elseif (count($namads)): ?>
@@ -326,9 +320,7 @@ $validator = form_validator();
                                         ><?= $namad; ?></textarea>
                                     </div>
                                     <?php if (0 != $counter++): ?>
-                                        <div class="__clone_remover_btn btn btn-danger">
-                                            <i class="icon-trash" aria-hidden="true"></i>
-                                        </div>
+                                        <?php load_partial('admin/parser/dynamic-remover-btn'); ?>
                                     <?php endif; ?>
                                 <?php endforeach; ?>
                             <?php else: ?>

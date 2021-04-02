@@ -3190,9 +3190,7 @@
                 admin.deleteItem(url + id, function () {
                     if (table) {
                         $(table).DataTable().ajax.reload();
-                        console.log($(table).DataTable());
                         createDatatable();
-                        // datatableInitCompleteActions(table);
                     }
                 }, {}, true);
             }
