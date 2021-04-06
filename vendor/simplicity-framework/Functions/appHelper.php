@@ -3,6 +3,7 @@
 use Sim\Captcha\CaptchaFactory;
 use Sim\Captcha\Interfaces\ICaptchaLanguage;
 use Sim\ConfigManager\ConfigManager;
+use Sim\Logger\ILogger;
 use Sim\Container\Container;
 use Sim\Cookie\Cookie as Cookie;
 use Sim\Csrf\Csrf;
@@ -52,6 +53,13 @@ if (!function_exists('config')) {
     function config(): ConfigManager
     {
         return \container()->get(ConfigManager::class);
+    }
+}
+
+if (!function_exists('logger')) {
+    function logger(): ILogger
+    {
+        return \container()->get(ILogger::class);
     }
 }
 

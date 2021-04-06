@@ -259,5 +259,11 @@ $validator = form_validator();
             </form>
         </div>
     </div>
+
+    <!-- Mini file manager modal -->
+    <?php load_partial('file-manager/modal-efm', [
+        'the_options' => $the_options ?? [],
+    ]); ?>
+    <!-- /mini file manager modal -->
 </div>
 <!-- /content area -->

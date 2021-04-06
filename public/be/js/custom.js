@@ -616,6 +616,16 @@
                 blogPagination: 'inp-setting-blog-pagination',
             },
         },
+        settingIndexPage: {
+            form: '#__form_setting_index_page',
+            inputs: {
+                title: 'inp-setting-tabbed-slider-title',
+                name: 'inp-setting-tabbed-slider-name[]',
+                type: 'inp-setting-tabbed-slider-type[]',
+                limit: 'inp-setting-tabbed-slider-limit[]',
+                category: 'inp-setting-tabbed-slider-category[]',
+            },
+        },
     });
     window.MyGlobalVariables.validation = $.extend({}, window.MyGlobalVariables.validation, {
         constraints: {
@@ -1660,7 +1670,7 @@
             showLoader: function () {
                 var id = core.idGenerator('loader');
                 $('body').append(
-                    $('<div class="position-fixed w-100 h-100" style="z-index: 1001; left: 0; top: 0; right: 0; bottom: 0;" id="' + id + '" />')
+                    $('<div class="position-fixed w-100 h-100" style="z-index: 1100; left: 0; top: 0; right: 0; bottom: 0;" id="' + id + '" />')
                         .append($('<div class="position-absolute bg-dark-alpha" style="left: 0; top: 0; right: 0; bottom: 0; z-index: 1;" />'))
                         .append($('<div class="theme_corners text-center" style="z-index: 2" />').append($('<div class="pace_activity" />')))
                 );
@@ -1964,7 +1974,7 @@
             });
         });
 
-        function createDatatable () {
+        function createDatatable(selector) {
             if ($().DataTable) {
                 // Setting datatable defaults
                 $.extend($.fn.dataTable.defaults, {
@@ -2128,7 +2138,8 @@
                     });
                 });
 
-                $.each($('.datatable-highlight'), function () {
+                selector = selector ? $(selector) : $('.datatable-highlight');
+                $.each(selector, function () {
                     var $this, table, url;
                     $this = $(this);
 
@@ -3190,7 +3201,7 @@
                 admin.deleteItem(url + id, function () {
                     if (table) {
                         $(table).DataTable().ajax.reload();
-                        createDatatable();
+                        createDatatable(table);
                     }
                 }, {}, true);
             }
@@ -3274,13 +3285,13 @@
             id = $(btn).attr('data-edit-id');
             editModal = $('#modal_form_address_edit');
             // clear element after each call
-            $(variables.elements.editAddress.form).reset();
+            $(variables.elements.editAddress.form).get(0).reset();
             if (id && editModal.length) {
                 admin.request(variables.url.address.get + '/' + userId + '/' + id, 'get', function () {
                     var _ = this;
                     var provincesSelect = $('select[name="' + variables.elements.editAddress.inputs.province + '"]'),
                         citiesSelect = $(provincesSelect.attr('data-city-select-target'));
-                    if (_.data.length && provincesSelect.length && citiesSelect.length) {
+                    if (core.objSize(_.data) && provincesSelect.length && citiesSelect.length) {
                         currentTable = table;
                         editAddrId = id;
                         //-----
@@ -3304,11 +3315,11 @@
             id = $(btn).attr('data-edit-id');
             editModal = $('#modal_form_edit_unit');
             // clear element after each call
-            $(variables.elements.editUnit.form).reset();
+            $(variables.elements.editUnit.form).get(0).reset();
             if (id && editModal.length) {
                 admin.request(variables.url.unit.get + '/' + id, 'get', function () {
                     var _ = this;
-                    if (_.data.length) {
+                    if (core.objSize(_.data)) {
                         currentTable = table;
                         editUnitId = id;
                         //-----
@@ -3328,11 +3339,11 @@
             id = $(btn).attr('data-edit-id');
             editModal = $('#modal_form_edit_faq');
             // clear element after each call
-            $(variables.elements.editFaq.form).reset();
+            $(variables.elements.editFaq.form).get(0).reset();
             if (id && editModal.length) {
                 admin.request(variables.url.faq.get + '/' + id, 'get', function () {
                     var _ = this;
-                    if (_.data.length) {
+                    if (core.objSize(_.data)) {
                         currentTable = table;
                         editFAQId = id;
                         //-----
@@ -3358,11 +3369,11 @@
             id = $(btn).attr('data-edit-id');
             editModal = $('#modal_form_edit_slide');
             // clear element after each call
-            $(variables.elements.editSlide.form).reset();
+            $(variables.elements.editSlide.form).get(0).reset();
             if (id && editModal.length) {
                 admin.request(variables.url.slider.get + '/' + id, 'get', function () {
                     var _ = this;
-                    if (_.data.length) {
+                    if (core.objSize(_.data)) {
                         currentTable = table;
                         editSlideId = id;
                         //-----
@@ -3387,11 +3398,11 @@
             id = $(btn).attr('data-edit-id');
             editModal = $('#modal_form_edit_ins_image');
             // clear element after each call
-            $(variables.elements.editInstagramImage.form).reset();
+            $(variables.elements.editInstagramImage.form).get(0).reset();
             if (id && editModal.length) {
                 admin.request(variables.url.instagram.get + '/' + id, 'get', function () {
                     var _ = this;
-                    if (_.data.length) {
+                    if (core.objSize(_.data)) {
                         currentTable = table;
                         editInstagramImageId = id;
                         //-----
@@ -3413,11 +3424,11 @@
             id = $(btn).attr('data-edit-id');
             editModal = $('#modal_form_edit_badges');
             // clear element after each call
-            $(variables.elements.editBadge.form).reset();
+            $(variables.elements.editBadge.form).get(0).reset();
             if (id && editModal.length) {
                 admin.request(variables.url.badge.get + '/' + id, 'get', function () {
                     var _ = this;
-                    if (_.data.length) {
+                    if (core.objSize(_.data)) {
                         currentTable = table;
                         editBadgeId = id;
                         //-----
@@ -3440,7 +3451,7 @@
             cId = $(btn).attr('data-add-category-id');
             addModal = $('#modal_form_add_cat_img');
             // clear element after each call
-            $(variables.elements.addCategoryImage.form).reset();
+            $(variables.elements.addCategoryImage.form).get(0).reset();
             if (cId && addModal.length) {
                 addCategoryImageId = cId;
             }
@@ -3456,11 +3467,11 @@
             cId = $(btn).attr('data-edit-category-id');
             editModal = $('#modal_form_edit_cat_img');
             // clear element after each call
-            $(variables.elements.editCategoryImage.form).reset();
+            $(variables.elements.editCategoryImage.form).get(0).reset();
             if (id && cId && editModal.length) {
                 admin.request(variables.url.categoryImage.get + '/' + cId + '/' + id, 'get', function () {
                     var _ = this;
-                    if (_.data.length) {
+                    if (core.objSize(_.data)) {
                         currentTable = table;
                         currentCategoryId = id;
                         editCategoryImageId = cId;
@@ -3483,11 +3494,11 @@
             id = $(btn).attr('data-edit-id');
             editModal = $('#modal_form_edit_sec_question');
             // clear element after each call
-            $(variables.elements.editSecurityQuestion.form).reset();
+            $(variables.elements.editSecurityQuestion.form).get(0).reset();
             if (id && editModal.length) {
                 admin.request(variables.url.securityQuestion.get + '/' + id, 'get', function () {
                     var _ = this;
-                    if (_.data.length) {
+                    if (core.objSize(_.data)) {
                         currentTable = table;
                         editSecurityQuestionId = id;
                         //-----
@@ -3506,11 +3517,11 @@
             id = $(btn).attr('data-edit-id');
             editModal = $('#modal_form_edit_type');
             // clear element after each call
-            $(variables.elements.editDepositType.form).reset();
+            $(variables.elements.editDepositType.form).get(0).reset();
             if (id && editModal.length) {
                 admin.request(variables.url.depositType.get + '/' + id, 'get', function () {
                     var _ = this;
-                    if (_.data.length) {
+                    if (core.objSize(_.data)) {
                         currentTable = table;
                         editDepositTypeId = id;
                         //-----
@@ -3536,7 +3547,7 @@
 
                 admin.request(variables.url.orders.info + '/' + id, 'get', function () {
                     var _ = this;
-                    if (_.data.length) {
+                    if (core.objSize(_.data)) {
                         infoModal.find('#__receiver_info_full_name')
                             .val(_.data['receiver_name'] ? _.data['receiver_name'] : '<i class="icon-minus2" aria-hidden="true"></i>');
                         infoModal.find('#__receiver_info_phone')
@@ -3711,11 +3722,8 @@
             admin.request(variables.url.address.add + '/' + userId, 'post', function () {
                 admin.hideLoader(loaderId);
                 // clear element after success
-                $(variables.elements.addAddress.form).reset();
-                if (currentTable) {
-                    $(currentTable).DataTable().ajax.reload();
-                    currentTable = null;
-                }
+                $(variables.elements.addAddress.form).get(0).reset();
+                createDatatable();
                 //-----
                 admin.toasts.toast(this.data, {
                     type: variables.toasts.types.success,
@@ -3748,13 +3756,14 @@
                 admin.request(variables.url.address.edit + '/' + userId + '/' + editAddrId, 'post', function () {
                     admin.hideLoader(loaderId);
                     // clear element after success
-                    $(variables.elements.editAddress.form).reset();
+                    $(variables.elements.editAddress.form).get(0).reset();
                     // remove current id for province and city and reset current address id
                     $('select[name="' + variables.elements.editAddress.inputs.province + '"]').removeAttr('data-current-province');
                     $('select[name="' + variables.elements.editAddress.inputs.city + '"]').removeAttr('data-current-city');
                     editAddrId = null;
                     if (currentTable) {
                         $(currentTable).DataTable().ajax.reload();
+                        createDatatable(currentTable);
                         currentTable = null;
                     }
                     //-----
@@ -3786,14 +3795,13 @@
                 createLoader = false;
                 loaderId = admin.showLoader();
             }
-            admin.request(variables.url.unit.add, 'post', function () {
+            admin.request(variables.url.unit.add, 'POST', function () {
                 admin.hideLoader(loaderId);
                 // clear element after success
-                $(variables.elements.addUnit.form).reset();
-                if (currentTable) {
-                    $(currentTable).DataTable().ajax.reload();
-                    currentTable = null;
-                }
+                $(variables.elements.addUnit.form).get(0).reset();
+                // currentTable is undefined but is must add data-current-table to working form for refresh data after add
+                // ... (postponed)
+                createDatatable(currentTable);
                 //-----
                 admin.toasts.toast(this.data, {
                     type: variables.toasts.types.success,
@@ -3824,10 +3832,11 @@
                 admin.request(variables.url.unit.edit + '/' + editUnitId, 'post', function () {
                     admin.hideLoader(loaderId);
                     // clear element after success
-                    $(variables.elements.editUnit.form).reset();
+                    $(variables.elements.editUnit.form).get(0).reset();
                     editUnitId = null;
                     if (currentTable) {
                         $(currentTable).DataTable().ajax.reload();
+                        createDatatable(currentTable);
                         currentTable = null;
                     }
                     //-----
@@ -3900,11 +3909,8 @@
             admin.request(variables.url.faq.add, 'post', function () {
                 admin.hideLoader(loaderId);
                 // clear element after success
-                $(variables.elements.addFaq.form).reset();
-                if (currentTable) {
-                    $(currentTable).DataTable().ajax.reload();
-                    currentTable = null;
-                }
+                $(variables.elements.addFaq.form).get(0).reset();
+                createDatatable();
                 //-----
                 admin.toasts.toast(this.data, {
                     type: variables.toasts.types.success,
@@ -3935,10 +3941,11 @@
                 admin.request(variables.url.faq.edit + '/' + editFAQId, 'post', function () {
                     admin.hideLoader(loaderId);
                     // clear element after success
-                    $(variables.elements.editFaq.form).reset();
+                    $(variables.elements.editFaq.form).get(0).reset();
                     editFAQId = null;
                     if (currentTable) {
                         $(currentTable).DataTable().ajax.reload();
+                        createDatatable(currentTable);
                         currentTable = null;
                     }
                     //-----
@@ -3991,12 +3998,9 @@
             admin.request(variables.url.slider.add, 'post', function () {
                 admin.hideLoader(loaderId);
                 // clear element after success
-                $(variables.elements.addSlide.form).reset();
+                $(variables.elements.addSlide.form).get(0).reset();
                 removeImageFromPlaceholder($(variables.elements.addSlide.form).find('[name="' + variables.elements.addSlide.inputs.image + '"]'));
-                if (currentTable) {
-                    $(currentTable).DataTable().ajax.reload();
-                    currentTable = null;
-                }
+                createDatatable();
                 //-----
                 admin.toasts.toast(this.data, {
                     type: variables.toasts.types.success,
@@ -4027,11 +4031,12 @@
                 admin.request(variables.url.slider.edit + '/' + editSlideId, 'post', function () {
                     admin.hideLoader(loaderId);
                     // clear element after success
-                    $(variables.elements.editSlide.form).reset();
+                    $(variables.elements.editSlide.form).get(0).reset();
                     removeImageFromPlaceholder($(variables.elements.editSlide.form).find('[name="' + variables.elements.editSlide.inputs.image + '"]'));
                     editSlideId = null;
                     if (currentTable) {
                         $(currentTable).DataTable().ajax.reload();
+                        createDatatable(currentTable);
                         currentTable = null;
                     }
                     //-----
@@ -4064,12 +4069,9 @@
             admin.request(variables.url.instagram.add, 'post', function () {
                 admin.hideLoader(loaderId);
                 // clear element after success
-                $(variables.elements.addInstagramImage.form).reset();
+                $(variables.elements.addInstagramImage.form).get(0).reset();
                 removeImageFromPlaceholder($(variables.elements.addInstagramImage.form).find('[name="' + variables.elements.addInstagramImage.inputs.image + '"]'));
-                if (currentTable) {
-                    $(currentTable).DataTable().ajax.reload();
-                    currentTable = null;
-                }
+                createDatatable();
                 //-----
                 admin.toasts.toast(this.data, {
                     type: variables.toasts.types.success,
@@ -4100,11 +4102,12 @@
                 admin.request(variables.url.instagram.edit + '/' + editInstagramImageId, 'post', function () {
                     admin.hideLoader(loaderId);
                     // clear element after success
-                    $(variables.elements.editInstagramImage.form).reset();
+                    $(variables.elements.editInstagramImage.form).get(0).reset();
                     removeImageFromPlaceholder($(variables.elements.editInstagramImage.form).find('[name="' + variables.elements.editInstagramImage.inputs.image + '"]'));
                     editInstagramImageId = null;
                     if (currentTable) {
                         $(currentTable).DataTable().ajax.reload();
+                        createDatatable(currentTable);
                         currentTable = null;
                     }
                     //-----
@@ -4137,11 +4140,8 @@
             admin.request(variables.url.newsletter.add, 'post', function () {
                 admin.hideLoader(loaderId);
                 // clear element after success
-                $(variables.elements.addNewsletter.form).reset();
-                if (currentTable) {
-                    $(currentTable).DataTable().ajax.reload();
-                    currentTable = null;
-                }
+                $(variables.elements.addNewsletter.form).get(0).reset();
+                createDatatable();
                 //-----
                 admin.toasts.toast(this.data, {
                     type: variables.toasts.types.success,
@@ -4197,11 +4197,8 @@
             admin.request(variables.url.badge.add, 'post', function () {
                 admin.hideLoader(loaderId);
                 // clear element after success
-                $(variables.elements.addBadge.form).reset();
-                if (currentTable) {
-                    $(currentTable).DataTable().ajax.reload();
-                    currentTable = null;
-                }
+                $(variables.elements.addBadge.form).get(0).reset();
+                createDatatable();
                 //-----
                 admin.toasts.toast(this.data, {
                     type: variables.toasts.types.success,
@@ -4232,10 +4229,11 @@
                 admin.request(variables.url.badge.edit + '/' + editBadgeId, 'post', function () {
                     admin.hideLoader(loaderId);
                     // clear element after success
-                    $(variables.elements.editBadge.form).reset();
+                    $(variables.elements.editBadge.form).get(0).reset();
                     editBadgeId = null;
                     if (currentTable) {
                         $(currentTable).DataTable().ajax.reload();
+                        createDatatable(currentTable);
                         currentTable = null;
                     }
                     //-----
@@ -4292,12 +4290,9 @@
                 admin.request(variables.url.categoryImage.add + '/' + addCategoryImageId, 'post', function () {
                     admin.hideLoader(loaderId);
                     // clear element after success
-                    $(variables.elements.addCategoryImage.form).reset();
+                    $(variables.elements.addCategoryImage.form).get(0).reset();
                     addCategoryImageId = null;
-                    if (currentTable) {
-                        $(currentTable).DataTable().ajax.reload();
-                        currentTable = null;
-                    }
+                    createDatatable();
                     //-----
                     admin.toasts.toast(this.data, {
                         type: variables.toasts.types.success,
@@ -4329,11 +4324,12 @@
                 admin.request(variables.url.categoryImage.edit + '/' + editCategoryImageId + '/' + currentCategoryId, 'post', function () {
                     admin.hideLoader(loaderId);
                     // clear element after success
-                    $(variables.elements.editCategoryImage.form).reset();
+                    $(variables.elements.editCategoryImage.form).get(0).reset();
                     currentCategoryId = null;
                     editCategoryImageId = null;
                     if (currentTable) {
                         $(currentTable).DataTable().ajax.reload();
+                        createDatatable(currentTable);
                         currentTable = null;
                     }
                     //-----
@@ -4406,11 +4402,8 @@
             admin.request(variables.url.securityQuestion.add, 'post', function () {
                 admin.hideLoader(loaderId);
                 // clear element after success
-                $(variables.elements.addSecurityQuestion.form).reset();
-                if (currentTable) {
-                    $(currentTable).DataTable().ajax.reload();
-                    currentTable = null;
-                }
+                $(variables.elements.addSecurityQuestion.form).get(0).reset();
+                createDatatable();
                 //-----
                 admin.toasts.toast(this.data, {
                     type: variables.toasts.types.success,
@@ -4441,10 +4434,11 @@
                 admin.request(variables.url.securityQuestion.edit + '/' + editSecurityQuestionId, 'post', function () {
                     admin.hideLoader(loaderId);
                     // clear element after success
-                    $(variables.elements.editSecurityQuestion.form).reset();
+                    $(variables.elements.editSecurityQuestion.form).get(0).reset();
                     editSecurityQuestionId = null;
                     if (currentTable) {
                         $(currentTable).DataTable().ajax.reload();
+                        createDatatable(currentTable);
                         currentTable = null;
                     }
                     //-----
@@ -4537,11 +4531,8 @@
             admin.request(variables.url.productFestival.addProduct + '/' + festivalId, 'post', function () {
                 admin.hideLoader(loaderId);
                 // clear element after success
-                $(variables.elements.addProductFestival.form).reset();
-                if (currentTable) {
-                    $(currentTable).DataTable().ajax.reload();
-                    currentTable = null;
-                }
+                $(variables.elements.addProductFestival.form).get(0).reset();
+                createDatatable();
                 //-----
                 admin.toasts.toast(this.data, {
                     type: variables.toasts.types.success,
@@ -4573,9 +4564,10 @@
             admin.request(variables.url.productFestival.addCategory + '/' + festivalId, 'post', function () {
                 admin.hideLoader(loaderId);
                 // clear element after success
-                $(variables.elements.modifyProductFestival.form).reset();
+                $(variables.elements.modifyProductFestival.form).get(0).reset();
                 if (currentTable) {
                     $(currentTable).DataTable().ajax.reload();
+                    createDatatable(currentTable);
                     currentTable = null;
                 }
                 //-----
@@ -4624,9 +4616,10 @@
                 admin.request(variables.url.productFestival.removeCategory + '/' + festivalId, 'post', function () {
                     admin.hideLoader(loaderId);
                     // clear element after success
-                    $(variables.elements.modifyProductFestival.form).reset();
+                    $(variables.elements.modifyProductFestival.form).get(0).reset();
                     if (currentTable) {
                         $(currentTable).DataTable().ajax.reload();
+                        createDatatable(currentTable);
                         currentTable = null;
                     }
                     //-----
@@ -4677,11 +4670,8 @@
             admin.request(variables.url.depositType.add, 'post', function () {
                 admin.hideLoader(loaderId);
                 // clear element after success
-                $(variables.elements.addDepositType.form).reset();
-                if (currentTable) {
-                    $(currentTable).DataTable().ajax.reload();
-                    currentTable = null;
-                }
+                $(variables.elements.addDepositType.form).get(0).reset();
+                createDatatable();
                 //-----
                 admin.toasts.toast(this.data, {
                     type: variables.toasts.types.success,
@@ -4712,10 +4702,11 @@
                 admin.request(variables.url.depositType.edit + '/' + editDepositTypeId, 'post', function () {
                     admin.hideLoader(loaderId);
                     // clear element after success
-                    $(variables.elements.editDepositType.form).reset();
+                    $(variables.elements.editDepositType.form).get(0).reset();
                     editDepositTypeId = null;
                     if (currentTable) {
                         $(currentTable).DataTable().ajax.reload();
+                        createDatatable(currentTable);
                         currentTable = null;
                     }
                     //-----

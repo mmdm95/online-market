@@ -35,7 +35,7 @@
     "mmdm/sim-csrf": "^1.0",
     "mmdm/sim-logger": "^1.0",
     "mmdm/sim-benchmark": "^1.0",
-    "mmdm/sim-event-dispatcher": "^1.1",
+    "mmdm/sim-event-dispatcher": "^2.0",
     "mmdm/sim-fa-sms": "^0.1",
     "mmdm/sim-fa-payment": "^0.1",
     "mmdm/sim-form": "^0.1",

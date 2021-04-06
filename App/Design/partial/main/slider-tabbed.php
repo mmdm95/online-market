@@ -37,7 +37,7 @@ foreach ($tabbed_slider['items'] ?? [] as $tab) {
                                     <?php if (count($tab['items'])): ?>
                                         <li class="nav-item">
                                             <a class="nav-link <?= 0 === $k ? 'active' : ''; ?>"
-                                               id="tab<?= ($k + 1); ?>tab"
+                                               id="tab<?= ($k + 1); ?>"
                                                data-toggle="tab"
                                                href="#tab<?= ($k + 1); ?>" role="tab"
                                                aria-controls="tab<?= ($k + 1); ?>"

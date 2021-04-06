@@ -43,7 +43,7 @@ class EditColorForm implements IPageForm
         $validator
             ->setFieldsAlias([
                 'inp-edit-color-name' => 'نام رنگ',
-                'inp-edit-color-color' => 'رنگ',
+                'inp-edit-color-color' => 'انتخاب رنگ',
             ]);
 
         // name

@@ -148,6 +148,22 @@ class SettingModel extends BaseModel
      * @param array $info
      * @return bool
      */
+    public function updateIndexPageSetting(array $info): bool
+    {
+        $res1 = $this->update([
+            'setting_value' => $info[SETTING_INDEX_TABBED_SLIDER],
+        ], 'setting_name=:name', ['name' => SETTING_INDEX_TABBED_SLIDER]);
+        $res2 = $this->update([
+            'setting_value' => $info[SETTING_INDEX_3_IMAGES],
+        ], 'setting_name=:name', ['name' => SETTING_INDEX_TABBED_SLIDER]);
+
+        return $res1 && $res2;
+    }
+
+    /**
+     * @param array $info
+     * @return bool
+     */
     public function updateOtherSetting(array $info): bool
     {
         $res1 = $this->update([

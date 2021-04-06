@@ -186,6 +186,8 @@ Data/Cache/*
 !Data/Cache/.keep
 Data/Drafts/*
 !Data/Drafts/.keep
+Data/Logs/*
+!Data/Logs/.keep
 vendor/*
 !vendor/simplicity-framework
 !vendor/simplicity-framework/*

@@ -18,6 +18,7 @@ use Sim\Container\Exceptions\MethodNotFoundException;
 use Sim\Container\Exceptions\ParameterHasNoDefaultValueException;
 use Sim\Container\Exceptions\ServiceNotFoundException;
 use Sim\Container\Exceptions\ServiceNotInstantiableException;
+use Sim\Utils\ArrayUtil;
 
 class FakeData
 {
@@ -736,7 +737,9 @@ class FakeData
          */
         $auth = container()->get('auth_home');
         $roles = $auth->getRoles();
+        $roles = ArrayUtil::arrayGroupBy('name', $roles);
         $resources = $auth->getResources();
+        $resources = ArrayUtil::arrayGroupBy('name', $resources);
         $permissions = [
             IAuth::PERMISSION_CREATE,
             IAuth::PERMISSION_READ,
@@ -744,16 +747,27 @@ class FakeData
             IAuth::PERMISSION_DELETE
         ];
 
-        foreach ($structure as $role => $resName) {
-            $resId = '';
+        foreach ($structure as $role => $resNames) {
+            $roleId = (int)$roles[$role][0]['id'];
 
-            /**
-             * @var Insert $insert
-             */
-            $insert = $this->model->insert();
-            $insert
-                ->into('role_res_perm');
-            $this->model->execute($insert);
+            foreach ($resNames as $resName) {
+                $resId = (int)$resources[$resName][0]['id'];
+
+                /**
+                 * @var Insert $insert
+                 */
+                foreach ($permissions as $permission) {
+                    $insert = $this->model->insert();
+                    $insert
+                        ->into('role_res_perm')
+                        ->cols([
+                            'role_id' => $roleId,
+                            'resource_id' => $resId,
+                            'perm_id' => $permission,
+                        ]);
+                    $this->model->execute($insert);
+                }
+            }
         }
     }
 

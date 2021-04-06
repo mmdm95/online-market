@@ -53,7 +53,7 @@ $validator = form_validator();
                                         <div class="row m-0">
                                             <div class="col-lg-4 form-group">
                                                 <label>
-                                                    عنوان منو
+                                                    عنوان منو:
                                                 </label>
                                                 <input type="text"
                                                        class="form-control"
@@ -63,7 +63,7 @@ $validator = form_validator();
                                             </div>
                                             <div class="col-lg-5 form-group">
                                                 <label>
-                                                    لینک
+                                                    لینک:
                                                 </label>
                                                 <input type="text"
                                                        class="form-control"
@@ -73,7 +73,7 @@ $validator = form_validator();
                                             </div>
                                             <div class="col-lg-3 form-group">
                                                 <label>
-                                                    اولویت
+                                                    اولویت:
                                                 </label>
                                                 <input type="text"
                                                        class="form-control"
@@ -92,7 +92,7 @@ $validator = form_validator();
                                                     <div class="row m-0 position-relative border-violet border-2 border-dashed rounded p-2 my-3 __sub_menu_items __sample_sub_menu_item">
                                                         <div class="col-lg-4 form-group">
                                                             <label>
-                                                                عنوان زیر منو
+                                                                عنوان زیر منو:
                                                             </label>
                                                             <input type="text"
                                                                    class="form-control"
@@ -102,7 +102,7 @@ $validator = form_validator();
                                                         </div>
                                                         <div class="col-lg-5 form-group">
                                                             <label>
-                                                                لینک
+                                                                لینک:
                                                             </label>
                                                             <input type="text"
                                                                    class="form-control"
@@ -112,7 +112,7 @@ $validator = form_validator();
                                                         </div>
                                                         <div class="col-lg-3 form-group">
                                                             <label>
-                                                                اولویت
+                                                                اولویت:
                                                             </label>
                                                             <input type="text"
                                                                    class="form-control"
@@ -129,7 +129,7 @@ $validator = form_validator();
                                                 <div class="row m-0 position-relative border-violet border-2 border-dashed rounded p-2 my-3 __sub_menu_items __sample_sub_menu_item">
                                                     <div class="col-lg-4 form-group">
                                                         <label>
-                                                            عنوان زیر منو
+                                                            عنوان زیر منو:
                                                         </label>
                                                         <input type="text"
                                                                class="form-control"
@@ -138,7 +138,7 @@ $validator = form_validator();
                                                     </div>
                                                     <div class="col-lg-5 form-group">
                                                         <label>
-                                                            لینک
+                                                            لینک:
                                                         </label>
                                                         <input type="text"
                                                                class="form-control"
@@ -147,7 +147,7 @@ $validator = form_validator();
                                                     </div>
                                                     <div class="col-lg-3 form-group">
                                                         <label>
-                                                            اولویت
+                                                            اولویت:
                                                         </label>
                                                         <input type="text"
                                                                class="form-control"
@@ -179,7 +179,7 @@ $validator = form_validator();
                                         <div class="row m-0">
                                             <div class="col-lg-4 form-group">
                                                 <label>
-                                                    عنوان منو
+                                                    عنوان منو:
                                                 </label>
                                                 <input type="text"
                                                        class="form-control"
@@ -189,7 +189,7 @@ $validator = form_validator();
                                             </div>
                                             <div class="col-lg-5 form-group">
                                                 <label>
-                                                    لینک
+                                                    لینک:
                                                 </label>
                                                 <input type="text"
                                                        class="form-control"
@@ -199,7 +199,7 @@ $validator = form_validator();
                                             </div>
                                             <div class="col-lg-3 form-group">
                                                 <label>
-                                                    اولویت
+                                                    اولویت:
                                                 </label>
                                                 <input type="text"
                                                        class="form-control"
@@ -218,7 +218,7 @@ $validator = form_validator();
                                                     <div class="row m-0 position-relative border-violet border-2 border-dashed rounded p-2 my-3 __sub_menu_items __sample_sub_menu_item">
                                                         <div class="col-lg-4 form-group">
                                                             <label>
-                                                                عنوان زیر منو
+                                                                عنوان زیر منو:
                                                             </label>
                                                             <input type="text"
                                                                    class="form-control"
@@ -228,7 +228,7 @@ $validator = form_validator();
                                                         </div>
                                                         <div class="col-lg-5 form-group">
                                                             <label>
-                                                                لینک
+                                                                لینک:
                                                             </label>
                                                             <input type="text"
                                                                    class="form-control"
@@ -238,7 +238,7 @@ $validator = form_validator();
                                                         </div>
                                                         <div class="col-lg-3 form-group">
                                                             <label>
-                                                                اولویت
+                                                                اولویت:
                                                             </label>
                                                             <input type="text"
                                                                    class="form-control"
@@ -255,7 +255,7 @@ $validator = form_validator();
                                                 <div class="row m-0 position-relative border-violet border-2 border-dashed rounded p-2 my-3 __sub_menu_items __sample_sub_menu_item">
                                                     <div class="col-lg-4 form-group">
                                                         <label>
-                                                            عنوان زیر منو
+                                                            عنوان زیر منو:
                                                         </label>
                                                         <input type="text"
                                                                class="form-control"
@@ -264,7 +264,7 @@ $validator = form_validator();
                                                     </div>
                                                     <div class="col-lg-5 form-group">
                                                         <label>
-                                                            لینک
+                                                            لینک:
                                                         </label>
                                                         <input type="text"
                                                                class="form-control"
@@ -273,7 +273,7 @@ $validator = form_validator();
                                                     </div>
                                                     <div class="col-lg-3 form-group">
                                                         <label>
-                                                            اولویت
+                                                            اولویت:
                                                         </label>
                                                         <input type="text"
                                                                class="form-control"
@@ -303,7 +303,7 @@ $validator = form_validator();
                                     <div class="row m-0">
                                         <div class="col-lg-4 form-group">
                                             <label>
-                                                عنوان منو
+                                                عنوان منو:
                                             </label>
                                             <input type="text"
                                                    class="form-control"
@@ -312,7 +312,7 @@ $validator = form_validator();
                                         </div>
                                         <div class="col-lg-5 form-group">
                                             <label>
-                                                لینک
+                                                لینک:
                                             </label>
                                             <input type="text"
                                                    class="form-control"
@@ -321,7 +321,7 @@ $validator = form_validator();
                                         </div>
                                         <div class="col-lg-3 form-group">
                                             <label>
-                                                اولویت
+                                                اولویت:
                                             </label>
                                             <input type="text"
                                                    class="form-control"
@@ -334,7 +334,7 @@ $validator = form_validator();
                                         <div class="row m-0 position-relative border-violet border-2 border-dashed rounded p-2 my-3 __sub_menu_items __sample_sub_menu_item">
                                             <div class="col-lg-4 form-group">
                                                 <label>
-                                                    عنوان زیر منو
+                                                    عنوان زیر منو:
                                                 </label>
                                                 <input type="text"
                                                        class="form-control"
@@ -343,7 +343,7 @@ $validator = form_validator();
                                             </div>
                                             <div class="col-lg-5 form-group">
                                                 <label>
-                                                    لینک
+                                                    لینک:
                                                 </label>
                                                 <input type="text"
                                                        class="form-control"
@@ -352,7 +352,7 @@ $validator = form_validator();
                                             </div>
                                             <div class="col-lg-3 form-group">
                                                 <label>
-                                                    اولویت
+                                                    اولویت:
                                                 </label>
                                                 <input type="text"
                                                        class="form-control"

@@ -81,7 +81,7 @@ class EditSecurityQuestionForm implements IPageForm
 
         return [
             $validator->getStatus(),
-            $validator->getFormattedUniqueErrors('<p class="m-0">'),
+            $validator->getUniqueErrors(),
         ];
     }
 

@@ -31,6 +31,8 @@ use Sim\Interfaces\PathManager\IPath;
 use Sim\Loader\Loader;
 
 use Sim\Loader\LoaderSingleton;
+use Sim\Logger\Handler\File\FileHandler;
+use Sim\Logger\ILogger;
 use Sim\Logger\Logger;
 
 use Pecee\SimpleRouter\SimpleRouter as Router;
@@ -299,8 +301,12 @@ class Bootstrap
     {
         // Define container's object(s)
 
+        \container()->set(ILogger::class, function () {
+            return new Logger(new FileHandler($this->config->get('log.log_error_file')));
+        });
+
         \container()->set(ErrorHandler::class, function (Container $c) {
-            return new ErrorHandler($c->get(ConfigManager::class), $c->get(Loader::class), $c->get(Logger::class));
+            return new ErrorHandler($c->get(ConfigManager::class), $c->get(Loader::class), $c->get(ILogger::class));
         });
 
         // Read all container objects that defined by user

@@ -80,8 +80,8 @@ class GeneralAjaxFormHandler implements IHandler
         } else {
             $this->resourceHandler
                 ->type(RESPONSE_TYPE_ERROR)
-                ->errorMessage(encode_html($errors));
-            emitter()->dispatch('remove.general.ajax:error', [&$this->resourceHandler]);
+                ->errorMessage(implode("<br>", $errors));
+            emitter()->dispatch('form.general.ajax:error', [&$this->resourceHandler]);
         }
 
         return $this->resourceHandler;

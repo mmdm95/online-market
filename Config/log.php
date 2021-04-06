@@ -9,5 +9,5 @@ return [
     /**
      * Error log file
      */
-    'log_error_file' => BASE_ROOT . 'data/log/errors.txt',
+    'log_error_file' => BASE_ROOT . 'Data/Logs/errors.txt',
 ];

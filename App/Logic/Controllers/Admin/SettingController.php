@@ -15,6 +15,7 @@ use App\Logic\Forms\Admin\Setting\SettingSMSForm;
 use App\Logic\Forms\Admin\Setting\SettingSocialForm;
 use App\Logic\Forms\Admin\Setting\SettingTopMenuForm;
 use App\Logic\Handlers\GeneralFormHandler;
+use App\Logic\Models\CategoryModel;
 use App\Logic\Utils\ConfigUtil;
 use ReflectionException;
 use Sim\Container\Exceptions\MethodNotFoundException;
@@ -227,14 +228,27 @@ class SettingController extends AbstractAdminController
     public function indexPage()
     {
         $data = [];
-//        if (is_post()) {
-//            $this->settingRewriteEvent();
-//            $formHandler = new GeneralFormHandler();
-//            $data = $formHandler->handle(SettingPageIndexForm::class, 'setting_index');
-//        }
+        if (is_post()) {
+            $this->settingRewriteEvent();
+            $formHandler = new GeneralFormHandler();
+            $data = $formHandler->handle(SettingPageIndexForm::class, 'setting_index');
+        }
+
+        /**
+         * @var CategoryModel $categoryModel
+         */
+        $categoryModel = container()->get(CategoryModel::class);
 
         $this->setLayout($this->main_layout)->setTemplate('view/setting/index-page');
-        return $this->render($data);
+        return $this->render(array_merge($data, [
+            'categories' => $categoryModel->get([
+                'id',
+                'name',
+            ], 'publish=:pub AND level=:lvl', [
+                'pub' => DB_YES,
+                'lvl' => MAX_CATEGORY_LEVEL,
+            ]),
+        ]));
     }
 
     /**

@@ -20,7 +20,7 @@ use Sim\I18n\ISOLanguageCodes;
  *     1.2.5.0 instead of 1.2.5-a
  *     1.2.5.0.1 instead of 1.2.5-a1 (I'm not sure)
  */
-defined("APP_VERSION") OR define("APP_VERSION", "0.1.18");
+defined("APP_VERSION") OR define("APP_VERSION", "0.1.20");
 
 /***************************************
  * You can add your constants here
@@ -191,6 +191,13 @@ defined("SLIDER_TABBED_MOST_DISCOUNT") OR define("SLIDER_TABBED_MOST_DISCOUNT", 
 defined("SLIDER_TABBED_FEATURED") OR define("SLIDER_TABBED_FEATURED", 4);
 // special = ویژه - from festivals
 defined("SLIDER_TABBED_SPECIAL") OR define("SLIDER_TABBED_SPECIAL", 5);
+defined("SLIDER_TABBED_TYPES") OR define("SLIDER_TABBED_TYPES", [
+    SLIDER_TABBED_NEWEST => 'جدیدترین',
+    SLIDER_TABBED_MOST_SELLER => 'پرفروش ترین',
+    SLIDER_TABBED_MOST_DISCOUNT => 'پرتخفیف ترین',
+    SLIDER_TABBED_FEATURED => 'ویژه',
+    SLIDER_TABBED_SPECIAL => 'جشنواره',
+]);
 
 // product orderings
 defined("PRODUCT_ORDERINGS") OR define("PRODUCT_ORDERINGS", [

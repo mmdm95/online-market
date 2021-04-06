@@ -618,13 +618,31 @@ window.MyGlobalVariables = {
                     form.submit(function () {
                         if (check) {
                             formValues = self.convertFormObjectNumbersToEnglish(window.validate.collectFormValues(this), formKey);
+                            // remap form values to its config name
+                            var data = new FormData();
+                            for (var o in formValues) {
+                                if (formValues.hasOwnProperty(o)) {
+                                    if (window.TheCore.isDefined(window.MyGlobalVariables.elements[formKey].inputs[o])) {
+                                        data.append(window.MyGlobalVariables.elements[formKey].inputs[o], formValues[o]);
+                                    } else {
+                                        data.append(o, formValues[o]);
+                                    }
+                                }
+                            }
+
+                            // show form data in this way because it does not show
+                            // in console.log
+                            // for (var pair of data.entries()) {
+                            //     console.log(pair[0] + ', ' + pair[1]);
+                            // }
+
                             /**
                              * @see https://github.com/ansman/validate.js/issues/69#issuecomment-567751903
                              * @type {ValidationResult}
                              */
                             formErrors = window.validate(formValues, constraints);
                             if (!formErrors) {
-                                return validationSuccessCallback.apply(null, [formValues]);
+                                return validationSuccessCallback.apply(null, [data]);
                             }
 
                             formErrors = formatErrors(formErrors, aliases);
