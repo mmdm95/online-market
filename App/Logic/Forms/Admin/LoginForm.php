@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Logic\Forms;
+namespace App\Logic\Forms\Admin;
 
 use App\Logic\Interfaces\IPageForm;
 use App\Logic\Models\UserModel;
@@ -38,27 +38,25 @@ class LoginForm implements IPageForm
 
         // aliases
         $validator->setFieldsAlias([
-            'inp-login-username' => 'موبایل',
-            'inp-login-password' => 'کلمه عبور',
-            'inp-login-captcha' => 'کد تصویر',
+            'inp-username' => 'موبایل',
+            'inp-password' => 'کلمه عبور',
+            'inp-captcha' => 'کد تصویر',
         ]);
         // captcha
         $validator
-            ->setFields('inp-login-captcha')
+            ->setFields('inp-captcha')
             ->captcha('{alias} ' . 'به درستی وارد نشده است.');
         // username
         $validator
-            ->setFields('inp-login-username')
+            ->setFields('inp-username')
             ->stopValidationAfterFirstError(false)
             ->required()
             ->stopValidationAfterFirstError(true)
             ->persianMobile('{alias} ' . 'نامعتبر است.');
         // password
         $validator
-            ->setFields('inp-login-password')
-            ->stopValidationAfterFirstError(false)
-            ->required()
-            ->stopValidationAfterFirstError(true);
+            ->setFields('inp-password')
+            ->required();
 
         // validate user status
         /**
@@ -68,13 +66,13 @@ class LoginForm implements IPageForm
         $info = $userModel->getFirst(
             ['is_login_locked', 'ban', 'ban_desc', 'is_deleted'],
             'username=:u_name',
-            ['u_name' => input()->post('inp-login-username', '')->getValue()]);
+            ['u_name' => input()->post('inp-username', '')->getValue()]);
         if (!count($info)) {
-            $validator->setStatus(false)->setError('inp-login-username', 'نام کاربری یا کلمه عبور نادرست است!');
+            $validator->setStatus(false)->setError('inp-username', 'نام کاربری یا کلمه عبور نادرست است!');
         } elseif (DB_NO === $info['is_login_locked'] || DB_YES === $info['is_deleted']) {
-            $validator->setStatus(false)->setError('inp-login-username', 'امکان ورود با این حساب کاربری وجود ندارد.');
+            $validator->setStatus(false)->setError('inp-username', 'امکان ورود با این حساب کاربری وجود ندارد.');
         } elseif (DB_YES === $info['ban']) {
-            $validator->setStatus(false)->setError('inp-login-username', $info['ban_desc']);
+            $validator->setStatus(false)->setError('inp-username', $info['ban_desc']);
         }
 
         // to reset form values and not set them again

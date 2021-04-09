@@ -1,5 +1,6 @@
 <?php
 
+use Sim\Auth\Interfaces\IAuth;
 use Sim\I18n\ISOLanguageCodes;
 
 /**
@@ -58,6 +59,38 @@ defined("PLACEHOLDER_VIDEO") OR define("PLACEHOLDER_VIDEO", __DIR__ . '/../publi
 
 // public access directory name
 defined("PUBLIC_ACCESS_DIR") OR define("PUBLIC_ACCESS_DIR", 'public-access');
+
+// resources constants
+defined("RESOURCE_USER") OR define("RESOURCE_USER", 'user');
+defined("RESOURCE_PAY_METHOD") OR define("RESOURCE_PAY_METHOD", 'pay_method');
+defined("RESOURCE_COLOR") OR define("RESOURCE_COLOR", 'color');
+defined("RESOURCE_BRAND") OR define("RESOURCE_BRAND", 'brand');
+defined("RESOURCE_CATEGORY") OR define("RESOURCE_CATEGORY", 'category');
+defined("RESOURCE_FESTIVAL") OR define("RESOURCE_FESTIVAL", 'festival');
+defined("RESOURCE_UNIT") OR define("RESOURCE_UNIT", 'unit');
+defined("RESOURCE_COUPON") OR define("RESOURCE_COUPON", 'coupon');
+defined("RESOURCE_PRODUCT") OR define("RESOURCE_PRODUCT", 'product');
+defined("RESOURCE_WALLET") OR define("RESOURCE_WALLET", 'wallet');
+defined("RESOURCE_ORDER") OR define("RESOURCE_ORDER", 'order');
+defined("RESOURCE_BLOG") OR define("RESOURCE_BLOG", 'blog');
+defined("RESOURCE_BLOG_CATEGORY") OR define("RESOURCE_BLOG_CATEGORY", 'blog_category');
+defined("RESOURCE_STATIC_PAGE") OR define("RESOURCE_STATIC_PAGE", 'static_page');
+defined("RESOURCE_CONTACT_US") OR define("RESOURCE_CONTACT_US", 'contact_us');
+defined("RESOURCE_COMPLAINT") OR define("RESOURCE_COMPLAINT", 'complaint');
+defined("RESOURCE_FAQ") OR define("RESOURCE_FAQ", 'faq');
+defined("RESOURCE_NEWSLETTER") OR define("RESOURCE_NEWSLETTER", 'newsletter');
+defined("RESOURCE_SLIDESHOW") OR define("RESOURCE_SLIDESHOW", 'slideshow');
+defined("RESOURCE_INSTAGRAM") OR define("RESOURCE_INSTAGRAM", 'instagram');
+defined("RESOURCE_SEC_QUESTION") OR define("RESOURCE_SEC_QUESTION", 'sec_question');
+defined("RESOURCE_FILEMANAGER") OR define("RESOURCE_FILEMANAGER", 'filemanager');
+defined("RESOURCE_SETTING") OR define("RESOURCE_SETTING", 'setting');
+defined("RESOURCE_REPORT_USER") OR define("RESOURCE_REPORT_USER", 'report_user');
+defined("RESOURCE_REPORT_PRODUCT") OR define("RESOURCE_REPORT_PRODUCT", 'report_product');
+defined("RESOURCE_REPORT_WALLET") OR define("RESOURCE_REPORT_WALLET", 'report_wallet');
+defined("RESOURCE_REPORT_ORDER") OR define("RESOURCE_REPORT_ORDER", 'report_order');
+
+// permissions array constant
+defined("OWN_PERMISSIONS") OR define("OWN_PERMISSIONS", IAuth::PERMISSIONS);
 
 // setting keys
 defined("SETTING_LOGO") OR define("SETTING_LOGO", 'logo');

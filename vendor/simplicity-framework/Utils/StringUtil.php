@@ -83,7 +83,7 @@ class StringUtil
             $characters = $charactersMap['number'] . $charactersMap['lower'] . $charactersMap['upper'];
         }
 
-        $charactersLength = strlen($characters);
+        $charactersLength = \strlen($characters);
 
         $randomString = '';
         for ($i = 0; $i < $length; $i++) {
@@ -102,14 +102,14 @@ class StringUtil
     public static function uniqidReal($lenght = 13)
     {
         // uniqid gives 13 chars, but you could adjust it to your needs.
-        if (function_exists("random_bytes")) {
-            $bytes = random_bytes(ceil($lenght / 2));
-        } elseif (function_exists("openssl_random_pseudo_bytes")) {
-            $bytes = openssl_random_pseudo_bytes(ceil($lenght / 2));
+        if (\function_exists("random_bytes")) {
+            $bytes = \random_bytes(\ceil($lenght / 2));
+        } elseif (\function_exists("openssl_random_pseudo_bytes")) {
+            $bytes = openssl_random_pseudo_bytes(\ceil($lenght / 2));
         } else {
             throw new Exception("no cryptographically secure random function available");
         }
-        return substr(bin2hex($bytes), 0, $lenght);
+        return \substr(\bin2hex($bytes), 0, $lenght);
     }
 
     /**
@@ -124,7 +124,7 @@ class StringUtil
         }
 
         $s = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-        $len = min(62, $base);
+        $len = \min(62, $base);
         $result = '';
 
         while ($decimal > 0) {
@@ -142,21 +142,21 @@ class StringUtil
      */
     public static function baseNDecode(string $hashed_str, int $base)
     {
-        $hashedStrLen = strlen($hashed_str);
+        $hashedStrLen = \strlen($hashed_str);
         if (empty($hashed_str) || 0 === $hashedStrLen) {
             return 0;
         }
 
         $s = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-        $len = min(62, $base);
+        $len = \min(62, $base);
         $result = 0;
 
         for ($i = 0; $i < $hashedStrLen; $i++) {
-            $p = strpos($s, $hashed_str[$i]);
+            $p = \strpos($s, $hashed_str[$i]);
             if (false === $p || $p < 0 || $p >= $base) {
                 return null;
             }
-            $result += $p * pow($len, $hashedStrLen - $i - 1);
+            $result += $p * \pow($len, $hashedStrLen - $i - 1);
         }
 
         return (int)$result;
@@ -209,7 +209,7 @@ class StringUtil
     public static function toPersian($str, $convert_type = StringUtil::CONVERT_ALL)
     {
         if (StringUtil::CONVERT_NUMBERS & $convert_type || StringUtil::CONVERT_ALL & $convert_type) {
-            if (is_array($str)) {
+            if (\is_array($str)) {
                 $newArr = [];
                 foreach ($str as $k => $v) {
                     $newArr[$k] = self::toPersian($str[$k], $convert_type);
@@ -217,13 +217,13 @@ class StringUtil
                 return $newArr;
             }
 
-            if (is_string($str) || is_scalar($str)) {
-                $str = str_replace(self::$english_numbers, self::$persian_numbers, $str);
-                $str = str_replace(self::$arabic_numbers, self::$persian_numbers, $str);
-                $str = str_replace(self::$arabic_decimal, self::$persian_numbers, $str);
+            if (\is_string($str) || \is_numeric($str)) {
+                $str = \str_replace(self::$english_numbers, self::$persian_numbers, $str);
+                $str = \str_replace(self::$arabic_numbers, self::$persian_numbers, $str);
+                $str = \str_replace(self::$arabic_decimal, self::$persian_numbers, $str);
             }
         } elseif (StringUtil::CONVERT_CHARACTERS & $convert_type || StringUtil::CONVERT_ALL & $convert_type) {
-            if (is_array($str)) {
+            if (\is_array($str)) {
                 $newArr = [];
                 foreach ($str as $k => $v) {
                     $newArr[$k] = self::toPersian($v, $convert_type);
@@ -231,8 +231,8 @@ class StringUtil
                 return $newArr;
             }
 
-            if (is_string($str) || is_scalar($str)) {
-                $str = str_replace(self::$arabic_special_characters, self::$persian_special_characters, $str);
+            if (\is_string($str) || \is_numeric($str)) {
+                $str = \str_replace(self::$arabic_special_characters, self::$persian_special_characters, $str);
             }
         }
 
@@ -250,7 +250,7 @@ class StringUtil
     public static function toArabic($str, $convert_type = StringUtil::CONVERT_ALL)
     {
         if (StringUtil::CONVERT_NUMBERS & $convert_type || StringUtil::CONVERT_ALL & $convert_type) {
-            if (is_array($str)) {
+            if (\is_array($str)) {
                 $newArr = [];
                 foreach ($str as $k => $v) {
                     $newArr[$k] = self::toArabic($str[$k], $convert_type);
@@ -258,13 +258,13 @@ class StringUtil
                 return $newArr;
             }
 
-            if (is_string($str) || is_scalar($str)) {
-                $str = str_replace(self::$english_numbers, self::$arabic_numbers, $str);
-                $str = str_replace(self::$persian_numbers, self::$arabic_numbers, $str);
-                $str = str_replace(self::$persian_decimal, self::$arabic_numbers, $str);
+            if (\is_string($str) || \is_numeric($str)) {
+                $str = \str_replace(self::$english_numbers, self::$arabic_numbers, $str);
+                $str = \str_replace(self::$persian_numbers, self::$arabic_numbers, $str);
+                $str = \str_replace(self::$persian_decimal, self::$arabic_numbers, $str);
             }
         } elseif (StringUtil::CONVERT_CHARACTERS & $convert_type || StringUtil::CONVERT_ALL & $convert_type) {
-            if (is_array($str)) {
+            if (\is_array($str)) {
                 $newArr = [];
                 foreach ($str as $k => $v) {
                     $newArr[$k] = self::toArabic($v, $convert_type);
@@ -272,8 +272,8 @@ class StringUtil
                 return $newArr;
             }
 
-            if (is_string($str) || is_scalar($str)) {
-                $str = str_replace(self::$persian_special_characters, self::$arabic_special_characters, $str);
+            if (\is_string($str) || \is_numeric($str)) {
+                $str = \str_replace(self::$persian_special_characters, self::$arabic_special_characters, $str);
             }
         }
 
@@ -288,7 +288,7 @@ class StringUtil
      */
     public static function toEnglish($str)
     {
-        if (is_array($str)) {
+        if (\is_array($str)) {
             $newArr = [];
             foreach ($str as $k => $v) {
                 $newArr[$k] = self::toEnglish($v);
@@ -296,11 +296,11 @@ class StringUtil
             return $newArr;
         }
 
-        if (is_string($str) || is_scalar($str)) {
-            $str = str_replace(self::$arabic_numbers, self::$english_numbers, $str);
-            $str = str_replace(self::$persian_numbers, self::$english_numbers, $str);
-            $str = str_replace(self::$persian_decimal, self::$english_numbers, $str);
-            $str = str_replace(self::$arabic_decimal, self::$english_numbers, $str);
+        if (\is_string($str) || \is_numeric($str)) {
+            $str = \str_replace(self::$arabic_numbers, self::$english_numbers, $str);
+            $str = \str_replace(self::$persian_numbers, self::$english_numbers, $str);
+            $str = \str_replace(self::$persian_decimal, self::$english_numbers, $str);
+            $str = \str_replace(self::$arabic_decimal, self::$english_numbers, $str);
         }
 
         return $str;
@@ -315,7 +315,7 @@ class StringUtil
      */
     public static function truncate(string $string, int $length, string $delimiter = '...'): string
     {
-        return mb_strimwidth($string, 0, $length, $delimiter);
+        return \mb_strimwidth($string, 0, $length, $delimiter);
     }
 
     /**
@@ -328,13 +328,13 @@ class StringUtil
     public static function truncate_word(string $string, int $length, string $delimiter = '…'): string
     {
         // we don't want new lines in our preview
-        $text_only_spaces = preg_replace('/\s+/', ' ', $string);
+        $text_only_spaces = \preg_replace('/\s+/', ' ', $string);
 
         // truncates the text
-        $text_truncated = mb_substr($text_only_spaces, 0, mb_strpos($text_only_spaces, ' ', $length));
+        $text_truncated = \mb_substr($text_only_spaces, 0, \mb_strpos($text_only_spaces, ' ', $length));
 
         // prevents last word truncation
-        $preview = trim(mb_substr($text_truncated, 0, mb_strrpos($text_truncated, ' '))) . $delimiter;
+        $preview = \trim(\mb_substr($text_truncated, 0, \mb_strrpos($text_truncated, ' '))) . $delimiter;
 
         return $preview;
     }
@@ -347,22 +347,22 @@ class StringUtil
     public static function slugify(string $text): string
     {
         // replace non letter or digits by -
-        $text = preg_replace('~[^\pL\d]+~u', '-', $text);
+        $text = \preg_replace('~[^\pL\d]+~u', '-', $text);
 
         // transliterate
         $text = iconv('utf-8', 'us-ascii//TRANSLIT', $text);
 
         // remove unwanted characters
-        $text = preg_replace('~[^-\w]+~', '', $text);
+        $text = \preg_replace('~[^-\w]+~', '', $text);
 
         // trim
-        $text = trim($text, '-');
+        $text = \trim($text, '-');
 
         // remove duplicate -
-        $text = preg_replace('~-+~', '-', $text);
+        $text = \preg_replace('~-+~', '-', $text);
 
         // lowercase
-        $text = strtolower($text);
+        $text = \strtolower($text);
 
         if (empty($text)) {
             return 'n-a';

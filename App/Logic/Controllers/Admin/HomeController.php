@@ -3,6 +3,8 @@
 namespace App\Logic\Controllers\Admin;
 
 use App\Logic\Abstracts\AbstractAdminController;
+use App\Logic\Forms\Admin\LoginForm as AdminLoginForm;
+use App\Logic\Models\BaseModel;
 use App\Logic\Models\BlogCategoryModel;
 use App\Logic\Models\BlogModel;
 use App\Logic\Models\BrandModel;
@@ -26,6 +28,8 @@ use App\Logic\Models\UnitModel;
 use App\Logic\Models\UserModel;
 use App\Logic\Utils\Jdf;
 use Sim\Auth\DBAuth;
+use Sim\Auth\Exceptions\IncorrectPasswordException;
+use Sim\Auth\Exceptions\InvalidUserException;
 use Sim\Auth\Interfaces\IDBException;
 use Sim\Container\Exceptions\MethodNotFoundException;
 use Sim\Container\Exceptions\ParameterHasNoDefaultValueException;
@@ -34,8 +38,10 @@ use Sim\Container\Exceptions\ServiceNotInstantiableException;
 use Sim\Exceptions\ConfigManager\ConfigNotRegisteredException;
 use Sim\Exceptions\Mvc\Controller\ControllerException;
 use Sim\Exceptions\PathManager\PathNotRegisteredException;
+use Sim\Form\Exceptions\FormException;
 use Sim\Interfaces\IFileNotExistsException;
 use Sim\Interfaces\IInvalidVariableNameException;
+use Sim\Utils\ArrayUtil;
 
 class HomeController extends AbstractAdminController
 {
@@ -291,23 +297,71 @@ class HomeController extends AbstractAdminController
 
     /**
      * @return string
-     * @throws \ReflectionException
      * @throws ConfigNotRegisteredException
      * @throws ControllerException
-     * @throws PathNotRegisteredException
      * @throws IFileNotExistsException
      * @throws IInvalidVariableNameException
+     * @throws MethodNotFoundException
+     * @throws ParameterHasNoDefaultValueException
+     * @throws PathNotRegisteredException
+     * @throws ServiceNotFoundException
+     * @throws ServiceNotInstantiableException
+     * @throws \ReflectionException
+     * @throws FormException
      */
     public function login()
     {
-        if (is_post()) {
+        /**
+         * @var DBAuth $auth
+         */
+        $auth = container()->get('auth_admin');
 
+        if ($auth->isLoggedIn()) {
+            response()->redirect(url('admin.index')->getRelativeUrl(), 301);
+        }
+
+        $data = [];
+        if (is_post()) {
+            try {
+                /**
+                 * @var AdminLoginForm $loginForm
+                 */
+                $loginForm = container()->get(AdminLoginForm::class);
+                [$status, $errors] = $loginForm->validate();
+                if ($status) {
+                    $auth->login([
+                        'username' => input()->post('inp-username', '')->getValue(),
+                        'password' => input()->post('inp-password', '')->getValue()
+                    ], BaseModel::TBL_USERS . '.is_activated=:isActive',
+                        [
+                            'isActive' => DB_YES
+                        ]);
+                    if ($auth->isLoggedIn()) {
+                        $backUrl = ArrayUtil::get($_GET, 'back_url', null);
+                        if (!empty($backUrl)) {
+                            response()->redirect($backUrl);
+                        } else {
+                            response()->redirect(url('admin.index')->getRelativeUrlTrimmed());
+                        }
+                    } else {
+                        $data['login_errors'] = [
+                            'عملیات ورود ناموفق بود، لطفا مجددا تلاش نمایید.'
+                        ];
+                    }
+                } else {
+                    $data['login_errors'] = $errors;
+                }
+            } catch (IncorrectPasswordException|InvalidUserException|IDBException $e) {
+                $data['login_errors'] = [
+                    'نام کاربری یا کلمه عبور نادرست است!'
+                ];
+            }
         }
 
         $this
             ->setLayout('admin-login')
             ->setTemplate('view/admin-login');
-        return $this->render();
+        return $this->render($data);
     }
 
     /**
@@ -333,9 +387,17 @@ class HomeController extends AbstractAdminController
 
     /**
      * Logout from system
+     *
+     * @throws IDBException
+     * @throws MethodNotFoundException
+     * @throws ParameterHasNoDefaultValueException
+     * @throws ServiceNotFoundException
+     * @throws ServiceNotInstantiableException
+     * @throws \ReflectionException
      */
     public function logout()
     {
+        auth_admin()->logout();
         response()->redirect(url('admin.login')->getRelativeUrl(), 301);
     }
 }

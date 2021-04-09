@@ -11,7 +11,7 @@ git add -A
 // reset staged files
 git reset <filename>
 // OR to reset all of files
-git reset -A
+git reset
 
 // reset last commit
 // --soft keeps files

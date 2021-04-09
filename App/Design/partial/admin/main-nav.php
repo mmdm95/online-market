@@ -61,8 +61,9 @@
                     </div>
 
                     <div class="dropdown-content-footer justify-content-center p-0">
-                        <a href="#" class="bg-light text-grey w-100 py-2" data-popup="tooltip" title="مشاهده همه"><i
-                                    class="icon-menu7 d-block top-0"></i></a>
+                        <a href="#" class="bg-light text-grey w-100 py-2" data-popup="tooltip" title="مشاهده همه">
+                            <i class="icon-menu7 d-block top-0"></i>
+                        </a>
                     </div>
                 </div>
             </li>
@@ -75,13 +76,30 @@
                 </a>
 
                 <div class="dropdown-menu dropdown-menu-right">
-                    <a href="#" class="dropdown-item"><i class="icon-user-plus"></i>اطلاعات من</a>
-                    <a href="#" class="dropdown-item"><i class="icon-coins"></i>مدیریت مالی</a>
-                    <a href="#" class="dropdown-item"><i class="icon-comment-discussion"></i> فاکتورهای جدید <span
-                                class="badge badge-pill badge-info ml-auto">۵۸</span></a>
+                    <a href="#" class="dropdown-item">
+                        <i class="icon-user-plus"></i>
+                        اطلاعات من
+                    </a>
+                    <a href="#" class="dropdown-item">
+                        <i class="icon-coins"></i>
+                        مدیریت مالی
+                    </a>
+                    <a href="#" class="dropdown-item">
+                        <i class="icon-comment-discussion"></i>
+                        فاکتورهای جدید
+                        <span class="badge badge-pill badge-info mr-auto">۵۸</span>
+                    </a>
                     <div class="dropdown-divider"></div>
-                    <a href="#" class="dropdown-item"><i class="icon-cog5"></i> تنظیمات</a>
-                    <a href="#" class="dropdown-item"><i class="icon-switch2"></i> خروج</a>
+                    <?php if (auth_admin()->isAllow(RESOURCE_SETTING, OWN_PERMISSIONS)): ?>
+                        <a href="<?= url('admin.setting.main')->getRelativeUrl(); ?>" class="dropdown-item">
+                            <i class="icon-cog5"></i>
+                            تنظیمات
+                        </a>
+                    <?php endif; ?>
+                    <a href="<?= url('admin.logout')->getRelativeUrl(); ?>" class="dropdown-item">
+                        <i class="icon-switch2"></i>
+                        خروج
+                    </a>
                 </div>
             </li>
         </ul>

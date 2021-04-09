@@ -588,6 +588,43 @@ class FakeData
      * @throws ServiceNotInstantiableException
      * @throws \ReflectionException
      */
+    public function createAdminUser()
+    {
+        /**
+         * @var UserModel $userModel
+         */
+        $userModel = container()->get(UserModel::class);
+        //
+        $userModel->registerUser([
+            'username' => '09139518055',
+            'password' => password_hash('heeva92155', PASSWORD_BCRYPT),
+            'first_name' => 'سعید',
+            'last_name' => 'گرامی فر',
+            'image' => PLACEHOLDER_USER_IMAGE,
+            'is_activated' => 1,
+            'activated_at' => time(),
+            'created_at' => time(),
+        ], [ROLE_SUPER_USER]);
+        //
+        $userModel->registerUser([
+            'username' => '09179516271',
+            'password' => password_hash('m9516271', PASSWORD_BCRYPT),
+            'first_name' => 'محمد مهدی',
+            'last_name' => 'دهقان منشادی',
+            'image' => PLACEHOLDER_USER_IMAGE,
+            'is_activated' => 1,
+            'activated_at' => time(),
+            'created_at' => time(),
+        ], [ROLE_DEVELOPER]);
+    }
+
+    /**
+     * @throws MethodNotFoundException
+     * @throws ParameterHasNoDefaultValueException
+     * @throws ServiceNotFoundException
+     * @throws ServiceNotInstantiableException
+     * @throws \ReflectionException
+     */
     public function users()
     {
         // clear all

@@ -2,6 +2,7 @@
 
 use App\Logic\Handlers\ResourceHandler;
 use App\Logic\Validations\ExtendedValidator;
+use Sim\Auth\DBAuth;
 use Sim\Container\Exceptions\MethodNotFoundException;
 use Sim\Container\Exceptions\ParameterHasNoDefaultValueException;
 use Sim\Container\Exceptions\ServiceNotFoundException;
@@ -123,6 +124,38 @@ function get_product_availability(array $item): bool
         $item['is_available'] &&
         ((int)$item['stock_count'] > 0) &&
         ((int)$item['max_cart_count'] > 0);
+}
+
+/**
+ * @return DBAuth
+ * @throws MethodNotFoundException
+ * @throws ParameterHasNoDefaultValueException
+ * @throws ReflectionException
+ * @throws ServiceNotFoundException
+ * @throws ServiceNotInstantiableException
+ */
+function auth_admin(): DBAuth
+{
+    /**
+     * @var DBAuth $auth
+     */
+    return container()->get('auth_admin');
+}
+
+/**
+ * @return DBAuth
+ * @throws MethodNotFoundException
+ * @throws ParameterHasNoDefaultValueException
+ * @throws ReflectionException
+ * @throws ServiceNotFoundException
+ * @throws ServiceNotInstantiableException
+ */
+function auth_home(): DBAuth
+{
+    /**
+     * @var DBAuth $auth
+     */
+    return container()->get('auth_home');
 }
 
 /**
