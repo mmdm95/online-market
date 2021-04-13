@@ -101,7 +101,7 @@ abstract class Route implements IRoute
         }
 
         /* When the callback is a class + method */
-        if (is_array($callback) && 2 == count($callback)) {
+        if (\is_array($callback) && 2 == \count($callback)) {
             $controller = $callback;
         } else {
             $controller = explode('@', $callback);

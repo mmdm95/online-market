@@ -17,6 +17,9 @@ use App\Logic\Models\WalletModel;
 use App\Logic\Utils\Jdf;
 use Jenssegers\Agent\Agent;
 use ReflectionException;
+use Sim\Auth\DBAuth;
+use Sim\Auth\Interfaces\IAuth;
+use Sim\Auth\Interfaces\IDBException;
 use Sim\Container\Exceptions\MethodNotFoundException;
 use Sim\Container\Exceptions\ParameterHasNoDefaultValueException;
 use Sim\Container\Exceptions\ServiceNotFoundException;
@@ -37,11 +40,24 @@ class WalletController extends AbstractAdminController implements IDatatableCont
      * @throws ControllerException
      * @throws IFileNotExistsException
      * @throws IInvalidVariableNameException
+     * @throws MethodNotFoundException
+     * @throws ParameterHasNoDefaultValueException
      * @throws PathNotRegisteredException
      * @throws ReflectionException
+     * @throws ServiceNotFoundException
+     * @throws ServiceNotInstantiableException
+     * @throws IDBException
      */
     public function view()
     {
+        /**
+         * @var DBAuth $auth
+         */
+        $auth = container()->get('auth_admin');
+        if (!$auth->isAllow(RESOURCE_WALLET, IAuth::PERMISSION_READ)) {
+            show_403();
+        }
+
         $this->setLayout($this->main_layout)->setTemplate('view/wallet/view');
         return $this->render();
     }
@@ -59,9 +75,18 @@ class WalletController extends AbstractAdminController implements IDatatableCont
      * @throws ReflectionException
      * @throws ServiceNotFoundException
      * @throws ServiceNotInstantiableException
+     * @throws IDBException
      */
     public function detail($id)
     {
+        /**
+         * @var DBAuth $auth
+         */
+        $auth = container()->get('auth_admin');
+        if (!$auth->isAllow(RESOURCE_WALLET, IAuth::PERMISSION_READ)) {
+            show_403();
+        }
+
         /**
          * @var WalletModel $walletModel
          */
@@ -107,9 +132,18 @@ class WalletController extends AbstractAdminController implements IDatatableCont
      * @throws ReflectionException
      * @throws ServiceNotFoundException
      * @throws ServiceNotInstantiableException
+     * @throws IDBException
      */
     public function charge($id)
     {
+        /**
+         * @var DBAuth $auth
+         */
+        $auth = container()->get('auth_admin');
+        if (!$auth->isAllow(RESOURCE_WALLET, IAuth::PERMISSION_UPDATE)) {
+            show_403();
+        }
+
         /**
          * @var WalletModel $walletModel
          */
@@ -164,9 +198,18 @@ class WalletController extends AbstractAdminController implements IDatatableCont
      * @throws ParameterHasNoDefaultValueException
      * @throws ServiceNotFoundException
      * @throws ServiceNotInstantiableException
+     * @throws IDBException
      */
     public function remove($id)
     {
+        /**
+         * @var DBAuth $auth
+         */
+        $auth = container()->get('auth_admin');
+        if (!$auth->isAllow(RESOURCE_WALLET, IAuth::PERMISSION_DELETE)) {
+            show_403();
+        }
+
         $resourceHandler = new ResourceHandler();
 
         /**
@@ -207,9 +250,23 @@ class WalletController extends AbstractAdminController implements IDatatableCont
     /**
      * @param array $_
      * @return void
+     * @throws IDBException
+     * @throws MethodNotFoundException
+     * @throws ParameterHasNoDefaultValueException
+     * @throws ReflectionException
+     * @throws ServiceNotFoundException
+     * @throws ServiceNotInstantiableException
      */
     public function getPaginatedDatatable(...$_): void
     {
+        /**
+         * @var DBAuth $auth
+         */
+        $auth = container()->get('auth_admin');
+        if (!$auth->isAllow(RESOURCE_WALLET, IAuth::PERMISSION_READ)) {
+            show_403();
+        }
+
         try {
             /**
              * @var Agent $agent
@@ -299,9 +356,23 @@ class WalletController extends AbstractAdminController implements IDatatableCont
 
     /**
      * @param $username
+     * @throws IDBException
+     * @throws MethodNotFoundException
+     * @throws ParameterHasNoDefaultValueException
+     * @throws ReflectionException
+     * @throws ServiceNotFoundException
+     * @throws ServiceNotInstantiableException
      */
     public function getDetailPaginatedDatatable($username)
     {
+        /**
+         * @var DBAuth $auth
+         */
+        $auth = container()->get('auth_admin');
+        if (!$auth->isAllow(RESOURCE_WALLET, IAuth::PERMISSION_READ)) {
+            show_403();
+        }
+
         try {
             /**
              * @var Agent $agent

@@ -12,6 +12,9 @@ use App\Logic\Models\ContactUsModel;
 use App\Logic\Utils\Jdf;
 use Jenssegers\Agent\Agent;
 use ReflectionException;
+use Sim\Auth\DBAuth;
+use Sim\Auth\Interfaces\IAuth;
+use Sim\Auth\Interfaces\IDBException;
 use Sim\Container\Exceptions\MethodNotFoundException;
 use Sim\Container\Exceptions\ParameterHasNoDefaultValueException;
 use Sim\Container\Exceptions\ServiceNotFoundException;
@@ -38,9 +41,18 @@ class ContactUsController extends AbstractAdminController implements IDatatableC
      * @throws ReflectionException
      * @throws ServiceNotFoundException
      * @throws ServiceNotInstantiableException
+     * @throws IDBException
      */
     public function view($id = null)
     {
+        /**
+         * @var DBAuth $auth
+         */
+        $auth = container()->get('auth_admin');
+        if (!$auth->isAllow(RESOURCE_CONTACT_US, IAuth::PERMISSION_READ)) {
+            show_403();
+        }
+
         $data = [];
 
         if (!is_null($id)) {
@@ -77,9 +89,18 @@ class ContactUsController extends AbstractAdminController implements IDatatableC
      * @throws ParameterHasNoDefaultValueException
      * @throws ServiceNotFoundException
      * @throws ServiceNotInstantiableException
+     * @throws IDBException
      */
     public function remove($id)
     {
+        /**
+         * @var DBAuth $auth
+         */
+        $auth = container()->get('auth_admin');
+        if (!$auth->isAllow(RESOURCE_CONTACT_US, IAuth::PERMISSION_DELETE)) {
+            show_403();
+        }
+
         $resourceHandler = new ResourceHandler();
 
         /**
@@ -102,9 +123,23 @@ class ContactUsController extends AbstractAdminController implements IDatatableC
     /**
      * @param array $_
      * @return void
+     * @throws IDBException
+     * @throws MethodNotFoundException
+     * @throws ParameterHasNoDefaultValueException
+     * @throws ReflectionException
+     * @throws ServiceNotFoundException
+     * @throws ServiceNotInstantiableException
      */
     public function getPaginatedDatatable(...$_): void
     {
+        /**
+         * @var DBAuth $auth
+         */
+        $auth = container()->get('auth_admin');
+        if (!$auth->isAllow(RESOURCE_CONTACT_US, IAuth::PERMISSION_READ)) {
+            show_403();
+        }
+
         try {
             /**
              * @var Agent $agent

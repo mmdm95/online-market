@@ -11,6 +11,9 @@ use App\Logic\Handlers\ResourceHandler;
 use App\Logic\Models\BaseModel;
 use App\Logic\Models\ProductModel;
 use Jenssegers\Agent\Agent;
+use Sim\Auth\DBAuth;
+use Sim\Auth\Interfaces\IAuth;
+use Sim\Auth\Interfaces\IDBException;
 use Sim\Container\Exceptions\MethodNotFoundException;
 use Sim\Container\Exceptions\ParameterHasNoDefaultValueException;
 use Sim\Container\Exceptions\ServiceNotFoundException;
@@ -37,9 +40,18 @@ class SteppedPriceController extends AbstractAdminController
      * @throws ServiceNotFoundException
      * @throws ServiceNotInstantiableException
      * @throws \ReflectionException
+     * @throws IDBException
      */
     public function view($p_id)
     {
+        /**
+         * @var DBAuth $auth
+         */
+        $auth = container()->get('auth_admin');
+        if (!$auth->isAllow(RESOURCE_PRODUCT, IAuth::PERMISSION_READ)) {
+            show_403();
+        }
+
         /**
          * @var ProductModel $productModel
          */
@@ -74,9 +86,18 @@ class SteppedPriceController extends AbstractAdminController
      * @throws ServiceNotFoundException
      * @throws ServiceNotInstantiableException
      * @throws \ReflectionException
+     * @throws IDBException
      */
     public function viewStepped($code)
     {
+        /**
+         * @var DBAuth $auth
+         */
+        $auth = container()->get('auth_admin');
+        if (!$auth->isAllow(RESOURCE_PRODUCT, IAuth::PERMISSION_READ)) {
+            show_403();
+        }
+
         /**
          * @var ProductModel $productModel
          */
@@ -136,9 +157,18 @@ class SteppedPriceController extends AbstractAdminController
      * @throws ServiceNotFoundException
      * @throws ServiceNotInstantiableException
      * @throws \ReflectionException
+     * @throws IDBException
      */
     public function add($code)
     {
+        /**
+         * @var DBAuth $auth
+         */
+        $auth = container()->get('auth_admin');
+        if (!$auth->isAllow(RESOURCE_PRODUCT, IAuth::PERMISSION_CREATE)) {
+            show_403();
+        }
+
         /**
          * @var ProductModel $productModel
          */
@@ -205,9 +235,18 @@ class SteppedPriceController extends AbstractAdminController
      * @throws ServiceNotFoundException
      * @throws ServiceNotInstantiableException
      * @throws \ReflectionException
+     * @throws IDBException
      */
     public function edit($code, $id)
     {
+        /**
+         * @var DBAuth $auth
+         */
+        $auth = container()->get('auth_admin');
+        if (!$auth->isAllow(RESOURCE_PRODUCT, IAuth::PERMISSION_UPDATE)) {
+            show_403();
+        }
+
         /**
          * @var ProductModel $productModel
          */
@@ -272,9 +311,18 @@ class SteppedPriceController extends AbstractAdminController
      * @throws ServiceNotFoundException
      * @throws ServiceNotInstantiableException
      * @throws \ReflectionException
+     * @throws IDBException
      */
     public function remove($id)
     {
+        /**
+         * @var DBAuth $auth
+         */
+        $auth = container()->get('auth_admin');
+        if (!$auth->isAllow(RESOURCE_PRODUCT, IAuth::PERMISSION_DELETE)) {
+            show_403();
+        }
+
         $resourceHandler = new ResourceHandler();
 
         /**
@@ -301,9 +349,18 @@ class SteppedPriceController extends AbstractAdminController
      * @throws ServiceNotFoundException
      * @throws ServiceNotInstantiableException
      * @throws \ReflectionException
+     * @throws IDBException
      */
     public function removeAll($code)
     {
+        /**
+         * @var DBAuth $auth
+         */
+        $auth = container()->get('auth_admin');
+        if (!$auth->isAllow(RESOURCE_PRODUCT, IAuth::PERMISSION_DELETE)) {
+            show_403();
+        }
+
         $resourceHandler = new ResourceHandler();
 
         /**

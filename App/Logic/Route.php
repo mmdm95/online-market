@@ -23,6 +23,7 @@ use App\Logic\Controllers\Admin\{BlogController as AdminBlogController,
     OrderController as AdminOrderController,
     PaymentMethodController as AdminPaymentMethodController,
     ProductFestivalController as AdminProductFestivalController,
+    ReportController as AdminReportController,
     ReturnOrderController as AdminReturnOrderController,
     SecurityQuestionController as AdminSecurityQuestionController,
     SendMethodController as AdminSendMethodController,
@@ -60,27 +61,6 @@ use App\Logic\Middlewares\AdminAuthMiddleware;
 use App\Logic\Middlewares\ApiVerifierMiddleware;
 use App\Logic\Middlewares\AuthMiddleware;
 use App\Logic\Middlewares\CheckoutMiddleware;
-use App\Logic\Role\Middlewares\AuthBlogCategoryResourceMiddleware;
-use App\Logic\Role\Middlewares\AuthBlogResourceMiddleware;
-use App\Logic\Role\Middlewares\AuthBrandResourceMiddleware;
-use App\Logic\Role\Middlewares\AuthCategoryResourceMiddleware;
-use App\Logic\Role\Middlewares\AuthColorResourceMiddleware;
-use App\Logic\Role\Middlewares\AuthComplaintResourceMiddleware;
-use App\Logic\Role\Middlewares\AuthContactUsResourceMiddleware;
-use App\Logic\Role\Middlewares\AuthCouponResourceMiddleware;
-use App\Logic\Role\Middlewares\AuthFAQResourceMiddleware;
-use App\Logic\Role\Middlewares\AuthFestivalResourceMiddleware;
-use App\Logic\Role\Middlewares\AuthInstagramResourceMiddleware;
-use App\Logic\Role\Middlewares\AuthNewsletterResourceMiddleware;
-use App\Logic\Role\Middlewares\AuthOrderResourceMiddleware;
-use App\Logic\Role\Middlewares\AuthPayMethodResourceMiddleware;
-use App\Logic\Role\Middlewares\AuthProductResourceMiddleware;
-use App\Logic\Role\Middlewares\AuthSecurityQuestionResourceMiddleware;
-use App\Logic\Role\Middlewares\AuthSlideShowResourceMiddleware;
-use App\Logic\Role\Middlewares\AuthStaticPageResourceMiddleware;
-use App\Logic\Role\Middlewares\AuthUnitResourceMiddleware;
-use App\Logic\Role\Middlewares\AuthUserResourceMiddleware;
-use App\Logic\Role\Middlewares\AuthWalletResourceMiddleware;
 use App\Logic\Utils\ConfigUtil;
 use Pecee\SimpleRouter\Event\EventArgument;
 use Pecee\SimpleRouter\Handlers\EventHandler;
@@ -202,76 +182,68 @@ class Route implements IInitialize
             Router::group(['prefix' => '/admin/', 'middleware' => AdminAuthMiddleware::class], function () {
                 Router::get('/', [AdminHomeController::class, 'index'])->name('admin.index');
 
-                Router::group(['middleware' => AuthUserResourceMiddleware::class], function () {
-                    /**
-                     * User Route
-                     */
-                    Router::get('/user/view/{id?}', [AdminUserController::class, 'view'])->where([
-                        'id' => '[0-9]+',
-                    ])->name('admin.user.view');
-                    Router::form('/user/add', [AdminUserController::class, 'add'])->name('admin.user.add');
-                    Router::form('/user/edit/{id}', [AdminUserController::class, 'edit'])->where([
-                        'id' => '[0-9]+',
-                    ])->name('admin.user.edit');
-                    Router::post('/user/view/dt', [AdminUserController::class, 'getPaginatedDatatable'])->name('admin.user.dt.view');
+                /**
+                 * User Route
+                 */
+                Router::get('/user/view/{id?}', [AdminUserController::class, 'view'])->where([
+                    'id' => '[0-9]+',
+                ])->name('admin.user.view');
+                Router::form('/user/add', [AdminUserController::class, 'add'])->name('admin.user.add');
+                Router::form('/user/edit/{id}', [AdminUserController::class, 'edit'])->where([
+                    'id' => '[0-9]+',
+                ])->name('admin.user.edit');
+                Router::post('/user/view/dt', [AdminUserController::class, 'getPaginatedDatatable'])->name('admin.user.dt.view');
 
-                    /**
-                     * Address Route
-                     */
-                    Router::post('/address/view/dt/{user_id}', [AdminAddressController::class, 'getPaginatedDatatable'])->where([
-                        'user_id' => '[0-9]+',
-                    ])->name('admin.addr.dt.view');
+                /**
+                 * Address Route
+                 */
+                Router::post('/address/view/dt/{user_id}', [AdminAddressController::class, 'getPaginatedDatatable'])->where([
+                    'user_id' => '[0-9]+',
+                ])->name('admin.addr.dt.view');
 
-                    /**
-                     * User Order Route
-                     */
-                    Router::post('/user/order/view/dt/{user_id}', [AdminUserController::class, 'getOrderPaginatedDatatable'])->where([
-                        'user_id' => '[0-9]+',
-                    ])->name('admin.user.order.dt.view');
-                });
+                /**
+                 * User Order Route
+                 */
+                Router::post('/user/order/view/dt/{user_id}', [AdminUserController::class, 'getOrderPaginatedDatatable'])->where([
+                    'user_id' => '[0-9]+',
+                ])->name('admin.user.order.dt.view');
 
-                Router::group(['middleware' => AuthCategoryResourceMiddleware::class], function () {
-                    /**
-                     * Category Route
-                     */
-                    Router::form('/category/add', [AdminCategoryController::class, 'add'])->name('admin.category.add');
-                    Router::form('/category/edit/{id}', [AdminCategoryController::class, 'edit'])->where([
-                        'id' => '[0-9]+',
-                    ])->name('admin.category.edit');
-                    Router::get('/category/view', [AdminCategoryController::class, 'view'])->name('admin.category.view');
-                    Router::post('/category/view/dt', [AdminCategoryController::class, 'getPaginatedDatatable'])->name('admin.category.dt.view');
+                /**
+                 * Category Route
+                 */
+                Router::form('/category/add', [AdminCategoryController::class, 'add'])->name('admin.category.add');
+                Router::form('/category/edit/{id}', [AdminCategoryController::class, 'edit'])->where([
+                    'id' => '[0-9]+',
+                ])->name('admin.category.edit');
+                Router::get('/category/view', [AdminCategoryController::class, 'view'])->name('admin.category.view');
+                Router::post('/category/view/dt', [AdminCategoryController::class, 'getPaginatedDatatable'])->name('admin.category.dt.view');
 
-                    /**
-                     * Category Image Route
-                     */
-                    Router::get('/category/image/view', [AdminCategoryImageController::class, 'view'])->name('admin.category.image.view');
-                    Router::post('/category/image/view/dt', [AdminCategoryImageController::class, 'getPaginatedDatatable'])
-                        ->name('admin.category.image.dt.view');
-                });
+                /**
+                 * Category Image Route
+                 */
+                Router::get('/category/image/view', [AdminCategoryImageController::class, 'view'])->name('admin.category.image.view');
+                Router::post('/category/image/view/dt', [AdminCategoryImageController::class, 'getPaginatedDatatable'])
+                    ->name('admin.category.image.dt.view');
 
-                Router::group(['middleware' => AuthCouponResourceMiddleware::class], function () {
-                    /**
-                     * Coupon Route
-                     */
-                    Router::form('/coupon/add', [AdminCouponController::class, 'add'])->name('admin.coupon.add');
-                    Router::form('/coupon/edit/{id}', [AdminCouponController::class, 'edit'])->where([
-                        'id' => '[0-9]+',
-                    ])->name('admin.coupon.edit');
-                    Router::get('/coupon/view', [AdminCouponController::class, 'view'])->name('admin.coupon.view');
-                    Router::post('/coupon/view/dt', [AdminCouponController::class, 'getPaginatedDatatable'])->name('admin.coupon.dt.view');
-                });
+                /**
+                 * Coupon Route
+                 */
+                Router::form('/coupon/add', [AdminCouponController::class, 'add'])->name('admin.coupon.add');
+                Router::form('/coupon/edit/{id}', [AdminCouponController::class, 'edit'])->where([
+                    'id' => '[0-9]+',
+                ])->name('admin.coupon.edit');
+                Router::get('/coupon/view', [AdminCouponController::class, 'view'])->name('admin.coupon.view');
+                Router::post('/coupon/view/dt', [AdminCouponController::class, 'getPaginatedDatatable'])->name('admin.coupon.dt.view');
 
-                Router::group(['middleware' => AuthPayMethodResourceMiddleware::class], function () {
-                    /**
-                     * Payment Methods Route
-                     */
-                    Router::form('/pay-method/add', [AdminPaymentMethodController::class, 'add'])->name('admin.pay_method.add');
-                    Router::form('/pay-method/edit/{id}', [AdminPaymentMethodController::class, 'edit'])->where([
-                        'id' => '[0-9]',
-                    ])->name('admin.pay_method.edit');
-                    Router::get('/pay-method/view', [AdminPaymentMethodController::class, 'view'])->name('admin.pay_method.view');
-                    Router::post('/pay-method/view/dt', [AdminPaymentMethodController::class, 'getPaginatedDatatable'])->name('admin.pay_method.dt.view');
-                });
+                /**
+                 * Payment Methods Route
+                 */
+                Router::form('/pay-method/add', [AdminPaymentMethodController::class, 'add'])->name('admin.pay_method.add');
+                Router::form('/pay-method/edit/{id}', [AdminPaymentMethodController::class, 'edit'])->where([
+                    'id' => '[0-9]',
+                ])->name('admin.pay_method.edit');
+                Router::get('/pay-method/view', [AdminPaymentMethodController::class, 'view'])->name('admin.pay_method.view');
+                Router::post('/pay-method/view/dt', [AdminPaymentMethodController::class, 'getPaginatedDatatable'])->name('admin.pay_method.dt.view');
 
                 /**
                  * Send Methods Route
@@ -283,150 +255,136 @@ class Route implements IInitialize
 //                Router::get('/send-method/view', [AdminSendMethodController::class, 'view'])->name('admin.send_method.view');
 //                Router::post('/send-method/view/dt', [AdminSendMethodController::class, 'getPaginatedDatatable'])->name('admin.send_method.dt.view');
 
-                Router::group(['middleware' => AuthColorResourceMiddleware::class], function () {
-                    /**
-                     * Color Route
-                     */
-                    Router::form('/color/add', [AdminColorController::class, 'add'])->name('admin.color.add');
-                    Router::form('/color/edit/{id}', [AdminColorController::class, 'edit'])->where([
-                        'id' => '[0-9]',
-                    ])->name('admin.color.edit');
-                    Router::get('/color/view', [AdminColorController::class, 'view'])->name('admin.color.view');
-                    Router::post('/color/view/dt', [AdminColorController::class, 'getPaginatedDatatable'])->name('admin.color.dt.view');
-                });
+                /**
+                 * Color Route
+                 */
+                Router::form('/color/add', [AdminColorController::class, 'add'])->name('admin.color.add');
+                Router::form('/color/edit/{id}', [AdminColorController::class, 'edit'])->where([
+                    'id' => '[0-9]',
+                ])->name('admin.color.edit');
+                Router::get('/color/view', [AdminColorController::class, 'view'])->name('admin.color.view');
+                Router::post('/color/view/dt', [AdminColorController::class, 'getPaginatedDatatable'])->name('admin.color.dt.view');
 
-                Router::group(['middleware' => AuthFestivalResourceMiddleware::class], function () {
-                    /**
-                     * Festival Route
-                     */
-                    Router::form('/festival/add', [AdminFestivalController::class, 'add'])->name('admin.festival.add');
-                    Router::form('/festival/edit/{id}', [AdminFestivalController::class, 'edit'])->where([
-                        'id' => '[0-9]+',
-                    ])->name('admin.festival.edit');
-                    Router::get('/festival/view', [AdminFestivalController::class, 'view'])->name('admin.festival.view');
-                    Router::post('/festival/view/dt', [AdminFestivalController::class, 'getPaginatedDatatable'])->name('admin.festival.dt.view');
+                /**
+                 * Festival Route
+                 */
+                Router::form('/festival/add', [AdminFestivalController::class, 'add'])->name('admin.festival.add');
+                Router::form('/festival/edit/{id}', [AdminFestivalController::class, 'edit'])->where([
+                    'id' => '[0-9]+',
+                ])->name('admin.festival.edit');
+                Router::get('/festival/view', [AdminFestivalController::class, 'view'])->name('admin.festival.view');
+                Router::post('/festival/view/dt', [AdminFestivalController::class, 'getPaginatedDatatable'])->name('admin.festival.dt.view');
 
-                    /**
-                     * Product Festival Route
-                     */
-                    Router::form('/festival/detail/{id}', [AdminProductFestivalController::class, 'view'])->where([
-                        'id' => '[0-9]+',
-                    ])->name('admin.product.festival.detail');
-                    Router::post('/product/festival/view/dt/{f_id}', [AdminProductFestivalController::class, 'getPaginatedDatatable'])->where([
-                        'f_id' => '[0-9]+',
-                    ])->name('admin.product.festival.dt.view');
-                });
+                /**
+                 * Product Festival Route
+                 */
+                Router::form('/festival/detail/{id}', [AdminProductFestivalController::class, 'view'])->where([
+                    'id' => '[0-9]+',
+                ])->name('admin.product.festival.detail');
+                Router::post('/product/festival/view/dt/{f_id}', [AdminProductFestivalController::class, 'getPaginatedDatatable'])->where([
+                    'f_id' => '[0-9]+',
+                ])->name('admin.product.festival.dt.view');
 
-                Router::group(['middleware' => AuthBrandResourceMiddleware::class], function () {
-                    /**
-                     * Brand Route
-                     */
-                    Router::form('/brand/add', [AdminBrandController::class, 'add'])->name('admin.brand.add');
-                    Router::form('/brand/edit/{id}', [AdminBrandController::class, 'edit'])->where([
-                        'id' => '[0-9]+',
-                    ])->name('admin.brand.edit');
-                    Router::get('/brand/view', [AdminBrandController::class, 'view'])->name('admin.brand.view');
-                    Router::post('/brand/view/dt', [AdminBrandController::class, 'getPaginatedDatatable'])
-                        ->name('admin.brand.dt.view');
-                });
+                /**
+                 * Brand Route
+                 */
+                Router::form('/brand/add', [AdminBrandController::class, 'add'])->name('admin.brand.add');
+                Router::form('/brand/edit/{id}', [AdminBrandController::class, 'edit'])->where([
+                    'id' => '[0-9]+',
+                ])->name('admin.brand.edit');
+                Router::get('/brand/view', [AdminBrandController::class, 'view'])->name('admin.brand.view');
+                Router::post('/brand/view/dt', [AdminBrandController::class, 'getPaginatedDatatable'])
+                    ->name('admin.brand.dt.view');
 
-                Router::group(['middleware' => AuthProductResourceMiddleware::class], function () {
-                    /**
-                     * Product Route
-                     */
-                    Router::form('/product/add', [AdminProductController::class, 'add'])->name('admin.product.add');
-                    Router::form('/product/edit/{id}', [AdminProductController::class, 'edit'])->where([
-                        'id' => '[0-9]+',
-                    ])->name('admin.product.edit');
-                    Router::get('/product/view', [AdminProductController::class, 'view'])->name('admin.product.view');
-                    Router::get('/product/detail/{id}', [AdminProductController::class, 'detail'])->where([
-                        'id' => '[0-9]+',
-                    ])->name('admin.product.detail');
-                    Router::post('/product/view/dt', [AdminProductController::class, 'getPaginatedDatatable'])->name('admin.product.dt.view');
-                    Router::get('/product/view/s2', [AdminProductController::class, 'getPaginatedSelect2'])->name('admin.product.s2.view');
-                    Router::form('/product/buyer/{id}', [AdminProductController::class, 'buyer'])->where([
-                        'id' => '[0-9]+',
-                    ])->name('admin.product.buyer');
-                    Router::post('/product/buyer/users/dt/{id}', [AdminProductController::class, 'getBuyerUsersPaginatedDatatable'])->where([
-                        'id' => '[0-9]+',
-                    ])->name('admin.product.dt.buyer.users');
-                    Router::post('/product/buyer/orders/dt/{id}', [AdminProductController::class, 'getBuyerOrdersPaginatedDatatable'])->where([
-                        'id' => '[0-9]+',
-                    ])->name('admin.product.dt.buyer.orders');
+                /**
+                 * Product Route
+                 */
+                Router::form('/product/add', [AdminProductController::class, 'add'])->name('admin.product.add');
+                Router::form('/product/edit/{id}', [AdminProductController::class, 'edit'])->where([
+                    'id' => '[0-9]+',
+                ])->name('admin.product.edit');
+                Router::get('/product/view', [AdminProductController::class, 'view'])->name('admin.product.view');
+                Router::get('/product/detail/{id}', [AdminProductController::class, 'detail'])->where([
+                    'id' => '[0-9]+',
+                ])->name('admin.product.detail');
+                Router::post('/product/view/dt', [AdminProductController::class, 'getPaginatedDatatable'])->name('admin.product.dt.view');
+                Router::get('/product/view/s2', [AdminProductController::class, 'getPaginatedSelect2'])->name('admin.product.s2.view');
+                Router::form('/product/buyer/{id}', [AdminProductController::class, 'buyer'])->where([
+                    'id' => '[0-9]+',
+                ])->name('admin.product.buyer');
+                Router::post('/product/buyer/users/dt/{id}', [AdminProductController::class, 'getBuyerUsersPaginatedDatatable'])->where([
+                    'id' => '[0-9]+',
+                ])->name('admin.product.dt.buyer.users');
+                Router::post('/product/buyer/orders/dt/{id}', [AdminProductController::class, 'getBuyerOrdersPaginatedDatatable'])->where([
+                    'id' => '[0-9]+',
+                ])->name('admin.product.dt.buyer.orders');
 
-                    /**
-                     * Stepped Price Route
-                     */
-                    Router::form('/product/stepped-price/add/{code}', [AdminSteppedPriceController::class, 'add'])->where([
-                        'code' => '[a-zA-Z0-9]+',
-                    ])->name('admin.stepped-price.add');
-                    Router::form('/product/stepped-price/edit/{code}/{id}', [AdminSteppedPriceController::class, 'edit'])->where([
-                        'code' => '[a-zA-Z0-9]+',
-                        'id' => '[0-9]+',
-                    ])->name('admin.stepped-price.edit');
-                    Router::get('/product/stepped-price/view/{p_id}', [AdminSteppedPriceController::class, 'view'])->where([
-                        'p_id' => '[0-9]+',
-                    ])->name('admin.stepped-price.view');
-                    Router::get('/product/stepped-price/view-all/{code}', [AdminSteppedPriceController::class, 'viewStepped'])->where([
-                        'code' => '[a-zA-Z0-9]+',
-                    ])->name('admin.stepped-price.view');
+                /**
+                 * Stepped Price Route
+                 */
+                Router::form('/product/stepped-price/add/{code}', [AdminSteppedPriceController::class, 'add'])->where([
+                    'code' => '[a-zA-Z0-9]+',
+                ])->name('admin.stepped-price.add');
+                Router::form('/product/stepped-price/edit/{code}/{id}', [AdminSteppedPriceController::class, 'edit'])->where([
+                    'code' => '[a-zA-Z0-9]+',
+                    'id' => '[0-9]+',
+                ])->name('admin.stepped-price.edit');
+                Router::get('/product/stepped-price/view/{p_id}', [AdminSteppedPriceController::class, 'view'])->where([
+                    'p_id' => '[0-9]+',
+                ])->name('admin.stepped-price.view');
+                Router::get('/product/stepped-price/view-all/{code}', [AdminSteppedPriceController::class, 'viewStepped'])->where([
+                    'code' => '[a-zA-Z0-9]+',
+                ])->name('admin.stepped-price.view');
 
-                    /**
-                     * Comment Route
-                     */
-                    Router::get('/comment/view/{p_id}', [AdminCommentController::class, 'view'])->where([
-                        'p_id' => '[0-9]+',
-                    ])->name('admin.comment.view');
-                    Router::form('/comment/detail/{p_id}/{id}', [AdminCommentController::class, 'detail'])->where([
-                        'p_id' => '[0-9]+',
-                        'id' => '[0-9]+',
-                    ])->name('admin.comment.detail');
-                    Router::post('/comment/view/dt/{p_id}', [AdminCommentController::class, 'getPaginatedDatatable'])->where([
-                        'p_id' => '[0-9]+',
-                    ])->name('admin.comment.dt.view');
-                });
+                /**
+                 * Comment Route
+                 */
+                Router::get('/comment/view/{p_id}', [AdminCommentController::class, 'view'])->where([
+                    'p_id' => '[0-9]+',
+                ])->name('admin.comment.view');
+                Router::form('/comment/detail/{p_id}/{id}', [AdminCommentController::class, 'detail'])->where([
+                    'p_id' => '[0-9]+',
+                    'id' => '[0-9]+',
+                ])->name('admin.comment.detail');
+                Router::post('/comment/view/dt/{p_id}', [AdminCommentController::class, 'getPaginatedDatatable'])->where([
+                    'p_id' => '[0-9]+',
+                ])->name('admin.comment.dt.view');
 
-                Router::group(['middleware' => AuthBlogResourceMiddleware::class], function () {
-                    /**
-                     * Blog Route
-                     */
-                    Router::form('/blog/add', [AdminBlogController::class, 'add'])->name('admin.blog.add');
-                    Router::form('/blog/edit/{id}', [AdminBlogController::class, 'edit'])->where([
-                        'id' => '[0-9]+',
-                    ])->name('admin.blog.edit');
-                    Router::get('/blog/view', [AdminBlogController::class, 'view'])->name('admin.blog.view');
-                    Router::post('/blog/view/dt', [AdminBlogController::class, 'getPaginatedDatatable'])->name('admin.blog.dt.view');
-                });
+                /**
+                 * Blog Route
+                 */
+                Router::form('/blog/add', [AdminBlogController::class, 'add'])->name('admin.blog.add');
+                Router::form('/blog/edit/{id}', [AdminBlogController::class, 'edit'])->where([
+                    'id' => '[0-9]+',
+                ])->name('admin.blog.edit');
+                Router::get('/blog/view', [AdminBlogController::class, 'view'])->name('admin.blog.view');
+                Router::post('/blog/view/dt', [AdminBlogController::class, 'getPaginatedDatatable'])->name('admin.blog.dt.view');
 
-                Router::group(['middleware' => AuthBlogCategoryResourceMiddleware::class], function () {
-                    /**
-                     * Blog Category Route
-                     */
-                    Router::form('/blog/category/add', [AdminBlogCategoryController::class, 'add'])->name('admin.blog.category.add');
-                    Router::form('/blog/category/edit/{id}', [AdminBlogCategoryController::class, 'edit'])->where([
-                        'id' => '[0-9]+',
-                    ])->name('admin.blog.category.edit');
-                    Router::get('/blog/category/view', [AdminBlogCategoryController::class, 'view'])->name('admin.blog.category.view');
-                    Router::post('/blog/category/view/dt', [AdminBlogCategoryController::class, 'getPaginatedDatatable'])
-                        ->name('admin.blog.category.dt.view');
-                });
+                /**
+                 * Blog Category Route
+                 */
+                Router::form('/blog/category/add', [AdminBlogCategoryController::class, 'add'])->name('admin.blog.category.add');
+                Router::form('/blog/category/edit/{id}', [AdminBlogCategoryController::class, 'edit'])->where([
+                    'id' => '[0-9]+',
+                ])->name('admin.blog.category.edit');
+                Router::get('/blog/category/view', [AdminBlogCategoryController::class, 'view'])->name('admin.blog.category.view');
+                Router::post('/blog/category/view/dt', [AdminBlogCategoryController::class, 'getPaginatedDatatable'])
+                    ->name('admin.blog.category.dt.view');
 
-                Router::group(['middleware' => AuthOrderResourceMiddleware::class], function () {
-                    /**
-                     * Order Route
-                     */
-                    Router::form('/order/detail/{id}', [AdminOrderController::class, 'detail'])->where([
-                        'id' => '[0-9]+',
-                    ])->name('admin.order.detail');
-                    Router::get('/order/view', [AdminOrderController::class, 'view'])->name('admin.order.view');
-                    Router::post('/order/view/dt', [AdminOrderController::class, 'getPaginatedDatatable'])->name('admin.order.dt.view');
+                /**
+                 * Order Route
+                 */
+                Router::form('/order/detail/{id}', [AdminOrderController::class, 'detail'])->where([
+                    'id' => '[0-9]+',
+                ])->name('admin.order.detail');
+                Router::get('/order/view', [AdminOrderController::class, 'view'])->name('admin.order.view');
+                Router::post('/order/view/dt', [AdminOrderController::class, 'getPaginatedDatatable'])->name('admin.order.dt.view');
 
-                    /**
-                     * Order Badges Route
-                     */
-                    Router::get('/order/badges', [AdminOrderBadgeController::class, 'view'])->name('admin.badge.view');
-                    Router::post('/order/badges/dt', [AdminOrderBadgeController::class, 'getPaginatedDatatable'])->name('admin.badge.dt.view');
-                });
+                /**
+                 * Order Badges Route
+                 */
+                Router::get('/order/badges', [AdminOrderBadgeController::class, 'view'])->name('admin.badge.view');
+                Router::post('/order/badges/dt', [AdminOrderBadgeController::class, 'getPaginatedDatatable'])->name('admin.badge.dt.view');
 
                 /**
                  * Return Order Route
@@ -437,111 +395,96 @@ class Route implements IInitialize
 //                Router::get('/return-order/view', [AdminReturnOrderController::class, 'view'])->name('admin.return.order.view');
 //                Router::post('/return-order/view/dt', [AdminReturnOrderController::class, 'getPaginatedDatatable'])->name('admin.return.order.dt.view');
 
-                Router::group(['middleware' => AuthWalletResourceMiddleware::class], function () {
-                    /**
-                     * Wallet Route
-                     */
-                    Router::form('/wallet/charge/{id}', [AdminWalletController::class, 'charge'])->where([
-                        'id' => '[0-9]+',
-                    ])->name('admin.wallet.charge');
-                    Router::get('/wallet/view', [AdminWalletController::class, 'view'])->name('admin.wallet.view');
-                    Router::post('/wallet/view/dt', [AdminWalletController::class, 'getPaginatedDatatable'])->name('admin.wallet.dt.view');
-                    Router::get('/wallet/detail/{id}', [AdminWalletController::class, 'detail'])->where([
-                        'id' => '[0-9]+',
-                    ])->name('admin.wallet.detail');;
-                    Router::post('/wallet/detail/dt/{username}', [AdminWalletController::class, 'getDetailPaginatedDatatable'])
-                        ->name('admin.wallet.detail.dt');
+                /**
+                 * Report Route
+                 */
+//                Router::get('/report/users', [AdminReportController::class, 'usersReport'])->name('admin.report.users');
 
-                    /**
-                     * Deposit Type Route
-                     */
-                    Router::get('/deposit-type/view', [AdminDepositTypeController::class, 'view'])->name('admin.deposit-type.view');
-                    Router::post('/deposit-type/view/dt', [AdminDepositTypeController::class, 'getPaginatedDatatable'])->name('admin.deposit-type.dt.view');
-                });
+                /**
+                 * Wallet Route
+                 */
+                Router::form('/wallet/charge/{id}', [AdminWalletController::class, 'charge'])->where([
+                    'id' => '[0-9]+',
+                ])->name('admin.wallet.charge');
+                Router::get('/wallet/view', [AdminWalletController::class, 'view'])->name('admin.wallet.view');
+                Router::post('/wallet/view/dt', [AdminWalletController::class, 'getPaginatedDatatable'])->name('admin.wallet.dt.view');
+                Router::get('/wallet/detail/{id}', [AdminWalletController::class, 'detail'])->where([
+                    'id' => '[0-9]+',
+                ])->name('admin.wallet.detail');;
+                Router::post('/wallet/detail/dt/{username}', [AdminWalletController::class, 'getDetailPaginatedDatatable'])
+                    ->name('admin.wallet.detail.dt');
 
-                Router::group(['middleware' => AuthStaticPageResourceMiddleware::class], function () {
-                    /**
-                     * Static Page Route
-                     */
-                    Router::form('/static-page/add', [AdminStaticPageController::class, 'add'])->name('admin.static.page.add');
-                    Router::form('/static-page/edit/{id}', [AdminStaticPageController::class, 'edit'])->where([
-                        'id' => '[0-9]+',
-                    ])->name('admin.static.page.edit');
-                    Router::get('/static-page/view', [AdminStaticPageController::class, 'view'])->name('admin.static.page.view');
-                    Router::post('/static-page/view/dt', [AdminStaticPageController::class, 'getPaginatedDatatable'])->name('admin.static.page.dt.view');
-                });
+                /**
+                 * Deposit Type Route
+                 */
+                Router::get('/deposit-type/view', [AdminDepositTypeController::class, 'view'])->name('admin.deposit-type.view');
+                Router::post('/deposit-type/view/dt', [AdminDepositTypeController::class, 'getPaginatedDatatable'])->name('admin.deposit-type.dt.view');
 
-                Router::group(['middleware' => AuthUnitResourceMiddleware::class], function () {
-                    /**
-                     * Unit Route
-                     */
-                    Router::get('/unit/view', [AdminUnitController::class, 'view'])->name('admin.unit.view');
-                    Router::post('/unit/view/dt', [AdminUnitController::class, 'getPaginatedDatatable'])->name('admin.unit.dt.view');
-                });
+                /**
+                 * Static Page Route
+                 */
+                Router::form('/static-page/add', [AdminStaticPageController::class, 'add'])->name('admin.static.page.add');
+                Router::form('/static-page/edit/{id}', [AdminStaticPageController::class, 'edit'])->where([
+                    'id' => '[0-9]+',
+                ])->name('admin.static.page.edit');
+                Router::get('/static-page/view', [AdminStaticPageController::class, 'view'])->name('admin.static.page.view');
+                Router::post('/static-page/view/dt', [AdminStaticPageController::class, 'getPaginatedDatatable'])->name('admin.static.page.dt.view');
 
-                Router::group(['middleware' => AuthFAQResourceMiddleware::class], function () {
-                    /**
-                     * FAQ Route
-                     */
-                    Router::get('/faq/view', [AdminFaqController::class, 'view'])->name('admin.faq.view');
-                    Router::post('/faq/view/dt', [AdminFaqController::class, 'getPaginatedDatatable'])->name('admin.faq.dt.view');
-                });
+                /**
+                 * Unit Route
+                 */
+                Router::get('/unit/view', [AdminUnitController::class, 'view'])->name('admin.unit.view');
+                Router::post('/unit/view/dt', [AdminUnitController::class, 'getPaginatedDatatable'])->name('admin.unit.dt.view');
 
-                Router::group(['middleware' => AuthContactUsResourceMiddleware::class], function () {
-                    /**
-                     * Contact Us Route
-                     */
-                    Router::get('/contact-us/view/{id?}', [AdminContactUsController::class, 'view'])->where([
-                        'id' => '[0-9]+',
-                    ])->name('admin.contact-us.view');
-                    Router::post('/contact-us/view/dt', [AdminContactUsController::class, 'getPaginatedDatatable'])
-                        ->name('admin.contact-us.dt.view');
-                });
+                /**
+                 * FAQ Route
+                 */
+                Router::get('/faq/view', [AdminFaqController::class, 'view'])->name('admin.faq.view');
+                Router::post('/faq/view/dt', [AdminFaqController::class, 'getPaginatedDatatable'])->name('admin.faq.dt.view');
 
-                Router::group(['middleware' => AuthComplaintResourceMiddleware::class], function () {
-                    /**
-                     * Complaints Route
-                     */
-                    Router::get('/complaints/view/{id?}', [AdminComplaintsController::class, 'view'])->where([
-                        'id' => '[0-9]+',
-                    ])->name('admin.complaints.view');
-                    Router::post('/complaints/view/dt', [AdminComplaintsController::class, 'getPaginatedDatatable'])
-                        ->name('admin.complaints.dt.view');
-                });
+                /**
+                 * Contact Us Route
+                 */
+                Router::get('/contact-us/view/{id?}', [AdminContactUsController::class, 'view'])->where([
+                    'id' => '[0-9]+',
+                ])->name('admin.contact-us.view');
+                Router::post('/contact-us/view/dt', [AdminContactUsController::class, 'getPaginatedDatatable'])
+                    ->name('admin.contact-us.dt.view');
 
-                Router::group(['middleware' => AuthNewsletterResourceMiddleware::class], function () {
-                    /**
-                     * Newsletter Route
-                     */
-                    Router::get('/newsletter/view/{id?}', [AdminNewsletterController::class, 'view'])->where([
-                        'id' => '[0-9]+',
-                    ])->name('admin.newsletter.view');
-                });
+                /**
+                 * Complaints Route
+                 */
+                Router::get('/complaints/view/{id?}', [AdminComplaintsController::class, 'view'])->where([
+                    'id' => '[0-9]+',
+                ])->name('admin.complaints.view');
+                Router::post('/complaints/view/dt', [AdminComplaintsController::class, 'getPaginatedDatatable'])
+                    ->name('admin.complaints.dt.view');
 
-                Router::group(['middleware' => AuthSlideShowResourceMiddleware::class], function () {
-                    /**
-                     * Slider Route
-                     */
-                    Router::get('/slider/view', [AdminSliderController::class, 'view'])->name('admin.slider.view');
-                    Router::post('/slider/view/dt', [AdminSliderController::class, 'getPaginatedDatatable'])->name('admin.slider.dt.view');
-                });
+                /**
+                 * Newsletter Route
+                 */
+                Router::get('/newsletter/view/{id?}', [AdminNewsletterController::class, 'view'])->where([
+                    'id' => '[0-9]+',
+                ])->name('admin.newsletter.view');
 
-                Router::group(['middleware' => AuthInstagramResourceMiddleware::class], function () {
-                    /**
-                     * Instagram Route
-                     */
-                    Router::get('/instagram/view', [AdminInstagramController::class, 'view'])->name('admin.instagram.view');
-                    Router::post('/instagram/view/dt', [AdminInstagramController::class, 'getPaginatedDatatable'])->name('admin.instagram.dt.view');
-                });
+                /**
+                 * Slider Route
+                 */
+                Router::get('/slider/view', [AdminSliderController::class, 'view'])->name('admin.slider.view');
+                Router::post('/slider/view/dt', [AdminSliderController::class, 'getPaginatedDatatable'])->name('admin.slider.dt.view');
 
-                Router::group(['middleware' => AuthSecurityQuestionResourceMiddleware::class], function () {
-                    /**
-                     * Security Question Route
-                     */
-                    Router::get('/sec-question/view', [AdminSecurityQuestionController::class, 'view'])->name('admin.sec_question.view');
-                    Router::post('/sec-question/view/dt', [AdminSecurityQuestionController::class, 'getPaginatedDatatable'])
-                        ->name('admin.sec_question.dt.view');
-                });
+                /**
+                 * Instagram Route
+                 */
+                Router::get('/instagram/view', [AdminInstagramController::class, 'view'])->name('admin.instagram.view');
+                Router::post('/instagram/view/dt', [AdminInstagramController::class, 'getPaginatedDatatable'])->name('admin.instagram.dt.view');
+
+                /**
+                 * Security Question Route
+                 */
+                Router::get('/sec-question/view', [AdminSecurityQuestionController::class, 'view'])->name('admin.sec_question.view');
+                Router::post('/sec-question/view/dt', [AdminSecurityQuestionController::class, 'getPaginatedDatatable'])
+                    ->name('admin.sec_question.dt.view');
 
                 /**
                  * Setting Route
@@ -556,6 +499,7 @@ class Route implements IInitialize
                 Router::form('/setting/pages/index', [AdminSettingController::class, 'indexPage'])->name('admin.setting.pages.index');
                 Router::form('/setting/pages/about', [AdminSettingController::class, 'aboutPage'])->name('admin.setting.pages.about');
                 Router::form('/setting/other', [AdminSettingController::class, 'other'])->name('admin.setting.other');
+
                 /**
                  * File Manager Route
                  */

@@ -23,6 +23,8 @@ use App\Logic\Models\UnitModel;
 use App\Logic\Utils\Jdf;
 use Jenssegers\Agent\Agent;
 use Sim\Auth\DBAuth;
+use Sim\Auth\Interfaces\IAuth;
+use Sim\Auth\Interfaces\IDBException;
 use Sim\Container\Exceptions\MethodNotFoundException;
 use Sim\Container\Exceptions\ParameterHasNoDefaultValueException;
 use Sim\Container\Exceptions\ServiceNotFoundException;
@@ -38,15 +40,28 @@ class ProductController extends AbstractAdminController implements IDatatableCon
 {
     /**
      * @return string
-     * @throws \ReflectionException
      * @throws ConfigNotRegisteredException
      * @throws ControllerException
-     * @throws PathNotRegisteredException
      * @throws IFileNotExistsException
      * @throws IInvalidVariableNameException
+     * @throws MethodNotFoundException
+     * @throws ParameterHasNoDefaultValueException
+     * @throws PathNotRegisteredException
+     * @throws ServiceNotFoundException
+     * @throws ServiceNotInstantiableException
+     * @throws \ReflectionException
+     * @throws IDBException
      */
     public function view()
     {
+        /**
+         * @var DBAuth $auth
+         */
+        $auth = container()->get('auth_admin');
+        if (!$auth->isAllow(RESOURCE_PRODUCT, IAuth::PERMISSION_READ)) {
+            show_403();
+        }
+
         $this->setLayout($this->main_layout)->setTemplate('view/product/view');
         return $this->render();
     }
@@ -64,9 +79,18 @@ class ProductController extends AbstractAdminController implements IDatatableCon
      * @throws ServiceNotFoundException
      * @throws ServiceNotInstantiableException
      * @throws \ReflectionException
+     * @throws IDBException
      */
     public function detail($id)
     {
+        /**
+         * @var DBAuth $auth
+         */
+        $auth = container()->get('auth_admin');
+        if (!$auth->isAllow(RESOURCE_PRODUCT, IAuth::PERMISSION_READ)) {
+            show_403();
+        }
+
         /**
          * @var ProductModel $productModel
          */
@@ -105,9 +129,18 @@ class ProductController extends AbstractAdminController implements IDatatableCon
      * @throws ServiceNotFoundException
      * @throws ServiceNotInstantiableException
      * @throws \ReflectionException
+     * @throws IDBException
      */
     public function add()
     {
+        /**
+         * @var DBAuth $auth
+         */
+        $auth = container()->get('auth_admin');
+        if (!$auth->isAllow(RESOURCE_PRODUCT, IAuth::PERMISSION_CREATE)) {
+            show_403();
+        }
+
         $data = [];
         if (is_post()) {
             $formHandler = new GeneralFormHandler();
@@ -153,9 +186,18 @@ class ProductController extends AbstractAdminController implements IDatatableCon
      * @throws ServiceNotFoundException
      * @throws ServiceNotInstantiableException
      * @throws \ReflectionException
+     * @throws IDBException
      */
     public function edit($id)
     {
+        /**
+         * @var DBAuth $auth
+         */
+        $auth = container()->get('auth_admin');
+        if (!$auth->isAllow(RESOURCE_PRODUCT, IAuth::PERMISSION_UPDATE)) {
+            show_403();
+        }
+
         /**
          * @var ProductModel $productModel
          */
@@ -217,9 +259,18 @@ class ProductController extends AbstractAdminController implements IDatatableCon
      * @throws ParameterHasNoDefaultValueException
      * @throws ServiceNotFoundException
      * @throws ServiceNotInstantiableException
+     * @throws IDBException
      */
     public function remove($id)
     {
+        /**
+         * @var DBAuth $auth
+         */
+        $auth = container()->get('auth_admin');
+        if (!$auth->isAllow(RESOURCE_PRODUCT, IAuth::PERMISSION_DELETE)) {
+            show_403();
+        }
+
         $resourceHandler = new ResourceHandler();
 
         /**
@@ -271,9 +322,23 @@ class ProductController extends AbstractAdminController implements IDatatableCon
 
     /**
      * @param $id
+     * @throws IDBException
+     * @throws MethodNotFoundException
+     * @throws ParameterHasNoDefaultValueException
+     * @throws ServiceNotFoundException
+     * @throws ServiceNotInstantiableException
+     * @throws \ReflectionException
      */
     public function pubStatusChange($id)
     {
+        /**
+         * @var DBAuth $auth
+         */
+        $auth = container()->get('auth_admin');
+        if (!$auth->isAllow(RESOURCE_PRODUCT, IAuth::PERMISSION_READ)) {
+            show_403();
+        }
+
         $resourceHandler = new ResourceHandler();
 
         try {
@@ -309,9 +374,23 @@ class ProductController extends AbstractAdminController implements IDatatableCon
 
     /**
      * @param $id
+     * @throws IDBException
+     * @throws MethodNotFoundException
+     * @throws ParameterHasNoDefaultValueException
+     * @throws ServiceNotFoundException
+     * @throws ServiceNotInstantiableException
+     * @throws \ReflectionException
      */
     public function availabilityStatusChange($id)
     {
+        /**
+         * @var DBAuth $auth
+         */
+        $auth = container()->get('auth_admin');
+        if (!$auth->isAllow(RESOURCE_PRODUCT, IAuth::PERMISSION_READ)) {
+            show_403();
+        }
+
         $resourceHandler = new ResourceHandler();
 
         try {
@@ -348,9 +427,23 @@ class ProductController extends AbstractAdminController implements IDatatableCon
     /**
      * @param array $_
      * @return void
+     * @throws IDBException
+     * @throws MethodNotFoundException
+     * @throws ParameterHasNoDefaultValueException
+     * @throws ServiceNotFoundException
+     * @throws ServiceNotInstantiableException
+     * @throws \ReflectionException
      */
     public function getPaginatedDatatable(...$_): void
     {
+        /**
+         * @var DBAuth $auth
+         */
+        $auth = container()->get('auth_admin');
+        if (!$auth->isAllow(RESOURCE_PRODUCT, IAuth::PERMISSION_READ)) {
+            show_403();
+        }
+
         try {
             /**
              * @var Agent $agent
@@ -480,9 +573,23 @@ class ProductController extends AbstractAdminController implements IDatatableCon
     /**
      * @param array $_
      * @return void
+     * @throws IDBException
+     * @throws MethodNotFoundException
+     * @throws ParameterHasNoDefaultValueException
+     * @throws ServiceNotFoundException
+     * @throws ServiceNotInstantiableException
+     * @throws \ReflectionException
      */
     public function getPaginatedSelect2(...$_): void
     {
+        /**
+         * @var DBAuth $auth
+         */
+        $auth = container()->get('auth_admin');
+        if (!$auth->isAllow(RESOURCE_PRODUCT, IAuth::PERMISSION_READ)) {
+            show_403();
+        }
+
         try {
             /**
              * @var Agent $agent
@@ -542,9 +649,18 @@ class ProductController extends AbstractAdminController implements IDatatableCon
      * @throws ServiceNotFoundException
      * @throws ServiceNotInstantiableException
      * @throws \ReflectionException
+     * @throws IDBException
      */
     public function buyer($id)
     {
+        /**
+         * @var DBAuth $auth
+         */
+        $auth = container()->get('auth_admin');
+        if (!$auth->isAllow(RESOURCE_PRODUCT, IAuth::PERMISSION_READ)) {
+            show_403();
+        }
+
         /**
          * @var ProductModel $productModel
          */
@@ -564,9 +680,23 @@ class ProductController extends AbstractAdminController implements IDatatableCon
 
     /**
      * @param $id
+     * @throws IDBException
+     * @throws MethodNotFoundException
+     * @throws ParameterHasNoDefaultValueException
+     * @throws ServiceNotFoundException
+     * @throws ServiceNotInstantiableException
+     * @throws \ReflectionException
      */
     public function getBuyerUsersPaginatedDatatable($id)
     {
+        /**
+         * @var DBAuth $auth
+         */
+        $auth = container()->get('auth_admin');
+        if (!$auth->isAllow(RESOURCE_PRODUCT, IAuth::PERMISSION_READ)) {
+            show_403();
+        }
+
         try {
             /**
              * @var Agent $agent
@@ -632,9 +762,23 @@ class ProductController extends AbstractAdminController implements IDatatableCon
 
     /**
      * @param $id
+     * @throws IDBException
+     * @throws MethodNotFoundException
+     * @throws ParameterHasNoDefaultValueException
+     * @throws ServiceNotFoundException
+     * @throws ServiceNotInstantiableException
+     * @throws \ReflectionException
      */
     public function getBuyerOrdersPaginatedDatatable($id)
     {
+        /**
+         * @var DBAuth $auth
+         */
+        $auth = container()->get('auth_admin');
+        if (!$auth->isAllow(RESOURCE_PRODUCT, IAuth::PERMISSION_READ)) {
+            show_403();
+        }
+
         try {
             /**
              * @var Agent $agent

@@ -44,6 +44,7 @@ class LoginController extends AbstractHomeController
      * @throws ServiceNotInstantiableException
      * @throws \ReflectionException
      * @throws FormException
+     * @throws IDBException
      */
     public function index()
     {
@@ -58,6 +59,7 @@ class LoginController extends AbstractHomeController
 
         $data = [];
         if (is_post()) {
+            $this->logout();
             try {
                 /**
                  * @var LoginForm $loginForm

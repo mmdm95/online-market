@@ -14,6 +14,9 @@ use App\Logic\Interfaces\IDatatableController;
 use App\Logic\Models\BaseModel;
 use App\Logic\Models\DepositTypeModel;
 use Jenssegers\Agent\Agent;
+use Sim\Auth\DBAuth;
+use Sim\Auth\Interfaces\IAuth;
+use Sim\Auth\Interfaces\IDBException;
 use Sim\Container\Exceptions\MethodNotFoundException;
 use Sim\Container\Exceptions\ParameterHasNoDefaultValueException;
 use Sim\Container\Exceptions\ServiceNotFoundException;
@@ -29,15 +32,28 @@ class DepositTypeController extends AbstractAdminController implements IAjaxCont
 {
     /**
      * @return string
-     * @throws \ReflectionException
      * @throws ConfigNotRegisteredException
      * @throws ControllerException
-     * @throws PathNotRegisteredException
      * @throws IFileNotExistsException
      * @throws IInvalidVariableNameException
+     * @throws MethodNotFoundException
+     * @throws ParameterHasNoDefaultValueException
+     * @throws PathNotRegisteredException
+     * @throws ServiceNotFoundException
+     * @throws ServiceNotInstantiableException
+     * @throws \ReflectionException
+     * @throws IDBException
      */
     public function view()
     {
+        /**
+         * @var DBAuth $auth
+         */
+        $auth = container()->get('auth_admin');
+        if (!$auth->isAllow(RESOURCE_WALLET, IAuth::PERMISSION_READ)) {
+            show_403();
+        }
+
         $this->setLayout($this->main_layout)->setTemplate('view/wallet/deposit-type');
         return $this->render();
     }
@@ -49,9 +65,18 @@ class DepositTypeController extends AbstractAdminController implements IAjaxCont
      * @throws ParameterHasNoDefaultValueException
      * @throws ServiceNotFoundException
      * @throws ServiceNotInstantiableException
+     * @throws IDBException
      */
     public function add(): void
     {
+        /**
+         * @var DBAuth $auth
+         */
+        $auth = container()->get('auth_admin');
+        if (!$auth->isAllow(RESOURCE_WALLET, IAuth::PERMISSION_CREATE)) {
+            show_403();
+        }
+
         $resourceHandler = new ResourceHandler();
 
         /**
@@ -80,9 +105,18 @@ class DepositTypeController extends AbstractAdminController implements IAjaxCont
      * @throws ServiceNotFoundException
      * @throws ServiceNotInstantiableException
      * @throws \ReflectionException
+     * @throws IDBException
      */
     public function edit($id): void
     {
+        /**
+         * @var DBAuth $auth
+         */
+        $auth = container()->get('auth_admin');
+        if (!$auth->isAllow(RESOURCE_WALLET, IAuth::PERMISSION_UPDATE)) {
+            show_403();
+        }
+
         $resourceHandler = new ResourceHandler();
 
         /**
@@ -112,9 +146,18 @@ class DepositTypeController extends AbstractAdminController implements IAjaxCont
      * @throws ServiceNotFoundException
      * @throws ServiceNotInstantiableException
      * @throws \ReflectionException
+     * @throws IDBException
      */
     public function remove($id): void
     {
+        /**
+         * @var DBAuth $auth
+         */
+        $auth = container()->get('auth_admin');
+        if (!$auth->isAllow(RESOURCE_WALLET, IAuth::PERMISSION_DELETE)) {
+            show_403();
+        }
+
         $resourceHandler = new ResourceHandler();
 
         /**
@@ -142,9 +185,18 @@ class DepositTypeController extends AbstractAdminController implements IAjaxCont
      * @throws ServiceNotFoundException
      * @throws ServiceNotInstantiableException
      * @throws \ReflectionException
+     * @throws IDBException
      */
     public function get($id): void
     {
+        /**
+         * @var DBAuth $auth
+         */
+        $auth = container()->get('auth_admin');
+        if (!$auth->isAllow(RESOURCE_WALLET, IAuth::PERMISSION_READ)) {
+            show_403();
+        }
+
         $resourceHandler = new ResourceHandler();
 
         /**
@@ -179,9 +231,23 @@ class DepositTypeController extends AbstractAdminController implements IAjaxCont
     /**
      * @param array $_
      * @return void
+     * @throws IDBException
+     * @throws MethodNotFoundException
+     * @throws ParameterHasNoDefaultValueException
+     * @throws ServiceNotFoundException
+     * @throws ServiceNotInstantiableException
+     * @throws \ReflectionException
      */
     public function getPaginatedDatatable(...$_): void
     {
+        /**
+         * @var DBAuth $auth
+         */
+        $auth = container()->get('auth_admin');
+        if (!$auth->isAllow(RESOURCE_WALLET, IAuth::PERMISSION_READ)) {
+            show_403();
+        }
+
         try {
             /**
              * @var Agent $agent

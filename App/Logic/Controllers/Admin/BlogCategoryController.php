@@ -17,6 +17,9 @@ use App\Logic\Models\BlogCategoryModel;
 use App\Logic\Utils\Jdf;
 use Jenssegers\Agent\Agent;
 use ReflectionException;
+use Sim\Auth\DBAuth;
+use Sim\Auth\Interfaces\IAuth;
+use Sim\Auth\Interfaces\IDBException;
 use Sim\Container\Exceptions\MethodNotFoundException;
 use Sim\Container\Exceptions\ParameterHasNoDefaultValueException;
 use Sim\Container\Exceptions\ServiceNotFoundException;
@@ -32,15 +35,28 @@ class BlogCategoryController extends AbstractAdminController implements IDatatab
 {
     /**
      * @return string
-     * @throws ReflectionException
      * @throws ConfigNotRegisteredException
      * @throws ControllerException
-     * @throws PathNotRegisteredException
      * @throws IFileNotExistsException
      * @throws IInvalidVariableNameException
+     * @throws MethodNotFoundException
+     * @throws ParameterHasNoDefaultValueException
+     * @throws PathNotRegisteredException
+     * @throws ReflectionException
+     * @throws ServiceNotFoundException
+     * @throws ServiceNotInstantiableException
+     * @throws IDBException
      */
     public function view()
     {
+        /**
+         * @var DBAuth $auth
+         */
+        $auth = container()->get('auth_admin');
+        if (!$auth->isAllow(RESOURCE_BLOG_CATEGORY, IAuth::PERMISSION_READ)) {
+            show_403();
+        }
+
         $this->setLayout($this->main_layout)->setTemplate('view/blog/category/view');
         return $this->render();
     }
@@ -57,9 +73,18 @@ class BlogCategoryController extends AbstractAdminController implements IDatatab
      * @throws ReflectionException
      * @throws ServiceNotFoundException
      * @throws ServiceNotInstantiableException
+     * @throws IDBException
      */
     public function add()
     {
+        /**
+         * @var DBAuth $auth
+         */
+        $auth = container()->get('auth_admin');
+        if (!$auth->isAllow(RESOURCE_BLOG_CATEGORY, IAuth::PERMISSION_CREATE)) {
+            show_403();
+        }
+
         $data = [];
         if (is_post()) {
             $formHandler = new GeneralFormHandler();
@@ -83,9 +108,18 @@ class BlogCategoryController extends AbstractAdminController implements IDatatab
      * @throws ReflectionException
      * @throws ServiceNotFoundException
      * @throws ServiceNotInstantiableException
+     * @throws IDBException
      */
     public function edit($id)
     {
+        /**
+         * @var DBAuth $auth
+         */
+        $auth = container()->get('auth_admin');
+        if (!$auth->isAllow(RESOURCE_BLOG_CATEGORY, IAuth::PERMISSION_UPDATE)) {
+            show_403();
+        }
+
         /**
          * @var BlogCategoryModel $categoryModel
          */
@@ -122,9 +156,18 @@ class BlogCategoryController extends AbstractAdminController implements IDatatab
      * @throws ParameterHasNoDefaultValueException
      * @throws ServiceNotFoundException
      * @throws ServiceNotInstantiableException
+     * @throws IDBException
      */
     public function remove($id)
     {
+        /**
+         * @var DBAuth $auth
+         */
+        $auth = container()->get('auth_admin');
+        if (!$auth->isAllow(RESOURCE_BLOG_CATEGORY, IAuth::PERMISSION_DELETE)) {
+            show_403();
+        }
+
         $resourceHandler = new ResourceHandler();
 
         /**
@@ -146,9 +189,23 @@ class BlogCategoryController extends AbstractAdminController implements IDatatab
 
     /**
      * @param $id
+     * @throws IDBException
+     * @throws MethodNotFoundException
+     * @throws ParameterHasNoDefaultValueException
+     * @throws ReflectionException
+     * @throws ServiceNotFoundException
+     * @throws ServiceNotInstantiableException
      */
     public function sideStatusChange($id)
     {
+        /**
+         * @var DBAuth $auth
+         */
+        $auth = container()->get('auth_admin');
+        if (!$auth->isAllow(RESOURCE_BLOG_CATEGORY, IAuth::PERMISSION_READ)) {
+            show_403();
+        }
+
         $resourceHandler = new ResourceHandler();
 
         try {
@@ -187,9 +244,23 @@ class BlogCategoryController extends AbstractAdminController implements IDatatab
     /**
      * @param array $_
      * @return void
+     * @throws IDBException
+     * @throws MethodNotFoundException
+     * @throws ParameterHasNoDefaultValueException
+     * @throws ReflectionException
+     * @throws ServiceNotFoundException
+     * @throws ServiceNotInstantiableException
      */
     public function getPaginatedDatatable(...$_): void
     {
+        /**
+         * @var DBAuth $auth
+         */
+        $auth = container()->get('auth_admin');
+        if (!$auth->isAllow(RESOURCE_BLOG_CATEGORY, IAuth::PERMISSION_READ)) {
+            show_403();
+        }
+
         try {
             /**
              * @var Agent $agent

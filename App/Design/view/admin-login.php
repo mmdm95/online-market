@@ -26,7 +26,7 @@ $validator = form_validator();
                             <h5 class="mb-0">به حساب کاربری خود وارد شوید</h5>
                         </div>
 
-                        <?php load_partial('main/message/message-form', [
+                        <?php load_partial('admin/message/message-form', [
                             'errors' => $login_errors ?? [],
                             'warning' => $login_warning ?? '',
                         ]); ?>

@@ -30,6 +30,7 @@ use App\Logic\Utils\Jdf;
 use Sim\Auth\DBAuth;
 use Sim\Auth\Exceptions\IncorrectPasswordException;
 use Sim\Auth\Exceptions\InvalidUserException;
+use Sim\Auth\Interfaces\IAuth;
 use Sim\Auth\Interfaces\IDBException;
 use Sim\Container\Exceptions\MethodNotFoundException;
 use Sim\Container\Exceptions\ParameterHasNoDefaultValueException;
@@ -308,6 +309,7 @@ class HomeController extends AbstractAdminController
      * @throws ServiceNotInstantiableException
      * @throws \ReflectionException
      * @throws FormException
+     * @throws IDBException
      */
     public function login()
     {
@@ -317,11 +319,16 @@ class HomeController extends AbstractAdminController
         $auth = container()->get('auth_admin');
 
         if ($auth->isLoggedIn()) {
-            response()->redirect(url('admin.index')->getRelativeUrl(), 301);
+            $backUrl = ArrayUtil::get($_GET, 'back_url', null);
+            if (!empty($backUrl)) {
+                response()->redirect($backUrl, 301);
+            } else {
+                response()->redirect(url('admin.index')->getRelativeUrlTrimmed(), 301);
+            }
         }
-
         $data = [];
         if (is_post()) {
+            $auth->logout();
             try {
                 /**
                  * @var AdminLoginForm $loginForm
@@ -368,13 +375,26 @@ class HomeController extends AbstractAdminController
      * @return string
      * @throws ConfigNotRegisteredException
      * @throws ControllerException
+     * @throws IDBException
      * @throws IFileNotExistsException
      * @throws IInvalidVariableNameException
+     * @throws MethodNotFoundException
+     * @throws ParameterHasNoDefaultValueException
      * @throws PathNotRegisteredException
+     * @throws ServiceNotFoundException
+     * @throws ServiceNotInstantiableException
      * @throws \ReflectionException
      */
     public function browser()
     {
+        /**
+         * @var DBAuth $auth
+         */
+        $auth = container()->get('auth_admin');
+        if (!$auth->isAllow(RESOURCE_FILEMANAGER, IAuth::PERMISSION_READ)) {
+            show_403();
+        }
+
         $this->setTemplate('partial/editor/browser');
         return $this->render([
             'the_options' => [

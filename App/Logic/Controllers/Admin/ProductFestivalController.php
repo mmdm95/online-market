@@ -16,6 +16,9 @@ use App\Logic\Models\FestivalModel;
 use App\Logic\Models\ProductFestivalModel;
 use App\Logic\Models\ProductModel;
 use Jenssegers\Agent\Agent;
+use Sim\Auth\DBAuth;
+use Sim\Auth\Interfaces\IAuth;
+use Sim\Auth\Interfaces\IDBException;
 use Sim\Container\Exceptions\MethodNotFoundException;
 use Sim\Container\Exceptions\ParameterHasNoDefaultValueException;
 use Sim\Container\Exceptions\ServiceNotFoundException;
@@ -42,9 +45,18 @@ class ProductFestivalController extends AbstractAdminController implements IData
      * @throws PathNotRegisteredException
      * @throws IFileNotExistsException
      * @throws IInvalidVariableNameException
+     * @throws IDBException
      */
     public function view($f_id)
     {
+        /**
+         * @var DBAuth $auth
+         */
+        $auth = container()->get('auth_admin');
+        if (!$auth->isAllow(RESOURCE_PRODUCT, IAuth::PERMISSION_READ)) {
+            show_403();
+        }
+
         /**
          * @var FestivalModel $festivalModel
          */
@@ -84,9 +96,18 @@ class ProductFestivalController extends AbstractAdminController implements IData
      * @throws ServiceNotFoundException
      * @throws ServiceNotInstantiableException
      * @throws \ReflectionException
+     * @throws IDBException
      */
     public function add($f_id)
     {
+        /**
+         * @var DBAuth $auth
+         */
+        $auth = container()->get('auth_admin');
+        if (!$auth->isAllow(RESOURCE_PRODUCT, IAuth::PERMISSION_CREATE)) {
+            show_403();
+        }
+
         $resourceHandler = new ResourceHandler();
 
         /**
@@ -115,9 +136,18 @@ class ProductFestivalController extends AbstractAdminController implements IData
      * @throws ServiceNotFoundException
      * @throws ServiceNotInstantiableException
      * @throws \ReflectionException
+     * @throws IDBException
      */
     public function addCategory($f_id)
     {
+        /**
+         * @var DBAuth $auth
+         */
+        $auth = container()->get('auth_admin');
+        if (!$auth->isAllow(RESOURCE_PRODUCT, IAuth::PERMISSION_CREATE)) {
+            show_403();
+        }
+
         $resourceHandler = new ResourceHandler();
 
         /**
@@ -147,9 +177,18 @@ class ProductFestivalController extends AbstractAdminController implements IData
      * @throws ParameterHasNoDefaultValueException
      * @throws ServiceNotFoundException
      * @throws ServiceNotInstantiableException
+     * @throws IDBException
      */
     public function remove($id)
     {
+        /**
+         * @var DBAuth $auth
+         */
+        $auth = container()->get('auth_admin');
+        if (!$auth->isAllow(RESOURCE_PRODUCT, IAuth::PERMISSION_DELETE)) {
+            show_403();
+        }
+
         $resourceHandler = new ResourceHandler();
 
         /**
@@ -171,9 +210,23 @@ class ProductFestivalController extends AbstractAdminController implements IData
 
     /**
      * @param $f_id
+     * @throws IDBException
+     * @throws MethodNotFoundException
+     * @throws ParameterHasNoDefaultValueException
+     * @throws ServiceNotFoundException
+     * @throws ServiceNotInstantiableException
+     * @throws \ReflectionException
      */
     public function removeCategory($f_id)
     {
+        /**
+         * @var DBAuth $auth
+         */
+        $auth = container()->get('auth_admin');
+        if (!$auth->isAllow(RESOURCE_PRODUCT, IAuth::PERMISSION_DELETE)) {
+            show_403();
+        }
+
         $resourceHandler = new ResourceHandler();
 
         try {
@@ -216,9 +269,31 @@ class ProductFestivalController extends AbstractAdminController implements IData
     /**
      * @param array $_
      * @return void
+     * @throws IDBException
+     * @throws MethodNotFoundException
+     * @throws ParameterHasNoDefaultValueException
+     * @throws ServiceNotFoundException
+     * @throws ServiceNotInstantiableException
+     * @throws \ReflectionException
      */
     public function getPaginatedDatatable(...$_): void
     {
+        /**
+         * @var DBAuth $auth
+         */
+        $auth = container()->get('auth_admin');
+        if (!$auth->isAllow(RESOURCE_PRODUCT, IAuth::PERMISSION_READ)) {
+            show_403();
+        }
+
+        /**
+         * @var DBAuth $auth
+         */
+        $auth = container()->get('auth_admin');
+        if (!$auth->isAllow(RESOURCE_PRODUCT, IAuth::PERMISSION_READ)) {
+            show_403();
+        }
+
         try {
             [$f_id] = $_;
 

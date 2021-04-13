@@ -18,6 +18,9 @@ use App\Logic\Handlers\GeneralFormHandler;
 use App\Logic\Models\CategoryModel;
 use App\Logic\Utils\ConfigUtil;
 use ReflectionException;
+use Sim\Auth\DBAuth;
+use Sim\Auth\Interfaces\IAuth;
+use Sim\Auth\Interfaces\IDBException;
 use Sim\Container\Exceptions\MethodNotFoundException;
 use Sim\Container\Exceptions\ParameterHasNoDefaultValueException;
 use Sim\Container\Exceptions\ServiceNotFoundException;
@@ -30,6 +33,31 @@ use Sim\Interfaces\IInvalidVariableNameException;
 
 class SettingController extends AbstractAdminController
 {
+    /**
+     * SettingController constructor.
+     * @throws ConfigNotRegisteredException
+     * @throws IFileNotExistsException
+     * @throws IInvalidVariableNameException
+     * @throws MethodNotFoundException
+     * @throws ParameterHasNoDefaultValueException
+     * @throws ReflectionException
+     * @throws ServiceNotFoundException
+     * @throws ServiceNotInstantiableException
+     * @throws IDBException
+     */
+    public function __construct()
+    {
+        parent::__construct();
+
+        /**
+         * @var DBAuth $auth
+         */
+        $auth = container()->get('auth_admin');
+        if (!$auth->isAllow(RESOURCE_SETTING, IAuth::PERMISSIONS)) {
+            show_403();
+        }
+    }
+
     /**
      * @return string
      * @throws ConfigNotRegisteredException

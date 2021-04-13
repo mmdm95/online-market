@@ -40,11 +40,11 @@ class LoginForm implements IPageForm
         $validator->setFieldsAlias([
             'inp-username' => 'موبایل',
             'inp-password' => 'کلمه عبور',
-            'inp-captcha' => 'کد تصویر',
+            'inp-login-captcha' => 'کد تصویر',
         ]);
         // captcha
         $validator
-            ->setFields('inp-captcha')
+            ->setFields('inp-login-captcha')
             ->captcha('{alias} ' . 'به درستی وارد نشده است.');
         // username
         $validator

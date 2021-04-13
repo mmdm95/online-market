@@ -16,6 +16,9 @@ use App\Logic\Models\BaseModel;
 use App\Logic\Models\CategoryModel;
 use Jenssegers\Agent\Agent;
 use ReflectionException;
+use Sim\Auth\DBAuth;
+use Sim\Auth\Interfaces\IAuth;
+use Sim\Auth\Interfaces\IDBException;
 use Sim\Container\Exceptions\MethodNotFoundException;
 use Sim\Container\Exceptions\ParameterHasNoDefaultValueException;
 use Sim\Container\Exceptions\ServiceNotFoundException;
@@ -31,15 +34,28 @@ class CategoryController extends AbstractAdminController implements IDatatableCo
 {
     /**
      * @return string
-     * @throws ReflectionException
      * @throws ConfigNotRegisteredException
      * @throws ControllerException
-     * @throws PathNotRegisteredException
      * @throws IFileNotExistsException
      * @throws IInvalidVariableNameException
+     * @throws MethodNotFoundException
+     * @throws ParameterHasNoDefaultValueException
+     * @throws PathNotRegisteredException
+     * @throws ReflectionException
+     * @throws ServiceNotFoundException
+     * @throws ServiceNotInstantiableException
+     * @throws IDBException
      */
     public function view()
     {
+        /**
+         * @var DBAuth $auth
+         */
+        $auth = container()->get('auth_admin');
+        if (!$auth->isAllow(RESOURCE_CATEGORY, IAuth::PERMISSION_READ)) {
+            show_403();
+        }
+
         $this->setLayout($this->main_layout)->setTemplate('view/category/view');
         return $this->render();
     }
@@ -56,9 +72,18 @@ class CategoryController extends AbstractAdminController implements IDatatableCo
      * @throws ReflectionException
      * @throws ServiceNotFoundException
      * @throws ServiceNotInstantiableException
+     * @throws IDBException
      */
     public function add()
     {
+        /**
+         * @var DBAuth $auth
+         */
+        $auth = container()->get('auth_admin');
+        if (!$auth->isAllow(RESOURCE_CATEGORY, IAuth::PERMISSION_CREATE)) {
+            show_403();
+        }
+
         $data = [];
         if (is_post()) {
             $formHandler = new GeneralFormHandler();
@@ -90,9 +115,18 @@ class CategoryController extends AbstractAdminController implements IDatatableCo
      * @throws ReflectionException
      * @throws ServiceNotFoundException
      * @throws ServiceNotInstantiableException
+     * @throws IDBException
      */
     public function edit($id)
     {
+        /**
+         * @var DBAuth $auth
+         */
+        $auth = container()->get('auth_admin');
+        if (!$auth->isAllow(RESOURCE_CATEGORY, IAuth::PERMISSION_UPDATE)) {
+            show_403();
+        }
+
         /**
          * @var CategoryModel $categoryModel
          */
@@ -131,9 +165,18 @@ class CategoryController extends AbstractAdminController implements IDatatableCo
      * @throws ParameterHasNoDefaultValueException
      * @throws ServiceNotFoundException
      * @throws ServiceNotInstantiableException
+     * @throws IDBException
      */
     public function remove($id)
     {
+        /**
+         * @var DBAuth $auth
+         */
+        $auth = container()->get('auth_admin');
+        if (!$auth->isAllow(RESOURCE_CATEGORY, IAuth::PERMISSION_DELETE)) {
+            show_403();
+        }
+
         $resourceHandler = new ResourceHandler();
 
         /**
@@ -153,8 +196,25 @@ class CategoryController extends AbstractAdminController implements IDatatableCo
         response()->json($resourceHandler->getReturnData());
     }
 
+    /**
+     * @param $id
+     * @throws IDBException
+     * @throws MethodNotFoundException
+     * @throws ParameterHasNoDefaultValueException
+     * @throws ReflectionException
+     * @throws ServiceNotFoundException
+     * @throws ServiceNotInstantiableException
+     */
     public function menuStatusChange($id)
     {
+        /**
+         * @var DBAuth $auth
+         */
+        $auth = container()->get('auth_admin');
+        if (!$auth->isAllow(RESOURCE_CATEGORY, IAuth::PERMISSION_READ)) {
+            show_403();
+        }
+
         $resourceHandler = new ResourceHandler();
 
         try {
@@ -193,9 +253,23 @@ class CategoryController extends AbstractAdminController implements IDatatableCo
     /**
      * @param array $_
      * @return void
+     * @throws IDBException
+     * @throws MethodNotFoundException
+     * @throws ParameterHasNoDefaultValueException
+     * @throws ReflectionException
+     * @throws ServiceNotFoundException
+     * @throws ServiceNotInstantiableException
      */
     public function getPaginatedDatatable(...$_): void
     {
+        /**
+         * @var DBAuth $auth
+         */
+        $auth = container()->get('auth_admin');
+        if (!$auth->isAllow(RESOURCE_CATEGORY, IAuth::PERMISSION_READ)) {
+            show_403();
+        }
+
         try {
             /**
              * @var Agent $agent

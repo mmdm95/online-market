@@ -18,13 +18,13 @@
 <body>
 
 <!-- Main navbar -->
-<?php load_partial('admin/main-nav'); ?>
+<?php load_partial('admin/main-nav', ['main_user_info' => $main_user_info]); ?>
 <!-- /main navbar -->
 
 <!-- Page content -->
 <div class="page-content">
     <!-- Main sidebar -->
-    <?php load_partial('admin/main-sidebar'); ?>
+    <?php load_partial('admin/main-sidebar', ['main_user_info' => $main_user_info]); ?>
     <!-- /main sidebar -->
 
     <!-- Main content -->

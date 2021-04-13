@@ -8,6 +8,8 @@ use App\Logic\Middlewares\Logic\NonePublicFolderAccessMiddleware;
 use App\Logic\Middlewares\Logic\PublicFolderModifyMiddleware;
 use App\Logic\Models\UserModel;
 use Sim\Auth\DBAuth;
+use Sim\Auth\Interfaces\IAuth;
+use Sim\Auth\Interfaces\IDBException;
 use Sim\Container\Exceptions\MethodNotFoundException;
 use Sim\Container\Exceptions\ParameterHasNoDefaultValueException;
 use Sim\Container\Exceptions\ServiceNotFoundException;
@@ -35,6 +37,12 @@ class FileController extends AbstractAdminController
      * @throws ConfigNotRegisteredException
      * @throws IFileNotExistsException
      * @throws IInvalidVariableNameException
+     * @throws MethodNotFoundException
+     * @throws ParameterHasNoDefaultValueException
+     * @throws ServiceNotFoundException
+     * @throws ServiceNotInstantiableException
+     * @throws \ReflectionException
+     * @throws IDBException
      */
     public function __construct()
     {
@@ -47,13 +55,26 @@ class FileController extends AbstractAdminController
      * @return string
      * @throws ConfigNotRegisteredException
      * @throws ControllerException
+     * @throws IDBException
      * @throws IFileNotExistsException
      * @throws IInvalidVariableNameException
+     * @throws MethodNotFoundException
+     * @throws ParameterHasNoDefaultValueException
      * @throws PathNotRegisteredException
+     * @throws ServiceNotFoundException
+     * @throws ServiceNotInstantiableException
      * @throws \ReflectionException
      */
     public function index()
     {
+        /**
+         * @var DBAuth $auth
+         */
+        $auth = container()->get('auth_admin');
+        if (!$auth->isAllow(RESOURCE_FILEMANAGER, IAuth::PERMISSION_READ)) {
+            show_403();
+        }
+
         $this->setLayout($this->main_layout)->setTemplate('view/file-manager/index');
 
         return $this->render();
@@ -67,9 +88,18 @@ class FileController extends AbstractAdminController
      * @throws ServiceNotFoundException
      * @throws ServiceNotInstantiableException
      * @throws \ReflectionException
+     * @throws IDBException
      */
     public function list()
     {
+        /**
+         * @var DBAuth $auth
+         */
+        $auth = container()->get('auth_admin');
+        if (!$auth->isAllow(RESOURCE_FILEMANAGER, IAuth::PERMISSION_READ)) {
+            show_403();
+        }
+
         // Security options
         $allow_delete = true;
         $hidden_extensions = hidden_extensions();
@@ -140,9 +170,18 @@ class FileController extends AbstractAdminController
      * @throws ServiceNotFoundException
      * @throws ServiceNotInstantiableException
      * @throws \ReflectionException
+     * @throws IDBException
      */
     public function delete()
     {
+        /**
+         * @var DBAuth $auth
+         */
+        $auth = container()->get('auth_admin');
+        if (!$auth->isAllow(RESOURCE_FILEMANAGER, IAuth::PERMISSION_DELETE)) {
+            show_403();
+        }
+
         // Security options
         $allow_delete = true;
 
@@ -172,9 +211,18 @@ class FileController extends AbstractAdminController
      * @throws ParameterHasNoDefaultValueException
      * @throws ServiceNotFoundException
      * @throws ServiceNotInstantiableException
+     * @throws IDBException
      */
     public function rename()
     {
+        /**
+         * @var DBAuth $auth
+         */
+        $auth = container()->get('auth_admin');
+        if (!$auth->isAllow(RESOURCE_FILEMANAGER, IAuth::PERMISSION_UPDATE)) {
+            show_403();
+        }
+
         $file = $this->getFileFromRequest();
 
         $newName = input()->post('newName', '');
@@ -243,9 +291,18 @@ class FileController extends AbstractAdminController
      * @throws ServiceNotFoundException
      * @throws ServiceNotInstantiableException
      * @throws \ReflectionException
+     * @throws IDBException
      */
     public function makeDir()
     {
+        /**
+         * @var DBAuth $auth
+         */
+        $auth = container()->get('auth_admin');
+        if (!$auth->isAllow(RESOURCE_FILEMANAGER, IAuth::PERMISSION_CREATE)) {
+            show_403();
+        }
+
         // Security options
         $allow_create_folder = true;
 
@@ -287,9 +344,18 @@ class FileController extends AbstractAdminController
      * @throws ServiceNotFoundException
      * @throws ServiceNotInstantiableException
      * @throws \ReflectionException
+     * @throws IDBException
      */
     public function moveDir()
     {
+        /**
+         * @var DBAuth $auth
+         */
+        $auth = container()->get('auth_admin');
+        if (!$auth->isAllow(RESOURCE_FILEMANAGER, IAuth::PERMISSION_UPDATE)) {
+            show_403();
+        }
+
         // Security options
         $allow_create_folder = true;
 
@@ -357,9 +423,18 @@ class FileController extends AbstractAdminController
      * @throws ServiceNotFoundException
      * @throws ServiceNotInstantiableException
      * @throws \ReflectionException
+     * @throws IDBException
      */
     public function upload()
     {
+        /**
+         * @var DBAuth $auth
+         */
+        $auth = container()->get('auth_admin');
+        if (!$auth->isAllow(RESOURCE_FILEMANAGER, IAuth::PERMISSION_CREATE)) {
+            show_403();
+        }
+
         // Security options
         $allow_upload = true;
         $disallowed_extensions = disallowed_extensions();
@@ -407,9 +482,18 @@ class FileController extends AbstractAdminController
      * @throws ServiceNotFoundException
      * @throws ServiceNotInstantiableException
      * @throws \ReflectionException
+     * @throws IDBException
      */
     public function download($file)
     {
+        /**
+         * @var DBAuth $auth
+         */
+        $auth = container()->get('auth_admin');
+        if (!$auth->isAllow(RESOURCE_FILEMANAGER, IAuth::PERMISSION_READ)) {
+            show_403();
+        }
+
         $path = get_path('upload-root', $file, false);
 
         $this->checkAccess($file);
@@ -423,9 +507,24 @@ class FileController extends AbstractAdminController
 
     /**
      * Get folders tree
+     *
+     * @throws IDBException
+     * @throws MethodNotFoundException
+     * @throws ParameterHasNoDefaultValueException
+     * @throws ServiceNotFoundException
+     * @throws ServiceNotInstantiableException
+     * @throws \ReflectionException
      */
     public function foldersTree()
     {
+        /**
+         * @var DBAuth $auth
+         */
+        $auth = container()->get('auth_admin');
+        if (!$auth->isAllow(RESOURCE_FILEMANAGER, IAuth::PERMISSION_READ)) {
+            show_403();
+        }
+
         $file = $this->getFileFromRequest();
 
         if (!$file) {

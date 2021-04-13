@@ -13,7 +13,6 @@ use Sim\Interfaces\IInvalidVariableNameException;
 class ReportController extends AbstractAdminController
 {
     /**
-     * @param $id
      * @return string
      * @throws ReflectionException
      * @throws ConfigNotRegisteredException
@@ -22,13 +21,9 @@ class ReportController extends AbstractAdminController
      * @throws IFileNotExistsException
      * @throws IInvalidVariableNameException
      */
-    public function view($id = null)
+    public function usersReport()
     {
-        if (!is_null($id)) {
-            $this->setLayout($this->main_layout)->setTemplate('view/complaints/message');
-        } else {
-            $this->setLayout($this->main_layout)->setTemplate('view/complaints/view');
-        }
+        $this->setLayout($this->main_layout)->setTemplate('view/report/user');
         return $this->render();
     }
 }

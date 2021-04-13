@@ -13,6 +13,9 @@ use App\Logic\Interfaces\IDatatableController;
 use App\Logic\Models\AddressModel;
 use App\Logic\Models\BaseModel;
 use Jenssegers\Agent\Agent;
+use Sim\Auth\DBAuth;
+use Sim\Auth\Interfaces\IAuth;
+use Sim\Auth\Interfaces\IDBException;
 use Sim\Container\Exceptions\MethodNotFoundException;
 use Sim\Container\Exceptions\ParameterHasNoDefaultValueException;
 use Sim\Container\Exceptions\ServiceNotFoundException;
@@ -28,9 +31,21 @@ class AddressController extends AbstractAdminController implements IDatatableCon
      * @throws ParameterHasNoDefaultValueException
      * @throws ServiceNotFoundException
      * @throws ServiceNotInstantiableException
+     * @throws IDBException
      */
     public function add($user_id): void
     {
+        /**
+         * @var DBAuth $auth
+         */
+        $auth = container()->get('auth_admin');
+        $currId = $auth->getCurrentUser()['id'] ?? null;
+        if (empty($currId) || $user_id != $currId) {
+            if (!$auth->isAllow(RESOURCE_USER, IAuth::PERMISSION_CREATE)) {
+                show_403();
+            }
+        }
+
         $resourceHandler = new ResourceHandler();
 
         /**
@@ -60,9 +75,21 @@ class AddressController extends AbstractAdminController implements IDatatableCon
      * @throws ServiceNotFoundException
      * @throws ServiceNotInstantiableException
      * @throws \ReflectionException
+     * @throws IDBException
      */
     public function edit($user_id, $id): void
     {
+        /**
+         * @var DBAuth $auth
+         */
+        $auth = container()->get('auth_admin');
+        $currId = $auth->getCurrentUser()['id'] ?? null;
+        if (empty($currId) || $user_id != $currId) {
+            if (!$auth->isAllow(RESOURCE_USER, IAuth::PERMISSION_UPDATE)) {
+                show_403();
+            }
+        }
+
         $resourceHandler = new ResourceHandler();
 
         /**
@@ -92,9 +119,26 @@ class AddressController extends AbstractAdminController implements IDatatableCon
      * @throws ServiceNotFoundException
      * @throws ServiceNotInstantiableException
      * @throws \ReflectionException
+     * @throws IDBException
      */
     public function remove($id): void
     {
+        /**
+         * @var DBAuth $auth
+         */
+        $auth = container()->get('auth_admin');
+        /**
+         * @var AddressModel $addressModel
+         */
+        $addressModel = container()->get(AddressModel::class);
+        $user_id = $addressModel->getFirst(['user_id'], 'id=:id', ['id' => $id])['user_id'] ?? null;
+        $currId = $auth->getCurrentUser()['id'] ?? null;
+        if (empty($currId) || $user_id != $currId) {
+            if (!$auth->isAllow(RESOURCE_USER, IAuth::PERMISSION_DELETE)) {
+                show_403();
+            }
+        }
+
         $resourceHandler = new ResourceHandler();
 
         /**
@@ -122,9 +166,21 @@ class AddressController extends AbstractAdminController implements IDatatableCon
      * @throws ServiceNotFoundException
      * @throws ServiceNotInstantiableException
      * @throws \ReflectionException
+     * @throws IDBException
      */
     public function get($user_id, $id): void
     {
+        /**
+         * @var DBAuth $auth
+         */
+        $auth = container()->get('auth_admin');
+        $currId = $auth->getCurrentUser()['id'] ?? null;
+        if (empty($currId) || $user_id != $currId) {
+            if (!$auth->isAllow(RESOURCE_USER, IAuth::PERMISSION_READ)) {
+                show_403();
+            }
+        }
+
         $resourceHandler = new ResourceHandler();
 
         /**
@@ -157,18 +213,37 @@ class AddressController extends AbstractAdminController implements IDatatableCon
     }
 
     /**
+     */
+    /**
      * {@inheritdoc}
+     * @throws IDBException
+     * @throws MethodNotFoundException
+     * @throws ParameterHasNoDefaultValueException
+     * @throws ServiceNotFoundException
+     * @throws ServiceNotInstantiableException
+     * @throws \ReflectionException
      */
     public function getPaginatedDatatable(...$_): void
     {
+        [$userId] = $_;
+
+        /**
+         * @var DBAuth $auth
+         */
+        $auth = container()->get('auth_admin');
+        $currId = $auth->getCurrentUser()['id'] ?? null;
+        if (empty($currId) || $userId != $currId) {
+            if (!$auth->isAllow(RESOURCE_USER, IAuth::PERMISSION_READ)) {
+                show_403();
+            }
+        }
+
         try {
             /**
              * @var Agent $agent
              */
             $agent = container()->get(Agent::class);
             if (!$agent->isRobot()) {
-                [$userId] = $_;
-
                 emitter()->addListener('datatable.ajax:load', function (IEvent $event, $cols, $where, $bindValues, $limit, $offset, $order) use ($userId) {
                     $event->stopPropagation();
 

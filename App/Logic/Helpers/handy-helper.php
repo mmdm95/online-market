@@ -22,6 +22,25 @@ function is_post(): bool
 }
 
 /**
+ * @return string
+ */
+function show_403()
+{
+    if (request()->isAjax()) {
+        $resourceHandler = new ResourceHandler();
+        $resourceHandler
+            ->type(RESPONSE_TYPE_ERROR)
+            ->errorMessage('دسترسی غیر مجاز');
+        response()->httpCode(403)->json($resourceHandler->getReturnData());
+    } else {
+        header_remove("Content-Type");
+        response()->httpCode(403)->header('HTTP/1.1 403 Forbidden');
+        echo 'دسترسی غیر مجاز';
+        exit(0);
+    }
+}
+
+/**
  * Not implemented response with resource
  */
 function not_implemented_yet()
@@ -40,8 +59,7 @@ function not_implemented_yet()
 function title_concat(...$_): string
 {
     $_ = array_filter($_, function ($val) {
-        if (is_scalar($val)) return true;
-        return false;
+        return is_scalar($val);
     });
     return implode(TITLE_DELIMITER, $_);
 }

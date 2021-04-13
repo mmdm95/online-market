@@ -8,13 +8,13 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 module.exports = merge(common, {
     mode: "production",
     output: {
-        filename: "[name].[contentHash].bundle.js",
+        filename: "[name].bundle.js?id=[contentHash]",
         path: path.resolve(__dirname, "../public/build/"),
     },
     plugins: [
         new MiniCssExtractPlugin({
-            filename: "[name].[contentHash].css",
-            chunkFilename: '[id].[contentHash].css'
+            filename: "[name].css?id=[contentHash]",
+            chunkFilename: '[id].css?id=[contentHash]'
         }),
         new ProvidePlugin({
             $: 'jquery',

@@ -2,8 +2,10 @@
 
 namespace App\Logic\Abstracts;
 
+use App\Logic\Models\UserModel;
 use Sim\Abstracts\Mvc\Controller\AbstractController;
 use Sim\Auth\DBAuth;
+use Sim\Auth\Interfaces\IDBException;
 use Sim\Container\Exceptions\MethodNotFoundException;
 use Sim\Container\Exceptions\ParameterHasNoDefaultValueException;
 use Sim\Container\Exceptions\ServiceNotFoundException;
@@ -29,10 +31,31 @@ abstract class AbstractAdminController extends AbstractController
      * @throws ParameterHasNoDefaultValueException
      * @throws ServiceNotFoundException
      * @throws ServiceNotInstantiableException
+     * @throws IDBException
      */
     public function __construct()
     {
         parent::__construct();
+
+        /**
+         * @var DBAuth $auth
+         */
+        $auth = container()->get('auth_admin');
+        $auth->resume()->isLoggedIn();
+
+        $id = $auth->getCurrentUser()['id'] ?? null;
+        $info = [
+            'info' => [],
+            'role' => [],
+        ];
+        if (!is_null($id)) {
+            /**
+             * @var UserModel $userModel
+             */
+            $userModel = container()->get(UserModel::class);
+            $info['info'] = $userModel->getFirst(['*'], 'id=:id', ['id' => $id]);
+            $info['role'] = $auth->getCurrentUserRole();
+        }
 
         $this->setDefaultArguments([
             'the_options' => [
@@ -42,13 +65,8 @@ abstract class AbstractAdminController extends AbstractController
                 'allow_direct_link' => true,
                 'MAX_UPLOAD_SIZE' => max_upload_size(),
             ],
+            'main_user_info' => $info,
         ]);
-
-        /**
-         * @var DBAuth $auth
-         */
-        $auth = container()->get('auth_admin');
-        $auth->resume()->isLoggedIn();
     }
 
     /**
