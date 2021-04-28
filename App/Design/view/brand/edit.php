@@ -10,7 +10,7 @@ $validator = form_validator();
         <?php load_partial('admin/card-header', ['header_title' => 'ویرایش برند']); ?>
 
         <div class="card-body">
-            <form action="<?= url('admin.brand.edit')->getRelativeUrl() . $brand['id']; ?>" method="post"
+            <form action="<?= url('admin.brand.edit')->getRelativeUrlTrimmed(); ?>" method="post"
                   id="__form_edit_brand">
                 <?php load_partial('admin/message/message-form', [
                     'errors' => $brand_edit_errors ?? [],
@@ -28,7 +28,7 @@ $validator = form_validator();
                                     انتخاب تصویر برند:
                                 </label>
                                 <?php
-                                $img = $validator->setInput('inp-edit-brand-img') ?: (url('image.show')->getRelativeUrl() . $brand['image']);
+                                $img = $validator->setInput('inp-edit-brand-img') ?: $brand['image'];
                                 ?>
                                 <div class="img-placeholder-custom __file_picker_handler __file_image mx-auto ml-lg-0 mr-lg-3 mb-0 <?= !empty($img) ? 'has-image' : ''; ?>"
                                      data-toggle="modal"

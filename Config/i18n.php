@@ -6,7 +6,7 @@ return [
     /**
      * Language directory
      */
-    'language_dir' => BASE_ROOT . 'i18n',
+    'language_dir' => BASE_ROOT . 'I18n',
 
     /**
      * Site language

@@ -123,7 +123,7 @@
             },
         },
     });
-    window.MyGlobalVariables.validation = $.extend({}, window.MyGlobalVariables.validation, {
+    window.MyGlobalVariables.validation = $.extend(true, window.MyGlobalVariables.validation, {
         constraints: {
             register: {
                 password: {
@@ -715,11 +715,11 @@
                     createLoader = false;
                     loaderId = shop.showLoader();
                 }
-                shop.request(variables.url.products.add.wishList, 'post', function () {
+                shop.request(variables.url.products.add.wishList + '/' + id, 'post', function () {
                     shop.hideLoader(loaderId);
                     var type, message;
-                    type = this.data.type;
-                    message = this.data.message;
+                    type = this.type;
+                    message = this.data;
                     if (type === variables.api.types.success) {
                         $this.addClass('active');
                     } else if (type === variables.api.types.info) {

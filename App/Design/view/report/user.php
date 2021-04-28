@@ -9,6 +9,20 @@
             با استفاده از ستون عملیات می‌توانید اقدام به حذف، ویرایش و مشاهده خرید‌های کاربر کنید.
         </div>
 
+        <div class="card-body border-bottom">
+            <div id="builder-basic" class="mb-3"></div>
+            <div class="text-right">
+                <button id="btn-filter" class="btn btn-primary mr-2">
+                    <i class="icon-filter3 mr-2" aria-hidden="true"></i>
+                    فیلتر اطلاعات
+                </button>
+                <button id="btn-reset" class="btn btn-warning">
+                    <i class="icon-trash mr-2" aria-hidden="true"></i>
+                    پاک کردن
+                </button>
+            </div>
+        </div>
+
         <table class="table table-bordered table-hover datatable-highlight">
             <thead>
             <tr>
@@ -113,5 +127,74 @@
     </div>
     <!-- /highlighting rows and columns -->
 
+    <script>
+        (function ($) {
+            'use strict';
+
+            $(function () {
+                $('#builder-basic').queryBuilder({
+                    filters: [{
+                        id: 'name',
+                        label: 'Name',
+                        type: 'string'
+                    }, {
+                        id: 'category',
+                        label: 'Category',
+                        type: 'integer',
+                        input: 'select',
+                        values: {
+                            1: 'Books',
+                            2: 'Movies',
+                            3: 'Music',
+                            4: 'Tools',
+                            5: 'Goodies',
+                            6: 'Clothes'
+                        },
+                        operators: ['equal', 'not_equal', 'in', 'not_in', 'is_null', 'is_not_null']
+                    }, {
+                        id: 'in_stock',
+                        label: 'In stock',
+                        type: 'integer',
+                        input: 'radio',
+                        values: {
+                            1: 'Yes',
+                            0: 'No'
+                        },
+                        operators: ['equal']
+                    }, {
+                        id: 'price',
+                        label: 'Price',
+                        type: 'double',
+                        validation: {
+                            min: 0,
+                            step: 0.01
+                        }
+                    }, {
+                        id: 'id',
+                        label: 'Identifier',
+                        type: 'string',
+                        placeholder: '____-____-____',
+                        operators: ['equal', 'not_equal'],
+                        validation: {
+                            format: /^.{4}-.{4}-.{4}$/
+                        }
+                    }],
+                    lang: 'fa-IR',
+                });
+
+                $('#btn-reset').on('click', function () {
+                    $('#builder-basic').queryBuilder('reset');
+                });
+
+                $('#btn-filter').on('click', function () {
+                    var result = $('#builder-basic').queryBuilder('getSQL', 'named');
+
+                    if (result.sql.length) {
+                        alert(result.sql + '\n\n' + JSON.stringify(result.params, null, 2));
+                    }
+                });
+            });
+        })(jQuery);
+    </script>
 </div>
 <!-- /content area -->

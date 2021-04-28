@@ -26,7 +26,7 @@ class NeedLoginResponseMiddleware extends AbstractMiddleware
         /**
          * @var DBAuth $auth
          */
-        $auth = container()->get('home_auth');
+        $auth = container()->get('auth_home');
 
         $resourceHandler = new ResourceHandler();
         if (!$auth->isLoggedIn()) {

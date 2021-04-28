@@ -177,7 +177,7 @@ class BrandController extends AbstractAdminController implements IDatatableContr
         $agent = container()->get(Agent::class);
         if (!$agent->isRobot()) {
             $handler = new GeneralAjaxRemoveHandler();
-            $resourceHandler = $handler->handle(BaseModel::TBL_BRANDS, $id, 'deletable', DB_YES);
+            $resourceHandler = $handler->handle(BaseModel::TBL_BRANDS, $id, 'deletable=:del', ['del' => DB_YES]);
         } else {
             response()->httpCode(403);
             $resourceHandler

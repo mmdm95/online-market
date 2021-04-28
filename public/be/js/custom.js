@@ -484,6 +484,7 @@
                 price: 'inp-add-product-price[]',
                 discountPrice: 'inp-add-product-discount-price[]',
                 discountDate: 'inp-add-product-discount-date[]',
+                considerDiscountDate: 'inp-add-product-consider-discount-date[]',
                 productAvailability: 'inp-add-product-product-availability[]',
                 gallery: 'inp-add-product-gallery-img[]',
                 desc: 'inp-add-product-desc',
@@ -517,6 +518,7 @@
                 price: 'inp-edit-product-price[]',
                 discountPrice: 'inp-edit-product-discount-price[]',
                 discountDate: 'inp-edit-product-discount-date[]',
+                considerDiscountDate: 'inp-edit-product-consider-discount-date[]',
                 productAvailability: 'inp-edit-product-product-availability[]',
                 gallery: 'inp-edit-product-gallery-img[]',
                 desc: 'inp-edit-product-desc',
@@ -627,7 +629,7 @@
             },
         },
     });
-    window.MyGlobalVariables.validation = $.extend({}, window.MyGlobalVariables.validation, {
+    window.MyGlobalVariables.validation = $.extend(true, window.MyGlobalVariables.validation, {
         constraints: {
             addAddress: {
                 province: {
@@ -854,12 +856,6 @@
                         message: '^' + 'زیر عنوان باید حداکثر ۲۵۰ کاراکتر باشد.',
                     },
                 },
-                priority: {
-                    format: {
-                        pattern: /[0-9]+/,
-                        message: '^' + 'اولویت باید از نوع عددی باشد.',
-                    },
-                },
             },
             editSlide: {
                 image: {
@@ -878,12 +874,6 @@
                     length: {
                         maximum: 250,
                         message: '^' + 'زیر عنوان باید حداکثر ۲۵۰ کاراکتر باشد.',
-                    },
-                },
-                priority: {
-                    format: {
-                        pattern: /[0-9]+/,
-                        message: '^' + 'اولویت باید از نوع عددی باشد.',
                     },
                 },
             },
@@ -993,10 +983,6 @@
                         allowEmpty: false,
                         message: '^' + 'فیلد اولویت را خالی نگذارید.',
                     },
-                    format: {
-                        pattern: /[0-9]+/,
-                        message: '^' + 'اولویت باید از نوع عددی باشد.',
-                    },
                 },
             },
             editCategory: {
@@ -1020,10 +1006,6 @@
                     presence: {
                         allowEmpty: false,
                         message: '^' + 'فیلد اولویت را خالی نگذارید.',
-                    },
-                    format: {
-                        pattern: /[0-9]+/,
-                        message: '^' + 'اولویت باید از نوع عددی باشد.',
                     },
                 },
             },
@@ -1134,19 +1116,19 @@
                         message: '^' + 'عنوان کوپن را وارد کنید.',
                     },
                     format: {
-                        pattern: /[0-9]+/,
+                        pattern: /\d+/,
                         message: '^' + 'قیمت باید از نوع عددی باشد.',
                     },
                 },
                 minPrice: {
                     format: {
-                        pattern: /[0-9]+/,
+                        pattern: /\d+/,
                         message: '^' + 'کمترین قیمت اعمال موپن قیمت باید از نوع عددی باشد.',
                     },
                 },
                 maxPrice: {
                     format: {
-                        pattern: /[0-9]+/,
+                        pattern: /\d+/,
                         message: '^' + 'بیشترین قیمت اعمال موپن قیمت باید از نوع عددی باشد.',
                     },
                 },
@@ -1156,25 +1138,25 @@
                         message: '^' + 'تعداد کوپن را وارد کنید.',
                     },
                     format: {
-                        pattern: /[0-9]+/,
+                        pattern: /\d+/,
                         message: '^' + 'تعداد باید از نوع عددی باشد.',
                     },
                 },
                 useAfter: {
                     format: {
-                        pattern: /[0-9]+/,
+                        pattern: /\d+/,
                         message: '^' + 'استفاده بعد از تعداد روز باید از نوع عددی باشد.',
                     },
                 },
                 start: {
                     format: {
-                        pattern: /[0-9]+/,
+                        pattern: /\d+/,
                         message: '^' + 'تاریخ شروع نامعتبر است.',
                     },
                 },
                 end: {
                     format: {
-                        pattern: /[0-9]+/,
+                        pattern: /\d+/,
                         message: '^' + 'تاریخ پایان نامعتبر است.',
                     },
                 },
@@ -1210,19 +1192,19 @@
                         message: '^' + 'عنوان کوپن را وارد کنید.',
                     },
                     format: {
-                        pattern: /[0-9]+/,
+                        pattern: /\d+/,
                         message: '^' + 'قیمت باید از نوع عددی باشد.',
                     },
                 },
                 minPrice: {
                     format: {
-                        pattern: /[0-9]+/,
+                        pattern: /\d+/,
                         message: '^' + 'کمترین قیمت اعمال موپن قیمت باید از نوع عددی باشد.',
                     },
                 },
                 maxPrice: {
                     format: {
-                        pattern: /[0-9]+/,
+                        pattern: /\d+/,
                         message: '^' + 'بیشترین قیمت اعمال موپن قیمت باید از نوع عددی باشد.',
                     },
                 },
@@ -1232,25 +1214,25 @@
                         message: '^' + 'تعداد کوپن را وارد کنید.',
                     },
                     format: {
-                        pattern: /[0-9]+/,
+                        pattern: /\d+/,
                         message: '^' + 'تعداد باید از نوع عددی باشد.',
                     },
                 },
                 useAfter: {
                     format: {
-                        pattern: /[0-9]+/,
+                        pattern: /\d+/,
                         message: '^' + 'استفاده بعد از تعداد روز باید از نوع عددی باشد.',
                     },
                 },
                 start: {
                     format: {
-                        pattern: /[0-9]+/,
+                        pattern: /\d+/,
                         message: '^' + 'تاریخ شروع نامعتبر است.',
                     },
                 },
                 end: {
                     format: {
-                        pattern: /[0-9]+/,
+                        pattern: /\d+/,
                         message: '^' + 'تاریخ پایان نامعتبر است.',
                     },
                 },
@@ -1384,7 +1366,7 @@
                         message: '^' + 'تاریخ شروع را انتخاب کنید.',
                     },
                     format: {
-                        pattern: /[0-9]+/,
+                        pattern: /\d+/,
                         message: '^' + 'تاریخ شروع نامعتبر است.',
                     },
                 },
@@ -1394,7 +1376,7 @@
                         message: '^' + 'تاریخ پایان را انتخاب کنید.',
                     },
                     format: {
-                        pattern: /[0-9]+/,
+                        pattern: /\d+/,
                         message: '^' + 'تاریخ پایان نامعتبر است.',
                     },
                 },
@@ -1416,7 +1398,7 @@
                         message: '^' + 'تاریخ شروع را انتخاب کنید.',
                     },
                     format: {
-                        pattern: /[0-9]+/,
+                        pattern: /\d+/,
                         message: '^' + 'تاریخ شروع نامعتبر است.',
                     },
                 },
@@ -1426,7 +1408,7 @@
                         message: '^' + 'تاریخ پایان را انتخاب کنید.',
                     },
                     format: {
-                        pattern: /[0-9]+/,
+                        pattern: /\d+/,
                         message: '^' + 'تاریخ پایان نامعتبر است.',
                     },
                 },
@@ -1776,14 +1758,12 @@
                 title: variables.validation.constraints.addSlide.title,
                 subTitle: variables.validation.constraints.addSlide.subTitle,
                 link: variables.validation.common.link,
-                priority: variables.validation.constraints.addSlide.priority,
             },
             editSlide: {
                 image: variables.validation.constraints.addSlide.image,
                 title: variables.validation.constraints.addSlide.title,
                 subTitle: variables.validation.constraints.addSlide.subTitle,
                 link: variables.validation.common.link,
-                priority: variables.validation.constraints.addSlide.priority,
             },
             addBlogCategory: {
                 name: variables.validation.constraints.addBlogCategory.name,
@@ -2168,6 +2148,11 @@
                         });
                     }
 
+                    // reInitialize
+                    table.on('draw', function () {
+                        datatableInitCompleteActions($this);
+                    });
+
                     // Highlighting rows and columns on mouseover
                     var lastIdx = null;
                     $('.datatable-highlight tbody').off('mouseover').on('mouseover', 'td', function () {
@@ -2230,6 +2215,8 @@
             status = $this.attr('data-internal-request-status');
 
             if (url && status) {
+                var data = new FormData();
+                data.append('status', status);
                 admin.toasts.confirm(null, function () {
                     admin.request(url, 'post', function () {
                         var _ = this;
@@ -2241,9 +2228,7 @@
                             });
                         }
                     }, {
-                        data: {
-                            'status': status,
-                        },
+                        data: data,
                     }, true);
                 });
             }
@@ -2260,6 +2245,7 @@
                     removableElements,
                     removableClasses,
                     dynamicIdElements,
+                    dynamicIdAltElements,
                     copy;
 
                 container = $(this).attr('data-container-element');
@@ -2279,6 +2265,10 @@
                 dynamicIdElements = $(this).attr('data-dynamic-id-elements');
                 if (dynamicIdElements && JSON.parse(dynamicIdElements)) {
                     dynamicIdElements = JSON.parse(dynamicIdElements);
+                }
+                dynamicIdAltElements = $(this).attr('data-alt-field');
+                if (dynamicIdAltElements && JSON.parse(dynamicIdAltElements)) {
+                    dynamicIdAltElements = JSON.parse(dynamicIdAltElements);
                 }
 
                 if (container && sample) {
@@ -2328,14 +2318,29 @@
                             }
                         }
 
+                        var rndId, cpyEl;
                         // make dynamic id for some elements
                         if (dynamicIdElements) {
-                            var rndId, cpyEl;
                             len = dynamicIdElements.length;
                             for (i = 0; i < len; ++i) {
                                 cpyEl = copy.find('[name="' + dynamicIdElements[i] + '"]');
                                 rndId = core.idGenerator('custom');
                                 cpyEl.attr('id', rndId);
+                            }
+                        }
+
+                        // make dynamic id for some element's alt field
+                        if (dynamicIdAltElements) {
+                            len = dynamicIdAltElements.length;
+                            var altElem;
+                            for (i = 0; i < len; ++i) {
+                                cpyEl = copy.find('[name="' + dynamicIdAltElements[i] + '"]');
+                                altElem = $(cpyEl.attr('data-alt-field'));
+                                if (altElem.length) {
+                                    rndId = core.idGenerator('custom');
+                                    cpyEl.attr('data-alt-field', rndId);
+                                    altElem.attr('id', rndId);
+                                }
                             }
                         }
 
@@ -2430,6 +2435,18 @@
 
             // uniform initialize
             if ($().uniform) {
+                $.uniform.restore(".form-check-input-styled");
+                $.uniform.restore(".form-input-styled");
+
+                // remove all of it first
+                do {
+                    $('.form-check-input-styled').unwrap('span').unwrap('div');
+                }
+                while ($('.form-check-input-styled').closest('.uniform-checker').length > 0);
+                do {
+                    $('.form-input-styled').unwrap('span').unwrap('div');
+                } while ($('.form-input-styled').closest('.uniform-checker').length > 0);
+
                 // Default initialization
                 $('.form-check-input-styled').uniform();
 
@@ -2457,6 +2474,8 @@
                         "onlyTimePicker": false,
                         "onlySelectOnDate": false,
                         "calendarType": "persian",
+                        "altFormat": 'X',
+                        "altField": $this.attr('data-alt-field') ? $this.attr('data-alt-field') : '',
                         "inputDelay": 800,
                         "observer": true,
                         "calendar": {
@@ -2484,102 +2503,6 @@
                             "enabled": true,
                             "calendarSwitch": {
                                 "enabled": true,
-                                "format": "MMMM"
-                            },
-                            "todayButton": {
-                                "enabled": true,
-                                "text": {
-                                    "fa": "امروز",
-                                    "en": "Today"
-                                }
-                            },
-                            "submitButton": {
-                                "enabled": true,
-                                "text": {
-                                    "fa": "تایید",
-                                    "en": "Submit"
-                                }
-                            },
-                            "text": {
-                                "btnToday": "امروز"
-                            }
-                        },
-                        "timePicker": {
-                            "enabled": !!$this.attr('data-time'),
-                            "step": 1,
-                            "hour": {
-                                "enabled": true,
-                                "step": null
-                            },
-                            "minute": {
-                                "enabled": true,
-                                "step": null
-                            },
-                            "second": {
-                                "enabled": true,
-                                "step": null
-                            },
-                            "meridian": {
-                                "enabled": true
-                            }
-                        },
-                        "dayPicker": {
-                            "enabled": true,
-                            "titleFormat": "YYYY MMMM"
-                        },
-                        "monthPicker": {
-                            "enabled": true,
-                            "titleFormat": "YYYY"
-                        },
-                        "yearPicker": {
-                            "enabled": true,
-                            "titleFormat": "YYYY"
-                        },
-                        "responsive": true
-                    });
-                });
-
-                $('.myDatepicker').each(function () {
-                    var $this = $(this);
-                    $this.persianDatepicker({
-                        "inline": false,
-                        "format": !!$this.attr('data-format') ? $this.attr('data-format') : 'L',
-                        "viewMode": "day",
-                        "initialValue": true,
-                        "minDate": 0,
-                        "maxDate": 0,
-                        "autoClose": false,
-                        "position": "auto",
-                        "onlyTimePicker": false,
-                        "onlySelectOnDate": false,
-                        "calendarType": "persian",
-                        "inputDelay": 800,
-                        "observer": true,
-                        "calendar": {
-                            "persian": {
-                                "locale": "fa",
-                                "showHint": true,
-                                "leapYearMode": "algorithmic"
-                            },
-                            "gregorian": {
-                                "locale": "en",
-                                "showHint": true
-                            }
-                        },
-                        "navigator": {
-                            "enabled": true,
-                            "scroll": {
-                                "enabled": true
-                            },
-                            "text": {
-                                "btnNextText": "<",
-                                "btnPrevText": ">"
-                            }
-                        },
-                        "toolbox": {
-                            "enabled": true,
-                            "calendarSwitch": {
-                                "enabled": false,
                                 "format": "MMMM"
                             },
                             "todayButton": {
@@ -3128,7 +3051,7 @@
                             return {
                                 results: data.items,
                                 pagination: {
-                                    more: (params.page * 30) < data.total_count
+                                    more: (params.page * limit) < data.total_count
                                 }
                             };
                         },
@@ -3217,6 +3140,10 @@
             id = $(btn).attr('data-change-status-id');
 
             if (url && id) {
+                var data = new FormData();
+                var v = $(btn).is(':checked') ? 1 : 0;
+                data.append('status', v);
+
                 admin.toasts.confirm(null, function () {
                     admin.request(url + id, 'post', function () {
                         var _ = this;
@@ -3228,9 +3155,7 @@
                             });
                         }
                     }, {
-                        data: {
-                            'status': $(btn).is(':checked') ? 1 : 0,
-                        },
+                        data: data,
                     }, true);
                 });
             }
@@ -3248,6 +3173,9 @@
             val = parseInt(value, 10);
 
             if (url && !isNaN(val)) {
+                var data = new FormData();
+                data.append('status', val);
+
                 admin.toasts.confirm(null, function () {
                     // $(handlebar.target),
                     admin.request(url, 'post', function () {
@@ -3260,9 +3188,7 @@
                             });
                         }
                     }, {
-                        data: {
-                            'status': val,
-                        },
+                        data: data,
                     }, true);
                 });
             }

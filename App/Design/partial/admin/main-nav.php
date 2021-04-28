@@ -5,7 +5,7 @@ $authAdmin = auth_admin();
 ?>
 
 <div class="navbar navbar-expand-md navbar-dark bg-indigo-800">
-    <div class="navbar-brand">
+    <div class="navbar-brand p-0 text-center">
         <a href="<?= url('home.index'); ?>" target="_blank" class="d-inline-block">
             <img src="<?= url('image.show') . config()->get('settings.logo_light.value'); ?>"
                  alt="<?= config()->get('settings.title.value'); ?>">

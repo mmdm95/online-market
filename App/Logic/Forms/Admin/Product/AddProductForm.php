@@ -8,6 +8,7 @@ use App\Logic\Models\CategoryModel;
 use App\Logic\Models\ColorModel;
 use App\Logic\Models\ProductModel;
 use App\Logic\Models\UnitModel;
+use App\Logic\Utils\Jdf;
 use App\Logic\Utils\ProductUtil;
 use App\Logic\Validations\ExtendedValidator;
 use Pecee\Http\Input\InputItem;
@@ -19,6 +20,7 @@ use Sim\Container\Exceptions\ServiceNotInstantiableException;
 use Sim\Exceptions\ConfigManager\ConfigNotRegisteredException;
 use Sim\Form\Exceptions\FormException;
 use Sim\Form\FormValue;
+use Sim\Form\Validations\TimestampValidation;
 use Sim\Interfaces\IFileNotExistsException;
 use Sim\Interfaces\IInvalidVariableNameException;
 use Sim\Utils\StringUtil;
@@ -49,7 +51,7 @@ class AddProductForm implements IPageForm
         // aliases
         $validator
             ->setFieldsAlias([
-                'inp-add-product-img' => 'تصویر شاخض',
+                'inp-add-product-img' => 'تصویر شاخص',
                 'inp-add-product-title' => 'عنوان',
                 'inp-add-product-simple-properties' => 'ویژگی‌های سریع',
                 'inp-add-product-keywords' => 'کلمات کلیدی',
@@ -57,7 +59,7 @@ class AddProductForm implements IPageForm
                 'inp-add-product-category' => 'دسته‌بندی',
                 'inp-add-product-unit' => 'واحد کالا',
                 'inp-add-product-stock-count.*' => 'تعداد کالا',
-                'inp-add-product-max-count.*' => 'نعداد در سبد خرید',
+                'inp-add-product-max-count.*' => 'تعداد در سبد خرید',
                 'inp-add-product-color.*' => 'رنگ',
                 'inp-add-product-size.*' => 'سایز',
                 'inp-add-product-guarantee.*' => 'گارانتی',
@@ -77,6 +79,7 @@ class AddProductForm implements IPageForm
                 'inp-add-product-price.*',
                 'inp-add-product-discount-price.*',
                 'inp-add-product-discount-date.*',
+                'inp-add-product-consider-discount-date.*',
                 'inp-add-product-product-availability.*',
                 'inp-add-product-desc',
                 'inp-add-product-alert-product',
@@ -126,7 +129,7 @@ class AddProductForm implements IPageForm
                  * @var CategoryModel $categoryModel
                  */
                 $categoryModel = container()->get(CategoryModel::class);
-                if (0 === $categoryModel->count('id=:id AND level=:lvl', ['id' => $value->getValue(), 'lvl' => MAX_CATEGORY_LEVEL])) {
+                if (0 === $categoryModel->count('id=:id', ['id' => $value->getValue()])) {
                     return false;
                 }
                 return true;
@@ -172,7 +175,7 @@ class AddProductForm implements IPageForm
             }, '{alias} ' . 'وارد شده نامعتبر است!');
 
         // check each stock count with max cart count
-        $stockCounts = input()->post('inp-add-product-stock-count.*');
+        $stockCounts = input()->post('inp-add-product-stock-count');
         if (!is_array($stockCounts)) {
             $validator
                 ->setStatus(false)
@@ -194,7 +197,7 @@ class AddProductForm implements IPageForm
                 }, '{alias} ' . 'از ' . $validator->getFieldAlias('inp-add-product-stock-count.*') . ' بیشتر است.');
         }
         // check each price with discount price
-        $prices = input()->post('inp-add-product-price.*');
+        $prices = input()->post('inp-add-product-price');
         if (!is_array($prices)) {
             $validator
                 ->setStatus(false)
@@ -233,15 +236,34 @@ class AddProductForm implements IPageForm
                 return true;
             }, '{alias} ' . 'وارد شده وجود ندارد.');
         // discount until date
-        $validator
-            ->setFields('inp-add-product-discount-date.*')
-            ->timestamp()
-            ->custom(function (FormValue $value) {
-                if (false === date(DEFAULT_TIME_FORMAT, $value->getValue())) {
-                    return false;
+        $allowedDates = input()->post('inp-add-product-consider-discount-date');
+        $counter = 0;
+        $discountDates = input()->post('inp-add-product-discount-date');
+
+        if (is_array($allowedDates) && is_array($discountDates)) {
+            /**
+             * @var InputItem $allow
+             */
+            foreach ($allowedDates as $allow) {
+                if (!is_value_checked($allow->getValue()) && isset($discountDates[$counter])) {
+                    $timestampRule = new TimestampValidation();
+                    if (!$timestampRule->validate($discountDates[$counter]->getValue()) ||
+                        (
+                            '' !== $discountDates[$counter]->getValue() &&
+                            false === date(DEFAULT_TIME_FORMAT, $discountDates[$counter]->getValue())
+                        )
+                    ) {
+                        $validator
+                            ->setStatus(false)
+                            ->setError(
+                            'inp-add-product-discount-date.*',
+                            $validator->getFieldAlias('inp-add-product-discount-date.*') . ' ' . 'یک زمان وارد شده نامعتبر است.'
+                        );
+                    }
                 }
-                return true;
-            }, '{alias} ' . 'یک زمان وارد شده نامعتبر است.');
+                ++$counter;
+            }
+        }
         // properties
         $properties = input()->post('inp-item-product-properties');
         $subProperties = input()->post('inp-item-product-sub-properties');
@@ -370,7 +392,7 @@ class AddProductForm implements IPageForm
                 'allow_commenting' => is_value_checked($commenting) ? DB_YES : DB_NO,
                 'created_by' => $auth->getCurrentUser()['id'] ?? null,
                 'created_at' => time(),
-            ], $gallery, $products, $relatedProducts ?: []);
+            ], $gallery, $products, $relatedProducts->getValue() ?: []);
         } catch (\Exception $e) {
             return false;
         }

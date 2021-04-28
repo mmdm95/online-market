@@ -102,7 +102,31 @@ class ProductController extends AbstractAdminController implements IDatatableCon
             return $this->show404();
         }
 
-        $product = $productModel->getSingleProduct('p.id=:id', ['id' => $id]);
+        $product = $productModel->getSingleProduct('p.id=:id', ['id' => $id], [
+            'p.id',
+            'p.slug',
+            'p.title',
+            'p.image',
+            'p.category_id',
+            'p.keywords',
+            'p.is_available',
+            'p.is_special',
+            'p.unit_title',
+            'p.unit_sign',
+            'p.body',
+            'p.properties',
+            'p.baby_property',
+            'p.brand_id',
+            'p.allow_commenting',
+            'p.min_product_alert',
+            'p.publish',
+            'p.is_returnable',
+            'b.name AS brand_name',
+            'b.slug AS brand_slug',
+            'b.keywords AS brand_keywords',
+            'c.name AS category_name',
+            'c.keywords AS category_keywords',
+        ]);
         $related = $productModel->getRelatedProductsWithInfo($id, ['title', 'image', 'brand_name', 'category_name']);
         $gallery = $productModel->getImageGallery($id);
         $productProperty = $productModel->getProductProperty($id);
@@ -166,10 +190,10 @@ class ProductController extends AbstractAdminController implements IDatatableCon
 
         $this->setLayout($this->main_layout)->setTemplate('view/product/add');
         return $this->render(array_merge($data, [
-            'colors' => $colorModel->get(['hex', 'name'], 'publish=:pub', ['pub' => DB_YES]),
+            'colors' => $colorModel->get(['hex', 'name']),
             'units' => $unitModel->get(['id', 'title', 'sign']),
             'brands' => $brandModel->get(['id', 'name'], 'publish=:pub', ['pub' => DB_YES]),
-            'categories' => $categoryModel->get(['id', 'name'], 'publish=:pub AND level=:lvl', ['pub' => DB_YES, 'lvl' => MAX_CATEGORY_LEVEL]),
+            'categories' => $categoryModel->get(['id', 'name'], 'publish=:pub', ['pub' => DB_YES]),
         ]));
     }
 
@@ -220,6 +244,8 @@ class ProductController extends AbstractAdminController implements IDatatableCon
         }
 
         $product = $productModel->getFirst(['*'], 'id=:id', ['id' => $id]);
+
+        $productProperties = $productModel->getProductProperty($id);
         $related = $productModel->getRelatedProductsWithInfo($id);
         $gallery = $productModel->getImageGallery($id);
 
@@ -241,14 +267,16 @@ class ProductController extends AbstractAdminController implements IDatatableCon
         $unitModel = container()->get(UnitModel::class);
 
         $this->setLayout($this->main_layout)->setTemplate('view/product/edit');
+
         return $this->render(array_merge($data, [
             'product' => $product,
+            'product_properties' => $productProperties,
             'related' => $related,
             'gallery' => $gallery,
-            'colors' => $colorModel->get(['hex', 'name'], 'publish=:pub', ['pub' => DB_YES]),
+            'colors' => $colorModel->get(['hex', 'name']),
             'units' => $unitModel->get(['id', 'title', 'sign']),
             'brands' => $brandModel->get(['id', 'name'], 'publish=:pub', ['pub' => DB_YES]),
-            'categories' => $categoryModel->get(['id', 'name'], 'publish=:pub AND level=:lvl', ['pub' => DB_YES, 'lvl' => MAX_CATEGORY_LEVEL]),
+            'categories' => $categoryModel->get(['id', 'name'], 'publish=:pub', ['pub' => DB_YES]),
         ]));
     }
 

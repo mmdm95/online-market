@@ -106,14 +106,12 @@ class SettingPageIndexForm implements IPageForm
              * @var InputItem $image
              */
             foreach ($itemImages as $image) {
-                if (is_image_exists($image->getValue())) {
-                    $assembled[$counter]['image'] = $image->getValue();
-                    $assembled[$counter]['link'] = $itemLinks[$counter]->getValue();
-                }
+                $assembled[$counter]['image'] = $image->getValue();
+                $assembled[$counter]['link'] = $itemLinks[$counter]->getValue();
+                ++$counter;
             }
             session()->setFlash('assembled_3_images_items', $assembled);
         }
-
 
         // to reset form values and not set them again
         if ($validator->getStatus()) {

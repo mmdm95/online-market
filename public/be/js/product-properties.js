@@ -7,8 +7,8 @@
             propertiesContainer = $('.__all_properties_container'),
             subPropertiesContainer = $('.__all_sub_property_container'),
             //-----
-            propertySample = propertiesContainer.find('.__sample_product_property'),
-            subPropertySample = subPropertiesContainer.find('.__sample_sub_product_property'),
+            propertySample = propertiesContainer.find('.__sample_product_property').first(),
+            subPropertySample = subPropertiesContainer.find('.__sample_sub_product_property').first(),
             //-----
             inputNameStart = 'inp-item-product-properties[',
             subInputNameStart = 'inp-item-product-sub-properties[',

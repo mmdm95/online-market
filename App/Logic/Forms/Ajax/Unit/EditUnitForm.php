@@ -127,7 +127,7 @@ class EditUnitForm implements IPageForm
 
             $res = $unitModel->update([
                 'title' => $xss->xss_clean(trim($title)),
-                'sign' => $xss->xss_clean($sign),
+                'sign' => $xss->xss_clean(trim($sign)) ?: null,
                 'updated_at' => time(),
                 'updated_by' => $auth->getCurrentUser()['id'] ?? null,
             ], 'id=:id', ['id' => $id]);

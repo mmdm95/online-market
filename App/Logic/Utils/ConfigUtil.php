@@ -32,7 +32,7 @@ class ConfigUtil
         $config = ArrayUtil::arrayGroupBy('setting_name', $config, ['setting_name'], true);
         $config = array_map(function ($value) {
             $arr = $value[0];
-            $arr['value'] = !empty(trim($arr['setting_value'])) ? $arr['setting_value'] : $arr['default_value'];
+            $arr['value'] = '' !== trim((string)$arr['setting_value']) ? $arr['setting_value'] : $arr['default_value'];
 
             // decode setting if it is encoded json
             $decoded = json_decode($arr['value'], true);

@@ -1,6 +1,7 @@
 <?php
 
 use App\Logic\Models\ProductModel;
+use Pecee\Http\Input\InputItem;
 
 $validator = form_validator();
 
@@ -42,7 +43,8 @@ $validator = form_validator();
                                             <input type="hidden" name="inp-add-product-img"
                                                    value="<?= $img; ?>">
                                             <?php if (!empty($img)): ?>
-                                                <img class="img-placeholder-image" src="<?= $img; ?>"
+                                                <img class="img-placeholder-image"
+                                                     src="<?= url('image.show') . $img; ?>"
                                                      alt="selected image">
                                             <?php endif; ?>
                                             <div class="img-placeholder-icon-container">
@@ -171,7 +173,8 @@ $validator = form_validator();
                         <button type="button" class="btn btn-primary flat-icon __duplicator_btn"
                                 data-container-element=".__all_products_container"
                                 data-sample-element="#__sample_all_product"
-                                data-clearable-elements='["inp-add-product-stock-count[]","inp-add-product-max-count[]","inp-add-product-color[]","inp-add-product-size[]","inp-add-product-weight[]","inp-add-product-guarantee[]","inp-add-product-price[]","inp-add-product-discount-price[]","inp-add-product-discount-date[]","inp-add-product-product-availability[]"]'
+                                data-clearable-elements='["inp-add-product-stock-count[]","inp-add-product-max-count[]","inp-add-product-color[]","inp-add-product-size[]","inp-add-product-weight[]","inp-add-product-guarantee[]","inp-add-product-price[]","inp-add-product-discount-price[]","inp-add-product-discount-date[]","inp-add-product-product-availability[]","inp-add-product-consider-discount-date[]"]'
+                                data-alt-field='["inp-add-product-discount-date-tmp[]"]'
                                 data-add-remove="true">
                             افزودن محصول جدید
                             <i class="icon-plus2 ml-2" aria-hidden="true"></i>
@@ -250,12 +253,29 @@ $validator = form_validator();
                                         </div>
                                         <div class="mt-3 col-lg-4">
                                             <label>تخفیف تا تاریخ:</label>
+                                            <?php
+                                            $sd = $validator->setInput('inp-add-product-discount-date.' . $counter, time());
+                                            ?>
+                                            <input type="hidden" name="inp-add-product-discount-date[]"
+                                                   id="altDate<?= $counter; ?>" value="<?= $sd; ?>">
                                             <input type="text" class="form-control myDatepickerWithEn"
                                                    placeholder="انتخاب تاریخ" readonly data-ignored
-                                                   name="inp-add-product-discount-date[]"
+                                                   name="inp-add-product-discount-date-tmp[]"
+                                                   data-alt-field="#altDate<?= $counter; ?>"
                                                    data-format="YYYY/MM/DD HH:mm"
                                                    data-time="true"
-                                                   value="<?= $validator->setInput('inp-add-product-discount-date.' . $counter, time()) ?>">
+                                                   value="<?= $sd ?>">
+                                        </div>
+                                        <div class="mt-3 col alert-warning d-flex align-items-center rounded">
+                                            <div class="form-check">
+                                                <label class="form-check-label">
+                                                    <input type="checkbox"
+                                                           name="inp-add-product-consider-discount-date[]"
+                                                           value="<?= $validator->setCheckbox('inp-add-product-consider-discount-date', '') ?>"
+                                                           class="styled form-input-styled">
+                                                    عدم درنظرگیری تاریخ تخفیف
+                                                </label>
+                                            </div>
                                         </div>
                                         <div class="mt-3 col">
                                             <div class="form-check form-check-switchery form-check-switchery-double mt-4 text-right">
@@ -332,12 +352,25 @@ $validator = form_validator();
                                     </div>
                                     <div class="mt-3 col-lg-4">
                                         <label>تخفیف تا تاریخ:</label>
+                                        <input type="hidden" name="inp-add-product-discount-date[]"
+                                               id="altDateField" value="<?= time(); ?>">
                                         <input type="text" class="form-control myDatepickerWithEn"
                                                placeholder="انتخاب تاریخ" readonly data-ignored
-                                               name="inp-add-product-discount-date[]"
+                                               name="inp-add-product-discount-date-tmp[]"
                                                data-format="YYYY/MM/DD HH:mm"
+                                               data-alt-field="#altDateField"
                                                data-time="true"
                                                value="<?= time() ?>">
+                                    </div>
+                                    <div class="mt-3 col alert-warning d-flex align-items-center rounded">
+                                        <div class="form-check">
+                                            <label class="form-check-label">
+                                                <input type="checkbox"
+                                                       name="inp-add-product-consider-discount-date[]"
+                                                       class="styled form-input-styled">
+                                                عدم درنظرگیری تاریخ تخفیف
+                                            </label>
+                                        </div>
                                     </div>
                                     <div class="mt-3 col">
                                         <div class="form-check form-check-switchery form-check-switchery-double mt-4 text-right">
@@ -538,17 +571,23 @@ $validator = form_validator();
                                     <?php
                                     $images = input()->post('inp-add-product-gallery-img');
                                     ?>
-                                    <?php if (is_array($stockCounts) && count($stockCounts)): ?>
+                                    <?php if (is_array($images) && count($images)): ?>
                                         <?php $counter = 0; ?>
-                                        <?php foreach ($images as $img): ?>
-                                            <div class="img-placeholder-custom __file_picker_handler __file_image <?= !empty($img) ? 'has-image' : ''; ?>"
+                                        <?php
+                                        /**
+                                         * @var InputItem $img
+                                         */
+                                        foreach ($images as $img):
+                                            ?>
+                                            <div class="img-placeholder-custom __file_picker_handler __file_image <?= !empty($img->getValue()) ? 'has-image' : ''; ?>"
                                                  data-toggle="modal"
                                                  data-target="#modal_efm"
                                                 <?= 0 === $counter ? 'id="__sample_gallery_image"' : ''; ?>>
                                                 <input type="hidden" name="inp-add-product-gallery-img[]"
-                                                       value="<?= $img; ?>">
-                                                <?php if (!empty($img)): ?>
-                                                    <img class="img-placeholder-image" src="<?= $img; ?>"
+                                                       value="<?= $img->getValue(); ?>">
+                                                <?php if (!empty($img->getValue())): ?>
+                                                    <img class="img-placeholder-image"
+                                                         src="<?= url('image.show') . $img->getValue(); ?>"
                                                          alt="selected image">
                                                 <?php endif; ?>
                                                 <div class="img-placeholder-icon-container">
@@ -559,8 +598,8 @@ $validator = form_validator();
                                                 </div>
                                             </div>
                                             <?php if (0 !== $counter++): ?>
-                                                <?php load_partial('admin/parser/dynamic-remover-btn'); ?>
-                                            <?php endif; ?>
+                                            <?php load_partial('admin/parser/dynamic-remover-btn'); ?>
+                                        <?php endif; ?>
                                         <?php endforeach; ?>
                                     <?php else: ?>
                                         <div class="img-placeholder-custom __file_picker_handler __file_image"
@@ -619,7 +658,7 @@ $validator = form_validator();
             <!-- Product properties -->
             <div class="col-lg-12">
                 <div class="card card-collapsed">
-                    <?php load_partial('admin/card-header', ['header_title' => "<span class='text-danger mr-1'>*</span>" . 'ویژگی‌های محصول']); ?>
+                    <?php load_partial('admin/card-header', ['header_title' => 'ویژگی‌های محصول']); ?>
 
                     <div class="card-body">
                         مواردی که
@@ -637,6 +676,7 @@ $validator = form_validator();
 
                         <div class="__all_properties_container">
                             <?php if (!$validator->getStatus()): ?>
+                                <?php $counter = 0; ?>
                                 <?php foreach ($properties as $k => $main): ?>
                                     <div class="border-success border-2 border-dashed rounded p-2 mb-3 position-relative __product_properties __sample_product_property">
                                         <div class="row m-0">
@@ -654,6 +694,7 @@ $validator = form_validator();
 
                                         <div class="__all_sub_property_container">
                                             <?php if (($subProperties[$k] ?? [])): ?>
+                                                <?php $counter2 = 0; ?>
                                                 <?php foreach (($subProperties[$k]) as $k2 => $sub): ?>
                                                     <div class="row m-0 position-relative border-warning border-2 border-dashed rounded p-2 my-3 __sub_product_properties __sample_sub_product_property">
                                                         <div class="col-lg-4 form-group">
@@ -676,6 +717,9 @@ $validator = form_validator();
                                                                    name="inp-item-product-sub-properties[<?= $k; ?>][<?= $k2; ?>][sub-properties]"
                                                                    value="<?= $sub['sub-properties']->getValue(); ?>">
                                                         </div>
+                                                        <?php if (0 != $counter2++): ?>
+                                                            <?php load_partial('admin/parser/dynamic-remover-btn'); ?>
+                                                        <?php endif; ?>
                                                     </div>
                                                 <?php endforeach; ?>
                                             <?php else: ?>
@@ -711,6 +755,9 @@ $validator = form_validator();
                                                 </button>
                                             </div>
                                         </div>
+                                        <?php if (0 != $counter++): ?>
+                                            <?php load_partial('admin/parser/dynamic-remover-btn'); ?>
+                                        <?php endif; ?>
                                     </div>
                                 <?php endforeach; ?>
                             <?php else: ?>

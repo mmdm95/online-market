@@ -81,7 +81,7 @@
                     </li>
                     <li class="nav-item">
                         <a href="<?= url('admin.setting.other')->getRelativeUrl(); ?>"
-                           class="nav-link">
+                           class="nav-link <?= url()->contains(url('admin.setting.other')->getRelativeUrlTrimmed()) ? 'active' : ''; ?>">
                             <i class="icon-menu"></i>
                             سایر
                         </a>

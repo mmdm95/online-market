@@ -28,20 +28,20 @@ class CategoryImageModel extends BaseModel
         array $bind_values = [],
         ?int $limit = null,
         int $offset = 0,
-        array $order_by = ['ci.id DESC']
+        array $order_by = ['c.id DESC']
     ): array
     {
         $select = $this->connector->select();
         $select
-            ->from($this->table . ' AS ci')
+            ->from(self::TBL_CATEGORIES . ' AS c')
             ->cols($columns)
             ->offset($offset)
             ->orderBy($order_by);
 
         try {
             $select
-                ->innerJoin(
-                    self::TBL_CATEGORIES . ' AS c',
+                ->leftJoin(
+                    $this->table . ' AS ci',
                     'ci.category_id=c.id'
                 );
         } catch (AuraException $e) {
@@ -70,7 +70,7 @@ class CategoryImageModel extends BaseModel
      */
     public function getCategoryImagesCount(?string $where = null, array $bind_values = []): int
     {
-        $res = $this->getCategoryImages(['COUNT(DISTINCT(ci.id)) AS count'], $where, $bind_values);
+        $res = $this->getCategoryImages(['COUNT(DISTINCT(c.id)) AS count'], $where, $bind_values);
         if (count($res)) {
             return (int)$res[0]['count'];
         }

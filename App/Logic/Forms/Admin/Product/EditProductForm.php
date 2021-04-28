@@ -20,6 +20,7 @@ use Sim\Container\Exceptions\ServiceNotInstantiableException;
 use Sim\Exceptions\ConfigManager\ConfigNotRegisteredException;
 use Sim\Form\Exceptions\FormException;
 use Sim\Form\FormValue;
+use Sim\Form\Validations\TimestampValidation;
 use Sim\Interfaces\IFileNotExistsException;
 use Sim\Interfaces\IInvalidVariableNameException;
 use Sim\Utils\StringUtil;
@@ -50,7 +51,7 @@ class EditProductForm implements IPageForm
         // aliases
         $validator
             ->setFieldsAlias([
-                'inp-edit-product-img' => 'تصویر شاخض',
+                'inp-edit-product-img' => 'تصویر شاخص',
                 'inp-edit-product-title' => 'عنوان',
                 'inp-edit-product-simple-properties' => 'ویژگی‌های سریع',
                 'inp-edit-product-keywords' => 'کلمات کلیدی',
@@ -58,7 +59,7 @@ class EditProductForm implements IPageForm
                 'inp-edit-product-category' => 'دسته‌بندی',
                 'inp-edit-product-unit' => 'واحد کالا',
                 'inp-edit-product-stock-count.*' => 'تعداد کالا',
-                'inp-edit-product-max-count.*' => 'نعداد در سبد خرید',
+                'inp-edit-product-max-count.*' => 'تعداد در سبد خرید',
                 'inp-edit-product-color.*' => 'رنگ',
                 'inp-edit-product-size.*' => 'سایز',
                 'inp-edit-product-guarantee.*' => 'گارانتی',
@@ -73,11 +74,14 @@ class EditProductForm implements IPageForm
                 'inp-edit-product-related.*' => 'محصولات مرتبط',
             ])
             ->setOptionalFields([
+                'inp-edit-product-unit',
                 'inp-edit-product-size.*',
+                'inp-edit-product-color.*',
                 'inp-edit-product-guarantee.*',
                 'inp-edit-product-price.*',
                 'inp-edit-product-discount-price.*',
                 'inp-edit-product-discount-date.*',
+                'inp-edit-product-consider-discount-date.*',
                 'inp-edit-product-product-availability.*',
                 'inp-edit-product-desc',
                 'inp-edit-product-alert-product',
@@ -131,7 +135,7 @@ class EditProductForm implements IPageForm
                  * @var CategoryModel $categoryModel
                  */
                 $categoryModel = container()->get(CategoryModel::class);
-                if (0 === $categoryModel->count('id=:id AND level=:lvl', ['id' => $value->getValue(), 'lvl' => MAX_CATEGORY_LEVEL])) {
+                if (0 === $categoryModel->count('id=:id', ['id' => $value->getValue()])) {
                     return false;
                 }
                 return true;
@@ -144,7 +148,7 @@ class EditProductForm implements IPageForm
                  * @var UnitModel $unitModel
                  */
                 $unitModel = container()->get(UnitModel::class);
-                if (0 === $unitModel->count('id=:id', ['id' => $value->getValue()])) {
+                if (trim($value->getValue()) != DEFAULT_OPTION_VALUE && 0 === $unitModel->count('id=:id', ['id' => $value->getValue()])) {
                     return false;
                 }
                 return true;
@@ -177,7 +181,7 @@ class EditProductForm implements IPageForm
             }, '{alias} ' . 'وارد شده نامعتبر است!');
 
         // check each stock count with max cart count
-        $stockCounts = input()->post('inp-edit-product-stock-count.*');
+        $stockCounts = input()->post('inp-edit-product-stock-count');
         if (!is_array($stockCounts)) {
             $validator
                 ->setStatus(false)
@@ -185,7 +189,7 @@ class EditProductForm implements IPageForm
         } else {
             $i = 0;
             $validator
-                ->setFields('inp-edit-product-max-count.*')
+                ->setFields('inp-edit-product-max-count')
                 ->custom(function (FormValue $value) use ($stockCounts, &$i) {
                     /**
                      * @var InputItem $currStock
@@ -199,7 +203,7 @@ class EditProductForm implements IPageForm
                 }, '{alias} ' . 'از ' . $validator->getFieldAlias('inp-edit-product-stock-count.*') . ' بیشتر است.');
         }
         // check each price with discount price
-        $prices = input()->post('inp-edit-product-price.*');
+        $prices = input()->post('inp-edit-product-price');
         if (!is_array($prices)) {
             $validator
                 ->setStatus(false)
@@ -232,21 +236,39 @@ class EditProductForm implements IPageForm
                  */
                 $colorModel = container()->get(ColorModel::class);
 
-                if (0 === $colorModel->count('hex=:hex', ['hex' => $value->getValue()])) {
+                if (trim($value->getValue()) != DEFAULT_OPTION_VALUE && 0 === $colorModel->count('hex=:hex', ['hex' => $value->getValue()])) {
                     return false;
                 }
                 return true;
             }, '{alias} ' . 'وارد شده وجود ندارد.');
         // discount until date
-        $validator
-            ->setFields('inp-edit-product-discount-date.*')
-            ->timestamp()
-            ->custom(function (FormValue $value) {
-                if (false === date(DEFAULT_TIME_FORMAT, $value->getValue())) {
-                    return false;
+        $allowedDates = input()->post('inp-edit-product-consider-discount-date');
+        $counter = 0;
+        $discountDates = input()->post('inp-edit-product-discount-date');
+        if (is_array($allowedDates) && is_array($discountDates)) {
+            /**
+             * @var InputItem $allow
+             */
+            foreach ($allowedDates as $allow) {
+                if (is_value_checked($allow->getValue()) && isset($discountDates[$counter])) {
+                    $timestampRule = new TimestampValidation();
+                    if (!$timestampRule->validate($discountDates[$counter]->getValue()) ||
+                        (
+                            '' !== $discountDates[$counter]->getValue() &&
+                            false === date(DEFAULT_TIME_FORMAT, $discountDates[$counter]->getValue())
+                        )
+                    ) {
+                        $validator
+                            ->setStatus(false)
+                            ->setError(
+                                'inp-edit-product-discount-date.*',
+                                $validator->getFieldAlias('inp-edit-product-discount-date.*') . ' ' . 'یک زمان وارد شده نامعتبر است.'
+                            );
+                    }
                 }
-                return true;
-            }, '{alias} ' . 'یک زمان وارد شده نامعتبر است.');
+                ++$counter;
+            }
+        }
         // properties
         $properties = input()->post('inp-item-product-properties');
         $subProperties = input()->post('inp-item-product-sub-properties');
@@ -265,7 +287,7 @@ class EditProductForm implements IPageForm
             $productUtil = container()->get(ProductUtil::class);
 
             // create gallery object
-            $gallery = $productUtil->createGalleryArray();
+            $gallery = $productUtil->createGalleryArray(true);
             if (!count($gallery)) {
                 $validator
                     ->setStatus(false)
@@ -275,7 +297,7 @@ class EditProductForm implements IPageForm
             }
 
             // create products object
-            $productObj = $productUtil->createProductObject();
+            $productObj = $productUtil->createProductObject(true);
             if (!count($productObj)) {
                 $validator
                     ->setStatus(false)
@@ -288,7 +310,9 @@ class EditProductForm implements IPageForm
         $id = session()->getFlash('product-curr-id', null, false);
         if (!empty($id)) {
             if (0 === $productModel->count('id=:id', ['id' => $id])) {
-                $validator->setError('inp-edit-product-title', 'شناسه محصول نامعتبر است.');
+                $validator
+                    ->setStatus(false)
+                    ->setError('inp-edit-product-title', 'شناسه محصول نامعتبر است.');
             }
         } else {
             $validator
@@ -358,15 +382,11 @@ class EditProductForm implements IPageForm
             // this is gallery
             $gallery = session()->getFlash('image-gallery-object-edit');
 
-            // get unit title and sign
-            $unit = input()->post('inp-edit-product-unit', '')->getValue();
-            $unitInfo = $unitModel->getFirst(['title', 'sign'], 'id=:id', ['id' => $unit]);
-
             $theProperties = json_encode(session()->getFlash('product-properties-in-edit-assembled') ?: []);
             if (is_null($theProperties)) return false;
 
-            // insert all products and main product information
-            return $productModel->updateProduct($id, [
+            //
+            $updateArr = [
                 'title' => $xss->xss_clean(trim($title)),
                 'fa_title' => $xss->xss_clean(StringUtil::toPersian(trim($title))),
                 'slug' => $xss->xss_clean(StringUtil::slugify(trim($title))),
@@ -376,8 +396,6 @@ class EditProductForm implements IPageForm
                 'body' => $xss->xss_clean($desc) ?: null,
                 'properties' => $xss->xss_clean($theProperties) ?: null,
                 'baby_property' => $xss->xss_clean($simpleProp) ?: null,
-                'unit_title' => $unitInfo['title'],
-                'unit_sign' => $unitInfo['sign'],
                 'keywords' => $xss->xss_clean($keywords) ?: null,
                 'min_product_alert' => $xss->xss_clean($alertProduct) ?: null,
                 'publish' => is_value_checked($pub) ? DB_YES : DB_NO,
@@ -387,7 +405,25 @@ class EditProductForm implements IPageForm
                 'allow_commenting' => is_value_checked($commenting) ? DB_YES : DB_NO,
                 'created_by' => $auth->getCurrentUser()['id'] ?? null,
                 'created_at' => time(),
-            ], $gallery, $products, $relatedProducts ?: []);
+            ];
+
+            // get unit title and sign
+            $unit = input()->post('inp-edit-product-unit', '')->getValue();
+            $unitInfo = $unitModel->getFirst(['title', 'sign'], 'id=:id', ['id' => $unit]);
+
+            if (count($unitInfo)) {
+                $updateArr['unit_title'] = $unitInfo['title'];
+                $updateArr['unit_sign'] = $unitInfo['sign'];
+            }
+
+            // insert all products and main product information
+            return $productModel->updateProduct(
+                $id,
+                $updateArr,
+                $gallery,
+                $products,
+                $relatedProducts->getValue() ?: []
+            );
         } catch (\Exception $e) {
             return false;
         }

@@ -51,7 +51,7 @@ class ProductController extends AbstractHomeController
             $select = $model->select();
             $select
                 ->from(BaseModel::TBL_CATEGORIES)
-                ->cols(['id', 'name', ''])
+                ->cols(['id', 'name'])
                 ->where('publish=:pub')
                 ->bindValues([
                     'pub' => DB_YES,
@@ -153,17 +153,23 @@ class ProductController extends AbstractHomeController
          */
         $productModel = container()->get(ProductModel::class);
 
-        $product = $productModel->getSingleProduct(
-            'p.id=:p_id AND p.publish=:pub AND p.is_deleted<>:del',
+        $product = $productModel->getLimitedProduct(
+            'pa.product_id=:p_id AND pa.publish=:pub AND pa.is_deleted<>:del',
             [
                 'p_id' => (int)$id,
                 'pub' => DB_YES,
                 'del' => DB_YES,
-            ]
+            ],
+            ['pa.product_id DESC'],
+            null,
+            0,
+            [],
+            ['*']
         );
         if (!count($product)) {
             return $this->show404();
         }
+        $product = $product[0];
 
         /**
          * @var Model $model
@@ -177,7 +183,7 @@ class ProductController extends AbstractHomeController
             ->cols(['image'])
             ->where('product_id=:pId')
             ->bindValues([
-                'pId' => $product['id'],
+                'pId' => $product['product_id'],
             ]);
         $gallery = $model->get($select);
 
@@ -187,7 +193,7 @@ class ProductController extends AbstractHomeController
             ->from(BaseModel::TBL_PRODUCT_PROPERTY)
             ->cols(['code', 'color_hex', 'color_name', 'size'])
             ->where('product_id=:p_id')
-            ->bindValue('p_id', $product['id']);
+            ->bindValue('p_id', $product['product_id']);
         $colorsNSizes = $model->get($select);
 
         if (!count($colorsNSizes)) {
@@ -197,12 +203,12 @@ class ProductController extends AbstractHomeController
         /**
          * @var DBAuth $auth
          */
-        $auth = container()->get('home_auth');
+        $auth = container()->get('auth_home');
 
         // is bookmarked
         $isWishListed = false;
         if ($auth->isLoggedIn()) {
-            $isWishListed = $productModel->isUserFavoriteProduct($auth->getCurrentUser()['id'] ?? 0, $product['id']);
+            $isWishListed = $productModel->isUserFavoriteProduct($auth->getCurrentUser()['id'] ?? 0, $product['product_id']);
         }
 
         /**
@@ -211,16 +217,16 @@ class ProductController extends AbstractHomeController
         $productUtil = container()->get(ProductUtil::class);
 
         // get related products
-        $related_products = $productUtil->getRelatedProducts($product['id']);
+        $related_products = $productUtil->getRelatedProducts($product['product_id']);
 
         // get comments count
         $select = $model->select();
         $select
             ->from(BaseModel::TBL_COMMENTS)
             ->cols(['COUNT(*) AS count'])
-            ->where('product_id=:p_id AND condition=:condition')
+            ->where('product_id=:p_id AND the_condition=:condition')
             ->bindValues([
-                'p_id' => $product['id'],
+                'p_id' => $product['product_id'],
                 'condition' => COMMENT_CONDITION_ACCEPT,
             ]);
         $commentsCount = $model->get($select);
@@ -370,7 +376,7 @@ class ProductController extends AbstractHomeController
                 /**
                  * @var DBAuth $auth
                  */
-                $auth = container()->get('home_auth');
+                $auth = container()->get('auth_home');
                 /**
                  * @var ProductModel $productModel
                  */
@@ -413,7 +419,7 @@ class ProductController extends AbstractHomeController
                 /**
                  * @var DBAuth $auth
                  */
-                $auth = container()->get('home_auth');
+                $auth = container()->get('auth_home');
                 /**
                  * @var ProductModel $productModel
                  */

@@ -4,8 +4,8 @@
 namespace App\Logic\Controllers\Admin;
 
 use App\Logic\Abstracts\AbstractAdminController;
-use App\Logic\Forms\Admin\Blog\AddCategoryForm;
-use App\Logic\Forms\Admin\Blog\EditCategoryForm;
+use App\Logic\Forms\Admin\Category\AddCategoryForm;
+use App\Logic\Forms\Admin\Category\EditCategoryForm;
 use App\Logic\Handlers\DatatableHandler;
 use App\Logic\Handlers\GeneralAjaxRemoveHandler;
 use App\Logic\Handlers\GeneralAjaxStatusHandler;
@@ -284,7 +284,7 @@ class CategoryController extends AbstractAdminController implements IDatatableCo
                      */
                     $categoryModel = container()->get(CategoryModel::class);
 
-                    $cols[] = 'deletable';
+                    $cols[] = 'c.deletable';
 
                     $data = $categoryModel->getCategories($cols, $where, $bindValues, $limit, $offset, $order);
                     //-----
@@ -297,7 +297,17 @@ class CategoryController extends AbstractAdminController implements IDatatableCo
                 $columns = [
                     ['db' => 'c.id', 'db_alias' => 'id', 'dt' => 'id'],
                     ['db' => 'c.name', 'db_alias' => 'name', 'dt' => 'name'],
-                    ['db' => 'cc.name', 'db_alias' => 'parent_name', 'dt' => 'parent_name'],
+                    [
+                        'db' => 'cc.name',
+                        'db_alias' => 'parent_name',
+                        'dt' => 'parent_name',
+                        'formatter' => function ($d) {
+                            if (empty($d)) {
+                                return $this->setTemplate('partial/admin/parser/dash-icon')->render();
+                            }
+                            return $d;
+                        }
+                    ],
                     ['db' => 'c.priority', 'db_alias' => 'priority', 'dt' => 'priority'],
                     [
                         'db' => 'c.publish',

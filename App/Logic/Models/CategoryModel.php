@@ -43,7 +43,7 @@ class CategoryModel extends BaseModel
 
         try {
             $select
-                ->innerJoin(
+                ->leftJoin(
                     self::TBL_CATEGORIES . ' AS cc',
                     'c.parent_id=cc.id'
                 );
@@ -73,7 +73,7 @@ class CategoryModel extends BaseModel
      */
     public function getCategoriesCount(?string $where = null, array $bind_values = []): int
     {
-        $res = $this->getCategories(['COUNT(DISTINCT(c.id)) AS count'], $where, $bind_values);
+        $res = $this->getCategories(['COUNT(DISTINCT(c.id)) AS count'], $where, $bind_values, null, 0, [], []);
         if (count($res)) {
             return (int)$res[0]['count'];
         }

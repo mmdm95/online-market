@@ -103,7 +103,7 @@ class SettingPageAboutForm implements IPageForm
             ];
 
             return $settingModel->update([
-                SETTING_ABOUT_SECTION => $xss->xss_clean(trim(json_encode($combined))),
+                'setting_value' => $xss->xss_clean(trim(json_encode($combined))),
             ], 'setting_name=:name', ['name' => SETTING_ABOUT_SECTION]);
         } catch (\Exception $e) {
             return false;

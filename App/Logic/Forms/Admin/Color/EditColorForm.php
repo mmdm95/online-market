@@ -138,7 +138,7 @@ class EditColorForm implements IPageForm
 
             return $colorModel->update([
                 'name' => $xss->xss_clean(trim($name)),
-                'hex' => $xss->xss_clean($color),
+                'hex' => $xss->xss_clean(strtolower($color)),
                 'publish' => is_value_checked($pub) ? DB_YES : DB_NO,
                 'updated_by' => $auth->getCurrentUser()['id'] ?? null,
                 'updated_at' => time(),

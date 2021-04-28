@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Logic\Forms\Admin\Blog;
+namespace App\Logic\Forms\Admin\Category;
 
 use App\Logic\Interfaces\IPageForm;
 use App\Logic\Models\CategoryModel;
@@ -76,7 +76,7 @@ class AddCategoryForm implements IPageForm
             ->custom(function (FormValue $value) use ($categoryModel) {
                 if (
                     $value->getValue() == DEFAULT_OPTION_VALUE ||
-                    $categoryModel->count('id=:id', ['id' => trim($value->getValue())]) === 0) {
+                    $categoryModel->count('id=:id', ['id' => trim($value->getValue())]) !== 0) {
                     return true;
                 }
                 return false;
@@ -143,7 +143,7 @@ class AddCategoryForm implements IPageForm
 
             return $categoryModel->insert([
                 'name' => $xss->xss_clean($name),
-                'parent_id' => $parent,
+                'parent_id' => $parent ?: null,
                 'keywords' => $xss->xss_clean($keywords),
                 'publish' => is_value_checked($pub) ? DB_YES : DB_NO,
                 'priority' => $xss->xss_clean($priority),

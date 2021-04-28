@@ -11,7 +11,7 @@
         </div>
 
         <table class="table table-bordered table-hover datatable-highlight"
-               data-columns='[{"data":"id"},{"data":"image"},{"data":"link"},{"data":"name"},{"data":"modify"},{"data":"operations"}]'
+               data-columns='[{"data":"id"},{"data":"image"},{"data":"name"},{"data":"link"},{"data":"modify"},{"data":"operations"}]'
                data-ajax-url="<?= url('admin.category.image.dt.view')->getRelativeUrlTrimmed(); ?>">
             <thead>
             <tr>

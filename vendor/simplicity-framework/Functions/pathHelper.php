@@ -113,14 +113,14 @@ if (!function_exists('log_path')) {
 if (!function_exists('asset_path')) {
     function asset_path(string $path = '', bool $add_version = true)
     {
-        return get_base_url() . $path . ($add_version ? '?' . APP_VERSION : '');
+        return get_base_url() . 'public/' . ltrim($path, '\\/') . ($add_version ? '?' . APP_VERSION : '');
     }
 }
 
 if (!function_exists('resource_path')) {
     function resource_path(string $path = '', bool $add_version = true)
     {
-        return get_base_url() . $path . ($add_version ? '?' . APP_VERSION : '');
+        return get_base_url() . ltrim($path, '\\/') . ($add_version ? '?' . APP_VERSION : '');
     }
 }
 

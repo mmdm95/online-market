@@ -208,10 +208,6 @@ body[dir="rtl"] .alert .close {
     text-align: right;
 }
 
-.pr_detail .product_price {
-    float: right;
-}
-
 .pr_detail .rating_wrap {
     float: left;
 }
@@ -678,7 +674,7 @@ body[dir="rtl"] .alert .close {
 
 .blockquote_style3 {
     border-left: 0;
-    border-right: 2px solid #FF324D;
+    border-right: 2px solid var(--custom-primary-color--);
 }
 
 .post_nav_next {

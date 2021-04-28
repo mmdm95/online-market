@@ -1,6 +1,24 @@
 <?php if (count($products ?? [])): ?>
     <div class="col-12">
         <div class="row">
+            <?php
+            $limit = config()->get('settings.product_each_page.value');
+            $current = $pagination['current_page'];
+            $total = $pagination['total'];
+            $firstCount = ($current - 1) * $limit;
+            $lastCount = ($current + 1) * $limit;
+            ?>
+            <div class="col-12 my-2">
+                نمایش
+                <?= $firstCount + 1; ?>
+                تا
+                <?= $total < $lastCount ? $total : $lastCount; ?>
+                از مجموع
+                <?= $total ?>
+                رکورد
+            </div>
+        </div>
+        <div class="row">
             <?php foreach ($products as $item): ?>
                 <div class="col-md-4 col-6">
                     <div class="product_box text-center">
@@ -22,7 +40,7 @@
                                 <ul class="list_none pr_action_btn">
                                     <!--                                    <li>-->
                                     <!--                                        <a href="">-->
-                                    <?= '';//url('home.compare');  ?>
+                                    <?= '';//url('home.compare');    ?>
                                     <!--                                            <i class="icon-shuffle"></i>-->
                                     <!--                                        </a>-->
                                     <!--                                    </li>-->

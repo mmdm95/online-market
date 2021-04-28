@@ -11,7 +11,7 @@
             },
         },
     });
-    window.MyGlobalVariables.validation = $.extend({}, window.MyGlobalVariables.validation, {
+    window.MyGlobalVariables.validation = $.extend(true, window.MyGlobalVariables.validation, {
         constraints: {
             productComment: {
                 message: {
@@ -103,9 +103,13 @@
          */
         function loadPaginatedComments(page) {
             page = page && !isNaN(parseInt(page, 10)) ? parseInt(page, 10) : 1;
-            shop.request(variables.url.products.get.comments, 'get', function () {
+            shop.request(variables.url.products.get.comments + '/' + currentProductId, 'get', function () {
                 commentsContainer.html(this.data);
                 paginationClick();
+            }, {
+                params: {
+                    page: page,
+                }
             }, false);
         }
 

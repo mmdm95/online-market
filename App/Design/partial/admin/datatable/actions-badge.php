@@ -10,7 +10,7 @@
                    data-edit-id="<?= $row['id']; ?>"
                    class="dropdown-item __item_badge_editor_btn"
                    data-toggle="modal"
-                   data-target="#modal_form_edit_unit">
+                   data-target="#modal_form_edit_badges">
                     <i class="icon-pencil"></i>
                     ویرایش
                 </a>

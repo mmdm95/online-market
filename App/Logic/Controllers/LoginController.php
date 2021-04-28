@@ -76,6 +76,7 @@ class LoginController extends AbstractHomeController
                         ]);
                     if ($auth->isLoggedIn()) {
                         $backUrl = ArrayUtil::get($_GET, 'back_url', null);
+                        $backUrl = urldecode($backUrl);
                         if (!empty($backUrl)) {
                             response()->redirect($backUrl);
                         } elseif ($auth->userHasRole(ROLE_COLLEAGUE)) {

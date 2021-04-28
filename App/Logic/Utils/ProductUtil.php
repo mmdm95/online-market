@@ -222,14 +222,16 @@ class ProductUtil
                 $bindValues,
                 $orderBy,
                 $limit,
-                $offset
+                $offset,
+                ['pa.product_id'],
+                ['*']
             ),
             'pagination' => [
                 'base_url' => url('home.search')->getRelativeUrlTrimmed(),
                 'total' => $total,
                 'first_page' => 1,
                 'last_page' => $lastPage,
-                'current_page' => $page,
+                'current_page' => intval($page),
             ],
         ];
     }
@@ -290,9 +292,10 @@ class ProductUtil
      *     'available',
      *   ]
      *
+     * @param bool $isUpdate
      * @return array
      */
-    public function createProductObject(): array
+    public function createProductObject(bool $isUpdate = false): array
     {
         try {
             /**
@@ -306,16 +309,17 @@ class ProductUtil
             $colorModel = container()->get(ColorModel::class);
 
             // get all products values
-            $stock = input()->post('inp-add-product-stock-count');
-            $maxCart = input()->post('inp-add-product-max-count');
-            $color = input()->post('inp-add-product-color');
-            $size = input()->post('inp-add-product-size');
-            $guarantee = input()->post('inp-add-product-guarantee');
-            $weight = input()->post('inp-add-product-weight');
-            $price = input()->post('inp-add-product-price');
-            $disPrice = input()->post('inp-add-product-discount-price');
-            $disDate = input()->post('inp-add-product-discount-date');
-            $pAvailability = input()->post('inp-add-product-product-availability');
+            $stock = input()->post('inp-' . ($isUpdate ? 'edit' : 'add') . '-product-stock-count');
+            $maxCart = input()->post('inp-' . ($isUpdate ? 'edit' : 'add') . '-product-max-count');
+            $color = input()->post('inp-' . ($isUpdate ? 'edit' : 'add') . '-product-color');
+            $size = input()->post('inp-' . ($isUpdate ? 'edit' : 'add') . '-product-size');
+            $guarantee = input()->post('inp-' . ($isUpdate ? 'edit' : 'add') . '-product-guarantee');
+            $weight = input()->post('inp-' . ($isUpdate ? 'edit' : 'add') . '-product-weight');
+            $price = input()->post('inp-' . ($isUpdate ? 'edit' : 'add') . '-product-price');
+            $disPrice = input()->post('inp-' . ($isUpdate ? 'edit' : 'add') . '-product-discount-price');
+            $disDate = input()->post('inp-' . ($isUpdate ? 'edit' : 'add') . '-product-discount-date');
+            $considerDisDate = input()->post('inp-' . ($isUpdate ? 'edit' : 'add') . '-product-consider-discount-date');
+            $pAvailability = input()->post('inp-' . ($isUpdate ? 'edit' : 'add') . '-product-product-availability');
 
             // create products object
             $productObj = [];
@@ -324,37 +328,80 @@ class ProductUtil
              * @var InputItem $productPrice
              */
             foreach ($price as $productPrice) {
-                $s = array_shift($stock);
-                $mc = array_shift($maxCart);
-                $dp = array_shift($disPrice);
-                $c = array_shift($color);
+                /**
+                 * @var InputItem $s
+                 */
+                $s = is_array($stock) ? array_shift($stock) : new InputItem('', null);
+                /**
+                 * @var InputItem $mc
+                 */
+                $mc = is_array($maxCart) ? array_shift($maxCart) : new InputItem('', null);
+                /**
+                 * @var InputItem $dp
+                 */
+                $dp = is_array($disPrice) ? array_shift($disPrice) : new InputItem('', null);
+                /**
+                 * @var InputItem $c
+                 */
+                $c = is_array($color) ? array_shift($color) : new InputItem('', null);
+                /**
+                 * @var InputItem $eachSize
+                 */
+                $eachSize = is_array($size) ? array_shift($size) : new InputItem('', null);
+                /**
+                 * @var InputItem $eachGuarantee
+                 */
+                $eachGuarantee = is_array($guarantee) ? array_shift($guarantee) : new InputItem('', null);
+                /**
+                 * @var InputItem $eachWeight
+                 */
+                $eachWeight = is_array($weight) ? array_shift($weight) : new InputItem('', null);
+                /**
+                 * @var InputItem $eachDisDate
+                 */
+                $eachDisDate = is_array($disDate) ? array_shift($disDate) : new InputItem('', null);
+                /**
+                 * @var InputItem $eachCDD
+                 */
+                $eachCDD = is_array($considerDisDate) ? array_shift($considerDisDate) : new InputItem('', null);
+                /**
+                 * @var InputItem $eachPAvailability
+                 */
+                $eachPAvailability = is_array($pAvailability) ? array_shift($pAvailability) : new InputItem('', null);
 
-                if (!empty($s) && !empty($mc) && !empty($dp) && !empty($c)) {
-                    $colorName = $colorModel->getFirst(['name'], 'hex=:hex', ['hex' => $color])['name'];
+                if (
+                    !empty($s->getValue()) && !empty($mc->getValue()) && !empty($dp->getValue()) &&
+                    (!empty($c->getValue()) || $isUpdate)
+                ) {
+                    $colorName = $c->getValue()
+                        ? $colorModel->getFirst(['name'], 'hex=:hex', ['hex' => strtolower($c->getValue())])['name']
+                        : null;
 
                     $productObj[$i]['price'] = $xss->xss_clean($productPrice->getValue());
-                    $productObj[$i]['stock_count'] = $xss->xss_clean($s);
-                    $productObj[$i]['max_cart'] = $xss->xss_clean($mc);
-                    $productObj[$i]['discount_price'] = $xss->xss_clean($dp);
-                    $productObj[$i]['color_hex'] = $xss->xss_clean($c);
+                    $productObj[$i]['stock_count'] = $xss->xss_clean($s->getValue());
+                    $productObj[$i]['max_cart'] = $xss->xss_clean($mc->getValue());
+                    $productObj[$i]['discount_price'] = $xss->xss_clean($dp->getValue());
+                    $productObj[$i]['color_hex'] = $xss->xss_clean($c->getValue()) ?: null;
                     $productObj[$i]['color_name'] = $xss->xss_clean($colorName);
-                    $productObj[$i]['size'] = $xss->xss_clean(array_shift($size)) ?: null;
-                    $productObj[$i]['guarantee'] = $xss->xss_clean(array_shift($guarantee)) ?: null;
-                    $productObj[$i]['weight'] = $xss->xss_clean(array_shift($weight)) ?: null;
-                    $productObj[$i]['discount_until'] = $xss->xss_clean(array_shift($disDate)) ?: null;
-                    $productObj[$i]['available'] = is_value_checked(array_shift($pAvailability)) ? DB_YES : DB_NO;
+                    $productObj[$i]['size'] = $xss->xss_clean($eachSize->getValue()) ?: null;
+                    $productObj[$i]['guarantee'] = $xss->xss_clean($eachGuarantee->getValue()) ?: null;
+                    $productObj[$i]['weight'] = $xss->xss_clean($eachWeight->getValue()) ?: null;
+                    $productObj[$i]['discount_until'] = is_null($eachCDD->getValue()) ? ($xss->xss_clean($eachDisDate->getValue()) ?: null) : null;
+                    $productObj[$i]['available'] = is_value_checked($eachPAvailability->getValue()) ? DB_YES : DB_NO;
                 }
             }
         } catch (\Exception $e) {
+            echo $e;
             return [];
         }
         return $productObj;
     }
 
     /**
+     * @param bool $isUpdate
      * @return array
      */
-    public function createGalleryArray(): array
+    public function createGalleryArray($isUpdate = false): array
     {
         $galleryArr = [];
         try {
@@ -363,7 +410,7 @@ class ProductUtil
              */
             $xss = container()->get(AntiXSS::class);
 
-            $gallery = input()->post('inp-add-product-gallery-img');
+            $gallery = input()->post('inp-' . ($isUpdate ? 'edit' : 'add') . '-product-gallery-img');
 
             /**
              * @var InputItem $item

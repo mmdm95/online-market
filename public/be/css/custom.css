@@ -155,6 +155,10 @@
     height: 24px;
 }
 
+.image-gallery-max-height {
+    max-height: 350px;
+}
+
 /* clone remover button */
 
 .__clone_remover_btn {

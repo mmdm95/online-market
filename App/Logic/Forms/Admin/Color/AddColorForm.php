@@ -118,7 +118,7 @@ class AddColorForm implements IPageForm
 
             return $colorModel->insert([
                 'name' => $xss->xss_clean(trim($name)),
-                'hex' => $xss->xss_clean($color),
+                'hex' => $xss->xss_clean(strtolower($color)),
                 'publish' => is_value_checked($pub) ? DB_YES : DB_NO,
                 'created_by' => $auth->getCurrentUser()['id'] ?? null,
                 'created_at' => time(),

@@ -44,10 +44,15 @@ class SettingContactForm implements IPageForm
                 'inp-setting-main-phone' => 'شمار تماس اصلی',
                 'inp-setting-address' => 'آدرس',
                 'inp-setting-phones' => ' شماره‌های تماس',
+                'inp-setting-email' => 'ایمیل',
                 'inp-setting-features-title.*' => 'عنوان ویژگی',
                 'inp-setting-features-sub-title.*' => 'زیر عنوان ویژگی',
             ]);
 
+        // email
+        $validator
+            ->setFields('inp-setting-email')
+            ->email();
         // main phone
         $validator
             ->setFields([
@@ -115,12 +120,14 @@ class SettingContactForm implements IPageForm
             $mainPhone = input()->post('inp-setting-main-phone', '')->getValue();
             $address = input()->post('inp-setting-address', '')->getValue();
             $phones = input()->post('inp-setting-phones', '')->getValue();
+            $email = input()->post('inp-setting-email', '')->getValue();
             $features = json_encode(session()->getFlash('setting-contact-features-assembled') ?: []);
 
             return $settingModel->updateContactSetting([
                 SETTING_MAIN_PHONE => $xss->xss_clean(trim($mainPhone)),
                 SETTING_ADDRESS => $xss->xss_clean(trim($address)),
                 SETTING_PHONES => $xss->xss_clean(trim($phones)),
+                SETTING_EMAIL => $xss->xss_clean(trim($email)),
                 SETTING_FEATURES => $xss->xss_clean(trim($features)),
             ]);
         } catch (\Exception $e) {

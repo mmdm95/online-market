@@ -242,6 +242,31 @@ return [
             ]
         ]
     ],
+    'admin-query-builder' => [
+        'js' => [
+            'bottom' => [
+                e(
+                    '<script type="text/javascript" src="' .
+                    asset_path('be/plugins/query-builder/js/query-builder.standalone.min.js') .
+                    '"></script>'
+                ),
+                e(
+                    '<script type="text/javascript" src="' .
+                    asset_path('be/plugins/query-builder/i18n/query-builder.fa-IR.js') .
+                    '"></script>'
+                ),
+            ],
+        ],
+        'css' => [
+            'top' => [
+                e(
+                    '<link href="' .
+                    asset_path('be/plugins/query-builder/css/query-builder.default.min.css') .
+                    '" rel="stylesheet" type="text/css">'
+                ),
+            ]
+        ]
+    ],
     'admin' => [
         'js' => [
             'bottom' => [

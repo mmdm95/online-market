@@ -52,8 +52,11 @@ class SettingModel extends BaseModel
         $res3 = $this->update([
             'setting_value' => $info[SETTING_CURRENT_CITY_POST_PRICE],
         ], 'setting_name=:name', ['name' => SETTING_CURRENT_CITY_POST_PRICE]);
+        $res4 = $this->update([
+            'setting_value' => $info[SETTING_MIN_FREE_PRICE],
+        ], 'setting_name=:name', ['name' => SETTING_MIN_FREE_PRICE]);
 
-        return $res1 && $res2 && $res3;
+        return $res1 && $res2 && $res3 && $res4;
     }
 
     /**
@@ -99,8 +102,11 @@ class SettingModel extends BaseModel
         $res4 = $this->update([
             'setting_value' => $info[SETTING_FEATURES],
         ], 'setting_name=:name', ['name' => SETTING_FEATURES]);
+        $res5 = $this->update([
+            'setting_value' => $info[SETTING_EMAIL],
+        ], 'setting_name=:name', ['name' => SETTING_EMAIL]);
 
-        return $res1 && $res2 && $res3 && $res4;
+        return $res1 && $res2 && $res3 && $res4 && $res5;
     }
 
     /**
@@ -155,7 +161,7 @@ class SettingModel extends BaseModel
         ], 'setting_name=:name', ['name' => SETTING_INDEX_TABBED_SLIDER]);
         $res2 = $this->update([
             'setting_value' => $info[SETTING_INDEX_3_IMAGES],
-        ], 'setting_name=:name', ['name' => SETTING_INDEX_TABBED_SLIDER]);
+        ], 'setting_name=:name', ['name' => SETTING_INDEX_3_IMAGES]);
 
         return $res1 && $res2;
     }

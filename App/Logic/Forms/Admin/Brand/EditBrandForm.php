@@ -84,15 +84,15 @@ class EditBrandForm implements IPageForm
                 if ($value->getName() == 'inp-edit-brand-en-title') {
                     $name = session()->getFlash('brand-prev-latin_name', null);
                     if ($name !== trim($value->getValue())) {
-                        if ($brandModel->count('name=:name', ['name' => trim($value->getValue())]) === 0) return true;
+                        if ($brandModel->count('name=:name', ['name' => trim($value->getValue())]) !== 0) return false;
                     }
                 } else {
                     $name = session()->getFlash('brand-prev-name', null);
                     if ($name !== trim($value->getValue())) {
-                        if ($brandModel->count('latin_name=:name', ['name' => trim($value->getValue())]) === 0) return true;
+                        if ($brandModel->count('latin_name=:name', ['name' => trim($value->getValue())]) !== 0) return false;
                     }
                 }
-                return false;
+                return true;
             }, 'برند با این عنوان (فارسی/انگلیسی) وجود دارد.');
 
         $id = session()->getFlash('brand-curr-id', null, false);

@@ -1,3 +1,8 @@
+<?php
+
+use Sim\Utils\StringUtil;
+
+?>
 <!-- START MAIN CONTENT -->
 <div class="main_content">
 
@@ -5,7 +10,7 @@
     <div class="section">
         <div class="container">
             <div class="row">
-                <input type="hidden" value="<?= $product['id']; ?>" id="__current_product_id">
+                <input type="hidden" value="<?= $product['product_id']; ?>" id="__current_product_id">
 
                 <!-- START GALLERY -->
                 <div class="col-lg-6 col-md-6 mb-4 mb-md-0">
@@ -42,7 +47,7 @@
                         <div class="product_description">
                             <h4 class="product_title">
                                 <a href="<?= url('home.product.show', [
-                                    'id' => $product['id'],
+                                    'id' => $product['product_id'],
                                     'slug' => $product['slug'],
                                 ]); ?>">
                                     <?= $product['title']; ?>
@@ -109,13 +114,13 @@
                                 </button>
                                 <!--                                <a class="add_compare" href=""-->
                                 <!--                                   data-toggle="tooltip" data-placement="top" title="لیست مقایسه">-->
-                                <?= '';//url('home.compare');  ?>
+                                <?= '';//url('home.compare');     ?>
                                 <!--                                    <i class="linearicons-shuffle"></i>-->
                                 <!--                                </a>-->
                                 <a class="add_wishlist <?= $is_in_wishlist ? 'active' : ''; ?>"
                                    href="javascript:void(0);" data-toggle="tooltip"
                                    data-placement="top" title="لیست علاقه مندی ها"
-                                   data-product-id="<?= $product['id']; ?>">
+                                   data-product-id="<?= $product['product_id']; ?>">
                                     <i class="linearicons-bookmark2"></i>
                                 </a>
                             </div>
@@ -127,9 +132,8 @@
                             <!-- START BRAND NAME -->
                             <li>
                                 دسته بندی:
-                                <a href="<?= url('home.brand.show', [
-                                    'id' => $product['brand_id'],
-                                    'slug' => $product['brand_slug'],
+                                <a href="<?= url('home.search', [], [
+                                    'brand' => $product['brand_id'],
                                 ]); ?>">
                                     <?= $product['brand_name']; ?>
                                 </a>
@@ -144,22 +148,24 @@
                                 return !empty(trim($val));
                             });
                             ?>
-                            <li>
-                                برچسب:
-                                <?php
-                                $len = count($keywords);
-                                ?>
-                                <?php for ($i = 0; $i < $len; ++$i): ?>
-                                    <a href="<?= url('home.search', null, [
-                                        'tag' => $keywords[$i],
-                                    ]); ?>" rel="tag">
-                                        <?= $keywords[$i]; ?>
-                                    </a>
-                                    <?php if ($i !== ($len - 1)): ?>
-                                        ,
-                                    <?php endif; ?>
-                                <?php endfor; ?>
-                            </li>
+                            <?php if (count($keywords)): ?>
+                                <li>
+                                    برچسب:
+                                    <?php
+                                    $len = count($keywords);
+                                    ?>
+                                    <?php for ($i = 0; $i < $len; ++$i): ?>
+                                        <a href="<?= url('home.search', null, [
+                                            'tag' => $keywords[$i],
+                                        ]); ?>" rel="tag">
+                                            <?= $keywords[$i]; ?>
+                                        </a>
+                                        <?php if ($i !== ($len - 1)): ?>
+                                            ,
+                                        <?php endif; ?>
+                                    <?php endfor; ?>
+                                </li>
+                            <?php endif; ?>
                             <!-- END KEYWORDS -->
                         </ul>
 
@@ -168,7 +174,7 @@
                             <span>اشتراک:</span>
                             <?php
                             $shareLink = url('home.product.show', [
-                                'id' => $product['id'],
+                                'id' => $product['product_id'],
                                 'slug' => $product['slug'],
                             ])->getRelativeUrl();
                             ?>
@@ -259,7 +265,7 @@
                             <!-- START PRODUCT DESCRIPTION -->
                             <div class="tab-pane fade show active" id="Description" role="tabpanel"
                                  aria-labelledby="Description-tab">
-                                <?= $product['body']; ?>
+                                <?= $product['body'] ?: 'هیچ توضیحی وجود ندارد.'; ?>
                             </div>
                             <!-- END PRODUCT DESCRIPTION -->
 
@@ -267,7 +273,7 @@
                             <div class="tab-pane fade" id="Additional-info" role="tabpanel"
                                  aria-labelledby="Additional-info-tab">
                                 <?php
-                                $properties = json_decode($product['properties']);
+                                $properties = json_decode($product['properties'], true);
                                 $properties = is_array($properties) ? $properties : [];
                                 ?>
 
@@ -315,7 +321,7 @@
                                         نظر برای
                                         <span><?= $product['title']; ?></span>
                                     </h5>
-                                    <?php if (($product['allow_commenting'] ?? 0)): ?>
+                                    <?php if ($product['allow_commenting'] == DB_YES): ?>
                                         <?php if ($is_commenting_allowed): ?>
                                             <div class="review_form field_form">
                                                 <h5>ارسال نظرات</h5>
@@ -344,7 +350,7 @@
                                                 <span>برای ارسال نظر، ابتدا باید به پنل کاربری خود وارد شوید.</span>
                                                 <a class="btn btn-fill-line ml-3" href="<?= url('home.login', null, [
                                                     'back_url' => url('home.product.show', [
-                                                        'id' => $product['id'],
+                                                        'id' => $product['product_id'],
                                                         'slug' => $product['slug'],
                                                     ]),
                                                 ]); ?>">

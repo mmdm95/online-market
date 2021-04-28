@@ -292,8 +292,9 @@ use Sim\Utils\StringUtil;
             <!-- Indicators -->
             <ul class="carousel-indicators">
                 <?php for ($i = 0; $i < count($gallery); ++$i): ?>
-                    <li data-target="#productImageGallery"
-                        data-slide-to="<?= $i ?>" <?= 0 == $i ? 'class="active"' : ''; ?>></li>
+                    <li class="<?= 0 == $i ? 'active' : ''; ?>"
+                        data-target="#productImageGallery"
+                        data-slide-to="<?= $i ?>"></li>
                 <?php endfor; ?>
             </ul>
 
@@ -302,17 +303,20 @@ use Sim\Utils\StringUtil;
                 <?php $k = 0; ?>
                 <?php foreach ($gallery as $item): ?>
                     <div class="carousel-item <?= 0 == $k ? 'active' : ''; ?>">
-                        <img class="w-100" src="<?= url('image.show')->getRelativeUrl() . $item['image']; ?>"
-                             alt="Gallery Image <?= ++$k; ?>">
+                        <div class="d-flex justify-content-center">
+                            <img class="image-gallery-max-height mx-auto"
+                                 src="<?= url('image.show')->getRelativeUrl() . $item['image']; ?>"
+                                 alt="Gallery Image <?= ++$k; ?>">
+                        </div>
                     </div>
                 <?php endforeach; ?>
             </div>
 
             <!-- Left and right controls -->
-            <a class="carousel-control-prev" href="#productImageGallery" data-slide="prev">
+            <a class="carousel-control-prev bg-dark-alpha" href="#productImageGallery" data-slide="prev">
                 <span class="carousel-control-next-icon"></span>
             </a>
-            <a class="carousel-control-next" href="#productImageGallery" data-slide="next">
+            <a class="carousel-control-next bg-dark-alpha" href="#productImageGallery" data-slide="next">
                 <span class="carousel-control-prev-icon"></span>
             </a>
         </div>

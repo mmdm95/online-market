@@ -6,6 +6,7 @@ return [
         'common' => [
             'admin-base',
             'admin-table',
+            'admin-query-builder',
             'admin',
         ],
         'sub_title' => 'گزارش‌گیری از کاربران',

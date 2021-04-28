@@ -23,7 +23,7 @@ use App\Logic\Controllers\Admin\{BlogController as AdminBlogController,
     OrderController as AdminOrderController,
     PaymentMethodController as AdminPaymentMethodController,
     ProductFestivalController as AdminProductFestivalController,
-    ReportController as AdminReportController,
+    ReportUserController as AdminReportUserController,
     ReturnOrderController as AdminReturnOrderController,
     SecurityQuestionController as AdminSecurityQuestionController,
     SendMethodController as AdminSendMethodController,
@@ -396,9 +396,10 @@ class Route implements IInitialize
 //                Router::post('/return-order/view/dt', [AdminReturnOrderController::class, 'getPaginatedDatatable'])->name('admin.return.order.dt.view');
 
                 /**
-                 * Report Route
+                 * Report User Route
                  */
-//                Router::get('/report/users', [AdminReportController::class, 'usersReport'])->name('admin.report.users');
+                Router::get('/report/users', [AdminReportUserController::class, 'usersReport'])->name('admin.report.users');
+                Router::get('/report/users/dt', [AdminReportUserController::class, 'userFilter'])->name('admin.report.users.dt');
 
                 /**
                  * Wallet Route
@@ -629,9 +630,11 @@ class Route implements IInitialize
              */
             Router::get('/search/{category?}/{category_slug?}', [ProductController::class, 'index'])->where([
                 'category' => '[0-9]+',
+                'category_slug' => '.*',
             ])->name('home.search');
             Router::get('/product/{id}/{slug?}', [ProductController::class, 'show'])->where([
                 'id' => '[0-9]+',
+                'slug' => '.*',
             ])->name('home.product.show');
 //            Router::get('/compare', [CompareController::class, 'compare'])->name('home.compare');
 
@@ -722,7 +725,7 @@ class Route implements IInitialize
              * get cities
              */
             Router::get('/cities/{province_id}', [PageController::class, 'getCities'])->where([
-                'province_id' => '[0-9]+',
+                'province_id' => '\-?[0-9]+',
             ])->name('ajax.city.get');
 
             /**
@@ -874,6 +877,9 @@ class Route implements IInitialize
                 /**
                  * brand route
                  */
+                Router::delete('/brand/remove/{id}', [AdminBrandController::class, 'remove'])->where([
+                    'id' => '[0-9]+',
+                ])->name('ajax.brand.remove');
                 Router::post('/brand/slider-status/{id}', [AdminBrandController::class, 'sliderStatusChange'])->where([
                     'id' => '[0-9]+',
                 ])->name('ajax.brand.slider.status');
@@ -1033,6 +1039,9 @@ class Route implements IInitialize
                 /**
                  * category route
                  */
+                Router::delete('/category/remove/{id}', [AdminCategoryController::class, 'remove'])->where([
+                    'id' => '[0-9]+',
+                ])->name('ajax.category.remove');
                 Router::post('/category/menu-status/{id}', [AdminCategoryController::class, 'menuStatusChange'])->where([
                     'id' => '[0-9]+',
                 ])->name('ajax.category.menu.status');

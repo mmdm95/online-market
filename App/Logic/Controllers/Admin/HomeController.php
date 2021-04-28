@@ -154,8 +154,8 @@ class HomeController extends AbstractAdminController
         $productWhere = 'is_deleted=:del';
         $productBindValues = ['del' => DB_NO];
         if ($auth->userHasRole(ROLE_DEVELOPER) || $auth->userHasRole(ROLE_SUPER_USER)) {
-            $productWhere = 'is_deleted=:del';
-            $productBindValues['del'] = DB_YES;
+            $productWhere = '';
+            $productBindValues = [];
         }
         $productCount = $productModel->getLimitedProductCount($productWhere, $productBindValues);
 
@@ -320,6 +320,7 @@ class HomeController extends AbstractAdminController
 
         if ($auth->isLoggedIn()) {
             $backUrl = ArrayUtil::get($_GET, 'back_url', null);
+            $backUrl = urldecode($backUrl);
             if (!empty($backUrl)) {
                 response()->redirect($backUrl, 301);
             } else {
@@ -345,6 +346,7 @@ class HomeController extends AbstractAdminController
                         ]);
                     if ($auth->isLoggedIn()) {
                         $backUrl = ArrayUtil::get($_GET, 'back_url', null);
+                        $backUrl = urldecode($backUrl);
                         if (!empty($backUrl)) {
                             response()->redirect($backUrl);
                         } else {

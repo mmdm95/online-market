@@ -134,25 +134,28 @@ class FileController extends AbstractAdminController
 
                 $fileExt = get_extension($entry);
                 if ($entry !== basename(__FILE__) && !in_array($fileExt, $hidden_extensions)) {
-                    $i = $directory . '/' . $entry;
+                    $i = $directory . '/' . urldecode($entry);
                     $stat = stat($i);
-                    $result[] = [
-                        'mtime' => $stat['mtime'],
-                        'size' => FileSystem::getFileSize($i),
-                        'ext' => $fileExt,
-                        'name' => basename($i),
-                        'path' => str_replace(get_path('upload-root'), '', preg_replace('@^\./@', '', $i)),
-                        'is_dir' => is_dir($i),
-                        'is_deleteable' => $allow_delete && ((!is_dir($i) && is_writable($directory)) ||
-                                (is_dir($i) && is_writable($directory) && is_recursively_deletable($i))),
-                        'is_readable' => is_readable($i),
-                        'is_writable' => is_writable($i),
-                        'is_executable' => is_executable($i),
-                    ];
+                    $isUTF8 = preg_match('//u', basename($i));
+                    if ($isUTF8) {
+                        $result[] = [
+                            'mtime' => $stat['mtime'],
+                            'size' => FileSystem::getFileSize($i),
+                            'ext' => $fileExt,
+                            'name' => basename($i),
+                            'path' => ltrim(str_replace(get_path('upload-root'), '', preg_replace('@^\./@', '', $i)), '\\/'),
+                            'is_dir' => is_dir($i),
+                            'is_deleteable' => $allow_delete && ((!is_dir($i) && is_writable($directory)) ||
+                                    (is_dir($i) && is_writable($directory) && is_recursively_deletable($i))),
+                            'is_readable' => is_readable($i),
+                            'is_writable' => is_writable($i),
+                            'is_executable' => is_executable($i),
+                        ];
+                    }
                 }
             }
         } else {
-            $this->data->resetData()->statusCode(412)->errorMessage('Not a Directory');
+            $this->data->resetData()->statusCode(412)->errorMessage('پوشه‌ای انتخاب نشده');
             \response()->json($this->data->getReturnData());
         }
 
@@ -193,7 +196,7 @@ class FileController extends AbstractAdminController
             if ($allow_delete && is_recursively_deletable($file)) {
                 rmrf($file);
             } else {
-                $this->data->resetData()->statusCode(412)->errorMessage('Not deletable!');
+                $this->data->resetData()->statusCode(412)->errorMessage('امکان حذف وجود ندارد!');
                 \response()->json($this->data->getReturnData());
             }
         } catch (\Exception $e) {
@@ -227,7 +230,7 @@ class FileController extends AbstractAdminController
 
         $newName = input()->post('newName', '');
         if (is_array($newName) || empty($newName)) {
-            $this->data->resetData()->statusCode(412)->errorMessage('Invalid file name');
+            $this->data->resetData()->statusCode(412)->errorMessage('نام فایل نامعتبر است.');
             \response()->json($this->data->getReturnData());
         }
         $newName = $newName->getValue();
@@ -239,25 +242,27 @@ class FileController extends AbstractAdminController
         $filename = $xss->xss_clean(str_replace(' ', '-', $newName));
         $filename = StringUtil::toPersian($filename);
         $filename = StringUtil::toEnglish($filename);
+        $filename = rtrim($filename, '\\/');
 
         $this->checkAccess($file);
 
         if (!file_exists($file)) {
-            $this->data->resetData()->statusCode(412)->errorMessage('File does not exists');
+            $this->data->resetData()->statusCode(412)->errorMessage('فایل وجود ندارد.');
             \response()->json($this->data->getReturnData());
         }
 
-        if (strpos(str_replace('\\', '/', $file), get_path('upload-root')) === false) {
-            $this->data->resetData()->statusCode(412)->errorMessage('Invalid folder selected');
+        if (mb_strpos(str_replace('\\', '/', $file), get_path('upload-root')) === false) {
+            $this->data->resetData()->statusCode(412)->errorMessage('پوشه انتخاب شده نامعتبر است.');
             \response()->json($this->data->getReturnData());
         }
         // don't allow actions outside root. we also filter out slashes to catch args like './../outside'
         $dir = str_replace('/', '', $filename);
-        if (substr($dir, 0, 2) === '..') {
-            $this->data->resetData()->statusCode(412)->errorMessage('Invalid folder selected');
+        if (mb_substr($dir, 0, 2) === '..') {
+            $this->data->resetData()->statusCode(412)->errorMessage('پوشه انتخاب شده نامعتبر است.');
             \response()->json($this->data->getReturnData());
         }
 
+        $file = rtrim($file, '\\/');
         $bName = get_base_name($file);
 
         if ($bName == $filename) {
@@ -265,16 +270,16 @@ class FileController extends AbstractAdminController
             \response()->json($this->data->getReturnData());
         }
 
-        $pos = mb_strrpos($file, $bName);
+        $pos = mb_strrpos($file . '/', $bName);
         if ($pos !== false) {
-            $newFile = substr_replace($file, $filename, $pos, strlen($file));
+            $newFile = StringUtil::mbSubstrReplace($file, $filename, $pos, mb_strlen($file));
         } else {
-            $this->data->resetData()->statusCode(412)->errorMessage('Something went wrong!');
+            $this->data->resetData()->statusCode(412)->errorMessage('مشکلی پیش آمده!');
             \response()->json($this->data->getReturnData());
         }
 
         if (file_exists($newFile)) {
-            $this->data->resetData()->statusCode(412)->errorMessage('File with this name is currently exists!');
+            $this->data->resetData()->statusCode(412)->errorMessage('فایلی با این نام وجود دارد.');
             \response()->json($this->data->getReturnData());
         }
 
@@ -314,18 +319,18 @@ class FileController extends AbstractAdminController
             // don't allow actions outside root. we also filter out slashes to catch args like './../outside'
             $dir = input()->post('name', '');
             if (is_array($dir) || empty($dir)) {
-                $this->data->resetData()->statusCode(412)->errorMessage('Invalid folder name');
+                $this->data->resetData()->statusCode(412)->errorMessage('نام پوشه نامعتبر است.');
                 \response()->json($this->data->getReturnData());
             }
             $dir = $dir->getValue();
             $dir = str_replace('/', '', $dir);
 
             if (check_file_uploaded_length($dir)) {
-                $this->data->resetData()->statusCode(412)->errorMessage('Invalid name length');
+                $this->data->resetData()->statusCode(412)->errorMessage('تعداد کاراکترهای نام پوشه از حد مجاز رد شده است. تعداد کاراکتر مجاز ۲۰۰ کاراکتر می‌باشد.');
                 \response()->json($this->data->getReturnData());
             }
-            if (substr($dir, 0, 2) === '..') {
-                $this->data->resetData()->statusCode(412)->errorMessage('Invalid folder name');
+            if (mb_substr($dir, 0, 2) === '..') {
+                $this->data->resetData()->statusCode(412)->errorMessage('نام پوشه نامعتبر است.');
                 \response()->json($this->data->getReturnData());
             }
             chdir($file);
@@ -361,35 +366,34 @@ class FileController extends AbstractAdminController
 
         $file = $this->getFileFromRequest(true);
 
-        $this->checkAccess($file);
-
         if ($allow_create_folder) {
             $fileArr = json_decode($file, true) ?: [];
             $counter = 0;
             foreach ($fileArr as $files) {
                 $file = $files;
+                $this->checkAccess($file);
                 $newDir = input()->post('newPath', '');
                 if (is_array($newDir) || empty($newDir)) {
-                    $this->data->resetData()->statusCode(412)->errorMessage('Invalid folder selected');
+                    $this->data->resetData()->statusCode(412)->errorMessage('پوشه انتخاب شده نامعتبر است.');
                     \response()->json($this->data->getReturnData());
                 }
                 $newDir = $newDir->getValue();
+                $newDir = urldecode($newDir);
 
                 if (!file_exists($file)) {
-                    $this->data->resetData()->statusCode(412)->errorMessage('File does not exists!');
-                    \response()->json($this->data->getReturnData());
+                    $this->data->resetData()->statusCode(412)->errorMessage('فایل وجود ندارد!');
                 }
 
-                if (strpos(str_replace('\\', '/', $file), get_path('upload-root')) === false
-                    || strpos(str_replace('\\', '/', $newDir), get_path('upload-root')) === false
+                if (mb_strpos(str_replace('\\', '/', $file), get_path('upload-root')) === false
+                    || mb_strpos(str_replace('\\', '/', $newDir), get_path('upload-root')) === false
                 ) {
-                    $this->data->resetData()->statusCode(412)->errorMessage('Invalid folder selected');
+                    $this->data->resetData()->statusCode(412)->errorMessage('پوشه انتخاب شده نامعتبر است.');
                     \response()->json($this->data->getReturnData());
                 }
                 // don't allow actions outside root. we also filter out slashes to catch args like './../outside'
                 $dir = str_replace('/', '', $newDir);
-                if (substr($dir, 0, 2) === '..') {
-                    $this->data->resetData()->statusCode(412)->errorMessage('Invalid folder selected');
+                if (mb_substr($dir, 0, 2) === '..') {
+                    $this->data->resetData()->statusCode(412)->errorMessage('پوشه انتخاب شده نامعتبر است.');
                     \response()->json($this->data->getReturnData());
                 }
 
@@ -397,7 +401,7 @@ class FileController extends AbstractAdminController
                 $newFile = $newDir . '/' . $bName;
 
                 if ($file == $newFile) {
-                    $this->data->resetData()->statusCode(412)->errorMessage('Invalid folder name');
+                    $this->data->resetData()->statusCode(412)->errorMessage('نام پوشه نامعتبر است.');
                     \response()->json($this->data->getReturnData());
                 }
 
@@ -446,7 +450,7 @@ class FileController extends AbstractAdminController
         if ($allow_upload) {
             foreach ($disallowed_extensions as $ext) {
                 if (preg_match(sprintf('/\.%s$/', preg_quote($ext)), input()->file('file_data')->getName())) {
-                    $this->data->resetData()->statusCode(412)->errorMessage('Files of this type are not allowed');
+                    $this->data->resetData()->statusCode(412)->errorMessage('فایل با پسوند وارد شده، اجازه آپلود ندارد.');
                     \response()->json($this->data->getReturnData());
                 }
             }
@@ -459,7 +463,7 @@ class FileController extends AbstractAdminController
             $filename = StringUtil::toEnglish($filename);
 
             if (check_file_uploaded_length($filename)) {
-                $this->data->resetData()->statusCode(412)->errorMessage('Invalid name size');
+                $this->data->resetData()->statusCode(412)->errorMessage('تعداد کاراکترهای نام پوشه از حد مجاز رد شده است. تعداد کاراکتر مجاز ۲۰۰ کاراکتر می‌باشد.');
                 \response()->json($this->data->getReturnData());
             }
 
@@ -469,7 +473,7 @@ class FileController extends AbstractAdminController
                 $this->data->resetData();
                 \response()->json($this->data->getReturnData());
             } else {
-                $this->data->resetData()->statusCode(412)->errorMessage('Can not upload!');
+                $this->data->resetData()->statusCode(412)->errorMessage('آپلود با خطا مواجه شد!');
                 \response()->json($this->data->getReturnData());
             }
         }
@@ -494,9 +498,9 @@ class FileController extends AbstractAdminController
             show_403();
         }
 
-        $path = get_path('upload-root', $file, false);
+        $path = urldecode(get_path('upload-root', $file, false));
 
-        $this->checkAccess($file);
+        $this->checkAccess($path);
 
         try {
             Download::makeDownloadFromPath($path)->download(null);
@@ -528,12 +532,12 @@ class FileController extends AbstractAdminController
         $file = $this->getFileFromRequest();
 
         if (!$file) {
-            $this->data->resetData()->statusCode(412)->errorMessage('Not a Directory');
+            $this->data->resetData()->statusCode(412)->errorMessage('پوشه انتخاب شده نامعتبر است.');
             \response()->json($this->data->getReturnData());
         }
 
-        if (strpos(str_replace('\\', '/', $file), get_path('upload-root')) === false) {
-            $this->data->resetData()->statusCode(412)->errorMessage('Not a Directory');
+        if (mb_strpos(str_replace('\\', '/', $file), get_path('upload-root')) === false) {
+            $this->data->resetData()->statusCode(412)->errorMessage('پوشه انتخاب شده نامعتبر است.');
             \response()->json($this->data->getReturnData());
         }
 
@@ -552,7 +556,7 @@ class FileController extends AbstractAdminController
                 }
             }
         } else {
-            $this->data->resetData()->statusCode(412)->errorMessage('Not a Directory');
+            $this->data->resetData()->statusCode(412)->errorMessage('پوشه انتخاب شده نامعتبر است.');
             \response()->json($this->data->getReturnData());
         }
 
@@ -566,7 +570,8 @@ class FileController extends AbstractAdminController
      */
     public function showImage(string $filename)
     {
-        $path = get_path('upload-root', $filename, false);
+        $filename = urldecode($filename);
+        $path = get_path('upload-root', trim($filename, '\\/'), false);
 
         if (FileSystem::fileExists($path)) {
             $file = FileSystem::getFromFile($path);
@@ -608,7 +613,7 @@ class FileController extends AbstractAdminController
                     )
                 )
             ) {
-                $this->data->resetData()->statusCode(403)->errorMessage('XSRF Failure');
+                $this->data->resetData()->statusCode(403)->errorMessage('مشکل در امنیت مدیریت فایل، لطفا دوباره تلاش کنید.');
                 \response()->json($this->data->getReturnData());
             }
         }
@@ -621,16 +626,16 @@ class FileController extends AbstractAdminController
                     if (is_string($f)) {
                         $tmp = get_absolute_path($tmp_dir . '/' . $f);
                         if ($tmp === false) {
-                            $this->data->resetData()->statusCode(404)->errorMessage('File or Directory Not Found');
+                            $this->data->resetData()->statusCode(404)->errorMessage('فایل یا پوشه انتخاب شده، پیدا نشد.');
                             \response()->json($this->data->getReturnData());
                         }
-                        if (substr($tmp, 0, strlen($tmp_dir)) !== $tmp_dir) {
-                            $this->data->resetData()->statusCode(403)->errorMessage('Forbidden');
+                        if (mb_substr($tmp, 0, mb_strlen($tmp_dir)) !== $tmp_dir) {
+                            $this->data->resetData()->statusCode(403)->errorMessage('دسترسی غیر مجاز!');
                             \response()->json($this->data->getReturnData());
                         }
                         //-----
-                        if (strpos(str_replace('\\', '/', $f), get_path('upload-root')) === false) {
-                            $f = get_path('upload-root') . $f;
+                        if (mb_strpos(str_replace('\\', '/', $f), get_path('upload-root')) === false) {
+                            $f = get_path('upload-root') . '/' . trim($f, '\\/');
                         }
                         $f = rtrim(str_replace(['//', '\\'], '/', $f));
                     }
@@ -638,29 +643,29 @@ class FileController extends AbstractAdminController
 
                 $file = json_encode($dFiles);
             } else {
-                $this->data->resetData()->statusCode(404)->errorMessage('File or Directory Not Found');
+                $this->data->resetData()->statusCode(404)->errorMessage('فایل یا پوشه انتخاب شده، پیدا نشد.');
                 \response()->json($this->data->getReturnData());
             }
         } else {
             $tmp = get_absolute_path($tmp_dir . '/' . input()->all()['file'] ?? '');
             if ($tmp === false) {
-                $this->data->resetData()->statusCode(404)->errorMessage('File or Directory Not Found');
+                $this->data->resetData()->statusCode(404)->errorMessage('فایل یا پوشه انتخاب شده، پیدا نشد.');
                 \response()->json($this->data->getReturnData());
             }
-            if (substr($tmp, 0, strlen($tmp_dir)) !== $tmp_dir) {
-                $this->data->resetData()->statusCode(403)->errorMessage('Forbidden');
+            if (mb_substr($tmp, 0, mb_strlen($tmp_dir)) !== $tmp_dir) {
+                $this->data->resetData()->statusCode(403)->errorMessage('دسترسی غیر مجاز!');
                 \response()->json($this->data->getReturnData());
             }
             //-----
             $file = input()->all()['file'] ?? get_path('upload-root');
             if (strpos(str_replace('\\', '/', $file), get_path('upload-root')) === false) {
-                $file = get_path('upload-root') . $file;
+                $file = get_path('upload-root', trim($file, '\\/'));
             }
             $file = rtrim(str_replace(['//', '\\'], '/', $file));
         }
 
         // do not worry it'll never be empty
-        return $file;
+        return urldecode($file);
     }
 
     /**
@@ -678,7 +683,7 @@ class FileController extends AbstractAdminController
         $res = $middleware->handle($filename);
         if (!$res) {
             if (\request()->isAjax()) {
-                $this->data->resetData()->statusCode(403)->errorMessage('Access denied!');
+                $this->data->resetData()->statusCode(403)->errorMessage('اجازه دسترسی داده نشد!');
                 \response()->json($this->data->getReturnData());
             } else {
                 echo 'دسترسی غیرمجاز';
@@ -697,12 +702,22 @@ class FileController extends AbstractAdminController
      */
     private function checkAccess($filename)
     {
+        if (false === mb_strpos($filename, get_path('upload-root'))) {
+            if (\request()->isAjax()) {
+                $this->data->resetData()->statusCode(403)->errorMessage('اجازه دسترسی داده نشد!');
+                \response()->json($this->data->getReturnData());
+            } else {
+                echo 'دسترسی غیرمجاز';
+                exit(0);
+            }
+        }
+
         $filename = str_replace(get_path('upload-root'), '', $filename);
         $middleware = new PublicFolderModifyMiddleware();
         $res = $middleware->handle($filename);
         if (!$res) {
             if (\request()->isAjax()) {
-                $this->data->resetData()->statusCode(403)->errorMessage('Access denied!');
+                $this->data->resetData()->statusCode(403)->errorMessage('اجازه دسترسی داده نشد!');
                 \response()->json($this->data->getReturnData());
             } else {
                 echo 'دسترسی غیرمجاز';

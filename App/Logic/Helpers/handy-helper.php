@@ -252,7 +252,11 @@ function is_image_exists(string $filename): bool
 {
     $filename = get_image_name($filename);
     $path = get_path('upload-root', $filename, false);
-    return FileSystem::fileExists($path);
+
+    $ext = FileSystem::getFileExtension($path);
+    $validImageExt = ['png', 'jpg', 'jpeg', 'gif', 'svg'];
+
+    return FileSystem::fileExists($path) && in_array($ext, $validImageExt);
 }
 
 /**

@@ -19,9 +19,9 @@ $validator = form_validator();
             <form action="<?= url('admin.setting.pages.index')->getRelativeUrlTrimmed(); ?>"
                   method="post" id="__form_setting_index_page">
                 <?php load_partial('admin/message/message-form', [
-                    'errors' => $setting_footer_errors ?? [],
-                    'success' => $setting_footer_success ?? '',
-                    'warning' => $setting_footer_warning ?? '',
+                    'errors' => $setting_index_errors ?? [],
+                    'success' => $setting_index_success ?? '',
+                    'warning' => $setting_index_warning ?? '',
                 ]); ?>
 
                 <input type="hidden" name="csrf_token" value="<?= csrf_token(); ?>" data-ignored>
@@ -46,7 +46,7 @@ $validator = form_validator();
                             </div>
                             <div class="col-12 __all_tabbed_slider_container">
                                 <?php
-                                $items = config()->get('settings.index_tabbed_slider.value.items');
+                                $items = config()->get('settings.index_tabbed_slider.value.items') ?: [];
                                 $errorItemNames = input()->post('inp-setting-tabbed-slider-name');
                                 $errorItemTypes = input()->post('inp-setting-tabbed-slider-type');
                                 $errorItemLimits = input()->post('inp-setting-tabbed-slider-limit');
@@ -67,7 +67,7 @@ $validator = form_validator();
                                                        class="form-control"
                                                        placeholder="وارد کنید"
                                                        name="inp-setting-tabbed-slider-name[]"
-                                                       value="<?= $validator->setInput('inp-setting-tabbed-slider-name', $name->getValue()); ?>">
+                                                       value="<?= $validator->setInput('inp-setting-tabbed-slider-name.' . $counter, $name->getValue()); ?>">
                                             </div>
                                             <div class="col-lg-6 form-group">
                                                 <label>
@@ -97,7 +97,7 @@ $validator = form_validator();
                                                        class="form-control"
                                                        placeholder="از نوع عددی"
                                                        name="inp-setting-tabbed-slider-limit[]"
-                                                       value="<?= $validator->setInput('inp-setting-tabbed-slider-limit', $errorItemLimits[$k]->getValue()); ?>">
+                                                       value="<?= $validator->setInput('inp-setting-tabbed-slider-limit.' . $counter, $errorItemLimits[$k]->getValue()); ?>">
                                             </div>
                                             <div class="col-lg-6 form-group">
                                                 <label>
@@ -284,7 +284,7 @@ $validator = form_validator();
                                 <div class="form-group text-center ml-sm-0 mr-sm-3 mb-0">
                                     <?php
                                     $img = !$validator->getStatus() ? ($validator->setInput('inp-setting-three-slider-image.1') ?: $images[0]['image']) : $images[0]['image'];
-                                    $img = is_image_exists($img) ? $img : '';
+                                    $img = $img && is_image_exists($img) ? $img : '';
                                     ?>
                                     <label class="form-text text-info">
                                         تصویر شماره ۱
@@ -314,8 +314,8 @@ $validator = form_validator();
                                 <input type="text"
                                        class="form-control"
                                        placeholder="برای مثال: http://www.example.com"
-                                       name="inp-setting-three-slider-name[0]"
-                                       value="<?= !$validator->getStatus() ? ($validator->setInput('inp-setting-three-slider-name.0') ?: $images[0]['link']) : $images[0]['link'] ?>">
+                                       name="inp-setting-three-slider-link[0]"
+                                       value="<?= !$validator->getStatus() ? ($validator->setInput('inp-setting-three-slider-link.0') ?: $images[0]['link']) : $images[0]['link'] ?>">
                             </div>
                         </div>
 
@@ -324,7 +324,7 @@ $validator = form_validator();
                                 <div class="form-group text-center ml-sm-0 mr-sm-3 mb-0">
                                     <?php
                                     $img = !$validator->getStatus() ? ($validator->setInput('inp-setting-three-slider-image.1') ?: $images[1]['image']) : $images[1]['image'];
-                                    $img = is_image_exists($img) ? $img : '';
+                                    $img = $img && is_image_exists($img) ? $img : '';
                                     ?>
                                     <label class="form-text text-info">
                                         تصویر شماره ۲
@@ -354,8 +354,8 @@ $validator = form_validator();
                                 <input type="text"
                                        class="form-control"
                                        placeholder="برای مثال: http://www.example.com"
-                                       name="inp-setting-three-slider-name[1]"
-                                       value="<?= !$validator->getStatus() ? ($validator->setInput('inp-setting-three-slider-name.1') ?: $images[1]['link']) : $images[1]['link'] ?>">
+                                       name="inp-setting-three-slider-link[1]"
+                                       value="<?= !$validator->getStatus() ? ($validator->setInput('inp-setting-three-slider-link.1') ?: $images[1]['link']) : $images[1]['link'] ?>">
                             </div>
                         </div>
 
@@ -364,7 +364,7 @@ $validator = form_validator();
                                 <div class="form-group text-center ml-sm-0 mr-sm-3 mb-0">
                                     <?php
                                     $img = !$validator->getStatus() ? ($validator->setInput('inp-setting-three-slider-image.2') ?: $images[2]['image']) : $images[2]['image'];
-                                    $img = is_image_exists($img) ? $img : '';
+                                    $img = $img && is_image_exists($img) ? $img : '';
                                     ?>
                                     <label class="form-text text-info">
                                         تصویر شماره ۳
@@ -394,8 +394,8 @@ $validator = form_validator();
                                 <input type="text"
                                        class="form-control"
                                        placeholder="برای مثال: http://www.example.com"
-                                       name="inp-setting-three-slider-name[2]"
-                                       value="<?= !$validator->getStatus() ? ($validator->setInput('inp-setting-three-slider-name.2') ?: $images[2]['link']) : $images[2]['link'] ?>">
+                                       name="inp-setting-three-slider-link[2]"
+                                       value="<?= !$validator->getStatus() ? ($validator->setInput('inp-setting-three-slider-link.2') ?: $images[2]['link']) : $images[2]['link'] ?>">
                             </div>
                         </div>
                     </div>

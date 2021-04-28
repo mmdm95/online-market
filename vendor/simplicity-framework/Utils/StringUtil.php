@@ -340,34 +340,82 @@ class StringUtil
     }
 
     /**
-     * @see https://stackoverflow.com/a/2955878/12154893
      * @param string $text
      * @return string
      */
     public static function slugify(string $text): string
     {
-        // replace non letter or digits by -
-        $text = \preg_replace('~[^\pL\d]+~u', '-', $text);
+        $separator = '-';
+        $text = \mb_strtolower($text);
+        $text = \preg_replace('/[^a-z0-9۰-۹ا-ی\s]+/ui', '', $text);
+        $text = \str_replace(' ', $separator, $text);
+        return \trim($text, $separator);
+    }
 
-        // transliterate
-        $text = iconv('utf-8', 'us-ascii//TRANSLIT', $text);
-
-        // remove unwanted characters
-        $text = \preg_replace('~[^-\w]+~', '', $text);
-
-        // trim
-        $text = \trim($text, '-');
-
-        // remove duplicate -
-        $text = \preg_replace('~-+~', '-', $text);
-
-        // lowercase
-        $text = \strtolower($text);
-
-        if (empty($text)) {
-            return 'n-a';
+    /**
+     * @param $text
+     * @return array|string|string[]|null
+     */
+    public static function replaceBadUTF8Chars($text)
+    {
+        if (\is_array($text)) {
+            $newArr = [];
+            foreach ($text as $k => $v) {
+                $newArr[$k] = replaceBadUTF8Chars($text[$k]);
+            }
+            return $newArr;
         }
 
-        return $text;
+        $regex = <<<'END'
+/
+  (
+    (?: [\x00-\x7F]               # single-byte sequences   0xxxxxxx
+    |   [\xC0-\xDF][\x80-\xBF]    # double-byte sequences   110xxxxx 10xxxxxx
+    |   [\xE0-\xEF][\x80-\xBF]{2} # triple-byte sequences   1110xxxx 10xxxxxx * 2
+    |   [\xF0-\xF7][\x80-\xBF]{3} # quadruple-byte sequence 11110xxx 10xxxxxx * 3 
+    ){1,100}                      # ...one or more times
+  )
+| ( [\x80-\xBF] )                 # invalid byte in range 10000000 - 10111111
+| ( [\xC0-\xFF] )                 # invalid byte in range 11000000 - 11111111
+/x
+END;
+        if (!function_exists('utf8replacer')) {
+            function utf8replacer($captures)
+            {
+                if ($captures[1] != "") {
+                    // Valid byte sequence. Return unmodified.
+                    return $captures[1];
+                } elseif ($captures[2] != "") {
+                    // Invalid byte of the form 10xxxxxx.
+                    // Encode as 11000010 10xxxxxx.
+                    return "\xC2" . $captures[2];
+                } else {
+                    // Invalid byte of the form 11xxxxxx.
+                    // Encode as 11000011 10xxxxxx.
+                    return "\xC3" . \chr(\ord($captures[3]) - 64);
+                }
+            }
+        }
+
+        return \preg_replace_callback($regex, "utf8replacer", $text);
+    }
+
+    /**
+     * @see https://github.com/sallaizalan/mb-substr-replace/blob/master/mbsubstrreplace.php
+     *
+     * @param string $string
+     * @param string $replacement
+     * @param int $start
+     * @param int $length
+     * @return string
+     */
+    public static function mbSubstrReplace($string, $replacement, $start, $length = 1)
+    {
+        $startString = mb_substr($string, 0, $start, "UTF-8");
+        $endString = mb_substr($string, $start + $length, mb_strlen($string), "UTF-8");
+
+        $out = $startString . $replacement . $endString;
+
+        return $out;
     }
 }

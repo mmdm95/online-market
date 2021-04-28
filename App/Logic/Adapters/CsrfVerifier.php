@@ -14,6 +14,10 @@ class CsrfVerifier extends BaseCsrfVerifier
      */
     protected $except = [
         '/api/*',
+        '/ajax/file-manager/rename',
+        '/ajax/file-manager/delete',
+        '/ajax/file-manager/mkdir',
+        '/ajax/file-manager/mvdir',
         '/ajax/file-manager/upload',
     ];
 

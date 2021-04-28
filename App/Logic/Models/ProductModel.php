@@ -199,7 +199,8 @@ class ProductModel extends BaseModel
         $select
             ->from(self::TBL_PRODUCT_GALLERY)
             ->cols(['image'])
-            ->where('product_id=:pId', ['pId' => $product_id]);
+            ->where('product_id=:pId')
+            ->bindValues(['pId' => $product_id]);
 
         return $this->db->fetchAll($select->getStatement(), $select->getBindValues());
     }
@@ -464,6 +465,7 @@ class ProductModel extends BaseModel
      * @param array $products
      * @param array $related_products
      * @return bool
+     * @throws \Exception
      */
     public function updateProduct($product_id, array $info, array $image_galley, array $products, array $related_products): bool
     {
@@ -472,7 +474,9 @@ class ProductModel extends BaseModel
         $update = $this->connector->update();
         $update
             ->table($this->table)
-            ->cols($info);
+            ->cols($info)
+            ->where('id=:id')
+            ->bindValues(['id' => $product_id]);
 
         $stmt = $this->db->prepare($update->getStatement());
         $res = $stmt->execute($update->getBindValues());
@@ -486,7 +490,8 @@ class ProductModel extends BaseModel
         $delete = $this->connector->delete();
         $delete
             ->from(self::TBL_PRODUCT_GALLERY)
-            ->where('product_id=:pId', ['pId' => $product_id]);
+            ->where('product_id=:pId')
+            ->bindValues(['pId' => $product_id]);
         $stmt = $this->db->prepare($delete->getStatement());
         $res4 = $stmt->execute($delete->getBindValues());
 
@@ -494,15 +499,26 @@ class ProductModel extends BaseModel
         $delete = $this->connector->delete();
         $delete
             ->from(self::TBL_PRODUCT_RELATED)
-            ->where('product_id=:pId', ['pId' => $product_id]);
+            ->where('product_id=:pId')
+            ->bindValues(['pId' => $product_id]);
         $stmt = $this->db->prepare($delete->getStatement());
         $res5 = $stmt->execute($delete->getBindValues());
 
         // delete all products
+        $productSelect = $this->connector->select();
+        $productSelect
+            ->cols(['color_hex', 'color_name'])
+            ->from(self::TBL_PRODUCT_PROPERTY)
+            ->where('product_id=:pId',)
+            ->bindValues(['pId' => $product_id]);
+        $prevProduct = $this->db->fetchAll($productSelect->getStatement(), $productSelect->getBindValues());
+        $prevProduct = count($prevProduct) ? $prevProduct[0] : [];
+        //
         $delete = $this->connector->delete();
         $delete
             ->from(self::TBL_PRODUCT_PROPERTY)
-            ->where('product_id=:pId', ['pId' => $product_id]);
+            ->where('product_id=:pId')
+            ->bindValues(['pId' => $product_id]);
         $stmt = $this->db->prepare($delete->getStatement());
         $res6 = $stmt->execute($delete->getBindValues());
 
@@ -517,6 +533,7 @@ class ProductModel extends BaseModel
             $insert
                 ->into(self::TBL_PRODUCT_PROPERTY)
                 ->cols([
+                    'code' => StringUtil::uniqidReal(12),
                     'product_id' => $product_id,
                     'stock_count' => $product['stock_count'],
                     'max_cart_count' => $product['max_cart'],
@@ -524,8 +541,8 @@ class ProductModel extends BaseModel
                     'discounted_price' => $product['discount_price'],
                     'discount_until' => $product['discount_until'] ?: null,
                     'is_available' => $product['available'],
-                    'color_hex' => $product['color_hex'],
-                    'color_name' => $product['color_name'],
+                    'color_hex' => $product['color_hex'] ?: $prevProduct['color_hex'],
+                    'color_name' => $product['color_name'] ?: $prevProduct['color_name'],
                     'size' => $product['size'] ?: null,
                     'guarantee' => $product['guarantee'] ?: null,
                     'weight' => $product['weight'],

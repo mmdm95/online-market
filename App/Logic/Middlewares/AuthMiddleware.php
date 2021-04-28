@@ -15,7 +15,7 @@ class AuthMiddleware implements IMiddleware
          */
         $auth = container()->get('auth_home');
 
-        if (!$auth->isLoggedIn()) {
+        if (!$auth->resume()->isLoggedIn()) {
             response()->redirect(url('home.login', [], ['back_url' => url()->getRelativeUrl()]));
         }
     }

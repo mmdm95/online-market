@@ -113,7 +113,7 @@ class AddUnitForm implements IPageForm
 
             $res = $unitModel->insert([
                 'title' => $xss->xss_clean(trim($title)),
-                'sign' => $xss->xss_clean(trim($sign)),
+                'sign' => $xss->xss_clean(trim($sign)) ?: null,
                 'created_at' => time(),
                 'created_by' => $auth->getCurrentUser()['id'] ?? null,
             ]);

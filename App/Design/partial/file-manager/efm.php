@@ -328,7 +328,7 @@
             if (!data.is_dir && !allow_direct_link) $link.css('pointer-events', 'none');
 
             // Download Icon
-            var $dl_link = $('<a/>').attr('href', routes.download + data.path)
+            var $dl_link = $('<a/>').attr('href', routes.download + '/' + data.path)
                 .attr('target', "_blank").addClass('download btn btn-success btn-icon').text('دانلود').prepend("<i class='icon-download4 ml-2'></i>");
             var $delete_link = $('<a href="javascript:void(0);" />').attr('data-file', data.path).addClass('delete btn btn-light btn-icon').text('حذف').prepend("<i class='icon-cross3 ml-2'></i>");
             var $rename_link = $('<a href="javascript:void(0);" />').attr('data-file-name', data.name).attr('data-file', data.path).attr('data-toggle', 'modal').attr('data-target', '#modal_rename').addClass('rename btn btn-warning btn-icon').text('تغییر نام').prepend("<i class='icon-pencil7 ml-2'></i>");
@@ -402,7 +402,7 @@
             }
 
             $link = $('<a class="name image ' + extraClass + '" />')
-                .attr('href', 'javascript:void(0);').attr('data-url', "<?= url('image.show'); ?>" + data.path)
+                .attr('href', 'javascript:void(0);').attr('data-url', data.path)
                 .append($('<span class="img-name">' + data.name + '</span>'))
                 .append($('<img class="lazy" data-src="' + dataSrc + '" alt="' + data.name + '" />'))
                 .append($('<div style="clear: both;"></div>'));
@@ -421,17 +421,15 @@
             }
             $.each(pathArr, function (k, v) {
                 if (v) {
-                    if (k >= 1) {
-                        var v_as_text;
-                        if (pathArr.length == (k + 1)) {
-                            v_as_text = decodeURIComponent(v);
-                            $html.append($('<span/>').text(' ▸ '))
-                                .append($('<a class="text-dark" />').attr('href', '#/' + base + v).text(v_as_text));
-                        } else {
-                            v_as_text = decodeURIComponent(v);
-                            $html.append($('<span/>').text(' ▸ '))
-                                .append($('<a class="text-muted" />').attr('href', '#/' + base + v).text(v_as_text));
-                        }
+                    var v_as_text;
+                    if (pathArr.length == k) {
+                        v_as_text = decodeURIComponent(v);
+                        $html.append($('<span/>').text(' ▸ '))
+                            .append($('<a class="text-dark" />').attr('href', '#/' + base + v).text(v_as_text));
+                    } else {
+                        v_as_text = decodeURIComponent(v);
+                        $html.append($('<span/>').text(' ▸ '))
+                            .append($('<a class="text-muted" />').attr('href', '#/' + base + v).text(v_as_text));
                     }
                     base += v + '/';
                 }

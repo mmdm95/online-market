@@ -266,6 +266,16 @@ class CategoryImageController extends AbstractAdminController implements IDatata
                     $categoryModel = container()->get(CategoryImageModel::class);
 
                     $cols[] = 'ci.category_id';
+                    $cols[] = 'c.deletable';
+
+                    if (!empty($where)) {
+                        $where .= ' AND (c.level=:c_lvl)';
+                    } else {
+                        $where = 'c.level=:c_lvl';
+                    }
+                    $bindValues = array_merge($bindValues, [
+                        'c_lvl' => 1,
+                    ]);
 
                     $data = $categoryModel->getCategoryImages($cols, $where, $bindValues, $limit, $offset, $order);
                     //-----
@@ -276,23 +286,29 @@ class CategoryImageController extends AbstractAdminController implements IDatata
                 });
 
                 $columns = [
-                    ['db' => 'ci.id', 'db_alias' => 'id', 'dt' => 'id'],
+                    ['db' => 'c.id', 'db_alias' => 'id', 'dt' => 'id'],
                     ['db' => 'c.name', 'db_alias' => 'name', 'dt' => 'name'],
-                    ['db' => 'ci.link', 'db_alias' => 'link', 'dt' => 'link'],
+                    [
+                        'db' => 'ci.link',
+                        'db_alias' => 'link',
+                        'dt' => 'link',
+                        'formatter' => function ($d) {
+                            return $d ?: $this->setTemplate('partial/admin/parser/dash-icon')->render();
+                        }
+                    ],
                     [
                         'db' => 'ci.image',
                         'db_alias' => 'image',
                         'dt' => 'image',
                         'formatter' => function ($d, $row) {
-                            if ($row['image']) {
+                            if ($d) {
                                 return $this->setTemplate('partial/admin/parser/image-placeholder')
                                     ->render([
                                         'img' => $d,
                                         'alt' => 'تصویر ' . $row['name'],
                                     ]);
-                            } else {
-                                return $this->setTemplate('partial/admin/parser/dash-icon')->render();
                             }
+                            return $this->setTemplate('partial/admin/parser/dash-icon')->render();
                         }
                     ],
                     [

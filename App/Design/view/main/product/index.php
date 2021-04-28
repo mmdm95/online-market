@@ -1,6 +1,7 @@
 <?php
 
 use Sim\Utils\ArrayUtil;
+use Sim\Utils\StringUtil;
 
 ?>
 
@@ -24,6 +25,12 @@ use Sim\Utils\ArrayUtil;
                                         </select>
                                     </div>
                                 </div>
+                                <div class="product_header_right">
+                                    <div class="products_view">
+                                        <a href="javascript:void(0);" class="shorting_icon grid"><i class="ti-view-grid"></i></a>
+                                        <a href="javascript:void(0);" class="shorting_icon list active"><i class="ti-layout-list-thumb"></i></a>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -41,8 +48,8 @@ use Sim\Utils\ArrayUtil;
                                         <li>
                                             <a href="<?= url('home.search', [
                                                 'category' => $cat['id'],
-                                                'category_slug' => $cat['name'],
-                                            ]); ?>">
+                                                'category_slug' => StringUtil::slugify($cat['name']),
+                                            ])->getRelativeUrlTrimmed(); ?>">
                                                 <span class="categories_name"><?= $cat['name']; ?></span>
                                             </a>
                                         </li>
@@ -91,7 +98,7 @@ use Sim\Utils\ArrayUtil;
                             </div>
                         <?php endif; ?>
                         <?php if (count($brands ?? [])): ?>
-                            <div class="widget max-widget-height">
+                            <div class="widget">
                                 <h5 class="widget_title">برندها</h5>
                                 <ul class="list_brand max-widget-height">
                                     <?php

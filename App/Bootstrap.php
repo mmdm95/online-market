@@ -94,6 +94,8 @@ class Bootstrap
     {
         $this->route_needed = $route_needed;
         //-----
+        date_default_timezone_set('Asia/Tehran');
+        //-----
         $this->defineConstants();
         $this->init();
         if ($route_needed) {

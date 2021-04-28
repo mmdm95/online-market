@@ -55,7 +55,7 @@
 
                                     <li class="dropdown dropdown-mega-menu">
                                         <a class="dropdown-item nav-link <?= $hasChildren ? 'dropdown-toggler' : 'nav_item'; ?>"
-                                           href="#"
+                                           href="<?= url('home.search', ['category' => $m['id']])->getRelativeUrl(); ?>"
                                             <?= $hasChildren ? 'data-toggle="dropdown"' : ''; ?>>
                                             <span><?= $m['name']; ?></span>
                                         </a>
@@ -79,7 +79,7 @@
                                                                     <ul>
                                                                         <li class="dropdown-header">
                                                                             <a class="nav-link nav_item"
-                                                                               href="#">
+                                                                               href="<?= url('home.search', ['category' => $children2['id']])->getRelativeUrl(); ?>">
                                                                                 <?= $children2['name']; ?>
                                                                             </a>
                                                                         </li>
@@ -87,7 +87,7 @@
                                                                             <?php foreach ($children2['children'] as $children3): ?>
                                                                                 <li>
                                                                                     <a class="dropdown-item nav-link nav_item"
-                                                                                       href="#">
+                                                                                       href="<?= url('home.search', ['category' => $children3['id']])->getRelativeUrl(); ?>">
                                                                                         <?= $children3['name']; ?>
                                                                                     </a>
                                                                                 </li>
@@ -102,7 +102,7 @@
                                                     <?php if ($hasImage): ?>
                                                         <li class="mega-menu-col col-lg-5">
                                                             <div class="header-banner2">
-                                                                <a href="#">
+                                                                <a href="<?= url('home.search', ['category' => $m['id']])->getRelativeUrl(); ?>">
                                                                     <img src="<?= url('image.show') . $menu_images[$m['id']]['image']; ?>"
                                                                          alt="<?= $m['name']; ?>">
                                                                 </a>
@@ -124,7 +124,7 @@
 
                                                 <li class="dropdown dropdown-mega-menu">
                                                     <a class="dropdown-item nav-link <?= $hasChildren ? 'dropdown-toggler' : 'nav_item'; ?>"
-                                                       href="#"
+                                                       href="<?= url('home.search', ['category' => $m['id']])->getRelativeUrl(); ?>"
                                                         <?= $hasChildren ? 'data-toggle="dropdown"' : ''; ?>>
                                                         <span><?= $m['name']; ?></span>
                                                     </a>
@@ -148,7 +148,7 @@
                                                                                 <ul>
                                                                                     <li class="dropdown-header">
                                                                                         <a class="nav-link nav_item"
-                                                                                           href="#">
+                                                                                           href="<?= url('home.search', ['category' => $children2['id']])->getRelativeUrl(); ?>">
                                                                                             <?= $children2['name']; ?>
                                                                                         </a>
                                                                                     </li>
@@ -156,7 +156,7 @@
                                                                                         <?php foreach ($children2['children'] as $children3): ?>
                                                                                             <li>
                                                                                                 <a class="dropdown-item nav-link nav_item"
-                                                                                                   href="#">
+                                                                                                   href="<?= url('home.search', ['category' => $children3['id']])->getRelativeUrl(); ?>">
                                                                                                     <?= $children3['name']; ?>
                                                                                                 </a>
                                                                                             </li>
@@ -171,7 +171,7 @@
                                                                 <?php if ($hasImage): ?>
                                                                     <li class="mega-menu-col col-lg-5">
                                                                         <div class="header-banner2">
-                                                                            <a href="#">
+                                                                            <a href="<?= url('home.search', ['category' => $m['id']])->getRelativeUrl(); ?>">
                                                                                 <img src="<?= url('image.show') . $menu_images[$m['id']]['image']; ?>"
                                                                                      alt="<?= $m['name']; ?>">
                                                                             </a>

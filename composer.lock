@@ -689,16 +689,16 @@
         },
         {
             "name": "mmdm/sim-csrf",
-            "version": "v1.1.0",
+            "version": "v1.2.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/mmdm95/sim-csrf.git",
-                "reference": "970b4454a8073e4cbb09f1a6f3d0f4f69d0d7a3f"
+                "reference": "0c0726fafa05cffcbd2a5da469638d4ee8fc446d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mmdm95/sim-csrf/zipball/970b4454a8073e4cbb09f1a6f3d0f4f69d0d7a3f",
-                "reference": "970b4454a8073e4cbb09f1a6f3d0f4f69d0d7a3f",
+                "url": "https://api.github.com/repos/mmdm95/sim-csrf/zipball/0c0726fafa05cffcbd2a5da469638d4ee8fc446d",
+                "reference": "0c0726fafa05cffcbd2a5da469638d4ee8fc446d",
                 "shasum": ""
             },
             "require": {
@@ -724,9 +724,9 @@
             "description": "A simple yet nice CSRF library",
             "support": {
                 "issues": "https://github.com/mmdm95/sim-csrf/issues",
-                "source": "https://github.com/mmdm95/sim-csrf/tree/v1.1.0"
+                "source": "https://github.com/mmdm95/sim-csrf/tree/v1.2.1"
             },
-            "time": "2021-03-14T11:56:41+00:00"
+            "time": "2021-04-23T23:03:57+00:00"
         },
         {
             "name": "mmdm/sim-event-dispatcher",
@@ -857,16 +857,16 @@
         },
         {
             "name": "mmdm/sim-file",
-            "version": "v0.2.3",
+            "version": "v0.2.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/mmdm95/sim-file.git",
-                "reference": "63ded6745550720afd7db6ab144e4adca14f6261"
+                "reference": "819b8ab295a9599c64b12484d574be5e14f4b0d5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mmdm95/sim-file/zipball/63ded6745550720afd7db6ab144e4adca14f6261",
-                "reference": "63ded6745550720afd7db6ab144e4adca14f6261",
+                "url": "https://api.github.com/repos/mmdm95/sim-file/zipball/819b8ab295a9599c64b12484d574be5e14f4b0d5",
+                "reference": "819b8ab295a9599c64b12484d574be5e14f4b0d5",
                 "shasum": ""
             },
             "require": {
@@ -893,9 +893,9 @@
             "description": "A simple yet nice file management library",
             "support": {
                 "issues": "https://github.com/mmdm95/sim-file/issues",
-                "source": "https://github.com/mmdm95/sim-file/tree/v0.2.3"
+                "source": "https://github.com/mmdm95/sim-file/tree/v0.2.5"
             },
-            "time": "2020-11-05T08:48:37+00:00"
+            "time": "2021-04-23T09:54:00+00:00"
         },
         {
             "name": "mmdm/sim-form",
@@ -1288,16 +1288,16 @@
         },
         {
             "name": "php-di/php-di",
-            "version": "6.3.1",
+            "version": "6.3.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/PHP-DI/PHP-DI.git",
-                "reference": "78278800b18e7c5582fd4d4e629715f5eebbfcc0"
+                "reference": "12a15cc288bbc89896dd80ce5a36731781613ba2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PHP-DI/PHP-DI/zipball/78278800b18e7c5582fd4d4e629715f5eebbfcc0",
-                "reference": "78278800b18e7c5582fd4d4e629715f5eebbfcc0",
+                "url": "https://api.github.com/repos/PHP-DI/PHP-DI/zipball/12a15cc288bbc89896dd80ce5a36731781613ba2",
+                "reference": "12a15cc288bbc89896dd80ce5a36731781613ba2",
                 "shasum": ""
             },
             "require": {
@@ -1348,7 +1348,7 @@
             ],
             "support": {
                 "issues": "https://github.com/PHP-DI/PHP-DI/issues",
-                "source": "https://github.com/PHP-DI/PHP-DI/tree/6.3.1"
+                "source": "https://github.com/PHP-DI/PHP-DI/tree/6.3.2"
             },
             "funding": [
                 {
@@ -1360,7 +1360,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-03-25T10:29:47+00:00"
+            "time": "2021-04-20T12:24:31+00:00"
         },
         {
             "name": "php-di/phpdoc-reader",
@@ -2391,21 +2391,21 @@
         },
         {
             "name": "symfony/service-contracts",
-            "version": "v2.2.0",
+            "version": "v2.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/service-contracts.git",
-                "reference": "d15da7ba4957ffb8f1747218be9e1a121fd298a1"
+                "reference": "f040a30e04b57fbcc9c6cbcf4dbaa96bd318b9bb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/service-contracts/zipball/d15da7ba4957ffb8f1747218be9e1a121fd298a1",
-                "reference": "d15da7ba4957ffb8f1747218be9e1a121fd298a1",
+                "url": "https://api.github.com/repos/symfony/service-contracts/zipball/f040a30e04b57fbcc9c6cbcf4dbaa96bd318b9bb",
+                "reference": "f040a30e04b57fbcc9c6cbcf4dbaa96bd318b9bb",
                 "shasum": ""
             },
             "require": {
                 "php": ">=7.2.5",
-                "psr/container": "^1.0"
+                "psr/container": "^1.1"
             },
             "suggest": {
                 "symfony/service-implementation": ""
@@ -2413,7 +2413,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.2-dev"
+                    "dev-main": "2.4-dev"
                 },
                 "thanks": {
                     "name": "symfony/contracts",
@@ -2450,7 +2450,7 @@
                 "standards"
             ],
             "support": {
-                "source": "https://github.com/symfony/service-contracts/tree/master"
+                "source": "https://github.com/symfony/service-contracts/tree/v2.4.0"
             },
             "funding": [
                 {
@@ -2466,7 +2466,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2020-09-07T11:33:47+00:00"
+            "time": "2021-04-01T10:43:52+00:00"
         },
         {
             "name": "symfony/string",

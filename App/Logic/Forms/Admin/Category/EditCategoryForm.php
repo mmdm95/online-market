@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Logic\Forms\Admin\Blog;
+namespace App\Logic\Forms\Admin\Category;
 
 use App\Logic\Interfaces\IPageForm;
 use App\Logic\Models\BlogCategoryModel;
@@ -87,7 +87,7 @@ class EditCategoryForm implements IPageForm
             ->custom(function (FormValue $value) use ($categoryModel) {
                 if (
                     $value->getValue() == DEFAULT_OPTION_VALUE ||
-                    $categoryModel->count('id=:id', ['id' => trim($value->getValue())]) === 0) {
+                    $categoryModel->count('id=:id', ['id' => trim($value->getValue())]) !== 0) {
                     return true;
                 }
                 return false;
@@ -150,11 +150,11 @@ class EditCategoryForm implements IPageForm
         $auth = container()->get('auth_admin');
 
         try {
-            $pub = input()->post('inp-add-category-status', '')->getValue();
-            $name = input()->post('inp-add-category-name', '')->getValue();
-            $parent = input()->post('inp-add-category-parent', '')->getValue();
-            $keywords = input()->post('inp-add-category-keywords', '')->getValue();
-            $priority = input()->post('inp-add-category-priority', '')->getValue();
+            $pub = input()->post('inp-edit-category-status', '')->getValue();
+            $name = input()->post('inp-edit-category-name', '')->getValue();
+            $parent = input()->post('inp-edit-category-parent', '')->getValue();
+            $keywords = input()->post('inp-edit-category-keywords', '')->getValue();
+            $priority = input()->post('inp-edit-category-priority', '')->getValue();
 
             $parentInfo = $categoryModel->getFirst(['level'], 'id=:id', ['id' => $parent]);
             if ($parent == DEFAULT_OPTION_VALUE) {
@@ -168,7 +168,7 @@ class EditCategoryForm implements IPageForm
 
             return $categoryModel->update([
                 'name' => $xss->xss_clean($name),
-                'parent_id' => $parent,
+                'parent_id' => $parent ?: null,
                 'keywords' => $xss->xss_clean($keywords),
                 'publish' => is_value_checked($pub) ? DB_YES : DB_NO,
                 'priority' => $xss->xss_clean($priority),

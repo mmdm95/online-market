@@ -1,10 +1,16 @@
+<?php
+
+$validator = form_validator();
+
+?>
+
 <!-- Content area -->
 <div class="content">
     <div class="card col-lg-9">
         <?php load_partial('admin/card-header', ['header_title' => 'ویرایش دسته‌بندی']); ?>
 
         <div class="card-body">
-            <form action="<?= url('admin.category.edit')->getRelativeUrl() . $category['id']; ?>" method="post"
+            <form action="<?= url('admin.category.edit')->getRelativeUrlTrimmed(); ?>" method="post"
                   id="__form_edit_category">
                 <?php load_partial('admin/message/message-form', [
                     'errors' => $cat_edit_errors ?? [],

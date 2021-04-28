@@ -34,7 +34,7 @@ $validator = form_validator();
                             <label>
                                 آدرس‌های تلگرام:
                             </label>
-                            <input type="text" class="form-control tags-input"
+                            <input type="text" class="form-control tags-input ltr"
                                    placeholder="وارد کنید"
                                    name="inp-setting-telegram"
                                    value="<?= !$validator->getStatus() ? ($validator->setInput('inp-setting-telegram') ?: config()->get('settings.social_telegram.value')) : config()->get('settings.social_telegram.value'); ?>">
@@ -43,7 +43,7 @@ $validator = form_validator();
                             <label>
                                 آدرس‌های اینستاگرام:
                             </label>
-                            <input type="text" class="form-control tags-input"
+                            <input type="text" class="form-control tags-input ltr"
                                    placeholder="وارد کنید"
                                    name="inp-setting-instagram"
                                    value="<?= !$validator->getStatus() ? ($validator->setInput('inp-setting-instagram') ?: config()->get('settings.social_instagram.value')) : config()->get('settings.social_instagram.value'); ?>">
@@ -52,7 +52,7 @@ $validator = form_validator();
                             <label>
                                 آدرس‌های واتس اپ:
                             </label>
-                            <input type="text" class="form-control tags-input"
+                            <input type="text" class="form-control tags-input ltr"
                                    placeholder="وارد کنید"
                                    name="inp-setting-whatsapp"
                                    value="<?= !$validator->getStatus() ? ($validator->setInput('inp-setting-whatsapp') ?: config()->get('settings.social_whatsapp.value')) : config()->get('settings.social_whatsapp.value'); ?>">

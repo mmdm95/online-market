@@ -10,7 +10,7 @@
                 ?>
                 <div class="col-lg-6">
                     <div class="about_img scene mb-4 mb-lg-0">
-                        <img src="<?= $aboutDesc['image']; ?>" alt="about_img">
+                        <img src="<?= url('image.show', ['filename' => $aboutDesc['image']]); ?>" alt="about_img">
                     </div>
                 </div>
                 <div class="col-lg-6">

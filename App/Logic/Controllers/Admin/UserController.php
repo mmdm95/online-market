@@ -473,7 +473,7 @@ class UserController extends AbstractAdminController implements IDatatableContro
                     ['db' => 'code', 'db_alias' => 'code', 'dt' => 'code'],
                     ['db' => 'receiver_name', 'db_alias' => 'receiver_name', 'dt' => 'name'],
                     ['db' => 'receiver_mobile', 'db_alias' => 'receiver_mobile', 'dt' => 'mobile'],
-                    ['db' => 'CONCAT(province, ' - ', city)', 'db_alias' => 'place', 'dt' => 'place'],
+                    ['db' => "CONCAT(province, '-', city)", 'db_alias' => 'place', 'dt' => 'place'],
                     [
                         'db' => 'payment_status',
                         'db_alias' => 'payment_status',

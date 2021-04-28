@@ -189,7 +189,7 @@
                             .addClass('has-image')
                             .find('.img-placeholder-image')
                             .remove();
-                        clickedItem.append($('<img class="img-placeholder-image" src="' + selectedItem + '" alt="selected image">'));
+                        clickedItem.append($('<img class="img-placeholder-image" src="/images/' + selectedItem + '" alt="selected image">'));
                         clickedItem.find('input[type="hidden"]').val(selectedItem);
                         return true;
                     } else {

@@ -107,7 +107,8 @@ class GeneralAjaxStatusHandler implements IHandler
                     emitter()->dispatch('status.general.ajax:not_exists', [&$this->resourceHandler]);
                 } else {
                     $emRes = emitter()->dispatch('status.general.ajax:before_update', [&$this->resourceHandler]);
-                    if (is_null($emRes) || (bool)$emRes->getReturnValue()) {
+
+                    if (is_null($emRes->getReturnValue()) || (bool)$emRes->getReturnValue()) {
                         $update = $model->update();
                         $update
                             ->table($table)
@@ -117,6 +118,7 @@ class GeneralAjaxStatusHandler implements IHandler
                             ->where('id=:id')
                             ->bindValue('id', $id);
                         $res = $model->execute($update);
+
                         if ($res) {
                             if (is_value_checked($status)) {
                                 $this->resourceHandler
