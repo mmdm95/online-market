@@ -83,12 +83,14 @@ class SettingFooterForm implements IPageForm
             $section2 = $xss->xss_clean(json_encode(session()->getFlash('setting-footer-sec2-assembled') ?: []));
             // it does not need xss cleaning, it had cleaned with its own parameter before
             $namads = json_encode(session()->getFlash('setting-footer-namads-assembled') ?: []);
+            $copyright = $xss->xss_clean(input()->post('inp-setting-copyright', '')->getValue());
 
             return $settingModel->updateFooterSetting([
                 SETTING_FOOTER_TINY_DESC => trim($tinyDesc),
                 SETTING_FOOTER_NAMADS => trim($namads),
                 SETTING_FOOTER_SECTION_1 => trim($section1),
                 SETTING_FOOTER_SECTION_2 => trim($section2),
+                SETTING_FOOTER_COPYRIGHT => trim($copyright),
             ]);
         } catch (\Exception $e) {
             return false;

@@ -88,8 +88,8 @@ class SettingPageIndexForm implements IPageForm
                 if ('' !== trim($name->getValue())) {
                     $assembled['items'][$counter]['name'] = $name->getValue();
                     $assembled['items'][$counter]['type'] = $itemTypes[$counter]->getValue();
-                    $assembled['items'][$counter]['category'] = $itemLimits[$counter]->getValue();
-                    $assembled['items'][$counter]['limit'] = $itemCategories[$counter]->getValue();
+                    $assembled['items'][$counter]['category'] = $itemCategories[$counter]->getValue();
+                    $assembled['items'][$counter]['limit'] = $itemLimits[$counter]->getValue();
                     ++$counter;
                 }
             }

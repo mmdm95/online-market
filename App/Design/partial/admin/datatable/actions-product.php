@@ -16,7 +16,7 @@
                     <i class="icon-comment-discussion"></i>
                      مشاهده
                 </a>
-                <a href="<?= url('admin.comment.view', ['id' => $row['id']]); ?>"
+                <a href="<?= url('admin.comment.view', ['p_id' => $row['id']]); ?>"
                    class="dropdown-item">
                     <i class="icon-comment-discussion"></i>
                     نمایش نظرات

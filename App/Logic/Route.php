@@ -984,9 +984,7 @@ class Route implements IInitialize
                 Router::get('/slider/get/{id}', [AdminSliderController::class, 'get'])->where([
                     'id' => '[0-9]+',
                 ])->name('ajax.slider.get');
-                Router::post('/slider/add/{user_id}', [AdminSliderController::class, 'add'])->where([
-                    'user_id' => '[0-9]+',
-                ])->name('ajax.slider.add');
+                Router::post('/slider/add', [AdminSliderController::class, 'add'])->name('ajax.slider.add');
                 Router::post('/slider/edit/{id}', [AdminSliderController::class, 'edit'])->where([
                     'id' => '[0-9]+',
                 ])->name('ajax.slider.edit');
@@ -1108,6 +1106,7 @@ class Route implements IInitialize
                 Router::get('/file-manager/list', [AdminFileController::class, 'list'])->name('api.file-manager.list');
                 Router::post('/file-manager/rename', [AdminFileController::class, 'rename'])->name('api.file-manager.rename');
                 Router::post('/file-manager/delete', [AdminFileController::class, 'delete'])->name('api.file-manager.delete');
+                Router::post('/file-manager/delete-all', [AdminFileController::class, 'deleteAll'])->name('api.file-manager.delete.all');
                 Router::post('/file-manager/mkdir', [AdminFileController::class, 'makeDir'])->name('api.file-manager.mkdir');
                 Router::post('/file-manager/mvdir', [AdminFileController::class, 'moveDir'])->name('api.file-manager.mvdir');
                 Router::post('/file-manager/upload', [AdminFileController::class, 'upload'])->name('api.file-manager.upload');

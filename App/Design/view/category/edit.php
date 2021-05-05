@@ -31,7 +31,7 @@ $validator = form_validator();
                                     نمایش
                                     <input type="checkbox" class="form-check-input-switchery"
                                            name="inp-edit-category-status"
-                                        <?= $validator->setCheckbox('inp-edit-category-status', 'on') ?: (is_value_checked($category['publish'] ? 'checked="checked"' : '')); ?>>
+                                        <?= $validator->setCheckbox('inp-edit-category-status', 'on') ?: (is_value_checked($category['publish']) ? 'checked="checked"' : ''); ?>>
                                     عدم نمایش
                                 </label>
                             </div>

@@ -12,7 +12,7 @@ use App\Logic\Utils\Jdf;
                     <div class="widget">
                         <div class="footer_logo">
                             <a href="<?= url('home.index'); ?>">
-                                <img src="<?= url('image.show') . \config()->get('settings.logo_light.value'); ?>"
+                                <img src="<?= url('image.show') . \config()->get('settings.logo_light_footer.value'); ?>"
                                      alt="logo"/>
                             </a>
                         </div>
@@ -140,19 +140,23 @@ use App\Logic\Utils\Jdf;
             </div>
         </div>
     </div>
-    <div class="bottom_footer border-top-tran">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-6">
-                    <p class="mb-md-0 text-center text-md-left">
-                        ©
-                        <?= Jdf::jdate('Y'); ?>
-                        کلیه حقوق این سایت متعلق به
-                        <?= \config()->get('settings.title.value'); ?>
-                        است.
-                    </p>
+
+    <?php
+    $copyright = \config()->get('settings.footer_copyright.value');
+    ?>
+    <?php if (!empty($copyright)): ?>
+        <div class="bottom_footer border-top-tran">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-6">
+                        <p class="mb-md-0 text-center text-md-left">
+                            ©
+                            <?= Jdf::jdate('Y'); ?>
+                            <?= $copyright; ?>
+                        </p>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+    <?php endif; ?>
 </footer>

@@ -90,10 +90,12 @@
                             <div class="col-lg-8 form-group">
                                 <label>لینک:</label>
                                 <input type="text" placeholder="http://" class="form-control ltr"
-                                       name="inp-add-slide-link">
+                                       name="inp-add-slide-sub-link">
                             </div>
                             <div class="col-lg-4 form-group">
-                                <label>اولویت:</label>
+                                <label>
+                                    اولویت:
+                                </label>
                                 <input type="number" placeholder="از نوع عددی" class="form-control"
                                        name="inp-add-slide-priority">
                             </div>
@@ -154,7 +156,7 @@
                             <div class="col-lg-8 form-group">
                                 <label>لینک:</label>
                                 <input type="text" placeholder="http://" class="form-control ltr"
-                                       name="inp-edit-slide-link">
+                                       name="inp-edit-slide-sub-link">
                             </div>
                             <div class="col-lg-4 form-group">
                                 <label>اولویت:</label>

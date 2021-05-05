@@ -69,6 +69,7 @@
             list: '/ajax/file-manager/list',
             rename: '/ajax/file-manager/rename',
             delete: '/ajax/file-manager/delete',
+            deleteAll: '/ajax/file-manager/delete-all',
             mkdir: '/ajax/file-manager/mkdir',
             mvdir: '/ajax/file-manager/mvdir',
             upload: '/ajax/file-manager/upload',
@@ -236,6 +237,41 @@
             }
         });
 
+        $('#delItem').on('click', function (e) {
+            var chks = $('.chks[checked=checked]');
+            chksLen = $(chks).length;
+
+            if (0 !== chksLen) {
+                adminCommon.toasts.confirm('آیا مطمئن هستید؟', function () {
+                    $.ajax({
+                        url: routes.deleteAll,
+                        method: 'POST',
+                        dataType: 'json',
+                        data: {
+                            file: JSON.stringify(chksPath),
+                            xsrf: XSRF,
+                        },
+                        success: function (response) {
+                            if (null === response.error) {
+                                uncheckAll(mainChks);
+                                chksPath = [];
+                                mainChks.find('input[type=checkbox]').removeAttr('checked');
+                                list();
+                                changeSelectedItemsCount();
+                            } else {
+                                adminCommon.toasts.toast(response.error, {
+                                    type: 'error',
+                                });
+                            }
+                        },
+                        error: function (response) {
+                            // console.warn(response.responseText);
+                        },
+                    });
+                });
+            }
+        });
+
         mainChks.find('input[type=checkbox]').on('change', function () {
             if ($(this).attr('checked') == 'checked') {
                 uncheckAll(this);
@@ -257,11 +293,11 @@
         }
 
         function changeSelectedItemsCount() {
-            var count = chksPath.length;
+            var count = $('.chks[checked=checked]').length;
             if (typeof count === typeof 0 && count >= 0) {
-                $('#selItemsCount').html(count);
+                $('.selItemsCount').html(count);
             } else {
-                $('#selItemsCount').html(0);
+                $('.selItemsCount').html(0);
             }
         }
 
@@ -443,7 +479,7 @@
 
                     // Detect checkbox of files change
                     $('.chks').off('change').on('change', function () {
-                        var path = $(this).closest('tr').find('.first a.name').attr('href');
+                        var path = $(this).closest('tr').find('.first a.name').attr('data-url');
                         $(this).closest('span').removeClass('checked');
                         if ($(this).attr('checked') == 'checked') {
                             $(this).removeAttr('checked').prop('checked', false);
@@ -554,6 +590,7 @@
                 default:
                     $link = $('<a class="name" />')
                         .attr('href', data.is_dir ? '#' + data.path : '<?= url('image.show'); ?>' + data.path)
+                        .attr('data-url', data.path)
                         .text(data.name);
                     return $link;
             }

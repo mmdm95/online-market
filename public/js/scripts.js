@@ -15,9 +15,10 @@ PAGE JS
     01. LOADING JS
     /*===================================*/
     $(window).on('load', function () {
-        setTimeout(function () {
-            $(".preloader").delay(700).fadeOut(700).addClass('loaded');
-        }, 800);
+        // setTimeout(function () {
+        //     $(".preloader").delay(500).fadeOut(700).addClass('loaded');
+            $(".preloader").fadeOut(700).addClass('loaded');
+        // }, 800);
     });
 
     /*===================================*
@@ -71,20 +72,21 @@ PAGE JS
     *===================================*/
     //Show Hide dropdown-menu Main navigation
     $(document).on('ready', function () {
-        $('.dropdown-menu a.dropdown-toggler').on('click', function () {
+        $('.dropdown-menu a.dropdown-toggler').on('click touchend', function () {
             //var $el = $( this );
             //var $parent = $( this ).offsetParent( ".dropdown-menu" );
             if (!$(this).next().hasClass('show')) {
                 $(this).parents('.dropdown-menu').first().find('.show').removeClass("show");
             }
-            var $subMenu = $(this).next(".dropdown-menu");
-            $subMenu.toggleClass('show');
 
             $(this).parent("li").toggleClass('show');
 
             $(this).parents('li.nav-item.dropdown.show').on('hidden.bs.dropdown', function () {
                 $('.dropdown-menu .show').removeClass("show");
             });
+
+            var $subMenu = $(this).next(".dropdown-menu");
+            $subMenu.toggleClass('show');
 
             return false;
         });
@@ -650,6 +652,9 @@ PAGE JS
     });
     $(function () {
         $('[data-toggle="popover"]').popover();
+    });
+    $(function () {
+        $('[data-toggle="tab"]').tab();
     });
 
     /*===================================*

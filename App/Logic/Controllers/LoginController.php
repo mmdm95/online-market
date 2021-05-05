@@ -59,7 +59,7 @@ class LoginController extends AbstractHomeController
 
         $data = [];
         if (is_post()) {
-            $this->logout();
+            $auth->logout();
             try {
                 /**
                  * @var LoginForm $loginForm

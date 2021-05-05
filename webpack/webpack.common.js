@@ -14,10 +14,22 @@ const dotenv = require('dotenv').config({
 
 module.exports = {
     entry: {
-        font: path.resolve(__dirname, "../resource/js/font.js"),
-        admin: path.resolve(__dirname, "../resource/js/admin.js"),
-        main: path.resolve(__dirname, "../resource/js/index.js"),
-        vendor: path.resolve(__dirname, "../resource/js/vendor.js")
+        main: [
+            path.resolve(__dirname, "../public/js/all/bootstrap.min.js"),
+            // path.resolve(__dirname, "../public/js/all/imagesloaded.pkgd.min.js"),
+            // path.resolve(__dirname, "../public/js/all/isotope.min.js"),
+            path.resolve(__dirname, "../public/js/all/jquery-1.12.4.min.js"),
+            path.resolve(__dirname, "../public/js/all/jquery.dd.min.js"),
+            path.resolve(__dirname, "../public/js/all/jquery.elevatezoom.js"),
+            path.resolve(__dirname, "../public/js/all/magnific-popup.min.js"),
+            path.resolve(__dirname, "../public/js/all/jquery.countdown.min.js"),
+            path.resolve(__dirname, "../public/js/all/owl.carousel.min.js"),
+            path.resolve(__dirname, "../public/js/all/parallax.js"),
+            path.resolve(__dirname, "../public/js/all/popper.min.js"),
+            path.resolve(__dirname, "../public/js/all/slick.min.js"),
+            path.resolve(__dirname, "../public/js/all/waypoints.min.js"),
+            path.resolve(__dirname, "../public/js/all/jquery-ui.js"),
+        ],
     },
     optimization: {
         minimizer: [

@@ -9,7 +9,7 @@ use Sim\Utils\StringUtil;
 <div class="content">
 
     <div class="form-group text-right">
-        <a href="<?= url('admin.product.buyer')->getRelativeUrl(); ?>"
+        <a href="<?= url('admin.product.buyer', ['id' => $product['id']])->getRelativeUrlTrimmed(); ?>"
            class="btn bg-indigo-400 d-block d-sm-inline-block">
             خریداران این محصول
             <i class="icon-coins ml-2" aria-hidden="true"></i>
@@ -346,7 +346,57 @@ use Sim\Utils\StringUtil;
         <?php load_partial('admin/card-header', ['header_title' => 'ویژگی‌های محصول']); ?>
 
         <div class="card-body">
+            <?php
+            $properties = json_decode($product['properties'], true);
+            $properties = is_array($properties) ? $properties : [];
+            ?>
 
+            <?php if (count($properties)): ?>
+                <?php foreach ($properties as $property): ?>
+                    <h5 class="mt-5 mb-3 text-info"><?= $property['title']; ?></h5>
+
+                    <?php if (isset($property['children']) && is_array($property['children']) && count($property['children']) > 0): ?>
+                        <table class="table table-bordered">
+                            <?php foreach ($property['children'] as $child): ?>
+                                <tr>
+                                    <td>
+                                        <?= $child['title']; ?>
+                                    </td>
+                                    <td class="p-0">
+                                        <?php if (trim($child['properties']) != ''): ?>
+                                            <?php
+                                            $parts = explode(',', $child['properties']);
+                                            $parts = array_map('trim', $parts);
+                                            ?>
+                                            <?php if (count($parts)): ?>
+                                                <?php $counter = 0; ?>
+                                                <?php foreach ($parts as $part): ?>
+                                                    <div class="p-2 <?= 0 != $counter ? 'border-top' : ''; ?>">
+                                                        <?= $part; ?>
+                                                    </div>
+                                                    <?php ++$counter; ?>
+                                                <?php endforeach; ?>
+                                            <?php else: ?>
+                                                <div class="p-2">
+                                                    <i class="linearicons-minus"
+                                                       aria-hidden="true"></i>
+                                                </div>
+                                            <?php endif; ?>
+                                        <?php else: ?>
+                                            <div class="p-2">
+                                                <i class="linearicons-minus"
+                                                   aria-hidden="true"></i>
+                                            </div>
+                                        <?php endif; ?>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
+                        </table>
+                    <?php endif; ?>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <span class="text-info">هیچ ویژگی‌ای یافت نشد.</span>
+            <?php endif; ?>
         </div>
     </div>
     <!-- /highlighting rows and columns -->

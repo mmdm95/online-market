@@ -33,8 +33,14 @@ class SettingModel extends BaseModel
         $res6 = $this->update([
             'setting_value' => $info[SETTING_KEYWORDS],
         ], 'setting_name=:name', ['name' => SETTING_KEYWORDS]);
+        $res7 = $this->update([
+            'setting_value' => $info[SETTING_LOGO_FOOTER],
+        ], 'setting_name=:name', ['name' => SETTING_LOGO_FOOTER]);
+        $res8 = $this->update([
+            'setting_value' => $info[SETTING_LOGO_LIGHT_FOOTER],
+        ], 'setting_name=:name', ['name' => SETTING_LOGO_LIGHT_FOOTER]);
 
-        return $res1 && $res2 && $res3 && $res4 && $res5 && $res6;
+        return $res1 && $res2 && $res3 && $res4 && $res5 && $res6 && $res7 && $res8;
     }
 
     /**
@@ -146,8 +152,11 @@ class SettingModel extends BaseModel
         $res4 = $this->update([
             'setting_value' => $info[SETTING_FOOTER_SECTION_2],
         ], 'setting_name=:name', ['name' => SETTING_FOOTER_SECTION_2]);
+        $res5 = $this->update([
+            'setting_value' => $info[SETTING_FOOTER_COPYRIGHT],
+        ], 'setting_name=:name', ['name' => SETTING_FOOTER_COPYRIGHT]);
 
-        return $res1 && $res2 && $res3 && $res4;
+        return $res1 && $res2 && $res3 && $res4 && $res5;
     }
 
     /**

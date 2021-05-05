@@ -5,8 +5,9 @@
                 <div class="col-lg-9 offset-lg-3">
                     <div id="carouselExampleControls" class="carousel slide light_arrow" data-ride="carousel">
                         <div class="carousel-inner">
-                            <?php foreach ($main_slider as $k => $item): ?>
-                                <a href="<?= $item['link']; ?>" class="carousel-item active background_bg"
+                            <?php $k = 0; ?>
+                            <?php foreach ($main_slider as $item): ?>
+                                <a href="<?= $item['link']; ?>" class="carousel-item background_bg <?= 0 == $k ? 'active' : ''; ?>"
                                    data-img-src="<?= url('image.show') . $item['image']; ?>">
                                     <div class="banner_slide_content banner_content_inner">
                                         <div class="col-lg-8 col-10">
@@ -27,12 +28,15 @@
                                         </div>
                                     </div>
                                 </a>
+                                <?php $k++; ?>
                             <?php endforeach; ?>
                         </div>
                         <ol class="carousel-indicators indicators_style1">
-                            <?php foreach ($main_slider as $k => $item): ?>
+                            <?php $k = 0; ?>
+                            <?php foreach ($main_slider as $item): ?>
                                 <li data-target="#carouselExampleControls"
                                     data-slide-to="<?= $k; ?>" <?= 0 === $k ? 'class="active"' : ''; ?>></li>
+                                <?php $k++; ?>
                             <?php endforeach; ?>
                         </ol>
                     </div>

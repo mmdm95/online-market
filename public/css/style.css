@@ -2946,7 +2946,7 @@ input.text {
 #navCatContent li a.dropdown-toggler::after {
     position: absolute;
     right: 15px;
-    top: 50%;
+    bottom: 0;
     -webkit-transform: translate(0, -50%) rotate(90deg);
     -moz-transform: translate(0, -50%) rotate(90deg);
     -ms-transform: translate(0, -50%) rotate(90deg);
@@ -2976,6 +2976,42 @@ input.text {
 
 #navCatContent .mega-menu-col {
     border: 0;
+}
+
+#navCatContent .mega-menu-col > ul {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    max-height: 300px;
+}
+
+#navCatContent .mega-menu-col > ul li {
+    direction: rtl;
+    text-align: right;
+    display: -webkit-inline-box;
+    display: -ms-inline-flexbox;
+    display: inline-flex;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    -webkit-box-pack: start;
+    -ms-flex-pack: start;
+    justify-content: flex-start;
+    width: 25%;
+    font-size: 1rem;
+    line-height: 30px;
+    font-weight: 700;
+    height: 30px;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    vertical-align: middle;
 }
 
 .more_categories {
@@ -7570,6 +7606,7 @@ footer .widget_recent_post .post_img img {
 }
 
 .widget_instafeed {
+    width: 100%;
     margin: -2px;
     display: table;
 }

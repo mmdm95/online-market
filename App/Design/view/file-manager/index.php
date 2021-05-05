@@ -114,10 +114,18 @@
                         <li>
                             <div class="fab-label-light" data-fab-label="جابجایی موارد انتخاب شده"
                                  id="selItem" data-toggle="modal" data-target="#modal_full">
-                                <a href="javascript:void(0);" class="btn btn-warning rounded-round btn-icon btn-float">
+                                <a href="javascript:void(0);" class="btn btn-info rounded-round btn-icon btn-float">
                                     <i class="icon-folder"></i>
                                 </a>
-                                <span class="badge bg-success-400" id="selItemsCount"></span>
+                                <span class="badge bg-success-400 selItemsCount"></span>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="fab-label-light" data-fab-label="حذف موارد انتخاب شده" id="delItem">
+                                <a href="javascript:void(0);" class="btn btn-danger rounded-round btn-icon btn-float">
+                                    <i class="icon-trash"></i>
+                                </a>
+                                <span class="badge bg-success-400 selItemsCount"></span>
                             </div>
                         </li>
                     </ul>
@@ -142,7 +150,8 @@
                             <div class="tree tree-default pt-3 pr-3">
                                 <ul>
                                     <li>
-                                        <a href="javascript:void(0);" class="folder" data-path="<?= get_path('upload-root'); ?>">
+                                        <a href="javascript:void(0);" class="folder"
+                                           data-path="<?= get_path('upload-root'); ?>">
                                             <i class="folder-icon icon-folder"></i>
                                             Home
                                         </a>

@@ -1,5 +1,5 @@
 <?php if (count($product ?? [])): ?>
-    <?php if (DB_YES === $product['product_availability'] || DB_YES === $product['is_available']): ?>
+    <?php if (DB_YES == $product['product_availability'] || DB_YES == $product['is_available']): ?>
         <div class="product_price">
             <?php
             $hasDiscount = false;
@@ -18,27 +18,31 @@
                  <?= local_number($discountPrice); ?>
                  تومان
             </span>
-            <del>
-                <?= local_number(number_format($product['price'])); ?>
-                تومان
-            </del>
-            <div class="on_sale">
-                <span>
-                    ٪
-                    <?php if (isset($product['festival_discount'])): ?>
-                        <?= local_number($product['festival_discount']); ?>
-                    <?php else: ?>
-                        <?= local_number(get_percentage($product['price'], $product['discounted_price'])); ?>
-                    <?php endif; ?>
-                    تخفیف
-                </span>
+            <?php if ($hasDiscount): ?>
+                <del>
+                    <?= local_number(number_format($product['price'])); ?>
+                    تومان
+                </del>
+                <div class="on_sale">
+                    <span>
+                        ٪
+                        <?php if (isset($product['festival_discount'])): ?>
+                            <?= local_number($product['festival_discount']); ?>
+                        <?php else: ?>
+                            <?= local_number(get_percentage($product['price'], $product['discounted_price'])); ?>
+                        <?php endif; ?>
+                         تخفیف
+                    </span>
+                </div>
+            <?php endif; ?>
+        </div>
+        <?php if (trim($product['guarantee']) != ''): ?>
+            <div class="pr_desc mt-3">
+                <p>
+                    <?= $product['guarantee']; ?>
+                </p>
             </div>
-        </div>
-        <div class="pr_desc">
-            <p>
-                <?= $product['guarantee']; ?>
-            </p>
-        </div>
+        <?php endif; ?>
     <?php else: ?>
         <div class="product_price">
             <span class="badge badge-danger d-block py-3">ناموجود</span>

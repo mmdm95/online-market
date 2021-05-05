@@ -44,6 +44,8 @@ class SettingMainForm implements IPageForm
                 'inp-setting-logo-light-img' => 'لوگوی سفید',
                 'inp-setting-fav-img' => 'فاو آیکون',
                 'inp-setting-title' => 'عنوان',
+                'inp-setting-logo-footer' => 'لوگوی پاورقی',
+                'inp-setting-logo-light-footer' => 'لوگوی سفید پاورقی',
             ]);
 
         // images
@@ -52,6 +54,8 @@ class SettingMainForm implements IPageForm
                 'inp-setting-logo-img',
                 'inp-setting-logo-light-img',
                 'inp-setting-fav-img',
+                'inp-setting-logo-footer',
+                'inp-setting-logo-light-footer',
             ])
             ->stopValidationAfterFirstError(false)
             ->required()
@@ -103,6 +107,8 @@ class SettingMainForm implements IPageForm
             $logo = input()->post('inp-setting-logo-img', '')->getValue();
             $logoWhite = input()->post('inp-setting-logo-light-img', '')->getValue();
             $favicon = input()->post('inp-setting-fav-img', '')->getValue();
+            $logoFooter = input()->post('inp-setting-logo-footer', '')->getValue();
+            $logoLightFooter = input()->post('inp-setting-logo-light-footer', '')->getValue();
             $title = input()->post('inp-setting-title', '')->getValue();
             $desc = input()->post('inp-setting-desc', '')->getValue();
             $tags = input()->post('inp-setting-tags', '')->getValue();
@@ -111,6 +117,8 @@ class SettingMainForm implements IPageForm
                 SETTING_LOGO => $xss->xss_clean(trim($logo)),
                 SETTING_LOGO_LIGHT => $xss->xss_clean(trim($logoWhite)),
                 SETTING_FAVICON => $xss->xss_clean(trim($favicon)),
+                SETTING_LOGO_FOOTER => $xss->xss_clean(trim($logoFooter)),
+                SETTING_LOGO_LIGHT_FOOTER => $xss->xss_clean(trim($logoLightFooter)),
                 SETTING_TITLE => $xss->xss_clean(trim($title)),
                 SETTING_DESCRIPTION => $xss->xss_clean(trim($desc)),
                 SETTING_KEYWORDS => $xss->xss_clean(trim($tags)),

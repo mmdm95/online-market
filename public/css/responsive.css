@@ -560,6 +560,16 @@
   max-width: 991px
 ---------------------------------------------------*/
 @media only screen and (max-width: 991px) {
+
+
+    #navCatContent .mega-menu-col > ul {
+        max-height: unset;
+    }
+
+    #navCatContent .mega-menu-col > ul li {
+        width: 100%;
+    }
+
     .md-height-300 {
         height: 300px !important;
     }
@@ -942,7 +952,10 @@
     }
 
     .tab-style2 .nav-tabs li.nav-item a {
-        padding: 5px 0;
+        padding-right: 5px;
+        padding-left: 5px;
+        margin-right: 5px;
+        margin-left: 5px;
     }
 
     .icon_box_style1::before {

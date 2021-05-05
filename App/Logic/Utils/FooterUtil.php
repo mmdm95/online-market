@@ -63,13 +63,17 @@ class FooterUtil
             $xss->removeNeverAllowedOnEventsAfterwards([
                 'onClick',
             ]);
+            $newNamad = [];
             /**
              * @var InputItem $namad
              */
-            foreach ($namads as &$namad) {
-                $namad = $xss->xss_clean($namad);
+            foreach ($namads as $namad) {
+                $x = $xss->xss_clean($namad->getValue());
+                if (trim($x) != '') {
+                    $newNamad[] = $x;
+                }
             }
-            return $namads;
+            return $newNamad;
         } catch (\Exception $e) {
             return [];
         }

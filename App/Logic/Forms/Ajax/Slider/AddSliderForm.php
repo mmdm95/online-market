@@ -51,6 +51,7 @@ class AddSliderForm implements IPageForm
                 'inp-add-slide-title',
                 'inp-add-slide-sub-title',
                 'inp-add-slide-sub-link',
+                'inp-add-slide-priority',
             ]);
 
         // image
@@ -75,9 +76,6 @@ class AddSliderForm implements IPageForm
         // priority
         $validator
             ->setFields('inp-add-slide-priority')
-            ->stopValidationAfterFirstError(false)
-            ->required()
-            ->stopValidationAfterFirstError(true)
             ->isInteger();
 
         // to reset form values and not set them again
@@ -119,7 +117,7 @@ class AddSliderForm implements IPageForm
             $title = input()->post('inp-add-slide-title', '')->getValue();
             $subTitle = input()->post('inp-add-slide-sub-title', '')->getValue();
             $link = input()->post('inp-add-slide-sub-link', '')->getValue();
-            $priority = input()->post('inp-add-slide-priority', '')->getValue();
+            $priority = input()->post('inp-add-slide-priority', 1)->getValue();
 
             return $slideModel->insert([
                 'title' => $xss->xss_clean(trim($title)),

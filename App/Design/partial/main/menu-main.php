@@ -66,35 +66,30 @@
                                                     <?php
                                                     $hasImage = isset($menu_images[$m['id']]['image']);
                                                     $menuColSize = !$hasImage ? 'col-lg-12' : 'col-lg-7';
-                                                    $menuSubColSize = !$hasImage ? 'col-lg-4' : 'col-lg-6';
                                                     ?>
 
                                                     <li class="mega-menu-col <?= $menuColSize; ?>">
-                                                        <ul class="d-lg-flex">
+                                                        <ul>
                                                             <?php foreach ($m['children'] as $children2): ?>
                                                                 <?php
                                                                 $hasChildren2 = count($children2['children'] ?? []);
                                                                 ?>
-                                                                <li class="mega-menu-col <?= $menuSubColSize; ?>">
-                                                                    <ul>
+                                                                <li class="dropdown-header">
+                                                                    <a class="nav-link nav_item"
+                                                                       href="<?= url('home.search', ['category' => $children2['id']])->getRelativeUrl(); ?>">
+                                                                        <?= $children2['name']; ?>
+                                                                    </a>
+                                                                </li>
+                                                                <?php if ($hasChildren2): ?>
+                                                                    <?php foreach ($children2['children'] as $children3): ?>
                                                                         <li class="dropdown-header">
-                                                                            <a class="nav-link nav_item"
-                                                                               href="<?= url('home.search', ['category' => $children2['id']])->getRelativeUrl(); ?>">
-                                                                                <?= $children2['name']; ?>
+                                                                            <a class="dropdown-item nav-link nav_item"
+                                                                               href="<?= url('home.search', ['category' => $children3['id']])->getRelativeUrl(); ?>">
+                                                                                <?= $children3['name']; ?>
                                                                             </a>
                                                                         </li>
-                                                                        <?php if ($hasChildren2): ?>
-                                                                            <?php foreach ($children2['children'] as $children3): ?>
-                                                                                <li>
-                                                                                    <a class="dropdown-item nav-link nav_item"
-                                                                                       href="<?= url('home.search', ['category' => $children3['id']])->getRelativeUrl(); ?>">
-                                                                                        <?= $children3['name']; ?>
-                                                                                    </a>
-                                                                                </li>
-                                                                            <?php endforeach; ?>
-                                                                        <?php endif; ?>
-                                                                    </ul>
-                                                                </li>
+                                                                    <?php endforeach; ?>
+                                                                <?php endif; ?>
                                                             <?php endforeach; ?>
                                                         </ul>
                                                     </li>
@@ -135,35 +130,30 @@
                                                                 <?php
                                                                 $hasImage = isset($menu_images[$m['id']]['image']);
                                                                 $menuColSize = !$hasImage ? 'col-lg-12' : 'col-lg-7';
-                                                                $menuSubColSize = !$hasImage ? 'col-lg-4' : 'col-lg-6';
                                                                 ?>
 
                                                                 <li class="mega-menu-col <?= $menuColSize; ?>">
-                                                                    <ul class="d-lg-flex">
+                                                                    <ul>
                                                                         <?php foreach ($m['children'] as $children2): ?>
                                                                             <?php
                                                                             $hasChildren2 = count($children2['children'] ?? []);
                                                                             ?>
-                                                                            <li class="mega-menu-col <?= $menuSubColSize; ?>">
-                                                                                <ul>
+                                                                            <li class="dropdown-header">
+                                                                                <a class="nav-link nav_item"
+                                                                                   href="<?= url('home.search', ['category' => $children2['id']])->getRelativeUrl(); ?>">
+                                                                                    <?= $children2['name']; ?>
+                                                                                </a>
+                                                                            </li>
+                                                                            <?php if ($hasChildren2): ?>
+                                                                                <?php foreach ($children2['children'] as $children3): ?>
                                                                                     <li class="dropdown-header">
-                                                                                        <a class="nav-link nav_item"
-                                                                                           href="<?= url('home.search', ['category' => $children2['id']])->getRelativeUrl(); ?>">
-                                                                                            <?= $children2['name']; ?>
+                                                                                        <a class="dropdown-item nav-link nav_item"
+                                                                                           href="<?= url('home.search', ['category' => $children3['id']])->getRelativeUrl(); ?>">
+                                                                                            <?= $children3['name']; ?>
                                                                                         </a>
                                                                                     </li>
-                                                                                    <?php if ($hasChildren2): ?>
-                                                                                        <?php foreach ($children2['children'] as $children3): ?>
-                                                                                            <li>
-                                                                                                <a class="dropdown-item nav-link nav_item"
-                                                                                                   href="<?= url('home.search', ['category' => $children3['id']])->getRelativeUrl(); ?>">
-                                                                                                    <?= $children3['name']; ?>
-                                                                                                </a>
-                                                                                            </li>
-                                                                                        <?php endforeach; ?>
-                                                                                    <?php endif; ?>
-                                                                                </ul>
-                                                                            </li>
+                                                                                <?php endforeach; ?>
+                                                                            <?php endif; ?>
                                                                         <?php endforeach; ?>
                                                                     </ul>
                                                                 </li>

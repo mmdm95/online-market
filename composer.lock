@@ -389,16 +389,16 @@
         },
         {
             "name": "mmdm/sim-auth",
-            "version": "v0.2.9",
+            "version": "v0.2.10",
             "source": {
                 "type": "git",
                 "url": "https://github.com/mmdm95/sim-auth.git",
-                "reference": "5986b0742092dd0894c239abacfc2c79331268d0"
+                "reference": "99f2f3359179466e4ac4fc68b43ce260bded6e6c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mmdm95/sim-auth/zipball/5986b0742092dd0894c239abacfc2c79331268d0",
-                "reference": "5986b0742092dd0894c239abacfc2c79331268d0",
+                "url": "https://api.github.com/repos/mmdm95/sim-auth/zipball/99f2f3359179466e4ac4fc68b43ce260bded6e6c",
+                "reference": "99f2f3359179466e4ac4fc68b43ce260bded6e6c",
                 "shasum": ""
             },
             "require": {
@@ -431,9 +431,9 @@
             "description": "A simple yet nice authentication library",
             "support": {
                 "issues": "https://github.com/mmdm95/sim-auth/issues",
-                "source": "https://github.com/mmdm95/sim-auth/tree/v0.2.9"
+                "source": "https://github.com/mmdm95/sim-auth/tree/v0.2.10"
             },
-            "time": "2021-04-09T16:11:01+00:00"
+            "time": "2021-04-28T13:28:09+00:00"
         },
         {
             "name": "mmdm/sim-benchmark",
@@ -983,16 +983,16 @@
         },
         {
             "name": "mmdm/sim-i18n",
-            "version": "v1.1.0",
+            "version": "v1.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/mmdm95/sim-i18n.git",
-                "reference": "c4181078c638a2a8461df34160059fbebb97deef"
+                "reference": "97e112f9dda4adb2301156349ee46e83dba76096"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mmdm95/sim-i18n/zipball/c4181078c638a2a8461df34160059fbebb97deef",
-                "reference": "c4181078c638a2a8461df34160059fbebb97deef",
+                "url": "https://api.github.com/repos/mmdm95/sim-i18n/zipball/97e112f9dda4adb2301156349ee46e83dba76096",
+                "reference": "97e112f9dda4adb2301156349ee46e83dba76096",
                 "shasum": ""
             },
             "require": {
@@ -1017,9 +1017,9 @@
             "description": "A simple way for multiple language management",
             "support": {
                 "issues": "https://github.com/mmdm95/sim-i18n/issues",
-                "source": "https://github.com/mmdm95/sim-i18n/tree/v1.1.0"
+                "source": "https://github.com/mmdm95/sim-i18n/tree/v1.1.1"
             },
-            "time": "2021-03-13T21:48:37+00:00"
+            "time": "2021-04-24T05:37:37+00:00"
         },
         {
             "name": "mmdm/sim-logger",

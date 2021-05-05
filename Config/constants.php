@@ -21,7 +21,7 @@ use Sim\I18n\ISOLanguageCodes;
  *     1.2.5.0 instead of 1.2.5-a
  *     1.2.5.0.1 instead of 1.2.5-a1 (I'm not sure)
  */
-defined("APP_VERSION") OR define("APP_VERSION", "0.2.0");
+defined("APP_VERSION") OR define("APP_VERSION", "0.2.1");
 
 /***************************************
  * You can add your constants here
@@ -100,6 +100,8 @@ defined("OWN_PERMISSIONS") OR define("OWN_PERMISSIONS", IAuth::PERMISSIONS);
 defined("SETTING_LOGO") OR define("SETTING_LOGO", 'logo');
 defined("SETTING_LOGO_LIGHT") OR define("SETTING_LOGO_LIGHT", 'logo_light');
 defined("SETTING_FAVICON") OR define("SETTING_FAVICON", 'favicon');
+defined("SETTING_LOGO_FOOTER") OR define("SETTING_LOGO_FOOTER", 'logo_footer');
+defined("SETTING_LOGO_LIGHT_FOOTER") OR define("SETTING_LOGO_LIGHT_FOOTER", 'logo_light_footer');
 defined("SETTING_TITLE") OR define("SETTING_TITLE", 'title');
 defined("SETTING_DESCRIPTION") OR define("SETTING_DESCRIPTION", 'description');
 defined("SETTING_KEYWORDS") OR define("SETTING_KEYWORDS", 'keywords');
@@ -121,6 +123,7 @@ defined("SETTING_SOCIAL_WHATSAPP") OR define("SETTING_SOCIAL_WHATSAPP", 'social_
 defined("SETTING_FOOTER_TINY_DESC") OR define("SETTING_FOOTER_TINY_DESC", 'footer_tiny_desc');
 defined("SETTING_FOOTER_SECTION_1") OR define("SETTING_FOOTER_SECTION_1", 'footer_section_1');
 defined("SETTING_FOOTER_SECTION_2") OR define("SETTING_FOOTER_SECTION_2", 'footer_section_2');
+defined("SETTING_FOOTER_COPYRIGHT") OR define("SETTING_FOOTER_COPYRIGHT", 'footer_copyright');
 defined("SETTING_FOOTER_NAMADS") OR define("SETTING_FOOTER_NAMADS", 'footer_namads');
 defined("SETTING_BLOG_EACH_PAGE") OR define("SETTING_BLOG_EACH_PAGE", 'blog_each_page');
 defined("SETTING_STORE_PROVINCE") OR define("SETTING_STORE_PROVINCE", 'store_province');

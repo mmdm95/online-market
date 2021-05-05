@@ -576,6 +576,8 @@
                 logo: 'inp-setting-logo-img',
                 logoWhite: 'inp-setting-logo-light-img',
                 fav: 'inp-setting-fav-img',
+                logoFooter: 'inp-setting-logo-footer',
+                logoFooterWhite: 'inp-setting-logo-light-footer',
                 title: 'inp-setting-title',
                 desc: 'inp-setting-desc',
                 tags: 'inp-setting-tags',
@@ -1544,6 +1546,18 @@
                         message: '^' + 'تصویر فاو آیکون را انتخاب کنید.',
                     },
                 },
+                logoFooter: {
+                    presence: {
+                        allowEmpty: false,
+                        message: '^' + 'تصویر لوگوی پاورقی را انتخاب کنید.',
+                    },
+                },
+                logoFooterWhite: {
+                    presence: {
+                        allowEmpty: false,
+                        message: '^' + 'تصویر سفید لوگوی پاورقی را انتخاب کنید.',
+                    },
+                },
                 title: {
                     presence: {
                         allowEmpty: false,
@@ -1760,9 +1774,9 @@
                 link: variables.validation.common.link,
             },
             editSlide: {
-                image: variables.validation.constraints.addSlide.image,
-                title: variables.validation.constraints.addSlide.title,
-                subTitle: variables.validation.constraints.addSlide.subTitle,
+                image: variables.validation.constraints.editSlide.image,
+                title: variables.validation.constraints.editSlide.title,
+                subTitle: variables.validation.constraints.editSlide.subTitle,
                 link: variables.validation.common.link,
             },
             addBlogCategory: {
@@ -1917,6 +1931,8 @@
             settingMain: {
                 logo: variables.validation.constraints.settingMain.logo,
                 logoWhite: variables.validation.constraints.settingMain.logoWhite,
+                logoFooter: variables.validation.constraints.settingMain.logoFooter,
+                logoFooterWhite: variables.validation.constraints.settingMain.logoFooterWhite,
                 fav: variables.validation.constraints.settingMain.fav,
                 title: variables.validation.constraints.settingMain.title,
             },
@@ -3092,10 +3108,11 @@
          * @param image
          */
         function addImageToPlaceholder(el, image) {
+            image = core.trim(image, '/');
             $(el)
                 .closest('.__file_picker_handler')
                 .addClass('has-image')
-                .append($('<img class="img-placeholder-image" src="' + variables.url.image + image + '" alt="the image">'))
+                .append($('<img class="img-placeholder-image" src="' + variables.url.image + '/' + image + '" alt="the image">'))
         }
 
         /**
@@ -3136,12 +3153,13 @@
          */
         function changeOperation(btn, table) {
             var url, id;
-            url = $(btn).attr('data-change-status-url');
-            id = $(btn).attr('data-change-status-id');
+            btn = $(btn);
+            url = btn.attr('data-change-status-url');
+            id = btn.attr('data-change-status-id');
+            var v = btn.is(':checked') ? 1 : 0;
 
             if (url && id) {
                 var data = new FormData();
-                var v = $(btn).is(':checked') ? 1 : 0;
                 data.append('status', v);
 
                 admin.toasts.confirm(null, function () {
@@ -3157,6 +3175,14 @@
                     }, {
                         data: data,
                     }, true);
+                }, null, function () {
+                    if (v) {
+                        btn.attr('checked', false)
+                            .prop('checked', false);
+                    } else {
+                        btn.attr('checked', 'checked')
+                            .prop('checked', 'checked');
+                    }
                 });
             }
         }
@@ -3921,6 +3947,7 @@
                 createLoader = false;
                 loaderId = admin.showLoader();
             }
+            // Display the key/value pairs
             admin.request(variables.url.slider.add, 'post', function () {
                 admin.hideLoader(loaderId);
                 // clear element after success

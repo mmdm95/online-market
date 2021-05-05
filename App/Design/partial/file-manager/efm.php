@@ -152,6 +152,23 @@
             }
         });
 
+        $('#mkdir').submit(function (e) {
+            var hashval = decodeURIComponent(window.location.hash.substr(1)),
+                $dir = $(this).find('#dirname[name="name"]');
+            e.preventDefault();
+            if ('' !== $.trim($dir.val())) {
+                $dir.val().length && $.post(routes.mkdir, {
+                    name: $dir.val(),
+                    xsrf: XSRF,
+                    file: hashval
+                }, function (data) {
+                }, 'json');
+                $dir.val('');
+                list();
+            }
+            return false;
+        });
+
         $('#mvdir').on('click', function (e) {
             e.preventDefault();
 

@@ -71,9 +71,9 @@ class LoginForm implements IPageForm
             ['u_name' => input()->post('inp-login-username', '')->getValue()]);
         if (!count($info)) {
             $validator->setStatus(false)->setError('inp-login-username', 'نام کاربری یا کلمه عبور نادرست است!');
-        } elseif (DB_NO === $info['is_login_locked'] || DB_YES === $info['is_deleted']) {
+        } elseif (DB_YES == $info['is_login_locked'] || DB_YES == $info['is_deleted']) {
             $validator->setStatus(false)->setError('inp-login-username', 'امکان ورود با این حساب کاربری وجود ندارد.');
-        } elseif (DB_YES === $info['ban']) {
+        } elseif (DB_YES == $info['ban']) {
             $validator->setStatus(false)->setError('inp-login-username', $info['ban_desc']);
         }
 

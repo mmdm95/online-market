@@ -94,6 +94,9 @@
 
             cloned = propertySample.clone(true);
             cloned.removeClass('__sample_product_property');
+            cloned.find('.__sub_product_properties')
+                .removeClass('__sample_sub_product_property')
+                .first().addClass('__sample_sub_product_property');
             cloned.find('.__sub_product_properties').each(function () {
                 if (!$(this).hasClass('__sample_sub_product_property')) {
                     $(this).remove();

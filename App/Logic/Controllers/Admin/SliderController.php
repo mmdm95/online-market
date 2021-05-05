@@ -4,7 +4,7 @@
 namespace App\Logic\Controllers\Admin;
 
 use App\Logic\Abstracts\AbstractAdminController;
-use App\Logic\Forms\Ajax\FAQ\EditSliderForm;
+use App\Logic\Forms\Ajax\Slider\EditSliderForm;
 use App\Logic\Forms\Ajax\Slider\AddSliderForm;
 use App\Logic\Handlers\DatatableHandler;
 use App\Logic\Handlers\GeneralAjaxFormHandler;

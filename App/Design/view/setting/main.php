@@ -106,6 +106,56 @@ $validator = form_validator();
                                     انتخاب فاو آیکون
                                 </label>
                             </div>
+
+                            <div class="form-group text-center ml-sm-0 mr-sm-3 mb-0">
+                                <?php
+                                $img = !$validator->getStatus() ? ($validator->setInput('inp-setting-logo-footer') ?: config()->get('settings.logo_footer.value')) : config()->get('settings.logo_footer.value');
+                                ?>
+                                <div class="img-placeholder-custom __file_picker_handler __file_image mx-auto <?= !empty($img) ? 'has-image' : ''; ?>"
+                                     data-toggle="modal"
+                                     data-target="#modal_efm">
+                                    <input type="hidden" name="inp-setting-logo-footer"
+                                           value="<?= $img; ?>">
+                                    <?php if (!empty($img)): ?>
+                                        <img class="img-placeholder-image" src="<?= url('image.show') . $img; ?>"
+                                             alt="selected image">
+                                    <?php endif; ?>
+                                    <div class="img-placeholder-icon-container">
+                                        <i class="icon-image2 img-placeholder-icon text-grey-300"></i>
+                                        <div class="img-placeholder-num bg-warning text-white">
+                                            <i class="icon-plus2"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                <label class="form-text text-info">
+                                    انتخاب تصویر لوگوی پاورقی
+                                </label>
+                            </div>
+
+                            <div class="form-group text-center ml-sm-0 mr-sm-3 mb-0">
+                                <?php
+                                $img = !$validator->getStatus() ? ($validator->setInput('inp-setting-logo-light-footer') ?: config()->get('settings.logo_light_footer.value')) : config()->get('settings.logo_light_footer.value');
+                                ?>
+                                <div class="img-placeholder-custom __file_picker_handler __file_image mx-auto <?= !empty($img) ? 'has-image' : ''; ?>"
+                                     data-toggle="modal"
+                                     data-target="#modal_efm">
+                                    <input type="hidden" name="inp-setting-logo-light-footer"
+                                           value="<?= $img; ?>">
+                                    <?php if (!empty($img)): ?>
+                                        <img class="img-placeholder-image" src="<?= url('image.show') . $img; ?>"
+                                             alt="selected image">
+                                    <?php endif; ?>
+                                    <div class="img-placeholder-icon-container">
+                                        <i class="icon-image2 img-placeholder-icon text-grey-300"></i>
+                                        <div class="img-placeholder-num bg-warning text-white">
+                                            <i class="icon-plus2"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                <label class="form-text text-info">
+                                    انتخاب تصویر سفید لوگوی پاورقی
+                                </label>
+                            </div>
                         </div>
                     </div>
 

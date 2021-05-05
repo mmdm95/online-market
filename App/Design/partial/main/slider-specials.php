@@ -20,7 +20,7 @@
                                 <div class="product_box text-center">
                                     <?php if (isset($item['festival_discount'])): ?>
                                         <span class="pr_flash bg-danger">جشنواره</span>
-                                    <?php elseif (DB_YES === $item['is_special']): ?>
+                                    <?php elseif (DB_YES == $item['is_special']): ?>
                                         <span class="pr_flash">ویژه</span>
                                     <?php endif; ?>
 
@@ -60,7 +60,7 @@
                                                 <?= $item['title']; ?>
                                             </a>
                                         </h6>
-                                        <?php if (DB_YES === $item['product_availability'] || DB_YES === $item['is_available']): ?>
+                                        <?php if (DB_YES == $item['product_availability'] || DB_YES == $item['is_available']): ?>
                                             <div class="product_price">
                                                 <?php
                                                 $hasDiscount = false;

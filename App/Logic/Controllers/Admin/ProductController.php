@@ -549,8 +549,8 @@ class ProductController extends AbstractAdminController implements IDatatableCon
                         }
                     ],
                     [
-                        'db' => 'pa.is_available',
-                        'db_alias' => 'is_available',
+                        'db' => 'pa.product_availability',
+                        'db_alias' => 'product_availability',
                         'dt' => 'is_available',
                         'formatter' => function ($d, $row) {
                             $status = $this->setTemplate('partial/admin/parser/status-changer')

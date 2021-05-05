@@ -42,6 +42,18 @@ $validator = form_validator();
                         </div>
                         <!-- /tiny description -->
 
+                        <?php load_partial('admin/section-header', ['header_title' => 'کپی رایت']); ?>
+                        <!-- Tiny description -->
+                        <div class="form-group pb-3">
+                            <label>توضیحات کپی رایت:</label>
+                            <input class="form-control maxlength-placeholder"
+                                   placeholder="تا ۲۵۰ کاراکتر"
+                                   maxlength="250"
+                                   name="inp-setting-copyright"
+                                   value="<?= !$validator->getStatus() ? ($validator->setInput('inp-setting-copyright') ?: config()->get('settings.footer_copyright.value')) : config()->get('settings.footer_copyright.value'); ?>">
+                        </div>
+                        <!-- /tiny description -->
+
                         <?php load_partial('admin/section-header', ['header_title' => 'پاورقی - بخش یک']); ?>
                         <?php load_partial('admin/message/message-info', [
                             'info' => 'مواردی که نام لینک آن‌ها خالی است، در نظر گرفته نمی‌شوند.',

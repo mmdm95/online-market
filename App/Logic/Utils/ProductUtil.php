@@ -61,6 +61,7 @@ class ProductUtil
                 $where .= ' OR pa.fa_title LIKE :q_p_fa_title';
                 $where .= ' OR pa.slug LIKE :q_p_slug';
                 $where .= ' OR pa.keywords LIKE :q_p_keywords';
+                $where .= ' OR pa.brand_latin_name LIKE :q_p_la_brand';
                 $where .= ' OR pa.brand_fa_name LIKE :q_p_fa_brand';
                 $where .= ' OR pa.festival_title LIKE :q_p_festival_title';
                 $where .= ')';
@@ -69,6 +70,7 @@ class ProductUtil
                 $bindValues['q_p_slug'] = '%' . StringUtil::slugify($q) . '%';
                 $bindValues['q_p_keywords'] = '%' . $q . '%';
                 $bindValues['q_p_fa_brand'] = '%' . $q . '%';
+                $bindValues['q_p_la_brand'] = '%' . $q . '%';
                 $bindValues['q_p_festival_title'] = '%' . $q . '%';
             }
         }
@@ -90,8 +92,10 @@ class ProductUtil
         if (!is_array($category)) {
             $category = $category->getValue();
             if (is_numeric($category)) {
-                $where .= ' AND pa.category_id=:p_category_id';
+                $where .= ' AND (pa.category_id=:p_category_id';
+                $where .= ' OR pa.category_parent_id=:p_category_parent_id)';
                 $bindValues['p_category_id'] = $category;
+                $bindValues['p_category_parent_id'] = $category;
             }
         }
         // price parameter

@@ -37,12 +37,11 @@ foreach ($tabbed_slider['items'] ?? [] as $tab) {
                                     <?php if (count($tab['items'])): ?>
                                         <li class="nav-item">
                                             <a class="nav-link <?= 0 === $k ? 'active' : ''; ?>"
-                                               id="tab<?= ($k + 1); ?>"
                                                data-toggle="tab"
                                                href="#tab<?= ($k + 1); ?>" role="tab"
                                                aria-controls="tab<?= ($k + 1); ?>"
                                                aria-selected=" <?= 0 === $k ? 'true' : 'false'; ?>">
-                                                <?= $tab['name']; ?>
+                                                <?= $tab['info']['name']; ?>
                                             </a>
                                         </li>
                                         <?php $k++; ?>
@@ -61,7 +60,7 @@ foreach ($tabbed_slider['items'] ?? [] as $tab) {
                             <?php if (count($tab['items'])): ?>
                                 <div class="tab-pane fade <?= 0 === $k ? 'show active' : ''; ?>"
                                      id="tab<?= ($k + 1); ?>" role="tabpanel"
-                                     aria-labelledby="<?= $tab['name']; ?>">
+                                     aria-labelledby="<?= $tab['info']['name']; ?>">
                                     <div class="product_slider carousel_slider owl-carousel owl-theme nav_style1"
                                          data-loop="true" data-dots="false" data-nav="true" data-margin="20"
                                          data-responsive='{"0":{"items": "1"}, "481":{"items": "2"}, "768":{"items": "3"}, "1199":{"items": "4"}}'>
@@ -70,7 +69,7 @@ foreach ($tabbed_slider['items'] ?? [] as $tab) {
                                                 <div class="product_box text-center">
                                                     <?php if (isset($item['festival_discount'])): ?>
                                                         <span class="pr_flash bg-danger">جشنواره</span>
-                                                    <?php elseif (DB_YES === $item['is_special']): ?>
+                                                    <?php elseif (DB_YES == $item['is_special']): ?>
                                                         <span class="pr_flash">ویژه</span>
                                                     <?php endif; ?>
 
@@ -110,7 +109,7 @@ foreach ($tabbed_slider['items'] ?? [] as $tab) {
                                                                 <?= $item['title']; ?>
                                                             </a>
                                                         </h6>
-                                                        <?php if (DB_YES === $item['product_availability'] || DB_YES === $item['is_available']): ?>
+                                                        <?php if (DB_YES == $item['product_availability'] || DB_YES == $item['is_available']): ?>
                                                             <div class="product_price">
                                                                 <?php
                                                                 $hasDiscount = false;

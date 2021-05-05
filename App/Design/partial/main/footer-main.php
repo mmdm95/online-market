@@ -76,7 +76,7 @@ use App\Logic\Utils\Jdf;
                     <div class="widget">
                         <div class="footer_logo">
                             <a href="<?= url('home.index'); ?>">
-                                <img src="<?= url('image.show') . \config()->get('settings.logo.value'); ?>"
+                                <img src="<?= url('image.show') . \config()->get('settings.logo_footer.value'); ?>"
                                      alt="logo"/>
                             </a>
                         </div>
@@ -184,15 +184,19 @@ use App\Logic\Utils\Jdf;
     <div class="bottom_footer border-top-tran mt-0">
         <div class="container">
             <div class="row align-items-center">
-                <div class="col-lg-6">
-                    <p class="mb-lg-0 text-center">
-                        ©
-                        <?= Jdf::jdate('Y'); ?>
-                        کلیه حقوق این سایت متعلق به
-                        <?= \config()->get('settings.title.value'); ?>
-                        است.
-                    </p>
-                </div>
+                <?php
+                $copyright = \config()->get('settings.footer_copyright.value');
+                ?>
+                <?php if (!empty($copyright)): ?>
+                    <div class="col-lg-6">
+                        <p class="mb-lg-0 text-center">
+                            ©
+                            <?= Jdf::jdate('Y'); ?>
+                            <?= $copyright; ?>
+                        </p>
+                    </div>
+                <?php endif; ?>
+
                 <?php
                 $telegram = \config()->get('settings.social_telegram.value');
                 $whatsapp = \config()->get('settings.social_whatsapp.value');

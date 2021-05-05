@@ -476,12 +476,14 @@ window.MyGlobalVariables = {
                 /**
                  * @param message
                  * @param onOkCallback
-                 * @param options
+                 * @param [options]
+                 * @param [onCancelCallback]
                  * @returns {boolean}
                  */
-                confirm: function (message, onOkCallback, options) {
+                confirm: function (message, onOkCallback, options, onCancelCallback) {
                     var res = false;
                     onOkCallback = window.TheCore.isFunction(onOkCallback) ? onOkCallback : window.TheCore.noop;
+                    onCancelCallback = window.TheCore.isFunction(onCancelCallback) ? onCancelCallback : window.TheCore.noop;
                     options = typeof options === typeof {} ? options : {};
                     message = message ? message : window.MyGlobalVariables.toasts.confirm.message;
 
@@ -501,6 +503,7 @@ window.MyGlobalVariables = {
                                 }),
 
                                 Noty.button(window.MyGlobalVariables.toasts.confirm.confirmLabels.no, window.MyGlobalVariables.toasts.confirm.btnClasses.no, function () {
+                                    onCancelCallback.call(window);
                                     n.close();
                                 })
                             ]
@@ -620,12 +623,15 @@ window.MyGlobalVariables = {
                             formValues = self.convertFormObjectNumbersToEnglish(window.validate.collectFormValues(this), formKey);
                             // remap form values to its config name
                             var data = new FormData();
+                            var val;
                             for (var o in formValues) {
                                 if (formValues.hasOwnProperty(o)) {
+                                    val = formValues[o];
+                                    val = !window.TheCore.isDefined(val) ? '' : val;
                                     if (window.TheCore.isDefined(window.MyGlobalVariables.elements[formKey].inputs[o])) {
-                                        data.append(window.MyGlobalVariables.elements[formKey].inputs[o], formValues[o]);
+                                        data.append(window.MyGlobalVariables.elements[formKey].inputs[o], val);
                                     } else {
-                                        data.append(o, formValues[o]);
+                                        data.append(o, val);
                                     }
                                 }
                             }
@@ -662,7 +668,7 @@ window.MyGlobalVariables = {
                 /**
                  * @param obj
                  * @param formKey
-                 * @returns {boolean}
+                 * @return {{}}
                  */
                 convertFormObjectNumbersToEnglish: function (obj, formKey) {
                     var
@@ -674,7 +680,7 @@ window.MyGlobalVariables = {
 
                         // get key from value and if its null return false
                         keyFromVal = window.TheCore.getKeyByValue(window.MyGlobalVariables.elements[formKey].inputs, prop);
-                        if (null === keyFromVal) return false;
+                        if (null === keyFromVal) return {};
 
                         newFormValues[keyFromVal] = window.TheCore.toEnglishNumbers(obj[prop]);
                     }

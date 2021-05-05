@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Logic\Forms\Ajax\FAQ;
+namespace App\Logic\Forms\Ajax\Slider;
 
 use App\Logic\Interfaces\IPageForm;
 use App\Logic\Models\SliderModel;
@@ -51,6 +51,7 @@ class EditSliderForm implements IPageForm
                 'inp-edit-slide-title',
                 'inp-edit-slide-sub-title',
                 'inp-edit-slide-sub-link',
+                'inp-edit-slide-priority',
             ]);
 
         // image
@@ -75,9 +76,6 @@ class EditSliderForm implements IPageForm
         // priority
         $validator
             ->setFields('inp-edit-slide-priority')
-            ->stopValidationAfterFirstError(false)
-            ->required()
-            ->stopValidationAfterFirstError(true)
             ->isInteger();
 
         $id = session()->getFlash('slider-edit-id', null, false);
@@ -136,7 +134,7 @@ class EditSliderForm implements IPageForm
             $title = input()->post('inp-edit-slide-title', '')->getValue();
             $subTitle = input()->post('inp-edit-slide-sub-title', '')->getValue();
             $link = input()->post('inp-edit-slide-sub-link', '')->getValue();
-            $priority = input()->post('inp-edit-slide-priority', '')->getValue();
+            $priority = input()->post('inp-edit-slide-priority', 1)->getValue();
 
             return $slideModel->update([
                 'title' => $xss->xss_clean(trim($title)),

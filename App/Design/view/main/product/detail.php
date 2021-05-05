@@ -67,7 +67,7 @@ use Sim\Utils\StringUtil;
                             });
                             ?>
                             <?php if (count($babyProperties)): ?>
-                                <div class="product_sort_info">
+                                <div class="product_sort_info my-3">
                                     <ul>
                                         <?php foreach ($babyProperties as $property): ?>
                                             <li>
@@ -282,29 +282,42 @@ use Sim\Utils\StringUtil;
                                         <h5 class="mt-5 mb-3 text-info"><?= $property['title']; ?></h5>
 
                                         <?php if (isset($property['children']) && is_array($property['children']) && count($property['children']) > 0): ?>
-                                            <?php $counter = 0; ?>
-                                            <?php foreach ($property['children'] as $child): ?>
-                                                <table class="table table-bordered">
+                                            <table class="table table-bordered">
+                                                <?php foreach ($property['children'] as $child): ?>
                                                     <tr>
                                                         <td>
                                                             <?= $child['title']; ?>
                                                         </td>
                                                         <td class="p-0">
-                                                            <div class="p-2 <?= 0 != $counter ? 'border-bottom' : ''; ?>">
-                                                                <?php if (trim($child['properties']) != ''): ?>
-                                                                    <?= $child['properties']; ?>
+                                                            <?php if (trim($child['properties']) != ''): ?>
+                                                                <?php
+                                                                $parts = explode(',', $child['properties']);
+                                                                $parts = array_map('trim', $parts);
+                                                                ?>
+                                                                <?php if (count($parts)): ?>
+                                                                    <?php $counter = 0; ?>
+                                                                    <?php foreach ($parts as $part): ?>
+                                                                        <div class="p-2 <?= 0 != $counter ? 'border-top' : ''; ?>">
+                                                                            <?= $part; ?>
+                                                                        </div>
+                                                                        <?php ++$counter; ?>
+                                                                    <?php endforeach; ?>
                                                                 <?php else: ?>
                                                                     <div class="p-2">
                                                                         <i class="linearicons-minus"
                                                                            aria-hidden="true"></i>
                                                                     </div>
                                                                 <?php endif; ?>
-                                                            </div>
+                                                            <?php else: ?>
+                                                                <div class="p-2">
+                                                                    <i class="linearicons-minus"
+                                                                       aria-hidden="true"></i>
+                                                                </div>
+                                                            <?php endif; ?>
                                                         </td>
                                                     </tr>
-                                                </table>
-                                                <?php ++$counter; ?>
-                                            <?php endforeach; ?>
+                                                <?php endforeach; ?>
+                                            </table>
                                         <?php endif; ?>
                                     <?php endforeach; ?>
                                 <?php else: ?>

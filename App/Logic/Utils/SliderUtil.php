@@ -83,7 +83,7 @@ class SliderUtil
             ->orderBy(['pa.title DESC'])
             ->groupBy(['pa.product_id']);
 
-        if (isset($info['category']) && !empty($info['category'])) {
+        if (isset($info['category']) && !empty($info['category']) && $info['category'] != DEFAULT_OPTION_VALUE) {
             $select
                 ->where('pa.category_id=:cat_id')
                 ->bindValue('cat_id', $info['category']);

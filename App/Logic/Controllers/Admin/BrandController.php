@@ -222,7 +222,7 @@ class BrandController extends AbstractAdminController implements IDatatableContr
                     ->handle(
                         BaseModel::TBL_BRANDS,
                         $id,
-                        'show_in_side',
+                        'show_in_sliders',
                         input()->post('status')->getValue(),
                         'deletable=:del',
                         ['del' => DB_YES]
