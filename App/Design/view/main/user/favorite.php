@@ -31,8 +31,8 @@ use Sim\Utils\StringUtil;
                                         'id' => $favorite['product_id'],
                                         'slug' => $favorite['slug']
                                     ]); ?>">
-                                        <img src="<?= url('image.show', ['filename' => $favorite['image']]); ?>"
-                                             alt="<?= $favorite['title']; ?>">
+                                        <img src="" data-src="<?= url('image.show', ['filename' => $favorite['image']]); ?>"
+                                             alt="<?= $favorite['title']; ?>" class="lazy">
                                     </a>
                                 </td>
                                 <td class="product-name" data-title="<?= $favorite['title']; ?>">

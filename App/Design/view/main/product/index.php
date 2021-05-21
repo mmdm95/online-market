@@ -27,14 +27,16 @@ use Sim\Utils\StringUtil;
                                 </div>
                                 <div class="product_header_right">
                                     <div class="products_view">
-                                        <a href="javascript:void(0);" class="shorting_icon grid"><i class="ti-view-grid"></i></a>
-                                        <a href="javascript:void(0);" class="shorting_icon list active"><i class="ti-layout-list-thumb"></i></a>
+                                        <a href="javascript:void(0);" class="shorting_icon grid active"><i
+                                                    class="ti-view-grid"></i></a>
+                                        <a href="javascript:void(0);" class="shorting_icon list"><i
+                                                    class="ti-layout-list-thumb"></i></a>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="row shop_container list" id="__main_product_container"
+                    <div class="row shop_container grid" id="__main_product_container"
                          data-category="<?= $category ?? '-1'; ?>">
                     </div>
                 </div>
@@ -104,6 +106,7 @@ use Sim\Utils\StringUtil;
                                     <?php
                                     $previousBrands = ArrayUtil::get($_GET, 'brands', []);
                                     $previousBrands = !is_array($previousBrands) ? [] : $previousBrands;
+                                    $previousBrands = array_map('urldecode', $previousBrands);
                                     ?>
                                     <?php foreach ($brands as $id => $brand): ?>
                                         <li>
@@ -127,6 +130,9 @@ use Sim\Utils\StringUtil;
                                 <div class="max-widget-height">
                                     <?php
                                     $previousSizes = ArrayUtil::get($_GET, 'size', []);
+                                    $previousSizes = is_string($previousSizes) ? [$previousSizes] : ($previousSizes ?: []);
+                                    $previousSizes = array_map('urldecode', $previousSizes);
+                                    $previousSizes = array_unique($previousSizes);
                                     ?>
                                     <?php foreach ($sizes as $size): ?>
                                         <span class="product_size_switch product_size_switch_multi">
@@ -143,6 +149,8 @@ use Sim\Utils\StringUtil;
                                 <div class="max-widget-height">
                                     <?php
                                     $previousColors = ArrayUtil::get($_GET, 'color', []);
+                                    $previousColors = is_string($previousColors) ? [$previousColors] : ($previousColors ?: []);
+                                    $previousColors = array_map('urldecode', $previousColors);
                                     ?>
                                     <?php foreach ($colors as $color): ?>
                                         <div class="product_color_switch product_color_switch_multi d-inline-block d-lg-flex justify-content-between">

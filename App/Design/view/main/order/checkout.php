@@ -168,8 +168,8 @@ $validator = form_validator();
                                                            type="radio" name="payment_method_option"
                                                            id="method<?= $k; ?>" value="<?= $method['code']; ?>">
                                                     <label class="form-check-label" for="method<?= $k; ?>">
-                                                        <img src="<?= url('image.show', ['filename' => $method['image']])->getRelativeUrl(); ?>"
-                                                             alt="<?= $method['title']; ?>" width="100px" height="auto">
+                                                        <img src="" data-src="<?= url('image.show', ['filename' => $method['image']])->getRelativeUrl(); ?>"
+                                                             alt="<?= $method['title']; ?>" width="100px" height="auto" class="lazy">
                                                         <?= $method['title']; ?>
                                                     </label>
                                                 </div>

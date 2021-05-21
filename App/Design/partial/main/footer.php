@@ -12,8 +12,8 @@ use App\Logic\Utils\Jdf;
                     <div class="widget">
                         <div class="footer_logo">
                             <a href="<?= url('home.index'); ?>">
-                                <img src="<?= url('image.show') . \config()->get('settings.logo_light_footer.value'); ?>"
-                                     alt="logo"/>
+                                <img src="" data-src="<?= url('image.show') . \config()->get('settings.logo_light_footer.value'); ?>"
+                                     alt="logo" class="lazy">
                             </a>
                         </div>
                         <?php

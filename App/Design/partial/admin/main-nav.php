@@ -7,8 +7,8 @@ $authAdmin = auth_admin();
 <div class="navbar navbar-expand-md navbar-dark bg-indigo-800">
     <div class="navbar-brand p-0 text-center">
         <a href="<?= url('home.index'); ?>" target="_blank" class="d-inline-block">
-            <img src="<?= url('image.show') . config()->get('settings.logo_light.value'); ?>"
-                 alt="<?= config()->get('settings.title.value'); ?>">
+            <img src="" data-src="<?= url('image.show') . config()->get('settings.logo_light.value'); ?>"
+                 alt="<?= config()->get('settings.title.value'); ?>" class="lazy">
         </a>
     </div>
 
@@ -37,8 +37,8 @@ $authAdmin = auth_admin();
         <ul class="navbar-nav">
             <li class="nav-item dropdown dropdown-user">
                 <a href="javascript:void(0);" class="navbar-nav-link dropdown-toggle" data-toggle="dropdown">
-                    <img src="<?= asset_path('image/avatars/' . $main_user_info['info']['image'], false); ?>"
-                         class="rounded-circle" alt="">
+                    <img src="" data-src="<?= asset_path('image/avatars/' . $main_user_info['info']['image'], false); ?>"
+                         class="rounded-circle lazy" alt="">
                     <span>
                         <?php if (!empty($main_user_info['info']['first_name'])): ?>
                             سلام،

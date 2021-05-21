@@ -14,8 +14,8 @@
                     <div class="col-md-<?= $colSize; ?>">
                         <div class="sale_banner">
                             <a class="hover_effect1" href="<?= $image['link'] ?>">
-                                <img src="<?= url('image.show') . $image['image']; ?>"
-                                     alt="بنر شماره <?= $k; ?>">
+                                <img src="" data-src="<?= url('image.show') . $image['image']; ?>"
+                                     alt="بنر شماره <?= $k; ?>" class="lazy">
                             </a>
                         </div>
                     </div>

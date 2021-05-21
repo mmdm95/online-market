@@ -77,7 +77,7 @@
                                                                 <li class="dropdown-header">
                                                                     <a class="nav-link nav_item"
                                                                        href="<?= url('home.search', ['category' => $children2['id']])->getRelativeUrl(); ?>">
-                                                                        <?= $children2['name']; ?>
+                                                                        <span class="__dropdown_header_underlined"><?= $children2['name']; ?></span>
                                                                     </a>
                                                                 </li>
                                                                 <?php if ($hasChildren2): ?>
@@ -98,8 +98,8 @@
                                                         <li class="mega-menu-col col-lg-5">
                                                             <div class="header-banner2">
                                                                 <a href="<?= url('home.search', ['category' => $m['id']])->getRelativeUrl(); ?>">
-                                                                    <img src="<?= url('image.show') . $menu_images[$m['id']]['image']; ?>"
-                                                                         alt="<?= $m['name']; ?>">
+                                                                    <img src="" data-src="<?= url('image.show') . $menu_images[$m['id']]['image']; ?>"
+                                                                         alt="<?= $m['name']; ?>" class="lazy">
                                                                 </a>
                                                             </div>
                                                         </li>
@@ -141,7 +141,7 @@
                                                                             <li class="dropdown-header">
                                                                                 <a class="nav-link nav_item"
                                                                                    href="<?= url('home.search', ['category' => $children2['id']])->getRelativeUrl(); ?>">
-                                                                                    <?= $children2['name']; ?>
+                                                                                    <span class="__dropdown_header_underlined"><?= $children2['name']; ?></span>
                                                                                 </a>
                                                                             </li>
                                                                             <?php if ($hasChildren2): ?>
@@ -162,8 +162,8 @@
                                                                     <li class="mega-menu-col col-lg-5">
                                                                         <div class="header-banner2">
                                                                             <a href="<?= url('home.search', ['category' => $m['id']])->getRelativeUrl(); ?>">
-                                                                                <img src="<?= url('image.show') . $menu_images[$m['id']]['image']; ?>"
-                                                                                     alt="<?= $m['name']; ?>">
+                                                                                <img src="" data-src="<?= url('image.show') . $menu_images[$m['id']]['image']; ?>"
+                                                                                     alt="<?= $m['name']; ?>" class="lazy">
                                                                             </a>
                                                                         </div>
                                                                     </li>
@@ -229,11 +229,19 @@
                         </div>
 
                         <ul class="navbar-nav attr-nav align-items-center">
-                            <li>
-                                <a href="<?= url('home.login'); ?>" class="nav-link">
-                                    <i class="linearicons-user"></i>
-                                </a>
-                            </li>
+                            <?php if(auth_home()->isLoggedIn()): ?>
+                                <li>
+                                    <a href="<?= url('user.index'); ?>" class="nav-link">
+                                        <i class="linearicons-clipboard-user"></i>
+                                    </a>
+                                </li>
+                            <?php else: ?>
+                                <li>
+                                    <a href="<?= url('home.login'); ?>" class="nav-link">
+                                        <i class="linearicons-user"></i>
+                                    </a>
+                                </li>
+                            <?php endif; ?>
                             <li class="dropdown cart_dropdown" id="__cart_main_container">
                                 <?= $cart_section; ?>
                             </li>

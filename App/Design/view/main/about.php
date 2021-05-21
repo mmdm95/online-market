@@ -10,7 +10,8 @@
                 ?>
                 <div class="col-lg-6">
                     <div class="about_img scene mb-4 mb-lg-0">
-                        <img src="<?= url('image.show', ['filename' => $aboutDesc['image']]); ?>" alt="about_img">
+                        <img src="" data-src="<?= url('image.show', ['filename' => $aboutDesc['image']]); ?>"
+                             alt="about_img" class="lazy">
                     </div>
                 </div>
                 <div class="col-lg-6">
@@ -20,7 +21,6 @@
                     <p>
                         <?= $aboutDesc['desc']; ?>
                     </p>
-
                 </div>
             </div>
         </div>
@@ -57,7 +57,7 @@
                                 ?>
                                 <?php if ($hasSocial): ?>
                                     <div class="team_img">
-                                        <img src="assets/images/team_img1.jpg" alt="team_img1">
+                                        <img src="" data-src="assets/images/team_img1.jpg" alt="team_img1" class="lazy">
                                         <ul class="social_icons social_style1">
                                             <?php if ($socialsTeam['telegram']): ?>
                                                 <li><a href="#"><i class="ion-ios-paperplane-outline"></i></a></li>

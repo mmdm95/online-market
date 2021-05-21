@@ -44,6 +44,17 @@ return [
                     'id' => 'INT(11) UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT',
                 ],
             ],
+            'brands' => [
+                'table_name' => 'brands',
+                'columns' => [
+                    'id' => 'id',
+                    'publish' => 'publish',
+                ],
+                'types' => [
+                    'id' => 'INT(11) UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT',
+                    'publish' => 'TINYINT(1) UNSIGNED NOT NULL DEFAULT 1',
+                ],
+            ],
             'products' => [
                 'table_name' => 'products',
                 'columns' => [

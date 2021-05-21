@@ -34,7 +34,8 @@ use Sim\Utils\StringUtil;
                             </li>
                         </ul>
                         <div class="blog_img">
-                            <img src="<?= url('image.show') . $blog['image']; ?>" alt="<?= $blog['title']; ?>">
+                            <img src="" data-src="<?= url('image.show') . $blog['image']; ?>"
+                                 alt="<?= $blog['title']; ?>" class="lazy">
                         </div>
                         <div class="blog_content">
                             <div class="blog_text">
@@ -110,7 +111,8 @@ use Sim\Utils\StringUtil;
                                                     'id' => $item['id'],
                                                     'slug' => $item['slug'],
                                                 ]); ?>">
-                                                    <img src="<?= url('image.show') . $item['image']; ?>" alt="<?= $item['title']; ?>">
+                                                    <img src="" data-src="<?= url('image.show') . $item['image']; ?>"
+                                                         alt="<?= $item['title']; ?>" class="lazy">
                                                 </a>
                                             </div>
                                             <div class="blog_content bg-white">

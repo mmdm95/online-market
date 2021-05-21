@@ -29,8 +29,8 @@
                                             'id' => $item['product_id'],
                                             'slug' => $item['slug'],
                                         ]); ?>">
-                                            <img src="<?= url('image.show') . $item['image']; ?>"
-                                                 alt="<?= $item['title']; ?>">
+                                            <img src="" data-src="<?= url('image.show') . $item['image']; ?>"
+                                                 alt="<?= $item['title']; ?>" class="lazy">
                                         </a>
                                         <div class="product_action_box">
                                             <ul class="list_none pr_action_btn">

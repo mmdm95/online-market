@@ -16,22 +16,12 @@ return [
             'bottom' => [
                 e(
                     '<script type="text/javascript" src="' .
-                    asset_path('plugins/noty/noty.min.js') .
+                    asset_path('plugins/lazy.min.js') .
                     '"></script>'
                 ),
                 e(
                     '<script type="text/javascript" src="' .
                     asset_path('js/cart.js') .
-                    '"></script>'
-                ),
-                e(
-                    '<script type="text/javascript" src="' .
-                    asset_path('plugins/selectric/jquery.selectric.min.js') .
-                    '"></script>'
-                ),
-                e(
-                    '<script type="text/javascript" src="' .
-                    asset_path('plugins/jquery.mswitch.js') .
                     '"></script>'
                 ),
             ],
@@ -55,32 +45,7 @@ return [
                 ),
                 e(
                     '<link href="' .
-                    asset_path('plugins/noty/noty.css') .
-                    '" rel="stylesheet" type="text/css">'
-                ),
-                e(
-                    '<link href="' .
-                    asset_path('plugins/noty/themes/sunset.css') .
-                    '" rel="stylesheet" type="text/css">'
-                ),
-                e(
-                    '<link href="' .
-                    asset_path('plugins/selectric/selectric.min.css') .
-                    '" rel="stylesheet" type="text/css">'
-                ),
-                e(
-                    '<link href="' .
-                    asset_path('css/style.css') .
-                    '" rel="stylesheet" type="text/css">'
-                ),
-                e(
-                    '<link href="' .
-                    asset_path('css/responsive.css') .
-                    '" rel="stylesheet" type="text/css">'
-                ),
-                e(
-                    '<link href="' .
-                    asset_path('css/rtl-style.css') .
+                    asset_path('css/app.css') .
                     '" rel="stylesheet" type="text/css">'
                 ),
             ],

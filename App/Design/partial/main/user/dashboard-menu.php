@@ -8,8 +8,8 @@
                         $name = trim($user['first_name'] . ' ' . $user['last_name']);
                         ?>
                     <?php endif; ?>
-                    <img src="<?= asset_path('image/avatars/' . $user['image'], false); ?>"
-                         alt="<?= $name ?: $user['username']; ?>">
+                    <img src="" data-src="<?= asset_path('image/avatars/' . $user['image'], false); ?>"
+                         alt="<?= $name ?: $user['username']; ?>" class="lazy">
                     <div class="text-center p-2">
                         <?= $name; ?>
                         <div class="mt-2">

@@ -27,8 +27,8 @@ $items = $cart->getItems();
                     'id' => $item['product_id'],
                     'slug' => $item['slug'],
                 ])->getRelativeUrl(); ?>">
-                    <img src="<?= url('image.show', ['filename' => $item['image']])->getRelativeUrl(); ?>"
-                         alt="<?= $item['title']; ?>">
+                    <img src="" data-src="<?= url('image.show', ['filename' => $item['image']])->getRelativeUrl(); ?>"
+                         alt="<?= $item['title']; ?>" class="lazy">
                 </a>
             </td>
             <td class="product-name" data-title="محصول">

@@ -15,20 +15,9 @@ const dotenv = require('dotenv').config({
 module.exports = {
     entry: {
         main: [
-            path.resolve(__dirname, "../public/js/all/bootstrap.min.js"),
-            // path.resolve(__dirname, "../public/js/all/imagesloaded.pkgd.min.js"),
-            // path.resolve(__dirname, "../public/js/all/isotope.min.js"),
-            path.resolve(__dirname, "../public/js/all/jquery-1.12.4.min.js"),
-            path.resolve(__dirname, "../public/js/all/jquery.dd.min.js"),
-            path.resolve(__dirname, "../public/js/all/jquery.elevatezoom.js"),
-            path.resolve(__dirname, "../public/js/all/magnific-popup.min.js"),
-            path.resolve(__dirname, "../public/js/all/jquery.countdown.min.js"),
-            path.resolve(__dirname, "../public/js/all/owl.carousel.min.js"),
-            path.resolve(__dirname, "../public/js/all/parallax.js"),
-            path.resolve(__dirname, "../public/js/all/popper.min.js"),
-            path.resolve(__dirname, "../public/js/all/slick.min.js"),
-            path.resolve(__dirname, "../public/js/all/waypoints.min.js"),
-            path.resolve(__dirname, "../public/js/all/jquery-ui.js"),
+            path.resolve(__dirname, "../public/css/style.css"),
+            path.resolve(__dirname, "../public/css/responsive.css"),
+            path.resolve(__dirname, "../public/css/rtl-style.css"),
         ],
     },
     optimization: {

@@ -93,8 +93,8 @@ $validator = form_validator();
                                                    value="<?= METHOD_TYPE_GATEWAY_BEH_PARDAKHT; ?>"
                                                    name="inp-edit-pay-method-method"
                                                    data-fouc>
-                                            <img src="<?= asset_path('image/gateways/beh-pardakht.png', false); ?>"
-                                                 alt="به پرداخت" class="rounded mr-2"
+                                            <img src="" data-src="<?= asset_path('image/gateways/beh-pardakht.png', false); ?>"
+                                                 alt="به پرداخت" class="rounded mr-2 lazy"
                                                  width="auto" height="40">
                                             <?= METHOD_TYPES[METHOD_TYPE_GATEWAY_BEH_PARDAKHT]; ?>
                                         </label>
@@ -154,8 +154,8 @@ $validator = form_validator();
                                                    value="<?= METHOD_TYPE_GATEWAY_IDPAY; ?>"
                                                    name="inp-edit-pay-method-method"
                                                    data-fouc>
-                                            <img src="<?= asset_path('image/gateways/Idpay.png', false); ?>"
-                                                 alt="آی‌دی پی" class="rounded mr-2"
+                                            <img src="" data-src="<?= asset_path('image/gateways/Idpay.png', false); ?>"
+                                                 alt="آی‌دی پی" class="rounded mr-2 lazy"
                                                  width="auto" height="40">
                                             <?= METHOD_TYPES[METHOD_TYPE_GATEWAY_IDPAY]; ?>
                                         </label>
@@ -194,8 +194,8 @@ $validator = form_validator();
                                                    value="<?= METHOD_TYPE_GATEWAY_MABNA; ?>"
                                                    name="inp-edit-pay-method-method"
                                                    data-fouc>
-                                            <img src="<?= asset_path('image/gateways/mabna.png', false); ?>"
-                                                 alt="مبنا" class="rounded mr-2"
+                                            <img src="" data-src="<?= asset_path('image/gateways/mabna.png', false); ?>"
+                                                 alt="مبنا" class="rounded mr-2 lazy"
                                                  width="auto" height="40">
                                             <?= METHOD_TYPES[METHOD_TYPE_GATEWAY_MABNA]; ?>
                                         </label>
@@ -234,8 +234,8 @@ $validator = form_validator();
                                                    value="<?= METHOD_TYPE_GATEWAY_ZARINPAL; ?>"
                                                    name="inp-edit-pay-method-method"
                                                    data-fouc>
-                                            <img src="<?= asset_path('image/gateways/zarinpal.png', false); ?>"
-                                                 alt="زرین پال" class="rounded mr-2"
+                                            <img src="" data-src="<?= asset_path('image/gateways/zarinpal.png', false); ?>"
+                                                 alt="زرین پال" class="rounded mr-2 lazy"
                                                  width="auto" height="40">
                                             <?= METHOD_TYPES[METHOD_TYPE_GATEWAY_ZARINPAL]; ?>
                                         </label>

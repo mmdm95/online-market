@@ -43,6 +43,7 @@ class EditDepositTypeForm implements IPageForm
         $validator
             ->setFieldsAlias([
                 'inp-edit-deposit-type-title' => 'عنوان',
+                'inp-edit-deposit-type-desc' => 'توضیح',
             ]);
 
         /**
@@ -53,7 +54,10 @@ class EditDepositTypeForm implements IPageForm
         // title
         // desc
         $validator
-            ->setFields('inp-edit-deposit-type-title')
+            ->setFields([
+                'inp-edit-deposit-type-title',
+                'inp-edit-deposit-type-desc',
+            ])
             ->stopValidationAfterFirstError(false)
             ->required()
             ->stopValidationAfterFirstError(true)
@@ -66,6 +70,7 @@ class EditDepositTypeForm implements IPageForm
             } else {
                 // check for duplicate
                 $validator
+                    ->setFields('inp-edit-deposit-type-title')
                     ->custom(function (FormValue $value) use ($depositModel, $id) {
                         $title = $depositModel->getFirst(['title'], 'id=:id', ['id' => $id])['title'];
                         if (
@@ -120,9 +125,11 @@ class EditDepositTypeForm implements IPageForm
         try {
             $id = session()->getFlash('deposit-type-edit-id', null);
             $title = input()->post('inp-edit-deposit-type-title', '')->getValue();
+            $desc = input()->post('inp-edit-deposit-type-desc', '')->getValue();
 
             return $depositModel->update([
                 'title' => $xss->xss_clean(trim($title)),
+                'desc' => $xss->xss_clean(trim($desc)),
                 'updated_by' => $auth->getCurrentUser()['id'] ?? null,
                 'updated_at' => time(),
             ], 'id=:id', ['id' => $id]);

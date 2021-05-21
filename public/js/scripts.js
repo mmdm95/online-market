@@ -14,11 +14,11 @@ PAGE JS
     /*===================================*
     01. LOADING JS
     /*===================================*/
-    $(window).on('load', function () {
-        // setTimeout(function () {
-        //     $(".preloader").delay(500).fadeOut(700).addClass('loaded');
-            $(".preloader").fadeOut(700).addClass('loaded');
-        // }, 800);
+    $(function () {
+        setTimeout(function () {
+            $(".preloader").delay(500).fadeOut(700).addClass('loaded');
+            // $(".preloader").fadeOut(700).addClass('loaded');
+        }, 800);
     });
 
     /*===================================*
@@ -668,15 +668,22 @@ PAGE JS
     });
 
     $('.product_size_switch:not(.product_size_switch_multi) span')
-        .on("click", function () {
-            $(this).siblings(this).removeClass('active').end().addClass('active');
+        .each(function () {
+            $(this).on("click", function () {
+                $(this).siblings(this).removeClass('active').end().addClass('active');
+            })
         });
-    $('.product_color_switch:not(.product_color_switch_multi)').on('click', function () {
-        $(this).find('span').siblings(this).removeClass('active').end().addClass('active');
-    });
+    $('.product_color_switch:not(.product_color_switch_multi)')
+        .each(function () {
+            $(this).on('click', function () {
+                $(this).find('span').siblings(this).removeClass('active').end().addClass('active')
+            });
+        });
     $('.product_color_switch_multi,.product_size_switch_multi,.product_model_switch_multi')
-        .on('click', function () {
-            $(this).find('span').toggleClass('active');
+        .each(function () {
+            $(this).on('click', function () {
+                $(this).find('span').toggleClass('active');
+            })
         });
 
     /*===================================*
@@ -859,6 +866,19 @@ PAGE JS
                             tabbedSlier.removeClass('show');
                         }
                     }
+                }
+            });
+        }
+
+        // Lazy loader (pictures, videos, etc.)
+        if ($.fn.lazy) {
+            $('.lazy').lazy({
+                effect: "fadeIn",
+                effectTime: 800,
+                threshold: 50,
+                // callback
+                afterLoad: function (element) {
+                    $(element).css({'background': 'none'});
                 }
             });
         }

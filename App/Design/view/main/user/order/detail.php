@@ -394,9 +394,9 @@ use Sim\Utils\StringUtil;
                                     'id' => $item['product_id'],
                                     'slug' => $item['product_slug'],
                                 ]); ?>">
-                                    <img src="<?= url('image.show', ['filename' => $item['product_image']]); ?>"
+                                    <img src="" data-src="<?= url('image.show', ['filename' => $item['product_image']]); ?>"
                                          alt="<?= $item['product_title']; ?>"
-                                         class="mx-0 mx-lg-3"
+                                         class="mx-0 mx-lg-3 lazy"
                                          width="160px" height="auto">
                                 </a>
                             </div>

@@ -185,16 +185,16 @@
         }
 
         function sizeCheckChange() {
-            sizeChk
-                .off('click' + variables.namespace)
+            sizeChk.off('click' + variables.namespace)
                 .on('click' + variables.namespace, function () {
                     var checked = [], val;
                     sizeChk.each(function () {
                         val = $(this).find('span.active').attr('data-value');
-                        if (val) {
+                        if (val && -1 === $.inArray(val, checked)) {
                             checked.push(val);
                         }
                     });
+
                     if (checked.length) {
                         uriParser.push('size', checked, true);
                     } else {
@@ -284,6 +284,11 @@
             }
             // sizes activate
             if (obj['size'] && core.isArray(obj['size'])) {
+                for(var o in obj['size']) {
+                    if(obj['size'].hasOwnProperty(o)) {
+                        obj['size'][o] = decodeURIComponent(obj['size'][o].replace(/\+/g, " "));
+                    }
+                }
                 sizeChk.each(function () {
                     el = $(this).find('span');
                     if (el.length) {
@@ -376,6 +381,19 @@
                     canPushState = true;
                     isInProgress = false;
                     createLoader = true;
+
+                    // Lazy loader (pictures, videos, etc.)
+                    if ($.fn.lazy) {
+                        $('.lazy').lazy({
+                            effect: "fadeIn",
+                            effectTime: 800,
+                            threshold: 50,
+                            // callback
+                            afterLoad: function (element) {
+                                $(element).css({'background': 'none'});
+                            }
+                        });
+                    }
                 }, {
                     params: uriParser.get(null, {}, true),
                 }, true, function () {

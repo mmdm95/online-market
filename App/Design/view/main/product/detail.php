@@ -24,7 +24,8 @@ use Sim\Utils\StringUtil;
                                        class="product_gallery_item <?= 0 == $k ? 'active' : ''; ?>"
                                        data-image="<?= url('image.show') . $item['image']; ?>"
                                        data-zoom-image="<?= url('image.show') . $item['image']; ?>">
-                                        <img src="<?= url('image.show') . $item['image']; ?>" alt="image gallery"/>
+                                        <img src="" data-src="<?= url('image.show') . $item['image']; ?>"
+                                             alt="image gallery" class="lazy">
                                     </a>
                                 </div>
                             <?php endforeach; ?>
@@ -133,7 +134,7 @@ use Sim\Utils\StringUtil;
                             <li>
                                 دسته بندی:
                                 <a href="<?= url('home.search', [], [
-                                    'brand' => $product['brand_id'],
+                                    'brands[]' => $product['brand_id'],
                                 ]); ?>">
                                     <?= $product['brand_name']; ?>
                                 </a>

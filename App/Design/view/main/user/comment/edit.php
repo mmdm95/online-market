@@ -15,9 +15,9 @@ $validator = form_validator();
             <div class="d-block d-lg-flex m-0 align-items-start">
                 <div>
                     <a href="<?= url('home.product.show', ['id' => $comment['product_id'], 'slug' => $product['slug']])->getRelativeUrl(); ?>">
-                        <img src="<?= url('image.show', ['filename' => $product['image']]); ?>"
+                        <img src="" data-src="<?= url('image.show', ['filename' => $product['image']]); ?>"
                              alt="<?= $product['title'] ?>"
-                             class="mx-0 mx-lg-3"
+                             class="mx-0 mx-lg-3 lazy"
                              width="100px" height="auto">
                     </a>
                 </div>

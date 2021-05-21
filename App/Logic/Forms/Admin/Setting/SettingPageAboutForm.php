@@ -97,13 +97,13 @@ class SettingPageAboutForm implements IPageForm
             $title = input()->post('inp-setting-title', '')->getValue();
             $desc = input()->post('inp-setting-desc', '')->getValue();
             $combined = [
-                'image' => $image,
-                'title' => $title,
-                'desc' => $desc,
+                'image' => $xss->xss_clean(trim($image)),
+                'title' => $xss->xss_clean(trim($title)),
+                'desc' => trim($desc),
             ];
 
             return $settingModel->update([
-                'setting_value' => $xss->xss_clean(trim(json_encode($combined))),
+                'setting_value' => json_encode($combined),
             ], 'setting_name=:name', ['name' => SETTING_ABOUT_SECTION]);
         } catch (\Exception $e) {
             return false;

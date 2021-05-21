@@ -44,12 +44,16 @@ class AddDepositTypeForm implements IPageForm
         $validator
             ->setFieldsAlias([
                 'inp-add-deposit-type-title' => 'عنوان',
+                'inp-add-deposit-type-desc' => 'توضیح',
             ]);
 
         // title
         // desc
         $validator
-            ->setFields('inp-add-deposit-type-title')
+            ->setFields([
+                'inp-add-deposit-type-title',
+                'inp-add-deposit-type-desc',
+            ])
             ->stopValidationAfterFirstError(false)
             ->required()
             ->stopValidationAfterFirstError(true)
@@ -57,6 +61,7 @@ class AddDepositTypeForm implements IPageForm
 
         // check for duplicate
         $validator
+            ->setFields('inp-add-deposit-type-title')
             ->custom(function (FormValue $value) {
                 /**
                  * @var DepositTypeModel $depositModel
@@ -105,10 +110,12 @@ class AddDepositTypeForm implements IPageForm
 
         try {
             $title = input()->post('inp-add-deposit-type-title', '')->getValue();
+            $desc = input()->post('inp-add-deposit-type-desc', '')->getValue();
 
             return $depositModel->insert([
                 'code' => StringUtil::uniqidReal(12),
                 'title' => $xss->xss_clean(trim($title)),
+                'desc' => $xss->xss_clean(trim($desc)),
                 'created_by' => $auth->getCurrentUser()['id'] ?? null,
                 'created_at' => time(),
             ]);

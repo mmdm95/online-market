@@ -170,16 +170,21 @@ $validator = form_validator();
                             </div>
                         </div>
                     </div>
-                    <div class="card-body text-right">
-                        <button type="button" class="btn btn-primary flat-icon __duplicator_btn"
-                                data-container-element=".__all_products_container"
-                                data-sample-element="#__sample_all_product"
-                                data-clearable-elements='["inp-edit-product-stock-count[]","inp-edit-product-max-count[]","inp-edit-product-color[]","inp-edit-product-size[]","inp-edit-product-weight[]","inp-edit-product-guarantee[]","inp-edit-product-price[]","inp-edit-product-discount-price[]","inp-edit-product-discount-date[]","inp-edit-product-product-availability[]","inp-edit-product-consider-discount-date[]"]'
-                                data-alt-field='["inp-edit-product-discount-date-tmp[]"]'
-                                data-edit-remove="true">
-                            افزودن محصول جدید
-                            <i class="icon-plus2 ml-2" aria-hidden="true"></i>
-                        </button>
+                    <div class="card-body">
+                        <div class="alert alert-primary">
+                            مواردی که رنگ آنها انتخاب نشده، در نظر گرفته نمی‌شود.
+                        </div>
+                        <div class="text-right">
+                            <button type="button" class="btn btn-primary flat-icon __duplicator_btn"
+                                    data-container-element=".__all_products_container"
+                                    data-sample-element="#__sample_all_product"
+                                    data-clearable-elements='["inp-edit-product-stock-count[]","inp-edit-product-max-count[]","inp-edit-product-color[]","inp-edit-product-size[]","inp-edit-product-weight[]","inp-edit-product-guarantee[]","inp-edit-product-price[]","inp-edit-product-discount-price[]","inp-edit-product-discount-date[]","inp-edit-product-product-availability[]","inp-edit-product-consider-discount-date[]"]'
+                                    data-alt-field='["inp-edit-product-discount-date-tmp[]"]'
+                                    data-edit-remove="true">
+                                افزودن محصول جدید
+                                <i class="icon-plus2 ml-2" aria-hidden="true"></i>
+                            </button>
+                        </div>
                     </div>
                     <div class="card-body __all_products_container">
                         <?php
@@ -216,7 +221,7 @@ $validator = form_validator();
                                                 <?php foreach ($colors as $color): ?>
                                                     <option value="<?= $color['hex']; ?>"
                                                             data-color="<?= $color['hex']; ?>"
-                                                        <?= $validator->setSelect('inp-edit-product-color', $color['hex']); ?>>
+                                                        <?= $validator->setSelect('inp-edit-product-color', $color['hex']) ?: ($color['hex'] == ($product_properties[$counter]['color_hex'] ?? '') ? 'selected="selected"' : ''); ?>>
                                                         <?= $color['name']; ?>
                                                     </option>
                                                 <?php endforeach; ?>
@@ -402,7 +407,7 @@ $validator = form_validator();
                                                     موجود
                                                     <input type="checkbox" class="form-check-input-switchery"
                                                            name="inp-edit-product-product-availability[]"
-                                                           <?= is_value_checked($property['is_available']) ? 'checked="checked"' : ''; ?>>
+                                                        <?= is_value_checked($property['is_available']) ? 'checked="checked"' : ''; ?>>
                                                     ناموجود
                                                 </label>
                                             </div>
@@ -711,10 +716,10 @@ $validator = form_validator();
                                                         <i class="icon-plus2"></i>
                                                     </div>
                                                 </div>
+                                                <?php if (0 !== $counter++): ?>
+                                                    <?php load_partial('admin/parser/dynamic-remover-btn'); ?>
+                                                <?php endif; ?>
                                             </div>
-                                            <?php if (0 !== $counter++): ?>
-                                                <?php load_partial('admin/parser/dynamic-remover-btn'); ?>
-                                            <?php endif; ?>
                                         <?php endforeach; ?>
                                     <?php elseif (is_array($galleryImages) && count($galleryImages)): ?>
                                         <?php $counter = 0; ?>
@@ -736,10 +741,10 @@ $validator = form_validator();
                                                         <i class="icon-plus2"></i>
                                                     </div>
                                                 </div>
+                                                <?php if (0 !== $counter++): ?>
+                                                    <?php load_partial('admin/parser/dynamic-remover-btn'); ?>
+                                                <?php endif; ?>
                                             </div>
-                                            <?php if (0 !== $counter++): ?>
-                                                <?php load_partial('admin/parser/dynamic-remover-btn'); ?>
-                                            <?php endif; ?>
                                         <?php endforeach; ?>
                                     <?php else: ?>
                                         <div class="img-placeholder-custom __file_picker_handler __file_image"

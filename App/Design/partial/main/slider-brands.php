@@ -18,8 +18,8 @@
                         <?php foreach ($brands as $brand): ?>
                             <div class="item">
                                 <div class="cl_logo">
-                                    <img src="<?= url('image.show') . $brand['image']; ?>"
-                                         alt="<?= $brand['name']; ?>"/>
+                                    <img src="" data-src="<?= url('image.show') . $brand['image']; ?>"
+                                         alt="<?= $brand['name']; ?>" class="lazy">
                                 </div>
                             </div>
                         <?php endforeach; ?>

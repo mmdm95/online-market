@@ -6,7 +6,7 @@
             $current = $pagination['current_page'];
             $total = $pagination['total'];
             $firstCount = ($current - 1) * $limit;
-            $lastCount = ($current + 1) * $limit;
+            $lastCount = $current * $limit;
             ?>
             <div class="col-12 my-2">
                 نمایش
@@ -33,8 +33,8 @@
                                 'id' => $item['product_id'],
                                 'slug' => $item['slug'],
                             ]); ?>">
-                                <img src="<?= url('image.show') . $item['image']; ?>"
-                                     alt="<?= $item['title']; ?>">
+                                <img src="" data-src="<?= url('image.show') . $item['image']; ?>"
+                                     alt="<?= $item['title']; ?>" class="lazy">
                             </a>
                             <div class="product_action_box">
                                 <ul class="list_none pr_action_btn">

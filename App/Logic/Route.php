@@ -16,6 +16,7 @@ use App\Logic\Controllers\Admin\{BlogController as AdminBlogController,
     FaqController as AdminFaqController,
     FestivalController as AdminFestivalController,
     FileController as AdminFileController,
+    GuideController as AdminGuideController,
     HomeController as AdminHomeController,
     InstagramController as AdminInstagramController,
     NewsletterController as AdminNewsletterController,
@@ -505,6 +506,11 @@ class Route implements IInitialize
                  * File Manager Route
                  */
                 Router::get('/file-manager', [AdminFileController::class, 'index'])->name('admin.file-manager');
+
+                /**
+                 * Guide Route
+                 */
+                Router::get('/guide', [AdminGuideController::class, 'index'])->name('admin.guide');
             });
 
             // show images outside of public folder
@@ -708,7 +714,7 @@ class Route implements IInitialize
             ])->name('ajax.product.comments');
             Router::post('/product/comment/add/{product_id}', [CommentController::class, 'saveComment'])->where([
                 'product_id' => '[0-9]+',
-            ])->name('ajax.product.comments');
+            ])->name('ajax.product.comments.add');
             Router::post('/product/wishlist/toggle/{product_id}', [ProductController::class, 'wishlistToggle'])->where([
                 'product_id' => '[0-9]+',
             ])->name('ajax.product.wishlist.toggle');

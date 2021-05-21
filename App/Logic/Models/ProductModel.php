@@ -601,16 +601,18 @@ class ProductModel extends BaseModel
     /**
      * @param $product_id
      * @param array $columns
+     * @param array $orderBy
      * @return array
      */
-    public function getProductProperty($product_id, array $columns = ['*']): array
+    public function getProductProperty($product_id, array $columns = ['*'], array $orderBy = ['id ASC']): array
     {
         $select = $this->connector->select();
         $select
             ->from(self::TBL_PRODUCT_PROPERTY)
             ->cols($columns)
             ->where('product_id=:id')
-            ->bindValue('id', $product_id);
+            ->bindValue('id', $product_id)
+            ->orderBy($orderBy);
 
         return $this->db->fetchAll($select->getStatement(), $select->getBindValues());
     }

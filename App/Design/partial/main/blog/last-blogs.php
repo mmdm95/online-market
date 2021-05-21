@@ -16,7 +16,8 @@ use App\Logic\Utils\Jdf;
                                 'id' => $item['id'],
                                 'slug' => $item['slug'],
                             ]); ?>">
-                                <img src="<?= url('image.show') . $item['image']; ?>" alt="<?= $item['title']; ?>">
+                                <img src="" data-src="<?= url('image.show') . $item['image']; ?>"
+                                     alt="<?= $item['title']; ?>" class="lazy">
                             </a>
                         </div>
                         <div class="post_content">

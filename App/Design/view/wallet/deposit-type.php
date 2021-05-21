@@ -59,6 +59,14 @@
                                     <input type="text" placeholder="وارد کنید" class="form-control"
                                            name="inp-add-deposit-type-title">
                                 </div>
+                                <div class="col-lg-12 form-group">
+                                    <label>
+                                        <span class="text-danger">*</span>
+                                        توضیح:
+                                    </label>
+                                    <input type="text" placeholder="وارد کنید" class="form-control"
+                                           name="inp-add-deposit-type-desc">
+                                </div>
                             </div>
                         </div>
 
@@ -91,6 +99,14 @@
                                     </label>
                                     <input type="text" placeholder="وارد کنید" class="form-control"
                                            name="inp-edit-deposit-type-title">
+                                </div>
+                                <div class="col-lg-12 form-group">
+                                    <label>
+                                        <span class="text-danger">*</span>
+                                        توضیح:
+                                    </label>
+                                    <input type="text" placeholder="وارد کنید" class="form-control"
+                                           name="inp-edit-deposit-type-desc">
                                 </div>
                             </div>
                         </div>

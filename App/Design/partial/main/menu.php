@@ -15,18 +15,33 @@
                 <div class="col-md-6">
                     <div class="text-center text-md-right">
                         <ul class="header_list">
-                            <li>
+                            <?php if(auth_home()->isLoggedIn()): ?>
+                                <li>
+                                    <a href="<?= url('user.index'); ?>">
+                                        <i class="linearicons-clipboard-user"></i>
+                                        <span>پنل کاربری</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="<?= url('home.logout'); ?>">
+                                        <i class="linearicons-power-switch"></i>
+                                        <span>خروج</span>
+                                    </a>
+                                </li>
+                            <?php else: ?>
+                                <li>
                                 <a href="<?= url('home.login'); ?>">
                                     <i class="linearicons-user"></i>
                                     <span>ورود</span>
                                 </a>
-                            </li>
-                            <li>
-                                <a href="<?= url('home.signup'); ?>">
-                                    <i class="linearicons-user-plus"></i>
-                                    <span>ثبت نام</span>
-                                </a>
-                            </li>
+                                </li>
+                                <li>
+                                    <a href="<?= url('home.signup'); ?>">
+                                        <i class="linearicons-user-plus"></i>
+                                        <span>ثبت نام</span>
+                                    </a>
+                                </li>
+                            <?php endif; ?>
                         </ul>
                     </div>
                 </div>

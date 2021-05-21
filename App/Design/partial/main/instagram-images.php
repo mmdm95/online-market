@@ -24,8 +24,8 @@
                             <div class="item">
                                 <div class="instafeed_box">
                                     <a href="<?= $image['link']; ?>" target="_blank">
-                                        <img src="<?= url('image.show') . $image['image']; ?>"
-                                             alt="<?= $image['link']; ?>">
+                                        <img src="" data-src="<?= url('image.show') . $image['image']; ?>"
+                                             alt="<?= $image['link']; ?>" class="lazy">
                                     </a>
                                 </div>
                             </div>

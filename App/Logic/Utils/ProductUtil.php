@@ -56,7 +56,7 @@ class ProductUtil
         $q = input()->get('q', '');
         if (!is_array($q)) {
             $q = $q->getValue();
-            if (is_string($q) && !empty($q)) {
+            if (is_string($q) && !empty(trim($q))) {
                 $where .= ' AND (pa.category_name LIKE :q_p_category';
                 $where .= ' OR pa.fa_title LIKE :q_p_fa_title';
                 $where .= ' OR pa.slug LIKE :q_p_slug';
@@ -78,10 +78,11 @@ class ProductUtil
         $tag = input()->get('tag', '');
         if (!is_array($tag)) {
             $tag = $tag->getValue();
-            if (is_string($tag) && !empty($tag)) {
-                $where .= ' OR pa.fa_title LIKE :tag_p_fa_title';
+            if (is_string($tag) && !empty(trim($tag))) {
+                $tag = urldecode($tag);
+                $where .= ' AND (pa.fa_title LIKE :tag_p_fa_title';
                 $where .= ' OR pa.slug LIKE :tag_p_slug';
-                $where .= ' OR pa.keywords LIKE :tag_p_keywords';
+                $where .= ' OR pa.keywords LIKE :tag_p_keywords)';
                 $bindValues['tag_p_fa_title'] = '%' . StringUtil::toPersian($tag) . '%';
                 $bindValues['tag_p_slug'] = '%' . StringUtil::slugify($tag) . '%';
                 $bindValues['tag_p_keywords'] = '%' . $tag . '%';
@@ -124,7 +125,7 @@ class ProductUtil
             foreach ($colors as $k => $color) {
                 if (!is_array($color) && !empty($color->getValue())) {
                     $inClause .= ":p_color{$k},";
-                    $bindValues["p_color{$k}"] = $color->getValue();
+                    $bindValues["p_color{$k}"] = urldecode($color->getValue());
                 }
             }
             $inClause = trim($inClause, ',');
@@ -142,13 +143,16 @@ class ProductUtil
             foreach ($sizes as $k => $size) {
                 if (!is_array($size) && !empty($size->getValue())) {
                     $inClause .= ":p_size{$k},";
-                    $bindValues["p_size{$k}"] = $size->getValue();
+                    $bindValues["p_size{$k}"] = urldecode($size->getValue());
                 }
             }
             $inClause = trim($inClause, ',');
             if (!empty($inClause)) {
                 $where .= " AND pa.size IN ({$inClause})";
             }
+        } elseif (null !== $sizes && !empty($sizes->getValue())) {
+            $where .= " AND pa.size=:p_size_one";
+            $bindValues["p_size_one"] = $sizes->getValue();
         }
         // brands parameter
         $brands = input()->get('brands', null);
@@ -167,6 +171,9 @@ class ProductUtil
             if (!empty($inClause)) {
                 $where .= " AND pa.brand_id IN ({$inClause})";
             }
+        } elseif (null !== $brands && !empty($brands->getValue())) {
+            $where .= " AND pa.brand_id=:p_brand_one";
+            $bindValues["p_brand_one"] = $brands->getValue();
         }
         // is available parameter
         $isAvailable = input()->get('is_available', null);
@@ -348,6 +355,7 @@ class ProductUtil
                  * @var InputItem $c
                  */
                 $c = is_array($color) ? array_shift($color) : new InputItem('', null);
+                $c = null === $c ? new InputItem('', null) : $c;
                 /**
                  * @var InputItem $eachSize
                  */
@@ -392,6 +400,7 @@ class ProductUtil
                     $productObj[$i]['weight'] = $xss->xss_clean($eachWeight->getValue()) ?: null;
                     $productObj[$i]['discount_until'] = is_null($eachCDD->getValue()) ? ($xss->xss_clean($eachDisDate->getValue()) ?: null) : null;
                     $productObj[$i]['available'] = is_value_checked($eachPAvailability->getValue()) ? DB_YES : DB_NO;
+                    $i++;
                 }
             }
         } catch (\Exception $e) {

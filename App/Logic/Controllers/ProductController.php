@@ -101,7 +101,7 @@ class ProductController extends AbstractHomeController
         $select = $model->select();
         $select
             ->from(BaseModel::TBL_PRODUCT_PROPERTY)
-            ->cols(['size']);
+            ->cols(['distinct(size)']);
         $sizesNModels = $model->get($select);
         $sizes = [];
         foreach ($sizesNModels as $item) {

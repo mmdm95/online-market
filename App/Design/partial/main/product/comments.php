@@ -9,8 +9,8 @@ use App\Logic\Utils\Jdf;
         <?php foreach ($comments as $comment): ?>
             <li>
                 <div class="comment_img">
-                    <img src="<?= url('image.show') . $comment['user_image']; ?>"
-                         alt="<?= $comment['first_name']; ?>"/>
+                    <img src="" data-src="<?= url('image.show') . $comment['user_image']; ?>"
+                         alt="<?= $comment['first_name']; ?>" class="lazy">
                 </div>
                 <div class="comment_block">
                     <p class="customer_meta">

@@ -20,8 +20,8 @@
                             'slug' => $item['slug'] ?? '',
                         ]); ?>">
                             <?php if (isset($item['image'])): ?>
-                                <img src="<?= url('image.show') . $item['image']; ?>"
-                                     alt="<?= $item['title'] ?? 'product ' . $item['code']; ?>">
+                                <img src="" data-src="<?= url('image.show') . $item['image']; ?>"
+                                     alt="<?= $item['title'] ?? 'product ' . $item['code']; ?>" class="lazy">
                             <?php endif; ?>
                             <?= $item['title']; ?>
                         </a>

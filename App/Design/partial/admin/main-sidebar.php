@@ -26,8 +26,9 @@ $authAdmin = auth_admin();
             <div class="sidebar-user-material-body">
                 <div class="card-body text-center">
                     <a href="<?= url('admin.user.view', ['id' => $authAdmin->getCurrentUser()['id']])->getRelativeUrl(); ?>">
-                        <img src="<?= asset_path('image/avatars/' . $main_user_info['info']['image'], false); ?>"
-                             class="img-fluid rounded-circle shadow-1 mb-3" width="80" height="80" alt="">
+                        <img src=""
+                             data-src="<?= asset_path('image/avatars/' . $main_user_info['info']['image'], false); ?>"
+                             class="img-fluid rounded-circle shadow-1 mb-3 lazy" width="80" height="80" alt="">
                     </a>
                     <div class="d-flex justify-content-between">
                         <div>
@@ -148,13 +149,13 @@ $authAdmin = auth_admin();
                     <!--                    <ul class="nav nav-group-sub">-->
                     <!--                        <li class="nav-item">-->
                     <!--                            <a href="" class="nav-link">-->
-                    <?= '';//url('admin.send_method.add');                                          ?>
+                    <?= '';//url('admin.send_method.add');                                           ?>
                     <!--                                افزودن روش ارسال جدید-->
                     <!--                            </a>-->
                     <!--                        </li>-->
                     <!--                        <li class="nav-item">-->
                     <!--                            <a href="" class="nav-link">-->
-                    <?= '';//url('admin.send_method.view', '');                                          ?>
+                    <?= '';//url('admin.send_method.view', '');                                           ?>
                     <!--                                لیست روش‌های ارسال-->
                     <!--                            </a>-->
                     <!--                        </li>-->
@@ -356,7 +357,7 @@ $authAdmin = auth_admin();
 
                     <!--                <li class="nav-item">-->
                     <!--                    <a href="" class="nav-link"-->
-                    <?= '';//url('admin.return.order.view');                                      ?>
+                    <?= '';//url('admin.return.order.view');                                       ?>
                     <!--                       data-popup="tooltip"-->
                     <!--                       data-original-title="سفارشات مرجوعی"-->
                     <!--                       data-placement="left">-->
@@ -644,6 +645,17 @@ $authAdmin = auth_admin();
                         </a>
                     </li>
                 <?php endif; ?>
+
+                <li class="nav-item">
+                    <a href="<?= url('admin.guide'); ?>"
+                       class="nav-link <?= url()->contains(url('admin.guide')->getRelativeUrlTrimmed()) ? 'active' : ''; ?>"
+                       data-popup="tooltip"
+                       data-original-title="راهنما"
+                       data-placement="left">
+                        <i class="icon-flag3"></i>
+                        <span>راهنما</span>
+                    </a>
+                </li>
 
                 <li class="nav-item">
                     <a href="<?= url('admin.logout'); ?>"

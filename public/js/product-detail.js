@@ -138,7 +138,7 @@
         }).on('selectric-change', function (event, element) {
             var code;
             code = $(element).val();
-            if (val && $.trim(code) !== '') {
+            if (code && $.trim(code) !== '') {
                 loadProductProperties(code);
             }
         });
