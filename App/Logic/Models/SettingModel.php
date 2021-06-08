@@ -111,8 +111,11 @@ class SettingModel extends BaseModel
         $res5 = $this->update([
             'setting_value' => $info[SETTING_EMAIL],
         ], 'setting_name=:name', ['name' => SETTING_EMAIL]);
+        $res6 = $this->update([
+            'setting_value' => $info[SETTING_LAT_LNG],
+        ], 'setting_name=:name', ['name' => SETTING_LAT_LNG]);
 
-        return $res1 && $res2 && $res3 && $res4 && $res5;
+        return $res1 && $res2 && $res3 && $res4 && $res5 && $res6;
     }
 
     /**

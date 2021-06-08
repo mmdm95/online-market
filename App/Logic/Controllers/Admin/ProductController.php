@@ -25,10 +25,6 @@ use Jenssegers\Agent\Agent;
 use Sim\Auth\DBAuth;
 use Sim\Auth\Interfaces\IAuth;
 use Sim\Auth\Interfaces\IDBException;
-use Sim\Container\Exceptions\MethodNotFoundException;
-use Sim\Container\Exceptions\ParameterHasNoDefaultValueException;
-use Sim\Container\Exceptions\ServiceNotFoundException;
-use Sim\Container\Exceptions\ServiceNotInstantiableException;
 use Sim\Event\Interfaces\IEvent;
 use Sim\Exceptions\ConfigManager\ConfigNotRegisteredException;
 use Sim\Exceptions\Mvc\Controller\ControllerException;
@@ -42,15 +38,13 @@ class ProductController extends AbstractAdminController implements IDatatableCon
      * @return string
      * @throws ConfigNotRegisteredException
      * @throws ControllerException
+     * @throws IDBException
      * @throws IFileNotExistsException
      * @throws IInvalidVariableNameException
-     * @throws MethodNotFoundException
-     * @throws ParameterHasNoDefaultValueException
      * @throws PathNotRegisteredException
-     * @throws ServiceNotFoundException
-     * @throws ServiceNotInstantiableException
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
      * @throws \ReflectionException
-     * @throws IDBException
      */
     public function view()
     {
@@ -71,15 +65,13 @@ class ProductController extends AbstractAdminController implements IDatatableCon
      * @return string
      * @throws ConfigNotRegisteredException
      * @throws ControllerException
+     * @throws IDBException
      * @throws IFileNotExistsException
      * @throws IInvalidVariableNameException
-     * @throws MethodNotFoundException
-     * @throws ParameterHasNoDefaultValueException
      * @throws PathNotRegisteredException
-     * @throws ServiceNotFoundException
-     * @throws ServiceNotInstantiableException
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
      * @throws \ReflectionException
-     * @throws IDBException
      */
     public function detail($id)
     {
@@ -145,15 +137,13 @@ class ProductController extends AbstractAdminController implements IDatatableCon
      * @return string
      * @throws ConfigNotRegisteredException
      * @throws ControllerException
+     * @throws IDBException
      * @throws IFileNotExistsException
      * @throws IInvalidVariableNameException
-     * @throws MethodNotFoundException
-     * @throws ParameterHasNoDefaultValueException
      * @throws PathNotRegisteredException
-     * @throws ServiceNotFoundException
-     * @throws ServiceNotInstantiableException
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
      * @throws \ReflectionException
-     * @throws IDBException
      */
     public function add()
     {
@@ -202,15 +192,13 @@ class ProductController extends AbstractAdminController implements IDatatableCon
      * @return string
      * @throws ConfigNotRegisteredException
      * @throws ControllerException
+     * @throws IDBException
      * @throws IFileNotExistsException
      * @throws IInvalidVariableNameException
-     * @throws MethodNotFoundException
-     * @throws ParameterHasNoDefaultValueException
      * @throws PathNotRegisteredException
-     * @throws ServiceNotFoundException
-     * @throws ServiceNotInstantiableException
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
      * @throws \ReflectionException
-     * @throws IDBException
      */
     public function edit($id)
     {
@@ -282,12 +270,9 @@ class ProductController extends AbstractAdminController implements IDatatableCon
 
     /**
      * @param $id
-     * @throws \ReflectionException
-     * @throws MethodNotFoundException
-     * @throws ParameterHasNoDefaultValueException
-     * @throws ServiceNotFoundException
-     * @throws ServiceNotInstantiableException
      * @throws IDBException
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
      */
     public function remove($id)
     {
@@ -351,11 +336,8 @@ class ProductController extends AbstractAdminController implements IDatatableCon
     /**
      * @param $id
      * @throws IDBException
-     * @throws MethodNotFoundException
-     * @throws ParameterHasNoDefaultValueException
-     * @throws ServiceNotFoundException
-     * @throws ServiceNotInstantiableException
-     * @throws \ReflectionException
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
      */
     public function pubStatusChange($id)
     {
@@ -403,11 +385,8 @@ class ProductController extends AbstractAdminController implements IDatatableCon
     /**
      * @param $id
      * @throws IDBException
-     * @throws MethodNotFoundException
-     * @throws ParameterHasNoDefaultValueException
-     * @throws ServiceNotFoundException
-     * @throws ServiceNotInstantiableException
-     * @throws \ReflectionException
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
      */
     public function availabilityStatusChange($id)
     {
@@ -456,11 +435,8 @@ class ProductController extends AbstractAdminController implements IDatatableCon
      * @param array $_
      * @return void
      * @throws IDBException
-     * @throws MethodNotFoundException
-     * @throws ParameterHasNoDefaultValueException
-     * @throws ServiceNotFoundException
-     * @throws ServiceNotInstantiableException
-     * @throws \ReflectionException
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
      */
     public function getPaginatedDatatable(...$_): void
     {
@@ -488,7 +464,7 @@ class ProductController extends AbstractAdminController implements IDatatableCon
 
                     $cols[] = 'pa.is_special';
 
-                    $data = $productModel->getLimitedProduct($where, $bindValues, $order, $limit, $offset, [], $cols);
+                    $data = $productModel->getLimitedProduct($where, $bindValues, $order, $limit, $offset, ['pa.product_id'], $cols);
                     //-----
                     $recordsFiltered = $productModel->getLimitedProductCount($where, $bindValues);
                     $recordsTotal = $productModel->getLimitedProductCount();
@@ -602,11 +578,8 @@ class ProductController extends AbstractAdminController implements IDatatableCon
      * @param array $_
      * @return void
      * @throws IDBException
-     * @throws MethodNotFoundException
-     * @throws ParameterHasNoDefaultValueException
-     * @throws ServiceNotFoundException
-     * @throws ServiceNotInstantiableException
-     * @throws \ReflectionException
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
      */
     public function getPaginatedSelect2(...$_): void
     {
@@ -669,15 +642,13 @@ class ProductController extends AbstractAdminController implements IDatatableCon
      * @return string
      * @throws ConfigNotRegisteredException
      * @throws ControllerException
+     * @throws IDBException
      * @throws IFileNotExistsException
      * @throws IInvalidVariableNameException
-     * @throws MethodNotFoundException
-     * @throws ParameterHasNoDefaultValueException
      * @throws PathNotRegisteredException
-     * @throws ServiceNotFoundException
-     * @throws ServiceNotInstantiableException
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
      * @throws \ReflectionException
-     * @throws IDBException
      */
     public function buyer($id)
     {
@@ -709,11 +680,8 @@ class ProductController extends AbstractAdminController implements IDatatableCon
     /**
      * @param $id
      * @throws IDBException
-     * @throws MethodNotFoundException
-     * @throws ParameterHasNoDefaultValueException
-     * @throws ServiceNotFoundException
-     * @throws ServiceNotInstantiableException
-     * @throws \ReflectionException
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
      */
     public function getBuyerUsersPaginatedDatatable($id)
     {
@@ -791,11 +759,8 @@ class ProductController extends AbstractAdminController implements IDatatableCon
     /**
      * @param $id
      * @throws IDBException
-     * @throws MethodNotFoundException
-     * @throws ParameterHasNoDefaultValueException
-     * @throws ServiceNotFoundException
-     * @throws ServiceNotInstantiableException
-     * @throws \ReflectionException
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
      */
     public function getBuyerOrdersPaginatedDatatable($id)
     {

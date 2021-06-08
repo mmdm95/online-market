@@ -21,10 +21,6 @@ use ReflectionException;
 use Sim\Auth\DBAuth;
 use Sim\Auth\Interfaces\IAuth;
 use Sim\Auth\Interfaces\IDBException;
-use Sim\Container\Exceptions\MethodNotFoundException;
-use Sim\Container\Exceptions\ParameterHasNoDefaultValueException;
-use Sim\Container\Exceptions\ServiceNotFoundException;
-use Sim\Container\Exceptions\ServiceNotInstantiableException;
 use Sim\Exceptions\ConfigManager\ConfigNotRegisteredException;
 use Sim\Exceptions\Mvc\Controller\ControllerException;
 use Sim\Exceptions\PathManager\PathNotRegisteredException;
@@ -36,14 +32,11 @@ class SettingController extends AbstractAdminController
     /**
      * SettingController constructor.
      * @throws ConfigNotRegisteredException
+     * @throws IDBException
      * @throws IFileNotExistsException
      * @throws IInvalidVariableNameException
-     * @throws MethodNotFoundException
-     * @throws ParameterHasNoDefaultValueException
-     * @throws ReflectionException
-     * @throws ServiceNotFoundException
-     * @throws ServiceNotInstantiableException
-     * @throws IDBException
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
      */
     public function __construct()
     {
@@ -66,10 +59,8 @@ class SettingController extends AbstractAdminController
      * @throws IInvalidVariableNameException
      * @throws PathNotRegisteredException
      * @throws ReflectionException
-     * @throws MethodNotFoundException
-     * @throws ParameterHasNoDefaultValueException
-     * @throws ServiceNotFoundException
-     * @throws ServiceNotInstantiableException
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
      */
     public function main()
     {
@@ -90,12 +81,10 @@ class SettingController extends AbstractAdminController
      * @throws ControllerException
      * @throws IFileNotExistsException
      * @throws IInvalidVariableNameException
-     * @throws MethodNotFoundException
-     * @throws ParameterHasNoDefaultValueException
      * @throws PathNotRegisteredException
      * @throws ReflectionException
-     * @throws ServiceNotFoundException
-     * @throws ServiceNotInstantiableException
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
      */
     public function topMenu()
     {
@@ -116,12 +105,10 @@ class SettingController extends AbstractAdminController
      * @throws ControllerException
      * @throws IFileNotExistsException
      * @throws IInvalidVariableNameException
-     * @throws MethodNotFoundException
-     * @throws ParameterHasNoDefaultValueException
      * @throws PathNotRegisteredException
      * @throws ReflectionException
-     * @throws ServiceNotFoundException
-     * @throws ServiceNotInstantiableException
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
      */
     public function buy()
     {
@@ -142,12 +129,10 @@ class SettingController extends AbstractAdminController
      * @throws ControllerException
      * @throws IFileNotExistsException
      * @throws IInvalidVariableNameException
-     * @throws MethodNotFoundException
-     * @throws ParameterHasNoDefaultValueException
      * @throws PathNotRegisteredException
      * @throws ReflectionException
-     * @throws ServiceNotFoundException
-     * @throws ServiceNotInstantiableException
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
      */
     public function sms()
     {
@@ -168,12 +153,10 @@ class SettingController extends AbstractAdminController
      * @throws ControllerException
      * @throws IFileNotExistsException
      * @throws IInvalidVariableNameException
-     * @throws MethodNotFoundException
-     * @throws ParameterHasNoDefaultValueException
      * @throws PathNotRegisteredException
      * @throws ReflectionException
-     * @throws ServiceNotFoundException
-     * @throws ServiceNotInstantiableException
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
      */
     public function contact()
     {
@@ -194,12 +177,10 @@ class SettingController extends AbstractAdminController
      * @throws ControllerException
      * @throws IFileNotExistsException
      * @throws IInvalidVariableNameException
-     * @throws MethodNotFoundException
-     * @throws ParameterHasNoDefaultValueException
      * @throws PathNotRegisteredException
      * @throws ReflectionException
-     * @throws ServiceNotFoundException
-     * @throws ServiceNotInstantiableException
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
      */
     public function social()
     {
@@ -220,12 +201,10 @@ class SettingController extends AbstractAdminController
      * @throws ControllerException
      * @throws IFileNotExistsException
      * @throws IInvalidVariableNameException
-     * @throws MethodNotFoundException
-     * @throws ParameterHasNoDefaultValueException
      * @throws PathNotRegisteredException
      * @throws ReflectionException
-     * @throws ServiceNotFoundException
-     * @throws ServiceNotInstantiableException
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
      */
     public function footer()
     {
@@ -246,12 +225,10 @@ class SettingController extends AbstractAdminController
      * @throws ControllerException
      * @throws IFileNotExistsException
      * @throws IInvalidVariableNameException
-     * @throws MethodNotFoundException
-     * @throws ParameterHasNoDefaultValueException
      * @throws PathNotRegisteredException
      * @throws ReflectionException
-     * @throws ServiceNotFoundException
-     * @throws ServiceNotInstantiableException
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
      */
     public function indexPage()
     {
@@ -272,9 +249,8 @@ class SettingController extends AbstractAdminController
             'categories' => $categoryModel->get([
                 'id',
                 'name',
-            ], 'publish=:pub AND level=:lvl', [
+            ], 'publish=:pub', [
                 'pub' => DB_YES,
-                'lvl' => MAX_CATEGORY_LEVEL,
             ]),
         ]));
     }
@@ -285,12 +261,10 @@ class SettingController extends AbstractAdminController
      * @throws ControllerException
      * @throws IFileNotExistsException
      * @throws IInvalidVariableNameException
-     * @throws MethodNotFoundException
-     * @throws ParameterHasNoDefaultValueException
      * @throws PathNotRegisteredException
      * @throws ReflectionException
-     * @throws ServiceNotFoundException
-     * @throws ServiceNotInstantiableException
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
      */
     public function aboutPage()
     {
@@ -311,12 +285,10 @@ class SettingController extends AbstractAdminController
      * @throws ControllerException
      * @throws IFileNotExistsException
      * @throws IInvalidVariableNameException
-     * @throws MethodNotFoundException
-     * @throws ParameterHasNoDefaultValueException
      * @throws PathNotRegisteredException
      * @throws ReflectionException
-     * @throws ServiceNotFoundException
-     * @throws ServiceNotInstantiableException
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
      */
     public function other()
     {

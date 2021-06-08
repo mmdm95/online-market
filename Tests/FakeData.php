@@ -14,10 +14,6 @@ use Sim\Auth\Interfaces\IAuthenticator;
 use Sim\Auth\Interfaces\IAuthorizer;
 use Sim\Auth\Interfaces\IAuthValidator;
 use Sim\Auth\Interfaces\IAuthVerifier;
-use Sim\Container\Exceptions\MethodNotFoundException;
-use Sim\Container\Exceptions\ParameterHasNoDefaultValueException;
-use Sim\Container\Exceptions\ServiceNotFoundException;
-use Sim\Container\Exceptions\ServiceNotInstantiableException;
 use Sim\Utils\ArrayUtil;
 
 class FakeData
@@ -34,11 +30,8 @@ class FakeData
 
     /**
      * FakeData constructor.
-     * @throws \ReflectionException
-     * @throws MethodNotFoundException
-     * @throws ParameterHasNoDefaultValueException
-     * @throws ServiceNotFoundException
-     * @throws ServiceNotInstantiableException
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
      */
     public function __construct()
     {
@@ -582,11 +575,8 @@ class FakeData
     }
 
     /**
-     * @throws MethodNotFoundException
-     * @throws ParameterHasNoDefaultValueException
-     * @throws ServiceNotFoundException
-     * @throws ServiceNotInstantiableException
-     * @throws \ReflectionException
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
      */
     public function createAdminUser()
     {
@@ -619,11 +609,8 @@ class FakeData
     }
 
     /**
-     * @throws MethodNotFoundException
-     * @throws ParameterHasNoDefaultValueException
-     * @throws ServiceNotFoundException
-     * @throws ServiceNotInstantiableException
-     * @throws \ReflectionException
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
      */
     public function users()
     {

@@ -21,7 +21,7 @@ use Sim\I18n\ISOLanguageCodes;
  *     1.2.5.0 instead of 1.2.5-a
  *     1.2.5.0.1 instead of 1.2.5-a1 (I'm not sure)
  */
-defined("APP_VERSION") OR define("APP_VERSION", "0.2.8");
+defined("APP_VERSION") OR define("APP_VERSION", "0.2.15");
 
 /***************************************
  * You can add your constants here
@@ -184,11 +184,13 @@ defined("METHOD_TYPE_GATEWAY_BEH_PARDAKHT") OR define("METHOD_TYPE_GATEWAY_BEH_P
 defined("METHOD_TYPE_GATEWAY_IDPAY") OR define("METHOD_TYPE_GATEWAY_IDPAY", 2);
 defined("METHOD_TYPE_GATEWAY_MABNA") OR define("METHOD_TYPE_GATEWAY_MABNA", 3);
 defined("METHOD_TYPE_GATEWAY_ZARINPAL") OR define("METHOD_TYPE_GATEWAY_ZARINPAL", 4);
+defined("METHOD_TYPE_GATEWAY_SADAD") OR define("METHOD_TYPE_GATEWAY_SADAD", 5);
 defined("METHOD_TYPES") OR define("METHOD_TYPES", [
     METHOD_TYPE_GATEWAY_BEH_PARDAKHT => 'درگاه بانک - به پرداخت',
     METHOD_TYPE_GATEWAY_IDPAY => 'درگاه بانک - آیدی پی',
     METHOD_TYPE_GATEWAY_MABNA => 'درگاه بانک - پرداخت الکترونیک سپهر (مبنا)',
     METHOD_TYPE_GATEWAY_ZARINPAL => 'درگاه بانک - زرین پال',
+    METHOD_TYPE_GATEWAY_SADAD => 'درگاه بانک - سداد',
 ]);
 
 // deposit type codes

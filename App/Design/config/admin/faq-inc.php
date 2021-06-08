@@ -8,6 +8,7 @@ return [
             'admin-form',
             'admin-tags-input',
             'admin-table',
+            'admin-editor',
             'admin'
         ],
         'sub_title' => 'مشاهده سؤالات',

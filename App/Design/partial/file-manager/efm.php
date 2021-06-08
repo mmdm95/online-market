@@ -157,14 +157,26 @@
                 $dir = $(this).find('#dirname[name="name"]');
             e.preventDefault();
             if ('' !== $.trim($dir.val())) {
-                $dir.val().length && $.post(routes.mkdir, {
-                    name: $dir.val(),
-                    xsrf: XSRF,
-                    file: hashval
-                }, function (data) {
-                }, 'json');
+                $dir.val().length && $.ajax({
+                    url: routes.mkdir,
+                    method: 'POST',
+                    dataType: 'json',
+                    data: {
+                        name: $dir.val(),
+                        xsrf: XSRF,
+                        file: hashval,
+                    },
+                    success: function () {
+                        list();
+                    },
+                    error: function (response) {
+                        // console.log(response.responseText);
+                        adminCommon.toasts.toast('عملیات ساخت پوشه انجام نشد!', {
+                            type: 'warning',
+                        });
+                    },
+                });
                 $dir.val('');
-                list();
             }
             return false;
         });

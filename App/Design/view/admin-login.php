@@ -1,5 +1,7 @@
 <?php
 
+use Sim\Utils\ArrayUtil;
+
 $validator = form_validator();
 
 ?>
@@ -15,7 +17,9 @@ $validator = form_validator();
 
             <!-- Login card -->
             <form class="login-form form-validate"
-                  action="<?= url('admin.login')->getRelativeUrlTrimmed(); ?>"
+                  action="<?= url('admin.login', null, [
+                      'back_url' => ArrayUtil::get($_GET, 'back_url', null)
+                  ])->getRelativeUrlTrimmed(); ?>"
                   method="post">
                 <input type="hidden" name="csrf_token" value="<?= csrf_token(); ?>" data-ignored>
 

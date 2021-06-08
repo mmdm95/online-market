@@ -3,10 +3,6 @@
 namespace App\Logic\Utils;
 
 use App\Logic\Models\MenuModel;
-use Sim\Container\Exceptions\MethodNotFoundException;
-use Sim\Container\Exceptions\ParameterHasNoDefaultValueException;
-use Sim\Container\Exceptions\ServiceNotFoundException;
-use Sim\Container\Exceptions\ServiceNotInstantiableException;
 
 class MenuUtil
 {
@@ -17,11 +13,8 @@ class MenuUtil
 
     /**
      * @return array
-     * @throws \ReflectionException
-     * @throws MethodNotFoundException
-     * @throws ParameterHasNoDefaultValueException
-     * @throws ServiceNotFoundException
-     * @throws ServiceNotInstantiableException
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
      */
     public function getMainMenuItems(): array
     {

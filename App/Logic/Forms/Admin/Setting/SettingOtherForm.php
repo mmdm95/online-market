@@ -3,16 +3,10 @@
 namespace App\Logic\Forms\Admin\Setting;
 
 use App\Logic\Interfaces\IPageForm;
-use App\Logic\Models\ProvinceModel;
 use App\Logic\Models\SettingModel;
 use App\Logic\Validations\ExtendedValidator;
-use Sim\Container\Exceptions\MethodNotFoundException;
-use Sim\Container\Exceptions\ParameterHasNoDefaultValueException;
-use Sim\Container\Exceptions\ServiceNotFoundException;
-use Sim\Container\Exceptions\ServiceNotInstantiableException;
 use Sim\Exceptions\ConfigManager\ConfigNotRegisteredException;
 use Sim\Form\Exceptions\FormException;
-use Sim\Form\FormValue;
 use Sim\Interfaces\IFileNotExistsException;
 use Sim\Interfaces\IInvalidVariableNameException;
 use voku\helper\AntiXSS;
@@ -21,15 +15,13 @@ class SettingOtherForm implements IPageForm
 {
     /**
      * {@inheritdoc}
-     * @throws \ReflectionException
-     * @throws MethodNotFoundException
-     * @throws ParameterHasNoDefaultValueException
-     * @throws ServiceNotFoundException
-     * @throws ServiceNotInstantiableException
+     * @return array
      * @throws ConfigNotRegisteredException
      * @throws FormException
      * @throws IFileNotExistsException
      * @throws IInvalidVariableNameException
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
      */
     public function validate(): array
     {
@@ -74,11 +66,9 @@ class SettingOtherForm implements IPageForm
 
     /**
      * {@inheritdoc}
-     * @throws MethodNotFoundException
-     * @throws ParameterHasNoDefaultValueException
-     * @throws ServiceNotFoundException
-     * @throws ServiceNotInstantiableException
-     * @throws \ReflectionException
+     * @return bool
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
      */
     public function store(): bool
     {

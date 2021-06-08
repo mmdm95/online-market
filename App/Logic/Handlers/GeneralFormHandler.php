@@ -3,10 +3,6 @@
 namespace App\Logic\Handlers;
 
 use App\Logic\Interfaces\IPageForm;
-use Sim\Container\Exceptions\MethodNotFoundException;
-use Sim\Container\Exceptions\ParameterHasNoDefaultValueException;
-use Sim\Container\Exceptions\ServiceNotFoundException;
-use Sim\Container\Exceptions\ServiceNotInstantiableException;
 use Sim\Interfaces\IHandler;
 
 class GeneralFormHandler implements IHandler
@@ -31,11 +27,8 @@ class GeneralFormHandler implements IHandler
      *
      * @param mixed ...$_
      * @return array
-     * @throws \ReflectionException
-     * @throws MethodNotFoundException
-     * @throws ParameterHasNoDefaultValueException
-     * @throws ServiceNotFoundException
-     * @throws ServiceNotInstantiableException
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
      */
     public function handle(...$_): array
     {

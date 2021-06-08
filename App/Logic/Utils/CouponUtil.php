@@ -3,10 +3,6 @@
 namespace App\Logic\Utils;
 
 use App\Logic\Models\CouponModel;
-use Sim\Container\Exceptions\MethodNotFoundException;
-use Sim\Container\Exceptions\ParameterHasNoDefaultValueException;
-use Sim\Container\Exceptions\ServiceNotFoundException;
-use Sim\Container\Exceptions\ServiceNotInstantiableException;
 
 class CouponUtil
 {
@@ -17,11 +13,8 @@ class CouponUtil
 
     /**
      * CouponUtil constructor.
-     * @throws \ReflectionException
-     * @throws MethodNotFoundException
-     * @throws ParameterHasNoDefaultValueException
-     * @throws ServiceNotFoundException
-     * @throws ServiceNotInstantiableException
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
      */
     public function __construct()
     {
@@ -54,11 +47,8 @@ class CouponUtil
     /**
      * @param $code
      * @return array
-     * @throws MethodNotFoundException
-     * @throws ParameterHasNoDefaultValueException
-     * @throws ServiceNotFoundException
-     * @throws ServiceNotInstantiableException
-     * @throws \ReflectionException
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
      */
     public static function checkCoupon($code): array
     {

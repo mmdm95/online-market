@@ -3,10 +3,6 @@
 namespace App\Logic\Handlers;
 
 use App\Logic\Interfaces\IPageForm;
-use Sim\Container\Exceptions\MethodNotFoundException;
-use Sim\Container\Exceptions\ParameterHasNoDefaultValueException;
-use Sim\Container\Exceptions\ServiceNotFoundException;
-use Sim\Container\Exceptions\ServiceNotInstantiableException;
 use Sim\Interfaces\IHandler;
 
 class GeneralAjaxFormHandler implements IHandler
@@ -44,11 +40,8 @@ class GeneralAjaxFormHandler implements IHandler
      *
      * @param mixed ...$_
      * @return ResourceHandler
-     * @throws MethodNotFoundException
-     * @throws ParameterHasNoDefaultValueException
-     * @throws ServiceNotFoundException
-     * @throws ServiceNotInstantiableException
-     * @throws \ReflectionException
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
      */
     public function handle(...$_): ResourceHandler
     {

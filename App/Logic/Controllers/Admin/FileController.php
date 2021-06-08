@@ -35,14 +35,11 @@ class FileController extends AbstractAdminController
     /**
      * FileController constructor.
      * @throws ConfigNotRegisteredException
+     * @throws IDBException
      * @throws IFileNotExistsException
      * @throws IInvalidVariableNameException
-     * @throws MethodNotFoundException
-     * @throws ParameterHasNoDefaultValueException
-     * @throws ServiceNotFoundException
-     * @throws ServiceNotInstantiableException
-     * @throws \ReflectionException
-     * @throws IDBException
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
      */
     public function __construct()
     {
@@ -58,11 +55,9 @@ class FileController extends AbstractAdminController
      * @throws IDBException
      * @throws IFileNotExistsException
      * @throws IInvalidVariableNameException
-     * @throws MethodNotFoundException
-     * @throws ParameterHasNoDefaultValueException
      * @throws PathNotRegisteredException
-     * @throws ServiceNotFoundException
-     * @throws ServiceNotInstantiableException
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
      * @throws \ReflectionException
      */
     public function index()
@@ -83,12 +78,9 @@ class FileController extends AbstractAdminController
     /**
      * Get a list of specific directory
      *
-     * @throws MethodNotFoundException
-     * @throws ParameterHasNoDefaultValueException
-     * @throws ServiceNotFoundException
-     * @throws ServiceNotInstantiableException
-     * @throws \ReflectionException
      * @throws IDBException
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
      */
     public function list()
     {
@@ -168,12 +160,14 @@ class FileController extends AbstractAdminController
     /**
      * Delete a file or directory
      *
+     * @throws IDBException
      * @throws MethodNotFoundException
      * @throws ParameterHasNoDefaultValueException
      * @throws ServiceNotFoundException
      * @throws ServiceNotInstantiableException
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
      * @throws \ReflectionException
-     * @throws IDBException
      */
     public function delete()
     {
@@ -211,12 +205,14 @@ class FileController extends AbstractAdminController
     /**
      * Delete a file or directory
      *
+     * @throws IDBException
      * @throws MethodNotFoundException
      * @throws ParameterHasNoDefaultValueException
      * @throws ServiceNotFoundException
      * @throws ServiceNotInstantiableException
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
      * @throws \ReflectionException
-     * @throws IDBException
      */
     public function deleteAll()
     {
@@ -260,12 +256,14 @@ class FileController extends AbstractAdminController
     }
 
     /**
-     * @throws \ReflectionException
+     * @throws IDBException
      * @throws MethodNotFoundException
      * @throws ParameterHasNoDefaultValueException
      * @throws ServiceNotFoundException
      * @throws ServiceNotInstantiableException
-     * @throws IDBException
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
+     * @throws \ReflectionException
      */
     public function rename()
     {
@@ -342,12 +340,14 @@ class FileController extends AbstractAdminController
     /**
      * Create a directory
      *
+     * @throws IDBException
      * @throws MethodNotFoundException
      * @throws ParameterHasNoDefaultValueException
      * @throws ServiceNotFoundException
      * @throws ServiceNotInstantiableException
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
      * @throws \ReflectionException
-     * @throws IDBException
      */
     public function makeDir()
     {
@@ -395,12 +395,14 @@ class FileController extends AbstractAdminController
     /**
      * Move items to another directory
      *
+     * @throws IDBException
      * @throws MethodNotFoundException
      * @throws ParameterHasNoDefaultValueException
      * @throws ServiceNotFoundException
      * @throws ServiceNotInstantiableException
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
      * @throws \ReflectionException
-     * @throws IDBException
      */
     public function moveDir()
     {
@@ -448,12 +450,14 @@ class FileController extends AbstractAdminController
     }
 
     /**
+     * @throws IDBException
      * @throws MethodNotFoundException
      * @throws ParameterHasNoDefaultValueException
      * @throws ServiceNotFoundException
      * @throws ServiceNotInstantiableException
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
      * @throws \ReflectionException
-     * @throws IDBException
      */
     public function upload()
     {
@@ -507,12 +511,14 @@ class FileController extends AbstractAdminController
 
     /**
      * @param $file
+     * @throws IDBException
      * @throws MethodNotFoundException
      * @throws ParameterHasNoDefaultValueException
      * @throws ServiceNotFoundException
      * @throws ServiceNotInstantiableException
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
      * @throws \ReflectionException
-     * @throws IDBException
      */
     public function download($file)
     {
@@ -539,11 +545,8 @@ class FileController extends AbstractAdminController
      * Get folders tree
      *
      * @throws IDBException
-     * @throws MethodNotFoundException
-     * @throws ParameterHasNoDefaultValueException
-     * @throws ServiceNotFoundException
-     * @throws ServiceNotInstantiableException
-     * @throws \ReflectionException
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
      */
     public function foldersTree()
     {
@@ -743,11 +746,6 @@ class FileController extends AbstractAdminController
 
     /**
      * @param $filename
-     * @throws MethodNotFoundException
-     * @throws ParameterHasNoDefaultValueException
-     * @throws ServiceNotFoundException
-     * @throws ServiceNotInstantiableException
-     * @throws \ReflectionException
      */
     private function checkListAccess($filename)
     {

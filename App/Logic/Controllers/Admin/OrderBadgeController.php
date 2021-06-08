@@ -18,10 +18,6 @@ use ReflectionException;
 use Sim\Auth\DBAuth;
 use Sim\Auth\Interfaces\IAuth;
 use Sim\Auth\Interfaces\IDBException;
-use Sim\Container\Exceptions\MethodNotFoundException;
-use Sim\Container\Exceptions\ParameterHasNoDefaultValueException;
-use Sim\Container\Exceptions\ServiceNotFoundException;
-use Sim\Container\Exceptions\ServiceNotInstantiableException;
 use Sim\Event\Interfaces\IEvent;
 use Sim\Exceptions\ConfigManager\ConfigNotRegisteredException;
 use Sim\Exceptions\Mvc\Controller\ControllerException;
@@ -35,15 +31,13 @@ class OrderBadgeController extends AbstractAdminController implements IAjaxContr
      * @return string
      * @throws ConfigNotRegisteredException
      * @throws ControllerException
+     * @throws IDBException
      * @throws IFileNotExistsException
      * @throws IInvalidVariableNameException
-     * @throws MethodNotFoundException
-     * @throws ParameterHasNoDefaultValueException
      * @throws PathNotRegisteredException
      * @throws ReflectionException
-     * @throws ServiceNotFoundException
-     * @throws ServiceNotInstantiableException
-     * @throws IDBException
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
      */
     public function view()
     {
@@ -61,12 +55,9 @@ class OrderBadgeController extends AbstractAdminController implements IAjaxContr
 
     /**
      * @return void
-     * @throws MethodNotFoundException
-     * @throws ParameterHasNoDefaultValueException
-     * @throws ReflectionException
-     * @throws ServiceNotFoundException
-     * @throws ServiceNotInstantiableException
      * @throws IDBException
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
      */
     public function add(): void
     {
@@ -101,12 +92,9 @@ class OrderBadgeController extends AbstractAdminController implements IAjaxContr
     /**
      * @param $id
      * @return void
-     * @throws MethodNotFoundException
-     * @throws ParameterHasNoDefaultValueException
-     * @throws ReflectionException
-     * @throws ServiceNotFoundException
-     * @throws ServiceNotInstantiableException
      * @throws IDBException
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
      */
     public function edit($id): void
     {
@@ -142,12 +130,9 @@ class OrderBadgeController extends AbstractAdminController implements IAjaxContr
     /**
      * @param $id
      * @return void
-     * @throws MethodNotFoundException
-     * @throws ParameterHasNoDefaultValueException
-     * @throws ReflectionException
-     * @throws ServiceNotFoundException
-     * @throws ServiceNotInstantiableException
      * @throws IDBException
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
      */
     public function remove($id): void
     {
@@ -181,12 +166,9 @@ class OrderBadgeController extends AbstractAdminController implements IAjaxContr
     /**
      * @param $id
      * @return void
-     * @throws ReflectionException
-     * @throws MethodNotFoundException
-     * @throws ParameterHasNoDefaultValueException
-     * @throws ServiceNotFoundException
-     * @throws ServiceNotInstantiableException
      * @throws IDBException
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
      */
     public function get($id): void
     {
@@ -233,11 +215,8 @@ class OrderBadgeController extends AbstractAdminController implements IAjaxContr
      * @param array $_
      * @return void
      * @throws IDBException
-     * @throws MethodNotFoundException
-     * @throws ParameterHasNoDefaultValueException
-     * @throws ReflectionException
-     * @throws ServiceNotFoundException
-     * @throws ServiceNotInstantiableException
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
      */
     public function getPaginatedDatatable(...$_): void
     {

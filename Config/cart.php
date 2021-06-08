@@ -59,9 +59,11 @@ return [
                 'table_name' => 'products',
                 'columns' => [
                     'id' => 'id',
+                    'brand_id' => 'brand_id',
                 ],
                 'types' => [
                     'id' => 'INT(11) UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT',
+                    'brand_id' => 'INT(11) UNSIGNED NOT NULL',
                 ],
             ],
             'product_property' => [
@@ -74,6 +76,7 @@ return [
                     'max_cart_count' => 'max_cart_count',
                     'price' => 'price',
                     'discounted_price' => 'discounted_price',
+                    'discount_until' => 'discount_until',
                     'tax_rate' => 'tax_rate',
                     'is_available' => 'is_available',
                 ],
@@ -85,12 +88,14 @@ return [
                     'max_cart_count' => 'INT(11) UNSIGNED NOT NULL',
                     'price' => 'DECIMAL(23, 3) UNSIGNED NOT NULL',
                     'discounted_price' => 'DECIMAL(23, 3) UNSIGNED NOT NULL',
+                    'discount_until' => 'INT(11) UNSIGNED',
                     'tax_rate' => 'DECIMAL(5, 2) UNSIGNED NOT NULL DEFAULT 0',
                     'is_available' => 'TINYINT(1) UNSIGNED NOT NULL DEFAULT 1',
                 ],
                 'constraints' => [
                     'ADD CONSTRAINT UC_Code UNIQUE (code)',
                     'ADD CONSTRAINT fk_pp_p FOREIGN KEY(product_id) REFERENCES products(id) ON DELETE CASCADE ON UPDATE CASCADE',
+                    'ADD CONSTRAINT fk_pp_b FOREIGN KEY(brand_id) REFERENCES brands(id) ON DELETE CASCADE ON UPDATE CASCADE',
                 ],
             ],
             'carts' => [

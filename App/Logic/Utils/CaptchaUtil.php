@@ -5,10 +5,6 @@ namespace App\Logic\Utils;
 use Sim\Captcha\Captcha;
 use Sim\Captcha\Exceptions\CaptchaException;
 use Sim\Captcha\Interfaces\ICaptchaException;
-use Sim\Container\Exceptions\MethodNotFoundException;
-use Sim\Container\Exceptions\ParameterHasNoDefaultValueException;
-use Sim\Container\Exceptions\ServiceNotFoundException;
-use Sim\Container\Exceptions\ServiceNotInstantiableException;
 
 class CaptchaUtil
 {
@@ -17,11 +13,8 @@ class CaptchaUtil
      * @param string $code
      * @return string
      * @throws CaptchaException
-     * @throws MethodNotFoundException
-     * @throws ParameterHasNoDefaultValueException
-     * @throws ServiceNotFoundException
-     * @throws ServiceNotInstantiableException
-     * @throws \ReflectionException
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
      */
     public static function get(string $name = '', string $code = ''): string
     {
@@ -40,11 +33,8 @@ class CaptchaUtil
      * @param string|null $name
      * @return bool
      * @throws ICaptchaException
-     * @throws MethodNotFoundException
-     * @throws ParameterHasNoDefaultValueException
-     * @throws ServiceNotFoundException
-     * @throws ServiceNotInstantiableException
-     * @throws \ReflectionException
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
      */
     public static function verify(string $input = '', ?string $name = ''): bool
     {

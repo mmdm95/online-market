@@ -7,10 +7,6 @@ use App\Logic\Models\RoleModel;
 use App\Logic\Models\UserModel;
 use App\Logic\Validations\ExtendedValidator;
 use Pecee\Http\Input\InputItem;
-use Sim\Container\Exceptions\MethodNotFoundException;
-use Sim\Container\Exceptions\ParameterHasNoDefaultValueException;
-use Sim\Container\Exceptions\ServiceNotFoundException;
-use Sim\Container\Exceptions\ServiceNotInstantiableException;
 use Sim\Exceptions\ConfigManager\ConfigNotRegisteredException;
 use Sim\Form\Exceptions\FormException;
 use Sim\Form\FormValue;
@@ -23,15 +19,13 @@ class EditUserForm implements IPageForm
 {
     /**
      * {@inheritdoc}
-     * @throws FormException
-     * @throws MethodNotFoundException
-     * @throws ParameterHasNoDefaultValueException
-     * @throws ServiceNotFoundException
-     * @throws ServiceNotInstantiableException
-     * @throws \ReflectionException
+     * @return array
      * @throws ConfigNotRegisteredException
+     * @throws FormException
      * @throws IFileNotExistsException
      * @throws IInvalidVariableNameException
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
      */
     public function validate(): array
     {
@@ -168,11 +162,9 @@ class EditUserForm implements IPageForm
 
     /**
      * {@inheritdoc}
-     * @throws \ReflectionException
-     * @throws MethodNotFoundException
-     * @throws ParameterHasNoDefaultValueException
-     * @throws ServiceNotFoundException
-     * @throws ServiceNotInstantiableException
+     * @return bool
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
      */
     public function store(): bool
     {

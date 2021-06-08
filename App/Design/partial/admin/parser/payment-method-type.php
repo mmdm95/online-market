@@ -2,6 +2,9 @@
     case METHOD_TYPE_GATEWAY_BEH_PARDAKHT: ?>
         به پرداخت
         <?php break; ?>
+    <?php case METHOD_TYPE_GATEWAY_SADAD: ?>
+        سداد
+        <?php break; ?>
     <?php case METHOD_TYPE_GATEWAY_IDPAY: ?>
         آی‌دی پی
         <?php break; ?>

@@ -3,10 +3,6 @@
 use App\Logic\Handlers\ResourceHandler;
 use App\Logic\Validations\ExtendedValidator;
 use Sim\Auth\DBAuth;
-use Sim\Container\Exceptions\MethodNotFoundException;
-use Sim\Container\Exceptions\ParameterHasNoDefaultValueException;
-use Sim\Container\Exceptions\ServiceNotFoundException;
-use Sim\Container\Exceptions\ServiceNotInstantiableException;
 use Sim\Exceptions\ConfigManager\ConfigNotRegisteredException;
 use Sim\File\FileSystem;
 use Sim\Form\FormValidator;
@@ -88,7 +84,7 @@ function get_today_end_of_time(int $time): int
  */
 function is_value_checked($val): bool
 {
-    return in_array($val, ['yes', 'on', 1, '1', true]);
+    return in_array($val, ['yes', 'on', 1, '1', true, "true"], true);
 }
 
 /**
@@ -146,11 +142,8 @@ function get_product_availability(array $item): bool
 
 /**
  * @return DBAuth
- * @throws MethodNotFoundException
- * @throws ParameterHasNoDefaultValueException
- * @throws ReflectionException
- * @throws ServiceNotFoundException
- * @throws ServiceNotInstantiableException
+ * @throws \DI\DependencyException
+ * @throws \DI\NotFoundException
  */
 function auth_admin(): DBAuth
 {
@@ -162,11 +155,8 @@ function auth_admin(): DBAuth
 
 /**
  * @return DBAuth
- * @throws MethodNotFoundException
- * @throws ParameterHasNoDefaultValueException
- * @throws ReflectionException
- * @throws ServiceNotFoundException
- * @throws ServiceNotInstantiableException
+ * @throws \DI\DependencyException
+ * @throws \DI\NotFoundException
  */
 function auth_home(): DBAuth
 {
@@ -181,11 +171,8 @@ function auth_home(): DBAuth
  * @throws ConfigNotRegisteredException
  * @throws IFileNotExistsException
  * @throws IInvalidVariableNameException
- * @throws MethodNotFoundException
- * @throws ParameterHasNoDefaultValueException
- * @throws ReflectionException
- * @throws ServiceNotFoundException
- * @throws ServiceNotInstantiableException
+ * @throws \DI\DependencyException
+ * @throws \DI\NotFoundException
  */
 function form_validator(): FormValidator
 {

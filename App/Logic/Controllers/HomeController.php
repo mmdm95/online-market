@@ -12,33 +12,26 @@ use App\Logic\Models\MenuModel;
 use App\Logic\Utils\MenuUtil;
 use App\Logic\Utils\SliderUtil;
 use Aura\SqlQuery\Exception as AuraException;
-use Sim\Container\Exceptions\MethodNotFoundException;
-use Sim\Container\Exceptions\ParameterHasNoDefaultValueException;
-use Sim\Container\Exceptions\ServiceNotFoundException;
-use Sim\Container\Exceptions\ServiceNotInstantiableException;
 use Sim\Exceptions\ConfigManager\ConfigNotRegisteredException;
 use Sim\Exceptions\Mvc\Controller\ControllerException;
 use Sim\Exceptions\PathManager\PathNotRegisteredException;
 use Sim\Interfaces\IFileNotExistsException;
 use Sim\Interfaces\IInvalidVariableNameException;
 use Sim\Utils\ArrayUtil;
-use Tests\FakeData;
 
 class HomeController extends AbstractHomeController
 {
     /**
      * @return string
+     * @throws AuraException
      * @throws ConfigNotRegisteredException
      * @throws ControllerException
      * @throws IFileNotExistsException
      * @throws IInvalidVariableNameException
      * @throws PathNotRegisteredException
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
      * @throws \ReflectionException
-     * @throws MethodNotFoundException
-     * @throws ParameterHasNoDefaultValueException
-     * @throws ServiceNotFoundException
-     * @throws ServiceNotInstantiableException
-     * @throws AuraException
      */
     public function index()
     {
@@ -117,19 +110,5 @@ class HomeController extends AbstractHomeController
                 ['pub' => DB_YES, 'sis' => DB_YES]
             )
         ]);
-    }
-
-    /**
-     * @throws MethodNotFoundException
-     * @throws ParameterHasNoDefaultValueException
-     * @throws ServiceNotFoundException
-     * @throws ServiceNotInstantiableException
-     * @throws \ReflectionException
-     */
-    private function fakeIt()
-    {
-        $faker = new FakeData();
-//        $faker->categories();
-//        $faker->setupConfig();
     }
 }

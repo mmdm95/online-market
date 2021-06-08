@@ -6,10 +6,6 @@ use App\Logic\Models\ColorModel;
 use App\Logic\Models\ProductModel;
 use Pecee\Http\Input\IInputItem;
 use Pecee\Http\Input\InputItem;
-use Sim\Container\Exceptions\MethodNotFoundException;
-use Sim\Container\Exceptions\ParameterHasNoDefaultValueException;
-use Sim\Container\Exceptions\ServiceNotFoundException;
-use Sim\Container\Exceptions\ServiceNotInstantiableException;
 use Sim\Exceptions\ConfigManager\ConfigNotRegisteredException;
 use Sim\Interfaces\IFileNotExistsException;
 use Sim\Interfaces\IInvalidVariableNameException;
@@ -20,14 +16,11 @@ class ProductUtil
 {
     /**
      * @return array
-     * @throws \ReflectionException
-     * @throws MethodNotFoundException
-     * @throws ParameterHasNoDefaultValueException
-     * @throws ServiceNotFoundException
-     * @throws ServiceNotInstantiableException
      * @throws ConfigNotRegisteredException
      * @throws IFileNotExistsException
      * @throws IInvalidVariableNameException
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
      */
     public function paginatedProduct(): array
     {
@@ -56,8 +49,10 @@ class ProductUtil
         $q = input()->get('q', '');
         if (!is_array($q)) {
             $q = $q->getValue();
+            $q = urldecode($q);
             if (is_string($q) && !empty(trim($q))) {
                 $where .= ' AND (pa.category_name LIKE :q_p_category';
+                $where .= ' OR pa.title LIKE :q_p_the_title';
                 $where .= ' OR pa.fa_title LIKE :q_p_fa_title';
                 $where .= ' OR pa.slug LIKE :q_p_slug';
                 $where .= ' OR pa.keywords LIKE :q_p_keywords';
@@ -66,6 +61,7 @@ class ProductUtil
                 $where .= ' OR pa.festival_title LIKE :q_p_festival_title';
                 $where .= ')';
                 $bindValues['q_p_category'] = '%' . $q . '%';
+                $bindValues['q_p_the_title'] = '%' . $q . '%';
                 $bindValues['q_p_fa_title'] = '%' . StringUtil::toPersian($q) . '%';
                 $bindValues['q_p_slug'] = '%' . StringUtil::slugify($q) . '%';
                 $bindValues['q_p_keywords'] = '%' . $q . '%';
@@ -78,6 +74,7 @@ class ProductUtil
         $tag = input()->get('tag', '');
         if (!is_array($tag)) {
             $tag = $tag->getValue();
+            $tag = urldecode($tag);
             if (is_string($tag) && !empty(trim($tag))) {
                 $tag = urldecode($tag);
                 $where .= ' AND (pa.fa_title LIKE :tag_p_fa_title';
@@ -94,9 +91,24 @@ class ProductUtil
             $category = $category->getValue();
             if (is_numeric($category)) {
                 $where .= ' AND (pa.category_id=:p_category_id';
-                $where .= ' OR pa.category_parent_id=:p_category_parent_id)';
+                $where .= ' OR pa.category_parent_id=:p_category_parent_id';
+                $where .= ' OR pa.category_all_parents_id REGEXP :p_category_all_parents_id)';
                 $bindValues['p_category_id'] = $category;
                 $bindValues['p_category_parent_id'] = $category;
+                $bindValues['p_category_all_parents_id'] = '([^0-9]|^)' . preg_quote($category) . '([^0-9]|$)';
+            }
+        }
+        // category from main page parameter
+        $tmpCategory = input()->get('search-categories-select-inp', null);
+        if (!is_array($tmpCategory)) {
+            $tmpCategory = $tmpCategory->getValue();
+            if (is_numeric($tmpCategory) && DEFAULT_OPTION_VALUE != $tmpCategory) {
+                $where .= ' AND (pa.category_id=:p_t_category_id';
+                $where .= ' OR pa.category_parent_id=:p_t_category_parent_id';
+                $where .= ' OR pa.category_all_parents_id REGEXP :p_t_category_all_parents_id)';
+                $bindValues['p_t_category_id'] = $tmpCategory;
+                $bindValues['p_t_category_parent_id'] = $tmpCategory;
+                $bindValues['p_t_category_all_parents_id'] = '([^0-9]|^)' . preg_quote($tmpCategory) . '([^0-9]|$)';
             }
         }
         // price parameter
@@ -250,11 +262,8 @@ class ProductUtil
     /**
      * @param $product_id
      * @return array
-     * @throws MethodNotFoundException
-     * @throws ParameterHasNoDefaultValueException
-     * @throws ServiceNotFoundException
-     * @throws ServiceNotInstantiableException
-     * @throws \ReflectionException
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
      */
     public function getRelatedProducts($product_id): array
     {

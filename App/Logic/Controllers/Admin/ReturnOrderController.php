@@ -8,10 +8,6 @@ use App\Logic\Interfaces\IDatatableController;
 use App\Logic\Models\ReturnOrderModel;
 use App\Logic\Utils\Jdf;
 use Jenssegers\Agent\Agent;
-use Sim\Container\Exceptions\MethodNotFoundException;
-use Sim\Container\Exceptions\ParameterHasNoDefaultValueException;
-use Sim\Container\Exceptions\ServiceNotFoundException;
-use Sim\Container\Exceptions\ServiceNotInstantiableException;
 use Sim\Event\Interfaces\IEvent;
 use Sim\Exceptions\ConfigManager\ConfigNotRegisteredException;
 use Sim\Exceptions\Mvc\Controller\ControllerException;
@@ -43,11 +39,9 @@ class ReturnOrderController extends AbstractAdminController implements IDatatabl
      * @throws ControllerException
      * @throws IFileNotExistsException
      * @throws IInvalidVariableNameException
-     * @throws MethodNotFoundException
-     * @throws ParameterHasNoDefaultValueException
      * @throws PathNotRegisteredException
-     * @throws ServiceNotFoundException
-     * @throws ServiceNotInstantiableException
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
      * @throws \ReflectionException
      */
     public function detail($id)

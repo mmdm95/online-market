@@ -3,10 +3,6 @@
 namespace App\Logic\Handlers;
 
 use App\Logic\Models\Model;
-use Sim\Container\Exceptions\MethodNotFoundException;
-use Sim\Container\Exceptions\ParameterHasNoDefaultValueException;
-use Sim\Container\Exceptions\ServiceNotFoundException;
-use Sim\Container\Exceptions\ServiceNotInstantiableException;
 use Sim\Interfaces\IHandler;
 
 class GeneralAjaxMultiStatusHandler implements IHandler
@@ -57,11 +53,8 @@ class GeneralAjaxMultiStatusHandler implements IHandler
      *
      * @param mixed ...$_
      * @return ResourceHandler
-     * @throws \ReflectionException
-     * @throws MethodNotFoundException
-     * @throws ParameterHasNoDefaultValueException
-     * @throws ServiceNotFoundException
-     * @throws ServiceNotInstantiableException
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
      */
     public function handle(...$_): ResourceHandler
     {

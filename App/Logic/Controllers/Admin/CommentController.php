@@ -18,10 +18,6 @@ use Jenssegers\Agent\Agent;
 use Sim\Auth\DBAuth;
 use Sim\Auth\Interfaces\IAuth;
 use Sim\Auth\Interfaces\IDBException;
-use Sim\Container\Exceptions\MethodNotFoundException;
-use Sim\Container\Exceptions\ParameterHasNoDefaultValueException;
-use Sim\Container\Exceptions\ServiceNotFoundException;
-use Sim\Container\Exceptions\ServiceNotInstantiableException;
 use Sim\Event\Interfaces\IEvent;
 use Sim\Exceptions\ConfigManager\ConfigNotRegisteredException;
 use Sim\Exceptions\Mvc\Controller\ControllerException;
@@ -36,15 +32,13 @@ class CommentController extends AbstractAdminController implements IDatatableCon
      * @return string
      * @throws ConfigNotRegisteredException
      * @throws ControllerException
+     * @throws IDBException
      * @throws IFileNotExistsException
      * @throws IInvalidVariableNameException
-     * @throws MethodNotFoundException
-     * @throws ParameterHasNoDefaultValueException
      * @throws PathNotRegisteredException
-     * @throws ServiceNotFoundException
-     * @throws ServiceNotInstantiableException
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
      * @throws \ReflectionException
-     * @throws IDBException
      */
     public function view($p_id)
     {
@@ -80,15 +74,13 @@ class CommentController extends AbstractAdminController implements IDatatableCon
      * @return string
      * @throws ConfigNotRegisteredException
      * @throws ControllerException
+     * @throws IDBException
      * @throws IFileNotExistsException
      * @throws IInvalidVariableNameException
-     * @throws MethodNotFoundException
-     * @throws ParameterHasNoDefaultValueException
      * @throws PathNotRegisteredException
-     * @throws ServiceNotFoundException
-     * @throws ServiceNotInstantiableException
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
      * @throws \ReflectionException
-     * @throws IDBException
      */
     public function detail($p_id, $id)
     {
@@ -177,12 +169,9 @@ class CommentController extends AbstractAdminController implements IDatatableCon
 
     /**
      * @param $id
-     * @throws \ReflectionException
-     * @throws MethodNotFoundException
-     * @throws ParameterHasNoDefaultValueException
-     * @throws ServiceNotFoundException
-     * @throws ServiceNotInstantiableException
      * @throws IDBException
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
      */
     public function remove($id)
     {
@@ -217,11 +206,8 @@ class CommentController extends AbstractAdminController implements IDatatableCon
      * @param $p_id
      * @param $id
      * @throws IDBException
-     * @throws MethodNotFoundException
-     * @throws ParameterHasNoDefaultValueException
-     * @throws ServiceNotFoundException
-     * @throws ServiceNotInstantiableException
-     * @throws \ReflectionException
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
      */
     public function conditionChange($p_id, $id)
     {
@@ -280,11 +266,8 @@ class CommentController extends AbstractAdminController implements IDatatableCon
      * @param array $_
      * @return void
      * @throws IDBException
-     * @throws MethodNotFoundException
-     * @throws ParameterHasNoDefaultValueException
-     * @throws ServiceNotFoundException
-     * @throws ServiceNotInstantiableException
-     * @throws \ReflectionException
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
      */
     public function getPaginatedDatatable(...$_): void
     {

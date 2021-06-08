@@ -5,13 +5,10 @@ namespace App\Logic\Controllers;
 use App\Logic\Abstracts\AbstractHomeController;
 use App\Logic\Handlers\ResourceHandler;
 use App\Logic\Models\ProductModel;
+use App\Logic\Utils\CartUtil;
 use App\Logic\Utils\CouponUtil;
 use Jenssegers\Agent\Agent;
 use Sim\Cart\Interfaces\IDBException as ICartDBException;
-use Sim\Container\Exceptions\MethodNotFoundException;
-use Sim\Container\Exceptions\ParameterHasNoDefaultValueException;
-use Sim\Container\Exceptions\ServiceNotFoundException;
-use Sim\Container\Exceptions\ServiceNotInstantiableException;
 use Sim\Exceptions\ConfigManager\ConfigNotRegisteredException;
 use Sim\Exceptions\Mvc\Controller\ControllerException;
 use Sim\Exceptions\PathManager\PathNotRegisteredException;
@@ -36,13 +33,41 @@ class CartController extends AbstractHomeController
     }
 
     /**
+     * @return string
+     * @throws IFileNotExistsException
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
+     */
+    public function cartTopInfo()
+    {
+        $resourceHandler = new ResourceHandler();
+        /**
+         * @var Agent $agent
+         */
+        $agent = container()->get(Agent::class);
+        if (!$agent->isRobot()) {
+            /**
+             * @var CartUtil $cartUtil
+             */
+            $cartUtil = \container()->get(CartUtil::class);
+
+            $resourceHandler
+                ->type(RESPONSE_TYPE_SUCCESS)
+                ->data($cartUtil->getCartSection());
+        } else {
+            response()->httpCode(403);
+            $resourceHandler
+                ->type(RESPONSE_TYPE_ERROR)
+                ->errorMessage('خطا در ارتباط با سرور، لطفا دوباره تلاش کنید.');
+        }
+        response()->json($resourceHandler->getReturnData());
+    }
+
+    /**
      * @param $product_code
      * @throws ICartDBException
-     * @throws MethodNotFoundException
-     * @throws ParameterHasNoDefaultValueException
-     * @throws ServiceNotFoundException
-     * @throws ServiceNotInstantiableException
-     * @throws \ReflectionException
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
      */
     public function addToCart($product_code)
     {
@@ -74,10 +99,10 @@ class CartController extends AbstractHomeController
             );
 
             if (count($extraInfo)) {
-                cart()->add($product_code, $extraInfo[0]);
+                cart()->add($product_code, $extraInfo[0])->store();
                 $resourceHandler
                     ->type(RESPONSE_TYPE_SUCCESS)
-                    ->errorMessage('محصول به سبد اضافه شد.');
+                    ->data('محصول به سبد اضافه شد.');
                 CouponUtil::checkCoupon(CouponUtil::getStoredCouponCode());
             } else {
                 $resourceHandler
@@ -111,7 +136,7 @@ class CartController extends AbstractHomeController
                  * @var ProductModel $productModel
                  */
                 $productModel = container()->get(ProductModel::class);
-                $qnt = input()->post('qnt')->getValue();
+                $qnt = (int)input()->post('qnt')->getValue();
                 if ($productModel->getLimitedProductCount(
                     'pa.code=:code AND pa.is_deleted!=:del AND pa.publish=:pub AND pa.is_available=:avl ' .
                     'AND pa.product_availability=:pAvl AND pa.stock_count>:sc AND pa.max_cart_count>:mcc', [
@@ -127,10 +152,10 @@ class CartController extends AbstractHomeController
                     if ($qnt > 0) {
                         cart()->update($product_code, [
                             'qnt' => $qnt,
-                        ]);
+                        ])->store();
                         $resourceHandler
                             ->type(RESPONSE_TYPE_SUCCESS)
-                            ->errorMessage('تعداد محصول در سبد، بروزرسانی شد.');
+                            ->data('تعداد محصول در سبد، بروزرسانی شد.');
                         CouponUtil::checkCoupon(CouponUtil::getStoredCouponCode());
                     } else {
                         $resourceHandler
@@ -148,22 +173,19 @@ class CartController extends AbstractHomeController
                     ->type(RESPONSE_TYPE_ERROR)
                     ->errorMessage('خطا در ارتباط با سرور، لطفا دوباره تلاش کنید.');
             }
-            response()->json($resourceHandler->getReturnData());
         } catch (\Exception $e) {
             response()->httpCode(403);
             $resourceHandler
                 ->type(RESPONSE_TYPE_ERROR)
                 ->errorMessage('خطا در ارتباط با سرور، لطفا دوباره تلاش کنید.');
         }
+        response()->json($resourceHandler->getReturnData());
     }
 
     /**
      * @param $product_code
-     * @throws MethodNotFoundException
-     * @throws ParameterHasNoDefaultValueException
-     * @throws ServiceNotFoundException
-     * @throws ServiceNotInstantiableException
-     * @throws \ReflectionException
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
      */
     public function removeFromCart($product_code)
     {
@@ -175,9 +197,10 @@ class CartController extends AbstractHomeController
         $agent = container()->get(Agent::class);
         if (!$agent->isRobot()) {
             if (cart()->remove($product_code)) {
+                cart()->store();
                 $resourceHandler
                     ->type(RESPONSE_TYPE_SUCCESS)
-                    ->errorMessage('محصول از سبد خرید حذف شد.');
+                    ->data('محصول از سبد خرید حذف شد.');
                 CouponUtil::checkCoupon(CouponUtil::getStoredCouponCode());
             } else {
                 $resourceHandler
@@ -198,11 +221,9 @@ class CartController extends AbstractHomeController
      * @throws ControllerException
      * @throws IFileNotExistsException
      * @throws IInvalidVariableNameException
-     * @throws MethodNotFoundException
-     * @throws ParameterHasNoDefaultValueException
      * @throws PathNotRegisteredException
-     * @throws ServiceNotFoundException
-     * @throws ServiceNotInstantiableException
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
      * @throws \ReflectionException
      */
     public function getCartProducts()
@@ -231,11 +252,9 @@ class CartController extends AbstractHomeController
      * @throws ControllerException
      * @throws IFileNotExistsException
      * @throws IInvalidVariableNameException
-     * @throws MethodNotFoundException
-     * @throws ParameterHasNoDefaultValueException
      * @throws PathNotRegisteredException
-     * @throws ServiceNotFoundException
-     * @throws ServiceNotInstantiableException
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
      * @throws \ReflectionException
      */
     public function getCartProductsInfo()
@@ -267,11 +286,9 @@ class CartController extends AbstractHomeController
      * @throws ControllerException
      * @throws IFileNotExistsException
      * @throws IInvalidVariableNameException
-     * @throws MethodNotFoundException
-     * @throws ParameterHasNoDefaultValueException
      * @throws PathNotRegisteredException
-     * @throws ServiceNotFoundException
-     * @throws ServiceNotInstantiableException
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
      * @throws \ReflectionException
      */
     public function getCartProductsTotalInfo()
@@ -300,11 +317,8 @@ class CartController extends AbstractHomeController
 
     /**
      * @param $coupon_code
-     * @throws MethodNotFoundException
-     * @throws ParameterHasNoDefaultValueException
-     * @throws ServiceNotFoundException
-     * @throws ServiceNotInstantiableException
-     * @throws \ReflectionException
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
      */
     public function checkCoupon($coupon_code)
     {
@@ -335,11 +349,8 @@ class CartController extends AbstractHomeController
     }
 
     /**
-     * @throws MethodNotFoundException
-     * @throws ParameterHasNoDefaultValueException
-     * @throws ServiceNotFoundException
-     * @throws ServiceNotInstantiableException
-     * @throws \ReflectionException
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
      */
     public function checkStoredCoupon()
     {

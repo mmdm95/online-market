@@ -28,6 +28,15 @@
     height: 90px;
 }
 
+/***************************************/
+
+.datatable-scroll-lg {
+    overflow: auto;
+    width: 100%;
+}
+
+/***************************************/
+
 .img-user-profile {
     width: 90px;
     height: auto;

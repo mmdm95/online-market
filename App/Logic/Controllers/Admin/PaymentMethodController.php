@@ -16,10 +16,6 @@ use Jenssegers\Agent\Agent;
 use Sim\Auth\DBAuth;
 use Sim\Auth\Interfaces\IAuth;
 use Sim\Auth\Interfaces\IDBException;
-use Sim\Container\Exceptions\MethodNotFoundException;
-use Sim\Container\Exceptions\ParameterHasNoDefaultValueException;
-use Sim\Container\Exceptions\ServiceNotFoundException;
-use Sim\Container\Exceptions\ServiceNotInstantiableException;
 use Sim\Event\Interfaces\IEvent;
 use Sim\Exceptions\ConfigManager\ConfigNotRegisteredException;
 use Sim\Exceptions\Mvc\Controller\ControllerException;
@@ -33,15 +29,13 @@ class PaymentMethodController extends AbstractAdminController implements IDatata
      * @return string
      * @throws ConfigNotRegisteredException
      * @throws ControllerException
+     * @throws IDBException
      * @throws IFileNotExistsException
      * @throws IInvalidVariableNameException
-     * @throws MethodNotFoundException
-     * @throws ParameterHasNoDefaultValueException
      * @throws PathNotRegisteredException
-     * @throws ServiceNotFoundException
-     * @throws ServiceNotInstantiableException
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
      * @throws \ReflectionException
-     * @throws IDBException
      */
     public function view()
     {
@@ -61,15 +55,13 @@ class PaymentMethodController extends AbstractAdminController implements IDatata
      * @return string
      * @throws ConfigNotRegisteredException
      * @throws ControllerException
+     * @throws IDBException
      * @throws IFileNotExistsException
      * @throws IInvalidVariableNameException
-     * @throws MethodNotFoundException
-     * @throws ParameterHasNoDefaultValueException
      * @throws PathNotRegisteredException
-     * @throws ServiceNotFoundException
-     * @throws ServiceNotInstantiableException
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
      * @throws \ReflectionException
-     * @throws IDBException
      */
     public function add()
     {
@@ -96,15 +88,13 @@ class PaymentMethodController extends AbstractAdminController implements IDatata
      * @return string
      * @throws ConfigNotRegisteredException
      * @throws ControllerException
+     * @throws IDBException
      * @throws IFileNotExistsException
      * @throws IInvalidVariableNameException
-     * @throws MethodNotFoundException
-     * @throws ParameterHasNoDefaultValueException
      * @throws PathNotRegisteredException
-     * @throws ServiceNotFoundException
-     * @throws ServiceNotInstantiableException
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
      * @throws \ReflectionException
-     * @throws IDBException
      */
     public function edit($id)
     {
@@ -135,7 +125,8 @@ class PaymentMethodController extends AbstractAdminController implements IDatata
         }
 
         $payment = $payModel->getFirst(['*'], 'id=:id', ['id' => $id]);
-        $payment['meta_parameters'] = '' != $payment['meta_parameters'] ? (json_decode($payment['meta_parameters']) ?: []) : [];
+
+        $payment['meta_parameters'] = '' != $payment['meta_parameters'] ? (json_decode(cryptographer()->decrypt($payment['meta_parameters']), true) ?: []) : [];
 
         $this->setLayout($this->main_layout)->setTemplate('view/payment-method/edit');
         return $this->render(array_merge($data, [
@@ -145,12 +136,9 @@ class PaymentMethodController extends AbstractAdminController implements IDatata
 
     /**
      * @param $id
-     * @throws \ReflectionException
-     * @throws MethodNotFoundException
-     * @throws ParameterHasNoDefaultValueException
-     * @throws ServiceNotFoundException
-     * @throws ServiceNotInstantiableException
      * @throws IDBException
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
      */
     public function remove($id)
     {
@@ -185,11 +173,8 @@ class PaymentMethodController extends AbstractAdminController implements IDatata
      * @param array $_
      * @return void
      * @throws IDBException
-     * @throws MethodNotFoundException
-     * @throws ParameterHasNoDefaultValueException
-     * @throws ServiceNotFoundException
-     * @throws ServiceNotInstantiableException
-     * @throws \ReflectionException
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
      */
     public function getPaginatedDatatable(...$_): void
     {
@@ -245,7 +230,8 @@ class PaymentMethodController extends AbstractAdminController implements IDatata
                         'db_alias' => 'method_type',
                         'dt' => 'type',
                         'formatter' => function ($d) {
-                            return load_partial('admin/parser/payment-method-type', [
+                            return $this->setTemplate('partial/admin/parser/payment-method-type')
+                                ->render([
                                 'type' => $d,
                             ]);
                         }

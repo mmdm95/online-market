@@ -468,6 +468,8 @@ class Route implements IInitialize
                 Router::get('/newsletter/view/{id?}', [AdminNewsletterController::class, 'view'])->where([
                     'id' => '[0-9]+',
                 ])->name('admin.newsletter.view');
+                Router::post('/newsletter/view/dt', [AdminNewsletterController::class, 'getPaginatedDatatable'])
+                    ->name('admin.newsletter.dt.view');
 
                 /**
                  * Slider Route
@@ -659,6 +661,12 @@ class Route implements IInitialize
             Router::get('/blog/{id}/{slug?}', [BlogController::class, 'show'])->where([
                 'id' => '[0-9]+',
             ])->name('home.blog.show');
+
+            /**
+             * payment routes
+             */
+            Router::get('/demoPayment', [CheckoutController::class, 'demo']); // must delete after test done
+            Router::post('/demoPayment/sadad', [CheckoutController::class, 'demoResult'])->name('pay.test'); // must delete after test done
         });
     }
 
@@ -675,10 +683,15 @@ class Route implements IInitialize
              * newsletter route
              */
             Router::post('/newsletter/add', [PageController::class, 'addNewsletter'])->name('ajax.newsletter.add');
+            Router::post('/admin/newsletter/add', [AdminNewsletterController::class, 'add'])->name('ajax.admin.newsletter.add');
+            Router::post('/admin/newsletter/remove/{id}', [AdminNewsletterController::class, 'remove'])->where([
+                'id' => '[0-9]+'
+            ])->name('ajax.admin.newsletter.remove');
 
             /**
              * cart routes
              */
+            Router::get('/cart/get', [CartController::class, 'cartTopInfo'])->name('ajax.cart.get');
             Router::post('/cart/add/{product_code}', [CartController::class, 'addToCart'])->where([
                 'product_code' => '\w+',
             ])->name('ajax.cart.add');
@@ -849,9 +862,7 @@ class Route implements IInitialize
                 Router::get('/faq/get/{id}', [AdminFaqController::class, 'get'])->where([
                     'id' => '[0-9]+',
                 ])->name('ajax.faq.get');
-                Router::post('/faq/add/{user_id}', [AdminFaqController::class, 'add'])->where([
-                    'user_id' => '[0-9]+',
-                ])->name('ajax.faq.add');
+                Router::post('/faq/add', [AdminFaqController::class, 'add'])->name('ajax.faq.add');
                 Router::post('/faq/edit/{id}', [AdminFaqController::class, 'edit'])->where([
                     'id' => '[0-9]+',
                 ])->name('ajax.faq.edit');
@@ -1014,9 +1025,7 @@ class Route implements IInitialize
                 Router::get('/instagram/get/{id}', [AdminInstagramController::class, 'get'])->where([
                     'id' => '[0-9]+',
                 ])->name('ajax.instagram.get');
-                Router::post('/instagram/add/{user_id}', [AdminInstagramController::class, 'add'])->where([
-                    'user_id' => '[0-9]+',
-                ])->name('ajax.instagram.add');
+                Router::post('/instagram/add', [AdminInstagramController::class, 'add'])->name('ajax.instagram.add');
                 Router::post('/instagram/edit/{id}', [AdminInstagramController::class, 'edit'])->where([
                     'id' => '[0-9]+',
                 ])->name('ajax.instagram.edit');

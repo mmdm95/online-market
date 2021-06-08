@@ -4,13 +4,8 @@ namespace App\Logic\Forms\Ajax\Instagram;
 
 use App\Logic\Interfaces\IPageForm;
 use App\Logic\Models\InstagramImagesModel;
-use App\Logic\Models\UnitModel;
 use App\Logic\Validations\ExtendedValidator;
 use Sim\Auth\DBAuth;
-use Sim\Container\Exceptions\MethodNotFoundException;
-use Sim\Container\Exceptions\ParameterHasNoDefaultValueException;
-use Sim\Container\Exceptions\ServiceNotFoundException;
-use Sim\Container\Exceptions\ServiceNotInstantiableException;
 use Sim\Exceptions\ConfigManager\ConfigNotRegisteredException;
 use Sim\Form\Exceptions\FormException;
 use Sim\Interfaces\IFileNotExistsException;
@@ -21,15 +16,13 @@ class AddInstagramImageForm implements IPageForm
 {
     /**
      * {@inheritdoc}
-     * @throws FormException
-     * @throws MethodNotFoundException
-     * @throws ParameterHasNoDefaultValueException
-     * @throws ServiceNotFoundException
-     * @throws ServiceNotInstantiableException
-     * @throws \ReflectionException
+     * @return array
      * @throws ConfigNotRegisteredException
+     * @throws FormException
      * @throws IFileNotExistsException
      * @throws IInvalidVariableNameException
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
      */
     public function validate(): array
     {
@@ -74,11 +67,9 @@ class AddInstagramImageForm implements IPageForm
 
     /**
      * {@inheritdoc}
-     * @throws MethodNotFoundException
-     * @throws ParameterHasNoDefaultValueException
-     * @throws ServiceNotFoundException
-     * @throws ServiceNotInstantiableException
-     * @throws \ReflectionException
+     * @return bool
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
      */
     public function store(): bool
     {
@@ -100,7 +91,7 @@ class AddInstagramImageForm implements IPageForm
             $link = input()->post('inp-add-ins-link', '')->getValue();
 
             $res = $instagramModel->insert([
-                'title' => $xss->xss_clean(get_image_name($image)),
+                'image' => $xss->xss_clean(get_image_name($image)),
                 'link' => $xss->xss_clean($link),
                 'created_by' => $auth->getCurrentUser()['id'] ?? null,
                 'created_at' => time(),

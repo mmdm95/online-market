@@ -3,13 +3,9 @@
 namespace App\Logic\Forms\Ajax\SecurityQuestion;
 
 use App\Logic\Interfaces\IPageForm;
-use App\Logic\Models\UnitModel;
+use App\Logic\Models\SecurityQuestionModel;
 use App\Logic\Validations\ExtendedValidator;
 use Sim\Auth\DBAuth;
-use Sim\Container\Exceptions\MethodNotFoundException;
-use Sim\Container\Exceptions\ParameterHasNoDefaultValueException;
-use Sim\Container\Exceptions\ServiceNotFoundException;
-use Sim\Container\Exceptions\ServiceNotInstantiableException;
 use Sim\Exceptions\ConfigManager\ConfigNotRegisteredException;
 use Sim\Form\Exceptions\FormException;
 use Sim\Interfaces\IFileNotExistsException;
@@ -20,15 +16,13 @@ class AddSecurityQuestionForm implements IPageForm
 {
     /**
      * {@inheritdoc}
-     * @throws FormException
-     * @throws MethodNotFoundException
-     * @throws ParameterHasNoDefaultValueException
-     * @throws ServiceNotFoundException
-     * @throws ServiceNotInstantiableException
-     * @throws \ReflectionException
+     * @return array
      * @throws ConfigNotRegisteredException
+     * @throws FormException
      * @throws IFileNotExistsException
      * @throws IInvalidVariableNameException
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
      */
     public function validate(): array
     {
@@ -41,23 +35,15 @@ class AddSecurityQuestionForm implements IPageForm
         // aliases
         $validator
             ->setFieldsAlias([
-                'inp-add-unit-title' => 'عنوان واحد',
-                'inp-add-unit-sign' => 'علامت',
-            ])
-            ->setOptionalFields([
-                'inp-add-unit-sign',
+                'inp-add-sec-question-q' => 'سؤال امنیتی',
             ]);
 
         // title
         $validator
-            ->setFields('inp-add-unit-title')
+            ->setFields('inp-add-sec-question-q')
             ->stopValidationAfterFirstError(false)
             ->required()
             ->stopValidationAfterFirstError(true)
-            ->lessThanEqualLength(250);
-        // sign
-        $validator
-            ->setFields('inp-add-unit-sign')
             ->lessThanEqualLength(250);
 
         // to reset form values and not set them again
@@ -73,18 +59,16 @@ class AddSecurityQuestionForm implements IPageForm
 
     /**
      * {@inheritdoc}
-     * @throws MethodNotFoundException
-     * @throws ParameterHasNoDefaultValueException
-     * @throws ServiceNotFoundException
-     * @throws ServiceNotInstantiableException
-     * @throws \ReflectionException
+     * @return bool
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
      */
     public function store(): bool
     {
         /**
-         * @var UnitModel $unitModel
+         * @var SecurityQuestionModel $secModel
          */
-        $unitModel = container()->get(UnitModel::class);
+        $secModel = container()->get(SecurityQuestionModel::class);
         /**
          * @var AntiXSS $xss
          */
@@ -95,12 +79,12 @@ class AddSecurityQuestionForm implements IPageForm
         $auth = container()->get('auth_admin');
 
         try {
-            $title = input()->post('inp-add-unit-title', '')->getValue();
-            $sign = input()->post('inp-add-unit-sign', '')->getValue();
+            $q = input()->post('inp-add-sec-question-q', '')->getValue();
+            $pub = input()->post('inp-add-sec-question-status', '')->getValue();
 
-            $res = $unitModel->insert([
-                'title' => $xss->xss_clean(trim($title)),
-                'sign' => $xss->xss_clean(trim($sign)),
+            $res = $secModel->insert([
+                'question' => $xss->xss_clean(trim($q)),
+                'publish' => is_value_checked($pub) ? DB_YES : DB_NO,
                 'created_at' => time(),
                 'created_by' => $auth->getCurrentUser()['id'] ?? null,
             ]);

@@ -3,14 +3,10 @@
 namespace App\Logic\Controllers;
 
 use App\Logic\Abstracts\AbstractHomeController;
-use App\Logic\Forms\CommentUserForm;
+use App\Logic\Forms\User\Comment\CommentUserForm;
 use App\Logic\Handlers\ResourceHandler;
 use App\Logic\Utils\CommentUtil;
 use Jenssegers\Agent\Agent;
-use Sim\Container\Exceptions\MethodNotFoundException;
-use Sim\Container\Exceptions\ParameterHasNoDefaultValueException;
-use Sim\Container\Exceptions\ServiceNotFoundException;
-use Sim\Container\Exceptions\ServiceNotInstantiableException;
 use Sim\Exceptions\ConfigManager\ConfigNotRegisteredException;
 use Sim\Exceptions\Mvc\Controller\ControllerException;
 use Sim\Exceptions\PathManager\PathNotRegisteredException;
@@ -26,11 +22,9 @@ class CommentController extends AbstractHomeController
      * @throws ControllerException
      * @throws IFileNotExistsException
      * @throws IInvalidVariableNameException
-     * @throws MethodNotFoundException
-     * @throws ParameterHasNoDefaultValueException
      * @throws PathNotRegisteredException
-     * @throws ServiceNotFoundException
-     * @throws ServiceNotInstantiableException
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
      * @throws \ReflectionException
      */
     public function paginate($product_id)
@@ -69,11 +63,13 @@ class CommentController extends AbstractHomeController
      * @throws FormException
      * @throws IFileNotExistsException
      * @throws IInvalidVariableNameException
-     * @throws MethodNotFoundException
-     * @throws ParameterHasNoDefaultValueException
-     * @throws ServiceNotFoundException
-     * @throws ServiceNotInstantiableException
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
      * @throws \ReflectionException
+     * @throws \Sim\Container\Exceptions\MethodNotFoundException
+     * @throws \Sim\Container\Exceptions\ParameterHasNoDefaultValueException
+     * @throws \Sim\Container\Exceptions\ServiceNotFoundException
+     * @throws \Sim\Container\Exceptions\ServiceNotInstantiableException
      */
     public function saveComment($product_id)
     {

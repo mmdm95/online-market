@@ -10,8 +10,8 @@ $validator = form_validator();
         <?php load_partial('admin/card-header', ['header_title' => 'ویرایش صفحه ثابت']); ?>
 
         <div class="card-body">
-            <form action="<?= url('admin.static.page.edit')->getRelativeUrl() . $page['id']; ?>" method="post"
-                  id="__form_add_static_page">
+            <form action="<?= url('admin.static.page.edit')->getRelativeUrlTrimmed(); ?>" method="post"
+                  id="__form_edit_static_page">
                 <?php load_partial('admin/message/message-form', [
                     'errors' => $static_page_edit_errors ?? [],
                     'success' => $static_page_edit_success ?? '',
@@ -85,6 +85,8 @@ $validator = form_validator();
             </form>
         </div>
     </div>
+
+    <?php load_partial('editor/browser-tiny-func'); ?>
 </div>
 <!-- /content area -->
 

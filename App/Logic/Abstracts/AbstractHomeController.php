@@ -4,10 +4,6 @@ namespace App\Logic\Abstracts;
 
 use Sim\Auth\DBAuth;
 use Sim\Cart\Interfaces\IDBException as ICartDBException;
-use Sim\Container\Exceptions\MethodNotFoundException;
-use Sim\Container\Exceptions\ParameterHasNoDefaultValueException;
-use Sim\Container\Exceptions\ServiceNotFoundException;
-use Sim\Container\Exceptions\ServiceNotInstantiableException;
 use Sim\Exceptions\ConfigManager\ConfigNotRegisteredException;
 use Sim\Interfaces\IFileNotExistsException;
 use Sim\Interfaces\IInvalidVariableNameException;
@@ -26,15 +22,12 @@ abstract class AbstractHomeController extends AbstractMainController
 
     /**
      * AbstractHomeController constructor.
-     * @throws MethodNotFoundException
-     * @throws ParameterHasNoDefaultValueException
-     * @throws ServiceNotFoundException
-     * @throws ServiceNotInstantiableException
-     * @throws \ReflectionException
-     * @throws ICartDBException
      * @throws ConfigNotRegisteredException
+     * @throws ICartDBException
      * @throws IFileNotExistsException
      * @throws IInvalidVariableNameException
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
      */
     public function __construct()
     {

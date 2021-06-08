@@ -6,21 +6,12 @@ use App\Logic\Models\UserModel;
 use Sim\Abstracts\Mvc\Controller\Middleware\AbstractMiddleware;
 use Sim\Auth\DBAuth;
 use Sim\Auth\Interfaces\IDBException;
-use Sim\Container\Exceptions\MethodNotFoundException;
-use Sim\Container\Exceptions\ParameterHasNoDefaultValueException;
-use Sim\Container\Exceptions\ServiceNotFoundException;
-use Sim\Container\Exceptions\ServiceNotInstantiableException;
 
 class PublicFolderModifyMiddleware extends AbstractMiddleware
 {
     /**
      * @param mixed ...$_
      * @return bool
-     * @throws MethodNotFoundException
-     * @throws ParameterHasNoDefaultValueException
-     * @throws ServiceNotFoundException
-     * @throws ServiceNotInstantiableException
-     * @throws \ReflectionException
      */
     public function handle(...$_): bool
     {

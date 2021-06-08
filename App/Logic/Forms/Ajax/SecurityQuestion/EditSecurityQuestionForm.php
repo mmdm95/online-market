@@ -3,13 +3,9 @@
 namespace App\Logic\Forms\Ajax\SecurityQuestion;
 
 use App\Logic\Interfaces\IPageForm;
-use App\Logic\Models\UnitModel;
+use App\Logic\Models\SecurityQuestionModel;
 use App\Logic\Validations\ExtendedValidator;
 use Sim\Auth\DBAuth;
-use Sim\Container\Exceptions\MethodNotFoundException;
-use Sim\Container\Exceptions\ParameterHasNoDefaultValueException;
-use Sim\Container\Exceptions\ServiceNotFoundException;
-use Sim\Container\Exceptions\ServiceNotInstantiableException;
 use Sim\Exceptions\ConfigManager\ConfigNotRegisteredException;
 use Sim\Form\Exceptions\FormException;
 use Sim\Interfaces\IFileNotExistsException;
@@ -20,15 +16,13 @@ class EditSecurityQuestionForm implements IPageForm
 {
     /**
      * {@inheritdoc}
-     * @throws FormException
-     * @throws MethodNotFoundException
-     * @throws ParameterHasNoDefaultValueException
-     * @throws ServiceNotFoundException
-     * @throws ServiceNotInstantiableException
-     * @throws \ReflectionException
+     * @return array
      * @throws ConfigNotRegisteredException
+     * @throws FormException
      * @throws IFileNotExistsException
      * @throws IInvalidVariableNameException
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
      */
     public function validate(): array
     {
@@ -39,39 +33,33 @@ class EditSecurityQuestionForm implements IPageForm
         $validator->reset();
 
         // aliases
-        $validator->setFieldsAlias([
-            'inp-edit-unit-title' => 'نام گیرنده',
-            'inp-edit-unit-sign' => 'موبایل',
-        ])->setOptionalFields([
-            'inp-edit-unit-sign'
-        ]);
+        $validator
+            ->setFieldsAlias([
+                'inp-edit-sec-question-q' => 'سؤال امنیتی',
+            ]);
 
         // title
         $validator
-            ->setFields('inp-edit-unit-title')
+            ->setFields('inp-edit-sec-question-q')
             ->stopValidationAfterFirstError(false)
             ->required()
             ->stopValidationAfterFirstError(true)
             ->lessThanEqualLength(250);
-        // sign
-        $validator
-            ->setFields('inp-edit-unit-sign')
-            ->required();
 
-        $id = session()->getFlash('unit-edit-id', null, false);
+        $id = session()->getFlash('sec-q-edit-id', null, false);
         if (!empty($id)) {
             /**
-             * @var UnitModel $unitModel
+             * @var SecurityQuestionModel $secModel
              */
-            $unitModel = container()->get(UnitModel::class);
+            $secModel = container()->get(SecurityQuestionModel::class);
 
-            if (0 === $unitModel->count('id=:id', ['id' => $id])) {
-                $validator->setError('inp-edit-unit-title', 'شناسه واحد مورد نظر نامعتبر است.');
+            if (0 === $secModel->count('id=:id', ['id' => $id])) {
+                $validator->setError('inp-edit-sec-question-q', 'شناسه سؤال مورد نظر نامعتبر است.');
             }
         } else {
             $validator
                 ->setStatus(false)
-                ->setError('inp-edit-unit-title', 'شناسه واحد مورد نظر نامعتبر است.');
+                ->setError('inp-edit-sec-question-q', 'شناسه سؤال مورد نظر نامعتبر است.');
         }
 
         // to reset form values and not set them again
@@ -87,18 +75,16 @@ class EditSecurityQuestionForm implements IPageForm
 
     /**
      * {@inheritdoc}
-     * @throws MethodNotFoundException
-     * @throws ParameterHasNoDefaultValueException
-     * @throws ServiceNotFoundException
-     * @throws ServiceNotInstantiableException
-     * @throws \ReflectionException
+     * @return bool
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
      */
     public function store(): bool
     {
         /**
-         * @var UnitModel $unitModel
+         * @var SecurityQuestionModel $secModel
          */
-        $unitModel = container()->get(UnitModel::class);
+        $secModel = container()->get(SecurityQuestionModel::class);
         /**
          * @var AntiXSS $xss
          */
@@ -109,13 +95,13 @@ class EditSecurityQuestionForm implements IPageForm
         $auth = container()->get('auth_admin');
 
         try {
-            $id = session()->getFlash('unit-edit-id', null);
-            $title = input()->post('inp-edit-unit-title', '')->getValue();
-            $sign = input()->post('inp-edit-unit-sign', '')->getValue();
+            $id = session()->getFlash('sec-q-edit-id', null);
+            $q = input()->post('inp-edit-sec-question-q', '')->getValue();
+            $pub = input()->post('inp-edit-sec-question-status', '')->getValue();
 
-            $res = $unitModel->update([
-                'title' => $xss->xss_clean(trim($title)),
-                'sign' => $xss->xss_clean($sign),
+            $res = $secModel->update([
+                'question' => $xss->xss_clean(trim($q)),
+                'publish' => is_value_checked($pub) ? DB_YES : DB_NO,
                 'updated_at' => time(),
                 'updated_by' => $auth->getCurrentUser()['id'] ?? null,
             ], 'id=:id', ['id' => $id]);

@@ -11,6 +11,21 @@ PAGE JS
 (function ($) {
     'use strict';
 
+    // Lazy loader (pictures, videos, etc.)
+    if ($.fn.lazy) {
+        var lazyFn = function () {
+            $('.lazy').lazy({
+                effect: "fadeIn",
+                effectTime: 800,
+                threshold: 50,
+                // callback
+                afterLoad: function (element) {
+                    $(element).css({'background': 'none'});
+                }
+            });
+        };
+    }
+
     /*===================================*
     01. LOADING JS
     /*===================================*/
@@ -87,6 +102,8 @@ PAGE JS
 
             var $subMenu = $(this).next(".dropdown-menu");
             $subMenu.toggleClass('show');
+
+            lazyFn();
 
             return false;
         });
@@ -425,6 +442,10 @@ PAGE JS
                 smartSpeed: $carousel.data("smart-speed"),
                 responsive: $carousel.data("responsive")
             });
+
+            $carousel.on('changed.owl.carousel', function(e) {
+                lazyFn();
+            });
         });
     }
 
@@ -749,6 +770,7 @@ PAGE JS
         });
     });
 
+    var inpQuantity = $('input[name="quantity"]');
     $('.plus').on('click', function () {
         var val, inp, max;
         inp = $(this).prev();
@@ -759,6 +781,7 @@ PAGE JS
         if (val >= 0 && (0 !== max && val < max)) {
             inp.val(+inp.val() + 1);
         }
+        inpQuantity.trigger('input');
     });
     $('.minus').on('click', function () {
         var val, inp;
@@ -768,8 +791,9 @@ PAGE JS
         if (val > 1) {
             if (inp.val() > 1) inp.val(+inp.val() - 1);
         }
+        inpQuantity.trigger('input');
     });
-    $('input[name="quantity"]').off('input').on('input', function () {
+    inpQuantity.off('input').on('input', function () {
         var val, max;
         val = $(this).val();
         val = val && !isNaN(parseInt(val, 10)) ? parseInt(val, 10) : 0;
@@ -870,18 +894,7 @@ PAGE JS
             });
         }
 
-        // Lazy loader (pictures, videos, etc.)
-        if ($.fn.lazy) {
-            $('.lazy').lazy({
-                effect: "fadeIn",
-                effectTime: 800,
-                threshold: 50,
-                // callback
-                afterLoad: function (element) {
-                    $(element).css({'background': 'none'});
-                }
-            });
-        }
+        lazyFn();
     });
 
     /*===================================*

@@ -76,11 +76,69 @@ $validator = form_validator();
 
                         <div class="accordion" id="radioAccordion">
                             <div class="card">
-                                <div class="card-header" id="behPardakhtHeading">
+                                <div class="card-header" id="sadadHeading">
                                     <div class="form-check form-check-inline">
                                         <label class="form-check-label align-items-center">
                                             <input type="radio"
                                                    checked="checked"
+                                                   data-toggle="collapse"
+                                                   aria-expanded="false"
+                                                   class="form-check-input-styled"
+                                                   data-target="#collapseSadad"
+                                                   aria-controls="collapseSadad"
+                                                   value="<?= METHOD_TYPE_GATEWAY_SADAD; ?>"
+                                                   name="inp-add-pay-method-method"
+                                                   data-fouc>
+                                            <img src="" data-src="<?= asset_path('image/gateways/sadad.jpg', false); ?>"
+                                                 alt="سداد" class="rounded mr-2 lazy"
+                                                 width="auto" height="40">
+                                            <?= METHOD_TYPES[METHOD_TYPE_GATEWAY_SADAD]; ?>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="form-group collapse" id="collapseSadad"
+                                     aria-labelledby="sadadHeading" data-parent="#radioAccordion">
+                                    <div class="row m-0">
+                                        <div class="col-lg-4 mb-3">
+                                            <label>
+                                                <span class="text-danger">*</span>
+                                                کلید:
+                                            </label>
+                                            <input type="text"
+                                                   class="form-control"
+                                                   placeholder=""
+                                                   name="inp-add-pay-method-sadad-key">
+                                        </div>
+                                        <div class="col-lg-4 mb-3">
+                                            <label>
+                                                <span class="text-danger">*</span>
+                                                شماره ترمینال:
+                                            </label>
+                                            <input type="text"
+                                                   class="form-control"
+                                                   placeholder=""
+                                                   name="inp-add-pay-method-sadad-terminal">
+                                        </div>
+                                        <div class="col-lg-4 mb-3">
+                                            <label>
+                                                <span class="text-danger">*</span>
+                                                شماره مرچنت:
+                                            </label>
+                                            <input type="text"
+                                                   class="form-control"
+                                                   placeholder=""
+                                                   name="inp-add-pay-method-sadad-merchant">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card">
+                                <div class="card-header" id="behPardakhtHeading">
+                                    <div class="form-check form-check-inline">
+                                        <label class="form-check-label align-items-center">
+                                            <input type="radio"
                                                    data-toggle="collapse"
                                                    aria-expanded="false"
                                                    class="form-check-input-styled"

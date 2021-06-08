@@ -34,13 +34,7 @@ Version      : 1.0
 		
 *=============================================================*/
 
-
-@font-face {
-    font-family: 'IranYekan';
-    font-weight: normal;
-    font-style: normal;
-    src: url('../fonts/iranyekanweblight.woff2') format('woff2');
-}
+@import url('font.css');
 
 /*===================================*
   01.GENERAL STYLE
@@ -62,13 +56,13 @@ html, body {
 body {
     background: #ffffff none repeat scroll 0 0;
     color: #687188;
-    font-family: 'IranYekan', sans-serif;
+    font-family: 'IRANSansWeb', sans-serif;
     font-size: 16px;
 }
 
 h1, h2, h3, h4, h5, h6 {
     color: #292b2c;
-    font-family: 'IranYekan';
+    font-family: 'IRANSansWeb';
     font-size: 1.2rem;
     font-weight: 900;
 }
@@ -5661,7 +5655,7 @@ footer .widget_title {
 .countdown_time .countdown_box {
     float: left;
     width: 25%;
-    font-family: 'IranYekan';
+    font-family: 'IRANSansWeb';
     padding: 0 15px;
 }
 

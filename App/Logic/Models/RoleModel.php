@@ -2,11 +2,6 @@
 
 namespace App\Logic\Models;
 
-use Sim\Container\Exceptions\MethodNotFoundException;
-use Sim\Container\Exceptions\ParameterHasNoDefaultValueException;
-use Sim\Container\Exceptions\ServiceNotFoundException;
-use Sim\Container\Exceptions\ServiceNotInstantiableException;
-
 class RoleModel extends BaseModel
 {
     /**
@@ -80,11 +75,8 @@ class RoleModel extends BaseModel
     /**
      * @param $username
      * @return bool
-     * @throws \ReflectionException
-     * @throws MethodNotFoundException
-     * @throws ParameterHasNoDefaultValueException
-     * @throws ServiceNotFoundException
-     * @throws ServiceNotInstantiableException
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
      */
     public function deleteUserRoles($username): bool
     {

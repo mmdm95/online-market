@@ -783,7 +783,7 @@
     .banner_section.slide_medium .carousel-item,
     .banner_section.slide_medium .banner_content_wrap,
     .banner_section.slide_medium .banner_content_wrap .carousel-item {
-        height: 350px;
+        height: auto;
     }
 
     .banner_content h2 {

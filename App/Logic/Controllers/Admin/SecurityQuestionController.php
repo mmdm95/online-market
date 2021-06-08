@@ -17,10 +17,6 @@ use Jenssegers\Agent\Agent;
 use Sim\Auth\DBAuth;
 use Sim\Auth\Interfaces\IAuth;
 use Sim\Auth\Interfaces\IDBException;
-use Sim\Container\Exceptions\MethodNotFoundException;
-use Sim\Container\Exceptions\ParameterHasNoDefaultValueException;
-use Sim\Container\Exceptions\ServiceNotFoundException;
-use Sim\Container\Exceptions\ServiceNotInstantiableException;
 use Sim\Event\Interfaces\IEvent;
 use Sim\Exceptions\ConfigManager\ConfigNotRegisteredException;
 use Sim\Exceptions\Mvc\Controller\ControllerException;
@@ -34,15 +30,13 @@ class SecurityQuestionController extends AbstractAdminController implements IAja
      * @return string
      * @throws ConfigNotRegisteredException
      * @throws ControllerException
+     * @throws IDBException
      * @throws IFileNotExistsException
      * @throws IInvalidVariableNameException
-     * @throws MethodNotFoundException
-     * @throws ParameterHasNoDefaultValueException
      * @throws PathNotRegisteredException
-     * @throws ServiceNotFoundException
-     * @throws ServiceNotInstantiableException
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
      * @throws \ReflectionException
-     * @throws IDBException
      */
     public function view()
     {
@@ -60,12 +54,9 @@ class SecurityQuestionController extends AbstractAdminController implements IAja
 
     /**
      * @return void
-     * @throws MethodNotFoundException
-     * @throws ParameterHasNoDefaultValueException
-     * @throws ServiceNotFoundException
-     * @throws ServiceNotInstantiableException
-     * @throws \ReflectionException
      * @throws IDBException
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
      */
     public function add(): void
     {
@@ -100,12 +91,9 @@ class SecurityQuestionController extends AbstractAdminController implements IAja
     /**
      * @param $id
      * @return void
-     * @throws MethodNotFoundException
-     * @throws ParameterHasNoDefaultValueException
-     * @throws ServiceNotFoundException
-     * @throws ServiceNotInstantiableException
-     * @throws \ReflectionException
      * @throws IDBException
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
      */
     public function edit($id): void
     {
@@ -124,7 +112,7 @@ class SecurityQuestionController extends AbstractAdminController implements IAja
          */
         $agent = container()->get(Agent::class);
         if (!$agent->isRobot()) {
-            session()->setFlash('unit-edit-id', $id);
+            session()->setFlash('sec-q-edit-id', $id);
             $formHandler = new GeneralAjaxFormHandler();
             $resourceHandler = $formHandler
                 ->setSuccessMessage('سؤال امنیتی با موفقیت ویرایش شد.')
@@ -141,12 +129,9 @@ class SecurityQuestionController extends AbstractAdminController implements IAja
     /**
      * @param $id
      * @return void
-     * @throws MethodNotFoundException
-     * @throws ParameterHasNoDefaultValueException
-     * @throws ServiceNotFoundException
-     * @throws ServiceNotInstantiableException
-     * @throws \ReflectionException
      * @throws IDBException
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
      */
     public function remove($id): void
     {
@@ -180,12 +165,9 @@ class SecurityQuestionController extends AbstractAdminController implements IAja
     /**
      * @param $id
      * @return void
-     * @throws \ReflectionException
-     * @throws MethodNotFoundException
-     * @throws ParameterHasNoDefaultValueException
-     * @throws ServiceNotFoundException
-     * @throws ServiceNotInstantiableException
      * @throws IDBException
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
      */
     public function get($id): void
     {
@@ -232,11 +214,8 @@ class SecurityQuestionController extends AbstractAdminController implements IAja
      * @param array $_
      * @return void
      * @throws IDBException
-     * @throws MethodNotFoundException
-     * @throws ParameterHasNoDefaultValueException
-     * @throws ServiceNotFoundException
-     * @throws ServiceNotInstantiableException
-     * @throws \ReflectionException
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
      */
     public function getPaginatedDatatable(...$_): void
     {

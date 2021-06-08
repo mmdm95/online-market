@@ -53,7 +53,16 @@ class InputHandler
         $postVars = $_POST;
 
         if (\in_array($this->request->getMethod(), ['put', 'patch', 'delete'], false) === true) {
-            parse_str(file_get_contents('php://input'), $postVars);
+            $contents = file_get_contents('php://input');
+            // Append any PHP-input json
+            if (strpos(trim($contents), '{') === 0) {
+                $post = json_decode($contents, true);
+                if ($post !== false) {
+                    $postVars += $post;
+                }
+            } else {
+                parse_str($contents, $postVars);
+            }
         }
 
         if (\count($postVars) !== 0) {
@@ -296,12 +305,22 @@ class InputHandler
      */
     public function all(array $filter = []): array
     {
-        $output = $_GET;
+        $output = [];
+        /**
+         * @var IInputItem $v
+         */
+        foreach ($this->get as $k => $v) {
+            $output[$k] = $v->getValue();
+        }
 
-        if ($this->request->getMethod() === 'post') {
-
+        if (\in_array($this->request->getMethod(), ['put', 'patch', 'delete', 'post'], false) === true) {
             // Append POST data
-            $output += $_POST;
+            /**
+             * @var IInputItem $v
+             */
+            foreach ($this->post as $k => $v) {
+                $output[$k] = $v->getValue();
+            }
             $contents = file_get_contents('php://input');
 
             // Append any PHP-input json

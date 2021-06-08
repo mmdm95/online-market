@@ -182,6 +182,8 @@ fabric.properties
 # End of https://www.toptal.com/developers/gitignore/api/phpstorm
 
 # Simplicity gitignore
+.idea
+.idea/*
 Data/Cache/*
 !Data/Cache/.keep
 Data/Drafts/*

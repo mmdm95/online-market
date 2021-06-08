@@ -5,10 +5,6 @@ namespace App\Logic\Controllers\Admin;
 use App\Logic\Abstracts\AbstractAdminController;
 use App\Logic\Models\UserModel;
 use ReflectionException;
-use Sim\Container\Exceptions\MethodNotFoundException;
-use Sim\Container\Exceptions\ParameterHasNoDefaultValueException;
-use Sim\Container\Exceptions\ServiceNotFoundException;
-use Sim\Container\Exceptions\ServiceNotInstantiableException;
 use Sim\Exceptions\ConfigManager\ConfigNotRegisteredException;
 use Sim\Exceptions\Mvc\Controller\ControllerException;
 use Sim\Exceptions\PathManager\PathNotRegisteredException;
@@ -25,10 +21,8 @@ class ReportUserController extends AbstractAdminController
      * @throws IInvalidVariableNameException
      * @throws PathNotRegisteredException
      * @throws ReflectionException
-     * @throws MethodNotFoundException
-     * @throws ParameterHasNoDefaultValueException
-     * @throws ServiceNotFoundException
-     * @throws ServiceNotInstantiableException
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
      */
     public function usersReport()
     {

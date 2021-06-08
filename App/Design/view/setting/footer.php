@@ -318,10 +318,10 @@ $validator = form_validator();
                                                   placeholder="نماد را وارد کنید"
                                                   name="inp-setting-namads[]"
                                         ><?= $namad->getValue(); ?></textarea>
+                                        <?php if (0 != $counter++): ?>
+                                            <?php load_partial('admin/parser/dynamic-remover-btn'); ?>
+                                        <?php endif; ?>
                                     </div>
-                                    <?php if (0 != $counter++): ?>
-                                        <?php load_partial('admin/parser/dynamic-remover-btn'); ?>
-                                    <?php endif; ?>
                                 <?php endforeach; ?>
                             <?php elseif (count($namads)): ?>
                                 <?php foreach ($namads as $namad): ?>
@@ -330,10 +330,10 @@ $validator = form_validator();
                                                   placeholder="نماد را وارد کنید"
                                                   name="inp-setting-namads[]"
                                         ><?= $namad; ?></textarea>
+                                        <?php if (0 != $counter++): ?>
+                                            <?php load_partial('admin/parser/dynamic-remover-btn'); ?>
+                                        <?php endif; ?>
                                     </div>
-                                    <?php if (0 != $counter++): ?>
-                                        <?php load_partial('admin/parser/dynamic-remover-btn'); ?>
-                                    <?php endif; ?>
                                 <?php endforeach; ?>
                             <?php else: ?>
                                 <div class="form-group position-relative" id="__sample_namad">

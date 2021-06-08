@@ -28,7 +28,7 @@ $validator = form_validator();
                                     انتخاب تصویر:
                                 </label>
                                 <?php
-                                $img = $validator->setInput('inp-edit-pay-method-img') ?: (url('image.show')->getRelativeUrl() . $payment['image']);
+                                $img = $validator->setInput('inp-edit-pay-method-img') ?: $payment['image'];
                                 ?>
                                 <div class="img-placeholder-custom __file_picker_handler __file_image mx-auto ml-lg-0 mr-lg-3 mb-0 <?= !empty($img) ? 'has-image' : ''; ?>"
                                      data-toggle="modal"
@@ -36,7 +36,8 @@ $validator = form_validator();
                                     <input type="hidden" name="inp-edit-pay-method-img"
                                            value="<?= $img; ?>">
                                     <?php if (!empty($img)): ?>
-                                        <img class="img-placeholder-image" src="<?= url('image.show') . $img; ?>" alt="selected image">
+                                        <img class="img-placeholder-image" src="<?= url('image.show') . $img; ?>"
+                                             alt="selected image">
                                     <?php endif; ?>
                                     <div class="img-placeholder-icon-container">
                                         <i class="icon-image2 img-placeholder-icon text-grey-300"></i>
@@ -75,16 +76,89 @@ $validator = form_validator();
                         </label>
 
                         <?php
-                        $method = $validator->setInput('inp-edit-pay-method-method');
+                        $method = $validator->setInput('inp-edit-pay-method-method') ?: $payment['method_type'];
                         ?>
 
                         <div class="accordion" id="radioAccordion">
+                            <div class="card">
+                                <div class="card-header" id="sadadHeading">
+                                    <div class="form-check form-check-inline">
+                                        <label class="form-check-label align-items-center">
+                                            <input type="radio"
+                                                <?= METHOD_TYPE_GATEWAY_SADAD == $method || '' == $method ? 'checked="checked"' : ''; ?>
+                                                   data-toggle="collapse"
+                                                   aria-expanded="false"
+                                                   class="form-check-input-styled"
+                                                   data-target="#collapseSadad"
+                                                   aria-controls="collapseSadad"
+                                                   value="<?= METHOD_TYPE_GATEWAY_SADAD; ?>"
+                                                   name="inp-edit-pay-method-method"
+                                                   data-fouc>
+                                            <img src="" data-src="<?= asset_path('image/gateways/sadad.jpg', false); ?>"
+                                                 alt="سداد" class="rounded mr-2 lazy"
+                                                 width="auto" height="40">
+                                            <?= METHOD_TYPES[METHOD_TYPE_GATEWAY_SADAD]; ?>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="form-group collapse" id="collapseSadad"
+                                     aria-labelledby="sadadHeading" data-parent="#radioAccordion">
+                                    <div class="row m-0">
+                                        <?php
+                                        $sadadInpKey = $validator->setInput('inp-edit-pay-method-sadad-key');
+                                        $sadadInpTerminal = $validator->setInput('inp-edit-pay-method-sadad-terminal');
+                                        $sadadInpMerchant = $validator->setInput('inp-edit-pay-method-sadad-merchant');
+                                        ?>
+                                        <?php if (METHOD_TYPE_GATEWAY_SADAD == $method): ?>
+                                            <?php
+                                            $sadadInpTerminal = $sadadInpTerminal ?: ($payment['meta_parameters']['terminal'] ?: '');
+                                            $sadadInpMerchant = $sadadInpMerchant ?: ($payment['meta_parameters']['merchant'] ?: '');
+                                            ?>
+                                        <?php endif; ?>
+                                        <div class="col-lg-4 mb-3">
+                                            <label>
+                                                <span class="text-danger">*</span>
+                                                کلید:
+                                            </label>
+                                            <input type="text"
+                                                   class="form-control"
+                                                   placeholder=""
+                                                   value="<?= $sadadInpKey; ?>"
+                                                   name="inp-edit-pay-method-sadad-key">
+                                        </div>
+                                        <div class="col-lg-4 mb-3">
+                                            <label>
+                                                <span class="text-danger">*</span>
+                                                شماره ترمینال:
+                                            </label>
+                                            <input type="text"
+                                                   class="form-control"
+                                                   placeholder=""
+                                                   value="<?= $sadadInpTerminal; ?>"
+                                                   name="inp-edit-pay-method-sadad-terminal">
+                                        </div>
+                                        <div class="col-lg-4 mb-3">
+                                            <label>
+                                                <span class="text-danger">*</span>
+                                                شماره مرچنت:
+                                            </label>
+                                            <input type="text"
+                                                   class="form-control"
+                                                   placeholder=""
+                                                   value="<?= $sadadInpMerchant; ?>"
+                                                   name="inp-edit-pay-method-sadad-merchant">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
                             <div class="card">
                                 <div class="card-header" id="behPardakhtHeading">
                                     <div class="form-check form-check-inline">
                                         <label class="form-check-label align-items-center">
                                             <input type="radio"
-                                                <?= METHOD_TYPE_GATEWAY_BEH_PARDAKHT == $method || '' == $method ? 'checked="checked"' : ''; ?>
+                                                <?= METHOD_TYPE_GATEWAY_BEH_PARDAKHT == $method ? 'checked="checked"' : ''; ?>
                                                    data-toggle="collapse"
                                                    aria-expanded="false"
                                                    class="form-check-input-styled"
@@ -93,7 +167,8 @@ $validator = form_validator();
                                                    value="<?= METHOD_TYPE_GATEWAY_BEH_PARDAKHT; ?>"
                                                    name="inp-edit-pay-method-method"
                                                    data-fouc>
-                                            <img src="" data-src="<?= asset_path('image/gateways/beh-pardakht.png', false); ?>"
+                                            <img src=""
+                                                 data-src="<?= asset_path('image/gateways/beh-pardakht.png', false); ?>"
                                                  alt="به پرداخت" class="rounded mr-2 lazy"
                                                  width="auto" height="40">
                                             <?= METHOD_TYPES[METHOD_TYPE_GATEWAY_BEH_PARDAKHT]; ?>
@@ -104,6 +179,16 @@ $validator = form_validator();
                                 <div class="form-group collapse" id="collapseBehPardakht"
                                      aria-labelledby="behPardakhtHeading" data-parent="#radioAccordion">
                                     <div class="row m-0">
+                                        <?php
+                                        $behInpTerminal = $validator->setInput('inp-edit-pay-method-beh-pardakht-terminal');
+                                        $behInpUsername = $validator->setInput('inp-edit-pay-method-beh-pardakht-username');
+                                        ?>
+                                        <?php if (METHOD_TYPE_GATEWAY_BEH_PARDAKHT == $method): ?>
+                                            <?php
+                                            $behInpTerminal = $behInpTerminal ?: ($payment['meta_parameters']['terminal'] ?: '');
+                                            $behInpUsername = $behInpUsername ?: ($payment['meta_parameters']['username'] ?: '');
+                                            ?>
+                                        <?php endif; ?>
                                         <div class="col-lg-4 mb-3">
                                             <label>
                                                 <span class="text-danger">*</span>
@@ -112,7 +197,7 @@ $validator = form_validator();
                                             <input type="text"
                                                    class="form-control"
                                                    placeholder=""
-                                                   value="<?= $validator->setInput('inp-edit-pay-method-beh-pardakht-terminal') ?: ($payment['meta_parameters']['terminal'] ?: ''); ?>"
+                                                   value="<?= $behInpTerminal; ?>"
                                                    name="inp-edit-pay-method-beh-pardakht-terminal">
                                         </div>
                                         <div class="col-lg-4 mb-3">
@@ -123,7 +208,7 @@ $validator = form_validator();
                                             <input type="text"
                                                    class="form-control"
                                                    placeholder=""
-                                                   value="<?= $validator->setInput('inp-edit-pay-method-beh-pardakht-username') ?: ($payment['meta_parameters']['username'] ?: ''); ?>"
+                                                   value="<?= $behInpUsername; ?>"
                                                    name="inp-edit-pay-method-beh-pardakht-username">
                                         </div>
                                         <div class="col-lg-4 mb-3">
@@ -165,6 +250,9 @@ $validator = form_validator();
                                 <div class="form-group collapse" id="collapseIdpay"
                                      aria-labelledby="idpayHeading" data-parent="#radioAccordion">
                                     <div class="row m-0">
+                                        <?php
+                                        $idPayInpApi = $validator->setInput('inp-edit-pay-method-idpay-api-key');
+                                        ?>
                                         <div class="col-lg-12 mb-3">
                                             <label>
                                                 <span class="text-danger">*</span>
@@ -173,7 +261,7 @@ $validator = form_validator();
                                             <input type="text"
                                                    class="form-control"
                                                    placeholder=""
-                                                   value="<?= $validator->setInput('inp-edit-pay-method-idpay-api-key') ?: ($payment['meta_parameters']['api_key'] ?: ''); ?>"
+                                                   value="<?= $idPayInpApi; ?>"
                                                    name="inp-edit-pay-method-idpay-api-key">
                                         </div>
                                     </div>
@@ -205,6 +293,14 @@ $validator = form_validator();
                                 <div class="form-group collapse" id="collapseMabna"
                                      aria-labelledby="mabnaHeading" data-parent="#radioAccordion">
                                     <div class="row m-0">
+                                        <?php
+                                        $mabnaInpTerminal = $validator->setInput('inp-edit-pay-method-mabna-terminal');
+                                        ?>
+                                        <?php if (METHOD_TYPE_GATEWAY_MABNA == $method): ?>
+                                            <?php
+                                            $mabnaInpTerminal = $mabnaInpTerminal ?: ($payment['meta_parameters']['terminal'] ?: '');
+                                            ?>
+                                        <?php endif; ?>
                                         <div class="col-lg-12 mb-3">
                                             <label>
                                                 <span class="text-danger">*</span>
@@ -213,7 +309,7 @@ $validator = form_validator();
                                             <input type="text"
                                                    class="form-control"
                                                    placeholder=""
-                                                   value="<?= $validator->setInput('inp-edit-pay-method-mabna-terminal') ?: ($payment['meta_parameters']['terminal'] ?: ''); ?>"
+                                                   value="<?= $mabnaInpTerminal; ?>"
                                                    name="inp-edit-pay-method-mabna-terminal">
                                         </div>
                                     </div>
@@ -234,7 +330,8 @@ $validator = form_validator();
                                                    value="<?= METHOD_TYPE_GATEWAY_ZARINPAL; ?>"
                                                    name="inp-edit-pay-method-method"
                                                    data-fouc>
-                                            <img src="" data-src="<?= asset_path('image/gateways/zarinpal.png', false); ?>"
+                                            <img src=""
+                                                 data-src="<?= asset_path('image/gateways/zarinpal.png', false); ?>"
                                                  alt="زرین پال" class="rounded mr-2 lazy"
                                                  width="auto" height="40">
                                             <?= METHOD_TYPES[METHOD_TYPE_GATEWAY_ZARINPAL]; ?>
@@ -245,6 +342,14 @@ $validator = form_validator();
                                 <div class="form-group collapse" id="collapseZarinpal"
                                      aria-labelledby="zarinpalHeading" data-parent="#radioAccordion">
                                     <div class="row m-0">
+                                        <?php
+                                        $zarinpalInpMerchant = $validator->setInput('inp-edit-pay-method-zarinpal-merchant');
+                                        ?>
+                                        <?php if (METHOD_TYPE_GATEWAY_ZARINPAL == $method): ?>
+                                            <?php
+                                            $zarinpalInpMerchant = $zarinpalInpMerchant ?: ($payment['meta_parameters']['merchant'] ?: '');
+                                            ?>
+                                        <?php endif; ?>
                                         <div class="col-lg-12 mb-3">
                                             <label>
                                                 <span class="text-danger">*</span>
@@ -253,7 +358,7 @@ $validator = form_validator();
                                             <input type="text"
                                                    class="form-control"
                                                    placeholder=""
-                                                   value="<?= $validator->setInput('inp-edit-pay-method-zarinpal-merchant') ?: ($payment['meta_parameters']['merchant'] ?: ''); ?>"
+                                                   value="<?= $zarinpalInpMerchant; ?>"
                                                    name="inp-edit-pay-method-zarinpal-merchant">
                                         </div>
                                     </div>

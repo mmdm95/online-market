@@ -571,7 +571,7 @@ $validator = form_validator();
                                     <?php
                                     $images = input()->post('inp-add-product-gallery-img');
                                     ?>
-                                    <?php if (is_array($images) && count($images)): ?>
+                                    <?php if (!$validator->getStatus() && is_array($images) && count($images)): ?>
                                         <?php $counter = 0; ?>
                                         <?php
                                         /**
@@ -596,10 +596,10 @@ $validator = form_validator();
                                                         <i class="icon-plus2"></i>
                                                     </div>
                                                 </div>
+                                                <?php if (0 !== $counter++): ?>
+                                                    <?php load_partial('admin/parser/dynamic-remover-btn'); ?>
+                                                <?php endif; ?>
                                             </div>
-                                            <?php if (0 !== $counter++): ?>
-                                            <?php load_partial('admin/parser/dynamic-remover-btn'); ?>
-                                        <?php endif; ?>
                                         <?php endforeach; ?>
                                     <?php else: ?>
                                         <div class="img-placeholder-custom __file_picker_handler __file_image"

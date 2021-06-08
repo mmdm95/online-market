@@ -4,7 +4,6 @@ use Sim\Captcha\CaptchaFactory;
 use Sim\Captcha\Interfaces\ICaptchaLanguage;
 use Sim\ConfigManager\ConfigManager;
 use Sim\Logger\ILogger;
-use Sim\Container\Container;
 use Sim\Cookie\Cookie as Cookie;
 use Sim\Csrf\Csrf;
 use Sim\Event\Emitter as Emitter;
@@ -17,10 +16,66 @@ use Sim\Cart\Cart as Cart;
 use \Sim\HitCounter\HitCounter as HitCounter;
 use Sim\DBConnector;
 
+use DI\Container as Container;
+use DI\ContainerBuilder as ContainerBuilder;
+
 if (!function_exists('container')) {
     function container(): Container
     {
-        return Container::getInstance();
+        static $containerInstance = null;
+        if (!isset($containerInstance)) {
+            $builder = new ContainerBuilder();
+            // load definitions
+            $builder->addDefinitions([
+                // crypt class
+                'cryptographer/class' => function () {
+                    return new Crypt(\config()->get('security.main_key'),
+                        \config()->get('security.assured_key'));
+                },
+
+                // hit counter class
+                HitCounter::class => function () {
+                    return new HitCounter(\connector()->getPDO(), \config()->get('hit.structure'));
+                },
+
+                // session class
+                Session::class => function () {
+                    return new Session(\cryptographer());
+                },
+
+                // cookie class
+                Cookie::class => function () {
+                    return new Cookie(\cryptographer());
+                },
+
+                // cart class
+                Cart::class => function (Container $resolver) {
+                    $cookie = $resolver->get(Cookie::class);
+                    return new Cart(\connector()->getPDO(), $cookie, 0, \config()->get('cart.structure'));
+                },
+
+                // translator class
+                Translate::class => function () {
+                    $translate = new Translate();
+                    $translateConfig = config()->get('i18n');
+                    if (!is_null($translateConfig)) {
+                        /** @var array $translateConfig */
+                        $translate->setTranslateDir($translateConfig['language_dir'] ?? '')
+                            ->setLocale($translateConfig['language'] ?? '');
+
+                        if ((bool)config()->get('i18n.is_rtl') === true) {
+                            $translate->itIsRTL();
+                        }
+                    }
+
+                    return $translate;
+                },
+            ]);
+            // ready to build
+            $containerInstance = $builder->build();
+        }
+        return $containerInstance;
+//        return Container::getInstance();
     }
 }
 
@@ -73,14 +128,6 @@ if (!function_exists('emitter')) {
 if (!function_exists('cryptographer')) {
     function cryptographer(): Crypt
     {
-        if (!\container()->has('cryptographer/class')) {
-            // crypt class
-            \container()->set('cryptographer/class', function () {
-                return new Crypt(\config()->get('security.main_key'),
-                    \config()->get('security.assured_key'));
-            });
-        }
-
         return \container()->get('cryptographer/class');
     }
 }
@@ -88,13 +135,6 @@ if (!function_exists('cryptographer')) {
 if (!function_exists('session')) {
     function session(): Session
     {
-        if (!\container()->has(Session::class)) {
-            // session class
-            \container()->set(Session::class, function () {
-                return new Session(\cryptographer());
-            });
-        }
-
         return \container()->get(Session::class);
     }
 }
@@ -102,13 +142,6 @@ if (!function_exists('session')) {
 if (!function_exists('cookie')) {
     function cookie(): Cookie
     {
-        if (!\container()->has(Cookie::class)) {
-            // cookie class
-            \container()->set(Cookie::class, function () {
-                return new Cookie(\cryptographer());
-            });
-        }
-
         return \container()->get(Cookie::class);
     }
 }
@@ -135,25 +168,6 @@ if (!function_exists('captcha')) {
 if (!function_exists('translate')) {
     function translate(): Translate
     {
-        if (!\container()->has(Translate::class)) {
-            // translator class
-            \container()->set(Translate::class, function () {
-                $translate = new Translate();
-                $translateConfig = config()->get('i18n');
-                if (!is_null($translateConfig)) {
-                    /** @var array $translateConfig */
-                    $translate->setTranslateDir($translateConfig['language_dir'] ?? '')
-                        ->setLocale($translateConfig['language'] ?? '');
-
-                    if ((bool)config()->get('i18n.is_rtl') === true) {
-                        $translate->itIsRTL();
-                    }
-                }
-
-                return $translate;
-            });
-        }
-
         return \container()->get(Translate::class);
     }
 }
@@ -161,14 +175,6 @@ if (!function_exists('translate')) {
 if (!function_exists('cart')) {
     function cart(): Cart
     {
-        if (!\container()->has(Cart::class)) {
-            // cart class
-            \container()->set(Cart::class, function (Container $resolver) {
-                $cookie = $resolver->get(Cookie::class);
-                return new Cart(\connector()->getPDO(), $cookie, 0, \config()->get('cart.structure'));
-            });
-        }
-
         return \container()->get(Cart::class);
     }
 }
@@ -176,13 +182,6 @@ if (!function_exists('cart')) {
 if (!function_exists('hit_counter')) {
     function hit_counter(): HitCounter
     {
-        if (!\container()->has(HitCounter::class)) {
-            // hit counter class
-            \container()->set(HitCounter::class, function () {
-                return new HitCounter(\connector()->getPDO(), \config()->get('hit.structure'));
-            });
-        }
-
         return \container()->get(HitCounter::class);
     }
 }

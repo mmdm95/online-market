@@ -387,6 +387,9 @@
                 image: 'inp-add-pay-method-img',
                 title: 'inp-add-pay-method-title',
                 method: 'inp-add-pay-method-method',
+                sadadMerchant: 'inp-add-pay-method-sadad-merchant',
+                sadadTerminal: 'inp-add-pay-method-sadad-terminal',
+                sadadKey: 'inp-add-pay-method-sadad-key',
                 behPardakhtTerminal: 'inp-add-pay-method-beh-pardakht-terminal',
                 behPardakhtUsername: 'inp-add-pay-method-beh-pardakht-username',
                 behPardakhtPassword: 'inp-add-pay-method-beh-pardakht-password',
@@ -402,6 +405,9 @@
                 image: 'inp-edit-pay-method-img',
                 title: 'inp-edit-pay-method-title',
                 method: 'inp-edit-pay-method-method',
+                sadadMerchant: 'inp-edit-pay-method-sadad-merchant',
+                sadadTerminal: 'inp-edit-pay-method-sadad-terminal',
+                sadadKey: 'inp-edit-pay-method-sadad-key',
                 behPardakhtTerminal: 'inp-edit-pay-method-beh-pardakht-terminal',
                 behPardakhtUsername: 'inp-edit-pay-method-beh-pardakht-username',
                 behPardakhtPassword: 'inp-edit-pay-method-beh-pardakht-password',
@@ -1045,7 +1051,7 @@
                 title: {
                     presence: {
                         allowEmpty: false,
-                        message: '^' + 'دسته‌بندی را انتخاب کنید.',
+                        message: '^' + 'عنوان را وارد کنید.',
                     },
                     length: {
                         maximum: 300,
@@ -1054,14 +1060,14 @@
                 },
                 url: {
                     format: {
-                        pattern: /[a-zA-Z-_\/]+/,
-                        message: '^' + 'آدرس صفحه باید از حروف انگلیسی، خط تیره، آندرلاین و اسلش تشکیل شده باشد.',
+                        pattern: /[a-zA-Z0-9-_\/]+/,
+                        message: '^' + 'آدرس صفحه باید از حروف و اعداد انگلیسی، خط تیره، آندرلاین و اسلش تشکیل شده باشد.',
                     },
                 },
                 desc: {
                     presence: {
                         allowEmpty: false,
-                        message: '^' + 'دسته‌بندی را انتخاب کنید.',
+                        message: '^' + 'توضیحات را وارد کنید.',
                     },
                 },
             },
@@ -1069,7 +1075,7 @@
                 title: {
                     presence: {
                         allowEmpty: false,
-                        message: '^' + 'دسته‌بندی را انتخاب کنید.',
+                        message: '^' + 'عنوان را وارد کنید.',
                     },
                     length: {
                         maximum: 300,
@@ -1078,14 +1084,14 @@
                 },
                 url: {
                     format: {
-                        pattern: /[a-zA-Z-_\/]+/,
-                        message: '^' + 'آدرس صفحه باید از حروف انگلیسی، خط تیره، آندرلاین و اسلش تشکیل شده باشد.',
+                        pattern: /[a-zA-Z0-9-_\/]+/,
+                        message: '^' + 'آدرس صفحه باید از حروف و اعداد انگلیسی، خط تیره، آندرلاین و اسلش تشکیل شده باشد.',
                     },
                 },
                 desc: {
                     presence: {
                         allowEmpty: false,
-                        message: '^' + 'دسته‌بندی را انتخاب کنید.',
+                        message: '^' + 'توضیحات را وارد کنید.',
                     },
                 },
             },
@@ -1713,7 +1719,9 @@
             addCategoryImageId = null,
             editCategoryImageId = null,
             editSecurityQuestionId = null,
-            editDepositTypeId = null;
+            editDepositTypeId = null,
+            //-----
+            switcheryElements = [];
 
         admin = new window.TheAdmin();
 
@@ -2010,7 +2018,7 @@
 
             try {
                 var successful = document.execCommand('copy');
-                if(!successful) {
+                if (!successful) {
                     console.warning('Oops, unable to copy');
                 }
             } catch (err) {
@@ -2019,6 +2027,7 @@
 
             document.body.removeChild(textArea);
         }
+
         //-----------------------------------------------------------------
 
         $('.copy-to-clipboard').on('click' + variables.namespace, function () {
@@ -2185,9 +2194,9 @@
                                     drawCallback(json);
                                 },
                                 // for debugging
-                                // "error": function (err) {
-                                //     console.log(err);
-                                // },
+                                "error": function (err) {
+                                    console.log(err);
+                                },
                             });
                         } else {
                             var json = $.extend(true, {}, cacheLastJson);
@@ -2467,7 +2476,7 @@
                 var elems = Array.prototype.slice.call(document.querySelectorAll('.form-check-input-switchery'));
                 elems.forEach(function (html) {
                     if (!$(html).attr('data-switchery')) {
-                        var switchery = new Switchery(html);
+                        switcheryElements[html] = new Switchery(html);
                     }
                 });
             }
@@ -3183,6 +3192,30 @@
             }
         });
 
+        function switcheryStatusChange(status, pub) {
+            if (core.isChecked(pub)) {
+                if (!status.is(':checked')) {
+                    status
+                        .parent()
+                        .find('.switchery')
+                        .click();
+                }
+                status
+                    .attr('checked', 'checked')
+                    .prop('checked', 'checked');
+            } else {
+                if (status.is(':checked')) {
+                    status
+                        .parent()
+                        .find('.switchery')
+                        .click();
+                }
+                status
+                    .removeAttr('checked')
+                    .prop('checked', false);
+            }
+        }
+
         /**
          * @param el
          * @param image
@@ -3374,19 +3407,18 @@
             $(variables.elements.editFaq.form).get(0).reset();
             if (id && editModal.length) {
                 admin.request(variables.url.faq.get + '/' + id, 'get', function () {
-                    var _ = this;
+                    var
+                        _ = this,
+                        status = editModal.find('[name="' + variables.elements.editFaq.inputs.status + '"]');
                     if (core.objSize(_.data)) {
                         currentTable = table;
                         editFAQId = id;
                         //-----
                         editModal.find('[name="' + variables.elements.editFaq.inputs.question + '"]').val(_.data['question']);
-                        editModal.find('[name="' + variables.elements.editFaq.inputs.answer + '"]').val(_.data['answer']);
+                        editModal.find('[name="' + variables.elements.editFaq.inputs.answer + '"]').html(_.data['answer']);
                         editModal.find('[name="' + variables.elements.editFaq.inputs.tags + '"]').val(_.data['tags']);
-                        if (core.isChecked(_.data['publish'])) {
-                            editModal.find('[name="' + variables.elements.editFaq.inputs.status + '"]')
-                                .attr('checked', 'checked')
-                                .prop('checked', 'checked');
-                        }
+                        switcheryStatusChange(status, _.data['publish']);
+                        initializeAllPlugins();
                     }
                 });
             }
@@ -3529,12 +3561,15 @@
             $(variables.elements.editSecurityQuestion.form).get(0).reset();
             if (id && editModal.length) {
                 admin.request(variables.url.securityQuestion.get + '/' + id, 'get', function () {
-                    var _ = this;
+                    var
+                        _ = this,
+                        status = editModal.find('[name="' + variables.elements.editSecurityQuestion.inputs.status + '"]');
                     if (core.objSize(_.data)) {
                         currentTable = table;
                         editSecurityQuestionId = id;
                         //-----
                         editModal.find('[name="' + variables.elements.editSecurityQuestion.inputs.question + '"]').val(_.data['question']);
+                        switcheryStatusChange(status, _.data['publish']);
                     }
                 });
             }
@@ -3942,6 +3977,7 @@
                 admin.hideLoader(loaderId);
                 // clear element after success
                 $(variables.elements.addFaq.form).get(0).reset();
+                initializeAllPlugins();
                 createDatatable();
                 //-----
                 admin.toasts.toast(this.data, {
@@ -3974,6 +4010,7 @@
                     admin.hideLoader(loaderId);
                     // clear element after success
                     $(variables.elements.editFaq.form).get(0).reset();
+                    initializeAllPlugins();
                     editFAQId = null;
                     if (currentTable) {
                         $(currentTable).DataTable().ajax.reload();
@@ -4126,7 +4163,7 @@
         // Edit INSTAGRAM IMAGE FORM
         //---------------------------------------------------------------
         admin.forms.submitForm('editInstagramImage', constraints.editInstagramImage, function (values) {
-            if (editSlideId) {
+            if (editInstagramImageId) {
                 // do ajax
                 if (createLoader) {
                     createLoader = false;
@@ -4170,6 +4207,11 @@
                 createLoader = false;
                 loaderId = admin.showLoader();
             }
+
+            // for (var pair of values.entries()) {
+            //     console.log(pair[0] + ', ' + pair[1]);
+            // }
+
             admin.request(variables.url.newsletter.add, 'post', function () {
                 admin.hideLoader(loaderId);
                 // clear element after success
@@ -4434,8 +4476,19 @@
             }
             admin.request(variables.url.securityQuestion.add, 'post', function () {
                 admin.hideLoader(loaderId);
+                var status, prevStat;
+                status = $(variables.elements.addSecurityQuestion.form)
+                    .find('[name="' + variables.elements.addSecurityQuestion.inputs.status + '"]');
+                prevStat = status.is(':checked');
                 // clear element after success
                 $(variables.elements.addSecurityQuestion.form).get(0).reset();
+                if (status.is(':checked') && !prevStat) {
+                    status
+                        .parent()
+                        .find('.switchery')
+                        .click()
+                        .click();
+                }
                 createDatatable();
                 //-----
                 admin.toasts.toast(this.data, {
@@ -4466,8 +4519,19 @@
                 }
                 admin.request(variables.url.securityQuestion.edit + '/' + editSecurityQuestionId, 'post', function () {
                     admin.hideLoader(loaderId);
+                    var status, prevStat;
+                    status = $(variables.elements.editSecurityQuestion.form)
+                        .find('[name="' + variables.elements.editSecurityQuestion.inputs.status + '"]');
+                    prevStat = status.is(':checked');
                     // clear element after success
                     $(variables.elements.editSecurityQuestion.form).get(0).reset();
+                    if (status.is(':checked') && !prevStat) {
+                        status
+                            .parent()
+                            .find('.switchery')
+                            .click()
+                            .click();
+                    }
                     editSecurityQuestionId = null;
                     if (currentTable) {
                         $(currentTable).DataTable().ajax.reload();

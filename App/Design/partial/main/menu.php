@@ -105,7 +105,8 @@
                         <div class="search_wrap">
                             <span class="close-search"><i class="ion-ios-close-empty"></i></span>
                             <form action="<?= url('home.search')->getRelativeUrlTrimmed(); ?>" method="get">
-                                <input type="text" placeholder="جستجو" class="form-control" id="search_input">
+                                <input type="text" autocomplete="off" placeholder="جستجو"
+                                       class="form-control" id="search_input" name="q">
                                 <button type="submit" class="search_icon"><i class="ion-ios-search-strong"></i></button>
                             </form>
                         </div>

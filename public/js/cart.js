@@ -97,10 +97,11 @@
 
             /**
              * @param code
+             * @param [successCallback]
              */
-            _.remove = function (code) {
+            _.remove = function (code, successCallback) {
                 shop.request(variables.url.cart.remove + '/' + code, 'delete', function () {
-                    // do other stuffs to handle data items
+                    successCallback.call(this);
                 }, {}, true);
             };
 
@@ -121,8 +122,13 @@
                 btn = $(btn);
                 code = btn.attr(dataItemCode);
                 if (code) {
-                    cart.remove(code, function () {
-                        cart.getNPlaceCart();
+                    shop.toasts.confirm('آیا مطمئن هستید؟', function () {
+                        cart.remove(code, function () {
+                            shop.toasts.toast(self.data, {
+                                type: variables.toasts.types.success,
+                            });
+                            cart.getNPlaceCart();
+                        });
                     });
                 } else {
                     shop.toasts.toast('لطفا محصول مورد نظر خود را انتخاب کنید.', {
@@ -201,10 +207,16 @@
 
                 if (null === qnt) {
                     cart.add(code, function () {
+                        shop.toasts.toast(this.data, {
+                            type: variables.toasts.types.success,
+                        });
                         cart.getNPlaceCart();
                     });
                 } else {
                     cart.update(code, qnt, function () {
+                        shop.toasts.toast(this.data, {
+                            type: variables.toasts.types.success,
+                        });
                         cart.getNPlaceCart();
                     });
                 }

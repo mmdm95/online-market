@@ -3,10 +3,6 @@
 namespace App\Logic\SMS;
 
 use App\Logic\Interfaces\ICustomSMS as ISMS;
-use Sim\Container\Exceptions\MethodNotFoundException;
-use Sim\Container\Exceptions\ParameterHasNoDefaultValueException;
-use Sim\Container\Exceptions\ServiceNotFoundException;
-use Sim\Container\Exceptions\ServiceNotInstantiableException;
 use Sim\SMS\Exceptions\SMSException;
 use Sim\SMS\Factories\NiazPardaz;
 use Sim\SMS\MessageProvider;
@@ -15,12 +11,12 @@ class CommonSMS implements ISMS
 {
     /**
      * {@inheritdoc}
-     * @throws MethodNotFoundException
-     * @throws ParameterHasNoDefaultValueException
+     * @param array $numbers
+     * @param string $body
+     * @return bool
      * @throws SMSException
-     * @throws ServiceNotFoundException
-     * @throws ServiceNotInstantiableException
-     * @throws \ReflectionException
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
      */
     public function send(array $numbers, string $body): bool
     {

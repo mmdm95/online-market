@@ -149,7 +149,8 @@
         inpQuantity.on('input', function (e) {
             var count;
             count = $(this).val();
-            count = count && !isNaN(parseInt(val, 10)) ? parseInt(count, 10) : 0;
+            count = count && !isNaN(parseInt(count, 10)) ? parseInt(count, 10) : 0;
+
             if (count > 0) {
                 addToCartBtn.attr('data-cart-item-quantity', count);
             }

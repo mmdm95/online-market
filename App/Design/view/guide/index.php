@@ -61,7 +61,7 @@
                 </div>
 
                 <div class="list-feed-item border-purple-400">
-                    لینک صفحه ثبت نام:
+                    لینک صفحه ورود:
                     <a href="<?= url('home.login')->getRelativeUrlTrimmed(); ?>" dir="ltr" target="_blank">
                         login
                     </a>
@@ -266,7 +266,7 @@
                                 -
                                 مقدار
                                 <code>1</code>
-                                به معنای موجود ویژه محصول می‌باشد
+                                به معنای ویژه بودن محصول می‌باشد
                             </li>
                             <li>
                                 <strong dir="ltr">sort</strong>

@@ -16,8 +16,8 @@
         </div>
 
         <table class="table table-bordered table-hover datatable-highlight"
-               data-columne='[{"data":"id"},{"data":"mobile"},{"data":"created_at"},{"data":"operations"}]'
-               data-ajax-url="<?= url('')->getRelativeUrlTrimmed(); ?>">
+               data-columns='[{"data":"id"},{"data":"mobile"},{"data":"created_at"},{"data":"operations"}]'
+               data-ajax-url="<?= url('admin.newsletter.dt.view')->getRelativeUrlTrimmed(); ?>">
             <thead>
             <tr>
                 <th>#</th>

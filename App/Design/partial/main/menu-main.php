@@ -25,7 +25,8 @@
                                     </select>
                                 </div>
                             </div>
-                            <input class="form-control" placeholder="جستجوی محصول ..." required="required" type="text">
+                            <input class="form-control" autocomplete="off" placeholder="جستجوی محصول ..."
+                                   required="required" type="text" name="q">
                             <button type="submit" class="search_btn"><i class="linearicons-magnifier"></i></button>
                         </div>
                     </form>

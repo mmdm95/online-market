@@ -6,10 +6,6 @@ use App\Logic\Interfaces\IPageForm;
 use App\Logic\Models\PaymentMethodModel;
 use App\Logic\Validations\ExtendedValidator;
 use Sim\Auth\DBAuth;
-use Sim\Container\Exceptions\MethodNotFoundException;
-use Sim\Container\Exceptions\ParameterHasNoDefaultValueException;
-use Sim\Container\Exceptions\ServiceNotFoundException;
-use Sim\Container\Exceptions\ServiceNotInstantiableException;
 use Sim\Exceptions\ConfigManager\ConfigNotRegisteredException;
 use Sim\Form\Exceptions\FormException;
 use Sim\Interfaces\IFileNotExistsException;
@@ -20,15 +16,13 @@ class EditPaymentMethodForm implements IPageForm
 {
     /**
      * {@inheritdoc}
-     * @throws FormException
-     * @throws MethodNotFoundException
-     * @throws ParameterHasNoDefaultValueException
-     * @throws ServiceNotFoundException
-     * @throws ServiceNotInstantiableException
-     * @throws \ReflectionException
+     * @return array
      * @throws ConfigNotRegisteredException
+     * @throws FormException
      * @throws IFileNotExistsException
      * @throws IInvalidVariableNameException
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
      */
     public function validate(): array
     {
@@ -44,6 +38,9 @@ class EditPaymentMethodForm implements IPageForm
                 'inp-edit-pay-method-img' => 'تصویر',
                 'inp-edit-pay-method-title' => 'عنوان',
                 'inp-edit-pay-method-method' => 'نوع روش پرداخت',
+                'inp-edit-pay-method-sadad-key' => 'کلید سداد',
+                'inp-edit-pay-method-sadad-terminal' => 'شماره ترمینال سداد',
+                'inp-edit-pay-method-sadad-merchant' => 'شماره مرچنت سداد',
                 'inp-edit-pay-method-beh-pardakht-terminal' => 'شماره ترمینال به پرداخت',
                 'inp-edit-pay-method-beh-pardakht-username' => 'نام کاربری به پرداخت',
                 'inp-edit-pay-method-beh-pardakht-password' => 'کلمه عبور به پرداخت',
@@ -72,42 +69,47 @@ class EditPaymentMethodForm implements IPageForm
             ->stopValidationAfterFirstError(false)
             ->required()
             ->stopValidationAfterFirstError(true)
-            ->isIn(METHOD_TYPES, '{alias} ' . 'وارد شده نامعتبر است.');
+            ->isIn(array_keys(METHOD_TYPES), '{alias} ' . 'وارد شده نامعتبر است.');
 
-        $method = $validator->getFieldValue('inp-edit-pay-method-method');
-        switch ($method) {
-            case METHOD_TYPE_GATEWAY_BEH_PARDAKHT:
-                $validator
-                    ->setFields([
-                        'inp-edit-pay-method-beh-pardakht-terminal',
-                        'inp-edit-pay-method-beh-pardakht-username',
-                        'inp-edit-pay-method-beh-pardakht-password',
-                    ])
-                    ->stopValidationAfterFirstError(false)
-                    ->required()
-                    ->stopValidationAfterFirstError(true);
-                break;
-            case METHOD_TYPE_GATEWAY_IDPAY:
-                $validator
-                    ->setFields('inp-edit-pay-method-idpay-api-key')
-                    ->stopValidationAfterFirstError(false)
-                    ->required()
-                    ->stopValidationAfterFirstError(true);
-                break;
-            case METHOD_TYPE_GATEWAY_MABNA:
-                $validator
-                    ->setFields('inp-edit-pay-method-mabna-terminal')
-                    ->stopValidationAfterFirstError(false)
-                    ->required()
-                    ->stopValidationAfterFirstError(true);
-                break;
-            case METHOD_TYPE_GATEWAY_ZARINPAL:
-                $validator
-                    ->setFields('inp-edit-pay-method-zarinpal-merchant')
-                    ->stopValidationAfterFirstError(false)
-                    ->required()
-                    ->stopValidationAfterFirstError(true);
-                break;
+        $method = (int)$validator->getFieldValue('inp-edit-pay-method-method');
+        if ($method == METHOD_TYPE_GATEWAY_SADAD) {
+            $validator
+                ->setFields([
+                    'inp-edit-pay-method-sadad-key',
+                    'inp-edit-pay-method-sadad-terminal',
+                    'inp-edit-pay-method-sadad-merchant',
+                ])
+                ->stopValidationAfterFirstError(false)
+                ->required()
+                ->stopValidationAfterFirstError(true);
+        } elseif ($method == METHOD_TYPE_GATEWAY_BEH_PARDAKHT) {
+            $validator
+                ->setFields([
+                    'inp-edit-pay-method-beh-pardakht-terminal',
+                    'inp-edit-pay-method-beh-pardakht-username',
+                    'inp-edit-pay-method-beh-pardakht-password',
+                ])
+                ->stopValidationAfterFirstError(false)
+                ->required()
+                ->stopValidationAfterFirstError(true);
+        } elseif ($method == METHOD_TYPE_GATEWAY_IDPAY) {
+            $validator
+                ->setFields('inp-edit-pay-method-idpay-api-key')
+                ->stopValidationAfterFirstError(false)
+                ->required()
+                ->stopValidationAfterFirstError(true);
+        } elseif ($method == METHOD_TYPE_GATEWAY_MABNA) {
+            $validator
+                ->setFields('inp-edit-pay-method-mabna-terminal')
+                ->stopValidationAfterFirstError(false)
+                ->required()
+                ->stopValidationAfterFirstError(true);
+        } elseif ($method == METHOD_TYPE_GATEWAY_ZARINPAL) {
+            $validator
+                ->setFields('inp-edit-pay-method-zarinpal-merchant')
+                ->stopValidationAfterFirstError(false)
+                ->required()
+                ->stopValidationAfterFirstError(true);
         }
 
         /**
@@ -143,11 +145,9 @@ class EditPaymentMethodForm implements IPageForm
 
     /**
      * {@inheritdoc}
-     * @throws MethodNotFoundException
-     * @throws ParameterHasNoDefaultValueException
-     * @throws ServiceNotFoundException
-     * @throws ServiceNotInstantiableException
-     * @throws \ReflectionException
+     * @return bool
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
      */
     public function store(): bool
     {
@@ -167,51 +167,59 @@ class EditPaymentMethodForm implements IPageForm
         try {
             $image = input()->post('inp-edit-pay-method-img', '')->getValue();
             $title = input()->post('inp-edit-pay-method-title', '')->getValue();
-            $method = input()->post('inp-edit-pay-method-method', '')->getValue();
+            $method = (int)input()->post('inp-edit-pay-method-method', '')->getValue();
             $pub = input()->post('inp-edit-pay-method-status', '')->getValue();
             $id = session()->getFlash('pay-method-curr-id', null);
             if (is_null($id)) return false;
 
             $meta = '';
-            switch ($method) {
-                case METHOD_TYPE_GATEWAY_BEH_PARDAKHT:
-                    $behTerminal = input()->post('inp-edit-pay-method-beh-pardakht-terminal', '')->getValue();
-                    $behUsername = input()->post('inp-edit-pay-method-beh-pardakht-username', '')->getValue();
-                    $behPassword = input()->post('inp-edit-pay-method-beh-pardakht-password', '')->getValue();
-                    //
-                    $meta = json_encode([
-                        'terminal' => $behTerminal,
-                        'username' => $behUsername,
-                        'password' => $behPassword,
-                    ]);
-                    break;
-                case METHOD_TYPE_GATEWAY_IDPAY:
-                    $idpayApiKey = input()->post('inp-edit-pay-method-idpay-api-key', '')->getValue();
-                    //
-                    $meta = json_encode([
-                        'api_key' => $idpayApiKey,
-                    ]);
-                    break;
-                case METHOD_TYPE_GATEWAY_MABNA:
-                    $mabnaTerminal = input()->post('inp-edit-pay-method-mabna-terminal', '')->getValue();
-                    //
-                    $meta = json_encode([
-                        'terminal' => $mabnaTerminal,
-                    ]);
-                    break;
-                case METHOD_TYPE_GATEWAY_ZARINPAL:
-                    $zarinpalMerchant = input()->post('inp-edit-pay-method-zarinpal-merchant', '')->getValue();
-                    //
-                    $meta = json_encode([
-                        'merchant' => $zarinpalMerchant,
-                    ]);
-                    break;
+            if ($method == METHOD_TYPE_GATEWAY_SADAD) {
+                $sadadKey = input()->post('inp-edit-pay-method-sadad-key', '')->getValue();
+                $sadadTerminal = input()->post('inp-edit-pay-method-sadad-terminal', '')->getValue();
+                $sadadMerchant = input()->post('inp-edit-pay-method-sadad-merchant', '')->getValue();
+                //
+                $meta = json_encode([
+                    'key' => $sadadKey,
+                    'terminal' => $sadadTerminal,
+                    'merchant' => $sadadMerchant,
+                ]);
+            } elseif ($method == METHOD_TYPE_GATEWAY_BEH_PARDAKHT) {
+                $behTerminal = input()->post('inp-edit-pay-method-beh-pardakht-terminal', '')->getValue();
+                $behUsername = input()->post('inp-edit-pay-method-beh-pardakht-username', '')->getValue();
+                $behPassword = input()->post('inp-edit-pay-method-beh-pardakht-password', '')->getValue();
+                //
+                $meta = json_encode([
+                    'terminal' => $behTerminal,
+                    'username' => $behUsername,
+                    'password' => $behPassword,
+                ]);
+            } elseif ($method == METHOD_TYPE_GATEWAY_IDPAY) {
+                $idpayApiKey = input()->post('inp-edit-pay-method-idpay-api-key', '')->getValue();
+                //
+                $meta = json_encode([
+                    'api_key' => $idpayApiKey,
+                ]);
+            } elseif ($method == METHOD_TYPE_GATEWAY_MABNA) {
+                $mabnaTerminal = input()->post('inp-edit-pay-method-mabna-terminal', '')->getValue();
+                //
+                $meta = json_encode([
+                    'terminal' => $mabnaTerminal,
+                ]);
+            } elseif ($method == METHOD_TYPE_GATEWAY_ZARINPAL) {
+                $zarinpalMerchant = input()->post('inp-edit-pay-method-zarinpal-merchant', '')->getValue();
+                //
+                $meta = json_encode([
+                    'merchant' => $zarinpalMerchant,
+                ]);
             }
 
             // meta should have value
             if (empty($meta)) {
                 return false;
             }
+
+            // encrypt meta to protect information
+            $meta = cryptographer()->encrypt($meta);
 
             return $payModel->update([
                 'title' => $xss->xss_clean(trim($title)),

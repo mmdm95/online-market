@@ -135,7 +135,7 @@
 
                     <div class="modal-footer">
                         <button type="button" class="btn btn-link" data-dismiss="modal">بستن</button>
-                        <button type="submit" class="btn btn-success">افزودن تصویر</button>
+                        <button type="submit" class="btn btn-success">ویرایش تصویر</button>
                     </div>
                 </form>
             </div>

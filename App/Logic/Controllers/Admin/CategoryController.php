@@ -14,15 +14,12 @@ use App\Logic\Handlers\ResourceHandler;
 use App\Logic\Interfaces\IDatatableController;
 use App\Logic\Models\BaseModel;
 use App\Logic\Models\CategoryModel;
+use App\Logic\Models\Model;
 use Jenssegers\Agent\Agent;
 use ReflectionException;
 use Sim\Auth\DBAuth;
 use Sim\Auth\Interfaces\IAuth;
 use Sim\Auth\Interfaces\IDBException;
-use Sim\Container\Exceptions\MethodNotFoundException;
-use Sim\Container\Exceptions\ParameterHasNoDefaultValueException;
-use Sim\Container\Exceptions\ServiceNotFoundException;
-use Sim\Container\Exceptions\ServiceNotInstantiableException;
 use Sim\Event\Interfaces\IEvent;
 use Sim\Exceptions\ConfigManager\ConfigNotRegisteredException;
 use Sim\Exceptions\Mvc\Controller\ControllerException;
@@ -36,15 +33,13 @@ class CategoryController extends AbstractAdminController implements IDatatableCo
      * @return string
      * @throws ConfigNotRegisteredException
      * @throws ControllerException
+     * @throws IDBException
      * @throws IFileNotExistsException
      * @throws IInvalidVariableNameException
-     * @throws MethodNotFoundException
-     * @throws ParameterHasNoDefaultValueException
      * @throws PathNotRegisteredException
      * @throws ReflectionException
-     * @throws ServiceNotFoundException
-     * @throws ServiceNotInstantiableException
-     * @throws IDBException
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
      */
     public function view()
     {
@@ -64,15 +59,13 @@ class CategoryController extends AbstractAdminController implements IDatatableCo
      * @return string
      * @throws ConfigNotRegisteredException
      * @throws ControllerException
+     * @throws IDBException
      * @throws IFileNotExistsException
      * @throws IInvalidVariableNameException
-     * @throws MethodNotFoundException
-     * @throws ParameterHasNoDefaultValueException
      * @throws PathNotRegisteredException
      * @throws ReflectionException
-     * @throws ServiceNotFoundException
-     * @throws ServiceNotInstantiableException
-     * @throws IDBException
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
      */
     public function add()
     {
@@ -107,15 +100,13 @@ class CategoryController extends AbstractAdminController implements IDatatableCo
      * @return string
      * @throws ConfigNotRegisteredException
      * @throws ControllerException
+     * @throws IDBException
      * @throws IFileNotExistsException
      * @throws IInvalidVariableNameException
-     * @throws MethodNotFoundException
-     * @throws ParameterHasNoDefaultValueException
      * @throws PathNotRegisteredException
      * @throws ReflectionException
-     * @throws ServiceNotFoundException
-     * @throws ServiceNotInstantiableException
-     * @throws IDBException
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
      */
     public function edit($id)
     {
@@ -160,12 +151,9 @@ class CategoryController extends AbstractAdminController implements IDatatableCo
 
     /**
      * @param $id
-     * @throws ReflectionException
-     * @throws MethodNotFoundException
-     * @throws ParameterHasNoDefaultValueException
-     * @throws ServiceNotFoundException
-     * @throws ServiceNotInstantiableException
      * @throws IDBException
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
      */
     public function remove($id)
     {
@@ -184,6 +172,22 @@ class CategoryController extends AbstractAdminController implements IDatatableCo
          */
         $agent = container()->get(Agent::class);
         if (!$agent->isRobot()) {
+            emitter()->addListener('remove.general.ajax:success', function (ResourceHandler $recHandler) use ($id) {
+                /**
+                 * @var Model $model
+                 */
+                $model = container()->get(Model::class);
+                $update = $model->update();
+                // there is no need to "where" clause because we want to update all parents ids
+                $update
+                    ->table(BaseModel::TBL_CATEGORIES)
+                    // replace regex of id with nothing in all categories
+                    // old: (,(?<![0-9])id(?![0-9])|(?<![0-9])id(?![0-9])|(?<![0-9])id(?![0-9]),)
+                    // new: ([^0-9]|^)id([^0-9]|$)
+                    // will match "id", ",id", "id," literally
+                    ->set('all_parents_id', 'REGEXP_REPLACE("all_parents_id", ([^0-9]|^)' . preg_quote($id) . '([^0-9]|$), ",")');
+                $model->execute($update);
+            });
             $handler = new GeneralAjaxRemoveHandler();
             $resourceHandler = $handler->handle(BaseModel::TBL_CATEGORIES, $id, 'deletable=:del', ['del' => DB_YES]);
         } else {
@@ -199,11 +203,8 @@ class CategoryController extends AbstractAdminController implements IDatatableCo
     /**
      * @param $id
      * @throws IDBException
-     * @throws MethodNotFoundException
-     * @throws ParameterHasNoDefaultValueException
-     * @throws ReflectionException
-     * @throws ServiceNotFoundException
-     * @throws ServiceNotInstantiableException
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
      */
     public function menuStatusChange($id)
     {
@@ -254,11 +255,8 @@ class CategoryController extends AbstractAdminController implements IDatatableCo
      * @param array $_
      * @return void
      * @throws IDBException
-     * @throws MethodNotFoundException
-     * @throws ParameterHasNoDefaultValueException
-     * @throws ReflectionException
-     * @throws ServiceNotFoundException
-     * @throws ServiceNotInstantiableException
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
      */
     public function getPaginatedDatatable(...$_): void
     {

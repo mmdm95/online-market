@@ -84,12 +84,6 @@ $validator = form_validator();
         </div>
     </div>
 
-    <!-- Mini file manager modal -->
-    <?php load_partial('file-manager/modal-efm', [
-        'the_options' => $the_options ?? [],
-    ]); ?>
-    <!-- /mini file manager modal -->
-
     <?php load_partial('editor/browser-tiny-func'); ?>
 </div>
 <!-- /content area -->

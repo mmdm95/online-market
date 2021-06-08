@@ -1,3 +1,8 @@
+<?php
+
+use Sim\Utils\StringUtil;
+
+?>
 <a class="nav-link cart_trigger"
    href="#"
    data-toggle="dropdown">
@@ -10,8 +15,8 @@
         <ul class="cart_list">
             <?php foreach ($items ?? [] as $item): ?>
                 <li>
-                    <a href="javascript:void(0);" class="__remove_from_cart_btn"
-                       data-cart-item-code<?= $item['code']; ?>>
+                    <a href="javascript:void(0);" class="__remove_from_cart_btn item_remove"
+                       data-cart-item-code="<?= $item['code']; ?>">
                         <i class="ion-close"></i>
                     </a>
                     <?php if (isset($item['title']) || isset($item['image'])): ?>
@@ -27,9 +32,9 @@
                         </a>
                     <?php endif; ?>
                     <span class="cart_quantity">
-                        <?= $item['qnt']; ?>
+                        <?= local_number(number_format($item['qnt'])); ?>
                         عدد
-                        <?= number_format($item['qnt'] * (int)$item['price']); ?>
+                        <?= local_number(number_format($item['qnt'] * (int)$item['price'])); ?>
                         <span class="cart_amount">
                             <span class="price_symbole">تومان</span>
                         </span>
@@ -40,7 +45,7 @@
         <div class="cart_footer">
             <p class="cart_total">
                 <strong>جمع:</strong>
-                <?= local_number($total_amount ?? 0); ?>
+                <?= local_number(number_format(StringUtil::toEnglish($total_amount ?? 0))); ?>
                 <span class="cart_price"> <span class="price_symbole">تومان</span></span>
             </p>
             <p class="cart_buttons">

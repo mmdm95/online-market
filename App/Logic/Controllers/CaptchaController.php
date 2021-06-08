@@ -7,20 +7,13 @@ use App\Logic\Handlers\ResourceHandler;
 use App\Logic\Utils\CaptchaUtil;
 use Sim\Captcha\Exceptions\CaptchaException;
 use Sim\Captcha\Interfaces\ICaptchaException;
-use Sim\Container\Exceptions\MethodNotFoundException;
-use Sim\Container\Exceptions\ParameterHasNoDefaultValueException;
-use Sim\Container\Exceptions\ServiceNotFoundException;
-use Sim\Container\Exceptions\ServiceNotInstantiableException;
 
 class CaptchaController extends AbstractHomeController
 {
     /**
-     * @throws \ReflectionException
      * @throws CaptchaException
-     * @throws MethodNotFoundException
-     * @throws ParameterHasNoDefaultValueException
-     * @throws ServiceNotFoundException
-     * @throws ServiceNotInstantiableException
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
      */
     public function generateCaptcha()
     {
@@ -37,12 +30,9 @@ class CaptchaController extends AbstractHomeController
     }
 
     /**
-     * @throws MethodNotFoundException
-     * @throws ParameterHasNoDefaultValueException
-     * @throws ServiceNotFoundException
-     * @throws ServiceNotInstantiableException
-     * @throws \ReflectionException
      * @throws ICaptchaException
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
      */
     public function verifyCaptcha()
     {

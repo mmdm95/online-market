@@ -12,12 +12,6 @@ use App\Logic\Helper as HelperDefinition;
 use Sim\ConfigManager\ConfigManager;
 use Sim\ConfigManager\ConfigManagerSingleton;
 
-use Sim\Container\Container;
-use Sim\Container\Exceptions\MethodNotFoundException;
-use Sim\Container\Exceptions\ParameterHasNoDefaultValueException;
-use Sim\Container\Exceptions\ServiceNotFoundException;
-use Sim\Container\Exceptions\ServiceNotInstantiableException;
-
 use Sim\Event\Emitter;
 
 use Sim\Handler\ErrorHandler;
@@ -36,6 +30,8 @@ use Sim\Logger\ILogger;
 use Sim\Logger\Logger;
 
 use Pecee\SimpleRouter\SimpleRouter as Router;
+
+use DI\Container as Container;
 
 use Dotenv\Dotenv;
 
@@ -79,15 +75,12 @@ class Bootstrap
      * @param bool $route_needed
      * @throws IFileNotExistsException
      * @throws IInvalidVariableNameException
-     * @throws MethodNotFoundException
-     * @throws ParameterHasNoDefaultValueException
-     * @throws ServiceNotFoundException
-     * @throws ServiceNotInstantiableException
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
      * @throws \Pecee\Http\Middleware\Exceptions\TokenMismatchException
      * @throws \Pecee\Http\Security\Exceptions\SecurityException
      * @throws \Pecee\SimpleRouter\Exceptions\HttpException
      * @throws \Pecee\SimpleRouter\Exceptions\NotFoundHttpException
-     * @throws \ReflectionException
      * @throws \Sim\Exceptions\ConfigManager\ConfigNotRegisteredException
      */
     public function __construct(bool $route_needed = true)
@@ -125,11 +118,8 @@ class Bootstrap
      *
      * @throws IFileNotExistsException
      * @throws IInvalidVariableNameException
-     * @throws MethodNotFoundException
-     * @throws ParameterHasNoDefaultValueException
-     * @throws ServiceNotFoundException
-     * @throws ServiceNotInstantiableException
-     * @throws \ReflectionException
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
      */
     protected function init()
     {
@@ -215,11 +205,6 @@ class Bootstrap
      * Load helpers that are not class but functions
      *
      * @throws IFileNotExistsException
-     * @throws MethodNotFoundException
-     * @throws ParameterHasNoDefaultValueException
-     * @throws ServiceNotFoundException
-     * @throws ServiceNotInstantiableException
-     * @throws \ReflectionException
      */
     protected function loadHelper()
     {
@@ -230,7 +215,7 @@ class Bootstrap
         /**
          * @var HelperDefinition $helper
          */
-        $helper = Container::getInstance()->get(HelperDefinition::class);
+        $helper = new HelperDefinition();
         $helpers = $helper->init();
         foreach ($helpers as $h) {
             if (is_string($h)) {
@@ -258,11 +243,8 @@ class Bootstrap
     /**
      * Custom error handler initialization
      *
-     * @throws MethodNotFoundException
-     * @throws ParameterHasNoDefaultValueException
-     * @throws ServiceNotFoundException
-     * @throws ServiceNotInstantiableException
-     * @throws \ReflectionException
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
      */
     protected function customErrorHandler()
     {
@@ -293,11 +275,8 @@ class Bootstrap
     }
 
     /**
-     * @throws MethodNotFoundException
-     * @throws ParameterHasNoDefaultValueException
-     * @throws ServiceNotFoundException
-     * @throws ServiceNotInstantiableException
-     * @throws \ReflectionException
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
      */
     protected function defineContainer()
     {
@@ -324,15 +303,12 @@ class Bootstrap
      *
      * @throws IFileNotExistsException
      * @throws IInvalidVariableNameException
-     * @throws MethodNotFoundException
-     * @throws ParameterHasNoDefaultValueException
-     * @throws ServiceNotFoundException
-     * @throws ServiceNotInstantiableException
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
      * @throws \Pecee\Http\Middleware\Exceptions\TokenMismatchException
      * @throws \Pecee\Http\Security\Exceptions\SecurityException
      * @throws \Pecee\SimpleRouter\Exceptions\HttpException
      * @throws \Pecee\SimpleRouter\Exceptions\NotFoundHttpException
-     * @throws \ReflectionException
      * @throws \Sim\Exceptions\ConfigManager\ConfigNotRegisteredException
      */
     protected function defineRoute()

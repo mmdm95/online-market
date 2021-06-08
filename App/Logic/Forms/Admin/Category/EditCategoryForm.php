@@ -3,38 +3,27 @@
 namespace App\Logic\Forms\Admin\Category;
 
 use App\Logic\Interfaces\IPageForm;
-use App\Logic\Models\BlogCategoryModel;
-use App\Logic\Models\BlogModel;
 use App\Logic\Models\CategoryModel;
-use App\Logic\Models\UserModel;
-use App\Logic\Utils\Jdf;
 use App\Logic\Validations\ExtendedValidator;
 use Sim\Auth\DBAuth;
-use Sim\Container\Exceptions\MethodNotFoundException;
-use Sim\Container\Exceptions\ParameterHasNoDefaultValueException;
-use Sim\Container\Exceptions\ServiceNotFoundException;
-use Sim\Container\Exceptions\ServiceNotInstantiableException;
 use Sim\Exceptions\ConfigManager\ConfigNotRegisteredException;
 use Sim\Form\Exceptions\FormException;
 use Sim\Form\FormValue;
 use Sim\Interfaces\IFileNotExistsException;
 use Sim\Interfaces\IInvalidVariableNameException;
-use Sim\Utils\StringUtil;
 use voku\helper\AntiXSS;
 
 class EditCategoryForm implements IPageForm
 {
     /**
      * {@inheritdoc}
-     * @throws FormException
-     * @throws MethodNotFoundException
-     * @throws ParameterHasNoDefaultValueException
-     * @throws ServiceNotFoundException
-     * @throws ServiceNotInstantiableException
-     * @throws \ReflectionException
+     * @return array
      * @throws ConfigNotRegisteredException
+     * @throws FormException
      * @throws IFileNotExistsException
      * @throws IInvalidVariableNameException
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
      */
     public function validate(): array
     {
@@ -128,11 +117,9 @@ class EditCategoryForm implements IPageForm
 
     /**
      * {@inheritdoc}
-     * @throws MethodNotFoundException
-     * @throws ParameterHasNoDefaultValueException
-     * @throws ServiceNotFoundException
-     * @throws ServiceNotInstantiableException
-     * @throws \ReflectionException
+     * @return bool
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
      */
     public function store(): bool
     {
@@ -156,7 +143,7 @@ class EditCategoryForm implements IPageForm
             $keywords = input()->post('inp-edit-category-keywords', '')->getValue();
             $priority = input()->post('inp-edit-category-priority', '')->getValue();
 
-            $parentInfo = $categoryModel->getFirst(['level'], 'id=:id', ['id' => $parent]);
+            $parentInfo = $categoryModel->getFirst(['all_parents_id', 'level'], 'id=:id', ['id' => $parent]);
             if ($parent == DEFAULT_OPTION_VALUE) {
                 $level = 1;
             } else {
@@ -169,6 +156,7 @@ class EditCategoryForm implements IPageForm
             return $categoryModel->update([
                 'name' => $xss->xss_clean($name),
                 'parent_id' => $parent ?: null,
+                'all_parents_id' => $parent ? (trim($parentInfo['all_parents_id'] . ',' . $parent, ',')) : '',
                 'keywords' => $xss->xss_clean($keywords),
                 'publish' => is_value_checked($pub) ? DB_YES : DB_NO,
                 'priority' => $xss->xss_clean($priority),

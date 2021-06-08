@@ -6,10 +6,6 @@ use App\Logic\Interfaces\IPageForm;
 use App\Logic\Models\CategoryModel;
 use App\Logic\Validations\ExtendedValidator;
 use Sim\Auth\DBAuth;
-use Sim\Container\Exceptions\MethodNotFoundException;
-use Sim\Container\Exceptions\ParameterHasNoDefaultValueException;
-use Sim\Container\Exceptions\ServiceNotFoundException;
-use Sim\Container\Exceptions\ServiceNotInstantiableException;
 use Sim\Exceptions\ConfigManager\ConfigNotRegisteredException;
 use Sim\Form\Exceptions\FormException;
 use Sim\Form\FormValue;
@@ -21,15 +17,13 @@ class AddCategoryForm implements IPageForm
 {
     /**
      * {@inheritdoc}
-     * @throws FormException
-     * @throws MethodNotFoundException
-     * @throws ParameterHasNoDefaultValueException
-     * @throws ServiceNotFoundException
-     * @throws ServiceNotInstantiableException
-     * @throws \ReflectionException
+     * @return array
      * @throws ConfigNotRegisteredException
+     * @throws FormException
      * @throws IFileNotExistsException
      * @throws IInvalidVariableNameException
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
      */
     public function validate(): array
     {
@@ -106,11 +100,9 @@ class AddCategoryForm implements IPageForm
 
     /**
      * {@inheritdoc}
-     * @throws MethodNotFoundException
-     * @throws ParameterHasNoDefaultValueException
-     * @throws ServiceNotFoundException
-     * @throws ServiceNotInstantiableException
-     * @throws \ReflectionException
+     * @return bool
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
      */
     public function store(): bool
     {
@@ -134,7 +126,7 @@ class AddCategoryForm implements IPageForm
             $keywords = input()->post('inp-add-category-keywords', '')->getValue();
             $priority = input()->post('inp-add-category-priority', '')->getValue();
 
-            $parentInfo = $categoryModel->getFirst(['level'], 'id=:id', ['id' => $parent]);
+            $parentInfo = $categoryModel->getFirst(['all_parents_id', 'level'], 'id=:id', ['id' => $parent]);
             if ($parent == DEFAULT_OPTION_VALUE) {
                 $level = 1;
             } else {
@@ -144,6 +136,7 @@ class AddCategoryForm implements IPageForm
             return $categoryModel->insert([
                 'name' => $xss->xss_clean($name),
                 'parent_id' => $parent ?: null,
+                'all_parents_id' => trim(((string)$parentInfo['all_parents_id']) . ',' . $parent, ',') ?: '',
                 'keywords' => $xss->xss_clean($keywords),
                 'publish' => is_value_checked($pub) ? DB_YES : DB_NO,
                 'priority' => $xss->xss_clean($priority),

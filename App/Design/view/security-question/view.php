@@ -42,7 +42,7 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header bg-primary">
-                    <h5 class="modal-title">افزودن واحد جدید</h5>
+                    <h5 class="modal-title">افزودن سؤال امنیتی جدید</h5>
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                 </div>
 
@@ -84,7 +84,7 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header bg-success">
-                    <h5 class="modal-title">ویرایش واحد جدید</h5>
+                    <h5 class="modal-title">ویرایش سؤال امنیتی</h5>
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                 </div>
 

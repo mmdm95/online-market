@@ -8,18 +8,19 @@ use App\Logic\Models\AddressModel;
 use App\Logic\Models\PaymentMethodModel;
 use App\Logic\Models\ProvinceModel;
 use App\Logic\Models\UserModel;
+use App\Logic\Utils\Payment\SharedPaymentUtil;
 use App\Logic\Utils\PostPriceUtil;
 use Jenssegers\Agent\Agent;
 use Sim\Auth\DBAuth;
-use Sim\Container\Exceptions\MethodNotFoundException;
-use Sim\Container\Exceptions\ParameterHasNoDefaultValueException;
-use Sim\Container\Exceptions\ServiceNotFoundException;
-use Sim\Container\Exceptions\ServiceNotInstantiableException;
 use Sim\Exceptions\ConfigManager\ConfigNotRegisteredException;
 use Sim\Exceptions\Mvc\Controller\ControllerException;
 use Sim\Exceptions\PathManager\PathNotRegisteredException;
 use Sim\Interfaces\IFileNotExistsException;
 use Sim\Interfaces\IInvalidVariableNameException;
+use Sim\Payment\Factories\Sadad;
+use Sim\Payment\PaymentFactory;
+use Sim\Payment\Providers\Sadad\SadadRequestProvider;
+use Sim\Payment\Providers\Sadad\SadadRequestResultProvider;
 
 class CheckoutController extends AbstractHomeController
 {
@@ -46,6 +47,38 @@ class CheckoutController extends AbstractHomeController
         ]));
     }
 
+    public function demo()
+    {
+        /**
+         * @var Sadad $gateway
+         */
+        // $key, $merchantId, $terminalId
+        $gateway = PaymentFactory::instance(PaymentFactory::GATEWAY_SADAD,);
+        // provider
+        $provider = new SadadRequestProvider();
+        $provider
+            ->setReturnUrl(url('pay.test')->getRelativeUrlTrimmed())
+            ->setAmount(10000)
+            ->setOrderId(1);
+        // events
+        $gateway->createRequestOkClosure(function (SadadRequestResultProvider $result) {
+            return '
+                    <form action="' . $result->getUrl() . '">
+                        <button type="submit">Go to payment</button>
+                    </form>
+                ';
+        });
+        //
+        $gateway->createRequest($provider);
+
+        return 'Demo Payment';
+    }
+
+    public function demoResult()
+    {
+
+    }
+
     /**
      * @return string
      * @throws ConfigNotRegisteredException
@@ -53,11 +86,9 @@ class CheckoutController extends AbstractHomeController
      * @throws IFileNotExistsException
      * @throws IInvalidVariableNameException
      * @throws PathNotRegisteredException
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
      * @throws \ReflectionException
-     * @throws MethodNotFoundException
-     * @throws ParameterHasNoDefaultValueException
-     * @throws ServiceNotFoundException
-     * @throws ServiceNotInstantiableException
      */
     public function checkout()
     {
@@ -146,10 +177,5 @@ class CheckoutController extends AbstractHomeController
         }
 
         response()->json($resourceHandler->getReturnData());
-    }
-
-    public function checkPaymentAndGetNeededInfo()
-    {
-
     }
 }

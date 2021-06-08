@@ -16,7 +16,7 @@ class CartUtil
         $count = count($items);
         return \loader()->setData([
             'items' => $items,
-            'total_amount' => \cart()->totalDiscountedPercentageWithTax(),
+            'total_amount' => \cart()->totalDiscountedPriceWithTax(),
             'count' => $count,
         ])->getContent(partial_path('main/ajax/cart', false));
     }

@@ -76,11 +76,8 @@ class UserModel extends BaseModel
      * @param array $user_info
      * @param array $roles
      * @return bool
-     * @throws MethodNotFoundException
-     * @throws ParameterHasNoDefaultValueException
-     * @throws ServiceNotFoundException
-     * @throws ServiceNotInstantiableException
-     * @throws \ReflectionException
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
      */
     public function registerUser(array $user_info, array $roles = [ROLE_USER]): bool
     {
@@ -166,11 +163,8 @@ class UserModel extends BaseModel
      * @param string $where
      * @param array $bind_values
      * @return bool
-     * @throws MethodNotFoundException
-     * @throws ParameterHasNoDefaultValueException
-     * @throws ServiceNotFoundException
-     * @throws ServiceNotInstantiableException
-     * @throws \ReflectionException
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
      */
     public function updateNRegisterUser(string $username, array $user_info, string $where, array $bind_values = []): bool
     {

@@ -45,7 +45,7 @@
 
     <!-- Add faq modal -->
     <div id="modal_form_add_faq" class="modal fade" tabindex="-1">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header bg-primary">
                     <h5 class="modal-title">افزودن سؤال جدید</h5>
@@ -76,22 +76,24 @@
                         <div class="form-group">
                             <label>
                                 <span class="text-danger">*</span>
-                                پاسخ:
-                            </label>
-                            <input type="text"
-                                   placeholder="پاسخ سؤال را وارد کنید"
-                                   class="form-control"
-                                   name="inp-add-faq-a">
-                        </div>
-                        <div class="form-group">
-                            <label>
-                                <span class="text-danger">*</span>
                                 برچسب‌ها:
                             </label>
                             <input type="text"
                                    placeholder="برچسب‌های مربوط به سؤال"
                                    class="form-control tags-input"
                                    name="inp-add-faq-tags">
+                        </div>
+                        <div class="form-group">
+                            <label>
+                                <span class="text-danger">*</span>
+                                پاسخ:
+                            </label>
+                            <textarea name="inp-add-faq-a"
+                                      cols="30"
+                                      rows="10"
+                                      placeholder="پاسخ سؤال را وارد کنید"
+                                      class="form-control cntEditor"
+                            ></textarea>
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -106,60 +108,66 @@
 
     <!-- Edit faq modal -->
     <div id="modal_form_edit_faq" class="modal fade" tabindex="-1">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header bg-success">
                     <h5 class="modal-title">ویرایش واحد</h5>
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                 </div>
                 <form action="#" id="__form_edit_faq">
-                    <div class="form-group text-right">
-                        <div class="form-check form-check-switchery form-check-switchery-double">
-                            <label class="form-check-label">
-                                نمایش سؤال
-                                <input type="checkbox" class="form-check-input-switchery"
-                                       name="inp-edit-faq-status">
-                                عدم نمایش سؤال
-                            </label>
+                    <div class="modal-body">
+                        <div class="form-group text-right">
+                            <div class="form-check form-check-switchery form-check-switchery-double">
+                                <label class="form-check-label">
+                                    نمایش سؤال
+                                    <input type="checkbox" class="form-check-input-switchery"
+                                           name="inp-edit-faq-status">
+                                    عدم نمایش سؤال
+                                </label>
+                            </div>
                         </div>
-                    </div>
-                    <div class="form-group">
-                        <label>
-                            <span class="text-danger">*</span>
-                            سؤال:
-                        </label>
-                        <input type="text"
-                               placeholder="متن سؤال را وارد کنید"
-                               class="form-control"
-                               name="inp-edit-faq-q">
-                    </div>
-                    <div class="form-group">
-                        <label>
-                            <span class="text-danger">*</span>
-                            پاسخ:
-                        </label>
-                        <input type="text"
-                               placeholder="پاسخ سؤال را وارد کنید"
-                               class="form-control"
-                               name="inp-edit-faq-a">
-                    </div>
-                    <div class="form-group">
-                        <label>
-                            <span class="text-danger">*</span>
-                            برچسب‌ها:
-                        </label>
-                        <input type="text"
-                               placeholder="برچسب‌های مربوط به سؤال"
-                               class="form-control tags-input"
-                               name="inp-edit-faq-tags">
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-link" data-dismiss="modal">بستن</button>
-                        <button type="submit" class="btn btn-success">ویرایش سؤال</button>
+                        <div class="form-group">
+                            <label>
+                                <span class="text-danger">*</span>
+                                سؤال:
+                            </label>
+                            <input type="text"
+                                   placeholder="متن سؤال را وارد کنید"
+                                   class="form-control"
+                                   name="inp-edit-faq-q">
+                        </div>
+                        <div class="form-group">
+                            <label>
+                                <span class="text-danger">*</span>
+                                برچسب‌ها:
+                            </label>
+                            <input type="text"
+                                   placeholder="برچسب‌های مربوط به سؤال"
+                                   class="form-control tags-input"
+                                   name="inp-edit-faq-tags">
+                        </div>
+                        <div class="form-group">
+                            <label>
+                                <span class="text-danger">*</span>
+                                پاسخ:
+                            </label>
+                            <textarea name="inp-edit-faq-a"
+                                      cols="30"
+                                      rows="10"
+                                      placeholder="پاسخ سؤال را وارد کنید"
+                                      class="form-control cntEditor"
+                            ></textarea>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-link" data-dismiss="modal">بستن</button>
+                            <button type="submit" class="btn btn-success">ویرایش سؤال</button>
+                        </div>
                     </div>
                 </form>
             </div>
         </div>
     </div>
     <!-- /edit faq modal -->
+
+    <?php load_partial('editor/browser-tiny-func'); ?>
 </div>
