@@ -13,7 +13,7 @@ $couponPrice = 0.0;
 
 $totalPrice = 0.0;
 foreach ($cart->getItems() as $item) {
-    $totalPrice += (float)get_discount_price($item)[0];
+    $totalPrice += $item['qnt'] * (float)get_discount_price($item)[0];
 }
 ?>
 

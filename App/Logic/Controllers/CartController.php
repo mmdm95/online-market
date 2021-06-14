@@ -33,7 +33,6 @@ class CartController extends AbstractHomeController
     }
 
     /**
-     * @return string
      * @throws IFileNotExistsException
      * @throws \DI\DependencyException
      * @throws \DI\NotFoundException

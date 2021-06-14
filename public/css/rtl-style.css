@@ -841,10 +841,6 @@ body[dir="rtl"] .alert .close {
     margin-left: 15px;
 }
 
-.shop_cart_table th.product-name, .shop_cart_table td.product-name, .wishlist_table th.product-name, .wishlist_table td.product-name {
-    text-align: left;
-}
-
 .dashboard_menu .nav-tabs li.nav-item a i {
     margin-right: 0;
     display: inline-block;

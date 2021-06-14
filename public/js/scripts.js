@@ -12,8 +12,8 @@ PAGE JS
     'use strict';
 
     // Lazy loader (pictures, videos, etc.)
-    if ($.fn.lazy) {
-        var lazyFn = function () {
+    var lazyFn = function () {
+        if ($.fn.lazy) {
             $('.lazy').lazy({
                 effect: "fadeIn",
                 effectTime: 800,
@@ -23,8 +23,8 @@ PAGE JS
                     $(element).css({'background': 'none'});
                 }
             });
-        };
-    }
+        }
+    };
 
     /*===================================*
     01. LOADING JS
@@ -443,7 +443,7 @@ PAGE JS
                 responsive: $carousel.data("responsive")
             });
 
-            $carousel.on('changed.owl.carousel', function(e) {
+            $carousel.on('changed.owl.carousel', function (e) {
                 lazyFn();
             });
         });

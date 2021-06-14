@@ -22,6 +22,10 @@
                 dataItemCode = 'data-cart-item-code',
                 dataItemQnt = 'data-cart-item-quantity';
 
+            var
+                addToCartBtn = $(variables.elements.cart.addBtn),
+                removeFromCartBtn = $(variables.elements.cart.removeBtn);
+
             /*************************************************************
              ********************* Private Functions *********************
              *************************************************************/
@@ -111,6 +115,7 @@
             _.getNPlaceCart = function () {
                 _.get(function () {
                     cartContainer.html(this.data);
+                    shop.lazyFn();
                 });
             };
 
@@ -173,66 +178,65 @@
                 shop.request(url, 'post', successCallback, {}, false !== showError);
             };
 
+            _.assignEventsToAddOrUpdateBtn = function () {
+                var $this;
+                /**
+                 * Cart add or update button click event
+                 */
+                addToCartBtn.off('click' + variables.namespace + ' touchend' + variables.namespace).on('click' + variables.namespace + ' touchend' + variables.namespace, function (e) {
+                    e.preventDefault();
+
+                    var code, qnt;
+
+                    $this = $(this);
+                    code = $this.attr(dataItemCode);
+                    if (code) {
+                        qnt = $this.attr(dataItemQnt);
+
+                        qnt = core.isDefined(qnt) && !isNaN(parseInt(qnt, 10)) ? parseInt(qnt, 10) : null;
+                        qnt = null !== qnt && qnt > 0 ? qnt : null;
+
+                        if (null === qnt) {
+                            cart.add(code, function () {
+                                shop.toasts.toast(this.data, {
+                                    type: variables.toasts.types.success,
+                                });
+                                cart.getNPlaceCart();
+                            });
+                        } else {
+                            cart.update(code, qnt, function () {
+                                shop.toasts.toast(this.data, {
+                                    type: variables.toasts.types.success,
+                                });
+                                cart.getNPlaceCart();
+                            });
+                        }
+                    } else {
+                        shop.toasts.toast('لطفا محصول مورد نظر خود را انتخاب کنید.', {
+                            type: 'warning',
+                        });
+                    }
+                });
+            };
+
+            _.assignEventsToRemoveBtn = function () {
+                /**
+                 * Cart remove button click event
+                 */
+                removeFromCartBtn
+                    .off('click' + variables.namespace + ' touchend' + variables.namespace)
+                    .on('click' + variables.namespace + ' touchend' + variables.namespace, function (e) {
+                        e.preventDefault();
+                        _.removeNPlaceCartFunctionality($(this));
+                    });
+            };
+
             return _;
         });
 
-        var
-            $this,
-            cart,
-            addToCartBtn,
-            removeFromCartBtn,
-            //-----
-            dataItemCode = 'data-cart-item-code',
-            dataItemQnt = 'data-cart-item-quantity';
+        var cart = new window.TheCart();
 
-        cart = new window.TheCart();
-        addToCartBtn = $(variables.elements.cart.addBtn);
-        removeFromCartBtn = $(variables.elements.cart.removeBtn);
-
-        /**
-         * Cart add or update button click event
-         */
-        addToCartBtn.on('click' + variables.namespace + ' touchend' + variables.namespace, function (e) {
-            e.preventDefault();
-
-            var code, qnt;
-
-            $this = $(this);
-            code = $this.attr(dataItemCode);
-            if (code) {
-                qnt = $this.attr(dataItemQnt);
-
-                qnt = core.isDefined(qnt) && !isNaN(parseInt(qnt, 10)) ? parseInt(qnt, 10) : null;
-                qnt = null !== qnt && qnt > 0 ? qnt : null;
-
-                if (null === qnt) {
-                    cart.add(code, function () {
-                        shop.toasts.toast(this.data, {
-                            type: variables.toasts.types.success,
-                        });
-                        cart.getNPlaceCart();
-                    });
-                } else {
-                    cart.update(code, qnt, function () {
-                        shop.toasts.toast(this.data, {
-                            type: variables.toasts.types.success,
-                        });
-                        cart.getNPlaceCart();
-                    });
-                }
-            } else {
-                shop.toasts.toast('لطفا محصول مورد نظر خود را انتخاب کنید.', {
-                    type: 'warning',
-                });
-            }
-        });
-
-        /**
-         * Cart remove button click event
-         */
-        removeFromCartBtn.on('click' + variables.namespace + ' touchend' + variables.namespace, function (e) {
-            e.preventDefault();
-            cart.removeNPlaceCartFunctionality($(this));
-        });
+        cart.assignEventsToAddOrUpdateBtn();
+        cart.assignEventsToRemoveBtn();
     });
 })(jQuery);

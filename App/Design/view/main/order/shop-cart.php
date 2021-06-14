@@ -17,7 +17,7 @@ $items = $cart->getItems();
                         </div>
 
                         <div class="row no-gutters align-items-center mt-3">
-                            <div class="col-lg-12 col-md-6 text-left text-md-right">
+                            <div class="col-lg-12 text-left text-md-right">
                                 <button class="btn btn-line-fill btn-sm" type="button"
                                         id="__update_main_cart">
                                     بروزرسانی سبد خرید

@@ -24,6 +24,7 @@
             core,
             //-----
             shop,
+            cart,
             constraints,
             uriParser,
             //-----
@@ -48,6 +49,7 @@
         variables = window.MyGlobalVariables;
         core = window.TheCore;
         shop = new window.TheShop();
+        cart = new window.TheCart();
         uriParser = new UriParser();
 
         //-----
@@ -284,8 +286,8 @@
             }
             // sizes activate
             if (obj['size'] && core.isArray(obj['size'])) {
-                for(var o in obj['size']) {
-                    if(obj['size'].hasOwnProperty(o)) {
+                for (var o in obj['size']) {
+                    if (obj['size'].hasOwnProperty(o)) {
                         obj['size'][o] = decodeURIComponent(obj['size'][o].replace(/\+/g, " "));
                     }
                 }
@@ -383,17 +385,8 @@
                     createLoader = true;
 
                     // Lazy loader (pictures, videos, etc.)
-                    if ($.fn.lazy) {
-                        $('.lazy').lazy({
-                            effect: "fadeIn",
-                            effectTime: 800,
-                            threshold: 50,
-                            // callback
-                            afterLoad: function (element) {
-                                $(element).css({'background': 'none'});
-                            }
-                        });
-                    }
+                    shop.lazyFn();
+                    cart.assignEventsToAddOrUpdateBtn();
                 }, {
                     params: uriParser.get(null, {}, true),
                 }, true, function () {

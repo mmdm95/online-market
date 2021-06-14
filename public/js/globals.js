@@ -453,6 +453,21 @@ window.MyGlobalVariables = {
                 };
             },
 
+            // Lazy loader (pictures, videos, etc.)
+            lazyFn: function () {
+                if ($.fn.lazy) {
+                    $('.lazy').lazy({
+                        effect: "fadeIn",
+                        effectTime: 800,
+                        threshold: 50,
+                        // callback
+                        afterLoad: function (element) {
+                            $(element).css({'background': 'none'});
+                        }
+                    });
+                }
+            },
+
             toasts: {
                 /**
                  * @param message

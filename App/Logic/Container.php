@@ -2,14 +2,12 @@
 
 namespace App\Logic;
 
-use App\Logic\Controllers\CartController;
-use DI\ContainerBuilder;
+use DI\Container as Resolver;
 use Sim\Auth\Interfaces\IAuth;
 use Sim\Captcha\CaptchaFactory;
 use Sim\Form\FormValidator;
 use Sim\I18n\Translate as Translate;
 use Sim\Interfaces\IInitialize;
-use Sim\Container\Container as Resolver;
 use Sim\Auth\DBAuth as Auth;
 use Sim\Auth\APIAuth as APIAuth;
 use Sim\SMS\Factories\NiazPardaz;
@@ -23,12 +21,12 @@ class Container implements IInitialize
     public function init()
     {
         // home authentication class
-        \container()->set('auth_home', function () {
+        container()->set('auth_home', function () {
             $authConfig = \config()->get('auth');
 
             $auth = new Auth(\connector()->getPDO(), 'home', [
-                'main' => \config()->get('env.APP_MAIN_KEY'),
-                'assured' => \config()->get('env.APP_ASSURED_KEY'),
+                'main' => \config()->get('security.main_key'),
+                'assured' => \config()->get('security.assured_key'),
             ], PASSWORD_BCRYPT, IAuth::STORAGE_DB, $authConfig['structure']);
 
             $auth->setExpiration($authConfig['namespaces']['home']['expire_time'])
@@ -42,8 +40,8 @@ class Container implements IInitialize
             $authConfig = \config()->get('auth');
 
             $auth = new Auth(\connector()->getPDO(), 'admin', [
-                'main' => \config()->get('env.APP_MAIN_KEY'),
-                'assured' => \config()->get('env.APP_ASSURED_KEY'),
+                'main' => \config()->get('security.main_key'),
+                'assured' => \config()->get('security.assured_key'),
             ], PASSWORD_BCRYPT, IAuth::STORAGE_DB, $authConfig['structure']);
 
             $auth->setExpiration($authConfig['namespaces']['admin']['expire_time'])

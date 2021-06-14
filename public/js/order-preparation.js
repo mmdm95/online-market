@@ -100,6 +100,7 @@
         function loadNPlaceCartItemsNInfo() {
             if (shopCartTable.length) {
                 shop.showLoaderInsideElement(shopCartTable);
+                cart.getNPlaceCart();
                 cart.getCartItems(function () {
                     var self = this;
                     // put content in correct place
@@ -138,6 +139,9 @@
 
                     if (code) {
                         cart.update(code, val, function () {
+                            shop.toasts.toast(this.data, {
+                                type: variables.toasts.types.success,
+                            });
                             loadNPlaceCartItemsNInfo();
                         });
                     }

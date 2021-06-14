@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a086cdb8ef376de227dd865465501126",
+    "content-hash": "4a80066353e45a8e426df5cb21df095b",
     "packages": [
         {
             "name": "aura/sql",
@@ -389,16 +389,16 @@
         },
         {
             "name": "mmdm/sim-auth",
-            "version": "v0.2.10",
+            "version": "v0.2.13",
             "source": {
                 "type": "git",
                 "url": "https://github.com/mmdm95/sim-auth.git",
-                "reference": "99f2f3359179466e4ac4fc68b43ce260bded6e6c"
+                "reference": "8ec1cf1524bf8ec0cc47f40afb95c27a11bc5b53"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mmdm95/sim-auth/zipball/99f2f3359179466e4ac4fc68b43ce260bded6e6c",
-                "reference": "99f2f3359179466e4ac4fc68b43ce260bded6e6c",
+                "url": "https://api.github.com/repos/mmdm95/sim-auth/zipball/8ec1cf1524bf8ec0cc47f40afb95c27a11bc5b53",
+                "reference": "8ec1cf1524bf8ec0cc47f40afb95c27a11bc5b53",
                 "shasum": ""
             },
             "require": {
@@ -406,7 +406,7 @@
                 "ext-openssl": "*",
                 "ext-pdo": "*",
                 "jenssegers/agent": "^2.6",
-                "mmdm/sim-cookie": "^1.0",
+                "mmdm/sim-cookie": "^2.0",
                 "mmdm/sim-session": "^1.0",
                 "php": ">=7.2"
             },
@@ -431,9 +431,9 @@
             "description": "A simple yet nice authentication library",
             "support": {
                 "issues": "https://github.com/mmdm95/sim-auth/issues",
-                "source": "https://github.com/mmdm95/sim-auth/tree/v0.2.10"
+                "source": "https://github.com/mmdm95/sim-auth/tree/v0.2.13"
             },
-            "time": "2021-04-28T13:28:09+00:00"
+            "time": "2021-06-12T20:52:34+00:00"
         },
         {
             "name": "mmdm/sim-benchmark",
@@ -521,22 +521,22 @@
         },
         {
             "name": "mmdm/sim-cart",
-            "version": "v1.1.15",
+            "version": "v1.1.16",
             "source": {
                 "type": "git",
                 "url": "https://github.com/mmdm95/sim-cart.git",
-                "reference": "4f2358ba55055fdf28a18f844000241a8e89280b"
+                "reference": "011d887d2871147fdb8d43167f2ebc168af5c2e1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mmdm95/sim-cart/zipball/4f2358ba55055fdf28a18f844000241a8e89280b",
-                "reference": "4f2358ba55055fdf28a18f844000241a8e89280b",
+                "url": "https://api.github.com/repos/mmdm95/sim-cart/zipball/011d887d2871147fdb8d43167f2ebc168af5c2e1",
+                "reference": "011d887d2871147fdb8d43167f2ebc168af5c2e1",
                 "shasum": ""
             },
             "require": {
                 "ext-json": "*",
                 "ext-pdo": "*",
-                "mmdm/sim-cookie": "^1.0"
+                "mmdm/sim-cookie": "^2.0"
             },
             "type": "library",
             "autoload": {
@@ -558,22 +558,22 @@
             "description": "A simple yet nice shopping cart library",
             "support": {
                 "issues": "https://github.com/mmdm95/sim-cart/issues",
-                "source": "https://github.com/mmdm95/sim-cart/tree/v1.1.15"
+                "source": "https://github.com/mmdm95/sim-cart/tree/v1.1.16"
             },
-            "time": "2021-06-08T17:45:42+00:00"
+            "time": "2021-06-12T20:54:28+00:00"
         },
         {
             "name": "mmdm/sim-cookie",
-            "version": "v1.2.1",
+            "version": "v2.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/mmdm95/sim-cookie.git",
-                "reference": "9a3b4213d3dfadb2f3e907c7e6a40b57fa5eed32"
+                "reference": "af46a032beeab4aed57ff0d082eb9bc9ca2a7ca4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mmdm95/sim-cookie/zipball/9a3b4213d3dfadb2f3e907c7e6a40b57fa5eed32",
-                "reference": "9a3b4213d3dfadb2f3e907c7e6a40b57fa5eed32",
+                "url": "https://api.github.com/repos/mmdm95/sim-cookie/zipball/af46a032beeab4aed57ff0d082eb9bc9ca2a7ca4",
+                "reference": "af46a032beeab4aed57ff0d082eb9bc9ca2a7ca4",
                 "shasum": ""
             },
             "require": {
@@ -601,9 +601,9 @@
             "description": "A simple yet nice cookie management library",
             "support": {
                 "issues": "https://github.com/mmdm95/sim-cookie/issues",
-                "source": "https://github.com/mmdm95/sim-cookie/tree/v1.2.1"
+                "source": "https://github.com/mmdm95/sim-cookie/tree/v2.0.2"
             },
-            "time": "2021-03-25T04:26:14+00:00"
+            "time": "2021-06-14T05:42:26+00:00"
         },
         {
             "name": "mmdm/sim-crypt",
@@ -1249,16 +1249,16 @@
         },
         {
             "name": "php-di/php-di",
-            "version": "6.3.3",
+            "version": "6.3.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/PHP-DI/PHP-DI.git",
-                "reference": "da8e476cafc8011477e2ec9fd2e4706947758af2"
+                "reference": "f53bcba06ab31b18e911b77c039377f4ccd1f7a5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PHP-DI/PHP-DI/zipball/da8e476cafc8011477e2ec9fd2e4706947758af2",
-                "reference": "da8e476cafc8011477e2ec9fd2e4706947758af2",
+                "url": "https://api.github.com/repos/PHP-DI/PHP-DI/zipball/f53bcba06ab31b18e911b77c039377f4ccd1f7a5",
+                "reference": "f53bcba06ab31b18e911b77c039377f4ccd1f7a5",
                 "shasum": ""
             },
             "require": {
@@ -1309,7 +1309,7 @@
             ],
             "support": {
                 "issues": "https://github.com/PHP-DI/PHP-DI/issues",
-                "source": "https://github.com/PHP-DI/PHP-DI/tree/6.3.3"
+                "source": "https://github.com/PHP-DI/PHP-DI/tree/6.3.4"
             },
             "funding": [
                 {
@@ -1321,7 +1321,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-05-01T16:26:47+00:00"
+            "time": "2021-06-10T08:04:48+00:00"
         },
         {
             "name": "php-di/phpdoc-reader",

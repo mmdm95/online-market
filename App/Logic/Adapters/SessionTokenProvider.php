@@ -4,7 +4,6 @@ namespace App\Logic\Adapters;
 
 use Pecee\Http\Security\ITokenProvider;
 use Sim\Cookie\Exceptions\CookieException;
-use Sim\Cookie\SetCookie;
 use Sim\Exceptions\ConfigManager\ConfigNotRegisteredException;
 use Sim\Interfaces\IFileNotExistsException;
 use Sim\Interfaces\IInvalidVariableNameException;
@@ -26,7 +25,11 @@ class SessionTokenProvider implements ITokenProvider
         $token = \csrf()->regenerateToken();
         $csrfExpiration = \config()->get('csrf.expiration') ?? 0;
         $csrfExpiration = 0 !== $csrfExpiration ? time() + $csrfExpiration : $csrfExpiration;
-        \cookie()->set(new SetCookie(self::CSRF_KEY, $token, $csrfExpiration, '/'));
+        \cookie()->set(self::CSRF_KEY)
+            ->setValue($token)
+            ->setExpiration($csrfExpiration)
+            ->setPath('/')
+            ->save();
     }
 
     /**
@@ -38,7 +41,7 @@ class SessionTokenProvider implements ITokenProvider
      */
     public function validate(string $token): bool
     {
-        $token = \cookie()->prepareGetCookieValue($token);
+        $token = \cookie()->getCookieValueFromString($token);
         return \csrf()->validate($token);
     }
 
@@ -58,7 +61,11 @@ class SessionTokenProvider implements ITokenProvider
         $token = \csrf()->getToken() ?? $defaultValue;
         $csrfExpiration = \config()->get('csrf.expiration') ?? 0;
         $csrfExpiration = 0 !== $csrfExpiration ? time() + $csrfExpiration : $csrfExpiration;
-        \cookie()->set(new SetCookie(self::CSRF_KEY, $token, $csrfExpiration, '/'));
+        \cookie()->set(self::CSRF_KEY)
+            ->setValue($token)
+            ->setExpiration($csrfExpiration)
+            ->setPath('/')
+            ->save();
         return $token;
     }
 }

@@ -10,12 +10,12 @@ $items = $cart->getItems();
 <table class="table">
     <thead>
     <tr>
-        <th class="product-thumbnail">&nbsp;</th>
-        <th class="product-name">محصول</th>
-        <th class="product-price">قیمت</th>
-        <th class="product-quantity">تعداد</th>
-        <th class="product-subtotal">جمع</th>
-        <th class="product-remove">حذف</th>
+        <th class="product-thumbnail text-left">&nbsp</th>
+        <th class="product-name text-left">محصول</th>
+        <th class="product-price text-left">قیمت</th>
+        <th class="product-quantity text-left">تعداد</th>
+        <th class="product-subtotal text-left">جمع</th>
+        <th class="product-remove text-left">حذف</th>
     </tr>
     </thead>
     <tbody>
@@ -27,8 +27,8 @@ $items = $cart->getItems();
                     'id' => $item['product_id'],
                     'slug' => $item['slug'],
                 ])->getRelativeUrl(); ?>">
-                    <img src="" data-src="<?= url('image.show', ['filename' => $item['image']])->getRelativeUrl(); ?>"
-                         alt="<?= $item['title']; ?>" class="lazy">
+                    <img src="<?= url('image.show', ['filename' => $item['image']])->getRelativeUrl(); ?>"
+                         alt="<?= $item['title']; ?>">
                 </a>
             </td>
             <td class="product-name" data-title="محصول">
@@ -41,16 +41,20 @@ $items = $cart->getItems();
 
                 <br>
 
-                <small class="mx-1">در دسته</small>
-                <a href="<?= url('home.search', [
-                    'category' => $item['category_id'],
-                    'category_slug' => StringUtil::slugify($item['category_name']),
-                ])->getRelativeUrl(); ?>" class="mr-4">
-                    <?= $item['category_name'] ?>
-                </a>
+                <small class="mx-1">در دسته:</small>
+                <small>
+                    <a href="<?= url('home.search', [
+                        'category' => $item['category_id'],
+                        'category_slug' => StringUtil::slugify($item['category_name']),
+                    ])->getRelativeUrl(); ?>" class="mr-4 text-info">
+                        <?= $item['category_name'] ?>
+                    </a>
+                </small>
 
-                <small class="mx-1">برند</small>
-                <span><?= $item['brand_fa_name']; ?></span>
+                <small class="mx-1">برند:</small>
+                <small>
+                    <span><?= $item['brand_fa_name']; ?></span>
+                </small>
             </td>
             <td class="product-price" data-title="قیمت">
                 <?php if (0 != $price): ?>
