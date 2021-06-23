@@ -28,6 +28,7 @@ abstract class AbstractUserController extends AbstractMainController
 
         // get current user info
         $user = $userModel->getFirst(['*'], 'id=:id', ['id' => $auth->getCurrentUser()['id'] ?? 0]);
+        unset($user['password']);
         $user['roles'] = $userModel->getUserRoles($user['id'], null, [], ['r.*']);
 
         $this->setDefaultArguments(array_merge($this->getDefaultArguments(), [

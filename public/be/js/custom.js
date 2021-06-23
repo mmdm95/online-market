@@ -273,6 +273,7 @@
             inputs: {
                 title: 'inp-add-badge-title',
                 color: 'inp-add-badge-color',
+                canReturnOrder: 'inp-add-badge-allow-return',
             },
         },
         editBadge: {
@@ -280,6 +281,7 @@
             inputs: {
                 title: 'inp-edit-badge-title',
                 color: 'inp-edit-badge-color',
+                canReturnOrder: 'inp-edit-badge-allow-return',
             },
         },
         addCategory: {
@@ -3491,7 +3493,9 @@
             $(variables.elements.editBadge.form).get(0).reset();
             if (id && editModal.length) {
                 admin.request(variables.url.badge.get + '/' + id, 'get', function () {
-                    var _ = this;
+                    var
+                        _ = this,
+                        canReturnOrder = editModal.find('[name="' + variables.elements.editBadge.inputs.canReturnOrder + '"]');
                     if (core.objSize(_.data)) {
                         currentTable = table;
                         editBadgeId = id;
@@ -3501,6 +3505,7 @@
                             .find('[name="' + variables.elements.editBadge.inputs.color + '"]')
                             .val(_.data['color'])
                             .spectrum("set", _.data['color']);
+                        switcheryStatusChange(canReturnOrder, _.data['can_return_order']);
                     }
                 });
             }
@@ -4271,8 +4276,19 @@
             }
             admin.request(variables.url.badge.add, 'post', function () {
                 admin.hideLoader(loaderId);
+                var status, prevStat;
+                status = $(variables.elements.addBadge.form)
+                    .find('[name="' + variables.elements.addBadge.inputs.canReturnOrder + '"]');
+                prevStat = status.is(':checked');
                 // clear element after success
                 $(variables.elements.addBadge.form).get(0).reset();
+                if (status.is(':checked') && !prevStat) {
+                    status
+                        .parent()
+                        .find('.switchery')
+                        .click()
+                        .click();
+                }
                 createDatatable();
                 //-----
                 admin.toasts.toast(this.data, {
@@ -4303,8 +4319,19 @@
                 }
                 admin.request(variables.url.badge.edit + '/' + editBadgeId, 'post', function () {
                     admin.hideLoader(loaderId);
+                    var status, prevStat;
+                    status = $(variables.elements.editBadge.form)
+                        .find('[name="' + variables.elements.editBadge.inputs.canReturnOrder + '"]');
+                    prevStat = status.is(':checked');
                     // clear element after success
                     $(variables.elements.editBadge.form).get(0).reset();
+                    if (status.is(':checked') && !prevStat) {
+                        status
+                            .parent()
+                            .find('.switchery')
+                            .click()
+                            .click();
+                    }
                     editBadgeId = null;
                     if (currentTable) {
                         $(currentTable).DataTable().ajax.reload();

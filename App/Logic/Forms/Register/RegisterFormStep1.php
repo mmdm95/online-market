@@ -105,6 +105,7 @@ class RegisterFormStep1 implements IPageForm
             $res = $userModel->insert([
                 'username' => $xss->xss_clean(StringUtil::toEnglish($username)),
                 'password' => '',
+                'image' => PLACEHOLDER_USER_IMAGE,
                 'is_activated' => DB_NO,
                 'activate_code' => $code,
                 'activate_code_request_free_at' => time() + TIME_ACTIVATE_CODE,

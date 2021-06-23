@@ -268,6 +268,20 @@ class OrderBadgeController extends AbstractAdminController implements IAjaxContr
                         }
                     ],
                     [
+                        'db' => 'can_return_order',
+                        'db_alias' => 'can_return_order',
+                        'dt' => 'can_return',
+                        'formatter' => function ($d) {
+                            $status = $this->setTemplate('partial/admin/parser/active-status')
+                                ->render([
+                                    'status' => $d,
+                                    'active' => 'دارد',
+                                    'deactive' => 'ندارد',
+                                ]);
+                            return $status;
+                        }
+                    ],
+                    [
                         'dt' => 'operations',
                         'formatter' => function ($row) {
                             $operations = $this->setTemplate('partial/admin/datatable/actions-badge')

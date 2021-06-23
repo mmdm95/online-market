@@ -4,10 +4,13 @@ namespace App\Logic\Forms\Ajax\Address;
 
 use App\Logic\Interfaces\IPageForm;
 use App\Logic\Models\AddressModel;
+use App\Logic\Models\CityModel;
+use App\Logic\Models\ProvinceModel;
 use App\Logic\Models\UserModel;
 use App\Logic\Validations\ExtendedValidator;
 use Sim\Exceptions\ConfigManager\ConfigNotRegisteredException;
 use Sim\Form\Exceptions\FormException;
+use Sim\Form\FormValue;
 use Sim\Interfaces\IFileNotExistsException;
 use Sim\Interfaces\IInvalidVariableNameException;
 use Sim\Utils\StringUtil;
@@ -60,11 +63,35 @@ class EditAddressForm implements IPageForm
         // province
         $validator
             ->setFields('inp-edit-address-province')
-            ->required();
+            ->stopValidationAfterFirstError(false)
+            ->required()
+            ->stopValidationAfterFirstError(true)
+            ->custom(function (FormValue $formValue) {
+                /**
+                 * @var ProvinceModel $provinceModel
+                 */
+                $provinceModel = container()->get(ProvinceModel::class);
+                if (0 !== $provinceModel->count('id=:id', ['id' => $formValue->getValue()])) {
+                    return true;
+                }
+                return false;
+            }, '{alias} ' . 'انتخاب شده نامعتبر است.');
         // city
         $validator
             ->setFields('inp-edit-address-city')
-            ->required();
+            ->stopValidationAfterFirstError(false)
+            ->required()
+            ->stopValidationAfterFirstError(true)
+            ->custom(function (FormValue $formValue) {
+                /**
+                 * @var CityModel $cityModel
+                 */
+                $cityModel = container()->get(CityModel::class);
+                if (0 !== $cityModel->count('id=:id', ['id' => $formValue->getValue()])) {
+                    return true;
+                }
+                return false;
+            }, '{alias} ' . 'انتخاب شده نامعتبر است.');
         // postal code
         $validator
             ->setFields('inp-edit-address-postal-code')

@@ -68,7 +68,7 @@ use App\Logic\Utils\Jdf;
                 $section2 = \config()->get('settings.footer_section_2.value');
                 ?>
                 <?php if (count($section1['links'])): ?>
-                    <div class="col-lg-2 col-md-4 col-sm-6">
+                    <div class="col-lg-3 col-md-4 col-sm-6">
                         <div class="widget">
                             <div class="widget">
                                 <h6 class="widget_title"><?= $section1['title']; ?></h6>
@@ -82,7 +82,7 @@ use App\Logic\Utils\Jdf;
                     </div>
                 <?php endif; ?>
                 <?php if (count($section2['links'])): ?>
-                    <div class="col-lg-2 col-md-4 col-sm-6">
+                    <div class="col-lg-3 col-md-4 col-sm-6">
                         <div class="widget">
                             <h6 class="widget_title"><?= $section2['title']; ?></h6>
                             <ul class="widget_links">
@@ -105,7 +105,7 @@ use App\Logic\Utils\Jdf;
                 $email = \config()->get('settings.email.value');
                 ?>
                 <?php if (!empty($address) || !empty($phones) || !empty($email)): ?>
-                    <div class="col-lg-4 col-md-4 col-sm-6">
+                    <div class="col-lg-6 col-md-6 col-sm-6">
                         <div class="widget">
                             <h6 class="widget_title">اطلاعات تماس</h6>
                             <ul class="contact_info contact_info_light">
@@ -133,6 +133,23 @@ use App\Logic\Utils\Jdf;
                                         </p>
                                     </li>
                                 <?php endif; ?>
+                            </ul>
+                        </div>
+                    </div>
+                <?php endif; ?>
+
+                <?php
+                $namads = \config()->get('settings.footer_namads.value') ?: [];
+                ?>
+                <?php if (!empty($namads)): ?>
+                    <div class="col-lg-6 col-md-6 col-sm-12">
+                        <div class="widget">
+                            <ul class="widget_instafeed namad_img">
+                                <?php foreach ($namads as $namad): ?>
+                                    <li>
+                                        <?= $namad; ?>
+                                    </li>
+                                <?php endforeach; ?>
                             </ul>
                         </div>
                     </div>

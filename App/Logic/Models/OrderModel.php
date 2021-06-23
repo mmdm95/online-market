@@ -2,6 +2,7 @@
 
 namespace App\Logic\Models;
 
+use Aura\SqlQuery\Common\Insert;
 use Aura\SqlQuery\Exception as AuraException;
 
 class OrderModel extends BaseModel
@@ -242,5 +243,42 @@ class OrderModel extends BaseModel
             return (int)$res[0]['count'];
         }
         return 0;
+    }
+
+    public function issueFullFactor(array $order, array $items): bool
+    {
+        $this->db->beginTransaction();
+
+        /**
+         * @var Model $model
+         */
+        $model = container()->get(Model::class);
+
+        // issue a factor by inserting to orders table
+        $res = $this->insert($order);
+        //-----
+
+        // insert all items to order items table
+        /**
+         * @var Insert $insert
+         */
+        $insert = $model->insert();
+        $counter = 0;
+        foreach ($items as $item) {
+            if ($counter++ != 0) {
+                $insert->addRow();
+            }
+            $insert->cols($item);
+        }
+        $res2 = $model->execute($insert);
+        //-----
+
+        if (!$res || !$res2) {
+            $this->db->rollBack();
+        }
+
+        $this->db->commit();
+
+        return false;
     }
 }

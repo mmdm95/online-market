@@ -38,7 +38,7 @@ $validator = form_validator();
                 </div>
             </div>
 
-            <form action="<?= url('home.checkout')->getRelativeUrlTrimmed(); ?>"
+            <form action="#"
                   method="post" id="__checkout_payment_gateway">
                 <div class="row" id="__theia_sticky_sidebar_container">
                     <div class="col-md-6">
@@ -51,22 +51,32 @@ $validator = form_validator();
                                     <span class="text-danger" aria-hidden="true">*</span>
                                     نام:
                                 </label>
+                                <?php
+                                $ufn = trim($user['first_name']);
+                                ?>
                                 <input type="text" required class="form-control" name="fname"
-                                       placeholder="حروف فارسی" value="<?= $validator->setInput('fname'); ?>">
+                                       placeholder="حروف فارسی"
+                                    <?= $ufn ? 'disabled="disabled"' : '' ?>
+                                       value="<?= $ufn ? $ufn : $validator->setInput('fname'); ?>">
                             </div>
                             <div class="form-group">
                                 <label>
                                     <span class="text-danger" aria-hidden="true">*</span>
                                     نام خانوادگی:
                                 </label>
+                                <?php
+                                $uln = trim($user['last_name']);
+                                ?>
                                 <input type="text" required class="form-control" name="lname"
-                                       placeholder="حروف فارسی" value="<?= $validator->setInput('lname'); ?>">
+                                       placeholder="حروف فارسی"
+                                    <?= $uln ? 'disabled="disabled"' : '' ?>
+                                       value="<?= $uln ? $uln : $validator->setInput('lname'); ?>">
                             </div>
 
                             <div class="medium_divider"></div>
 
                             <div class="form-group">
-                                <button type="button" class="btn btn-light btn-block"
+                                <button type="button" class="btn btn-fill-line btn-block"
                                         id="__user_addr_choose_btn"
                                         data-toggle="modal" data-target="#__user_addr_choose_modal">
                                     انتخاب آدرس
@@ -79,7 +89,7 @@ $validator = form_validator();
                                 </label>
                                 <input class="form-control" required type="text"
                                        placeholder="حروف فارسی" name="inp-addr-full-name"
-                                       value="<?= $validator->setInput('inp-addr-full-name'); ?>">
+                                       value="<?= $validator->setInput('inp-addr-full-name') ?: trim("{$user['first_name']} {$user['last_name']}"); ?>">
                             </div>
                             <div class="form-group">
                                 <label>
@@ -88,7 +98,7 @@ $validator = form_validator();
                                 </label>
                                 <input class="form-control" required type="text"
                                        placeholder="یازده رقم" name="inp-addr-mobile"
-                                       value="<?= $validator->setInput('inp-addr-mobile'); ?>">
+                                       value="<?= $validator->setInput('inp-addr-mobile') ?: $user['username']; ?>">
                             </div>
                             <div class="form-group">
                                 <label>
@@ -125,6 +135,15 @@ $validator = form_validator();
                             <div class="form-group">
                                 <label>
                                     <span class="text-danger" aria-hidden="true">*</span>
+                                    کد پستی:
+                                </label>
+                                <input class="form-control" required type="text"
+                                       placeholder="از نوع عددی" name="inp-addr-postal-code"
+                                       value="<?= $validator->setInput('inp-addr-postal-code'); ?>">
+                            </div>
+                            <div class="form-group">
+                                <label>
+                                    <span class="text-danger" aria-hidden="true">*</span>
                                     آدرس:
                                 </label>
                                 <textarea
@@ -134,15 +153,6 @@ $validator = form_validator();
                                         required=""
                                         placeholder=""
                                 ><?= $validator->setInput('inp-addr-address'); ?></textarea>
-                            </div>
-                            <div class="form-group">
-                                <label>
-                                    <span class="text-danger" aria-hidden="true">*</span>
-                                    کد پستی:
-                                </label>
-                                <input class="form-control" required type="text"
-                                       placeholder="از نوع عددی" name="inp-addr-postal-code"
-                                       value="<?= $validator->setInput('inp-addr-postal-code'); ?>">
                             </div>
                         </form>
                     </div>
@@ -168,9 +178,11 @@ $validator = form_validator();
                                                            type="radio" name="payment_method_option"
                                                            id="method<?= $k; ?>" value="<?= $method['code']; ?>">
                                                     <label class="form-check-label" for="method<?= $k; ?>">
-                                                        <img src="" data-src="<?= url('image.show', ['filename' => $method['image']])->getRelativeUrl(); ?>"
-                                                             alt="<?= $method['title']; ?>" width="100px" height="auto" class="lazy">
-                                                        <?= $method['title']; ?>
+                                                        <img src=""
+                                                             data-src="<?= url('image.show', ['filename' => $method['image']])->getRelativeUrl(); ?>"
+                                                             alt="<?= $method['title']; ?>" width="100px" height="auto"
+                                                             class="lazy">
+                                                        <span class="ml-2"><?= $method['title']; ?></span>
                                                     </label>
                                                 </div>
                                             </div>
@@ -207,6 +219,11 @@ $validator = form_validator();
                                         <h4>انتخاب آدرس گیرنده</h4>
                                     </div>
                                 </div>
+
+                                <?php load_partial('main/message/message-info', [
+                                        'info' => 'تنها آدرس هایی که در پنل کاربری خود وارد کرده‌اید، آورده شده است',
+                                        'dismissible' => false,
+                                ]); ?>
 
                                 <div id="__address_choise_container">
                                     <?php load_partial('main/ajax/user-addresses', [

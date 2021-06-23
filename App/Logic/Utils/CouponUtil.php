@@ -64,7 +64,7 @@ class CouponUtil
 
         $coupon = $couponModel->getFirst([
             'price', 'min_price', 'max_price', 'use_count',
-        ], 'code=:code AND publish=:pub AND start_at>=:start AND expire_at<=:expire', [
+        ], 'code=:code AND publish=:pub AND (start_at<=:start OR start_at is NULL) AND (expire_at>=:expire OR expire_at is NULL)', [
             'code' => $code,
             'pub' => DB_YES,
             'start' => time(),

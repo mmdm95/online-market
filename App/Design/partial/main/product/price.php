@@ -1,5 +1,5 @@
 <?php if (count($product ?? [])): ?>
-    <?php if (DB_YES == $product['product_availability'] || DB_YES == $product['is_available']): ?>
+    <?php if (DB_YES == $product['product_availability'] && DB_YES == $product['is_available']): ?>
         <div class="product_price">
             <?php
             $hasDiscount = false;

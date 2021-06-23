@@ -521,16 +521,16 @@
         },
         {
             "name": "mmdm/sim-cart",
-            "version": "v1.1.16",
+            "version": "v1.1.17",
             "source": {
                 "type": "git",
                 "url": "https://github.com/mmdm95/sim-cart.git",
-                "reference": "011d887d2871147fdb8d43167f2ebc168af5c2e1"
+                "reference": "a40eee9a4813f1ab254670e1ed34a082c0310dd5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mmdm95/sim-cart/zipball/011d887d2871147fdb8d43167f2ebc168af5c2e1",
-                "reference": "011d887d2871147fdb8d43167f2ebc168af5c2e1",
+                "url": "https://api.github.com/repos/mmdm95/sim-cart/zipball/a40eee9a4813f1ab254670e1ed34a082c0310dd5",
+                "reference": "a40eee9a4813f1ab254670e1ed34a082c0310dd5",
                 "shasum": ""
             },
             "require": {
@@ -558,9 +558,9 @@
             "description": "A simple yet nice shopping cart library",
             "support": {
                 "issues": "https://github.com/mmdm95/sim-cart/issues",
-                "source": "https://github.com/mmdm95/sim-cart/tree/v1.1.16"
+                "source": "https://github.com/mmdm95/sim-cart/tree/v1.1.17"
             },
-            "time": "2021-06-12T20:54:28+00:00"
+            "time": "2021-06-15T18:05:33+00:00"
         },
         {
             "name": "mmdm/sim-cookie",

@@ -272,3 +272,7 @@ defined("MAX_CATEGORY_LEVEL") OR define("MAX_CATEGORY_LEVEL", 3);
 defined("SESSION_APPLIED_COUPON_CODE") OR define("SESSION_APPLIED_COUPON_CODE", 'session_applied_coupon_code');
 // post price session key constant
 defined("SESSION_APPLIED_POST_PRICE") OR define("SESSION_APPLIED_POST_PRICE", 'session_applied_post_price');
+// the gateway session key constant
+defined("SESSION_GATEWAY_RECORD") OR define("SESSION_GATEWAY_RECORD", 'session_gateway_record_custom');
+// gateway info session key constant
+defined("SESSION_GATEWAY_INFO") OR define("SESSION_GATEWAY_INFO", 'session_gateway_info_custom');

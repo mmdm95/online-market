@@ -6,6 +6,9 @@ use Sim\Form\Abstracts\AbstractValidation;
 
 class AlphaNumericSpaceValidation extends AbstractValidation
 {
+    /**
+     * @var string
+     */
     protected $error_message = 'You should just use alpha, number, dash, underline and space.';
 
     /**

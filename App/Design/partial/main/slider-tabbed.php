@@ -109,7 +109,7 @@ foreach ($tabbed_slider['items'] ?? [] as $tab) {
                                                                 <?= $item['title']; ?>
                                                             </a>
                                                         </h6>
-                                                        <?php if (DB_YES == $item['product_availability'] || DB_YES == $item['is_available']): ?>
+                                                        <?php if (DB_YES == $item['product_availability'] && DB_YES == $item['is_available']): ?>
                                                             <div class="product_price">
                                                                 <?php
                                                                 $hasDiscount = false;

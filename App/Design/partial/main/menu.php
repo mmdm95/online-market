@@ -15,7 +15,7 @@
                 <div class="col-md-6">
                     <div class="text-center text-md-right">
                         <ul class="header_list">
-                            <?php if(auth_home()->isLoggedIn()): ?>
+                            <?php if (auth_home()->isLoggedIn()): ?>
                                 <li>
                                     <a href="<?= url('user.index'); ?>">
                                         <i class="linearicons-clipboard-user"></i>
@@ -30,10 +30,10 @@
                                 </li>
                             <?php else: ?>
                                 <li>
-                                <a href="<?= url('home.login'); ?>">
-                                    <i class="linearicons-user"></i>
-                                    <span>ورود</span>
-                                </a>
+                                    <a href="<?= url('home.login'); ?>">
+                                        <i class="linearicons-user"></i>
+                                        <span>ورود</span>
+                                    </a>
                                 </li>
                                 <li>
                                     <a href="<?= url('home.signup'); ?>">
@@ -113,10 +113,11 @@
                         <div class="search_overlay"></div>
                     </li>
 
-                    <?php if(!url()->contains(url('home.cart')->getRelativeUrlTrimmed())): ?>
-                    <li class="dropdown cart_dropdown" id="__cart_main_container">
-                        <?= $cart_section; ?>
-                    </li>
+                    <?php if (!url()->contains(url('home.cart')->getRelativeUrlTrimmed())
+                        && !url()->contains(url('home.checkout')->getRelativeUrlTrimmed())): ?>
+                        <li class="dropdown cart_dropdown" id="__cart_main_container">
+                            <?= $cart_section; ?>
+                        </li>
                     <?php endif; ?>
                 </ul>
             </nav>

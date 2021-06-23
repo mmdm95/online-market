@@ -3,7 +3,6 @@ Author       : Bestwebcreator.
 Template Name: Shopwise - eCommerce Bootstrap 4 HTML Template
 Version      : 1.0
 ==============================================================*/
-
 /*=============================================================
     CSS INDEX
     =============================
@@ -33,7 +32,6 @@ Version      : 1.0
 	24.START ELEMENT DESIGN
 		
 *=============================================================*/
-
 @import url('font.css');
 
 /*===================================*
@@ -4941,11 +4939,11 @@ footer .widget_title {
 }
 
 .breadcrumb_section.page-title-mini {
-    padding: 70px 0;
+    padding: 50px 0;
 }
 
 .page-title-mini .page-title h1 {
-    font-size: 28px;
+    font-size: 25px;
 }
 
 .page-title-mini .breadcrumb li {
@@ -5926,6 +5924,7 @@ footer .widget_title {
     border: 1px solid #ddd;
     border-radius: 10px;
     overflow: hidden;
+    min-height: 420px;
 }
 
 .product_box .product_info {
@@ -5936,7 +5935,7 @@ footer .widget_title {
     position: absolute;
     left: 0;
     right: 0;
-    bottom: -20px;
+    bottom: -30px;
     background-color: #fff;
     padding: 10px 15px 15px 15px;
     opacity: 0;
@@ -5945,7 +5944,7 @@ footer .widget_title {
 }
 
 .product_box:hover .add-to-cart {
-    bottom: 0px;
+    bottom: -15px;
     opacity: 1;
     visibility: visible;
 }
@@ -6028,7 +6027,7 @@ footer .widget_title {
 .price {
     color: var(--custom-primary-color--);
     font-weight: 600;
-    font-size: 12px;
+    font-size: 14px;
 }
 
 .product_price del {
@@ -6237,10 +6236,13 @@ footer .widget_title {
 .product .product_title,
 .product_box .product_title,
 .product_wrap .product_title {
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    overflow: hidden;
-    text-transform: capitalize;
+    /*white-space: nowrap;*/
+    /*text-overflow: ellipsis;*/
+    /*overflow: hidden;*/
+    /*text-transform: capitalize;*/
+    font-size: 1rem;
+    line-height: 1.8rem;
+    min-height: 60px;
 }
 
 .product_color_switch {
@@ -6912,6 +6914,10 @@ footer .widget_title {
 .shop_container.list .pr_action_btn li.add-to-cart a i {
     line-height: normal;
     margin-right: 5px;
+}
+
+.shop_container.list .product_box {
+    min-height: auto;
 }
 
 #Additional-info table td:first-child {
@@ -7978,9 +7984,10 @@ footer .widget_recent_post .post_img img {
     width: 8px;
     border-radius: 100%;
     position: absolute;
-    top: 10px;
+    top: 50%;
     left: 4px;
     opacity: 0;
+    transform: translate(0, -4px);
 }
 
 .custome-radio .form-check-label, .custome-checkbox .form-check-label {

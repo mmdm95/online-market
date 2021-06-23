@@ -1,6 +1,72 @@
 (function ($) {
     'use strict';
 
+    window.MyGlobalVariables.url = $.extend(true, window.MyGlobalVariables.url, {
+        checkout: {
+            check: '/ajax/checkout/check',
+        }
+    });
+    window.MyGlobalVariables.elements = $.extend(true, window.MyGlobalVariables.elements, {
+        checkoutCheck: {
+            form: '#__checkout_payment_gateway',
+            inputs: {
+                firstName: 'fname',
+                lastName: 'lname',
+                receiverName: 'inp-addr-full-name',
+                mobile: 'inp-addr-mobile',
+                province: 'inp-addr-province',
+                city: 'inp-addr-city',
+                postalCode: 'inp-addr-postal-code',
+                address: 'inp-addr-address',
+                gateway: 'payment_method_option',
+            },
+        },
+    });
+    window.MyGlobalVariables.validation = $.extend(true, window.MyGlobalVariables.validation, {
+        constraints: {
+            checkoutCheck: {
+                receiverName: {
+                    presence: {
+                        allowEmpty: false,
+                        message: '^' + 'فیلد نام گیرنده را خالی نگذارید.',
+                    },
+                    format: {
+                        pattern: /^[پچجحخهعغفقثصضشسیبلاتنمکگوئدذرزطظژؤإأآءًٌٍَُِّ\s]+$/u,
+                        message: '^' + ' نام گیرنده باید دارای حروف فارسی باشد.',
+                    },
+                },
+                province: {
+                    presence: {
+                        allowEmpty: false,
+                        message: '^' + 'فیلد استان را خالی نگذارید.',
+                    },
+                },
+                city: {
+                    presence: {
+                        allowEmpty: false,
+                        message: '^' + 'فیلد شهر را خالی نگذارید.',
+                    },
+                },
+                postalCode: {
+                    presence: {
+                        allowEmpty: false,
+                        message: '^' + 'فیلد کد پستی را خالی نگذارید.',
+                    },
+                    format: {
+                        pattern: /^\d{1,10}$/,
+                        message: '^' + 'کد پستی باید از نوع عددی و دارای حداکثر ۱۰ رقم باشد.',
+                    },
+                },
+                address: {
+                    presence: {
+                        allowEmpty: false,
+                        message: '^' + 'فیلد آدرس را خالی نگذارید.',
+                    },
+                },
+            },
+        }
+    });
+
     /**
      * Do stuffs after DOM loaded
      */
@@ -10,6 +76,10 @@
             cart = new window.TheCart(),
             core = window.TheCore,
             variables = window.MyGlobalVariables,
+            constraints,
+            //-----
+            loaderId,
+            createLoader,
             //-----
             addressChoosingContainer,
             addressChoosingBtn,
@@ -20,9 +90,20 @@
             //-----
             shopCartTable,
             shopCartItemsInfoTable,
-            shopCartInfoTable,
-            //-----
-            paymentGatewayForm;
+            shopCartInfoTable;
+
+        //-----
+        constraints = {
+            checkoutCheck: {
+                firstName: variables.validation.common.name,
+                lastName: variables.validation.common.lastName,
+                mobile: variables.validation.common.mobile,
+                province: variables.validation.constraints.checkoutCheck.province,
+                city: variables.validation.constraints.checkoutCheck.city,
+                postalCode: variables.validation.constraints.checkoutCheck.postalCode,
+                address: variables.validation.constraints.checkoutCheck.address,
+            },
+        };
 
         addressChoosingContainer = $('#__address_choise_container');
         addressChoosingBtn = $('#__address_choise_button');
@@ -33,8 +114,6 @@
         shopCartTable = $('.shop_cart_table');
         shopCartItemsInfoTable = $('.shop-cart-items-info-table');
         shopCartInfoTable = $('.shop-cart-info-table');
-
-        paymentGatewayForm = $('#__checkout_payment_gateway');
 
         function initializeItemQuantityChanger() {
             $('.plus').off('click').on('click', function () {
@@ -196,33 +275,62 @@
         });
 
         // when city changed, calculate send price and update side info table
-        $('input[name="inp-addr-province"]').on('change' + variables.namespace, function () {
-            var checked = $(this).find(':checked').val();
+        $('input[name="inp-addr-city"]').on('change' + variables.namespace, function () {
+            var checked, checkedProvince;
+            checked = $(this).find(':checked').val();
+            checkedProvince = $('input[name="inp-addr-province"]').find(':checked').val();
+
             if (checked) {
                 shop.request(variables.url.cart.checkPostPrice, 'post', function () {
                     loadNPlaceCartInfo();
                 }, {
                     data: {
-                        province: checked,
+                        city: checked,
+                        province: checkedProvince,
                     }
                 });
             }
         });
 
-        // submit checking
-        paymentGatewayForm.submit(function () {
-            $.ajax({
-                url: '',
-                method: 'POST',
-                data: {},
-                async: false,
-            }).done(function () {
-                // return true;
-                // return false;
-            }).fail(function () {
-                return false;
+        //---------------------------------------------------------------
+        // SUBMIT CHECKING
+        //---------------------------------------------------------------
+        shop.forms.submitForm('checkoutCheck', constraints.checkoutCheck, function (values) {
+            // do ajax
+            if (createLoader) {
+                createLoader = false;
+                loaderId = shop.showLoader();
+            }
+            shop.request(variables.url.checkout.check, 'post', function () {
+                shop.hideLoader(loaderId);
+                createLoader = true;
+                //-----
+                if (this.type !== variables.toasts.types.success) {
+                    shop.toasts.toast(this.data, {
+                        type: variables.toasts.types.warning,
+                    });
+                } else {
+                    // create a new form and submit it with hidden inputs
+                    var frm = $('<form method="post" action="" style="display: none; position: absolute; top: -9999px; left: -9999px; visibility: hidden; opacity: 0;" />')
+                        .append($('<input type="hidden" value="" name="">'));
+                    // add form to body
+                    $('body').append(frm);
+                    // submit it to go to the gateway
+                    frm.submit();
+                }
+            }, {
+                data: values,
+            }, true, function () {
+                createLoader = true;
+                shop.hideLoader(loaderId);
             });
             return false;
+        }, function (errors) {
+            shop.forms.showFormErrors(errors);
+            return false;
+        }, {
+            '{{name}}': 'نام',
+            '{{last-name}}': 'نام خانوادگی',
         });
 
         loadNPlaceCartItemsNInfo();

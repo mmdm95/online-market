@@ -61,7 +61,6 @@ use App\Logic\Handlers\CustomExceptionHandler;
 use App\Logic\Middlewares\AdminAuthMiddleware;
 use App\Logic\Middlewares\ApiVerifierMiddleware;
 use App\Logic\Middlewares\AuthMiddleware;
-use App\Logic\Middlewares\CheckoutMiddleware;
 use App\Logic\Utils\ConfigUtil;
 use Pecee\SimpleRouter\Event\EventArgument;
 use Pecee\SimpleRouter\Handlers\EventHandler;
@@ -625,9 +624,7 @@ class Route implements IInitialize
              */
             Router::get('/cart', [CartController::class, 'index'])->name('home.cart');
             Router::group(['middleware' => AuthMiddleware::class], function () {
-                Router::group(['middleware' => CheckoutMiddleware::class], function () {
-                    Router::get('/checkout', [CheckoutController::class, 'checkout'])->name('home.checkout');
-                });
+                Router::get('/checkout', [CheckoutController::class, 'checkout'])->name('home.checkout');
             });
             Router::get('/finish/{type}', [OrderResult::class, 'index'])->where([
                 'type' => '[a-zA-Z0-9]+',
@@ -661,12 +658,6 @@ class Route implements IInitialize
             Router::get('/blog/{id}/{slug?}', [BlogController::class, 'show'])->where([
                 'id' => '[0-9]+',
             ])->name('home.blog.show');
-
-            /**
-             * payment routes
-             */
-            Router::get('/demoPayment', [CheckoutController::class, 'demo']); // must delete after test done
-            Router::post('/demoPayment/sadad', [CheckoutController::class, 'demoResult'])->name('pay.test'); // must delete after test done
         });
     }
 
@@ -709,6 +700,13 @@ class Route implements IInitialize
             ])->name('ajax.cart.check.coupon');
             Router::post('/cart/check-stored-coupon', [CartController::class, 'checkStoredCoupon'])->name('ajax.cart.check.stored.coupon');
             Router::post('/cart/check-post-price', [CheckoutController::class, 'calculateSendPrice'])->name('ajax.cart.check.post.price');
+
+            /**
+             * cart routes
+             */
+            Router::group(['middleware' => AuthMiddleware::class], function () {
+                Router::post('/checkout/check', [CheckoutController::class, 'issuingFactorNConnectToGateway']);
+            });
 
             /**
              * blog route

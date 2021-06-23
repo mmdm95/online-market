@@ -22,10 +22,6 @@
                 dataItemCode = 'data-cart-item-code',
                 dataItemQnt = 'data-cart-item-quantity';
 
-            var
-                addToCartBtn = $(variables.elements.cart.addBtn),
-                removeFromCartBtn = $(variables.elements.cart.removeBtn);
-
             /*************************************************************
              ********************* Private Functions *********************
              *************************************************************/
@@ -113,9 +109,11 @@
              * it'll place the cart items info cart container
              */
             _.getNPlaceCart = function () {
+                var self = this;
                 _.get(function () {
                     cartContainer.html(this.data);
                     shop.lazyFn();
+                    self.assignEventsToRemoveBtn();
                 });
             };
 
@@ -129,7 +127,7 @@
                 if (code) {
                     shop.toasts.confirm('آیا مطمئن هستید؟', function () {
                         cart.remove(code, function () {
-                            shop.toasts.toast(self.data, {
+                            shop.toasts.toast(this.data, {
                                 type: variables.toasts.types.success,
                             });
                             cart.getNPlaceCart();
@@ -183,7 +181,7 @@
                 /**
                  * Cart add or update button click event
                  */
-                addToCartBtn.off('click' + variables.namespace + ' touchend' + variables.namespace).on('click' + variables.namespace + ' touchend' + variables.namespace, function (e) {
+                $(variables.elements.cart.addBtn).off('click' + variables.namespace + ' touchend' + variables.namespace).on('click' + variables.namespace + ' touchend' + variables.namespace, function (e) {
                     e.preventDefault();
 
                     var code, qnt;
@@ -223,7 +221,7 @@
                 /**
                  * Cart remove button click event
                  */
-                removeFromCartBtn
+                $(variables.elements.cart.removeBtn)
                     .off('click' + variables.namespace + ' touchend' + variables.namespace)
                     .on('click' + variables.namespace + ' touchend' + variables.namespace, function (e) {
                         e.preventDefault();

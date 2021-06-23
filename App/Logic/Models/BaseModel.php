@@ -28,11 +28,7 @@ abstract class BaseModel
     const TBL_FAQ = 'faq';
     const TBL_FAVORITE_USER_PRODUCT = 'favorite_user_product';
     const TBL_FESTIVALS = 'festivals';
-    const TBL_GATEWAY_BEH_PARDAKHT = 'gateway_beh_pardakht';
     const TBL_GATEWAY_FLOW = 'gateway_flow';
-    const TBL_GATEWAY_IDPAY = 'gateway_idpay';
-    const TBL_GATEWAY_MABNA = 'gateway_mabna';
-    const TBL_GATEWAY_ZARINPAL = 'gateway_zarinpal';
     const TBL_INSTAGRAM_IMAGES = 'instagram_images';
     const TBL_MAIN_SLIDER = 'main_slider';
     const TBL_NEWSLETTERS = 'newsletters';

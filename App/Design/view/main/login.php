@@ -32,15 +32,6 @@ $validator = form_validator();
                                            placeholder="کلمه عبور">
                                 </div>
                                 <div class="login_footer form-group">
-                                    <div class="chek-form">
-                                        <div class="custome-checkbox">
-                                            <input class="form-check-input" type="checkbox" name="inp-login-chk"
-                                                   id="rememberChk">
-                                            <label class="form-check-label" for="rememberChk">
-                                                <span>مرا به خاطر بسپار</span>
-                                            </label>
-                                        </div>
-                                    </div>
                                     <a href="<?= url('home.forget-password'); ?>">کلمه عبور را فراموش کرده اید؟</a>
                                 </div>
                                 <div class="row">

@@ -183,7 +183,6 @@ fabric.properties
 
 # Simplicity gitignore
 .idea
-.idea/*
 Data/Cache/*
 !Data/Cache/.keep
 Data/Drafts/*

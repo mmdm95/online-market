@@ -53,7 +53,8 @@
                                        class="form-control"
                                        placeholder="حروف فارسی"
                                        name="inp-info-first-name"
-                                       type="text">
+                                       type="text"
+                                       value="<?= $user['first_name']; ?>">
                             </div>
                             <div class="form-group col-md-6">
                                 <label>
@@ -62,7 +63,8 @@
                                 <input type="text"
                                        class="form-control"
                                        placeholder="حروف فارسی"
-                                       name="inp-info-last-name">
+                                       name="inp-info-last-name"
+                                       value="<?= $user['last_name']; ?>">
                             </div>
                             <div class="form-group col-md-12">
                                 <label>
@@ -71,7 +73,8 @@
                                 <input class="form-control ltr"
                                        type="text"
                                        placeholder="مثال: example@gmail.com"
-                                       name="inp-info-email">
+                                       name="inp-info-email"
+                                       value="<?= $user['email']; ?>">
                             </div>
                             <div class="form-group col-md-12">
                                 <label>
@@ -80,7 +83,8 @@
                                 <div class="input-group">
                                     <input class="form-control ltr" type="text"
                                            placeholder="از نوع عددی"
-                                           name="inp-info-shaba-num">
+                                           name="inp-info-shaba-num"
+                                           value="<?= $user['shaba_number']; ?>">
                                     <div class="input-group-append">
                                         <span class="input-group-text">IR</span>
                                     </div>
@@ -107,7 +111,7 @@
                 </div>
                 <div class="card-body">
                     <?php load_partial('main/message/message-info', [
-                        'info' => 'پس از تغییر کلمه عبور، عملیات ورود باید دوباره انجام شود.',
+                        'info' => 'پس از تغییر کلمه عبور، عملیات ورود باید دوباره انجام شود',
                         'dismissible' => false,
                     ]); ?>
 

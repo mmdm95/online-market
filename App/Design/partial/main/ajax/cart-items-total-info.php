@@ -3,13 +3,14 @@
 use Sim\Utils\StringUtil;
 
 $cart = cart();
+$cart->restore(true);
 $items = $cart->getItems();
 
 $couponPrice = 0.0;
 
 $totalPrice = 0.0;
-foreach ($cart->getItems() as $item) {
-    $totalPrice += (float)get_discount_price($item)[0];
+foreach ($items as $item) {
+    $totalPrice += $item['qnt'] * (float)get_discount_price($item)[0];
 }
 ?>
 

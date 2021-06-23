@@ -166,7 +166,6 @@ use App\Logic\Utils\Jdf;
                 <?php if (!empty($namads)): ?>
                     <div class="col-lg-4 col-md-4 col-sm-12">
                         <div class="widget">
-                            <h6 class="widget_title">نمادها</h6>
                             <ul class="widget_instafeed namad_img">
                                 <?php foreach ($namads as $namad): ?>
                                     <li>
