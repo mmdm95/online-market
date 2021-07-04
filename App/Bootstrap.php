@@ -91,10 +91,6 @@ class Bootstrap
         //-----
         $this->defineConstants();
         $this->init();
-        if ($route_needed) {
-            $this->customErrorHandler();
-            $this->defineRoute();
-        }
     }
 
     /**
@@ -120,6 +116,11 @@ class Bootstrap
      * @throws IInvalidVariableNameException
      * @throws \DI\DependencyException
      * @throws \DI\NotFoundException
+     * @throws \Pecee\Http\Middleware\Exceptions\TokenMismatchException
+     * @throws \Pecee\Http\Security\Exceptions\SecurityException
+     * @throws \Pecee\SimpleRouter\Exceptions\HttpException
+     * @throws \Pecee\SimpleRouter\Exceptions\NotFoundHttpException
+     * @throws \Sim\Exceptions\ConfigManager\ConfigNotRegisteredException
      */
     protected function init()
     {
@@ -171,10 +172,18 @@ class Bootstrap
         // Call needed functionality
         $this->defineConfig();
         $this->definePath();
+
+        // check maintenance mode here
+        $this->checkMaintenanceMode();
+
         // only for none route (without CLI) cases
         if ($this->route_needed) {
             $this->defineEvents();
             $this->defineContainer();
+        }
+        if ($this->route_needed) {
+            $this->customErrorHandler();
+            $this->defineRoute();
         }
     }
 
@@ -326,5 +335,45 @@ class Bootstrap
 
         // Start the routing
         Router::start();
+    }
+
+    /**
+     * Check and apply some config in maintenance mode or
+     * even set access to some developers
+     *
+     * @throws IFileNotExistsException
+     * @throws IInvalidVariableNameException
+     */
+    protected function checkMaintenanceMode()
+    {
+        try {
+            $maintenanceConfig = config()->get('main.maintenance');
+            if (empty($maintenanceConfig)) return;
+
+            // is maintenance mode on?
+            if (!isset($maintenanceConfig['is_on']) || $maintenanceConfig['is_on'] === false) return;
+
+            $forceKeys = [];
+            if (
+                isset($maintenanceConfig['force_with']) &&
+                (
+                    is_array($maintenanceConfig['force_with']) ||
+                    is_string($maintenanceConfig['force_with'])
+                )
+            ) {
+                $forceKeys = $maintenanceConfig['force_with'];
+                $forceKeys = is_string($forceKeys) ? [$forceKeys] : $forceKeys;
+            }
+
+            $key = input()->get('key', null);
+            if (!\count($forceKeys) || empty($key) || !in_array($key, $forceKeys)) {
+                $content = loader()->getContent(path()->get('error') . $maintenanceConfig['page']);
+                show_500($content);
+                exit(0);
+            }
+        } catch (\Exception $e) {
+            show_500();
+            exit(0);
+        }
     }
 }

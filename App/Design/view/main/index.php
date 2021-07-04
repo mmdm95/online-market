@@ -9,19 +9,8 @@
 
     <!-- START SECTION SHOP -->
     <?php load_partial('main/slider-tabbed', [
+        'side_image' => $tabbed_slider_side_image ?? null,
         'tabbed_slider' => $tabbed_slider ?? [],
-    ]); ?>
-    <!-- END SECTION SHOP -->
-
-    <!-- START SECTION INSTAGRAM IMAGE -->
-    <?php load_partial('main/instagram-images', [
-        'instagram_images' => $instagram_images ?? [],
-    ]); ?>
-    <!-- END SECTION INSTAGRAM IMAGE -->
-
-    <!-- START SECTION SHOP -->
-    <?php load_partial('main/slider-specials', [
-        'special_slider' => $special_slider ?? [],
     ]); ?>
     <!-- END SECTION SHOP -->
 
@@ -30,6 +19,21 @@
         'three_images' => $three_images ?? [],
     ]); ?>
     <!-- END SECTION BANNER -->
+
+    <!-- START SECTION SHOP -->
+    <?php load_partial('main/slider-specials', [
+        'special_slider' => $special_slider ?? [],
+    ]); ?>
+    <!-- END SECTION SHOP -->
+
+    <!-- START SECTION SHOP DYNAMIC -->
+    <?php foreach ($general_slider['items'] ?? [] as $slider): ?>
+        <?php load_partial('main/slider-general', [
+            'slider' => $slider ?? [],
+            'info' => $general_slider['info'] ?? [],
+        ]); ?>
+    <?php endforeach; ?>
+    <!-- END SECTION SHOP DYNAMIC -->
 
     <!-- START SECTION BLOG -->
     <?php load_partial('main/section-blog', [

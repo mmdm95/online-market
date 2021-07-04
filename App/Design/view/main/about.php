@@ -3,7 +3,7 @@
 
     <!-- START SECTION ABOUT -->
     <div class="section">
-        <div class="container">
+        <div class="custom-container">
             <div class="row align-items-center">
                 <?php
                 $aboutDesc = \config()->get('settings.about_section.value');
@@ -30,7 +30,7 @@
     <!-- START SECTION TEAM -->
     <?php if (count($our_team ?? [])): ?>
         <div class="section pb_70">
-            <div class="container">
+            <div class="custom-container">
                 <div class="row justify-content-center">
                     <div class="col-lg-6">
                         <div class="heading_s1 text-center">
@@ -91,7 +91,7 @@
 
     <!-- START SECTION SHOP INFO -->
     <div class="section pb_70">
-        <div class="container">
+        <div class="custom-container">
             <div class="row no-gutters">
                 <?php
                 $features = \config()->get('settings.features.value') ?: [];

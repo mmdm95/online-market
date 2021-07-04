@@ -8,7 +8,7 @@ $items = $cart->getItems();
 
     <!-- START SECTION SHOP -->
     <div class="section">
-        <div class="container">
+        <div class="custom-container">
             <?php if (count($items)): ?>
                 <!-- START CART ITEMS -->
                 <div class="row">

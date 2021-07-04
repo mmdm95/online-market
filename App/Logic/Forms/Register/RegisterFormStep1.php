@@ -7,6 +7,7 @@ use App\Logic\Models\UserModel;
 use App\Logic\Validations\ExtendedValidator;
 use Sim\Exceptions\ConfigManager\ConfigNotRegisteredException;
 use Sim\Form\Exceptions\FormException;
+use Sim\Form\FormValue;
 use Sim\Interfaces\IFileNotExistsException;
 use Sim\Interfaces\IInvalidVariableNameException;
 use Sim\Utils\StringUtil;
@@ -47,27 +48,26 @@ class RegisterFormStep1 implements IPageForm
             ->stopValidationAfterFirstError(false)
             ->required()
             ->stopValidationAfterFirstError(true)
-            ->persianMobile('{alias} ' . 'نامعتبر است.');
+            ->persianMobile('{alias} ' . 'نامعتبر است.')
+            ->custom(function (FormValue $value) {
+                /**
+                 * @var UserModel $userModel
+                 */
+                $userModel = container()->get(UserModel::class);
+                if ($userModel->count('username=:username AND is_activated=:active', [
+                    'username' => trim($value->getValue()),
+                    'active' => DB_YES
+                ])) {
+                    return false;
+                } else {
+                    $userModel->delete('username=:username', ['username' => trim($value->getValue())]);
+                }
+                return true;
+            }, 'این' . ' {alias} ' . 'قبلا ثبت شده است.');
 
         // to reset form values and not set them again
         if ($validator->getStatus()) {
             $validator->resetBagValues();
-        }
-
-        /**
-         * @var UserModel $userModel
-         */
-        $userModel = container()->get(UserModel::class);
-
-        $username = input()->post('inp-register-username', '')->getValue();
-        $hasActiveUsername = $userModel->count('username=:u_name AND is_activated=:active', [
-            'u_name' => $username,
-            'active' => DB_YES,
-        ]);
-        if (0 !== $hasActiveUsername) {
-            $validator->setError('inp-register-username', 'این شماره موبایل قبلا ثبت شده است.');
-        } else {
-            $userModel->delete('username=:u_name', ['u_name' => $username]);
         }
 
         return [

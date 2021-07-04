@@ -21,7 +21,7 @@ use Sim\I18n\ISOLanguageCodes;
  *     1.2.5.0 instead of 1.2.5-a
  *     1.2.5.0.1 instead of 1.2.5-a1 (I'm not sure)
  */
-defined("APP_VERSION") OR define("APP_VERSION", "0.2.15");
+defined("APP_VERSION") OR define("APP_VERSION", "0.2.16");
 
 /***************************************
  * You can add your constants here
@@ -47,6 +47,9 @@ defined("TITLE_DELIMITER") OR define("TITLE_DELIMITER", ' | ');
 // publish or true in database
 defined("DB_YES") OR define("DB_YES", 1);
 defined("DB_NO") OR define("DB_NO", 0);
+
+defined("TIME_ONE_WEEK_IN_SECONDS") OR define("TIME_ONE_WEEK_IN_SECONDS", 604800);
+defined("TIME_THREE_DAYS_IN_SECONDS") OR define("TIME_THREE_DAYS_IN_SECONDS", 259200);
 
 // recover password type
 defined("RECOVER_PASS_TYPE_SMS") OR define("RECOVER_PASS_TYPE_SMS", 1);
@@ -131,8 +134,11 @@ defined("SETTING_STORE_CITY") OR define("SETTING_STORE_CITY", 'store_city');
 defined("SETTING_CURRENT_CITY_POST_PRICE") OR define("SETTING_CURRENT_CITY_POST_PRICE", 'current_city_post_price');
 defined("SETTING_MIN_FREE_PRICE") OR define("SETTING_MIN_FREE_PRICE", 'min_free_price');
 defined("SETTING_PRODUCT_EACH_PAGE") OR define("SETTING_PRODUCT_EACH_PAGE", 'product_each_page');
+defined("SETTING_INDEX_MAIN_SLIDER_SIDE_IMAGES") OR define("SETTING_INDEX_MAIN_SLIDER_SIDE_IMAGES", 'index_main_slider_side_images');
 defined("SETTING_INDEX_3_IMAGES") OR define("SETTING_INDEX_3_IMAGES", 'index_3_images');
 defined("SETTING_INDEX_TABBED_SLIDER") OR define("SETTING_INDEX_TABBED_SLIDER", 'index_tabbed_slider');
+defined("SETTING_INDEX_TABBED_SLIDER_SIDE_IMAGE") OR define("SETTING_INDEX_TABBED_SLIDER_SIDE_IMAGE", 'index_tabbed_slider_side_image');
+defined("SETTING_INDEX_GENERAL_SLIDERS") OR define("SETTING_INDEX_GENERAL_SLIDERS", 'index_general_sliders');
 defined("SETTING_ABOUT_SECTION") OR define("SETTING_ABOUT_SECTION", 'about_section');
 defined("SETTING_TOP_MENU") OR define("SETTING_TOP_MENU", 'top_menu');
 
@@ -153,6 +159,18 @@ defined("SMS_TYPE_BUY") OR define("SMS_TYPE_BUY", 'sms_buy');
 defined("SMS_TYPE_ORDER_STATUS") OR define("SMS_TYPE_ORDER_STATUS", 'sms_order_status');
 defined("SMS_TYPE_WALLET_CHARGE") OR define("SMS_TYPE_WALLET_CHARGE", 'sms_wallet_charge');
 
+// sms log types
+defined("SMS_LOG_TYPE_REGISTER") OR define("SMS_LOG_TYPE_REGISTER", 1);
+defined("SMS_LOG_TYPE_RECOVER_PASS") OR define("SMS_LOG_TYPE_RECOVER_PASS", 2);
+defined("SMS_LOG_TYPE_BUY") OR define("SMS_LOG_TYPE_BUY", 3);
+defined("SMS_LOG_TYPE_ORDER_STATUS") OR define("SMS_LOG_TYPE_ORDER_STATUS", 4);
+defined("SMS_LOG_TYPE_WALLET_CHARGE") OR define("SMS_LOG_TYPE_WALLET_CHARGE", 5);
+defined("SMS_LOG_TYPE_OTHERS") OR define("SMS_LOG_TYPE_OTHERS", 100);
+
+// sms log sender
+defined("SMS_LOG_SENDER_SYSTEM") OR define("SMS_LOG_SENDER_SYSTEM", 1);
+defined("SMS_LOG_SENDER_USER") OR define("SMS_LOG_SENDER_USER", 2);
+
 // sms replacements
 defined('SMS_REPLACEMENTS') OR define('SMS_REPLACEMENTS', [
     'mobile' => '@mobile@',
@@ -161,6 +179,17 @@ defined('SMS_REPLACEMENTS') OR define('SMS_REPLACEMENTS', [
     'status' => '@status@',
     'balance' => '@balance@',
 ]);
+
+// gateway error message
+defined("GATEWAY_SUCCESS_MESSAGE") OR define("GATEWAY_SUCCESS_MESSAGE", 'تراکنش با موفقیت انجام شد.');
+defined("GATEWAY_ERROR_MESSAGE") OR define("GATEWAY_ERROR_MESSAGE", 'تراکنش نا موفق بود در صورت کسر مبلغ از حساب شما حداکثر پس از 72 ساعت مبلغ به حسابتان برمی گردد.');
+defined("GATEWAY_INVALID_PARAMETERS_MESSAGE") OR define("GATEWAY_INVALID_PARAMETERS_MESSAGE", 'پارامترهای ارسالی از درگاه نامعتبر است.');
+
+// gateway flow status codes
+defined("PAYMENT_GATEWAY_FLOW_STATUS_CREATE_REQUEST") OR define("PAYMENT_GATEWAY_FLOW_STATUS_CREATE_REQUEST", 1);
+defined("PAYMENT_GATEWAY_FLOW_STATUS_HANDLE_RESULT") OR define("PAYMENT_GATEWAY_FLOW_STATUS_HANDLE_RESULT", 2);
+defined("PAYMENT_GATEWAY_FLOW_STATUS_ADVICE") OR define("PAYMENT_GATEWAY_FLOW_STATUS_ADVICE", 3);
+defined("PAYMENT_GATEWAY_FLOW_STATUS_SETTLE") OR define("PAYMENT_GATEWAY_FLOW_STATUS_SETTLE", 4);
 
 // order payment statuses
 defined("PAYMENT_STATUS_SUCCESS") OR define("PAYMENT_STATUS_SUCCESS", 1);
@@ -192,6 +221,13 @@ defined("METHOD_TYPES") OR define("METHOD_TYPES", [
     METHOD_TYPE_GATEWAY_ZARINPAL => 'درگاه بانک - زرین پال',
     METHOD_TYPE_GATEWAY_SADAD => 'درگاه بانک - سداد',
 ]);
+
+// needed payment method type for payment result
+defined("METHOD_RESULT_TYPE_BEH_PARDAKHT") OR define("METHOD_RESULT_TYPE_BEH_PARDAKHT", 'beh_pardakht');
+defined("METHOD_RESULT_TYPE_IDPAY") OR define("METHOD_RESULT_TYPE_IDPAY", 'idpay');
+defined("METHOD_RESULT_TYPE_MABNA") OR define("METHOD_RESULT_TYPE_MABNA", 'mabna');
+defined("METHOD_RESULT_TYPE_ZARINPAL") OR define("METHOD_RESULT_TYPE_ZARINPAL", 'zarinpal');
+defined("METHOD_RESULT_TYPE_SADAD") OR define("METHOD_RESULT_TYPE_SADAD", 'sadad');
 
 // deposit type codes
 defined("DEPOSIT_TYPE_PAYED") OR define("DEPOSIT_TYPE_PAYED", "a1b2c3d4e5f6");
@@ -250,6 +286,9 @@ defined("PRODUCT_ORDERINGS") OR define("PRODUCT_ORDERINGS", [
     7 => 'گران ترین',
 ]);
 
+// maximum order reserve time
+defined("RESERVE_MAX_TIME") OR define("RESERVE_MAX_TIME", 1200 /* 20min */);
+
 // maximum store for addresses
 defined("ADDRESS_MAX_COUNT") OR define("ADDRESS_MAX_COUNT", 10);
 
@@ -268,6 +307,8 @@ defined("MINIMUM_WARNING_STOCK_VALUE") OR define("MINIMUM_WARNING_STOCK_VALUE", 
 // max category level number
 defined("MAX_CATEGORY_LEVEL") OR define("MAX_CATEGORY_LEVEL", 3);
 
+// order array info session key constant
+defined("SESSION_ORDER_ARR_INFO") OR define("SESSION_ORDER_ARR_INFO", 'session_order_arr_info_custom');
 // coupon code session key constant
 defined("SESSION_APPLIED_COUPON_CODE") OR define("SESSION_APPLIED_COUPON_CODE", 'session_applied_coupon_code');
 // post price session key constant

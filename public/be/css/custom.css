@@ -169,8 +169,10 @@
 }
 
 /* clone remover button */
+/* image cleaner button */
 
-.__clone_remover_btn {
+.__clone_remover_btn,
+.__image_cleaner_btn {
     display: flex;
     display: -webkit-box;
     display: -moz-box;
@@ -183,16 +185,29 @@
     -webkit-justify-content: center;
     justify-content: center;
     position: absolute;
-    top: 0;
-    left: 0;
     width: 2rem;
     height: 2rem;
+    z-index: 1;
+}
+
+.__clone_remover_btn {
+    top: 0;
+    left: 0;
     -webkit-transform: translate(-40%, -40%);
     -moz-transform: translate(-40%, -40%);
     -ms-transform: translate(-40%, -40%);
     -o-transform: translate(-40%, -40%);
     transform: translate(-40%, -40%);
-    z-index: 1;
+}
+
+.__image_cleaner_btn {
+    bottom: 0;
+    right: 0;
+    -webkit-transform: translate(40%, 40%);
+    -moz-transform: translate(40%, 40%);
+    -ms-transform: translate(40%, 40%);
+    -o-transform: translate(40%, 40%);
+    transform: translate(40%, 40%);
 }
 
 /*********************************

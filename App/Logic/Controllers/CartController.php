@@ -93,7 +93,8 @@ class CartController extends AbstractHomeController
                 'mcc' => 0
             ], [], 1, 0, [], [
                     'pa.image', 'pa.brand_fa_name', 'pa.festival_discount', 'pa.festival_expire',
-                    'pa.category_name', 'pa.title', 'pa.slug', 'pa.category_id',
+                    'pa.category_name', 'pa.title', 'pa.slug', 'pa.category_id', 'pa.unit_title',
+                    'pa.unit_sign', 'pa.is_returnable',
                 ]
             );
 
@@ -136,7 +137,7 @@ class CartController extends AbstractHomeController
                  */
                 $productModel = container()->get(ProductModel::class);
                 $qnt = (int)input()->post('qnt')->getValue();
-                if ($productModel->getLimitedProductCount(
+                $extraInfo = $productModel->getLimitedProduct(
                     'pa.code=:code AND pa.is_deleted!=:del AND pa.publish=:pub AND pa.is_available=:avl ' .
                     'AND pa.product_availability=:pAvl AND pa.stock_count>:sc AND pa.max_cart_count>:mcc', [
                     'code' => $product_code,
@@ -146,12 +147,17 @@ class CartController extends AbstractHomeController
                     'pAvl' => DB_YES,
                     'sc' => 0,
                     'mcc' => 0
-                ])
-                ) {
+                ], [], 1, 0, [], [
+                        'pa.image', 'pa.brand_fa_name', 'pa.festival_discount', 'pa.festival_expire',
+                        'pa.category_name', 'pa.title', 'pa.slug', 'pa.category_id', 'pa.unit_title',
+                        'pa.unit_sign', 'pa.is_returnable',
+                    ]
+                );
+                if (count($extraInfo)) {
                     if ($qnt > 0) {
-                        cart()->update($product_code, [
+                        cart()->update($product_code, array_merge($extraInfo, [
                             'qnt' => $qnt,
-                        ])->store();
+                        ]))->store();
                         $resourceHandler
                             ->type(RESPONSE_TYPE_SUCCESS)
                             ->data('تعداد محصول در سبد، بروزرسانی شد.');

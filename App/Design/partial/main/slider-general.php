@@ -1,116 +1,66 @@
-<?php if (count($related_products ?? [])): ?>
-    <div class="row">
-        <div class="col-12">
-            <div class="heading_s1">
-                <h3><?= $slider_title ?? ''; ?></h3>
-            </div>
-            <div class="releted_product_slider carousel_slider owl-carousel owl-theme" data-margin="20"
-                 data-responsive='{"0":{"items": "1"}, "481":{"items": "2"}, "768":{"items": "3"}, "1199":{"items": "4"}}'>
-                <?php foreach ($related_products as $item): ?>
-                    <div class="item">
-                        <div class="product_box text-center">
-                            <?php if (isset($item['festival_discount'])): ?>
-                                <span class="pr_flash bg-danger">جشنواره</span>
-                            <?php elseif (DB_YES == $item['is_special']): ?>
-                                <span class="pr_flash">ویژه</span>
-                            <?php endif; ?>
+<?php
+$slider = isset($slider) && count($slider) ? $slider : [];
+$col_1 = 'col-xl-3';
+$col_2 = 'col-xl-9';
+$hasSideImage = true;
 
-                            <div class="product_img">
-                                <a href="<?= url('home.product.show', [
-                                    'id' => $item['product_id'],
-                                    'slug' => $item['slug'],
-                                ]); ?>">
-                                    <img src="" data-src="<?= url('image.show') . $item['image']; ?>"
-                                         alt="<?= $item['title']; ?>" class="lazy">
-                                </a>
-                                <div class="product_action_box">
-                                    <ul class="list_none pr_action_btn">
-                                        <!--                                        <li>-->
-                                        <!--                                            <a href="">-->
-                                        <?= '';//url('home.compare');  ?>
-                                        <!--                                                <i class="icon-shuffle"></i>-->
-                                        <!--                                            </a>-->
-                                        <!--                                        </li>-->
-                                        <li>
-                                            <a href="<?= url('home.product.show', [
-                                                'id' => $item['product_id'],
-                                                'slug' => $item['slug'],
-                                            ]); ?>">
-                                                <i class="icon-eye"></i>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                            <div class="product_info">
-                                <h6 class="product_title">
-                                    <a href="<?= url('home.product.show', [
-                                        'id' => $item['product_id'],
-                                        'slug' => $item['slug'],
-                                    ]); ?>">
-                                        <?= $item['title']; ?>
-                                    </a>
-                                </h6>
-                                <?php if (DB_YES == $item['product_availability'] && DB_YES == $item['is_available']): ?>
-                                    <div class="product_price">
-                                        <?php
-                                        $hasDiscount = false;
-                                        $discountPrice = number_format($item['price']);
+if (!isset($slider['image']) || empty($slider['image'])) {
+    $col_1 = '';
+    $col_2 = 'col-xl-12';
+    $hasSideImage = false;
+}
+?>
 
-                                        if (!empty($item['festival_expire']) && $item['festival_expire'] > time() && isset($item['festival_discount']) && 0 != $item['festival_discount']) {
-                                            $hasDiscount = true;
-                                            $discountPrice = number_format($item['price'] * (int)$item['festival_discount']);
-                                        } elseif (isset($item['discount_until']) && $item['discount_until'] >= time()) {
-                                            $hasDiscount = true;
-                                            $discountPrice = number_format($item['discounted_price']);
-                                        }
-                                        ?>
+<?php if (count($slider['items'] ?? [])): ?>
+    <div class="section small_pt small_pb">
+        <div class="custom-container">
 
-                                        <span class="price">
-                                            <?= local_number($discountPrice); ?>
-                                            تومان
-                                        </span>
-                                        <?php if ($hasDiscount): ?>
-                                            <del>
-                                                <?= local_number(number_format($item['price'])); ?>
-                                                تومان
-                                            </del>
-                                            <div class="on_sale">
-                                                <span>
-                                                    ٪
-                                                    <?php if (!empty($item['festival_expire']) && $item['festival_expire'] > time() && isset($item['festival_discount'])): ?>
-                                                        <?= local_number($item['festival_discount']); ?>
-                                                    <?php else: ?>
-                                                        <?= local_number(get_percentage($item['price'], $item['discounted_price'])); ?>
-                                                    <?php endif; ?>
-                                                     تخفیف
-                                                </span>
-                                            </div>
-                                        <?php endif; ?>
-                                    </div>
-                                    <?php if (!empty($item['festival_expire']) && $item['festival_expire'] > time()): ?>
-                                        <div class="deal_timer">
-                                            <div class="countdown_time countdown_style1"
-                                                 data-time="<?= date('Y/m/d H:i:s', $item['festival_expire']); ?>"></div>
+            <div class="row">
+                <?php if ($hasSideImage): ?>
+                    <div class="<?= $col_1; ?> d-none d-xl-block">
+                        <div class="sale-banner">
+                            <a class="hover_effect1" href="#">
+                                <img src="assets/images/shop_banner_img10.jpg" alt="shop_banner_img10">
+                            </a>
+                        </div>
+                    </div>
+                <?php endif; ?>
+
+                <div class="<?= $col_2; ?>">
+                    <?php if (!empty($info['title'] ?? []) || !empty($info['link'] ?? [])): ?>
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="heading_tab_header">
+                                    <?php if (!empty($info['title'] ?? [])): ?>
+                                        <div class="heading_s2">
+                                            <h4><?= $info['title']; ?></h4>
                                         </div>
                                     <?php endif; ?>
-                                    <div class="add-to-cart">
-                                        <a href="javascript:void(0);"
-                                           class="btn btn-fill-out btn-radius __add_to_cart_btn"
-                                           data-cart-item-code="<?= $item['code']; ?>">
-                                            <i class="icon-basket-loaded"></i>
-                                            افزودن به سبد خرید
-                                        </a>
-                                    </div>
-                                <?php else: ?>
-                                    <div class="product_price">
-                                        <span class="badge badge-danger d-block py-3">ناموجود</span>
-                                    </div>
-                                <?php endif; ?>
+                                    <?php if (!empty($info['link'] ?? [])): ?>
+                                        <div class="view_all">
+                                            <a href="<?= $info['link']; ?>" class="text_default">
+                                                <i class="linearicons-power"></i>
+                                                <span>مشاهده همه</span>
+                                            </a>
+                                        </div>
+                                    <?php endif; ?>
+                                </div>
+                            </div>
+                        </div>
+                    <?php endif; ?>
+
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="product_slider carousel_slider owl-carousel owl-theme dot_style1"
+                                 data-loop="true" data-margin="20"
+                                 data-responsive='{"0":{"items": "1"}, "481":{"items": "2"}, "768":{"items": "3"}, "991":{"items": "4"}}'>
+                                <?php foreach ($slider as $item): ?>
+                                    <?php load_partial('main/product-card', ['item' => $item]); ?>
+                                <?php endforeach; ?>
                             </div>
                         </div>
                     </div>
-                <?php endforeach; ?>
+                </div>
             </div>
         </div>
     </div>

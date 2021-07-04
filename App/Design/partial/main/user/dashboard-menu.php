@@ -43,9 +43,9 @@
                 </li>
                 <!--                <li class="nav-item">-->
                 <!--                    <a class="nav-link "-->
-                <?= '';//url()->getRelativeUrl() == url('user.return-order')->getRelativeUrl() ? 'active' : '';  ?>
+                <?= '';//url()->getRelativeUrl() == url('user.return-order')->getRelativeUrl() ? 'active' : '';      ?>
                 <!--                       href="">-->
-                <?= '';//url('user.return-order');  ?>
+                <?= '';//url('user.return-order');      ?>
                 <!--                        <i class="linearicons-cart-remove"></i>-->
                 <!--                        مرجوع سفارش-->
                 <!--                    </a>-->
@@ -72,10 +72,21 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link <?= url()->getRelativeUrl() == url('user.favorite')->getRelativeUrl() ? 'active' : ''; ?>"
+                    <?php
+                    $isActive = url()->getRelativeUrl() == url('user.favorite')->getRelativeUrl();
+                    ?>
+                    <a class="nav-link <?= $isActive ? 'active' : ''; ?>"
                        href="<?= url('user.favorite'); ?>">
-                        <i class="ti-heart"></i>
-                        کالاهای مورد علاقه
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <i class="ti-heart"></i>
+                                کالاهای مورد علاقه
+                            </div>
+
+                            <span class="badge <?= $isActive ? 'badge-light' : 'badge-info'; ?> px-2 d-flex align-items-center justify-content-center">
+                                <?= local_number($favorite_count); ?>
+                            </span>
+                        </div>
                     </a>
                 </li>
                 <li class="nav-item">

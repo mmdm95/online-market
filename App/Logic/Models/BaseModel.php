@@ -52,6 +52,7 @@ abstract class BaseModel
     const TBL_SEND_METHODS = 'send_methods';
     const TBL_STATIC_PAGES = 'static_pages';
     const TBL_SETTINGS = 'settings';
+    const TBL_SMS_LOGS = 'sms_logs';
     const TBL_STEPPED_PRICES = 'stepped_prices';
     const TBL_UNITS = 'units';
     const TBL_USERS = 'users';

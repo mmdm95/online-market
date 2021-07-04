@@ -10,7 +10,7 @@ use Sim\Utils\StringUtil;
 
     <!-- START SECTION BLOG -->
     <div class="section">
-        <div class="container">
+        <div class="custom-container">
             <div class="row">
                 <div class="col-xl-9">
                     <div class="single_post">

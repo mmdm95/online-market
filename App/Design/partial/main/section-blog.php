@@ -6,7 +6,7 @@ use Sim\Utils\StringUtil;
 ?>
 <?php if (count($blog ?? [])): ?>
     <div class="section pb_20">
-        <div class="container">
+        <div class="custom-container">
             <div class="row justify-content-center">
                 <div class="col-lg-6 col-md-8">
                     <div class="heading_s1 text-center">

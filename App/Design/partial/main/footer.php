@@ -6,7 +6,7 @@ use App\Logic\Utils\Jdf;
 
 <footer class="footer_dark">
     <div class="footer_top">
-        <div class="container">
+        <div class="custom-container">
             <div class="row">
                 <div class="col-lg-4 col-md-12 col-sm-12">
                     <div class="widget">
@@ -35,7 +35,7 @@ use App\Logic\Utils\Jdf;
                                     <?php foreach (explode(',', $telegram) as $item): ?>
                                         <li>
                                             <a href="<?= $item; ?>">
-                                                <i class="ion-ios-paperplane-outline"></i>
+                                                <i class="linearicons-paper-plane"></i>
                                             </a>
                                         </li>
                                     <?php endforeach; ?>
@@ -147,7 +147,7 @@ use App\Logic\Utils\Jdf;
                             <ul class="widget_instafeed namad_img">
                                 <?php foreach ($namads as $namad): ?>
                                     <li>
-                                        <?= $namad; ?>
+                                        <?= html_entity_decode($namad); ?>
                                     </li>
                                 <?php endforeach; ?>
                             </ul>
@@ -163,7 +163,7 @@ use App\Logic\Utils\Jdf;
     ?>
     <?php if (!empty($copyright)): ?>
         <div class="bottom_footer border-top-tran">
-            <div class="container">
+            <div class="custom-container">
                 <div class="row">
                     <div class="col-md-6">
                         <p class="mb-md-0 text-center text-md-left">

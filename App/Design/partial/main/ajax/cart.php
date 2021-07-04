@@ -3,14 +3,15 @@
 use Sim\Utils\StringUtil;
 
 ?>
+
 <a class="nav-link cart_trigger"
    href="#"
    data-toggle="dropdown">
-    <i class="linearicons-cart"></i>
+    <i class="linearicons-bag2"></i>
     <span class="cart_count"><?= local_number($count ?? 0); ?></span>
 </a>
 
-<div class="cart_box dropdown-menu dropdown-menu-right">
+<div class="cart_box cart_right dropdown-menu dropdown-menu-right">
     <?php if (count($items ?? [])): ?>
         <ul class="cart_list">
             <?php foreach ($items ?? [] as $item): ?>
@@ -49,7 +50,7 @@ use Sim\Utils\StringUtil;
                 <span class="cart_price"> <span class="price_symbole">تومان</span></span>
             </p>
             <p class="cart_buttons">
-                <a href="<?= url('home.cart'); ?>" class="btn btn-fill-out view-cart">
+                <a href="<?= url('home.cart'); ?>" class="btn btn-fill-line view-cart">
                     سبد خرید
                 </a>
             </p>

@@ -93,6 +93,11 @@ class CouponUtil
                 }
             }
 
+            if(0 == $coupon['use_count']) {
+                $ok = false;
+                $msg = 'کوپن مورد نظر به اتمام رسیده است.';
+            }
+
             if ($ok) {
                 session()->set(SESSION_APPLIED_COUPON_CODE, $code);
                 $msg = 'کوپن اعمال شد.';

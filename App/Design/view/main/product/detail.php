@@ -8,7 +8,7 @@ use Sim\Utils\StringUtil;
 
     <!-- START SECTION SHOP -->
     <div class="section">
-        <div class="container">
+        <div class="custom-container">
             <div class="row">
                 <input type="hidden" value="<?= $product['product_id']; ?>" id="__current_product_id">
 
@@ -115,14 +115,16 @@ use Sim\Utils\StringUtil;
                                 </button>
                                 <!--                                <a class="add_compare" href=""-->
                                 <!--                                   data-toggle="tooltip" data-placement="top" title="لیست مقایسه">-->
-                                <?= '';//url('home.compare');     ?>
+                                <?= '';//url('home.compare');       ?>
                                 <!--                                    <i class="linearicons-shuffle"></i>-->
                                 <!--                                </a>-->
                                 <a class="add_wishlist <?= $is_in_wishlist ? 'active' : ''; ?>"
                                    href="javascript:void(0);" data-toggle="tooltip"
                                    data-placement="top" title="لیست علاقه مندی ها"
                                    data-product-id="<?= $product['product_id']; ?>">
-                                    <i class="linearicons-bookmark2"></i>
+                                    <span class="d-flex justify-content-center align-items-cneter p-1">
+                                        <i class="linearicons-bookmark2"></i>
+                                    </span>
                                 </a>
                             </div>
                         </div>
@@ -322,7 +324,7 @@ use Sim\Utils\StringUtil;
                                         <?php endif; ?>
                                     <?php endforeach; ?>
                                 <?php else: ?>
-                                    <span class="text-info">هیچ ویژگی‌ای یافت نشد.</span>
+                                    <span class="text-info">هیچ ویژگی‌ای یافت نشد</span>
                                 <?php endif; ?>
                             </div>
                             <!-- END PRODUCT PROPERTIES -->
@@ -343,6 +345,7 @@ use Sim\Utils\StringUtil;
                                                     <div class="form-group col-md-6">
                                                         <input required="required" placeholder="نام خود را وارد کنید *"
                                                                class="form-control" name="inp-comment-name"
+                                                            <?= isset($user['first_name']) && !empty(trim($user['first_name'])) ? 'readonly="readonly"' : ''; ?>
                                                                type="text" value="<?= $user['first_name'] ?: ''; ?>">
                                                     </div>
                                                     <div class="form-group col-12">

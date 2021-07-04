@@ -3,6 +3,7 @@
 namespace App\Logic\Models;
 
 use Aura\SqlQuery\Common\Insert;
+use Aura\SqlQuery\Common\Update;
 use Aura\SqlQuery\Exception as AuraException;
 
 class OrderModel extends BaseModel
@@ -245,6 +246,31 @@ class OrderModel extends BaseModel
         return 0;
     }
 
+    /**
+     * @param $code
+     * @return array
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
+     */
+    public function getOrderFromGatewayCode($code): array
+    {
+        /**
+         * @var GatewayModel $gatewayModel
+         */
+        $gatewayModel = container()->get(GatewayModel::class);
+        $flow = $gatewayModel->getFirst(['order_code'], 'code=:code', ['code' => $code]);
+
+        if (!count($flow)) return [];
+        return $this->getFirst(['*'], 'code=:code', ['code' => $flow['order_code']]);
+    }
+
+    /**
+     * @param array $order
+     * @param array $items
+     * @return bool
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
+     */
     public function issueFullFactor(array $order, array $items): bool
     {
         $this->db->beginTransaction();
@@ -263,22 +289,113 @@ class OrderModel extends BaseModel
          * @var Insert $insert
          */
         $insert = $model->insert();
+        /**
+         * @var Update $update
+         */
+        $update = $model->update();
+        $res4 = true;
         $counter = 0;
         foreach ($items as $item) {
             if ($counter++ != 0) {
                 $insert->addRow();
             }
-            $insert->cols($item);
+            $insert
+                ->into(self::TBL_ORDER_ITEMS)
+                ->cols([
+                    'order_code	' => $order['code'],
+                    'product_id' => $item['product_id'],
+                    'product_code' => $item['code'],
+                    'product_title' => $item['title'],
+                    'price' => $item['price'],
+                    'discounted_price' => $item['discounted_price'],
+                    'unit_price' => $item['unit_sign'],
+                    'product_count' => $item['qnt'],
+                    'unit_title' => $item['unit_title'],
+                    'color' => $item['color_hex'],
+                    'color_name' => $item['color_name'],
+                    'size' => $item['size'],
+                    'guarantee' => $item['guarantee'],
+                    'is_returnable' => $item['is_returnable'],
+                    'is_returned' => DB_NO,
+                ]);
+            $update
+                ->table(self::TBL_PRODUCT_PROPERTY)
+                ->set('stock_count', 'stock_count-' . $item['qnt']);
+            $res4 = $model->execute($update);
+            if (!$res4) break;
         }
         $res2 = $model->execute($insert);
         //-----
 
-        if (!$res || !$res2) {
+        if (!$res || !$res2 || !$res4) {
+            $this->db->rollBack();
+        }
+
+        /**
+         * @var OrderReserveModel $reserveModel
+         */
+        $reserveModel = container()->get(OrderReserveModel::class);
+
+        $res3 = $reserveModel->insert([
+            'order_code' => $order['code'],
+            'created_at' => time(),
+            'expire_at' => time() + RESERVE_MAX_TIME,
+        ]);
+
+        if (!$res3) {
             $this->db->rollBack();
         }
 
         $this->db->commit();
 
         return false;
+    }
+
+    /**
+     * @param $orderCode
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
+     */
+    public function removeIssuedFactor($orderCode)
+    {
+        /**
+         * @var OrderReserveModel $reserveModel
+         */
+        $reserveModel = container()->get(OrderReserveModel::class);
+        /**
+         * @var CouponModel $couponModel
+         */
+        $couponModel = container()->get(CouponModel::class);
+        /**
+         * @var Model $model
+         */
+        $model = container()->get(Model::class);
+
+        $this->db->beginTransaction();
+
+        $order = $this->getFirst(['coupon_id', 'coupon_code'], 'code=:code', ['code' => $orderCode]);
+
+        $res = $this->delete('code=:code', ['code' => $orderCode]);
+        $res2 = $reserveModel->delete('order_code=:code', ['code' => $orderCode]);
+
+        $couponRes = true;
+        if (count($order) && !empty($order['coupon_id']) && !empty($order['coupon_code'])) {
+            // make this coupon a used one
+            $couponUpdate = $model->update();
+            $couponUpdate
+                ->table(BaseModel::TBL_COUPONS)
+                ->set('use_count', 'use_count+1')
+                ->where('id=:id AND code=:code')
+                ->bindValues([
+                    'id' => $order['coupon_id'],
+                    'code' => $order['coupon_code'],
+                ]);
+            $couponRes = $model->execute($couponUpdate);
+        }
+
+        if (!$res || !$res2 || !$couponRes) {
+            $this->db->rollBack();
+        }
+        $this->db->commit();
     }
 }

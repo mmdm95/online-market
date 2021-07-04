@@ -11,7 +11,7 @@ use App\Logic\Middlewares\Logic\ForgetCodeCheckMiddleware;
 use App\Logic\Middlewares\Logic\ForgetCompletionCheckMiddleware;
 use App\Logic\Middlewares\Logic\ForgetMobileCheckMiddleware;
 use App\Logic\Models\BaseModel;
-use App\Logic\SMS\CommonSMS;
+use App\Logic\Utils\SMSUtil;
 use Sim\Auth\DBAuth;
 use Sim\Auth\Exceptions\IncorrectPasswordException;
 use Sim\Auth\Exceptions\InvalidUserException;
@@ -125,6 +125,7 @@ class LoginController extends AbstractHomeController
      * @throws \DI\DependencyException
      * @throws \DI\NotFoundException
      * @throws \ReflectionException
+     * @throws SMSException
      */
     public function forgetPassword($step = 'step1')
     {
@@ -147,11 +148,13 @@ class LoginController extends AbstractHomeController
                             session()->setFlash('forget.username', $username);
 
                             // send code as sms
-//                            $forgetSms = new CommonSMS();
-//                            $forgetSms->send([$username], replaced_sms_body(SMS_TYPE_ACTIVATION, [
-//                                SMS_REPLACEMENTS['mobile'] => $username,
-//                                SMS_REPLACEMENTS['code'] => session()->getFlash('register.code', ''),
-//                            ]));
+                            $body = replaced_sms_body(SMS_TYPE_ACTIVATION, [
+                                SMS_REPLACEMENTS['mobile'] => $username,
+                                SMS_REPLACEMENTS['code'] => session()->getFlash('register.code', ''),
+                            ]);
+                            $smsRes = SMSUtil::send([$username], $body);
+                            SMSUtil::logSMS([$username], $body, $smsRes, SMS_LOG_TYPE_RECOVER_PASS, SMS_LOG_SENDER_SYSTEM);
+
 
                             response()->redirect(url('home.forget-password', ['step' => 'step2'])->getRelativeUrlTrimmed());
                         } else {

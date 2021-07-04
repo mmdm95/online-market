@@ -314,7 +314,7 @@ $validator = form_validator();
                             <?php if (!$validator->getStatus()): ?>
                                 <?php foreach ($errNamads as $namad): ?>
                                     <div class="form-group position-relative" <?= 0 == $counter ? 'id="__sample_namad"' : ''; ?>>
-                                        <textarea class="form-control form-control-min-height"
+                                        <textarea class="form-control form-control-min-height ltr"
                                                   placeholder="نماد را وارد کنید"
                                                   name="inp-setting-namads[]"
                                         ><?= $namad->getValue(); ?></textarea>
@@ -326,7 +326,7 @@ $validator = form_validator();
                             <?php elseif (count($namads)): ?>
                                 <?php foreach ($namads as $namad): ?>
                                     <div class="form-group position-relative" <?= 0 == $counter ? 'id="__sample_namad"' : ''; ?>>
-                                        <textarea class="form-control form-control-min-height"
+                                        <textarea class="form-control form-control-min-height ltr"
                                                   placeholder="نماد را وارد کنید"
                                                   name="inp-setting-namads[]"
                                         ><?= $namad; ?></textarea>
@@ -337,7 +337,7 @@ $validator = form_validator();
                                 <?php endforeach; ?>
                             <?php else: ?>
                                 <div class="form-group position-relative" id="__sample_namad">
-                                    <textarea class="form-control form-control-min-height"
+                                    <textarea class="form-control form-control-min-height ltr"
                                               placeholder="نماد را وارد کنید"
                                               name="inp-setting-namads[]"
                                     ></textarea>

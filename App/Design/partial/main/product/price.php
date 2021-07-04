@@ -16,12 +16,12 @@
 
             <span class="price">
                  <?= local_number($discountPrice); ?>
-                 تومان
+                 <span class="price_symbole">تومان</span>
             </span>
             <?php if ($hasDiscount): ?>
                 <del>
                     <?= local_number(number_format($product['price'])); ?>
-                    تومان
+                    <span class="price_symbole">تومان</span>
                 </del>
                 <div class="on_sale">
                     <span>

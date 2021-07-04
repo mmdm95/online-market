@@ -13,7 +13,7 @@ class SliderUtil
      * @throws \DI\DependencyException
      * @throws \DI\NotFoundException
      */
-    public function getTabSliderItems(array $info): array
+    public function getFilteredSliderItems(array $info): array
     {
         if (!isset($info['type'])) return [];
 
@@ -28,7 +28,7 @@ class SliderUtil
             ->cols([
                 'pa.title', 'pa.slug', 'pa.image', 'pa.category_id', 'pa.is_special', 'pa.product_availability',
                 'pa.code', 'pa.product_id', 'pa.price', 'pa.discounted_price', 'pa.discount_until', 'pa.is_available',
-                'pa.festival_id', 'pa.festival_discount',
+                'pa.festival_id', 'pa.festival_discount', 'pa.created_at',
             ]);
 
         $info['limit'] = isset($info['limit']) && (int)$info['limit'] > 0 ? (int)$info['limit'] : 3;

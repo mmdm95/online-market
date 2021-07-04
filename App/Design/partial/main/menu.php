@@ -1,6 +1,6 @@
 <header class="header_wrap fixed-top header_with_topbar">
     <div class="top-header">
-        <div class="container">
+        <div class="custom-container">
             <div class="row align-items-center">
                 <div class="col-md-6">
                     <div class="d-flex align-items-center justify-content-center justify-content-md-start">
@@ -49,7 +49,7 @@
         </div>
     </div>
     <div class="bottom_header dark_skin main_menu_uppercase">
-        <div class="container">
+        <div class="custom-container">
             <nav class="navbar navbar-expand-lg">
                 <a class="navbar-brand" href="<?= url('home.index'); ?>">
                     <img class="logo_light"
@@ -80,7 +80,7 @@
                                 </a>
 
                                 <?php if ($hasChildren): ?>
-                                    <div class="dropdown-menu">
+                                    <div class="dropdown-menu dropdown-menu-right">
                                         <ul>
                                             <?php foreach ($t['children'] as $c): ?>
                                                 <li>

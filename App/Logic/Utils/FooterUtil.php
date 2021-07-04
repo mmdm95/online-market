@@ -56,19 +56,12 @@ class FooterUtil
     public function assembleFooterNamads(array $namads): array
     {
         try {
-            /**
-             * @var AntiXSS $xss
-             */
-            $xss = container()->make(AntiXSS::class);
-            $xss->removeNeverAllowedOnEventsAfterwards([
-                'onClick',
-            ]);
             $newNamad = [];
             /**
              * @var InputItem $namad
              */
             foreach ($namads as $namad) {
-                $x = $xss->xss_clean($namad->getValue());
+                $x = htmlentities($namad->getValue());
                 if (trim($x) != '') {
                     $newNamad[] = $x;
                 }

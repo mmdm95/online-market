@@ -236,6 +236,7 @@ class ProductModel extends BaseModel
             'pa.max_cart_count',
             'pa.stock_count',
             'pa.color_name',
+            'pa.color_hex',
             'pa.size',
             'pa.guarantee',
             'pa.product_availability',

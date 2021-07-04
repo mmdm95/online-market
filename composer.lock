@@ -730,16 +730,16 @@
         },
         {
             "name": "mmdm/sim-fa-payment",
-            "version": "v0.2.1",
+            "version": "v0.2.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/mmdm95/sim-fa-payment.git",
-                "reference": "77a9267522650caebbc4774184ee2b24370272ab"
+                "reference": "7955e3bd6eb8eae9c02f483b7c6ad2267754ed23"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mmdm95/sim-fa-payment/zipball/77a9267522650caebbc4774184ee2b24370272ab",
-                "reference": "77a9267522650caebbc4774184ee2b24370272ab",
+                "url": "https://api.github.com/repos/mmdm95/sim-fa-payment/zipball/7955e3bd6eb8eae9c02f483b7c6ad2267754ed23",
+                "reference": "7955e3bd6eb8eae9c02f483b7c6ad2267754ed23",
                 "shasum": ""
             },
             "require": {
@@ -769,22 +769,22 @@
             "description": "A simple yet nice iranian payment library",
             "support": {
                 "issues": "https://github.com/mmdm95/sim-fa-payment/issues",
-                "source": "https://github.com/mmdm95/sim-fa-payment/tree/v0.2.1"
+                "source": "https://github.com/mmdm95/sim-fa-payment/tree/v0.2.5"
             },
-            "time": "2021-06-02T20:37:45+00:00"
+            "time": "2021-07-04T03:50:59+00:00"
         },
         {
             "name": "mmdm/sim-fa-sms",
-            "version": "v0.1.0",
+            "version": "v0.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/mmdm95/sim-fa-sms.git",
-                "reference": "4f6f7f74bb3748c52f3ed788d987d1af3c21e4a3"
+                "reference": "2116c31c5812fa71118eadebf1164bb0e5467735"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mmdm95/sim-fa-sms/zipball/4f6f7f74bb3748c52f3ed788d987d1af3c21e4a3",
-                "reference": "4f6f7f74bb3748c52f3ed788d987d1af3c21e4a3",
+                "url": "https://api.github.com/repos/mmdm95/sim-fa-sms/zipball/2116c31c5812fa71118eadebf1164bb0e5467735",
+                "reference": "2116c31c5812fa71118eadebf1164bb0e5467735",
                 "shasum": ""
             },
             "require": {
@@ -812,9 +812,9 @@
             "description": "A simple yet nice SMS library",
             "support": {
                 "issues": "https://github.com/mmdm95/sim-fa-sms/issues",
-                "source": "https://github.com/mmdm95/sim-fa-sms/tree/v0.1.0"
+                "source": "https://github.com/mmdm95/sim-fa-sms/tree/v0.1.1"
             },
-            "time": "2020-10-05T23:24:10+00:00"
+            "time": "2021-07-03T19:00:33+00:00"
         },
         {
             "name": "mmdm/sim-file",
@@ -944,16 +944,16 @@
         },
         {
             "name": "mmdm/sim-i18n",
-            "version": "v1.1.1",
+            "version": "v1.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/mmdm95/sim-i18n.git",
-                "reference": "97e112f9dda4adb2301156349ee46e83dba76096"
+                "reference": "7c6cf0dc74268d29df016a40fa671f4cd3c9b4b6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mmdm95/sim-i18n/zipball/97e112f9dda4adb2301156349ee46e83dba76096",
-                "reference": "97e112f9dda4adb2301156349ee46e83dba76096",
+                "url": "https://api.github.com/repos/mmdm95/sim-i18n/zipball/7c6cf0dc74268d29df016a40fa671f4cd3c9b4b6",
+                "reference": "7c6cf0dc74268d29df016a40fa671f4cd3c9b4b6",
                 "shasum": ""
             },
             "require": {
@@ -978,9 +978,9 @@
             "description": "A simple way for multiple language management",
             "support": {
                 "issues": "https://github.com/mmdm95/sim-i18n/issues",
-                "source": "https://github.com/mmdm95/sim-i18n/tree/v1.1.1"
+                "source": "https://github.com/mmdm95/sim-i18n/tree/v1.2.0"
             },
-            "time": "2021-04-24T05:37:37+00:00"
+            "time": "2021-06-20T07:40:19+00:00"
         },
         {
             "name": "mmdm/sim-logger",
@@ -1613,16 +1613,16 @@
         },
         {
             "name": "symfony/console",
-            "version": "v5.3.0",
+            "version": "v5.3.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/console.git",
-                "reference": "058553870f7809087fa80fa734704a21b9bcaeb2"
+                "reference": "649730483885ff2ca99ca0560ef0e5f6b03f2ac1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/console/zipball/058553870f7809087fa80fa734704a21b9bcaeb2",
-                "reference": "058553870f7809087fa80fa734704a21b9bcaeb2",
+                "url": "https://api.github.com/repos/symfony/console/zipball/649730483885ff2ca99ca0560ef0e5f6b03f2ac1",
+                "reference": "649730483885ff2ca99ca0560ef0e5f6b03f2ac1",
                 "shasum": ""
             },
             "require": {
@@ -1691,7 +1691,7 @@
                 "terminal"
             ],
             "support": {
-                "source": "https://github.com/symfony/console/tree/v5.3.0"
+                "source": "https://github.com/symfony/console/tree/v5.3.2"
             },
             "funding": [
                 {
@@ -1707,7 +1707,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-05-26T17:43:10+00:00"
+            "time": "2021-06-12T09:42:48+00:00"
         },
         {
             "name": "symfony/deprecation-contracts",
@@ -2499,16 +2499,16 @@
         },
         {
             "name": "symfony/string",
-            "version": "v5.3.0",
+            "version": "v5.3.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/string.git",
-                "reference": "a9a0f8b6aafc5d2d1c116dcccd1573a95153515b"
+                "reference": "bd53358e3eccec6a670b5f33ab680d8dbe1d4ae1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/string/zipball/a9a0f8b6aafc5d2d1c116dcccd1573a95153515b",
-                "reference": "a9a0f8b6aafc5d2d1c116dcccd1573a95153515b",
+                "url": "https://api.github.com/repos/symfony/string/zipball/bd53358e3eccec6a670b5f33ab680d8dbe1d4ae1",
+                "reference": "bd53358e3eccec6a670b5f33ab680d8dbe1d4ae1",
                 "shasum": ""
             },
             "require": {
@@ -2562,7 +2562,7 @@
                 "utf8"
             ],
             "support": {
-                "source": "https://github.com/symfony/string/tree/v5.3.0"
+                "source": "https://github.com/symfony/string/tree/v5.3.3"
             },
             "funding": [
                 {
@@ -2578,7 +2578,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-05-26T17:43:10+00:00"
+            "time": "2021-06-27T11:44:38+00:00"
         },
         {
             "name": "vlucas/phpdotenv",

@@ -61,6 +61,7 @@ use App\Logic\Handlers\CustomExceptionHandler;
 use App\Logic\Middlewares\AdminAuthMiddleware;
 use App\Logic\Middlewares\ApiVerifierMiddleware;
 use App\Logic\Middlewares\AuthMiddleware;
+use App\Logic\Middlewares\CartMiddleware;
 use App\Logic\Utils\ConfigUtil;
 use Pecee\SimpleRouter\Event\EventArgument;
 use Pecee\SimpleRouter\Handlers\EventHandler;
@@ -624,10 +625,13 @@ class Route implements IInitialize
              */
             Router::get('/cart', [CartController::class, 'index'])->name('home.cart');
             Router::group(['middleware' => AuthMiddleware::class], function () {
-                Router::get('/checkout', [CheckoutController::class, 'checkout'])->name('home.checkout');
+                Router::group(['middleware' => CartMiddleware::class], function () {
+                    Router::get('/checkout', [CheckoutController::class, 'checkout'])->name('home.checkout');
+                });
             });
-            Router::get('/finish/{type}', [OrderResult::class, 'index'])->where([
+            Router::get('/finish/{type}/{code}', [OrderResult::class, 'index'])->where([
                 'type' => '[a-zA-Z0-9]+',
+                'code' => '[a-zA-Z0-9]+',
             ])->name('home.finish');
 
             /**

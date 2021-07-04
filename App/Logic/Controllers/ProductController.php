@@ -236,6 +236,7 @@ class ProductController extends AbstractHomeController
             'related_products' => $related_products,
             'comments_count' => $commentsCount,
             'is_commenting_allowed' => $auth->isLoggedIn(),
+            'user' => get_current_authenticated_user(auth_home()),
         ]);
     }
 

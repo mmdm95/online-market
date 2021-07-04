@@ -81,7 +81,15 @@ class HomeController extends AbstractHomeController
         foreach (\config()->get('settings.index_tabbed_slider.value.items') ?? [] as $k => $tab) {
             if (is_array($tab)) {
                 $tabbedSlider[$k]['info'] = $tab;
-                $tabbedSlider[$k]['items'] = $sliderUtil->getTabSliderItems($tab);
+                $tabbedSlider[$k]['items'] = $sliderUtil->getFilteredSliderItems($tab);
+            }
+        }
+        // general slider
+        $generalSlider = [];
+        foreach (\config()->get('settings.index_general_sliders.value') ?: [] as $k => $slider) {
+            if (is_array($slider)) {
+                $generalSlider[$k]['info'] = $slider;
+                $generalSlider[$k]['items'] = $sliderUtil->getFilteredSliderItems($slider);
             }
         }
 
@@ -90,10 +98,12 @@ class HomeController extends AbstractHomeController
             'menu_images' => $menuImages,
             'categories' => $catModel->get(['id', 'name'], 'level=:lvl AND publish=:pub', ['pub' => DB_YES, 'lvl' => 1], ['name ASC']),
             'main_slider' => $indexModel->getMainSlider(),
+            'tabbed_slider_side_image' => \config()->get('settings.index_tabbed_slider_side_image.value'),
             'tabbed_slider' => [
                 'title' => \config()->get('settings.index_tabbed_slider.value.title'),
                 'items' => $tabbedSlider,
             ],
+            'general_slider' => $generalSlider,
             'instagram_images' => $instagramImagesModel->get(['image', 'link']),
             'special_slider' => $sliderUtil->getSpecialsSlider(),
             'three_images' => \config()->get('settings.index_3_images.value'),

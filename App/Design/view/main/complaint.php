@@ -6,7 +6,7 @@ $validator = form_validator();
 <div class="main_content">
     <!-- START SECTION COMPLAINT -->
     <div class="section pt-0">
-        <div class="container">
+        <div class="custom-container">
             <div class="row">
                 <div class="col-lg-10 mx-auto mt-5" id="__complaint_form_container">
                     <div class="heading_s1">

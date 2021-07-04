@@ -39,10 +39,6 @@ class HomeController extends AbstractUserController
     public function index()
     {
         /**
-         * @var ProductModel $productModel
-         */
-        $productModel = container()->get(ProductModel::class);
-        /**
          * @var OrderModel $orderModel
          */
         $orderModel = container()->get(OrderModel::class);
@@ -66,7 +62,6 @@ class HomeController extends AbstractUserController
         $user = $this->getDefaultArguments()['user'];
 
         $walletBalance = $walletModel->getFirst(['balance'], 'username=:username', ['username' => $user['username']])['balance'];
-        $favoriteCount = $productModel->userFavoriteProductCount($user['id']);
         $orderCount = $orderModel->count('user_id=:id', ['id' => $user['id']]);
 //        $returnCount = $returnModel->count('user_id=:id', ['id' => $user['id']]);
         $accCommentCount = $commentModel->count('user_id=:id AND the_condition=:condition', ['id' => $user['id'], 'condition' => COMMENT_CONDITION_ACCEPT]);
@@ -106,7 +101,6 @@ class HomeController extends AbstractUserController
             'order_count' => $orderCount,
 //            'return_order_count' => $returnCount,
             'wallet_balance' => $walletBalance,
-            'favorite_count' => $favoriteCount,
             'accept_comment_count' => $accCommentCount,
             'not_accept_comment_count' => $naccCommentCount,
             //

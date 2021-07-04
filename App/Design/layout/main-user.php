@@ -49,10 +49,13 @@
 
     <!-- START SECTION SHOP -->
     <div class="section">
-        <div class="container">
+        <div class="custom-container">
             <div class="row" id="__theia_sticky_sidebar_container">
                 <!-- START DASHBOARD MENU -->
-                <?php load_partial('main/user/dashboard-menu', ['user' => $user]); ?>
+                <?php load_partial('main/user/dashboard-menu', [
+                    'user' => $user,
+                    'favorite_count' => $favorite_count ?? 0,
+                ]); ?>
                 <!-- END DASHBOARD MENU -->
 
                 <div class="col-lg-9 col-md-8">

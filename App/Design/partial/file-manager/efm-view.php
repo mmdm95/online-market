@@ -135,7 +135,6 @@
                 table,
                 okBtn,
                 //-----
-                picker,
                 clickedItem = null,
                 selectedItem;
 
@@ -154,7 +153,18 @@
             modal = $('#modal_efm');
             table = $('#table');
             okBtn = $('#__pick_file_btn');
-            picker = $('.__file_picker_handler');
+
+            $.efmInitPickerEvent = function () {
+                $('.__file_picker_handler')
+                    .off('click' + variables.namespace)
+                    .on('click' + variables.namespace, function () {
+                        if ($(this).hasClass(clsImage) || $(this).hasClass(clsVideo)) {
+                            isImage = $(this).hasClass(clsImage);
+                            isVideo = $(this).hasClass(clsVideo);
+                            clickedItem = $(this);
+                        }
+                    });
+            }
 
             /**
              * @param filename
@@ -222,15 +232,7 @@
                     });
             });
 
-            picker
-                .off('click' + variables.namespace)
-                .on('click' + variables.namespace, function () {
-                    if ($(this).hasClass(clsImage) || $(this).hasClass(clsVideo)) {
-                        isImage = $(this).hasClass(clsImage);
-                        isVideo = $(this).hasClass(clsVideo);
-                        clickedItem = $(this);
-                    }
-                });
+            $.efmInitPickerEvent();
 
             okBtn
                 .off('click')

@@ -7,6 +7,8 @@ use App\Logic\Forms\Checkout\CheckoutForm;
 use App\Logic\Handlers\GeneralAjaxFormHandler;
 use App\Logic\Handlers\ResourceHandler;
 use App\Logic\Models\AddressModel;
+use App\Logic\Models\OrderModel;
+use App\Logic\Models\OrderReserveModel;
 use App\Logic\Models\PaymentMethodModel;
 use App\Logic\Models\ProvinceModel;
 use App\Logic\Models\UserModel;
@@ -19,6 +21,7 @@ use Sim\Exceptions\Mvc\Controller\ControllerException;
 use Sim\Exceptions\PathManager\PathNotRegisteredException;
 use Sim\Interfaces\IFileNotExistsException;
 use Sim\Interfaces\IInvalidVariableNameException;
+use Sim\Payment\Providers\Sadad\SadadRequestResultProvider;
 
 class CheckoutController extends AbstractHomeController
 {
@@ -126,12 +129,6 @@ class CheckoutController extends AbstractHomeController
                 // store to flash session to retrieve in form store
                 session()->setFlash(SESSION_GATEWAY_RECORD, $gatewayMethod);
 
-                // connect to gateway and get needed info
-                PaymentUtil::getGatewayInfo(
-                    $gatewayMethod['method_type'],
-                    cryptographer()->decrypt($gatewayMethod['meta_parameters'])
-                );
-
                 // issue a factor for order
                 $formHandler = new GeneralAjaxFormHandler();
                 $resourceHandler = $formHandler
@@ -139,9 +136,49 @@ class CheckoutController extends AbstractHomeController
 
                 // return needed response for gateway redirection if everything is ok
                 if ($resourceHandler->getReturnData()['type'] == RESPONSE_TYPE_SUCCESS) {
-                    $resourceHandler->data([
+                    // connect to gateway and get needed info
+                    PaymentUtil::getGatewayInfo(
+                        $gatewayMethod['method_type'],
+                        $gatewayMethod['code'],
+                        cryptographer()->decrypt($gatewayMethod['meta_parameters'])
+                    );
 
-                    ]);
+                    if (session()->hasFlash(SESSION_GATEWAY_INFO)) {
+                        $url = '#';
+                        $inputs = [];
+                        $redirect = false;
+                        switch ((int)$gatewayMethod['method_type']) {
+                            case METHOD_TYPE_GATEWAY_SADAD:
+                                /**
+                                 * @var SadadRequestResultProvider $gatewayInfo
+                                 */
+                                $gatewayInfo = session()->getFlash(SESSION_GATEWAY_INFO);
+                                $url = $gatewayInfo->getUrl();
+                                $redirect = true;
+                                break;
+                        }
+
+                        // remove all cart items
+                        cart()->destroy();
+
+                        $resourceHandler->data([
+                            'redirect' => $redirect,
+                            'url' => $url,
+                            'inputs' => $inputs,
+                        ]);
+                    } else {
+                        /**
+                         * @var OrderModel $orderModel
+                         */
+                        $orderModel = container()->get(OrderModel::class);
+                        $orderArr = session()->get(SESSION_ORDER_ARR_INFO);
+                        // reverse all db action
+                        $orderModel->removeIssuedFactor($orderArr['code']);
+                        session()->remove(SESSION_ORDER_ARR_INFO);
+                        $resourceHandler
+                            ->type(RESPONSE_TYPE_ERROR)
+                            ->errorMessage('خطا در ارتباط با درگاه بانک، لطفا دوباره تلاش کنید.');
+                    }
                 }
             } else {
                 response()->httpCode(403);
@@ -194,7 +231,7 @@ class CheckoutController extends AbstractHomeController
                         $totalPrice += $item['qnt'] * (float)get_discount_price($item)[0];
                     }
 
-                    if($totalPrice > (config()->get('settings.min_free_price.value') ?: PHP_INT_MAX)) {
+                    if ($totalPrice > (config()->get('settings.min_free_price.value') ?: PHP_INT_MAX)) {
                         $price = 0;
                     } elseif (
                         (config()->get('settings.store_city.value') ?: -1) == $cityId &&

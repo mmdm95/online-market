@@ -31,7 +31,8 @@ use Sim\Utils\StringUtil;
                                         'id' => $favorite['product_id'],
                                         'slug' => $favorite['slug']
                                     ]); ?>">
-                                        <img src="" data-src="<?= url('image.show', ['filename' => $favorite['image']]); ?>"
+                                        <img src=""
+                                             data-src="<?= url('image.show', ['filename' => $favorite['image']]); ?>"
                                              alt="<?= $favorite['title']; ?>" class="lazy">
                                     </a>
                                 </td>
@@ -41,13 +42,17 @@ use Sim\Utils\StringUtil;
                                         'slug' => $favorite['slug']
                                     ]); ?>">
                                         <?php if (!empty($favorite['color_name'])): ?>
-                                            <span class="mx-2"><?= $favorite['color_name']; ?></span>
+                                            <div class="mx-2 my-1">
+                                                <span class="p-2 d-inline-block rounded-pill"
+                                                      style="background-color: <?= $favorite['color_hex']; ?>;"></span>
+                                                <?= $favorite['color_name']; ?>
+                                            </div>
                                         <?php endif; ?>
                                         <?php if (!empty($favorite['size'])): ?>
-                                            <span class="mx-2"><?= $favorite['size']; ?></span>
+                                            <div class="mx-2 my-1"><?= $favorite['size']; ?></div>
                                         <?php endif; ?>
                                         <?php if (!empty($favorite['guarantee'])): ?>
-                                            <span class="d-block mt-2 mx-2"><?= $favorite['guarantee']; ?></span>
+                                            <div class="d-block my-1 mx-2"><?= $favorite['guarantee']; ?></div>
                                         <?php endif; ?>
                                     </a>
                                 </td>
@@ -57,17 +62,19 @@ use Sim\Utils\StringUtil;
                                     ?>
                                     <?php if ($hasDiscount): ?>
                                         <del>
-                                            <?= number_format(StringUtil::toEnglish($favorite['price'])); ?>
+                                            <?= local_number(number_format(StringUtil::toEnglish($favorite['price']))); ?>
+                                            <span class="price_symbole">تومان</span>
                                         </del>
                                     <?php endif; ?>
-                                    <?= number_format(StringUtil::toEnglish($discountPrice)); ?>
+                                    <?= local_number(number_format(StringUtil::toEnglish($discountPrice))); ?>
+                                    <span class="price_symbole">تومان</span>
                                 </td>
                                 <td class="product-stock-status" data-title="وضعیت محصول">
                                     <?php
                                     $availability = get_product_availability($favorite);
                                     ?>
                                     <?php if ($availability): ?>
-                                        <span class="badge badge-pill badge-success">موچود</span>
+                                        <span class="badge badge-pill badge-success">موجود</span>
                                     <?php else: ?>
                                         <span class="badge badge-pill badge-danger">ناموجود</span>
                                     <?php endif; ?>
@@ -82,9 +89,9 @@ use Sim\Utils\StringUtil;
                                 </td>
                                 <td class="product-remove" data-title="حذف">
                                     <a href="javascript:void(0);" class="__item_remover_btn"
-                                       data-remove-url="<?= url('ajax.user.favorite.remove')->getRelativeUrlTrimmed(); ?>"
+                                       data-remove-url="<?= url('ajax.user.favorite.remove')->getRelativeUrl(); ?>"
                                        data-remove-id="<?= $favorite['favorite_id']; ?>"
-                                       data-toggle="tooltip" data-original-title="حذف آدرس"
+                                       data-toggle="tooltip" data-original-title="حذف از فهرست"
                                        data-placement="right">
                                         <i class="ti-close" aria-hidden="true"></i>
                                     </a>

@@ -1,6 +1,7 @@
 <?php
 
 use App\Logic\Handlers\ResourceHandler;
+use App\Logic\Models\UserModel;
 use App\Logic\Validations\ExtendedValidator;
 use Sim\Auth\DBAuth;
 use Sim\Exceptions\ConfigManager\ConfigNotRegisteredException;
@@ -18,7 +19,7 @@ function is_post(): bool
 }
 
 /**
- * @return string
+ * Show 403 error somehow
  */
 function show_403()
 {
@@ -32,6 +33,26 @@ function show_403()
         header_remove("Content-Type");
         response()->httpCode(403)->header('HTTP/1.1 403 Forbidden');
         echo 'دسترسی غیر مجاز';
+        exit(0);
+    }
+}
+
+/**
+ * Show 500 error somehow
+ * @param string|null $content
+ */
+function show_500(?string $content = null)
+{
+    if (request()->isAjax()) {
+        $resourceHandler = new ResourceHandler();
+        $resourceHandler
+            ->type(RESPONSE_TYPE_ERROR)
+            ->errorMessage($content ?: 'سرویس در دسترس نمی باشد.');
+        response()->httpCode(500)->json($resourceHandler->getReturnData());
+    } else {
+        header_remove("Content-Type");
+        response()->httpCode(500)->header('HTTP/1.1 500 Service Unavailable');
+        echo ($content ?: 'سرویس در دسترس نمی باشد.');
         exit(0);
     }
 }
@@ -167,6 +188,26 @@ function auth_home(): DBAuth
 }
 
 /**
+ * @param DBAuth $auth
+ * @return array
+ * @throws \DI\DependencyException
+ * @throws \DI\NotFoundException
+ */
+function get_current_authenticated_user(DBAuth $auth)
+{
+    /**
+     * @var UserModel $userModel
+     */
+    $userModel = container()->get(UserModel::class);
+
+    // get current user info
+    $user = $userModel->getFirst(['*'], 'id=:id', ['id' => $auth->getCurrentUser()['id'] ?? 0]);
+    unset($user['password']);
+    $user['roles'] = $userModel->getUserRoles($user['id'], null, [], ['r.*']);
+    return $user;
+}
+
+/**
  * @return FormValidator
  * @throws ConfigNotRegisteredException
  * @throws IFileNotExistsException
@@ -196,21 +237,23 @@ function form_validator(): FormValidator
  */
 function replaced_sms_body($type, array $placeholders = []): string
 {
-    /**
-     * @param string $message
-     * @param array $placeholders
-     * @return string
-     */
-    function message_replacer(string $message, array $placeholders): string
-    {
-        if (!empty($message)) {
-            foreach ($placeholders as $placeholder => $value) {
-                if (is_scalar($value)) {
-                    $message = str_replace($placeholder, $value, $message);
+    if(!function_exists('message_replacer')) {
+        /**
+         * @param string $message
+         * @param array $placeholders
+         * @return string
+         */
+        function message_replacer(string $message, array $placeholders): string
+        {
+            if (!empty($message)) {
+                foreach ($placeholders as $placeholder => $value) {
+                    if (is_scalar($value)) {
+                        $message = str_replace($placeholder, $value, $message);
+                    }
                 }
             }
+            return $message;
         }
-        return $message;
     }
 
     try {

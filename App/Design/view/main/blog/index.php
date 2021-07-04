@@ -3,7 +3,7 @@
 
     <!-- START SECTION BLOG -->
     <div class="section">
-        <div class="container">
+        <div class="custom-container">
             <div class="row">
                 <div class="col-lg-9" id="__main_blog_container">
                 </div>

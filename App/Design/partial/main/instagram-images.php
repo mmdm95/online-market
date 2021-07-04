@@ -1,7 +1,7 @@
 <?php if (count($instagram_images ?? [])): ?>
     <div class="section small_pt small_pb">
-        <div class="container-fluid p-0">
-            <div class="row no-gutters">
+        <div class="custom-container">
+            <div class="row">
                 <div class="col-12">
                     <div class="follow_box">
                         <?php

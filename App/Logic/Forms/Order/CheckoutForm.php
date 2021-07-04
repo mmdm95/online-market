@@ -3,8 +3,10 @@
 namespace App\Logic\Forms\Checkout;
 
 use App\Logic\Interfaces\IPageForm;
+use App\Logic\Models\BaseModel;
 use App\Logic\Models\CityModel;
 use App\Logic\Models\CouponModel;
+use App\Logic\Models\Model;
 use App\Logic\Models\OrderBadgeModel;
 use App\Logic\Models\OrderModel;
 use App\Logic\Models\ProvinceModel;
@@ -151,6 +153,10 @@ class CheckoutForm implements IPageForm
          */
         $xss = container()->get(AntiXSS::class);
         /**
+         * @var Model $model
+         */
+        $model = container()->get(Model::class);
+        /**
          * @var UserModel $userModel
          */
         $userModel = container()->get(UserModel::class);
@@ -204,27 +210,31 @@ class CheckoutForm implements IPageForm
                     $x = (float)$item['price'];
                     $y = (float)get_discount_price($item)[0];
 
-                    $discountPrice += abs($x - $y);
+                    $discountPrice += $item['qnt'] * abs($x - $y);
 
                     $totalPrice += $item['qnt'] * $x;
                     $totalDiscountedPrice += $item['qnt'] * $y;
                 }
 
                 // calculate send price (get from session)
-                // ...
+                $shipping = session()->get(SESSION_APPLIED_POST_PRICE);
+                if (null !== $shipping) {
+                    $totalPrice += (float)$shipping;
+                    $totalDiscountedPrice += (float)$shipping;
+                }
 
                 $orderArr = [
                     'code' => $code,
                     'user_id' => $user['id'],
                     'receiver_name' => $xss->xss_clean($receiver),
-                    'receiver_mobile' => $mobile,
-                    'first_name' => $firstName,
-                    'last_name' => $lastName,
-                    'mobile' => $user['username'],
-                    'city' => $city,
-                    'province' => $province,
-                    'address' => $addr,
-                    'postal_code' => $postalCode,
+                    'receiver_mobile' => $xss->xss_clean($mobile),
+                    'first_name' => $xss->xss_clean($firstName),
+                    'last_name' => $xss->xss_clean($lastName),
+                    'mobile' => $xss->xss_clean($user['username']),
+                    'city' => $xss->xss_clean($city),
+                    'province' => $xss->xss_clean($province),
+                    'address' => $xss->xss_clean($addr),
+                    'postal_code' => $xss->xss_clean($postalCode),
                     'method_code' => $gateway['code'] ?? 'نامشخص',
                     'method_title' => $gateway['title'] ?? 'نامشخص',
                     'method_type' => $gateway['method_type'] ?? 'نامشخص',
@@ -232,6 +242,7 @@ class CheckoutForm implements IPageForm
                     'payment_status' => PAYMENT_STATUS_WAIT,
                 ];
 
+                $couponRes = true;
                 $coupon = $couponModel->getFirst([
                     'id', 'code', 'title', 'price',
                 ], 'code=:code AND publish=:pub AND start_at<=:start AND expire_at>=:expire', [
@@ -241,8 +252,9 @@ class CheckoutForm implements IPageForm
                     'expire' => time(),
                 ]);
                 if (count($coupon)) {
-                    $totalPrice += $coupon['price'];
-                    $totalDiscountedPrice += $coupon['price'];
+                    $totalPrice -= $coupon['price'];
+                    $totalDiscountedPrice -= $coupon['price'];
+                    $discountPrice += $coupon['price'];
 
                     $orderArr = array_merge($orderArr, [
                         'coupon_id' => $coupon['id'],
@@ -250,12 +262,26 @@ class CheckoutForm implements IPageForm
                         'coupon_title' => $coupon['title'],
                         'coupon_price' => $coupon['price'],
                     ]);
+
+                    // make this coupon a used one
+                    $couponUpdate = $model->update();
+                    $couponUpdate
+                        ->table(BaseModel::TBL_COUPONS)
+                        ->set('use_count', 'use_count-1')
+                        ->where('id=:id AND code=:code')
+                        ->bindValues([
+                            'id' => $coupon['id'],
+                            'code' => $coupon['code'],
+                        ]);
+                    $couponRes = $model->execute($couponUpdate);
                 }
+                // to prevent go further because DB operation failed!
+                if (!$couponRes) return false;
 
                 $orderArr = array_merge($orderArr, [
                     'total_price' => $totalPrice,
                     'discount_price' => $discountPrice,
-                    'shipping_price' => session()->get(SESSION_APPLIED_POST_PRICE),
+                    'shipping_price' => $shipping ?: 0,
                     'final_price' => $totalDiscountedPrice,
                     'send_status_code' => $badge['code'],
                     'send_status_title' => $badge['title'],
@@ -264,6 +290,9 @@ class CheckoutForm implements IPageForm
                     'invoice_status_changed_at' => time(),
                     'send_status_changed_at' => time(),
                 ]);
+
+                // store order array in flash session for gateway usage
+                session()->set(SESSION_ORDER_ARR_INFO, $orderArr);
 
                 // insert to database
                 $res = $orderModel->issueFullFactor($orderArr, cart()->restore(true)->getItems());

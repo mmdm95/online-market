@@ -499,6 +499,19 @@
                 var $this = $(this);
                 deleteOperation($this, function () {
                     $this.closest('tr').fadeOut(300, function () {
+                        if (1 === $(this).parent().find('tr').length) {
+                            $(this).parent()
+                                .append(
+                                    $('<tr/>')
+                                        .append(
+                                            $('<td class="text-center p-2" colspan="' +
+                                                $(this).parent().find('tr').first().find('td').length +
+                                                '"/>')
+                                                .html('هیچ موردی وجود ندارد')
+                                        )
+                                );
+                        }
+                        //
                         $(this).remove();
                     });
                 });
@@ -511,6 +524,10 @@
                 var $this = $(this);
                 deleteOperation($this, function () {
                     $this.closest('.remove-element-item').fadeOut(300, function () {
+                        if (1 === $(this).parent().find('.remove-element-item').length) {
+                            $(this).parent().append($('<div class="text-center p-2"/>').html('هیچ موردی وجود ندارد'));
+                        }
+                        //
                         $(this).remove();
                     });
                 });

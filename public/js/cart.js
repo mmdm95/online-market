@@ -128,7 +128,7 @@
                     shop.toasts.confirm('آیا مطمئن هستید؟', function () {
                         cart.remove(code, function () {
                             shop.toasts.toast(this.data, {
-                                type: variables.toasts.types.success,
+                                type: variables.toasts.types.info,
                             });
                             cart.getNPlaceCart();
                         });

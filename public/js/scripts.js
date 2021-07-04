@@ -722,7 +722,9 @@ PAGE JS
                 easing: true,
                 gallery: 'pr_item_gallery',
                 zoomType: "inner",
-                galleryActiveClass: "active"
+                galleryActiveClass: "active",
+                zoomWindowWidth: 600,
+                zoomWindowHeight: 600,
             });
         }
     } else {
@@ -885,7 +887,7 @@ PAGE JS
                 } else {
                     var id = tabbedSlier.attr('id');
                     if (id) {
-                        var expanded = $('[data-targer="#' + id + '"]').attr('aria-expanded');
+                        var expanded = $('[data-target="#' + id + '"]').attr('aria-expanded');
                         if (expanded && 'false' === expanded) {
                             tabbedSlier.removeClass('show');
                         }

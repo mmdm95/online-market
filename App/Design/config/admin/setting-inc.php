@@ -166,6 +166,7 @@ return [
         'common' => [
             'admin-base',
             'admin-form',
+            'admin-color',
             'admin',
         ],
         'sub_title' => 'تنظیمات صفحه اصلی',

@@ -174,8 +174,17 @@ class SettingModel extends BaseModel
         $res2 = $this->update([
             'setting_value' => $info[SETTING_INDEX_3_IMAGES],
         ], 'setting_name=:name', ['name' => SETTING_INDEX_3_IMAGES]);
+        $res3 = $this->update([
+            'setting_value' => $info[SETTING_INDEX_GENERAL_SLIDERS],
+        ], 'setting_name=:name', ['name' => SETTING_INDEX_GENERAL_SLIDERS]);
+        $res4 = $this->update([
+            'setting_value' => $info[SETTING_INDEX_MAIN_SLIDER_SIDE_IMAGES],
+        ], 'setting_name=:name', ['name' => SETTING_INDEX_MAIN_SLIDER_SIDE_IMAGES]);
+        $res5 = $this->update([
+            'setting_value' => $info[SETTING_INDEX_TABBED_SLIDER_SIDE_IMAGE],
+        ], 'setting_name=:name', ['name' => SETTING_INDEX_TABBED_SLIDER_SIDE_IMAGE]);
 
-        return $res1 && $res2;
+        return $res1 && $res2 && $res3 && $res4 && $res5;
     }
 
     /**

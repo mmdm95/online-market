@@ -9,5 +9,5 @@ interface ICustomSMS
      * @param string $body
      * @return bool
      */
-    public function send(array $numbers, string $body): bool;
+    public static function send(array $numbers, string $body): bool;
 }

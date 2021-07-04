@@ -310,13 +310,23 @@
                         type: variables.toasts.types.warning,
                     });
                 } else {
-                    // create a new form and submit it with hidden inputs
-                    var frm = $('<form method="post" action="" style="display: none; position: absolute; top: -9999px; left: -9999px; visibility: hidden; opacity: 0;" />')
-                        .append($('<input type="hidden" value="" name="">'));
-                    // add form to body
-                    $('body').append(frm);
-                    // submit it to go to the gateway
-                    frm.submit();
+                    var data = this.data;
+                    if(data.redirect) {
+                        // Simulate an HTTP redirect:
+                        window.location.replace(data.url);
+                    } else {
+                        // create a new form and submit it with hidden inputs
+                        var frm = $('<form method="post" action="' +
+                            data.url +
+                            '" style="display: none; position: absolute; top: -9999px; left: -9999px; visibility: hidden; opacity: 0;" />');
+                        for (var i = 0; i < data.inputs.length; ++i) {
+                            frm.append($('<input type="hidden" value="' + data.inputs[i].value + '" name="' + data.inputs[i].name + '">'));
+                        }
+                        // add form to body
+                        $('body').append(frm);
+                        // submit it to go to the gateway
+                        frm.submit();
+                    }
                 }
             }, {
                 data: values,

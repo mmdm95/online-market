@@ -1,6 +1,6 @@
 <header class="header_wrap">
     <div class="middle-header dark_skin">
-        <div class="container">
+        <div class="custom-container">
             <div class="nav_block">
                 <a class="navbar-brand" href="<?= url('home.index'); ?>">
                     <img class="logo_light"
@@ -8,11 +8,7 @@
                     <img class="logo_dark" src="<?= url('image.show') . \config()->get('settings.logo.value'); ?>"
                          alt="logo"/>
                 </a>
-                <div class="contact_phone order-md-last">
-                    <i class="linearicons-phone-wave"></i>
-                    <span><?= local_number(\config()->get('settings.main_phone.value')) ?></span>
-                </div>
-                <div class="product_search_form">
+                <div class="product_search_form rounded_input">
                     <form action="<?= url('home.search')->getRelativeUrlTrimmed(); ?>" method="get">
                         <div class="input-group">
                             <div class="input-group-prepend">
@@ -26,16 +22,36 @@
                                 </div>
                             </div>
                             <input class="form-control" autocomplete="off" placeholder="جستجوی محصول ..."
-                                   required="required" type="text" name="q">
-                            <button type="submit" class="search_btn"><i class="linearicons-magnifier"></i></button>
+                                   required="" type="text" name="q">
+                            <button type="submit" class="search_btn2"><i class="fa fa-search"></i></button>
                         </div>
                     </form>
                 </div>
+
+                <ul class="navbar-nav attr-nav align-items-center">
+                    <?php if (auth_home()->isLoggedIn()): ?>
+                        <li>
+                            <a href="<?= url('user.index'); ?>" class="nav-link">
+                                <i class="linearicons-clipboard-user"></i>
+                            </a>
+                        </li>
+                    <?php else: ?>
+                        <li>
+                            <a href="<?= url('home.login'); ?>" class="nav-link">
+                                <i class="linearicons-user"></i>
+                            </a>
+                        </li>
+                    <?php endif; ?>
+                    <li class="dropdown cart_dropdown" id="__cart_main_container">
+                        <?= $cart_section; ?>
+                    </li>
+                </ul>
             </div>
         </div>
     </div>
-    <div class="bottom_header light_skin main_menu_uppercase bg_dark mb-4">
-        <div class="container">
+
+    <div class="bottom_header dark_skin main_menu_uppercase border-top border-bottom">
+        <div class="custom-container">
             <div class="row">
                 <div class="col-lg-3 col-md-4 col-sm-6 col-3">
                     <div class="categories_wrap">
@@ -99,7 +115,8 @@
                                                         <li class="mega-menu-col col-lg-5">
                                                             <div class="header-banner2">
                                                                 <a href="<?= url('home.search', ['category' => $m['id']])->getRelativeUrl(); ?>">
-                                                                    <img src="" data-src="<?= url('image.show') . $menu_images[$m['id']]['image']; ?>"
+                                                                    <img src=""
+                                                                         data-src="<?= url('image.show') . $menu_images[$m['id']]['image']; ?>"
                                                                          alt="<?= $m['name']; ?>" class="lazy">
                                                                 </a>
                                                             </div>
@@ -163,8 +180,10 @@
                                                                     <li class="mega-menu-col col-lg-5">
                                                                         <div class="header-banner2">
                                                                             <a href="<?= url('home.search', ['category' => $m['id']])->getRelativeUrl(); ?>">
-                                                                                <img src="" data-src="<?= url('image.show') . $menu_images[$m['id']]['image']; ?>"
-                                                                                     alt="<?= $m['name']; ?>" class="lazy">
+                                                                                <img src=""
+                                                                                     data-src="<?= url('image.show') . $menu_images[$m['id']]['image']; ?>"
+                                                                                     alt="<?= $m['name']; ?>"
+                                                                                     class="lazy">
                                                                             </a>
                                                                         </div>
                                                                     </li>
@@ -191,6 +210,11 @@
                                 data-target="#navbarSidetoggle" aria-expanded="false">
                             <span class="ion-android-menu"></span>
                         </button>
+                        <div class="pr_search_icon">
+                            <a href="javascript:void(0);" class="nav-link pr_search_trigger"><i
+                                        class="linearicons-magnifier"></i></a>
+                        </div>
+
                         <div class="collapse navbar-collapse mobile_side_menu" id="navbarSidetoggle">
                             <ul class="navbar-nav">
                                 <?php
@@ -229,29 +253,9 @@
                             </ul>
                         </div>
 
-                        <ul class="navbar-nav attr-nav align-items-center">
-                            <?php if(auth_home()->isLoggedIn()): ?>
-                                <li>
-                                    <a href="<?= url('user.index'); ?>" class="nav-link">
-                                        <i class="linearicons-clipboard-user"></i>
-                                    </a>
-                                </li>
-                            <?php else: ?>
-                                <li>
-                                    <a href="<?= url('home.login'); ?>" class="nav-link">
-                                        <i class="linearicons-user"></i>
-                                    </a>
-                                </li>
-                            <?php endif; ?>
-                            <li class="dropdown cart_dropdown" id="__cart_main_container">
-                                <?= $cart_section; ?>
-                            </li>
-                        </ul>
-
-                        <div class="pr_search_icon">
-                            <a href="javascript:void(0);" class="nav-link pr_search_trigger">
-                                <i class="linearicons-magnifier"></i>
-                            </a>
+                        <div class="contact_phone contact_support">
+                            <i class="linearicons-phone-wave"></i>
+                            <span><?= local_number(\config()->get('settings.main_phone.value')) ?></span>
                         </div>
                     </nav>
                 </div>

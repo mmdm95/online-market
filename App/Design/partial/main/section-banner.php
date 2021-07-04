@@ -1,7 +1,7 @@
 <?php if (count($three_images ?? [])): ?>
     <div class="section pb_20 small_pt">
-        <div class="container-fluid px-2">
-            <div class="row no-gutters">
+        <div class="custom-container">
+            <div class="row">
                 <?php
                 $colSize = 4;
                 if (count($three_images) === 2) {
@@ -12,7 +12,7 @@
                 ?>
                 <?php foreach ($three_images as $k => $image): ?>
                     <div class="col-md-<?= $colSize; ?>">
-                        <div class="sale_banner">
+                        <div class="sale-banner mb-3 mb-md-4">
                             <a class="hover_effect1" href="<?= $image['link'] ?>">
                                 <img src="" data-src="<?= url('image.show') . $image['image']; ?>"
                                      alt="بنر شماره <?= $k; ?>" class="lazy">

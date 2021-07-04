@@ -3,7 +3,7 @@
 
     <!-- START LOGIN SECTION -->
     <div class="login_register_wrap section">
-        <div class="container">
+        <div class="custom-container">
             <div class="row justify-content-center">
                 <div class="col-xl-6 col-md-8 col-sm-10">
                     <div class="login_wrap" id="__register_form_container">

@@ -234,7 +234,7 @@ abstract class AbstractController implements ITemplateFactory, ITemplateRenderer
     {
         $this->makeMiddlewareNested();
         if (!$this->hasMiddleware()) return true;
-        return $this->middleware_bottleneck->handle($this->request);
+        return $this->middleware_bottleneck->handle(request());
     }
 
     /**

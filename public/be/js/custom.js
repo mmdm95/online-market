@@ -2278,7 +2278,7 @@
             }
         }
 
-        function removeCloneElementEvent() {
+        function removeClonedElementEvent() {
             $('.__clone_remover_btn')
                 .off('click' + variables.namespace)
                 .on('click' + variables.namespace, function (e) {
@@ -2290,17 +2290,35 @@
                 });
         }
 
-        removeCloneElementEvent();
+        function clearImageElementEvent() {
+            $('.__image_cleaner_btn')
+                .off('click' + variables.namespace)
+                .on('click' + variables.namespace, function (e) {
+                    e.stopPropagation();
+
+                    removeImageFromPlaceholder($(this));
+                });
+        }
+
+        removeClonedElementEvent();
+        clearImageElementEvent();
 
         function afterCloneElement(copy) {
-            removeCloneElementEvent();
+            if ($.efmInitPickerEvent) {
+                $.efmInitPickerEvent();
+            }
+
+            removeClonedElementEvent();
+            clearImageElementEvent();
             initializeAllPlugins();
 
             copy = $(copy);
             if (copy.length) {
                 var switchery = copy.find('.form-check-input-switchery');
-                switchery.removeAttr('data-switchery').parent().find('.switchery').remove();
-                new Switchery(switchery.get(0));
+                if (switchery.length) {
+                    switchery.removeAttr('data-switchery').parent().find('.switchery').remove();
+                    new Switchery(switchery.get(0));
+                }
             }
         }
 
@@ -2351,6 +2369,7 @@
                     clearableElements,
                     removableElements,
                     removableClasses,
+                    removableClassesForAll,
                     dynamicIdElements,
                     dynamicIdAltElements,
                     copy;
@@ -2368,6 +2387,10 @@
                 removableClasses = $(this).attr('data-removable-classes');
                 if (removableClasses && JSON.parse(removableClasses)) {
                     removableClasses = JSON.parse(removableClasses);
+                }
+                removableClassesForAll = $(this).attr('data-removable-classes-for-all');
+                if (removableClassesForAll && JSON.parse(removableClassesForAll)) {
+                    removableClassesForAll = JSON.parse(removableClassesForAll);
                 }
                 dynamicIdElements = $(this).attr('data-dynamic-id-elements');
                 if (dynamicIdElements && JSON.parse(dynamicIdElements)) {
@@ -2422,6 +2445,14 @@
                             len = removableClasses.length;
                             for (i = 0; i < len; ++i) {
                                 copy.removeClass(removableClasses[i]);
+                            }
+                        }
+
+                        // remove removable classes for all elements in cloned element
+                        if (removableClassesForAll) {
+                            len = removableClassesForAll.length;
+                            for (i = 0; i < len; ++i) {
+                                copy.find('.' + removableClassesForAll[i]).removeClass(removableClassesForAll[i]);
                             }
                         }
 

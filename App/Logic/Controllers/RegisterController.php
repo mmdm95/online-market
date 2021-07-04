@@ -9,7 +9,7 @@ use App\Logic\Forms\Register\RegisterFormStep3;
 use App\Logic\Middlewares\Logic\RegisterCodeCheckMiddleware;
 use App\Logic\Middlewares\Logic\RegisterMobileCheckMiddleware;
 use App\Logic\Models\BaseModel;
-use App\Logic\SMS\CommonSMS;
+use App\Logic\Utils\SMSUtil;
 use Sim\Auth\DBAuth;
 use Sim\Auth\Exceptions\InvalidUserException;
 use Sim\Auth\Interfaces\IDBException;
@@ -31,6 +31,7 @@ class RegisterController extends AbstractHomeController
      * @throws IFileNotExistsException
      * @throws IInvalidVariableNameException
      * @throws PathNotRegisteredException
+     * @throws SMSException
      * @throws \DI\DependencyException
      * @throws \DI\NotFoundException
      * @throws \ReflectionException
@@ -53,11 +54,12 @@ class RegisterController extends AbstractHomeController
                     session()->setFlash('register.username', $username);
 
                     // send code as sms
-//                    $registerSms = new CommonSMS();
-//                    $registerSms->send([$username], replaced_sms_body(SMS_TYPE_ACTIVATION, [
-//                        SMS_REPLACEMENTS['mobile'] => $username,
-//                        SMS_REPLACEMENTS['code'] => session()->getFlash('register.code', ''),
-//                    ]));
+                    $body = replaced_sms_body(SMS_TYPE_ACTIVATION, [
+                        SMS_REPLACEMENTS['mobile'] => $username,
+                        SMS_REPLACEMENTS['code'] => session()->getFlash('register.code', ''),
+                    ]);
+                    $smsRes = SMSUtil::send([$username], $body);
+                    SMSUtil::logSMS([$username], $body, $smsRes, SMS_LOG_TYPE_REGISTER, SMS_LOG_SENDER_SYSTEM);
 
                     response()->redirect(url('home.signup.code')->getRelativeUrlTrimmed());
                 } else {
