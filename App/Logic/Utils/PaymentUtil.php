@@ -312,7 +312,7 @@ class PaymentUtil
         $gateway = null;
         $provider = null;
 
-        $res = [false, 'سفارش نامعتبر می‌باشد.'];
+        $res = [false, 'سفارش نامعتبر می‌باشد.', null];
 
         // check the order and see if it is a valid order
         if (0 == count($order)) {
@@ -333,9 +333,9 @@ class PaymentUtil
                 );
                 $gateway
                     ->handleResultNotOkClosure(function () use (&$res) {
-                        $res = [false, GATEWAY_INVALID_PARAMETERS_MESSAGE];
+                        $res = [false, GATEWAY_INVALID_PARAMETERS_MESSAGE, null];
                     })->duplicateSendAdviceClosure(function () use (&$res) {
-                        $res = [true, GATEWAY_SUCCESS_MESSAGE];
+                        $res = [true, GATEWAY_SUCCESS_MESSAGE, null];
                     })->sendAdviceNotOkClosure(
                         function (
                             IEvent $event,
@@ -356,7 +356,7 @@ class PaymentUtil
                                 ]),
                             ], 'code=:code', ['code' => $gatewayCode]);
 
-                            $res = [false, GATEWAY_ERROR_MESSAGE];
+                            $res = [false, GATEWAY_ERROR_MESSAGE, $resultProvider->getSaleReferenceId('')];
                         }
                     )->sendSettleOKClosure(
                         function (
@@ -379,7 +379,7 @@ class PaymentUtil
                                 ]),
                             ], 'code=:code', ['code' => $gatewayCode]);
 
-                            $res = [true, GATEWAY_SUCCESS_MESSAGE];
+                            $res = [true, GATEWAY_SUCCESS_MESSAGE, $resultProvider->getSaleReferenceId('')];
                         }
                     )->sendSettleNotOkClosure(
                         function (
@@ -403,7 +403,7 @@ class PaymentUtil
                                 ]),
                             ], 'code=:code', ['code' => $gatewayCode]);
 
-                            $res = [false, GATEWAY_ERROR_MESSAGE];
+                            $res = [false, GATEWAY_ERROR_MESSAGE, $resultProvider->getSaleReferenceId('')];
                         }
                     )->sendAdvice();
                 break;
@@ -418,7 +418,7 @@ class PaymentUtil
                 );
                 $gateway
                     ->handleResultNotOkClosure(function () use (&$res) {
-                        $res = [false, GATEWAY_INVALID_PARAMETERS_MESSAGE];
+                        $res = [false, GATEWAY_INVALID_PARAMETERS_MESSAGE, null];
                     })->sendAdviceOkClosure(
                         function (
                             IEvent $event,
@@ -438,7 +438,7 @@ class PaymentUtil
                                 ]),
                             ], 'code=:code', ['code' => $gatewayCode]);
 
-                            $res = [true, GATEWAY_SUCCESS_MESSAGE];
+                            $res = [true, GATEWAY_SUCCESS_MESSAGE, $adviceProvider->getTrackId('')];
                         }
                     )->sendAdviceNotOkClosure(
                         function (
@@ -460,7 +460,7 @@ class PaymentUtil
                                 ]),
                             ], 'code=:code', ['code' => $gatewayCode]);
 
-                            $res = [false, GATEWAY_ERROR_MESSAGE];
+                            $res = [false, GATEWAY_ERROR_MESSAGE, $adviceProvider->getTrackId('')];
                         }
                     );
                 break;
@@ -475,7 +475,7 @@ class PaymentUtil
                 );
                 $gateway
                     ->handleResultNotOkClosure(function () use (&$res) {
-                        $res = [false, GATEWAY_INVALID_PARAMETERS_MESSAGE];
+                        $res = [false, GATEWAY_INVALID_PARAMETERS_MESSAGE, null];
                     })->sendAdviceOkClosure(
                         function (
                             IEvent $event,
@@ -496,10 +496,10 @@ class PaymentUtil
                                 ]),
                             ], 'code=:code', ['code' => $gatewayCode]);
 
-                            $res = [true, GATEWAY_SUCCESS_MESSAGE];
+                            $res = [true, GATEWAY_SUCCESS_MESSAGE, $resultProvider->getTraceNumber('')];
                         }
                     )->duplicateSendAdviceClosure(function () use (&$res) {
-                        $res = [true, GATEWAY_SUCCESS_MESSAGE];
+                        $res = [true, GATEWAY_SUCCESS_MESSAGE, null];
                     })->sendAdviceNotOkClosure(
                         function (
                             IEvent $event,
@@ -520,7 +520,7 @@ class PaymentUtil
                                 ]),
                             ], 'code=:code', ['code' => $gatewayCode]);
 
-                            $res = [false, GATEWAY_ERROR_MESSAGE];
+                            $res = [false, GATEWAY_ERROR_MESSAGE, $resultProvider->getTraceNumber('')];
                         }
                     );
                 break;
@@ -535,7 +535,7 @@ class PaymentUtil
                 );
                 $gateway
                     ->handleResultNotOkClosure(function () use (&$res) {
-                        $res = [false, GATEWAY_INVALID_PARAMETERS_MESSAGE];
+                        $res = [false, GATEWAY_INVALID_PARAMETERS_MESSAGE, null];
                     })->sendAdviceOkClosure(
                         function (
                             IEvent $event,
@@ -555,7 +555,7 @@ class PaymentUtil
                                 ]),
                             ], 'code=:code', ['code' => $gatewayCode]);
 
-                            $res = [true, GATEWAY_SUCCESS_MESSAGE];
+                            $res = [true, GATEWAY_SUCCESS_MESSAGE, $adviceProvider->getRefID('')];
                         }
                     )->sendAdviceNotOkClosure(
                         function (
@@ -577,7 +577,7 @@ class PaymentUtil
                                 ]),
                             ], 'code=:code', ['code' => $gatewayCode]);
 
-                            $res = [false, GATEWAY_ERROR_MESSAGE];
+                            $res = [false, GATEWAY_ERROR_MESSAGE, $adviceProvider->getRefID('')];
                         }
                     )->failedSendAdviceClosure(
                         function (
@@ -594,7 +594,7 @@ class PaymentUtil
                                 'extra_info' => json_encode(['result' => $resultProvider->getParameters()]),
                             ], 'code=:code', ['code' => $gatewayCode]);
 
-                            $res = [false, GATEWAY_ERROR_MESSAGE];
+                            $res = [false, GATEWAY_ERROR_MESSAGE, null];
                         }
                     )->sendAdvice(
                         (new ZarinpalAdviceProvider())->setAmount($order['final_price'])
@@ -613,7 +613,7 @@ class PaymentUtil
                 );
                 $gateway
                     ->handleResultNotOkClosure(function () use (&$res) {
-                        $res = [false, GATEWAY_INVALID_PARAMETERS_MESSAGE];
+                        $res = [false, GATEWAY_INVALID_PARAMETERS_MESSAGE, null];
                     })->sendAdviceOkClosure(
                         function (
                             IEvent $event,
@@ -633,7 +633,7 @@ class PaymentUtil
                                 ]),
                             ], 'code=:code', ['code' => $gatewayCode]);
 
-                            $res = [true, GATEWAY_SUCCESS_MESSAGE];
+                            $res = [true, GATEWAY_SUCCESS_MESSAGE, $adviceProvider->getSystemTraceNo('')];
                         }
                     )->sendAdviceNotOkClosure(
                         function (
@@ -655,7 +655,7 @@ class PaymentUtil
                                 ]),
                             ], 'code=:code', ['code' => $gatewayCode]);
 
-                            $res = [false, GATEWAY_ERROR_MESSAGE];
+                            $res = [false, GATEWAY_ERROR_MESSAGE, $adviceProvider->getSystemTraceNo('')];
                         }
                     )->sendAdvice();
                 break;
