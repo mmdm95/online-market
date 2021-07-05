@@ -216,19 +216,19 @@ class ProductUtil
             $order = $order->getValue();
             if (is_numeric($order)) {
                 switch ($order) {
-                    case 4: // cheapest
+                    case PRODUCT_ORDERING_CHEAPEST: // cheapest
                         $orderBy = ['pa.price ASC', 'pa.product_id DESC'];
                         break;
-                    case 7: // most expensive
+                    case PRODUCT_ORDERING_MOST_EXPENSIVE: // most expensive
                         $orderBy = ['pa.price DESC', 'pa.product_id DESC'];
                         break;
-                    case 12: // most view
+                    case PRODUCT_ORDERING_MOST_VIEWED: // most view
                         $orderBy = ['pa.view_count DESC', 'pa.product_id DESC'];
                         break;
-                    case 16: // most discount
+                    case PRODUCT_ORDERING_MOST_DISCOUNT: // most discount
                         $orderBy = ['CASE WHEN (pa.discount_until IS NULL OR pa.discount_until >= UNIX_TIMESTAMP()) AND pa.stock_count > 0 THEN 0 ELSE 1 END', '((pa.price - pa.discounted_price) / pa.price * 100) DESC', 'pa.discounted_price ASC', 'pa.product_id DESC'];
                         break;
-                    default: // newest
+                    default: // newest [PRODUCT_ORDERING_NEWEST]
                         $orderBy = ['pa.product_id DESC'];
                         break;
                 }

@@ -21,7 +21,7 @@ use Sim\I18n\ISOLanguageCodes;
  *     1.2.5.0 instead of 1.2.5-a
  *     1.2.5.0.1 instead of 1.2.5-a1 (I'm not sure)
  */
-defined("APP_VERSION") OR define("APP_VERSION", "0.2.16");
+defined("APP_VERSION") OR define("APP_VERSION", "0.3.1.2");
 
 /***************************************
  * You can add your constants here
@@ -278,12 +278,17 @@ defined("SLIDER_TABBED_TYPES") OR define("SLIDER_TABBED_TYPES", [
 ]);
 
 // product orderings
+defined("PRODUCT_ORDERING_NEWEST") OR define("PRODUCT_ORDERING_NEWEST", 1);
+defined("PRODUCT_ORDERING_MOST_VIEWED") OR define("PRODUCT_ORDERING_MOST_VIEWED", 12);
+defined("PRODUCT_ORDERING_MOST_DISCOUNT") OR define("PRODUCT_ORDERING_MOST_DISCOUNT", 16);
+defined("PRODUCT_ORDERING_CHEAPEST") OR define("PRODUCT_ORDERING_CHEAPEST", 4);
+defined("PRODUCT_ORDERING_MOST_EXPENSIVE") OR define("PRODUCT_ORDERING_MOST_EXPENSIVE", 7);
 defined("PRODUCT_ORDERINGS") OR define("PRODUCT_ORDERINGS", [
-    1 => 'جدیدترین',
-    12 => 'پربازدیدترین',
-    16 => 'پرتخفیف ترین',
-    4 => 'ارزان ترین',
-    7 => 'گران ترین',
+    PRODUCT_ORDERING_NEWEST => 'جدیدترین',
+    PRODUCT_ORDERING_MOST_VIEWED => 'پربازدیدترین',
+    PRODUCT_ORDERING_MOST_DISCOUNT => 'پرتخفیف ترین',
+    PRODUCT_ORDERING_CHEAPEST => 'ارزان ترین',
+    PRODUCT_ORDERING_MOST_EXPENSIVE => 'گران ترین',
 ]);
 
 // maximum order reserve time
