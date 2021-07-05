@@ -365,7 +365,7 @@ class Bootstrap
                 $forceKeys = is_string($forceKeys) ? [$forceKeys] : $forceKeys;
             }
 
-            $key = input()->get('key', null);
+            $key = input()->get('key', null)->getValue();
             if (!\count($forceKeys) || empty($key) || !in_array($key, $forceKeys)) {
                 $content = loader()->getContent(path()->get('error') . $maintenanceConfig['page']);
                 show_500($content);
