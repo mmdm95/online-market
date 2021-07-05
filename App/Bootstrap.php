@@ -366,11 +366,13 @@ class Bootstrap
             }
 
             $key = input()->get('key', null)->getValue();
+            $key = !$key ? session()->getTimed('__maintenance_mode_key__') : $key;
             if (!\count($forceKeys) || empty($key) || !in_array($key, $forceKeys)) {
                 $content = loader()->getContent(path()->get('error') . $maintenanceConfig['page']);
                 show_500($content);
                 exit(0);
             }
+            session()->setTimed('__maintenance_mode_key__', $key, 7200);
         } catch (\Exception $e) {
             show_500();
             exit(0);
