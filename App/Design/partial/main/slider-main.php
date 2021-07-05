@@ -27,21 +27,23 @@
                                         <div class="banner_slide_content banner_content_inner">
                                             <div class="col-lg-7 col-10">
                                                 <div class="banner_content3 overflow-hidden">
-                                                    <?php if (isset($item['note'])): ?>
+                                                    <?php if (isset($item['note']) && !empty($item['note'])): ?>
                                                         <h5 class="mb-3 staggered-animation font-weight-light"
                                                             data-animation="slideInRight" data-animation-delay="0.5s">
                                                             <?= $item['note']; ?>
                                                         </h5>
                                                     <?php endif; ?>
-                                                    <?php if (isset($item['title'])): ?>
+                                                    <?php if (isset($item['title']) && !empty($item['title'])): ?>
                                                         <h2 class="staggered-animation" data-animation="slideInRight"
                                                             data-animation-delay="1s">
                                                             <?= $item['title']; ?>
                                                         </h2>
                                                     <?php endif; ?>
-                                                    <a class="btn btn-fill-out btn-radius staggered-animation text-uppercase"
-                                                       href="<?= $item['link']; ?>" data-animation="slideInRight"
-                                                       data-animation-delay="1.5s">جزئیات بیشتر</a>
+                                                    <?php if (isset($item['link']) && !empty($item['link'])): ?>
+                                                        <a class="btn btn-fill-out btn-radius staggered-animation text-uppercase"
+                                                           href="<?= $item['link']; ?>" data-animation="slideInRight"
+                                                           data-animation-delay="1.5s">جزئیات بیشتر</a>
+                                                    <?php endif; ?>
                                                 </div>
                                             </div>
                                         </div>
