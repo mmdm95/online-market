@@ -3,6 +3,11 @@
         Options -MultiViews -Indexes
     </IfModule>
 
+    <Files .env>
+        order allow,deny
+        Deny from all
+    </Files>
+
    RewriteEngine on
 
     # Redirect Trailing Slashes If Not A Folder...
