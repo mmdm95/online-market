@@ -7,18 +7,39 @@
             <div class="row justify-content-center">
                 <div class="col-md-8">
                     <div class="text-center order_complete">
-                        <i class="fas fa-check-circle text-success"></i>
-                        <div class="heading_s1">
-                            <h3>سفارش شما انجام شد!</h3>
-                        </div>
+                        <?php if ($result): ?>
+                            <i class="fas fa-check-circle text-success"></i>
+                            <div class="heading_s1">
+                                <h3>سفارش شما انجام شد</h3>
+                            </div>
+                        <?php else: ?>
+                            <i class="fas fa-times-circle text-danger"></i>
+                            <div class="heading_s1">
+                                <h3>سفارش شما با خطا مواجه شد!</h3>
+                            </div>
+                        <?php endif; ?>
 
-                        <p>
-                            بابت سفارش شما متشکریم! سفارش شما در حال پردازش است و طی 3-6 ساعت به اتمام می رسد. تغییر
-                            وضعیت سفارش از طریق پیامک به شما اظلاع‌رسانی خواهد شد.
-                        </p>
+                        <?php if ($order_code): ?>
+                            <p>
+                                کد سفارش:
+                                <?= $order_code; ?>
+                            </p>
+                        <?php endif; ?>
+                        <?php if ($payment_code): ?>
+                            <p>
+                                کد پیگیری:
+                                <?= $payment_code; ?>
+                            </p>
+                        <?php endif; ?>
 
-                        <a href="shop-left-sidebar.html" class="btn btn-dark">بازگشت به خانه</a>
-                        <a href="shop-left-sidebar.html" class="btn btn-info">ادامه خرید</a>
+                        <p><?= $message; ?></p>
+
+                        <a href="<?= url('home.index')->getRelativeUrl(); ?>" class="btn btn-dark">
+                            بازگشت به خانه
+                        </a>
+                        <a href="<?= url('home.search')->getRelativeUrl() ?>" class="btn btn-info">
+                            ادامه خرید
+                        </a>
                     </div>
                 </div>
             </div>

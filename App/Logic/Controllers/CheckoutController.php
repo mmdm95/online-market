@@ -147,6 +147,7 @@ class CheckoutController extends AbstractHomeController
                         $url = '#';
                         $inputs = [];
                         $redirect = false;
+                        // TODO: add other gateway cases and create inputs according to them
                         switch ((int)$gatewayMethod['method_type']) {
                             case METHOD_TYPE_GATEWAY_SADAD:
                                 /**
