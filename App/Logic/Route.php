@@ -571,8 +571,8 @@ class Route implements IInitialize
                 /**
                  * wallet routes
                  */
-                Router::form('/wallet', [UserWalletController::class, 'index'])->name('user.wallet');
-                Router::form('/wallet/charge', [UserWalletController::class, 'charge'])->name('user.wallet.charge');
+//                Router::form('/wallet', [UserWalletController::class, 'index'])->name('user.wallet');
+//                Router::form('/wallet/charge', [UserWalletController::class, 'charge'])->name('user.wallet.charge');
             });
 
             //==========================

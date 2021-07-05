@@ -7,7 +7,7 @@ use Sim\Utils\StringUtil;
 
 <!-- Summary of things -->
 <div class="row mt-3 mt-md-0">
-    <div class="col-md-6 col-lg-6">
+    <div class="col-md-6 col-lg-12">
         <div class="dashboard_content">
             <div class="card">
                 <div class="card-body border border-dark-alpha">
@@ -17,13 +17,14 @@ use Sim\Utils\StringUtil;
                             <div>سفارشات</div>
                         </div>
                         <h4 class="mt-3 mb-0">
-                            <?= $order_count; ?>
+                            <?= local_number(number_format(StringUtil::toEnglish($order_count))); ?>
                         </h4>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+
     <!--    <div class="col-md-6 col-lg-6">-->
     <!--        <div class="dashboard_content">-->
     <!--            <div class="card">-->
@@ -34,31 +35,32 @@ use Sim\Utils\StringUtil;
     <!--                            <div>مرجوعی</div>-->
     <!--                        </div>-->
     <!--                        <h4 class="mt-3 mb-0">-->
-    <?= '';//$return_order_count;  ?>
+    <?= '';//$return_order_count;       ?>
     <!--                        </h4>-->
     <!--                    </div>-->
     <!--                </div>-->
     <!--            </div>-->
     <!--        </div>-->
     <!--    </div>-->
-    <div class="col-lg-6">
-        <div class="dashboard_content">
-            <div class="card">
-                <div class="card-body border border-dark-alpha">
-                    <div class="text-center">
-                        <div class="d-flex justify-content-center align-items-center">
-                            <i class="linearicons-wallet icon-2x mr-3" aria-hidden="true"></i>
-                            <div>کیف پول</div>
-                        </div>
-                        <h4 class="mt-3 mb-0">
-                            <?= number_format(StringUtil::toEnglish($wallet_balance)); ?>
-                            <small>تومان</small>
-                        </h4>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+
+    <!--    <div class="col-lg-6">-->
+    <!--        <div class="dashboard_content">-->
+    <!--            <div class="card">-->
+    <!--                <div class="card-body border border-dark-alpha">-->
+    <!--                    <div class="text-center">-->
+    <!--                        <div class="d-flex justify-content-center align-items-center">-->
+    <!--                            <i class="linearicons-wallet icon-2x mr-3" aria-hidden="true"></i>-->
+    <!--                            <div>کیف پول</div>-->
+    <!--                        </div>-->
+    <!--                        <h4 class="mt-3 mb-0">-->
+    <?= '';//local_number(number_format(StringUtil::toEnglish($wallet_balance)));    ?>
+    <!--                            <small>تومان</small>-->
+    <!--                        </h4>-->
+    <!--                    </div>-->
+    <!--                </div>-->
+    <!--            </div>-->
+    <!--        </div>-->
+    <!--    </div>-->
     <div class="col-md-6 col-lg-4">
         <div class="dashboard_content">
             <div class="card">
@@ -70,7 +72,7 @@ use Sim\Utils\StringUtil;
                             <div>مورد علاقه</div>
                         </div>
                         <h4 class="text-info mt-3 mb-0">
-                            <?= $favorite_count ?>
+                            <?= local_number(number_format(StringUtil::toEnglish($favorite_count))); ?>
                         </h4>
                     </div>
                 </div>
@@ -87,7 +89,7 @@ use Sim\Utils\StringUtil;
                             <div>نظرات تایید شده</div>
                         </div>
                         <h4 class="text-success mt-3 mb-0">
-                            <?= $accept_comment_count; ?>
+                            <?= local_number(number_format(StringUtil::toEnglish($accept_comment_count))); ?>
                         </h4>
                     </div>
                 </div>
@@ -104,7 +106,7 @@ use Sim\Utils\StringUtil;
                             <div>نظرات تایید نشده</div>
                         </div>
                         <h4 class="text-danger mt-3 mb-0">
-                            <?= $not_accept_comment_count ?>
+                            <?= local_number(number_format(StringUtil::toEnglish($not_accept_comment_count))); ?>
                         </h4>
                     </div>
                 </div>

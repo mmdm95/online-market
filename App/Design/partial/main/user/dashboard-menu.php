@@ -41,22 +41,27 @@
                         سفارشات
                     </a>
                 </li>
+
                 <!--                <li class="nav-item">-->
                 <!--                    <a class="nav-link "-->
-                <?= '';//url()->getRelativeUrl() == url('user.return-order')->getRelativeUrl() ? 'active' : '';      ?>
+                <?= '';//url()->getRelativeUrl() == url('user.return-order')->getRelativeUrl() ? 'active' : '';       ?>
                 <!--                       href="">-->
-                <?= '';//url('user.return-order');      ?>
+                <?= '';//url('user.return-order');       ?>
                 <!--                        <i class="linearicons-cart-remove"></i>-->
                 <!--                        مرجوع سفارش-->
                 <!--                    </a>-->
                 <!--                </li>-->
-                <li class="nav-item">
-                    <a class="nav-link <?= url()->getRelativeUrl() == url('user.wallet')->getRelativeUrl() ? 'active' : ''; ?>"
-                       href="<?= url('user.wallet'); ?>">
-                        <i class="icon-wallet"></i>
-                        کیف پول
-                    </a>
-                </li>
+
+                <!--                <li class="nav-item">-->
+                <!--                    <a class="nav-link "-->
+                <?= '';//url()->getRelativeUrl() == url('user.wallet')->getRelativeUrl() ? 'active' : '';  ?>
+                <!--                       href="">-->
+                <?= '';//url('user.wallet');  ?>
+                <!--                        <i class="icon-wallet"></i>-->
+                <!--                        کیف پول-->
+                <!--                    </a>-->
+                <!--                </li>-->
+
                 <li class="nav-item">
                     <a class="nav-link <?= url()->getRelativeUrl() == url('user.comments')->getRelativeUrl() ? 'active' : ''; ?>"
                        href="<?= url('user.comments'); ?>">
