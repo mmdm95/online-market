@@ -43,6 +43,6 @@ return [
          *
          * [accept: string|array]
          */
-        'force_with' => 'xXibUvvu0VUIPQi5FNcRDQmYaAL3rHXzudB3CAsPDII=',
+        'force_with' => 'xXibUvvu0VUIPQi5FNcRDQmYaAL3rHXzudB3CAsPDII',
     ],
 ];
