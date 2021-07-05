@@ -155,7 +155,6 @@ class LoginController extends AbstractHomeController
                             $smsRes = SMSUtil::send([$username], $body);
                             SMSUtil::logSMS([$username], $body, $smsRes, SMS_LOG_TYPE_RECOVER_PASS, SMS_LOG_SENDER_SYSTEM);
 
-
                             response()->redirect(url('home.forget-password', ['step' => 'step2'])->getRelativeUrlTrimmed());
                         } else {
                             $data['register_warning'] = 'خطا در ارتباط با سرور، لطفا دوباره تلاش کنید.';
