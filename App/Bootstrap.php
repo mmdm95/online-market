@@ -372,7 +372,9 @@ class Bootstrap
                 show_500($content);
                 exit(0);
             }
-            session()->setTimed('__maintenance_mode_key__', $key, 7200);
+            if (!empty($key)) {
+                session()->setTimed('__maintenance_mode_key__', $key, 7200);
+            }
         } catch (\Exception $e) {
             show_500();
             exit(0);

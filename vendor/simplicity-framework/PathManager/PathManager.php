@@ -173,6 +173,6 @@ class PathManager implements IPath
      */
     protected function doAddEndSlash(string $path): string
     {
-        return trim($path, '/\\') . DIRECTORY_SEPARATOR;
+        return rtrim($path, '/\\') . DIRECTORY_SEPARATOR;
     }
 }
