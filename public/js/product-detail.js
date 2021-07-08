@@ -69,8 +69,16 @@
          */
         function setFetchedProductPropertyToPlaces(code) {
             priceContainer.html(loadedPrices[code]['partial']);
-            inpQuantity.attr('data-max-cart-count', loadedPrices[code]['max_cart_count'] ? loadedPrices[code]['max_cart_count'] : 0);
+            inpQuantity.attr('data-max-cart-count', (
+                loadedPrices[code]['max_cart_count'] && loadedPrices[code]['is_really_available'])
+                ? loadedPrices[code]['max_cart_count']
+                : 0
+            );
             addToCartBtn.attr('data-cart-item-code', code);
+            inpQuantity.closest('.cart-product-quantity').removeClass('d-none');
+            if (!loadedPrices[code]['is_really_available']) {
+                inpQuantity.closest('.cart-product-quantity').addClass('d-none');
+            }
         }
 
         /**
@@ -91,6 +99,7 @@
                         }
                         loadedPrices[code]['partial'] = d['html'];
                         loadedPrices[code]['max_cart_count'] = d['max_cart_count'];
+                        loadedPrices[code]['is_really_available'] = d['is_really_available'];
 
                         setFetchedProductPropertyToPlaces(code);
                     }, false);

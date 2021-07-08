@@ -12,7 +12,7 @@
             <a href="<?= url('home.product.show', [
                 'id' => $item['product_id'],
                 'slug' => $item['slug'],
-            ]); ?>">
+            ]); ?>" <?= ($new_tab ?? false) ? 'target="_blank"' : ''; ?>>
                 <img src="" data-src="<?= url('image.show') . $item['image']; ?>"
                      alt="<?= $item['title']; ?>" class="lazy">
             </a>
@@ -49,7 +49,7 @@
                 </a>
             </h6>
 
-            <?php if (DB_YES == $item['product_availability'] && DB_YES == $item['is_available']): ?>
+            <?php if (get_product_availability($item)): ?>
                 <div class="product_price">
                     <?php
                     $hasDiscount = false;

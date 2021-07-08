@@ -28,7 +28,7 @@ class SliderUtil
             ->cols([
                 'pa.title', 'pa.slug', 'pa.image', 'pa.category_id', 'pa.is_special', 'pa.product_availability',
                 'pa.code', 'pa.product_id', 'pa.price', 'pa.discounted_price', 'pa.discount_until', 'pa.is_available',
-                'pa.festival_id', 'pa.festival_discount', 'pa.created_at',
+                'pa.festival_id', 'pa.festival_discount', 'pa.created_at', 'pa.stock_count', 'pa.max_cart_count',
             ]);
 
         $info['limit'] = isset($info['limit']) && (int)$info['limit'] > 0 ? (int)$info['limit'] : 3;
@@ -104,7 +104,8 @@ class SliderUtil
             ->cols([
                 'pa.title', 'pa.slug', 'pa.image', 'pa.category_id', 'pa.product_availability',
                 'pa.code', 'pa.product_id', 'pa.price', 'pa.discounted_price', 'pa.discount_until',
-                'pa.is_available', 'pa.festival_id', 'pa.festival_discount', 'pa.festival_expire'
+                'pa.is_available', 'pa.festival_id', 'pa.festival_discount', 'pa.festival_expire',
+                'pa.stock_count', 'pa.max_cart_count',
             ])
             ->join(
                 'INNER',

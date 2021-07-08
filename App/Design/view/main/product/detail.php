@@ -8,7 +8,7 @@ use Sim\Utils\StringUtil;
 
     <!-- START SECTION SHOP -->
     <div class="section">
-        <div class="custom-container">
+        <div class="custom-container container">
             <div class="row">
                 <input type="hidden" value="<?= $product['product_id']; ?>" id="__current_product_id">
 

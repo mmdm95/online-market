@@ -3,7 +3,7 @@
     <?php if (count($faq ?? [])): ?>
         <!-- STAT SECTION FAQ -->
         <div class="section">
-            <div class="custom-container">
+            <div class="custom-container container">
                 <div class="row justify-content-center">
                     <div class="col-md-12">
                         <div class="heading_s1 mb-3 mb-md-5">

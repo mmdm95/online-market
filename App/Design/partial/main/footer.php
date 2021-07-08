@@ -6,7 +6,7 @@ use App\Logic\Utils\Jdf;
 
 <footer class="footer_dark">
     <div class="footer_top">
-        <div class="custom-container">
+        <div class="custom-container container">
             <div class="row">
                 <div class="col-lg-4 col-md-12 col-sm-12">
                     <div class="widget">
@@ -105,7 +105,7 @@ use App\Logic\Utils\Jdf;
                 $email = \config()->get('settings.email.value');
                 ?>
                 <?php if (!empty($address) || !empty($phones) || !empty($email)): ?>
-                    <div class="col-lg-6 col-md-6 col-sm-6">
+                    <div class="col-lg-8 col-md-8 col-sm-6">
                         <div class="widget">
                             <h6 class="widget_title">اطلاعات تماس</h6>
                             <ul class="contact_info contact_info_light">
@@ -142,7 +142,7 @@ use App\Logic\Utils\Jdf;
                 $namads = \config()->get('settings.footer_namads.value') ?: [];
                 ?>
                 <?php if (!empty($namads)): ?>
-                    <div class="col-lg-6 col-md-6 col-sm-12">
+                    <div class="col-lg-4 col-md-4 col-sm-12">
                         <div class="widget">
                             <ul class="widget_instafeed namad_img">
                                 <?php foreach ($namads as $namad): ?>
@@ -163,7 +163,7 @@ use App\Logic\Utils\Jdf;
     ?>
     <?php if (!empty($copyright)): ?>
         <div class="bottom_footer border-top-tran">
-            <div class="custom-container">
+            <div class="custom-container container">
                 <div class="row">
                     <div class="col-md-6">
                         <p class="mb-md-0 text-center text-md-left">

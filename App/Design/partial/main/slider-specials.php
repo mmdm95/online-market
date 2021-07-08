@@ -1,6 +1,6 @@
 <?php if (count($special_slider ?? [])): ?>
     <div class="section pt-0 pb-0">
-        <div class="custom-container">
+        <div class="custom-container container">
             <div class="row">
                 <div class="col-md-12">
                     <div class="heading_tab_header">

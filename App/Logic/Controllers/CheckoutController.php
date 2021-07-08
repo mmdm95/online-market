@@ -3,12 +3,11 @@
 namespace App\Logic\Controllers;
 
 use App\Logic\Abstracts\AbstractHomeController;
-use App\Logic\Forms\Checkout\CheckoutForm;
+use App\Logic\Forms\Order\CheckoutForm;
 use App\Logic\Handlers\GeneralAjaxFormHandler;
 use App\Logic\Handlers\ResourceHandler;
 use App\Logic\Models\AddressModel;
 use App\Logic\Models\OrderModel;
-use App\Logic\Models\OrderReserveModel;
 use App\Logic\Models\PaymentMethodModel;
 use App\Logic\Models\ProvinceModel;
 use App\Logic\Models\UserModel;

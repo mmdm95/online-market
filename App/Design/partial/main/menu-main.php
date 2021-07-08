@@ -1,6 +1,6 @@
 <header class="header_wrap">
     <div class="middle-header dark_skin">
-        <div class="custom-container">
+        <div class="custom-container container">
             <div class="nav_block">
                 <a class="navbar-brand" href="<?= url('home.index'); ?>">
                     <img class="logo_light"
@@ -51,7 +51,7 @@
     </div>
 
     <div class="bottom_header dark_skin main_menu_uppercase border-top border-bottom">
-        <div class="custom-container">
+        <div class="custom-container container">
             <div class="row">
                 <div class="col-lg-3 col-md-4 col-sm-6 col-3">
                     <div class="categories_wrap">

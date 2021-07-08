@@ -1,6 +1,6 @@
 <?php if (count($three_images ?? [])): ?>
     <div class="section pb_20 small_pt">
-        <div class="custom-container">
+        <div class="custom-container container">
             <div class="row">
                 <?php
                 $colSize = 4;

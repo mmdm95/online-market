@@ -155,8 +155,8 @@ function get_discount_price(array $item): array
  */
 function get_product_availability(array $item): bool
 {
-    return $item['product_availability'] &&
-        $item['is_available'] &&
+    return DB_YES == $item['product_availability'] &&
+        DB_YES == $item['is_available'] &&
         ((int)$item['stock_count'] > 0) &&
         ((int)$item['max_cart_count'] > 0);
 }
@@ -202,8 +202,10 @@ function get_current_authenticated_user(DBAuth $auth)
 
     // get current user info
     $user = $userModel->getFirst(['*'], 'id=:id', ['id' => $auth->getCurrentUser()['id'] ?? 0]);
-    unset($user['password']);
-    $user['roles'] = $userModel->getUserRoles($user['id'], null, [], ['r.*']);
+    if(count($user)) {
+        unset($user['password']);
+        $user['roles'] = $userModel->getUserRoles($user['id'], null, [], ['r.*']);
+    }
     return $user;
 }
 

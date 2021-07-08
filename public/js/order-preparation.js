@@ -295,12 +295,13 @@
         //---------------------------------------------------------------
         // SUBMIT CHECKING
         //---------------------------------------------------------------
-        shop.forms.submitForm('checkoutCheck', constraints.checkoutCheck, function (values) {
+        shop.forms.submitForm(false, 'checkoutCheck', constraints.checkoutCheck, function (values) {
             // do ajax
             if (createLoader) {
                 createLoader = false;
                 loaderId = shop.showLoader();
             }
+            
             shop.request(variables.url.checkout.check, 'post', function () {
                 shop.hideLoader(loaderId);
                 createLoader = true;

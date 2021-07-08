@@ -13,7 +13,7 @@ if (!isset($slider['image']) || empty($slider['image'])) {
 
 <?php if (count($slider['items'] ?? [])): ?>
     <div class="section small_pt small_pb">
-        <div class="custom-container">
+        <div class="custom-container container">
 
             <div class="row">
                 <?php if ($hasSideImage): ?>

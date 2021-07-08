@@ -15,7 +15,7 @@ foreach ($tabbed_slider['items'] ?? [] as $tab) {
 ?>
 <?php if ($hasItems): ?>
     <div class="section small_pt pb-0">
-        <div class="custom-container">
+        <div class="custom-container container">
             <?php
             $col_1 = 'col-xl-3';
             $col_2 = 'col-xl-9';

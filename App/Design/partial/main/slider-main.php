@@ -1,6 +1,6 @@
 <?php if (count($main_slider)): ?>
     <div class="mt-4 staggered-animation-wrap">
-        <div class="custom-container">
+        <div class="custom-container container">
             <?php
             $col_1 = 'col-lg-7';
             $col_2 = 'col-lg-2';

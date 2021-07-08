@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Logic\Forms\Checkout;
+namespace App\Logic\Forms\Order;
 
 use App\Logic\Interfaces\IPageForm;
 use App\Logic\Models\BaseModel;

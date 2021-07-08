@@ -1,6 +1,6 @@
 <?php if (!empty($sub_title)): ?>
     <div class="breadcrumb_section bg_gray page-title-mini">
-        <div class="custom-container"><!-- STRART CONTAINER -->
+        <div class="custom-container container"><!-- STRART CONTAINER -->
             <div class="row align-items-center">
                 <div class="col-md-6">
                     <div class="page-title">

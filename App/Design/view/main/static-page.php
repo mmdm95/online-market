@@ -3,7 +3,7 @@
 
     <!-- START SECTION PAGE -->
     <div class="section">
-        <div class="custom-container">
+        <div class="custom-container container">
             <div class="row">
                 <div class="col-12">
                     <div class="term_conditions">

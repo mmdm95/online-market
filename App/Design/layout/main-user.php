@@ -49,7 +49,7 @@
 
     <!-- START SECTION SHOP -->
     <div class="section">
-        <div class="custom-container">
+        <div class="custom-container container">
             <div class="row" id="__theia_sticky_sidebar_container">
                 <!-- START DASHBOARD MENU -->
                 <?php load_partial('main/user/dashboard-menu', [

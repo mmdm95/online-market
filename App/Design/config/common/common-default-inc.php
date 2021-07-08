@@ -16,6 +16,11 @@ return [
             'bottom' => [
                 e(
                     '<script type="text/javascript" src="' .
+                    asset_path('plugins/validate.min.js') .
+                    '"></script>'
+                ),
+                e(
+                    '<script type="text/javascript" src="' .
                     asset_path('plugins/lazy.min.js') .
                     '"></script>'
                 ),

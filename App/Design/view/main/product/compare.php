@@ -3,7 +3,7 @@
 
     <!-- START SECTION SHOP -->
     <div class="section">
-        <div class="custom-container">
+        <div class="custom-container container">
             <div class="row">
                 <div class="col-md-12">
                     <div class="compare_box">

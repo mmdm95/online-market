@@ -1,5 +1,5 @@
 <div class="section bg_dark small_pt small_pb">
-    <div class="custom-container">
+    <div class="custom-container container">
         <div class="row align-items-center">
             <div class="col-md-6">
                 <div class="newsletter_text text_white">

@@ -1,6 +1,6 @@
 <?php if (count($brands ?? [])): ?>
     <div class="section small_pb">
-        <div class="custom-container">
+        <div class="custom-container container">
             <div class="row">
                 <div class="col-md-12">
                     <div class="heading_tab_header">

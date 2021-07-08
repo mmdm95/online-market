@@ -21,7 +21,7 @@
         <div class="row">
             <?php foreach ($products as $item): ?>
                 <div class="col-md-4 col-6">
-                    <?php load_partial('main/product-card', ['item' => $item]); ?>
+                    <?php load_partial('main/product-card', ['item' => $item, 'new_tab' => true]); ?>
                 </div>
             <?php endforeach; ?>
         </div>

@@ -9,7 +9,7 @@ $validator = form_validator();
 
     <!-- START SECTION CONTACT -->
     <div class="section pb_70">
-        <div class="custom-container">
+        <div class="custom-container container">
             <div class="row justify-content-center">
                 <?php
                 $address = \config()->get('settings.address.value');
@@ -65,7 +65,7 @@ $validator = form_validator();
 
     <!-- START SECTION CONTACT -->
     <div class="section pt-0">
-        <div class="custom-container">
+        <div class="custom-container container">
             <div class="row">
                 <div class="col-lg-6" id="__contact_form_container">
                     <div class="heading_s1">

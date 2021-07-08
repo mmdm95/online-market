@@ -16,6 +16,13 @@ return [
     'show_native_errors' => false,
 
     /*
+     * Path of env file.
+     *
+     * Usually in root of project
+     */
+    'env_path' => dirname(__DIR__),
+
+    /*
      * Maintenance settings
      */
     'maintenance' => [

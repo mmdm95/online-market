@@ -39,6 +39,7 @@ class ProductModel extends BaseModel
             'p.baby_property',
             'p.brand_id',
             'p.allow_commenting',
+            'p.stock_count',
             'b.name AS brand_name',
             'b.slug AS brand_slug',
             'b.keywords AS brand_keywords',
@@ -97,7 +98,9 @@ class ProductModel extends BaseModel
             'pa.title',
             'pa.image',
             'pa.price',
-            'pa.discounted_price'
+            'pa.discounted_price',
+            'pa.stock_count',
+            'pa.max_cart_count',
         ]
     ): array
     {

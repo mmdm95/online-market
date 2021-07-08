@@ -594,6 +594,7 @@ window.MyGlobalVariables = {
 
             forms: {
                 /**
+                 * @param defaultReturn
                  * @param formKey
                  * @param constraints
                  * @param [validationSuccessCallback]
@@ -601,13 +602,23 @@ window.MyGlobalVariables = {
                  * @param [aliases]
                  * @param [check]
                  */
-                submitForm: function (formKey, constraints, validationSuccessCallback, validationErrorCallback, aliases, check) {
+                submitForm: function (defaultReturn, formKey, constraints, validationSuccessCallback, validationErrorCallback, aliases, check) {
                     var
                         self = this,
                         //-----
                         form,
                         formValues,
                         formErrors;
+
+                    if (!window.TheCore.isBoolean(defaultReturn)) {
+                        check = aliases;
+                        aliases = validationErrorCallback;
+                        validationErrorCallback = validationSuccessCallback;
+                        validationSuccessCallback = constraints;
+                        constraints = formKey;
+                        formKey = defaultReturn;
+                        defaultReturn = true;
+                    }
 
                     function formatErrors(errors, mapping) {
                         for (var attrName in errors) {
@@ -633,51 +644,51 @@ window.MyGlobalVariables = {
                     check = !(false === check);
 
                     form = $(window.MyGlobalVariables.elements[formKey].form);
-                    form.submit(function () {
-                        if (check) {
-                            formValues = self.convertFormObjectNumbersToEnglish(window.validate.collectFormValues(this), formKey);
-                            // remap form values to its config name
-                            var data = new FormData();
-                            var val;
-                            for (var o in formValues) {
-                                if (formValues.hasOwnProperty(o)) {
-                                    val = formValues[o];
-                                    val = !window.TheCore.isDefined(val) ? '' : val;
-                                    if (window.TheCore.isDefined(window.MyGlobalVariables.elements[formKey].inputs[o])) {
-                                        data.append(window.MyGlobalVariables.elements[formKey].inputs[o], val);
-                                    } else {
-                                        data.append(o, val);
+
+                    if (form.length) {
+                        form.submit(function () {
+                            if (check) {
+                                try {
+                                    formValues = self.convertFormObjectNumbersToEnglish(window.validate.collectFormValues(this), formKey);
+                                    // remap form values to its config name
+                                    var data = new FormData();
+                                    var val;
+                                    for (var o in formValues) {
+                                        if (formValues.hasOwnProperty(o)) {
+                                            val = formValues[o];
+                                            val = !window.TheCore.isDefined(val) ? '' : val;
+                                            if (window.TheCore.isDefined(window.MyGlobalVariables.elements[formKey].inputs[o])) {
+                                                data.append(window.MyGlobalVariables.elements[formKey].inputs[o], val);
+                                            } else {
+                                                data.append(o, val);
+                                            }
+                                        }
                                     }
+
+                                    // show form data in this way because it does not show
+                                    // in console.log
+                                    // for (var pair of data.entries()) {
+                                    //     console.log(pair[0] + ', ' + pair[1]);
+                                    // }
+
+                                    /**
+                                     * @see https://github.com/ansman/validate.js/issues/69#issuecomment-567751903
+                                     * @type {ValidationResult}
+                                     */
+                                    formErrors = window.validate(formValues, constraints);
+                                    if (!formErrors) {
+                                        return validationSuccessCallback ? validationSuccessCallback.apply(null, [data]) : true;
+                                    }
+
+                                    formErrors = formatErrors(formErrors, aliases);
+
+                                    return validationErrorCallback ? validationErrorCallback.apply(null, [formErrors]) : true;
+                                } catch (e) {
+                                    return defaultReturn;
                                 }
                             }
-
-                            // show form data in this way because it does not show
-                            // in console.log
-                            // for (var pair of data.entries()) {
-                            //     console.log(pair[0] + ', ' + pair[1]);
-                            // }
-
-                            /**
-                             * @see https://github.com/ansman/validate.js/issues/69#issuecomment-567751903
-                             * @type {ValidationResult}
-                             */
-                            formErrors = window.validate(formValues, constraints);
-                            if (!formErrors) {
-                                return validationSuccessCallback.apply(null, [data]);
-                            }
-
-                            formErrors = formatErrors(formErrors, aliases);
-
-                            // , {
-                            //         prettify: function prettify(string) {
-                            //             console.log(validate.prettify(string));
-                            //             return aliases[string] || validate.prettify(string);
-                            //         },
-                            //     }
-
-                            return validationErrorCallback.apply(null, [formErrors]);
-                        }
-                    });
+                        });
+                    }
                 },
 
                 /**

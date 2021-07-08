@@ -317,10 +317,13 @@ class ProductController extends AbstractHomeController
                     'pa.discounted_price',
                     'pa.guarantee',
                     'pa.max_cart_count',
+                    'pa.stock_count',
                 ]
             );
 
             if (count($product)) $product = $product[0];
+
+            $isAvailable = get_product_availability($product);
 
             $resourceHandler
                 ->type(RESPONSE_TYPE_SUCCESS)
@@ -328,7 +331,8 @@ class ProductController extends AbstractHomeController
                     'html' => $this->setTemplate('partial/main/product/price')->render([
                         'product' => $product,
                     ]),
-                    'max_cart_count' => $product['max_cart_count'] ?? 0,
+                    'max_cart_count' => $isAvailable ? ($product['max_cart_count'] ?? 0) : 0,
+                    'is_really_available' => $isAvailable,
                 ]);
         } else {
             response()->httpCode(403);

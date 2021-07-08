@@ -1,5 +1,5 @@
 <?php if (count($steps ?? [])): ?>
-    <div class="custom-container pt-5 px-5">
+    <div class="custom-container container pt-5 px-5">
         <div class="step-container">
             <?php
             $len = count($steps ?? []);

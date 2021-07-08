@@ -10,7 +10,7 @@ use Sim\Utils\StringUtil;
 
     <!-- START SECTION SHOP -->
     <div class="section">
-        <div class="custom-container">
+        <div class="custom-container container">
             <div class="row" id="__sticky_sidebar_container">
                 <div class="col-lg-9">
                     <div class="row align-items-center mb-4 pb-1">
