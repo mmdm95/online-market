@@ -16,6 +16,7 @@ class OrderResult extends AbstractHomeController
 {
     /**
      * @param $type
+     * @param $method
      * @param $code
      * @return string
      * @throws ConfigNotRegisteredException
@@ -28,11 +29,11 @@ class OrderResult extends AbstractHomeController
      * @throws \ReflectionException
      * @throws \Sim\SMS\Exceptions\SMSException
      */
-    public function index($type, $code)
+    public function index($type, $method, $code)
     {
         $this->setLayout($this->main_layout)->setTemplate('view/main/order/order-completed');
 
-        [$res, $msg, $paymentCode] = PaymentUtil::getResultProvider($type, $code);
+        [$res, $msg, $paymentCode] = PaymentUtil::getResultProvider($type, $method, $code);
 
         if ($res) {
             /**

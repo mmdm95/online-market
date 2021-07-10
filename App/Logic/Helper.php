@@ -21,6 +21,7 @@ class Helper implements IInitialize
             __DIR__ . '/Helpers/config-helper.php',
             __DIR__ . '/Helpers/easy-file-manager.php',
             __DIR__ . '/Helpers/pagination-helper.php',
+            __DIR__ . '/Helpers/csrf-helper.php',
         ];
     }
 }

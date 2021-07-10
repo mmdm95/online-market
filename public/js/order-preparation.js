@@ -79,7 +79,7 @@
             constraints,
             //-----
             loaderId,
-            createLoader,
+            createLoader = true,
             //-----
             addressChoosingContainer,
             addressChoosingBtn,
@@ -90,7 +90,9 @@
             //-----
             shopCartTable,
             shopCartItemsInfoTable,
-            shopCartInfoTable;
+            shopCartInfoTable,
+            //-----
+            canSubmit = true;
 
         //-----
         constraints = {
@@ -274,20 +276,39 @@
             }
         });
 
+        $('select[name="inp-addr-province"]').on('change' + variables.namespace, function () {
+            var target = $(this).attr('data-city-select-target');
+            if ($(target).length) {
+                $(target).trigger('change');
+            }
+        });
+
         // when city changed, calculate send price and update side info table
-        $('input[name="inp-addr-city"]').on('change' + variables.namespace, function () {
+        $('select[name="inp-addr-city"]').on('change' + variables.namespace, function () {
             var checked, checkedProvince;
-            checked = $(this).find(':checked').val();
-            checkedProvince = $('input[name="inp-addr-province"]').find(':checked').val();
+            checked = $(this).find('option:selected').val();
+            checkedProvince = $('select[name="inp-addr-province"]').find('option:selected').val();
 
             if (checked) {
+                if (createLoader) {
+                    createLoader = false;
+                    loaderId = shop.showLoader();
+                }
+
+                var form = new FormData();
+                form.append('city', checked);
+                form.append('province', checkedProvince);
+                canSubmit = false;
                 shop.request(variables.url.cart.checkPostPrice, 'post', function () {
                     loadNPlaceCartInfo();
+                    canSubmit = true;
+                    createLoader = true;
+                    shop.hideLoader(loaderId);
                 }, {
-                    data: {
-                        city: checked,
-                        province: checkedProvince,
-                    }
+                    data: form,
+                }, false, function () {
+                    createLoader = true;
+                    shop.hideLoader(loaderId);
                 });
             }
         });
@@ -301,40 +322,41 @@
                 createLoader = false;
                 loaderId = shop.showLoader();
             }
-            
-            shop.request(variables.url.checkout.check, 'post', function () {
-                shop.hideLoader(loaderId);
-                createLoader = true;
-                //-----
-                if (this.type !== variables.toasts.types.success) {
-                    shop.toasts.toast(this.data, {
-                        type: variables.toasts.types.warning,
-                    });
-                } else {
-                    var data = this.data;
-                    if(data.redirect) {
-                        // Simulate an HTTP redirect:
-                        window.location.replace(data.url);
+
+            if (canSubmit) {
+                shop.request(variables.url.checkout.check, 'post', function () {
+                    createLoader = true;
+                    //-----
+                    if (this.type !== variables.toasts.types.success) {
+                        shop.toasts.toast(this.data, {
+                            type: variables.toasts.types.warning,
+                        });
                     } else {
-                        // create a new form and submit it with hidden inputs
-                        var frm = $('<form method="post" action="' +
-                            data.url +
-                            '" style="display: none; position: absolute; top: -9999px; left: -9999px; visibility: hidden; opacity: 0;" />');
-                        for (var i = 0; i < data.inputs.length; ++i) {
-                            frm.append($('<input type="hidden" value="' + data.inputs[i].value + '" name="' + data.inputs[i].name + '">'));
+                        var data = this.data;
+                        if (data.redirect) {
+                            // Simulate an HTTP redirect:
+                            window.location.replace(data.url);
+                        } else {
+                            // create a new form and submit it with hidden inputs
+                            var frm = $('<form method="post" action="' +
+                                data.url +
+                                '" style="display: none; position: absolute; top: -9999px; left: -9999px; visibility: hidden; opacity: 0;" />');
+                            for (var i = 0; i < data.inputs.length; ++i) {
+                                frm.append($('<input type="hidden" value="' + data.inputs[i].value + '" name="' + data.inputs[i].name + '">'));
+                            }
+                            // add form to body
+                            $('body').append(frm);
+                            // submit it to go to the gateway
+                            frm.submit();
                         }
-                        // add form to body
-                        $('body').append(frm);
-                        // submit it to go to the gateway
-                        frm.submit();
                     }
-                }
-            }, {
-                data: values,
-            }, true, function () {
-                createLoader = true;
-                shop.hideLoader(loaderId);
-            });
+                }, {
+                    data: values,
+                }, true, function () {
+                    createLoader = true;
+                    shop.hideLoader(loaderId);
+                });
+            }
             return false;
         }, function (errors) {
             shop.forms.showFormErrors(errors);

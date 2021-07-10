@@ -137,6 +137,7 @@ window.MyGlobalVariables = {
             },
         },
         captcha: '/ajax/captcha',
+        csrfToken: '/ajax/csrf-token',
         image: '/images',
     },
     elements: {
@@ -855,6 +856,10 @@ window.MyGlobalVariables = {
                             } else if ($.fn.selectric && citiesSelect.data('selectric')) {
                                 citiesSelect.selectric('refresh');
                             }
+                            // trigger on change if there is a current city id
+                            if (currCity) {
+                                citiesSelect.trigger('change');
+                            }
                         });
                     }
                 });
@@ -874,6 +879,11 @@ window.MyGlobalVariables = {
             captchaReloadBtn = $(variables.elements.captcha.refreshBtn),
             provincesSelect = $('.city-loader-select'),
             citiesSelect = $(provincesSelect.attr('data-city-select-target'));
+
+        //---------------------------------------------------------------
+        // CSRF TOKEN LOAD
+        //---------------------------------------------------------------
+        shop.request(variables.url.csrfToken, 'GET');
 
         //---------------------------------------------------------------
         // CAPTCHA RELOAD

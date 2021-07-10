@@ -4,6 +4,7 @@ namespace App\Logic\Utils;
 
 use App\Logic\Models\GatewayModel;
 use App\Logic\Models\OrderModel;
+use App\Logic\Models\PaymentMethodModel;
 use Sim\Auth\DBAuth;
 use Sim\Event\Interfaces\IEvent;
 use Sim\Payment\Factories\BehPardakht;
@@ -42,11 +43,12 @@ class PaymentUtil
      * @param $gatewayType
      * @param $gatewayCode
      * @param $gatewayInfo
+     * @return array
      * @throws \DI\DependencyException
      * @throws \DI\NotFoundException
      * @throws \Exception
      */
-    public static function getGatewayInfo($gatewayType, $gatewayCode, $gatewayInfo)
+    public static function getGatewayInfo($gatewayType, $gatewayCode, $gatewayInfo): array
     {
         /**
          * @var DBAuth $auth
@@ -57,12 +59,15 @@ class PaymentUtil
          */
         $gatewayModel = container()->get(GatewayModel::class);
         $gateway = null;
+        $gatewayRes = null;
         $provider = null;
 
-        $code = StringUtil::uniqidReal(20);
+        $newCode = self::getUniqueGatewayFlowCode();
+
+        $res = true;
 
         $orderArr = session()->get(SESSION_ORDER_ARR_INFO);
-        if (is_null($orderArr) || !count($orderArr)) return;
+        if (is_null($orderArr) || !count($orderArr)) return [$gatewayRes, false];
 
         switch ((int)$gatewayType) {
             case METHOD_TYPE_GATEWAY_BEH_PARDAKHT:
@@ -81,18 +86,22 @@ class PaymentUtil
                 $provider
                     ->setCallbackUrl(rtrim(get_base_url(), '/') . url('home.finish', [
                             'type' => METHOD_RESULT_TYPE_BEH_PARDAKHT,
-                            'code' => $gatewayCode,
+                            'method' => $gatewayCode,
+                            'code' => $newCode,
                         ])->getRelativeUrlTrimmed())
-                    ->setAmount($orderArr['final_price'])
+                    ->setAmount(($orderArr['final_price'] * 10))
                     ->setOrderId($orderArr['code'])
                     ->setPayerId(0);
                 // events
                 $gateway->createRequestOkClosure(
-                    function (IEvent $event, BehPardakhtRequestResultProvider $result) use ($auth, $gatewayModel, $orderArr, $code) {
-                        // store gateway info in session to store all order things at once
-                        session()->setFlash(SESSION_GATEWAY_INFO, $result);
+                    function (
+                        IEvent $event,
+                        BehPardakhtRequestResultProvider $result
+                    ) use ($auth, $gatewayModel, $orderArr, $newCode, &$gatewayRes) {
+                        // store gateway info to store all order things at once
+                        $gatewayRes = $result;
                         $gatewayModel->insert([
-                            'code' => $code,
+                            'code' => $newCode,
                             'order_code' => $orderArr['code'],
                             'user_id' => $auth->getCurrentUser()['id'] ?? 0,
                             'price' => $orderArr['final_price'],
@@ -102,12 +111,12 @@ class PaymentUtil
                             'issue_date' => time(),
                         ]);
                     }
-                )->createRequestNotOkClosure(function (IEvent $event, $code, $msg) use ($gatewayModel, $code) {
-                    $gatewayModel->update([
-                        'status' => $code,
-                        'msg' => $msg,
-                    ], 'code=:code', ['code' => $code]);
-                });
+                )->createRequestNotOkClosure(
+                    function (IEvent $event, $code, $msg) use (&$res) {
+                        $res = false;
+                        self::logConnectionError(METHOD_TYPE_GATEWAY_BEH_PARDAKHT, $code, $msg);
+                    }
+                );
                 //
                 $gateway->createRequest($provider);
                 break;
@@ -125,17 +134,21 @@ class PaymentUtil
                 $provider
                     ->setCallbackUrl(rtrim(get_base_url(), '/') . url('home.finish', [
                             'type' => METHOD_RESULT_TYPE_IDPAY,
-                            'code' => $gatewayCode,
+                            'method' => $gatewayCode,
+                            'code' => $newCode,
                         ])->getRelativeUrlTrimmed())
-                    ->setAmount($orderArr['final_price'])
+                    ->setAmount(($orderArr['final_price'] * 10))
                     ->setOrderId($orderArr['code']);
                 // events
                 $gateway->createRequestOkClosure(
-                    function (IEvent $event, IDPayRequestResultProvider $result) use ($auth, $gatewayModel, $orderArr, $code) {
-                        // store gateway info in session to store all order things at once
-                        session()->setFlash(SESSION_GATEWAY_INFO, $result);
+                    function (
+                        IEvent $event,
+                        IDPayRequestResultProvider $result
+                    ) use ($auth, $gatewayModel, $orderArr, $newCode, &$gatewayRes) {
+                        // store gateway info to store all order things at once
+                        $gatewayRes = $result;
                         $gatewayModel->insert([
-                            'code' => $code,
+                            'code' => $newCode,
                             'order_code' => $orderArr['code'],
                             'user_id' => $auth->getCurrentUser()['id'] ?? 0,
                             'price' => $orderArr['final_price'],
@@ -145,12 +158,12 @@ class PaymentUtil
                             'issue_date' => time(),
                         ]);
                     }
-                )->createRequestNotOkClosure(function (IEvent $event, $code, $msg) use ($gatewayModel, $code) {
-                    $gatewayModel->update([
-                        'status' => $code,
-                        'msg' => $msg,
-                    ], 'code=:code', ['code' => $code]);
-                });
+                )->createRequestNotOkClosure(
+                    function (IEvent $event, $code, $msg) use (&$res) {
+                        $res = false;
+                        self::logConnectionError(METHOD_TYPE_GATEWAY_IDPAY, $code, $msg);
+                    }
+                );
                 //
                 $gateway->createRequest($provider);
                 break;
@@ -168,17 +181,21 @@ class PaymentUtil
                 $provider
                     ->setCallbackUrl(rtrim(get_base_url(), '/') . url('home.finish', [
                             'type' => METHOD_RESULT_TYPE_MABNA,
-                            'code' => $gatewayCode,
+                            'method' => $gatewayCode,
+                            'code' => $newCode,
                         ])->getRelativeUrlTrimmed())
-                    ->setAmount($orderArr['final_price'])
+                    ->setAmount(($orderArr['final_price'] * 10))
                     ->setInvoiceId($orderArr['code']);
                 // events
                 $gateway->createRequestOkClosure(
-                    function (IEvent $event, MabnaRequestResultProvider $result) use ($auth, $gatewayModel, $orderArr, $code) {
-                        // store gateway info in session to store all order things at once
-                        session()->setFlash(SESSION_GATEWAY_INFO, $result);
+                    function (
+                        IEvent $event,
+                        MabnaRequestResultProvider $result
+                    ) use ($auth, $gatewayModel, $orderArr, $newCode, &$gatewayRes) {
+                        // store gateway info to store all order things at once
+                        $gatewayRes = $result;
                         $gatewayModel->insert([
-                            'code' => $code,
+                            'code' => $newCode,
                             'order_code' => $orderArr['code'],
                             'user_id' => $auth->getCurrentUser()['id'] ?? 0,
                             'price' => $orderArr['final_price'],
@@ -188,12 +205,12 @@ class PaymentUtil
                             'issue_date' => time(),
                         ]);
                     }
-                )->createRequestNotOkClosure(function (IEvent $event, $code, $msg) use ($gatewayModel, $code) {
-                    $gatewayModel->update([
-                        'status' => $code,
-                        'msg' => $msg,
-                    ], 'code=:code', ['code' => $code]);
-                });
+                )->createRequestNotOkClosure(
+                    function (IEvent $event, $code, $msg) use (&$res) {
+                        $res = false;
+                        self::logConnectionError(METHOD_TYPE_GATEWAY_MABNA, $code, $msg);
+                    }
+                );
                 //
                 $gateway->createRequest($provider);
                 break;
@@ -211,16 +228,20 @@ class PaymentUtil
                 $provider
                     ->setCallbackUrl(rtrim(get_base_url(), '/') . url('home.finish', [
                             'type' => METHOD_RESULT_TYPE_ZARINPAL,
-                            'code' => $gatewayCode,
+                            'method' => $gatewayCode,
+                            'code' => $newCode,
                         ])->getRelativeUrlTrimmed())
-                    ->setAmount($orderArr['final_price']);
+                    ->setAmount(($orderArr['final_price'] * 10));
                 // events
                 $gateway->createRequestOkClosure(
-                    function (IEvent $event, ZarinpalRequestResultProvider $result) use ($auth, $gatewayModel, $orderArr, $code) {
-                        // store gateway info in session to store all order things at once
-                        session()->setFlash(SESSION_GATEWAY_INFO, $result);
+                    function (
+                        IEvent $event,
+                        ZarinpalRequestResultProvider $result
+                    ) use ($auth, $gatewayModel, $orderArr, $newCode, &$gatewayRes) {
+                        // store gateway info to store all order things at once
+                        $gatewayRes = $result;
                         $gatewayModel->insert([
-                            'code' => $code,
+                            'code' => $newCode,
                             'order_code' => $orderArr['code'],
                             'user_id' => $auth->getCurrentUser()['id'] ?? 0,
                             'price' => $orderArr['final_price'],
@@ -230,12 +251,12 @@ class PaymentUtil
                             'issue_date' => time(),
                         ]);
                     }
-                )->createRequestNotOkClosure(function (IEvent $event, $code, $msg) use ($gatewayModel, $code) {
-                    $gatewayModel->update([
-                        'status' => $code,
-                        'msg' => $msg,
-                    ], 'code=:code', ['code' => $code]);
-                });
+                )->createRequestNotOkClosure(
+                    function (IEvent $event, $code, $msg) use (&$res) {
+                        $res = false;
+                        self::logConnectionError(METHOD_TYPE_GATEWAY_ZARINPAL, $code, $msg);
+                    }
+                );
                 //
                 $gateway->createRequest($provider);
                 break;
@@ -255,17 +276,21 @@ class PaymentUtil
                 $provider
                     ->setReturnUrl(rtrim(get_base_url(), '/') . url('home.finish', [
                             'type' => METHOD_RESULT_TYPE_SADAD,
-                            'code' => $gatewayCode,
+                            'method' => $gatewayCode,
+                            'code' => $newCode,
                         ])->getRelativeUrlTrimmed())
-                    ->setAmount($orderArr['final_price'])
-                    ->setOrderId($orderArr['code']);
+                    ->setAmount(($orderArr['final_price'] * 10))
+                    ->setOrderId((int)$orderArr['code']);
                 // events
                 $gateway->createRequestOkClosure(
-                    function (IEvent $event, SadadRequestResultProvider $result) use ($auth, $gatewayModel, $orderArr, $code) {
-                        // store gateway info in session to store all order things at once
-                        session()->setFlash(SESSION_GATEWAY_INFO, $result);
+                    function (
+                        IEvent $event,
+                        SadadRequestResultProvider $result
+                    ) use ($auth, $gatewayModel, $orderArr, $newCode, &$gatewayRes) {
+                        // store gateway info to store all order things at once
+                        $gatewayRes = $result;
                         $gatewayModel->insert([
-                            'code' => $code,
+                            'code' => $newCode,
                             'order_code' => $orderArr['code'],
                             'user_id' => $auth->getCurrentUser()['id'] ?? 0,
                             'price' => $orderArr['final_price'],
@@ -275,28 +300,34 @@ class PaymentUtil
                             'issue_date' => time(),
                         ]);
                     }
-                )->createRequestNotOkClosure(function (IEvent $event, $code, $msg) use ($gatewayModel, $code) {
-                    $gatewayModel->update([
-                        'status' => $code,
-                        'msg' => $msg,
-                    ], 'code=:code', ['code' => $code]);
-                });
+                )->createRequestNotOkClosure(
+                    function (IEvent $event, $code, $msg) use (&$res) {
+                        $res = false;
+                        self::logConnectionError(METHOD_TYPE_GATEWAY_SADAD, $code, $msg);
+                    }
+                );
                 //
                 $gateway->createRequest($provider);
                 break;
+            default:
+                $res = false;
+                break;
         }
+
+        return [$gatewayRes, $res];
     }
 
     /**
      * Check result of gateway and take action
      *
-     * @param $gatewayType
+     * @param $type
+     * @param $methodCode
      * @param $gatewayCode
      * @return array
      * @throws \DI\DependencyException
      * @throws \DI\NotFoundException
      */
-    public static function getResultProvider($gatewayType, $gatewayCode): array
+    public static function getResultProvider($type, $methodCode, $gatewayCode): array
     {
         /**
          * @var GatewayModel $gatewayModel
@@ -306,21 +337,43 @@ class PaymentUtil
          * @var OrderModel $orderModel
          */
         $orderModel = container()->get(OrderModel::class);
-
-        $order = $orderModel->getOrderFromGatewayCode($gatewayCode);
-        $gatewayInfo = [];
-        $gateway = null;
-        $provider = null;
+        /**
+         * @var PaymentMethodModel $methodModel
+         */
+        $methodModel = container()->get(PaymentMethodModel::class);
 
         $res = [false, 'سفارش نامعتبر می‌باشد.', null];
 
-        // check the order and see if it is a valid order
-        if (0 == count($order)) {
+        $flow = $gatewayModel->getFirst([
+            'order_code',
+            'method_type',
+        ], 'code=:code', ['code' => $gatewayCode]);
+
+        // check flow and see if it is a valid gateway flow record
+        if (!count($flow)) {
             return $res;
         }
 
-        switch ((int)$gatewayType) {
-            case METHOD_TYPE_GATEWAY_BEH_PARDAKHT:
+        $order = $orderModel->getFirst(['*'], 'code=:code', ['code' => $flow['order_code']]);
+        $gateway = null;
+        $provider = null;
+
+        // check the order and see if it is a valid order
+        if (!count($order)) {
+            return $res;
+        }
+
+        $method = $methodModel->getFirst(['meta_parameters'], 'code=:code', ['code' => $methodCode]);
+
+        // check the order and see if it is a valid order
+        if (!count($method)) {
+            return $res;
+        }
+
+        $gatewayInfo = json_decode(cryptographer()->decrypt($method['meta_parameters']), true);
+
+        switch ($type) {
+            case METHOD_RESULT_TYPE_BEH_PARDAKHT:
                 /**
                  * @var BehPardakht $gateway
                  */
@@ -407,7 +460,7 @@ class PaymentUtil
                         }
                     )->sendAdvice();
                 break;
-            case METHOD_TYPE_GATEWAY_IDPAY:
+            case METHOD_RESULT_TYPE_IDPAY:
                 /**
                  * @var IDPay $gateway
                  */
@@ -464,7 +517,7 @@ class PaymentUtil
                         }
                     );
                 break;
-            case METHOD_TYPE_GATEWAY_MABNA:
+            case METHOD_RESULT_TYPE_MABNA:
                 /**
                  * @var Mabna $gateway
                  */
@@ -524,7 +577,7 @@ class PaymentUtil
                         }
                     );
                 break;
-            case METHOD_TYPE_GATEWAY_ZARINPAL:
+            case METHOD_RESULT_TYPE_ZARINPAL:
                 /**
                  * @var Zarinpal $gateway
                  */
@@ -600,7 +653,7 @@ class PaymentUtil
                         (new ZarinpalAdviceProvider())->setAmount($order['final_price'])
                     );
                 break;
-            case METHOD_TYPE_GATEWAY_SADAD:
+            case METHOD_RESULT_TYPE_SADAD:
                 /**
                  * @var Sadad $gateway
                  */
@@ -662,5 +715,40 @@ class PaymentUtil
         }
 
         return $res;
+    }
+
+    /**
+     * @param int $length
+     * @return string
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
+     */
+    private static function getUniqueGatewayFlowCode($length = 20): string
+    {
+        /**
+         * @var GatewayModel $flowModel
+         */
+        $flowModel = container()->get(GatewayModel::class);
+        do {
+            $uniqueStr = StringUtil::randomString($length, StringUtil::RS_NUMBER | StringUtil::RS_LOWER_CHAR);
+            $isUnique = (bool)$flowModel->count('code=:code', ['code' => $uniqueStr]);
+        } while ($isUnique);
+        return $uniqueStr;
+    }
+
+    /**
+     * @param $type
+     * @param $code
+     * @param $msg
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
+     */
+    private static function logConnectionError($type, $code, $msg)
+    {
+        logger_gateway()->error([
+            'gateway_type' => $type,
+            'code' => $code,
+            'message' => $msg,
+        ]);
     }
 }

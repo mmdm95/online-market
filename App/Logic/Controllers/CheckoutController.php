@@ -99,7 +99,7 @@ class CheckoutController extends AbstractHomeController
             $agent = container()->get(Agent::class);
             if (!$agent->isRobot()) {
                 // check gateway code and get information about it
-                $gatewayCode = input()->post('payment_method_option');
+                $gatewayCode = input()->post('payment_method_option')->getValue();
                 if (null == $gatewayCode) {
                     $resourceHandler
                         ->type(RESPONSE_TYPE_ERROR)
@@ -136,23 +136,37 @@ class CheckoutController extends AbstractHomeController
                 // return needed response for gateway redirection if everything is ok
                 if ($resourceHandler->getReturnData()['type'] == RESPONSE_TYPE_SUCCESS) {
                     // connect to gateway and get needed info
-                    PaymentUtil::getGatewayInfo(
+                    [$gatewayInfo, $infoRes] = PaymentUtil::getGatewayInfo(
                         $gatewayMethod['method_type'],
                         $gatewayMethod['code'],
-                        cryptographer()->decrypt($gatewayMethod['meta_parameters'])
+                        json_decode(cryptographer()->decrypt($gatewayMethod['meta_parameters']), true)
                     );
 
-                    if (session()->hasFlash(SESSION_GATEWAY_INFO)) {
+                    if (
+                        $infoRes &&
+                        !empty($gatewayInfo) &&
+                        in_array(
+                            (int)$gatewayMethod['method_type'], [
+                                METHOD_TYPE_GATEWAY_BEH_PARDAKHT,
+                                METHOD_TYPE_GATEWAY_IDPAY,
+                                METHOD_TYPE_GATEWAY_MABNA,
+                                METHOD_TYPE_GATEWAY_ZARINPAL,
+                                METHOD_TYPE_GATEWAY_SADAD,
+                            ]
+                        )
+                    ) {
                         $url = '#';
                         $inputs = [];
                         $redirect = false;
+
                         // TODO: add other gateway cases and create inputs according to them
+                        // ...
+
                         switch ((int)$gatewayMethod['method_type']) {
                             case METHOD_TYPE_GATEWAY_SADAD:
                                 /**
                                  * @var SadadRequestResultProvider $gatewayInfo
                                  */
-                                $gatewayInfo = session()->getFlash(SESSION_GATEWAY_INFO);
                                 $url = $gatewayInfo->getUrl();
                                 $redirect = true;
                                 break;
@@ -161,11 +175,13 @@ class CheckoutController extends AbstractHomeController
                         // remove all cart items
                         cart()->destroy();
 
-                        $resourceHandler->data([
-                            'redirect' => $redirect,
-                            'url' => $url,
-                            'inputs' => $inputs,
-                        ]);
+                        $resourceHandler
+                            ->type(RESPONSE_TYPE_SUCCESS)
+                            ->data([
+                                'redirect' => $redirect,
+                                'url' => $url,
+                                'inputs' => $inputs,
+                            ]);
                     } else {
                         /**
                          * @var OrderModel $orderModel
@@ -187,7 +203,6 @@ class CheckoutController extends AbstractHomeController
                     ->errorMessage('خطا در ارتباط با سرور، لطفا دوباره تلاش کنید.');
             }
         } catch (\Exception $e) {
-            response()->httpCode(403);
             $resourceHandler
                 ->type(RESPONSE_TYPE_ERROR)
                 ->errorMessage('خطا در ارتباط با سرور، لطفا دوباره تلاش کنید.');
@@ -221,6 +236,7 @@ class CheckoutController extends AbstractHomeController
                 $provinceId = input()->post('province')->getValue();
                 $province = $provinceModel->getFirst(['post_price_order'], 'id=:id', ['id' => $provinceId]);
                 $ownProvince = $provinceModel->getFirst(['post_price_order'], 'id=:id', ['id' => config()->get('settings.store_province.value')]);
+
                 if (0 != count($province) && 0 != count($ownProvince)) {
                     // calculate weights
                     $items = cart()->getItems();
@@ -239,13 +255,13 @@ class CheckoutController extends AbstractHomeController
                     ) {
                         $price = config()->get('settings.current_city_post_price.value');
                     } else {
-                        $postUtil = new PostPriceUtil($ownProvince, $province, $weight);
+                        $postUtil = new PostPriceUtil($ownProvince['post_price_order'], $province['post_price_order'], $weight);
                         $price = $postUtil->post();
                     }
                     session()->set(SESSION_APPLIED_POST_PRICE, $price);
                     $resourceHandler
                         ->type(RESPONSE_TYPE_SUCCESS)
-                        ->data('');
+                        ->data('هزینه ارسال اعمال شد.');
                 } else {
                     $resourceHandler
                         ->type(RESPONSE_TYPE_ERROR)
@@ -258,7 +274,6 @@ class CheckoutController extends AbstractHomeController
                     ->errorMessage('خطا در ارتباط با سرور، لطفا دوباره تلاش کنید.');
             }
         } catch (\Exception $e) {
-            response()->httpCode(403);
             $resourceHandler
                 ->type(RESPONSE_TYPE_ERROR)
                 ->errorMessage('خطا در ارتباط با سرور، لطفا دوباره تلاش کنید.');

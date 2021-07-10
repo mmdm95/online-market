@@ -1,6 +1,6 @@
 <?php
 $errors = $errors ?? [];
-$hasCSRFTokenError = \session()->getFlash('CSRFRouteHasUndefined');
+$hasCSRFTokenError = \session()->getFlash('CSRFRouteIsUndefined');
 
 if (!is_null($hasCSRFTokenError)) {
     array_unshift($errors, $hasCSRFTokenError);

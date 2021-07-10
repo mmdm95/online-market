@@ -8,7 +8,11 @@
         var
             shop = new window.TheShop(),
             core = window.TheCore,
-            variables = window.MyGlobalVariables;
+            variables = window.MyGlobalVariables,
+            //-----
+            createLoader = true,
+            loaderId,
+            timeout;
 
         /**
          * Cart class contains all cart functionality
@@ -194,8 +198,16 @@
                         qnt = core.isDefined(qnt) && !isNaN(parseInt(qnt, 10)) ? parseInt(qnt, 10) : null;
                         qnt = null !== qnt && qnt > 0 ? qnt : null;
 
+                        if (createLoader) {
+                            createLoader = false;
+                            loaderId = shop.showLoader();
+                        }
+
                         if (null === qnt) {
                             cart.add(code, function () {
+                                createLoader = true;
+                                shop.hideLoader(loaderId);
+
                                 shop.toasts.toast(this.data, {
                                     type: variables.toasts.types.success,
                                 });
@@ -203,12 +215,21 @@
                             });
                         } else {
                             cart.update(code, qnt, function () {
+                                createLoader = true;
+                                shop.hideLoader(loaderId);
+
                                 shop.toasts.toast(this.data, {
                                     type: variables.toasts.types.success,
                                 });
                                 cart.getNPlaceCart();
                             });
                         }
+
+                        clearTimeout(timeout);
+                        timeout = setTimeout(function () {
+                            createLoader = true;
+                            shop.hideLoader(loaderId);
+                        }, 3000);
                     } else {
                         shop.toasts.toast('لطفا محصول مورد نظر خود را انتخاب کنید.', {
                             type: 'warning',

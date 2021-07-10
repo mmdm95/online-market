@@ -11,6 +11,7 @@ use App\Logic\Models\OrderBadgeModel;
 use App\Logic\Models\OrderModel;
 use App\Logic\Models\ProvinceModel;
 use App\Logic\Models\UserModel;
+use App\Logic\Utils\OrderUtil;
 use App\Logic\Validations\ExtendedValidator;
 use Sim\Auth\DBAuth;
 use Sim\Exceptions\ConfigManager\ConfigNotRegisteredException;
@@ -80,7 +81,7 @@ class CheckoutForm implements IPageForm
                     'del' => DB_NO,
                 ]);
                 if (0 !== count($province)) {
-                    session()->setFlash('__custom_province_info_in_order', $province);
+                    session()->setFlash('__custom_province_info_in_order', $province['name']);
                     return true;
                 }
                 return false;
@@ -103,7 +104,7 @@ class CheckoutForm implements IPageForm
                         'del' => DB_NO,
                     ]);
                     if (0 !== count($city)) {
-                        session()->setFlash('__custom_city_info_in_order', $city);
+                        session()->setFlash('__custom_city_info_in_order', $city['name']);
                         return true;
                     }
                     return false;
@@ -176,7 +177,7 @@ class CheckoutForm implements IPageForm
         try {
             // if user is logged in, fetch his info
             if ($auth->isLoggedIn()) {
-                $code = StringUtil::uniqidReal(20);
+                $code = OrderUtil::getUniqueOrderCode();
                 $firstName = input()->post('fname', '')->getValue();
                 $lastName = input()->post('lname', '')->getValue();
                 $receiver = input()->post('inp-addr-full-name', '')->getValue();
@@ -191,7 +192,7 @@ class CheckoutForm implements IPageForm
 
                 $badge = $badgeMode->getFirst([
                     'code', 'title', 'color'
-                ], 'is_default_badge=:idb AND is_deleted:del', [
+                ], 'is_default_badge=:idb AND is_deleted=:del', [
                     'idb' => DB_YES,
                     'del' => DB_NO,
                 ]);

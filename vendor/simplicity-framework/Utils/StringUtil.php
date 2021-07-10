@@ -79,7 +79,7 @@ class StringUtil
             $characters .= $charactersMap['upper'];
             $haveType = $haveType ^ StringUtil::RS_UPPER_CHAR;
         }
-        if (StringUtil::RS_ALL ^ $haveType == 0) {
+        if ((StringUtil::RS_ALL ^ $haveType) == 0) {
             $characters = $charactersMap['number'] . $charactersMap['lower'] . $charactersMap['upper'];
         }
 
@@ -107,7 +107,7 @@ class StringUtil
         } elseif (\function_exists("openssl_random_pseudo_bytes")) {
             $bytes = openssl_random_pseudo_bytes(\ceil($lenght / 2));
         } else {
-            throw new Exception("no cryptographically secure random function available");
+            throw new \Exception("no cryptographically secure random function available");
         }
         return \substr(\bin2hex($bytes), 0, $lenght);
     }
@@ -177,7 +177,7 @@ class StringUtil
      */
     public static function base62Decode(string $hashed_str)
     {
-        self::baseNDecode($hashed_str, 62);
+        return self::baseNDecode($hashed_str, 62);
     }
 
     /**
@@ -195,7 +195,7 @@ class StringUtil
      */
     public static function base10Decode(string $hashed_str)
     {
-        self::baseNDecode($hashed_str, 10);
+        return self::baseNDecode($hashed_str, 10);
     }
 
     /**

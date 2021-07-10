@@ -10,6 +10,8 @@ use Sim\I18n\Translate as Translate;
 use Sim\Interfaces\IInitialize;
 use Sim\Auth\DBAuth as Auth;
 use Sim\Auth\APIAuth as APIAuth;
+use Sim\Logger\Handler\File\FileHandler;
+use Sim\Logger\Logger;
 use Sim\SMS\Factories\NiazPardaz;
 use Sim\SMS\SMSFactory;
 
@@ -53,6 +55,11 @@ class Container implements IInitialize
         // api authentication class
         \container()->set('auth_api', function () {
             return new APIAuth(\connector()->getPDO(), \config()->get('auth.structure'));
+        });
+
+        // a logger for gateway error (mostly in connection)
+        \container()->set('gateway_logger', function () {
+            return new Logger(new FileHandler(\config()->get('log.log_gateway_error_file')));
         });
 
         // form validator class

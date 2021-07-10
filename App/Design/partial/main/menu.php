@@ -28,7 +28,7 @@
                                         <span>خروج</span>
                                     </a>
                                 </li>
-                            <?php else: ?>
+                            <?php elseif (!url()->contains(url('home.finish')->getRelativeUrlTrimmed())): ?>
                                 <li>
                                     <a href="<?= url('home.login'); ?>">
                                         <i class="linearicons-user"></i>
@@ -113,8 +113,10 @@
                         <div class="search_overlay"></div>
                     </li>
 
-                    <?php if (!url()->contains(url('home.cart')->getRelativeUrlTrimmed())
-                        && !url()->contains(url('home.checkout')->getRelativeUrlTrimmed())): ?>
+                    <?php if (
+                        !url()->contains(url('home.cart')->getRelativeUrlTrimmed()) &&
+                        !url()->contains(url('home.checkout')->getRelativeUrlTrimmed())
+                    ): ?>
                         <li class="dropdown cart_dropdown" id="__cart_main_container">
                             <?= $cart_section; ?>
                         </li>

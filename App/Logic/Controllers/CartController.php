@@ -179,7 +179,6 @@ class CartController extends AbstractHomeController
                     ->errorMessage('خطا در ارتباط با سرور، لطفا دوباره تلاش کنید.');
             }
         } catch (\Exception $e) {
-            response()->httpCode(403);
             $resourceHandler
                 ->type(RESPONSE_TYPE_ERROR)
                 ->errorMessage('خطا در ارتباط با سرور، لطفا دوباره تلاش کنید.');

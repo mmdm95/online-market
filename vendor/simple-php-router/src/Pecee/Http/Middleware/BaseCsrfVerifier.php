@@ -76,6 +76,10 @@ class BaseCsrfVerifier implements IMiddleware
             if ($this->tokenProvider->validate((string)$token) === false) {
                 // Refresh existing token
                 $this->tokenProvider->refresh();
+                if ($request->getUrl()->contains('/api') ||
+                    $request->getUrl()->contains('/ajax')) {
+                    response()->httpCode(403)->json(['data' => 'CSRF token mismatched! Do operation again.']);
+                }
                 throw new TokenMismatchException('Invalid CSRF-token.');
             }
 

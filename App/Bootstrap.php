@@ -323,7 +323,7 @@ class Bootstrap
     protected function defineRoute()
     {
         $verifier = new CsrfVerifier();
-        $verifier->setTokenProvider(new SessionTokenProvider());
+        $verifier->setTokenProvider(container()->get(SessionTokenProvider::class));
 
         Router::csrfVerifier($verifier);
 

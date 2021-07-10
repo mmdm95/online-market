@@ -21,7 +21,7 @@ use Sim\I18n\ISOLanguageCodes;
  *     1.2.5.0 instead of 1.2.5-a
  *     1.2.5.0.1 instead of 1.2.5-a1 (I'm not sure)
  */
-defined("APP_VERSION") OR define("APP_VERSION", "0.3.2.2");
+defined("APP_VERSION") OR define("APP_VERSION", "0.3.3.2");
 
 /***************************************
  * You can add your constants here
@@ -321,5 +321,3 @@ defined("SESSION_APPLIED_COUPON_CODE") OR define("SESSION_APPLIED_COUPON_CODE", 
 defined("SESSION_APPLIED_POST_PRICE") OR define("SESSION_APPLIED_POST_PRICE", 'session_applied_post_price');
 // the gateway session key constant
 defined("SESSION_GATEWAY_RECORD") OR define("SESSION_GATEWAY_RECORD", 'session_gateway_record_custom');
-// gateway info session key constant
-defined("SESSION_GATEWAY_INFO") OR define("SESSION_GATEWAY_INFO", 'session_gateway_info_custom');

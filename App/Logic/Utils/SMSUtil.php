@@ -51,6 +51,9 @@ class SMSUtil implements ISMS
         $senderType
     )
     {
+        $auth = auth_admin();
+        if (!$auth->isLoggedIn()) return;
+
         /**
          * @var AbstractSMS $sms
          */
@@ -60,8 +63,8 @@ class SMSUtil implements ISMS
          */
         $smsModel = container()->get(SMSLogsModel::class);
 
-        $allowInsert = true;
         $arr = [
+            'sms_panel_number' => config()->get('sms.niaz.from') ?: 'unknown',
             'sms_panel_name' => $sms->getPanelName(),
             'type' => $type,
             'status' => $status,
@@ -71,17 +74,10 @@ class SMSUtil implements ISMS
             'sent_at' => time(),
         ];
 
-        if(SMS_LOG_SENDER_USER == $senderType) {
-            $auth = auth_admin();
-            if($auth->isLoggedIn()) {
-                $arr['sent_by'] = $auth->getCurrentUser()['id'];
-            } else {
-                $allowInsert = false;
-            }
+        if (SMS_LOG_SENDER_USER == $senderType) {
+            $arr['sent_by'] = $auth->getCurrentUser()['id'];
         }
 
-        if($allowInsert) {
-            $smsModel->insert($arr);
-        }
+        $smsModel->insert($arr);
     }
 }

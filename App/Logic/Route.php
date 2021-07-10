@@ -2,6 +2,7 @@
 
 namespace App\Logic;
 
+use App\Logic\Adapters\SessionTokenProvider;
 use App\Logic\Controllers\Admin\{BlogController as AdminBlogController,
     BlogCategoryController as AdminBlogCategoryController,
     BrandController as AdminBrandController,
@@ -37,6 +38,7 @@ use App\Logic\Controllers\Admin\{BlogController as AdminBlogController,
     WalletController as AdminWalletController,
     ProductController as AdminProductController,
     AddressController as AdminAddressController};
+use App\Logic\Controllers\API\CsrfController;
 use App\Logic\Controllers\CheckoutController;
 use App\Logic\Controllers\OrderResult;
 use App\Logic\Controllers\User\{AddressController as UserAddressController,
@@ -125,6 +127,11 @@ class Route implements IInitialize
     protected function setEventHandlers()
     {
         $eventHandler = new EventHandler();
+
+        // Add event that fires when a route is matched
+        $eventHandler->register(EventHandler::EVENT_MATCH_ROUTE, function () {
+            csrf_token_regenerate();
+        });
 
         // Add event that fires when a route is rendered
         $eventHandler->register(EventHandler::EVENT_RENDER_ROUTE, function (EventArgument $argument) {
@@ -629,8 +636,9 @@ class Route implements IInitialize
                     Router::get('/checkout', [CheckoutController::class, 'checkout'])->name('home.checkout');
                 });
             });
-            Router::get('/finish/{type}/{code}', [OrderResult::class, 'index'])->where([
+            Router::form('/finish/{type}/{method}/{code}', [OrderResult::class, 'index'])->where([
                 'type' => '[a-zA-Z0-9]+',
+                'method' => '[a-zA-Z0-9]+',
                 'code' => '[a-zA-Z0-9]+',
             ])->name('home.finish');
 
@@ -674,6 +682,11 @@ class Route implements IInitialize
             'prefix' => '/ajax/',
             'exceptionHandler' => CustomExceptionHandler::class,
         ], function () {
+            /**
+             * csrf route
+             */
+            Router::post('/csrf-token', [CsrfController::class, 'show'])->name('ajax.csrf_token');
+
             /**
              * newsletter route
              */

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "4a80066353e45a8e426df5cb21df095b",
+    "content-hash": "feee6cc0c3c63496d625659f09a12a58",
     "packages": [
         {
             "name": "aura/sql",
@@ -521,16 +521,16 @@
         },
         {
             "name": "mmdm/sim-cart",
-            "version": "v1.1.17",
+            "version": "v1.1.18",
             "source": {
                 "type": "git",
                 "url": "https://github.com/mmdm95/sim-cart.git",
-                "reference": "a40eee9a4813f1ab254670e1ed34a082c0310dd5"
+                "reference": "718cac6da6886afc19b7a3d41db026c4d2c6f9d0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mmdm95/sim-cart/zipball/a40eee9a4813f1ab254670e1ed34a082c0310dd5",
-                "reference": "a40eee9a4813f1ab254670e1ed34a082c0310dd5",
+                "url": "https://api.github.com/repos/mmdm95/sim-cart/zipball/718cac6da6886afc19b7a3d41db026c4d2c6f9d0",
+                "reference": "718cac6da6886afc19b7a3d41db026c4d2c6f9d0",
                 "shasum": ""
             },
             "require": {
@@ -558,9 +558,9 @@
             "description": "A simple yet nice shopping cart library",
             "support": {
                 "issues": "https://github.com/mmdm95/sim-cart/issues",
-                "source": "https://github.com/mmdm95/sim-cart/tree/v1.1.17"
+                "source": "https://github.com/mmdm95/sim-cart/tree/v1.1.18"
             },
-            "time": "2021-06-15T18:05:33+00:00"
+            "time": "2021-07-10T18:07:50+00:00"
         },
         {
             "name": "mmdm/sim-cookie",
@@ -730,16 +730,16 @@
         },
         {
             "name": "mmdm/sim-fa-payment",
-            "version": "v0.2.5",
+            "version": "v0.2.11",
             "source": {
                 "type": "git",
                 "url": "https://github.com/mmdm95/sim-fa-payment.git",
-                "reference": "7955e3bd6eb8eae9c02f483b7c6ad2267754ed23"
+                "reference": "66dc3fe6a802eb9e0acce124626203d156e2d9ad"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mmdm95/sim-fa-payment/zipball/7955e3bd6eb8eae9c02f483b7c6ad2267754ed23",
-                "reference": "7955e3bd6eb8eae9c02f483b7c6ad2267754ed23",
+                "url": "https://api.github.com/repos/mmdm95/sim-fa-payment/zipball/66dc3fe6a802eb9e0acce124626203d156e2d9ad",
+                "reference": "66dc3fe6a802eb9e0acce124626203d156e2d9ad",
                 "shasum": ""
             },
             "require": {
@@ -769,9 +769,9 @@
             "description": "A simple yet nice iranian payment library",
             "support": {
                 "issues": "https://github.com/mmdm95/sim-fa-payment/issues",
-                "source": "https://github.com/mmdm95/sim-fa-payment/tree/v0.2.5"
+                "source": "https://github.com/mmdm95/sim-fa-payment/tree/v0.2.11"
             },
-            "time": "2021-07-04T03:50:59+00:00"
+            "time": "2021-07-10T23:01:14+00:00"
         },
         {
             "name": "mmdm/sim-fa-sms",

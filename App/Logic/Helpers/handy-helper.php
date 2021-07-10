@@ -9,6 +9,7 @@ use Sim\File\FileSystem;
 use Sim\Form\FormValidator;
 use Sim\Interfaces\IFileNotExistsException;
 use Sim\Interfaces\IInvalidVariableNameException;
+use Sim\Logger\ILogger;
 
 /**
  * @return bool
@@ -52,7 +53,7 @@ function show_500(?string $content = null)
     } else {
         header_remove("Content-Type");
         response()->httpCode(500)->header('HTTP/1.1 500 Service Unavailable');
-        echo ($content ?: 'سرویس در دسترس نمی باشد.');
+        echo($content ?: 'سرویس در دسترس نمی باشد.');
         exit(0);
     }
 }
@@ -188,6 +189,16 @@ function auth_home(): DBAuth
 }
 
 /**
+ * @return ILogger
+ * @throws \DI\DependencyException
+ * @throws \DI\NotFoundException
+ */
+function logger_gateway(): ILogger
+{
+    return container()->get('gateway_logger');
+}
+
+/**
  * @param DBAuth $auth
  * @return array
  * @throws \DI\DependencyException
@@ -202,7 +213,7 @@ function get_current_authenticated_user(DBAuth $auth)
 
     // get current user info
     $user = $userModel->getFirst(['*'], 'id=:id', ['id' => $auth->getCurrentUser()['id'] ?? 0]);
-    if(count($user)) {
+    if (count($user)) {
         unset($user['password']);
         $user['roles'] = $userModel->getUserRoles($user['id'], null, [], ['r.*']);
     }
@@ -239,7 +250,7 @@ function form_validator(): FormValidator
  */
 function replaced_sms_body($type, array $placeholders = []): string
 {
-    if(!function_exists('message_replacer')) {
+    if (!function_exists('message_replacer')) {
         /**
          * @param string $message
          * @param array $placeholders

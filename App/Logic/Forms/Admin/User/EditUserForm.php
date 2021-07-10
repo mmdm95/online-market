@@ -217,9 +217,12 @@ class EditUserForm implements IPageForm
                 'is_login_locked' => is_value_checked($loginStatus) ? DB_YES : DB_NO,
                 'ban' => is_value_checked($banStatus) ? DB_YES : DB_NO,
                 'ban_desc' => $xss->xss_clean($banDesc ?: null),
-                'activated_at' => $activatedAt,
                 'updated_at' => time(),
             ];
+
+            if ($activatedAt) {
+                $updateArr['activated_at'] = $activatedAt;
+            }
 
             if (!empty(trim($password))) {
                 $updateArr['password'] = password_hash($password, PASSWORD_BCRYPT);

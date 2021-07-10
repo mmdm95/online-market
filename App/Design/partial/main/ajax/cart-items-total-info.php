@@ -74,7 +74,7 @@ foreach ($items as $item) {
             <th>هزینه ارسال</th>
             <td>
                 <?php
-                $postPrice = session()->get(SESSION_APPLIED_POST_PRICE);
+                $postPrice = session()->get(SESSION_APPLIED_POST_PRICE, 0.0);
                 ?>
                 <?php if (!is_null($postPrice) && 0 != $postPrice): ?>
                     <?= number_format(StringUtil::toEnglish($postPrice)); ?>
@@ -91,7 +91,7 @@ foreach ($items as $item) {
             <th>جمع</th>
             <td class="product-subtotal">
                 <?php
-                $theTotalPrice = (float)$totalPrice + (float)$couponPrice;
+                $theTotalPrice = (float)$totalPrice + (float)$couponPrice + (float)$postPrice;
                 ?>
                 <?php if (0 != $theTotalPrice): ?>
                     <?= number_format(StringUtil::toEnglish($theTotalPrice)); ?>

@@ -171,6 +171,7 @@ class AddUserForm implements IPageForm
                 'image' => PLACEHOLDER_USER_IMAGE,
                 'is_activated' => is_value_checked($status) ? DB_YES : DB_NO,
                 'activated_at' => $activatedAt,
+                'created_at' => time(),
             ], $roles);
         } catch (\Exception $e) {
             return false;

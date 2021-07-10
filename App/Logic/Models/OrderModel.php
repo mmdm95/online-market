@@ -247,24 +247,6 @@ class OrderModel extends BaseModel
     }
 
     /**
-     * @param $code
-     * @return array
-     * @throws \DI\DependencyException
-     * @throws \DI\NotFoundException
-     */
-    public function getOrderFromGatewayCode($code): array
-    {
-        /**
-         * @var GatewayModel $gatewayModel
-         */
-        $gatewayModel = container()->get(GatewayModel::class);
-        $flow = $gatewayModel->getFirst(['order_code'], 'code=:code', ['code' => $code]);
-
-        if (!count($flow)) return [];
-        return $this->getFirst(['*'], 'code=:code', ['code' => $flow['order_code']]);
-    }
-
-    /**
      * @param array $order
      * @param array $items
      * @return bool
@@ -273,6 +255,11 @@ class OrderModel extends BaseModel
      */
     public function issueFullFactor(array $order, array $items): bool
     {
+        // it must have at least one item to issue a factor
+        if (!count($items)) {
+            return false;
+        }
+
         $this->db->beginTransaction();
 
         /**
@@ -283,26 +270,18 @@ class OrderModel extends BaseModel
         // issue a factor by inserting to orders table
         $res = $this->insert($order);
         //-----
-
-        // insert all items to order items table
-        /**
-         * @var Insert $insert
-         */
-        $insert = $model->insert();
-        /**
-         * @var Update $update
-         */
-        $update = $model->update();
+        $res2 = true;
         $res4 = true;
-        $counter = 0;
         foreach ($items as $item) {
-            if ($counter++ != 0) {
-                $insert->addRow();
-            }
+            // insert all items to order items table
+            /**
+             * @var Insert $insert
+             */
+            $insert = $this->connector->insert();
             $insert
                 ->into(self::TBL_ORDER_ITEMS)
                 ->cols([
-                    'order_code	' => $order['code'],
+                    'order_code' => $order['code'],
                     'product_id' => $item['product_id'],
                     'product_code' => $item['code'],
                     'product_title' => $item['title'],
@@ -315,20 +294,30 @@ class OrderModel extends BaseModel
                     'color_name' => $item['color_name'],
                     'size' => $item['size'],
                     'guarantee' => $item['guarantee'],
-                    'is_returnable' => $item['is_returnable'],
-                    'is_returned' => DB_NO,
+                    'is_returnable' => is_value_checked($item['is_returnable']) ? DB_YES : DB_NO,
                 ]);
+
+            $stmt = $this->db->prepare($insert->getStatement());
+            $res2 = $stmt->execute($insert->getBindValues());
+            if (!$res2) break;
+
+            /**
+             * @var Update $update
+             */
+            $update = $this->connector->update();
             $update
                 ->table(self::TBL_PRODUCT_PROPERTY)
-                ->set('stock_count', 'stock_count-' . $item['qnt']);
+                ->set('stock_count', 'stock_count-' . $item['qnt'])
+                ->where('code=:code')
+                ->bindValue('code', $item['code']);
             $res4 = $model->execute($update);
             if (!$res4) break;
         }
-        $res2 = $model->execute($insert);
         //-----
 
         if (!$res || !$res2 || !$res4) {
             $this->db->rollBack();
+            return false;
         }
 
         /**
@@ -344,11 +333,12 @@ class OrderModel extends BaseModel
 
         if (!$res3) {
             $this->db->rollBack();
+            return false;
         }
 
         $this->db->commit();
 
-        return false;
+        return $res && $res2 && $res3 && $res4;
     }
 
     /**
