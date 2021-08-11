@@ -7,7 +7,6 @@ return [
             'default',
             'default-theia-sticky-sidebar',
             'default-changeable',
-            'default-cart',
         ],
         'sub_title' => 'کیف پول',
         'breadcrumb' => [

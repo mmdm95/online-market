@@ -81,7 +81,7 @@ class AddCategoryForm implements IPageForm
             ->stopValidationAfterFirstError(false)
             ->required()
             ->stopValidationAfterFirstError(true)
-            ->regex('/[0-9]+/', '{alias} ' . 'باید از نوع عددی باشد.');
+            ->regex('/\-?[0-9]+/', '{alias} ' . 'باید از نوع عددی باشد.');
 
         // to reset form values and not set them again
         if ($validator->getStatus()) {
@@ -136,7 +136,9 @@ class AddCategoryForm implements IPageForm
             return $categoryModel->insert([
                 'name' => $xss->xss_clean($name),
                 'parent_id' => $parent ?: null,
-                'all_parents_id' => trim(((string)$parentInfo['all_parents_id']) . ',' . $parent, ',') ?: '',
+                'all_parents_id' => isset($parentInfo['all_parents_id'])
+                    ? (trim(((string)$parentInfo['all_parents_id']) . ',' . $parent, ','))
+                    : '',
                 'keywords' => $xss->xss_clean($keywords),
                 'publish' => is_value_checked($pub) ? DB_YES : DB_NO,
                 'priority' => $xss->xss_clean($priority),

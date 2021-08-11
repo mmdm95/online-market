@@ -33,7 +33,7 @@ class GatewayModel extends BaseModel
         $select
             ->from($this->table . ' AS gf')
             ->cols(['o.*'])
-            ->where('code=:code')
+            ->where('gf.code=:code')
             ->bindValue('code', $code)
             ->limit(1);
         try {
@@ -46,13 +46,16 @@ class GatewayModel extends BaseModel
             return $ret;
         }
         $ret['order'] = $this->db->fetchAll($select->getStatement(), $select->getBindValues());
+        if (count($ret['order'])) {
+            $ret['order'] = $ret['order'][0];
+        }
 
         // get user info
         $select = $this->connector->select();
         $select
             ->from($this->table . ' AS gf')
             ->cols(['u.*'])
-            ->where('code=:code')
+            ->where('gf.code=:code')
             ->bindValue('code', $code)
             ->limit(1);
         try {
@@ -69,6 +72,9 @@ class GatewayModel extends BaseModel
             return $ret;
         }
         $ret['user'] = $this->db->fetchAll($select->getStatement(), $select->getBindValues());
+        if (count($ret['user'])) {
+            $ret['user'] = $ret['user'][0];
+        }
 
         return $ret;
     }

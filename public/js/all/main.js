@@ -1,0 +1,16 @@
+require('jquery');
+require('popper.js');
+require('bootstrap');
+require('es6-promise/dist/es6-promise.auto');
+require('axios');
+require('../../plugins/selectric/jquery.selectric.min');
+require('./jquery.countdown.min');
+require('./jquery.elevatezoom');
+require('./magnific-popup.min');
+require('./parallax');
+require('./slick.min');
+require('./jquery.waypoints.min');
+require('./owl.carousel.min');
+require('../../plugins/noty/noty.min');
+require('./jquery.mswitch');
+require('./isotope.min');

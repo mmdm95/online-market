@@ -1,8 +1,3 @@
-<?php
-
-use Sim\Utils\StringUtil;
-
-?>
 <!-- START MAIN CONTENT -->
 <div class="main_content">
 
@@ -84,12 +79,18 @@ use Sim\Utils\StringUtil;
                             <!-- START CHANGEABLE STUFFS -->
                             <div>
                                 <select name="changeable-stuffs"
-                                        class="selectric_dropdown selectric_dropdown_changeable_stuffs">
+                                        class="form-control d-block selectric_dropdown selectric_dropdown_changeable_stuffs">
                                     <?php foreach ($colors_and_sizes as $k => $prd): ?>
                                         <option value='<?= $prd['code']; ?>' <?= 0 === $k ? 'selected="selected"' : ''; ?>
                                                 data-color-hex="<?= $prd['color_hex'] ?>"
                                                 data-color-name="<?= $prd['color_name']; ?>"
-                                                data-size="<?= $prd['size']; ?>"></option>
+                                                data-size="<?= $prd['size']; ?>">
+                                            رنگ
+                                            <?= $prd['color_name']; ?>
+                                            <?php if ($prd['size']): ?>
+                                                <?= ' - ' . $prd['size']; ?>
+                                            <?php endif; ?>
+                                        </option>
                                     <?php endforeach; ?>
                                 </select>
                             </div>
@@ -115,7 +116,7 @@ use Sim\Utils\StringUtil;
                                 </button>
                                 <!--                                <a class="add_compare" href=""-->
                                 <!--                                   data-toggle="tooltip" data-placement="top" title="لیست مقایسه">-->
-                                <?= '';//url('home.compare');       ?>
+                                <?= '';//url('home.compare');         ?>
                                 <!--                                    <i class="linearicons-shuffle"></i>-->
                                 <!--                                </a>-->
                                 <a class="add_wishlist <?= $is_in_wishlist ? 'active' : ''; ?>"
@@ -176,10 +177,10 @@ use Sim\Utils\StringUtil;
                         <div class="product_share">
                             <span>اشتراک:</span>
                             <?php
-                            $shareLink = url('home.product.show', [
-                                'id' => $product['product_id'],
-                                'slug' => $product['slug'],
-                            ])->getRelativeUrl();
+                            $shareLink = rtrim(get_base_url(), '\\/') . url('home.product.show', [
+                                    'id' => $product['product_id'],
+                                    'slug' => $product['slug'],
+                                ])->getRelativeUrl();
                             ?>
                             <ul class="social_icons">
                                 <li>
@@ -247,11 +248,11 @@ use Sim\Utils\StringUtil;
                         <ul class="nav nav-tabs" role="tablist">
                             <li class="nav-item">
                                 <a class="nav-link active" id="Description-tab" data-toggle="tab" href="#Description"
-                                   role="tab" aria-controls="Description" aria-selected="true">توضیحات</a>
+                                   role="tab" aria-controls="Description" aria-selected="true">بررسی اجمالی</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" id="Additional-info-tab" data-toggle="tab" href="#Additional-info"
-                                   role="tab" aria-controls="Additional-info" aria-selected="false">اطلاعات اضافی</a>
+                                   role="tab" aria-controls="Additional-info" aria-selected="false">مشخصات فنی</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" id="Reviews-tab" data-toggle="tab" href="#Reviews" role="tab"
@@ -332,7 +333,7 @@ use Sim\Utils\StringUtil;
                             <!-- START PRODUCT COMMENTS -->
                             <div class="tab-pane fade" id="Reviews" role="tabpanel" aria-labelledby="Reviews-tab">
                                 <div class="comments">
-                                    <h5 class="product_tab_title">
+                                    <h5 class="product_tab_title mb-5">
                                         <?= local_number($comments_count ?? ''); ?>
                                         نظر برای
                                         <span><?= $product['title']; ?></span>

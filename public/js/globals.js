@@ -571,12 +571,19 @@ window.MyGlobalVariables = {
                         }
                     })
                     .catch(function (error) {
+                        $('[data-is-preloader]').remove();
+
                         errorCallback.call({catchErr: error});
                         if (error.response) {
                             // The request was made and the server responded with a status code
                             // that falls out of the range of 2xx
                             console.log(error.response.data);
                             console.log(error.response.status);
+                            if (showError) {
+                                _.toasts.toast(window.MyGlobalVariables.messages.request.error, {
+                                    type: 'error',
+                                });
+                            }
                         } else if (error.request) {
                             if (showError) {
                                 _.toasts.toast(window.MyGlobalVariables.messages.request.error, {
@@ -707,9 +714,9 @@ window.MyGlobalVariables = {
 
                         // get key from value and if its null return false
                         keyFromVal = window.TheCore.getKeyByValue(window.MyGlobalVariables.elements[formKey].inputs, prop);
-                        if (null === keyFromVal) return {};
-
-                        newFormValues[keyFromVal] = window.TheCore.toEnglishNumbers(obj[prop]);
+                        if (null !== keyFromVal) {
+                            newFormValues[keyFromVal] = window.TheCore.toEnglishNumbers(obj[prop]);
+                        }
                     }
 
                     return newFormValues;
@@ -735,6 +742,7 @@ window.MyGlobalVariables = {
                         type: 'error',
                         layout: 'center',
                         modal: true,
+                        closeWith: ['click', 'backdrop'],
                         timeout: null,
                     });
                 },

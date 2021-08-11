@@ -186,7 +186,7 @@
     }
 
     .footer_top {
-        padding: 80px 0 50px;
+        padding: 80px 0 15px;
     }
 
     .blog_meta li {
@@ -767,14 +767,7 @@
     .banner_section:not(.full_screen) .carousel-item,
     .banner_section:not(.full_screen) .banner_content_wrap,
     .banner_section:not(.full_screen) .banner_content_wrap .carousel-item {
-        height: 600px;
-    }
-
-    .banner_section:not(.full_screen),
-    .banner_section:not(.full_screen) .carousel-item,
-    .banner_section:not(.full_screen) .banner_content_wrap,
-    .banner_section:not(.full_screen) .banner_content_wrap .carousel-item {
-        height: 500px;
+        height: auto;
     }
 
     .banner_section.full_screen.banner_half_content,
@@ -931,9 +924,9 @@
         max-width: 400px;
     }
 
-    #tabmenubar {
+    .tabmenubar {
         position: absolute;
-        right: 0;
+        /*right: 0;*/
         top: 100%;
         z-index: 999;
         display: block;
@@ -945,21 +938,20 @@
         height: auto !important;
     }
 
-    #tabmenubar.show {
+    .tabmenubar.show {
         opacity: 1;
         visibility: visible;
         margin-top: 0;
     }
 
-    #tabmenubar li a {
+    .tabmenubar li a {
         text-align: left;
     }
 
     .tab-style2 .nav-tabs li.nav-item a {
-        padding-right: 5px;
-        padding-left: 5px;
-        margin-right: 5px;
-        margin-left: 5px;
+        padding: 5px 0;
+        margin-right: 0;
+        margin-left: 0;
     }
 
     .icon_box_style1::before {
@@ -983,7 +975,6 @@
         right: 0;
         bottom: -146px;
         z-index: 9;
-        right: 0;
         width: 100%;
         padding: 15px 15px;
         background-color: #fff;
@@ -1148,7 +1139,7 @@
     }
 
     .section.pb_20, .pb_20, .footer_top.pb_20 {
-        padding-bottom: 0px;
+        padding-bottom: 0;
     }
 
     .large_divider {
@@ -1188,7 +1179,7 @@
     }
 
     .footer_top {
-        padding: 50px 0 20px;
+        padding: 50px 0 15px;
     }
 
     .grid_col4 > li,
@@ -1204,14 +1195,7 @@
     .banner_section:not(.full_screen) .carousel-item,
     .banner_section:not(.full_screen) .banner_content_wrap,
     .banner_section:not(.full_screen) .banner_content_wrap .carousel-item {
-        height: 500px;
-    }
-
-    .banner_section:not(.full_screen),
-    .banner_section:not(.full_screen) .carousel-item,
-    .banner_section:not(.full_screen) .banner_content_wrap,
-    .banner_section:not(.full_screen) .banner_content_wrap .carousel-item {
-        height: 400px;
+        height: auto;
     }
 
     .banner_section.slide_medium,
@@ -1622,12 +1606,18 @@
         margin-bottom: 15px;
     }
 
-    .banner_section.slide_medium, .banner_section.slide_medium .carousel-item, .banner_section.slide_medium .banner_content_wrap, .banner_section.slide_medium .banner_content_wrap .carousel-item {
+    .banner_section.slide_medium,
+    .banner_section.slide_medium .carousel-item,
+    .banner_section.slide_medium .banner_content_wrap,
+    .banner_section.slide_medium .banner_content_wrap .carousel-item {
         height: 250px;
     }
 
-    .banner_section:not(.full_screen), .banner_section:not(.full_screen) .carousel-item, .banner_section:not(.full_screen) .banner_content_wrap, .banner_section:not(.full_screen) .banner_content_wrap .carousel-item {
-        height: 350px;
+    .banner_section:not(.full_screen),
+    .banner_section:not(.full_screen) .carousel-item,
+    .banner_section:not(.full_screen) .banner_content_wrap,
+    .banner_section:not(.full_screen) .banner_content_wrap .carousel-item {
+        height: auto;
     }
 
     .banner_content h2 {

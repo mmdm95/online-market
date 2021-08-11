@@ -110,13 +110,13 @@ class OrderController extends AbstractAdminController implements IDatatableContr
          */
         $gatewayModel = container()->get(GatewayModel::class);
 
-        $order = $orderModel->getOrders('o.id=:id', ['id' => $id])[0];
+        $order = $orderModel->getOrders('o.id=:id', ['id' => $id], ['o.id DESC'], 1)[0];
         $orderItems = $orderModel->getOrderItems([
             'oi.*', 'p.image AS product_image'
-        ], 'code=:code', ['code' => $order['code']]);
+        ], 'oi.order_code=:code', ['code' => $order['code']]);
         $order['payment_code'] = $gatewayModel->getFirst(['payment_code'], 'method_type=:mt', ['mt' => $order['method_type']])['payment_code'] ?? null;
 
-        $badges = $badgeModel->get(['code', 'title', 'color'], 'is_deleted:del', ['del' => DB_NO]);
+        $badges = $badgeModel->get(['code', 'title', 'color'], 'is_deleted=:del', ['del' => DB_NO]);
 
         $this->setLayout($this->main_layout)->setTemplate('view/order/detail');
         return $this->render(array_merge($data, [
@@ -172,6 +172,8 @@ class OrderController extends AbstractAdminController implements IDatatableContr
                 ->type(RESPONSE_TYPE_ERROR)
                 ->errorMessage('خطا در ارتباط با سرور، لطفا دوباره تلاش کنید.');
         }
+
+        response()->json($resourceHandler->getReturnData());
     }
 
     /**
@@ -206,6 +208,8 @@ class OrderController extends AbstractAdminController implements IDatatableContr
                     $orderModel = container()->get(OrderModel::class);
 
                     $cols[] = 'u.id AS main_user_id';
+                    $cols[] = 'o.send_status_code';
+                    $cols[] = 'o.send_status_color';
 
                     $data = $orderModel->getOrders($where, $bindValues, $order, $limit, $offset, $cols);
                     //-----
@@ -225,7 +229,7 @@ class OrderController extends AbstractAdminController implements IDatatableContr
                         'formatter' => function ($d, $row) {
                             if (!empty($row['main_user_id'])) {
                                 return '<a href="' .
-                                    url('admin.user.view', ['id' => $row['user_id']])->getRelativeUrl() .
+                                    url('admin.user.view', ['id' => $row['main_user_id']])->getRelativeUrl() .
                                     '">' .
                                     $d .
                                     '</a>';
@@ -240,7 +244,7 @@ class OrderController extends AbstractAdminController implements IDatatableContr
                         'formatter' => function ($d, $row) {
                             if (!empty($row['main_user_id'])) {
                                 return '<a href="' .
-                                    url('admin.user.view', ['id' => $row['user_id']])->getRelativeUrl() .
+                                    url('admin.user.view', ['id' => $row['main_user_id']])->getRelativeUrl() .
                                     '">' .
                                     $d .
                                     '</a>';
@@ -252,9 +256,7 @@ class OrderController extends AbstractAdminController implements IDatatableContr
                         'dt' => 'info',
                         'formatter' => function ($row) {
                             return '<button type="button" class="btn btn-dark __item_order_info_btn" data-toggle="modal" ' .
-                                ' data-target="#modal_form_receiver_detail" data-ajax-order-info="' .
-                                url('admin.order.info', ['id' => $row['id']])->getRelativeUrlTrimmed() .
-                                '">' .
+                                ' data-target="#modal_form_receiver_detail" data-ajax-order-info="' . $row['id'] . '">' .
                                 'مشاهده' .
                                 '</button>';
                         }

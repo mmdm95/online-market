@@ -7,7 +7,6 @@ return [
             'default',
             'default-jquery-ui',
             'default-changeable',
-            'default-cart',
             'default-theia-sticky-sidebar',
         ],
         'sub_title' => 'محصولات',
@@ -42,7 +41,6 @@ return [
         'common' => [
             'default',
             'default-changeable',
-            'default-cart',
         ],
         'breadcrumb' => [
             [
@@ -71,7 +69,6 @@ return [
         'common' => [
             'default',
             'default-changeable',
-            'default-cart',
         ],
         'sub_title' => 'مقایسه',
         'breadcrumb' => [

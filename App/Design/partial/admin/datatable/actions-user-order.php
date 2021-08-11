@@ -1,11 +1,7 @@
 <?php
 
-use Sim\Auth\DBAuth;
+$auth = auth_admin();
 
-/**
- * @var DBAuth $auth
- */
-$auth = container()->get('auth_admin');
 ?>
 
 <div class="text-center">
@@ -20,7 +16,7 @@ $auth = container()->get('auth_admin');
                     <i class="icon-eye"></i>
                     مشاهده جزئیات
                 </a>
-                <?php if ($auth->hasRole(ROLE_DEVELOPER) || $auth->hasRole(ROLE_SUPER_USER)): ?>
+                <?php if ($auth->hasRole(ROLE_DEVELOPER)): ?>
                     <a href="javascript:void(0);" data-remove-url="<?= url('ajax.user.order.remove'); ?>"
                        data-remove-id="<?= $row['id']; ?>"
                        class="dropdown-item text-danger __item_remover_btn">

@@ -21,8 +21,7 @@ class OrderUtil
         $orderModel = container()->get(OrderModel::class);
         do {
             $uniqueStr = StringUtil::randomString($length, StringUtil::RS_NUMBER);
-            $isUnique = (bool)$orderModel->count('code=:code', ['code' => $uniqueStr]);
-        } while ($isUnique);
+        } while ($orderModel->count('code=:code', ['code' => $uniqueStr]));
         return $uniqueStr;
     }
 }

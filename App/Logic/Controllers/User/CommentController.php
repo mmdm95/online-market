@@ -68,22 +68,19 @@ class CommentController extends AbstractUserController
      */
     public function decider($id)
     {
-        if (is_post()) {
-            $user = $this->getDefaultArguments()['user'];
+        $user = $this->getDefaultArguments()['user'];
 
-            /**
-             * @var CommentModel $commentModel
-             */
-            $commentModel = container()->get(CommentModel::class);
-            $comment = $commentModel->getComments('product_id=:pId AND user_id=:uId', ['pId' => $id, 'uId' => $user['id']]);
+        /**
+         * @var CommentModel $commentModel
+         */
+        $commentModel = container()->get(CommentModel::class);
+        $comment = $commentModel->getComments('product_id=:pId AND user_id=:uId', ['pId' => $id, 'uId' => $user['id']]);
 
-            if (count($comment)) {
-                response()->redirect(url('user.comment.edit', ['id' => $id])->getRelativeUrl());
-            } else {
-                response()->redirect(url('home.product.show', ['id' => $id])->getRelativeUrlTrimmed() . '#Reviews');
-            }
+        if (count($comment)) {
+            response()->redirect(url('user.comment.edit', ['id' => $id])->getRelativeUrl());
+        } else {
+            response()->redirect(url('home.product.show', ['id' => $id])->getRelativeUrlTrimmed() . '#Reviews');
         }
-        response()->redirect(url('user.comments')->getRelativeUrl());
     }
 
     /**

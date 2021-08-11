@@ -66,7 +66,7 @@ function not_implemented_yet()
     $resourceHandler = new ResourceHandler();
     $resourceHandler
         ->type(RESPONSE_TYPE_ERROR)
-        ->errorMessage('Not implemented yet!');
+        ->errorMessage(translate()->translate('not_implemented_yet'));
     response()->json($resourceHandler->getReturnData());
 }
 

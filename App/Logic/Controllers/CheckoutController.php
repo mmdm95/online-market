@@ -174,6 +174,11 @@ class CheckoutController extends AbstractHomeController
 
                         // remove all cart items
                         cart()->destroy();
+                        // remove order array that stored before to prevent any error due to traces
+                        session()->remove(SESSION_ORDER_ARR_INFO);
+                        // remove other traces
+                        session()->remove(SESSION_APPLIED_COUPON_CODE);
+                        session()->remove(SESSION_APPLIED_POST_PRICE);
 
                         $resourceHandler
                             ->type(RESPONSE_TYPE_SUCCESS)

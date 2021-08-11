@@ -13,37 +13,39 @@
                     </div>
                 </div>
                 <div class="col-md-6">
-                    <div class="text-center text-md-right">
-                        <ul class="header_list">
-                            <?php if (auth_home()->isLoggedIn()): ?>
-                                <li>
-                                    <a href="<?= url('user.index'); ?>">
-                                        <i class="linearicons-clipboard-user"></i>
-                                        <span>پنل کاربری</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="<?= url('home.logout'); ?>">
-                                        <i class="linearicons-power-switch"></i>
-                                        <span>خروج</span>
-                                    </a>
-                                </li>
-                            <?php elseif (!url()->contains(url('home.finish')->getRelativeUrlTrimmed())): ?>
-                                <li>
-                                    <a href="<?= url('home.login'); ?>">
-                                        <i class="linearicons-user"></i>
-                                        <span>ورود</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="<?= url('home.signup'); ?>">
-                                        <i class="linearicons-user-plus"></i>
-                                        <span>ثبت نام</span>
-                                    </a>
-                                </li>
-                            <?php endif; ?>
-                        </ul>
-                    </div>
+                    <?php if (!url()->contains(url('home.finish')->getRelativeUrlTrimmed())): ?>
+                        <div class="text-center text-md-right">
+                            <ul class="header_list">
+                                <?php if (auth_home()->isLoggedIn()): ?>
+                                    <li>
+                                        <a href="<?= url('user.index'); ?>">
+                                            <i class="linearicons-clipboard-user"></i>
+                                            <span>پنل کاربری</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="<?= url('home.logout'); ?>">
+                                            <i class="linearicons-power-switch"></i>
+                                            <span>خروج</span>
+                                        </a>
+                                    </li>
+                                <?php else: ?>
+                                    <li>
+                                        <a href="<?= url('home.login'); ?>">
+                                            <i class="linearicons-user"></i>
+                                            <span>ورود</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="<?= url('home.signup'); ?>">
+                                            <i class="linearicons-user-plus"></i>
+                                            <span>ثبت نام</span>
+                                        </a>
+                                    </li>
+                                <?php endif; ?>
+                            </ul>
+                        </div>
+                    <?php endif; ?>
                 </div>
             </div>
         </div>

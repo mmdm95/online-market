@@ -260,11 +260,6 @@ use Sim\Utils\StringUtil;
                         دانلود فاکتور
                     </button>
                 </form>
-                <a href="#" target="_blank" type="button"
-                   class="btn btn-light btn-sm ml-3">
-                    <i class="icon-printer mr-2"></i>
-                    پرینت
-                </a>
             </div>
         </div>
 

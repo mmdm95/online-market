@@ -13,7 +13,7 @@
                 </a>
                 <a href="<?= url('admin.product.detail', ['id' => $row['id']]); ?>"
                    class="dropdown-item text-info">
-                    <i class="icon-comment-discussion"></i>
+                    <i class="icon-eye"></i>
                      مشاهده
                 </a>
                 <a href="<?= url('admin.comment.view', ['p_id' => $row['id']]); ?>"

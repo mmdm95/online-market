@@ -87,7 +87,7 @@ class EditCategoryForm implements IPageForm
             ->stopValidationAfterFirstError(false)
             ->required()
             ->stopValidationAfterFirstError(true)
-            ->regex('/[0-9]+/', '{alias} ' . 'باید از نوع عددی باشد.');
+            ->regex('/\-?[0-9]+/', '{alias} ' . 'باید از نوع عددی باشد.');
 
         $id = session()->getFlash('category-curr-id', null, false);
         if (!empty($id)) {
@@ -156,7 +156,9 @@ class EditCategoryForm implements IPageForm
             return $categoryModel->update([
                 'name' => $xss->xss_clean($name),
                 'parent_id' => $parent ?: null,
-                'all_parents_id' => $parent ? (trim($parentInfo['all_parents_id'] . ',' . $parent, ',')) : '',
+                'all_parents_id' => $parent != DEFAULT_OPTION_VALUE
+                    ? (trim($parentInfo['all_parents_id'] . ',' . $parent, ','))
+                    : '',
                 'keywords' => $xss->xss_clean($keywords),
                 'publish' => is_value_checked($pub) ? DB_YES : DB_NO,
                 'priority' => $xss->xss_clean($priority),

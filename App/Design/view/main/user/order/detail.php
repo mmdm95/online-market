@@ -372,7 +372,7 @@ use Sim\Utils\StringUtil;
                             <div class="dropdown-menu px-3">
                                 <div>
                                     <?php if (DB_YES == $item['allow_commenting']): ?>
-                                        <a href="<?= url('user.comment.decider', ['id' => $item['product_id']])->getRelativeUrl(); ?>"
+                                        <a href="<?= url('user.comment.decider', ['id' => $item['product_id']])->getRelativeUrlTrimmed(); ?>"
                                            class="d-block p-2">
                                             ثبت نظر
                                         </a>
@@ -394,7 +394,8 @@ use Sim\Utils\StringUtil;
                                     'id' => $item['product_id'],
                                     'slug' => $item['product_slug'],
                                 ]); ?>">
-                                    <img src="" data-src="<?= url('image.show', ['filename' => $item['product_image']]); ?>"
+                                    <img src=""
+                                         data-src="<?= url('image.show', ['filename' => $item['product_image']]); ?>"
                                          alt="<?= $item['product_title']; ?>"
                                          class="mx-0 mx-lg-3 lazy"
                                          width="160px" height="auto">
@@ -462,15 +463,21 @@ use Sim\Utils\StringUtil;
                                     <small>تعداد:</small>
                                     <label class="m-0">
                                         <?= $item['product_count']; ?>
+                                        <?= $item['unit_title']; ?>
                                     </label>
                                 </li>
-                                <li class="list-inline-item my-1">
-                                    <small>تخفیف:</small>
-                                    <label class="m-0">
-                                        <?= StringUtil::toPersian(number_format(StringUtil::toEnglish(((float)$item['price'] - (float)$item['discounted_price'])))); ?>
-                                        <small>تومان</small>
-                                    </label>
-                                </li>
+                                <?php
+                                $discount = ((float)$item['price'] - (float)$item['discounted_price']);
+                                ?>
+                                <?php if (!empty($discount)): ?>
+                                    <li class="list-inline-item my-1">
+                                        <small>تخفیف:</small>
+                                        <label class="m-0">
+                                            <?= StringUtil::toPersian(number_format(StringUtil::toEnglish($discount))); ?>
+                                            <small>تومان</small>
+                                        </label>
+                                    </li>
+                                <?php endif; ?>
                             </ul>
                         </div>
                     </div>

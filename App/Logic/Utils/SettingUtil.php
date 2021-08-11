@@ -62,14 +62,14 @@ class SettingUtil
         $counter = 0;
 
         /**
-         * @var InputItem $type
+         * @var InputItem $title
          */
-        foreach ($itemTypes as $type) {
-            if ('' !== trim($type->getValue()) && in_array($type->getValue(), array_keys(SLIDER_TABBED_TYPES))) {
+        foreach ($itemTitles as $title) {
+            if ('' !== trim($title->getValue()) && in_array($itemTypes[$counter]->getValue(), array_keys(SLIDER_TABBED_TYPES))) {
                 $assembled[$counter]['image_link'] = $itemImagesLink[$counter]->getValue();
                 $assembled[$counter]['image'] = $itemImages[$counter]->getValue();
-                $assembled[$counter]['title'] = $itemTitles[$counter]->getValue();
-                $assembled[$counter]['type'] = $type->getValue();
+                $assembled[$counter]['title'] = $title->getValue();
+                $assembled[$counter]['type'] = $itemTypes[$counter]->getValue();
                 $assembled[$counter]['category'] = $itemCategories[$counter]->getValue();
                 $assembled[$counter]['limit'] = $itemLimits[$counter]->getValue();
                 $assembled[$counter]['link'] = $itemLinks[$counter]->getValue();

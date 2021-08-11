@@ -11,7 +11,8 @@ $validator = form_validator();
         <?php load_partial('admin/card-header', ['header_title' => 'ویرایش رنگ']); ?>
 
         <div class="card-body">
-            <form action="<?= url('admin.color.add')->getRelativeUrlTrimmed(); ?>" id="__form_edit_color" method="post">
+            <form action="<?= url('admin.color.edit')->getRelativeUrlTrimmed(); ?>" id="__form_edit_color"
+                  method="post">
                 <?php load_partial('admin/message/message-form', [
                     'errors' => $color_edit_errors ?? [],
                     'success' => $color_edit_success ?? '',

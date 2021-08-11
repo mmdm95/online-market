@@ -25,6 +25,7 @@ return [
         <p>&mdash; The Team</p>
     </div>',
     ],
+    'not_implemented_yet' => 'Not implemented yet!',
 
     /**
      * Form translation

@@ -6,7 +6,6 @@ return [
         'common' => [
             'default',
             'default-changeable',
-            'default-cart',
         ],
         'sub_title' => 'بلاگ',
         'breadcrumb' => [
@@ -39,7 +38,6 @@ return [
         'common' => [
             'default',
             'default-changeable',
-            'default-cart',
         ],
         'breadcrumb' => [
             [

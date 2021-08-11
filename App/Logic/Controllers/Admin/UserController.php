@@ -263,15 +263,11 @@ class UserController extends AbstractAdminController implements IDatatableContro
                     $auth = container()->get('auth_admin');
 
                     if (!empty($where)) {
-                        $where .= ' AND u.is_deleted<>:del';
-                        if (!$auth->hasRole(ROLE_DEVELOPER)) {
-                            $where .= ' AND u.is_hidden<>:hidden';
-                        }
-                    } else {
-                        $where = 'u.is_deleted<>:del';
-                        if (!$auth->hasRole(ROLE_DEVELOPER)) {
-                            $where .= ' AND u.is_hidden<>:hidden';
-                        }
+                        $where .= ' AND ';
+                    }
+                    $where .= ' u.is_deleted<>:del';
+                    if (!$auth->hasRole(ROLE_DEVELOPER)) {
+                        $where .= ' AND u.is_hidden<>:hidden';
                     }
                     $bindValues = array_merge($bindValues, [
                         'del' => DB_YES,
@@ -436,6 +432,8 @@ class UserController extends AbstractAdminController implements IDatatableContro
                         'uId' => $user_id,
                     ]);
 
+                    $cols[] = 'id';
+                    $cols[] = 'send_status_code';
                     $cols[] = 'send_status_color';
                     $cols[] = 'total_price';
 
@@ -470,7 +468,10 @@ class UserController extends AbstractAdminController implements IDatatableContro
                         'db_alias' => 'final_price',
                         'dt' => 'price',
                         'formatter' => function ($d, $row) {
-                            $status = '<del class="text-grey m-2">' . local_number(number_format($row['total_price'])) . '</del>';
+                            $status = '';
+                            if ($d != $row['total_price']) {
+                                $status .= '<del class="text-grey m-2">' . local_number(number_format($row['total_price'])) . '</del>';
+                            }
                             $status .= '<span class="text-success">' . local_number(number_format($d)) . '</span>';
                             return $status;
                         }
@@ -480,8 +481,14 @@ class UserController extends AbstractAdminController implements IDatatableContro
                         'db_alias' => 'send_status_title',
                         'dt' => 'send_status',
                         'formatter' => function ($d, $row) {
-                            $status = '<span style="background-color: ' . $row['send_status_color'] . ';">' . $d . '</span>';
-                            return $status;
+                            $this->setTemplate('partial/admin/parser/status-creation');
+                            return $this->render([
+                                'status' => $row['send_status_code'],
+                                'default' => [
+                                    'text' => $d,
+                                    'style' => 'background-color: ' . $row['send_status_color'] . '; color:' . get_color_from_bg($row['send_status_color']),
+                                ],
+                            ]);
                         }
                     ],
                     [

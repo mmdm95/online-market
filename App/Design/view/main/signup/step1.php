@@ -22,6 +22,7 @@ $validator = form_validator();
                                     'success' => $register_success ?? '',
                                     'warning' => $register_warning ?? '',
                                 ]); ?>
+
                                 <input type="hidden" name="csrf_token" value="<?= csrf_token(); ?>" data-ignored>
                                 <div class="form-group">
                                     <input type="text" required class="form-control" name="inp-register-username"
@@ -39,7 +40,7 @@ $validator = form_validator();
                                         <button class="btn btn-link text_default p-2 ml-3 __captcha_regenerate_btn"
                                                 type="button" aria-label="regenerate captcha">
                                             <input type="hidden" name="inp-captcha-name"
-                                                   value="<?= url() . '__form_register'; ?>">
+                                                   value="<?= url() . '__form_register'; ?>" data-ignored>
                                             <i class="icon-refresh icon-2x" aria-hidden="true"></i>
                                         </button>
                                     </div>

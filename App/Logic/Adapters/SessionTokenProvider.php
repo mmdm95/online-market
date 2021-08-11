@@ -25,6 +25,7 @@ class SessionTokenProvider implements ITokenProvider
         $token = \csrf()->regenerateToken();
         $csrfExpiration = \config()->get('csrf.expiration') ?? 0;
         $csrfExpiration = 0 !== $csrfExpiration ? time() + $csrfExpiration : $csrfExpiration;
+        cookie()->remove(self::CSRF_KEY);
         \cookie()->set(self::CSRF_KEY)
             ->setValue($token)
             ->setExpiration($csrfExpiration)
@@ -42,7 +43,9 @@ class SessionTokenProvider implements ITokenProvider
     public function validate(string $token): bool
     {
         $token = \cookie()->getCookieValueFromString($token);
-        return \csrf()->validate($token);
+        $res = \csrf()->validate($token);
+        if(!$res) cookie()->remove(self::CSRF_KEY);
+        return $res;
     }
 
     /**
@@ -61,6 +64,7 @@ class SessionTokenProvider implements ITokenProvider
         $token = \csrf()->getToken() ?? $defaultValue;
         $csrfExpiration = \config()->get('csrf.expiration') ?? 0;
         $csrfExpiration = 0 !== $csrfExpiration ? time() + $csrfExpiration : $csrfExpiration;
+        cookie()->remove(self::CSRF_KEY);
         \cookie()->set(self::CSRF_KEY)
             ->setValue($token)
             ->setExpiration($csrfExpiration)

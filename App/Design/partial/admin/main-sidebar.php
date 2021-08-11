@@ -4,7 +4,7 @@ $authAdmin = auth_admin();
 
 ?>
 
-<div class="sidebar sidebar-dark sidebar-main sidebar-expand-md">
+<div class="sidebar sidebar-dark sidebar-main sidebar-expand-md sidebar-fixed">
 
     <!-- Sidebar mobile toggler -->
     <div class="sidebar-mobile-toggler text-center">
@@ -74,6 +74,7 @@ $authAdmin = auth_admin();
                        class="nav-link <?= url()->getRelativeUrlTrimmed() == url('admin.index')->getRelativeUrlTrimmed() ? 'active' : ''; ?>"
                        data-popup="tooltip"
                        data-original-title="میز کار"
+                       data-boundary="window"
                        data-placement="left">
                         <i class="icon-home4"></i>
                         <span>میز کار</span>
@@ -149,13 +150,13 @@ $authAdmin = auth_admin();
                     <!--                    <ul class="nav nav-group-sub">-->
                     <!--                        <li class="nav-item">-->
                     <!--                            <a href="" class="nav-link">-->
-                    <?= '';//url('admin.send_method.add');                                           ?>
+                    <?= '';//url('admin.send_method.add');                                            ?>
                     <!--                                افزودن روش ارسال جدید-->
                     <!--                            </a>-->
                     <!--                        </li>-->
                     <!--                        <li class="nav-item">-->
                     <!--                            <a href="" class="nav-link">-->
-                    <?= '';//url('admin.send_method.view', '');                                           ?>
+                    <?= '';//url('admin.send_method.view', '');                                            ?>
                     <!--                                لیست روش‌های ارسال-->
                     <!--                            </a>-->
                     <!--                        </li>-->
@@ -251,6 +252,7 @@ $authAdmin = auth_admin();
                             <a href="<?= url('admin.unit.view', ''); ?>" class="nav-link"
                                data-popup="tooltip"
                                data-original-title="واحد‌ها"
+                               data-boundary="window"
                                data-placement="left">
                                 <i class="icon-unicode"></i>
                                 <span>واحد‌ها</span>
@@ -357,9 +359,10 @@ $authAdmin = auth_admin();
 
                     <!--                <li class="nav-item">-->
                     <!--                    <a href="" class="nav-link"-->
-                    <?= '';//url('admin.return.order.view');                                       ?>
+                    <?= '';//url('admin.return.order.view');                                        ?>
                     <!--                       data-popup="tooltip"-->
                     <!--                       data-original-title="سفارشات مرجوعی"-->
+                    <!--                       data-boundary="window"-->
                     <!--                       data-placement="left">-->
                     <!--                        <i class="icon-backspace2"></i>-->
                     <!--                        <span>سفارشات مرجوعی</span>-->
@@ -386,6 +389,7 @@ $authAdmin = auth_admin();
                             <a href="<?= url('admin.report.users'); ?>" class="nav-link"
                                data-popup="tooltip"
                                data-original-title="گزارش‌گیری از کاربران"
+                               data-boundary="window"
                                data-placement="left">
                                 <i class="icon-archive"></i>
                                 <span>گزارش‌گیری از کاربران</span>
@@ -398,6 +402,7 @@ $authAdmin = auth_admin();
                             <a href="<?= url(''); ?>" class="nav-link"
                                data-popup="tooltip"
                                data-original-title="گزارش‌گیری از محصولات"
+                               data-boundary="window"
                                data-placement="left">
                                 <i class="icon-archive"></i>
                                 <span>گزارش‌گیری از محصولات</span>
@@ -410,6 +415,7 @@ $authAdmin = auth_admin();
                             <a href="<?= url(''); ?>" class="nav-link"
                                data-popup="tooltip"
                                data-original-title="گزارش‌گیری از کیف پول"
+                               data-boundary="window"
                                data-placement="left">
                                 <i class="icon-archive"></i>
                                 <span>گزارش‌گیری از کیف پول</span>
@@ -422,6 +428,7 @@ $authAdmin = auth_admin();
                             <a href="<?= url(''); ?>" class="nav-link"
                                data-popup="tooltip"
                                data-original-title="گزارش‌گیری از سفارشات"
+                               data-boundary="window"
                                data-placement="left">
                                 <i class="icon-archive"></i>
                                 <span>گزارش‌گیری از سفارشات</span>
@@ -527,6 +534,7 @@ $authAdmin = auth_admin();
                                class="nav-link <?= url()->contains(url('admin.contact-us.view', '')->getRelativeUrlTrimmed()) ? 'active' : ''; ?>"
                                data-popup="tooltip"
                                data-original-title="تماس‌ها"
+                               data-boundary="window"
                                data-placement="left">
                                 <i class="icon-envelop5"></i>
                                 <span>تماس‌ها</span>
@@ -540,6 +548,7 @@ $authAdmin = auth_admin();
                                class="nav-link <?= url()->contains(url('admin.complaints.view', '')->getRelativeUrlTrimmed()) ? 'active' : ''; ?>"
                                data-popup="tooltip"
                                data-original-title="شکایات"
+                               data-boundary="window"
                                data-placement="left">
                                 <i class="icon-balance"></i>
                                 <span>شکایات</span>
@@ -553,6 +562,7 @@ $authAdmin = auth_admin();
                                class="nav-link <?= url()->contains(url('admin.faq.view', '')->getRelativeUrlTrimmed()) ? 'active' : ''; ?>"
                                data-popup="tooltip"
                                data-original-title="سؤالات متداول"
+                               data-boundary="window"
                                data-placement="left">
                                 <i class="icon-question7"></i>
                                 <span>سؤالات متداول</span>
@@ -566,6 +576,7 @@ $authAdmin = auth_admin();
                                class="nav-link <?= url()->contains(url('admin.newsletter.view', '')->getRelativeUrlTrimmed()) ? 'active' : ''; ?>"
                                data-popup="tooltip"
                                data-original-title="خبرنامه"
+                               data-boundary="window"
                                data-placement="left">
                                 <i class="icon-newspaper2"></i>
                                 <span>خبرنامه</span>
@@ -587,6 +598,7 @@ $authAdmin = auth_admin();
                            class="nav-link <?= url()->contains(url('admin.slider.view', '')->getRelativeUrlTrimmed()) ? 'active' : ''; ?>"
                            data-popup="tooltip"
                            data-original-title="مدیریت اسلایدشو"
+                           data-boundary="window"
                            data-placement="left">
                             <i class="icon-image-compare"></i>
                             <span>مدیریت اسلایدشو</span>
@@ -600,6 +612,7 @@ $authAdmin = auth_admin();
                            class="nav-link <?= url()->contains(url('admin.instagram.view', '')->getRelativeUrlTrimmed()) ? 'active' : ''; ?>"
                            data-popup="tooltip"
                            data-original-title="مدیریت تصاویر اینستاگرام"
+                           data-boundary="window"
                            data-placement="left">
                             <i class="icon-instagram"></i>
                             <span>مدیریت تصاویر اینستاگرام</span>
@@ -613,6 +626,7 @@ $authAdmin = auth_admin();
                            class="nav-link <?= url()->contains(url('admin.sec_question.view', '')->getRelativeUrlTrimmed()) ? 'active' : ''; ?>"
                            data-popup="tooltip"
                            data-original-title="سؤالات امنیتی"
+                           data-boundary="window"
                            data-placement="left">
                             <i class="icon-lock"></i>
                             <span>سؤالات امنیتی</span>
@@ -626,6 +640,7 @@ $authAdmin = auth_admin();
                            class="nav-link <?= url()->contains(url('admin.file-manager')->getRelativeUrlTrimmed()) ? 'active' : ''; ?>"
                            data-popup="tooltip"
                            data-original-title="مدیریت فایل‌ها"
+                           data-boundary="window"
                            data-placement="left">
                             <i class="icon-files-empty"></i>
                             <span>مدیریت فایل‌ها</span>
@@ -639,6 +654,7 @@ $authAdmin = auth_admin();
                            class="nav-link <?= url()->contains(url('admin.setting.main')->getRelativeUrlTrimmed()) ? 'active' : ''; ?>"
                            data-popup="tooltip"
                            data-original-title="تنظیمات"
+                           data-boundary="window"
                            data-placement="left">
                             <i class="icon-cog"></i>
                             <span>تنظیمات</span>
@@ -651,6 +667,7 @@ $authAdmin = auth_admin();
                        class="nav-link <?= url()->contains(url('admin.guide')->getRelativeUrlTrimmed()) ? 'active' : ''; ?>"
                        data-popup="tooltip"
                        data-original-title="راهنما"
+                       data-boundary="window"
                        data-placement="left">
                         <i class="icon-flag3"></i>
                         <span>راهنما</span>
@@ -662,6 +679,7 @@ $authAdmin = auth_admin();
                        class="nav-link"
                        data-popup="tooltip"
                        data-original-title="خروج"
+                       data-boundary="window"
                        data-placement="left">
                         <i class="icon-switch2"></i>
                         <span>خروج</span>

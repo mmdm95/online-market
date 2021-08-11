@@ -30,7 +30,7 @@ class MenuModel extends BaseModel
                     'sim' => DB_YES,
                 ])
                 ->leftJoin(self::TBL_CATEGORIES . ' AS pc', 'c.parent_id=pc.id')
-                ->orderBy(['c.priority DESC']);
+                ->orderBy(['c.priority ASC']);
         } catch (Exception $e) {
             return [];
         }

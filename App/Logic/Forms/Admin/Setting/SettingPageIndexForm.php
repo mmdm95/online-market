@@ -92,9 +92,6 @@ class SettingPageIndexForm implements IPageForm
                 'inp-setting-tabbed-slider-title',
                 'inp-setting-general-slider-title',
             ])
-            ->stopValidationAfterFirstError(false)
-            ->required()
-            ->stopValidationAfterFirstError(true)
             ->lessThanLength(50);
 
         if ($validator->getStatus()) {

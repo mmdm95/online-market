@@ -3,6 +3,7 @@ $errors = $errors ?? [];
 $hasCSRFTokenError = \session()->getFlash('CSRFRouteIsUndefined');
 
 if (!is_null($hasCSRFTokenError)) {
+    \session()->removeFlash('CSRFRouteIsUndefined');
     array_unshift($errors, $hasCSRFTokenError);
 }
 ?>

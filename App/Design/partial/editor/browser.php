@@ -56,7 +56,7 @@
                 if (selectedRow && selectedRow.length && !selectedRow.hasClass('is_dir')) {
                     var image_url = selectedRow.find('.first a').attr("data-url");
 
-                    top.tinymce.activeEditor.windowManager.getParams().onInsert(image_url);
+                    top.tinymce.activeEditor.windowManager.getParams().onInsert("<?= url('image.show')->getRelativeUrl(); ?>" + image_url);
                     top.tinymce.activeEditor.windowManager.close();
                 }
             });

@@ -6,7 +6,6 @@ return [
         'common' => [
             'default',
             'default-changeable',
-            'default-cart',
         ],
         'sub_title' => 'فراموشی کلمه عبور',
         'stepy' => [
@@ -31,7 +30,6 @@ return [
         'common' => [
             'default',
             'default-changeable',
-            'default-cart',
         ],
         'sub_title' => 'فراموشی کلمه عبور',
         'stepy' => [
@@ -58,7 +56,6 @@ return [
         'common' => [
             'default',
             'default-changeable',
-            'default-cart',
         ],
         'sub_title' => 'فراموشی کلمه عبور',
         'stepy' => [
@@ -87,7 +84,6 @@ return [
         'common' => [
             'default',
             'default-changeable',
-            'default-cart',
         ],
         'sub_title' => 'فراموشی کلمه عبور',
         'stepy' => [

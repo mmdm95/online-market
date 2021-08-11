@@ -56,7 +56,7 @@ foreach ($tabbed_slider['items'] ?? [] as $tab) {
                                         <span class="ion-android-menu"></span>
                                     </button>
 
-                                    <ul class="nav nav-tabs justify-content-center justify-content-md-end __tabbed_slider_multi"
+                                    <ul class="nav nav-tabs justify-content-center justify-content-md-end tabmenubar __tabbed_slider_multi"
                                         id="tabmenubar<?= $randomNum; ?>" role="tablist">
                                         <?php $k = 0; ?>
                                         <?php foreach ($tabbed_slider['items'] as $tab): ?>

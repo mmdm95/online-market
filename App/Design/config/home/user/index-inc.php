@@ -7,7 +7,6 @@ return [
             'default',
             'default-theia-sticky-sidebar',
             'default-changeable',
-            'default-cart',
         ],
         'sub_title' => 'حساب کاربری',
         'breadcrumb' => [
@@ -28,7 +27,6 @@ return [
             'default',
             'default-theia-sticky-sidebar',
             'default-changeable',
-            'default-cart',
         ],
         'sub_title' => 'اطلاعات حساب کاربری',
         'breadcrumb' => [
@@ -54,7 +52,6 @@ return [
             'default',
             'default-theia-sticky-sidebar',
             'default-changeable',
-            'default-cart',
         ],
         'sub_title' => 'آیتم‌های مورد علاقه',
         'breadcrumb' => [

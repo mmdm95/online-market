@@ -68,7 +68,7 @@ use App\Logic\Utils\Jdf;
                 $section2 = \config()->get('settings.footer_section_2.value');
                 ?>
                 <?php if (count($section1['links'])): ?>
-                    <div class="col-lg-3 col-md-4 col-sm-6">
+                    <div class="col-lg-4 col-md-4 col-sm-6">
                         <div class="widget">
                             <div class="widget">
                                 <h6 class="widget_title"><?= $section1['title']; ?></h6>
@@ -82,7 +82,7 @@ use App\Logic\Utils\Jdf;
                     </div>
                 <?php endif; ?>
                 <?php if (count($section2['links'])): ?>
-                    <div class="col-lg-3 col-md-4 col-sm-6">
+                    <div class="col-lg-4 col-md-4 col-sm-6">
                         <div class="widget">
                             <h6 class="widget_title"><?= $section2['title']; ?></h6>
                             <ul class="widget_links">

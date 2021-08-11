@@ -3,7 +3,6 @@
 namespace App;
 
 use App\Logic\Adapters\CsrfVerifier as CsrfVerifier;
-use App\Logic\Adapters\SessionTokenProvider;
 use App\Logic\Container as ContainerDefinition;
 use App\Logic\Route as RouteDefinition;
 use App\Logic\Event as EventDefinition;
@@ -29,6 +28,7 @@ use Sim\Logger\Handler\File\FileHandler;
 use Sim\Logger\ILogger;
 use Sim\Logger\Logger;
 
+use App\Logic\Adapters\SessionTokenProvider as TokenProvider;
 use Pecee\SimpleRouter\SimpleRouter as Router;
 
 use DI\Container as Container;
@@ -323,7 +323,7 @@ class Bootstrap
     protected function defineRoute()
     {
         $verifier = new CsrfVerifier();
-        $verifier->setTokenProvider(container()->get(SessionTokenProvider::class));
+        $verifier->setTokenProvider(container()->get(TokenProvider::class));
 
         Router::csrfVerifier($verifier);
 

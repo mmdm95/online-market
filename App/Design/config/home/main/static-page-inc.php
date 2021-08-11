@@ -5,7 +5,6 @@ return [
         'common' => [
             'default',
             'default-changeable',
-            'default-cart',
         ],
     ],
 ];

@@ -74,6 +74,7 @@ class HomeController extends AbstractUserController
             3,
             0,
             [
+                'o.id',
                 'o.code',
                 'o.method_title',
                 'o.payment_status',

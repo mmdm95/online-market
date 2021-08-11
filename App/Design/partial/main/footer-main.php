@@ -74,12 +74,6 @@ use App\Logic\Utils\Jdf;
             <div class="row">
                 <div class="col-lg-4 col-md-12 col-sm-12">
                     <div class="widget">
-                        <div class="footer_logo">
-                            <a href="<?= url('home.index'); ?>">
-                                <img src="" data-src="<?= url('image.show') . \config()->get('settings.logo_footer.value'); ?>"
-                                     alt="logo" class="lazy">
-                            </a>
-                        </div>
                         <?php
                         $tinyDesc = \config()->get('settings.footer_tiny_desc.value');
                         ?>

@@ -6,7 +6,6 @@ return [
         'common' => [
             'default',
             'default-changeable',
-            'default-cart',
         ],
     ],
     'view/main/signup/step2' => [
@@ -14,7 +13,6 @@ return [
         'common' => [
             'default',
             'default-changeable',
-            'default-cart',
         ],
     ],
     'view/main/signup/step3' => [
@@ -22,7 +20,6 @@ return [
         'common' => [
             'default',
             'default-changeable',
-            'default-cart',
         ],
     ],
 ];

@@ -31,8 +31,9 @@ PAGE JS
     /*===================================*/
     $(function () {
         setTimeout(function () {
-            $(".preloader").delay(500).fadeOut(700).addClass('loaded');
-            // $(".preloader").fadeOut(700).addClass('loaded');
+            $(".preloader").delay(500).fadeOut(700, function () {
+                $(this).remove();
+            }).addClass('loaded');
         }, 800);
     });
 
@@ -185,12 +186,32 @@ PAGE JS
         return false;
     });
 
+    function removeBackdrop() {
+        $('body').find('.custom-backdrop').remove();
+    }
+
+    function backdropClick(backdrop) {
+        backdrop.on('click', function () {
+            removeBackdrop();
+        });
+    }
+
+    function createBackdrop() {
+        let bckdp = $('<div class="custom-backdrop" />');
+        $('body').append(bckdp);
+        backdropClick(bckdp);
+    }
+
     $(".categories_btn").on('click', function () {
+        removeBackdrop();
+        createBackdrop();
         $('.side_navbar_toggler').attr('aria-expanded', 'false');
         $('#navbarSidetoggle').removeClass('show');
     });
 
     $(".side_navbar_toggler").on('click', function () {
+        removeBackdrop();
+        createBackdrop();
         $('.categories_btn').attr('aria-expanded', 'false');
         $('#navCatContent').removeClass('show');
     });
@@ -318,7 +339,7 @@ PAGE JS
     *===================================*/
     $(window).on('scroll', function () {
         if ($(this).scrollTop() > 150) {
-            $('.scrollup').fadeIn();
+            $('.scrollup').stop().fadeIn();
         } else {
             $('.scrollup').fadeOut();
         }
@@ -556,12 +577,15 @@ PAGE JS
             $(".selectric_dropdown.selectric_dropdown_changeable_stuffs").selectric({
                 optionsItemBuilder: function (itemData) {
                     var
-                        el, str,
+                        el, str = '',
                         colorHex, colorName, size,
                         colorSpan = '', sizeSpan = '';
 
                     el = $(itemData.element);
-                    str = itemData.text;
+
+                    if(el.attr('data-show-text')) {
+                        str = itemData.text;
+                    }
                     colorHex = el.attr('data-color-hex');
                     colorName = el.attr('data-color-name');
                     size = el.attr('data-size');
@@ -580,12 +604,14 @@ PAGE JS
                 },
                 labelBuilder: function (currItem) {
                     var
-                        el, str,
+                        el, str = '',
                         colorHex, colorName, size,
                         colorSpan = '', sizeSpan = '';
 
                     el = $(currItem.element);
-                    str = currItem.text;
+                    if (el.attr('data-show-text')) {
+                        str = currItem.text;
+                    }
                     colorHex = el.attr('data-color-hex');
                     colorName = el.attr('data-color-name');
                     size = el.attr('data-size');
@@ -659,7 +685,7 @@ PAGE JS
         $(".shop_container").append('<div class="loading_pr"><div class="mfp-preloader"></div></div>');
         setTimeout(function () {
             $('.loading_pr').remove();
-            $container.isotope('layout');
+            // $container.isotope('layout');
         }, 800);
     });
 
@@ -915,12 +941,12 @@ PAGE JS
 //			if(e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)){
 //			 return false;
 //			}
-//		
+//
 //			if(e.ctrlKey && e.shiftKey && e.keyCode == 'C'.charCodeAt(0)){
 //			 return false;
-//			}      
+//			}
 //		 };
-//		 
+//
 //		$("html").on("contextmenu",function(){
 //			return false;
 //		});

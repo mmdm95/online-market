@@ -73,7 +73,7 @@ abstract class AbstractViewRenderer implements IViewRenderer
     {
         // Get includes config file items
         $includes = $this->config->get('includes');
-        
+
         // Check if we have any configuration
         if (count($includes)) {
             // Get main alias name
@@ -106,7 +106,7 @@ abstract class AbstractViewRenderer implements IViewRenderer
 
             $desktopConfig = $includes['desktop'][$mainAlias] ?? [];
             $desktopCommonConfig = $this->detectConfigCommons($includes['desktop'], $desktopConfig);
-            
+
             // Detect which platform must be use
             $agent = new Agent();
             $isMobile = $agent->isMobile();
@@ -141,14 +141,9 @@ abstract class AbstractViewRenderer implements IViewRenderer
                 // Replace required js and css and other things that are not string with merged one
                 foreach ($mainAliasInclude as $key => &$item) {
                     if (is_array($item) && isset($mainAliasIncludeMerged[$key])) {
-                        if ('js' === $key) {
-                            $js = $mainAliasIncludeMerged['js'] ?? [];
-                            $item = ArrayUtil::uniqueRecursive($js);
-                        } elseif ('css' === $key) {
-                            $css = $mainAliasIncludeMerged['css'] ?? [];
-                            $item = ArrayUtil::uniqueRecursive($css);
-                        } else {
-                            $item = $mainAliasIncludeMerged[$key] ?? '';
+                        if ('js' === $key || 'css' === $key) {
+                            $x = $mainAliasIncludeMerged[$key] ?? [];
+                            $item = array_merge_recursive($item, ArrayUtil::uniqueRecursive($x));
                         }
                     }
                 }

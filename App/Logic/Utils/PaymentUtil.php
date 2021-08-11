@@ -4,6 +4,7 @@ namespace App\Logic\Utils;
 
 use App\Logic\Models\GatewayModel;
 use App\Logic\Models\OrderModel;
+use App\Logic\Models\OrderReserveModel;
 use App\Logic\Models\PaymentMethodModel;
 use Sim\Auth\DBAuth;
 use Sim\Event\Interfaces\IEvent;
@@ -338,6 +339,10 @@ class PaymentUtil
          */
         $orderModel = container()->get(OrderModel::class);
         /**
+         * @var OrderReserveModel $orderReserveModel
+         */
+        $orderReserveModel = container()->get(OrderReserveModel::class);
+        /**
          * @var PaymentMethodModel $methodModel
          */
         $methodModel = container()->get(PaymentMethodModel::class);
@@ -347,6 +352,7 @@ class PaymentUtil
         $flow = $gatewayModel->getFirst([
             'order_code',
             'method_type',
+            'is_success',
         ], 'code=:code', ['code' => $gatewayCode]);
 
         // check flow and see if it is a valid gateway flow record
@@ -368,6 +374,10 @@ class PaymentUtil
         // check the order and see if it is a valid order
         if (!count($method)) {
             return $res;
+        }
+        // if is was successful before, there is no need to change it
+        if ($flow['is_success'] == DB_YES) {
+            return [true, GATEWAY_SUCCESS_MESSAGE, null];
         }
 
         $gatewayInfo = json_decode(cryptographer()->decrypt($method['meta_parameters']), true);
@@ -407,7 +417,7 @@ class PaymentUtil
                                     'result' => $resultProvider->getParameters(),
                                     'advice' => $adviceProvider->getParameters(),
                                 ]),
-                            ], 'code=:code', ['code' => $gatewayCode]);
+                            ], 'code=:code AND is_success=:suc', ['code' => $gatewayCode, 'suc' => DB_NO]);
 
                             $res = [false, GATEWAY_ERROR_MESSAGE, $resultProvider->getSaleReferenceId('')];
                         }
@@ -417,7 +427,7 @@ class PaymentUtil
                             BehPardakhtSettleResultProvider $settleProvider,
                             BehPardakhtAdviceResultProvider $adviceProvider,
                             BehPardakhtHandlerProvider $resultProvider
-                        ) use ($gatewayModel, $gatewayCode, &$res) {
+                        ) use ($gatewayModel, $orderModel, $orderReserveModel, $gatewayCode, $flow, &$res) {
                             $gatewayModel->update([
                                 'payment_code' => $resultProvider->getSaleReferenceId(''),
                                 'status' => $adviceProvider->getStatus(),
@@ -431,6 +441,11 @@ class PaymentUtil
                                     'settle' => $settleProvider->getParameters(),
                                 ]),
                             ], 'code=:code', ['code' => $gatewayCode]);
+                            $orderModel->update([
+                                'payment_status' => PAYMENT_STATUS_SUCCESS,
+                                'payed_at' => time(),
+                            ], 'code=:code', ['code' => $flow['order_code']]);
+                            $orderReserveModel->delete('order_code=:code', ['code' => $flow['order_code']]);
 
                             $res = [true, GATEWAY_SUCCESS_MESSAGE, $resultProvider->getSaleReferenceId('')];
                         }
@@ -454,7 +469,7 @@ class PaymentUtil
                                     'advice' => $adviceProvider->getParameters(),
                                     'settle' => $settleProvider->getParameters(),
                                 ]),
-                            ], 'code=:code', ['code' => $gatewayCode]);
+                            ], 'code=:code AND is_success=:suc', ['code' => $gatewayCode, 'suc' => DB_NO]);
 
                             $res = [false, GATEWAY_ERROR_MESSAGE, $resultProvider->getSaleReferenceId('')];
                         }
@@ -477,7 +492,7 @@ class PaymentUtil
                             IEvent $event,
                             IDPayAdviceResultProvider $adviceProvider,
                             IDPayHandlerProvider $resultProvider
-                        ) use ($gatewayModel, $gatewayCode, &$res) {
+                        ) use ($gatewayModel, $orderModel, $orderReserveModel, $gatewayCode, $flow, &$res) {
                             $gatewayModel->update([
                                 'payment_code' => $adviceProvider->getTrackId(''),
                                 'status' => $adviceProvider->getStatus(),
@@ -490,6 +505,11 @@ class PaymentUtil
                                     'advice' => $adviceProvider->getParameters(),
                                 ]),
                             ], 'code=:code', ['code' => $gatewayCode]);
+                            $orderModel->update([
+                                'payment_status' => PAYMENT_STATUS_SUCCESS,
+                                'payed_at' => time(),
+                            ], 'code=:code', ['code' => $flow['order_code']]);
+                            $orderReserveModel->delete('order_code=:code', ['code' => $flow['order_code']]);
 
                             $res = [true, GATEWAY_SUCCESS_MESSAGE, $adviceProvider->getTrackId('')];
                         }
@@ -511,7 +531,7 @@ class PaymentUtil
                                     'result' => $resultProvider->getParameters(),
                                     'advice' => $adviceProvider->getParameters(),
                                 ]),
-                            ], 'code=:code', ['code' => $gatewayCode]);
+                            ], 'code=:code AND is_success=:suc', ['code' => $gatewayCode, 'suc' => DB_NO]);
 
                             $res = [false, GATEWAY_ERROR_MESSAGE, $adviceProvider->getTrackId('')];
                         }
@@ -534,7 +554,7 @@ class PaymentUtil
                             IEvent $event,
                             MabnaAdviceResultProvider $adviceProvider,
                             MabnaHandlerProvider $resultProvider
-                        ) use ($gatewayModel, $gatewayCode, &$res) {
+                        ) use ($gatewayModel, $orderModel, $orderReserveModel, $gatewayCode, $flow, &$res) {
                             // most of information are in $resultProvider
                             $gatewayModel->update([
                                 'payment_code' => $resultProvider->getTraceNumber(''),
@@ -548,6 +568,11 @@ class PaymentUtil
                                     'advice' => $adviceProvider->getParameters(),
                                 ]),
                             ], 'code=:code', ['code' => $gatewayCode]);
+                            $orderModel->update([
+                                'payment_status' => PAYMENT_STATUS_SUCCESS,
+                                'payed_at' => time(),
+                            ], 'code=:code', ['code' => $flow['order_code']]);
+                            $orderReserveModel->delete('order_code=:code', ['code' => $flow['order_code']]);
 
                             $res = [true, GATEWAY_SUCCESS_MESSAGE, $resultProvider->getTraceNumber('')];
                         }
@@ -571,7 +596,7 @@ class PaymentUtil
                                     'result' => $resultProvider->getParameters(),
                                     'advice' => $adviceProvider->getParameters(),
                                 ]),
-                            ], 'code=:code', ['code' => $gatewayCode]);
+                            ], 'code=:code AND is_success=:suc', ['code' => $gatewayCode, 'suc' => DB_NO]);
 
                             $res = [false, GATEWAY_ERROR_MESSAGE, $resultProvider->getTraceNumber('')];
                         }
@@ -594,7 +619,7 @@ class PaymentUtil
                             IEvent $event,
                             ZarinpalAdviceResultProvider $adviceProvider,
                             ZarinpalHandlerProvider $resultProvider
-                        ) use ($gatewayModel, $gatewayCode, &$res) {
+                        ) use ($gatewayModel, $orderModel, $orderReserveModel, $gatewayCode, $flow, &$res) {
                             $gatewayModel->update([
                                 'payment_code' => $adviceProvider->getRefID(''),
                                 'status' => $adviceProvider->getStatus(),
@@ -607,6 +632,11 @@ class PaymentUtil
                                     'advice' => $adviceProvider->getParameters(),
                                 ]),
                             ], 'code=:code', ['code' => $gatewayCode]);
+                            $orderModel->update([
+                                'payment_status' => PAYMENT_STATUS_SUCCESS,
+                                'payed_at' => time(),
+                            ], 'code=:code', ['code' => $flow['order_code']]);
+                            $orderReserveModel->delete('order_code=:code', ['code' => $flow['order_code']]);
 
                             $res = [true, GATEWAY_SUCCESS_MESSAGE, $adviceProvider->getRefID('')];
                         }
@@ -628,7 +658,7 @@ class PaymentUtil
                                     'result' => $resultProvider->getParameters(),
                                     'advice' => $adviceProvider->getParameters(),
                                 ]),
-                            ], 'code=:code', ['code' => $gatewayCode]);
+                            ], 'code=:code AND is_success=:suc', ['code' => $gatewayCode, 'suc' => DB_NO]);
 
                             $res = [false, GATEWAY_ERROR_MESSAGE, $adviceProvider->getRefID('')];
                         }
@@ -645,7 +675,7 @@ class PaymentUtil
                                 'in_step' => PAYMENT_GATEWAY_FLOW_STATUS_HANDLE_RESULT,
                                 'payment_date' => time(),
                                 'extra_info' => json_encode(['result' => $resultProvider->getParameters()]),
-                            ], 'code=:code', ['code' => $gatewayCode]);
+                            ], 'code=:code AND is_success=:suc', ['code' => $gatewayCode, 'suc' => DB_NO]);
 
                             $res = [false, GATEWAY_ERROR_MESSAGE, null];
                         }
@@ -672,7 +702,7 @@ class PaymentUtil
                             IEvent $event,
                             SadadAdviceResultProvider $adviceProvider,
                             SadadHandlerProvider $resultProvider
-                        ) use ($gatewayModel, $gatewayCode, &$res) {
+                        ) use ($gatewayModel, $orderModel, $orderReserveModel, $gatewayCode, $flow, &$res) {
                             $gatewayModel->update([
                                 'payment_code' => $adviceProvider->getSystemTraceNo(''),
                                 'status' => $adviceProvider->getResCode(),
@@ -685,6 +715,11 @@ class PaymentUtil
                                     'advice' => $adviceProvider->getParameters(),
                                 ]),
                             ], 'code=:code', ['code' => $gatewayCode]);
+                            $orderModel->update([
+                                'payment_status' => PAYMENT_STATUS_SUCCESS,
+                                'payed_at' => time(),
+                            ], 'code=:code', ['code' => $flow['order_code']]);
+                            $orderReserveModel->delete('order_code=:code', ['code' => $flow['order_code']]);
 
                             $res = [true, GATEWAY_SUCCESS_MESSAGE, $adviceProvider->getSystemTraceNo('')];
                         }
@@ -706,7 +741,7 @@ class PaymentUtil
                                     'result' => $resultProvider->getParameters(),
                                     'advice' => $adviceProvider->getParameters(),
                                 ]),
-                            ], 'code=:code', ['code' => $gatewayCode]);
+                            ], 'code=:code AND is_success=:suc', ['code' => $gatewayCode, 'suc' => DB_NO]);
 
                             $res = [false, GATEWAY_ERROR_MESSAGE, $adviceProvider->getSystemTraceNo('')];
                         }
@@ -731,8 +766,7 @@ class PaymentUtil
         $flowModel = container()->get(GatewayModel::class);
         do {
             $uniqueStr = StringUtil::randomString($length, StringUtil::RS_NUMBER | StringUtil::RS_LOWER_CHAR);
-            $isUnique = (bool)$flowModel->count('code=:code', ['code' => $uniqueStr]);
-        } while ($isUnique);
+        } while ($flowModel->count('code=:code', ['code' => $uniqueStr]));
         return $uniqueStr;
     }
 

@@ -77,17 +77,6 @@ return [
             ],
         ],
     ],
-    'default-cart' => [
-        'js' => [
-            'bottom' => [
-                e(
-                    '<script type="text/javascript" src="' .
-                    asset_path('js/cart.js') .
-                    '"></script>'
-                ),
-            ],
-        ],
-    ],
     'default-theia-sticky-sidebar' => [
         'js' => [
             'bottom' => [

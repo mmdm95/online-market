@@ -92,7 +92,7 @@ class OrderController extends AbstractUserController
         $orderItems = $orderModel->getOrderItemsWithReturnOrderItems([
             'oi.*', 'roi.order_item_id', 'p.slug AS product_slug', 'p.allow_commenting',
             'p.image AS product_image', 'pp.code AS main_product_code',
-        ], 'code=:code', ['code' => $order['code']]);
+        ], 'oi.order_code=:code', ['code' => $order['code']]);
 
         $paymentSuccess = $gatewayModel->getFirst([
             'id', 'price', 'msg', 'payment_code', 'is_success', 'method_type', 'payment_date'
@@ -109,7 +109,8 @@ class OrderController extends AbstractUserController
         $paymentInfo = [];
         $paymentInfo['gateway_flow'] = $gatewayModel->get([
             'id', 'price', 'msg', 'payment_code', 'is_success', 'method_type', 'payment_date'
-        ], 'order_code=:oc AND user_id=:uId', [
+        ], 'order_code=:oc AND user_id=:uId AND id!=:id', [
+            'id' => $paymentSuccess['id'],
             'oc' => $order['code'],
             'uId' => $user['id'],
         ], ['payment_date DESC', 'id DESC']);

@@ -15,7 +15,7 @@
                             </p>
                             <div class="search_form pb-3 pb-md-4">
                                 <form action="<?= url('home.search')->getRelativeUrlTrimmed(); ?>" method="get">
-                                    <input name="text" id="text" type="text" placeholder="جستجو" class="form-control">
+                                    <input name="q" id="text" type="text" placeholder="جستجو" class="form-control">
                                     <button type="submit" class="btn icon_search">
                                         <i class="ion-ios-search-strong"></i>
                                     </button>

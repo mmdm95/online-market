@@ -6,7 +6,6 @@ return [
         'common' => [
             'default',
             'default-changeable',
-            'default-cart',
         ],
         'sub_title' => 'ثبت شکایات',
         'breadcrumb' => [

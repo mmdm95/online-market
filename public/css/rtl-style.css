@@ -938,6 +938,7 @@ body[dir="rtl"] .alert .close {
     #navCatContent {
         left: auto;
         right: -280px;
+        z-index: 99;
     }
 
     #navCatContent.show {
@@ -948,6 +949,7 @@ body[dir="rtl"] .alert .close {
     .header_wrap .navbar-collapse.mobile_side_menu {
         right: auto;
         left: -280px;
+        z-index: 99;
     }
 
     .header_wrap .navbar-collapse.mobile_side_menu.show {
@@ -960,12 +962,12 @@ body[dir="rtl"] .alert .close {
         right: 0;
     }
 
-    #tabmenubar {
+    .tabmenubar {
         right: auto;
         left: 0;
     }
 
-    #tabmenubar li a {
+    .tabmenubar li a {
         text-align: right;
     }
 

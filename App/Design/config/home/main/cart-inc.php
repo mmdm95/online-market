@@ -6,7 +6,6 @@ return [
         'common' => [
             'default',
             'default-changeable',
-            'default-cart',
         ],
         'sub_title' => 'سبد خرید',
         'breadcrumb' => [
@@ -36,7 +35,6 @@ return [
             'default',
             'default-theia-sticky-sidebar',
             'default-changeable',
-            'default-cart',
         ],
         'sub_title' => 'بررسی',
         'breadcrumb' => [
@@ -65,7 +63,6 @@ return [
         'common' => [
             'default',
             'default-changeable',
-            'default-cart',
         ],
         'sub_title' => 'سفارش به پایان رسید',
         'breadcrumb' => [

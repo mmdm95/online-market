@@ -197,19 +197,28 @@ $validator = form_validator();
                                         class="position-relative form-group" <?= 0 === $counter ? 'id="__sample_all_product"' : ''; ?>>
                                     <div class="row px-3 pb-3 m-0 border-dashed border-2 border-info rounded">
                                         <div class="mt-3 col-md-6 col-xl-2">
-                                            <label>تعداد موجود:</label>
+                                            <label>
+                                                <span class="text-danger">*</span>
+                                                تعداد موجود:
+                                            </label>
                                             <input type="text" class="form-control" placeholder="از نوع عددی"
                                                    name="inp-edit-product-stock-count[]"
                                                    value="<?= $validator->setInput('inp-edit-product-stock-count.' . $counter); ?>">
                                         </div>
                                         <div class="mt-3 col-md-6 col-xl-3">
-                                            <label>بیشترین تعداد در سبد خرید:</label>
+                                            <label>
+                                                <span class="text-danger">*</span>
+                                                بیشترین تعداد در سبد خرید:
+                                            </label>
                                             <input type="text" class="form-control" placeholder="از نوع عددی"
                                                    name="inp-edit-product-max-count[]"
                                                    value="<?= $validator->setInput('inp-edit-product-max-count.' . $counter); ?>">
                                         </div>
                                         <div class="mt-3 col-md-6 col-xl-4">
-                                            <label>رنگ:</label>
+                                            <label>
+                                                <span class="text-danger">*</span>
+                                                رنگ:
+                                            </label>
                                             <select data-placeholder="رنگ را انتخاب کنید..."
                                                     class="form-control form-control-select2-colors"
                                                     name="inp-edit-product-color[]" data-fouc>
@@ -244,19 +253,28 @@ $validator = form_validator();
                                                    value="<?= $validator->setInput('inp-edit-product-guarantee.' . $counter); ?>">
                                         </div>
                                         <div class="mt-3 col-md-6 col-xl-3">
-                                            <label>وزن با بسته‌بندی(گرم):</label>
+                                            <label>
+                                                <span class="text-danger">*</span>
+                                                وزن با بسته‌بندی(گرم):
+                                            </label>
                                             <input type="text" class="form-control" placeholder="از نوع عددی"
                                                    name="inp-edit-product-weight[]"
                                                    value="<?= $validator->setInput('inp-edit-product-weight.' . $counter); ?>">
                                         </div>
                                         <div class="mt-3 col-md-6 col-xl-3">
-                                            <label>قیمت:</label>
+                                            <label>
+                                                <span class="text-danger">*</span>
+                                                قیمت:
+                                            </label>
                                             <input type="text" class="form-control" placeholder="به تومان"
                                                    name="inp-edit-product-price[]"
                                                    value="<?= $validator->setInput('inp-edit-product-price.' . $counter); ?>">
                                         </div>
                                         <div class="mt-3 col-md-6 col-xl-3">
-                                            <label>قیمت با تخفیف:</label>
+                                            <label>
+                                                <span class="text-danger">*</span>
+                                                قیمت با تخفیف:
+                                            </label>
                                             <input type="text" class="form-control" placeholder="به تومان"
                                                    name="inp-edit-product-discount-price[]"
                                                    value="<?= $validator->setInput('inp-edit-product-discount-price.' . $counter); ?>">
@@ -311,19 +329,28 @@ $validator = form_validator();
                                         class="position-relative form-group" <?= 0 === $counter ? 'id="__sample_all_product"' : ''; ?>>
                                     <div class="row px-3 pb-3 m-0 border-dashed border-2 border-info rounded">
                                         <div class="mt-3 col-md-6 col-xl-2">
-                                            <label>تعداد موجود:</label>
+                                            <label>
+                                                <span class="text-danger">*</span>
+                                                تعداد موجود:
+                                            </label>
                                             <input type="text" class="form-control" placeholder="از نوع عددی"
                                                    name="inp-edit-product-stock-count[]"
                                                    value="<?= $property['stock_count']; ?>">
                                         </div>
                                         <div class="mt-3 col-md-6 col-xl-3">
-                                            <label>بیشترین تعداد در سبد خرید:</label>
+                                            <label>
+                                                <span class="text-danger">*</span>
+                                                بیشترین تعداد در سبد خرید:
+                                            </label>
                                             <input type="text" class="form-control" placeholder="از نوع عددی"
                                                    name="inp-edit-product-max-count[]"
                                                    value="<?= $property['max_cart_count']; ?>">
                                         </div>
                                         <div class="mt-3 col-md-6 col-xl-4">
-                                            <label>رنگ:</label>
+                                            <label>
+                                                <span class="text-danger">*</span>
+                                                رنگ:
+                                            </label>
                                             <select data-placeholder="رنگ را انتخاب کنید..."
                                                     class="form-control form-control-select2-colors"
                                                     name="inp-edit-product-color[]" data-fouc>
@@ -358,19 +385,28 @@ $validator = form_validator();
                                                    value="<?= $property['guarantee']; ?>">
                                         </div>
                                         <div class="mt-3 col-md-6 col-xl-3">
-                                            <label>وزن با بسته‌بندی(گرم):</label>
+                                            <label>
+                                                <span class="text-danger">*</span>
+                                                وزن با بسته‌بندی(گرم):
+                                            </label>
                                             <input type="text" class="form-control" placeholder="از نوع عددی"
                                                    name="inp-edit-product-weight[]"
                                                    value="<?= $property['weight']; ?>">
                                         </div>
                                         <div class="mt-3 col-md-6 col-xl-3">
-                                            <label>قیمت:</label>
+                                            <label>
+                                                <span class="text-danger">*</span>
+                                                قیمت:
+                                            </label>
                                             <input type="text" class="form-control" placeholder="به تومان"
                                                    name="inp-edit-product-price[]"
                                                    value="<?= $property['price']; ?>">
                                         </div>
                                         <div class="mt-3 col-md-6 col-xl-3">
-                                            <label>قیمت با تخفیف:</label>
+                                            <label>
+                                                <span class="text-danger">*</span>
+                                                قیمت با تخفیف:
+                                            </label>
                                             <input type="text" class="form-control" placeholder="به تومان"
                                                    name="inp-edit-product-discount-price[]"
                                                    value="<?= $property['discounted_price']; ?>">
@@ -422,17 +458,26 @@ $validator = form_validator();
                             <fieldset class="position-relative form-group" id="__sample_all_product">
                                 <div class="row px-3 pb-3 m-0 border-dashed border-2 border-info rounded">
                                     <div class="mt-3 col-md-6 col-xl-2">
-                                        <label>تعداد موجود:</label>
+                                        <label>
+                                            <span class="text-danger">*</span>
+                                            تعداد موجود:
+                                        </label>
                                         <input type="text" class="form-control" placeholder="از نوع عددی"
                                                name="inp-edit-product-stock-count[]">
                                     </div>
                                     <div class="mt-3 col-md-6 col-xl-3">
-                                        <label>بیشترین تعداد در سبد خرید:</label>
+                                        <label>
+                                            <span class="text-danger">*</span>
+                                            بیشترین تعداد در سبد خرید:
+                                        </label>
                                         <input type="text" class="form-control" placeholder="از نوع عددی"
                                                name="inp-edit-product-max-count[]">
                                     </div>
                                     <div class="mt-3 col-md-6 col-xl-4">
-                                        <label>رنگ:</label>
+                                        <label>
+                                            <span class="text-danger">*</span>
+                                            رنگ:
+                                        </label>
                                         <select data-placeholder="رنگ را انتخاب کنید..."
                                                 class="form-control form-control-select2-colors"
                                                 name="inp-edit-product-color[]" data-fouc>
@@ -460,17 +505,26 @@ $validator = form_validator();
                                                name="inp-edit-product-guarantee[]">
                                     </div>
                                     <div class="mt-3 col-md-6 col-xl-3">
-                                        <label>وزن با بسته‌بندی(گرم):</label>
+                                        <label>
+                                            <span class="text-danger">*</span>
+                                            وزن با بسته‌بندی(گرم):
+                                        </label>
                                         <input type="text" class="form-control" placeholder="از نوع عددی"
                                                name="inp-edit-product-weight[]">
                                     </div>
                                     <div class="mt-3 col-md-6 col-xl-3">
-                                        <label>قیمت:</label>
+                                        <label>
+                                            <span class="text-danger">*</span>
+                                            قیمت:
+                                        </label>
                                         <input type="text" class="form-control" placeholder="به تومان"
                                                name="inp-edit-product-price[]">
                                     </div>
                                     <div class="mt-3 col-md-6 col-xl-3">
-                                        <label>قیمت با تخفیف:</label>
+                                        <label>
+                                            <span class="text-danger">*</span>
+                                            قیمت با تخفیف:
+                                        </label>
                                         <input type="text" class="form-control" placeholder="به تومان"
                                                name="inp-edit-product-discount-price[]">
                                     </div>

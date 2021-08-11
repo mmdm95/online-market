@@ -20,26 +20,54 @@ use Sim\Utils\StringUtil;
                        data-cart-item-code="<?= $item['code']; ?>">
                         <i class="ion-close"></i>
                     </a>
-                    <?php if (isset($item['title']) || isset($item['image'])): ?>
-                        <a href="<?= url('home.product.show', [
-                            'id' => $item['product_id'],
-                            'slug' => $item['slug'] ?? '',
-                        ]); ?>">
-                            <?php if (isset($item['image'])): ?>
-                                <img src="" data-src="<?= url('image.show') . $item['image']; ?>"
-                                     alt="<?= $item['title'] ?? 'product ' . $item['code']; ?>" class="lazy">
-                            <?php endif; ?>
-                            <?= $item['title']; ?>
-                        </a>
-                    <?php endif; ?>
-                    <span class="cart_quantity">
-                        <?= local_number(number_format($item['qnt'])); ?>
-                        عدد
-                        <?= local_number(number_format($item['qnt'] * (int)$item['price'])); ?>
-                        <span class="cart_amount">
-                            <span class="price_symbole">تومان</span>
-                        </span>
-                    </span>
+                    <div class="d-flex">
+                        <?php if (isset($item['title']) || isset($item['image'])): ?>
+                            <a href="<?= url('home.product.show', [
+                                'id' => $item['product_id'],
+                                'slug' => $item['slug'] ?? '',
+                            ]); ?>">
+                                <?php if (isset($item['image'])): ?>
+                                    <img src="" data-src="<?= url('image.show') . $item['image']; ?>"
+                                         alt="<?= $item['title'] ?? 'product ' . $item['code']; ?>"
+                                         class="lazy float-none">
+                                <?php endif; ?>
+                            </a>
+                        <?php endif; ?>
+                        <div>
+                            <a href="<?= url('home.product.show', [
+                                'id' => $item['product_id'],
+                                'slug' => $item['slug'] ?? '',
+                            ]); ?>">
+                                <?= $item['title']; ?>
+                            </a>
+                            <div class="cart_quantity">
+                                <?= local_number(number_format($item['qnt'])); ?>
+                                <?= $item['unit_title']; ?>
+                                <?= local_number(number_format($item['qnt'] * (int)$item['price'])); ?>
+                                <span class="cart_amount">
+                                    <span class="price_symbole">تومان</span>
+                                </span>
+
+                                <?php if (!empty($item['color_hex'])): ?>
+                                    <div class="mt-2">
+                                        <div class="product_color_switch d-inline-block mx-2">
+                                            <span style="background-color: <?= $item['color_hex']; ?>;"></span>
+                                            <div class="d-inline-block mr-2">
+                                                <?= $item['color_name']; ?>
+                                            </div>
+                                        </div>
+                                    </div>
+                                <?php endif; ?>
+                                <?php if (!empty($item['size'])): ?>
+                                    <div class="mt-2">
+                                        <span class="product_size_switch mx-2">
+                                            <span><?= $item['size']; ?></span>
+                                        </span>
+                                    </div>
+                                <?php endif; ?>
+                            </div>
+                        </div>
+                    </div>
                 </li>
             <?php endforeach; ?>
         </ul>

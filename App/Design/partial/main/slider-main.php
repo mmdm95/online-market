@@ -6,6 +6,12 @@
             $col_2 = 'col-lg-2';
             $hasSideImages = true;
             $sideImages = config()->get('settings.index_main_slider_side_images.value');
+            $sideImages = array_filter($sideImages, function ($val) {
+                if(is_image_exists($val['image'])) {
+                    return true;
+                }
+                return false;
+            });
 
             if (!is_array($sideImages) || !count($sideImages)) {
                 $col_1 = 'col-lg-9';
@@ -22,8 +28,9 @@
                             <div class="carousel-inner">
                                 <?php $k = 0; ?>
                                 <?php foreach ($main_slider as $item): ?>
-                                    <div class="carousel-item background_bg <?= 0 == $k ? 'active' : ''; ?>"
-                                         data-img-src="<?= url('image.show') . $item['image']; ?>">
+                                    <div class="carousel-item <?= 0 == $k ? 'active' : ''; ?>">
+                                        <img src="<?= url('image.show') . $item['image']; ?>"
+                                             alt="<?= $item['title']; ?>">
                                         <div class="banner_slide_content banner_content_inner">
                                             <div class="col-lg-7 col-10">
                                                 <div class="banner_content3 overflow-hidden">

@@ -12,7 +12,7 @@ use Sim\Exceptions\PathManager\PathNotRegisteredException;
 use Sim\Interfaces\IFileNotExistsException;
 use Sim\Interfaces\IInvalidVariableNameException;
 
-class OrderResult extends AbstractHomeController
+class OrderResultController extends AbstractHomeController
 {
     /**
      * @param $type
@@ -41,16 +41,18 @@ class OrderResult extends AbstractHomeController
              */
             $gatewayModel = container()->get(GatewayModel::class);
             $info = $gatewayModel->getUserAndOrderInfoFromGatewayFlowCode($code);
-            $username = $info['user']['username'];
-            $orderCode = $info['order']['code'];
-            // send success order sms
-            $body = 'سفارش با کد ' .
-                $orderCode .
-                ' با موفقیت ثبت شده است. برای پیگیری به آدرس ' .
-                url('user.order.detail', ['id' => $info['order']['id']])->getRelativeUrlTrimmed() .
-                ' مراجعه نمایید.';
-            $smsRes = SMSUtil::send([$username], $body);
-            SMSUtil::logSMS([$username], $body, $smsRes, SMS_LOG_TYPE_ORDER_SUCCESS, SMS_LOG_SENDER_SYSTEM);
+            $username = $info['user']['username'] ?? null;
+            $orderCode = $info['order']['code'] ?? null;
+            if (!is_null($username) && !is_null($orderCode)) {
+                // send success order sms
+                $body = 'سفارش شما با موفقیت ثبت گردید.' . "\n" .
+                    'کد سفارش شما : ' . $orderCode . "\n" .
+                    'برای پیگیری به آدرس ' .
+                    url('user.order.detail', ['id' => $info['order']['id']])->getRelativeUrlTrimmed() .
+                    ' مراجعه نمایید.';
+                $smsRes = SMSUtil::send([$username], $body);
+                SMSUtil::logSMS([$username], $body, $smsRes, SMS_LOG_TYPE_ORDER_SUCCESS, SMS_LOG_SENDER_SYSTEM);
+            }
         }
 
         return $this->render([

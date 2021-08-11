@@ -7,7 +7,6 @@ return [
             'default',
             'default-theia-sticky-sidebar',
             'default-changeable',
-            'default-cart',
         ],
         'sub_title' => 'سفارشات',
         'breadcrumb' => [
@@ -33,7 +32,6 @@ return [
             'default',
             'default-theia-sticky-sidebar',
             'default-changeable',
-            'default-cart',
         ],
         'breadcrumb' => [
             [

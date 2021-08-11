@@ -7,7 +7,6 @@ return [
             'default',
             'default-changeable',
             'default-google-map',
-            'default-cart',
         ],
         'sub_title' => 'تماس با ما',
         'breadcrumb' => [

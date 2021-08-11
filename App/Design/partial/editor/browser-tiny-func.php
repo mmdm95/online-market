@@ -8,7 +8,7 @@
                 cmsURL = cmsURL + "?type=" + meta.filetype;
 
                 tinymce.activeEditor.windowManager.open({
-                    title: 'File Manager',
+                    title: 'مدیریت فایل‌ها',
                     url: cmsURL,
                     width: 600,
                     height: 600

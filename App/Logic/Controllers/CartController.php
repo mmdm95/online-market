@@ -95,6 +95,7 @@ class CartController extends AbstractHomeController
                     'pa.image', 'pa.brand_fa_name', 'pa.festival_discount', 'pa.festival_expire',
                     'pa.category_name', 'pa.title', 'pa.slug', 'pa.category_id', 'pa.unit_title',
                     'pa.unit_sign', 'pa.is_returnable', 'pa.stock_count', 'pa.max_cart_count',
+                    'pa.color_hex', 'pa.color_name', 'pa.size', 'pa.guarantee',
                 ]
             );
 
@@ -151,6 +152,7 @@ class CartController extends AbstractHomeController
                         'pa.image', 'pa.brand_fa_name', 'pa.festival_discount', 'pa.festival_expire',
                         'pa.category_name', 'pa.title', 'pa.slug', 'pa.category_id', 'pa.unit_title',
                         'pa.unit_sign', 'pa.is_returnable', 'pa.stock_count', 'pa.max_cart_count',
+                        'pa.color_hex', 'pa.color_name', 'pa.size', 'pa.guarantee',
                     ]
                 );
                 if (count($extraInfo)) {

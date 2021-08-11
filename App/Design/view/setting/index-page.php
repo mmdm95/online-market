@@ -148,7 +148,7 @@ $validator = form_validator();
                                        class="form-control"
                                        placeholder="وارد کنید"
                                        name="inp-setting-main-slider-side-title[1]"
-                                       value="<?= !$validator->getStatus() ? ($validator->setInput('inp-setting-main-slider-side-title.1') ?: ($images[0]['title'] ?? '')) : ($images[0]['title'] ?? '') ?>">
+                                       value="<?= !$validator->getStatus() ? ($validator->setInput('inp-setting-main-slider-side-title.1') ?: ($images[1]['title'] ?? '')) : ($images[1]['title'] ?? '') ?>">
                             </div>
                             <div class="form-group col-lg-6">
                                 <label>
@@ -158,7 +158,7 @@ $validator = form_validator();
                                        class="form-control"
                                        placeholder="وارد کنید"
                                        name="inp-setting-main-slider-side-sub-title[1]"
-                                       value="<?= !$validator->getStatus() ? ($validator->setInput('inp-setting-main-slider-side-sub-title.1') ?: ($images[0]['sub_title'] ?? '')) : ($images[0]['sub_title'] ?? '') ?>">
+                                       value="<?= !$validator->getStatus() ? ($validator->setInput('inp-setting-main-slider-side-sub-title.1') ?: ($images[1]['sub_title'] ?? '')) : ($images[1]['sub_title'] ?? '') ?>">
                             </div>
                             <div class="form-group col-lg-6">
                                 <label>
@@ -168,14 +168,14 @@ $validator = form_validator();
                                        class="form-control"
                                        placeholder="برای مثال: http://www.example.com"
                                        name="inp-setting-main-slider-side-link[1]"
-                                       value="<?= !$validator->getStatus() ? ($validator->setInput('inp-setting-main-slider-side-link.1') ?: ($images[0]['link'] ?? '')) : ($images[0]['link'] ?? '') ?>">
+                                       value="<?= !$validator->getStatus() ? ($validator->setInput('inp-setting-main-slider-side-link.1') ?: ($images[1]['link'] ?? '')) : ($images[1]['link'] ?? '') ?>">
                             </div>
                             <div class="form-group col">
                                 <label class="d-block">
                                     رنگ:
                                 </label>
                                 <?php
-                                $c = !$validator->getStatus() ? ($validator->setInput('inp-setting-main-slider-side-color.1') ?: ($images[0]['color'] ?? '')) : ($images[0]['color'] ?? '');
+                                $c = !$validator->getStatus() ? ($validator->setInput('inp-setting-main-slider-side-color.1') ?: ($images[1]['color'] ?? '')) : ($images[1]['color'] ?? '');
                                 ?>
                                 <input type="text" class="form-control colorpicker-show-input"
                                        name="inp-setting-main-slider-side-color[1]"
@@ -626,11 +626,11 @@ $validator = form_validator();
                                     <?php
                                     $counter = 0;
                                     ?>
-                                    <?php foreach ($errorItemTypes as $k => $t): ?>
+                                    <?php foreach ($errorItemTitles as $k => $t): ?>
                                         <div id="__sample_general_item"
                                              class="row m-0 border-pink border-2 border-dashed rounded p-2 mb-3 position-relative __general_items">
                                             <?php
-                                            $img = $validator->setInput('inp-setting-general-slider-image.' . $counter, ($errorItemImages[$k]->getValue() ?? ''));
+                                            $img = $validator->setInput('inp-setting-general-slider-image.' . $counter, (isset($errorItemImages[$k]) ? $errorItemImages[$k]->getValue() : ''));
                                             $img = $img && is_image_exists($img) ? $img : '';
                                             ?>
                                             <div class="col-12 form-group">
@@ -671,7 +671,7 @@ $validator = form_validator();
                                                                class="form-control"
                                                                placeholder="برای مثال: http://www.example.com"
                                                                name="inp-setting-general-slider-image-link[]"
-                                                               value="<?= $validator->setInput('inp-setting-general-slider-image-link', $item['image_link']); ?>">
+                                                               value="<?= $validator->setInput('inp-setting-general-slider-image-link.' . $counter, isset($errorItemLinks[$k]) ? $errorItemLinks[$k]->getValue() : ''); ?>">
                                                     </div>
                                                 </div>
                                             </div>
@@ -683,7 +683,7 @@ $validator = form_validator();
                                                        class="form-control"
                                                        placeholder="وارد کنید"
                                                        name="inp-setting-general-slider-title[]"
-                                                       value="<?= $validator->setInput('inp-setting-general-slider-title.' . $counter, $errorItemTitles[$k]->getValue()); ?>">
+                                                       value="<?= $validator->setInput('inp-setting-general-slider-title.' . $counter, $t->getValue()); ?>">
                                             </div>
                                             <div class="col-lg-6 form-group">
                                                 <label>
@@ -699,7 +699,7 @@ $validator = form_validator();
                                                     </option>
                                                     <?php foreach (SLIDER_TABBED_TYPES as $type => $text): ?>
                                                         <option value="<?= $type; ?>"
-                                                            <?= !$validator->getStatus() ? $validator->setSelect('inp-setting-general-slider-type', $type) : ($type == $t->getValue() ? 'selected="selected"' : ''); ?>>
+                                                            <?= !$validator->getStatus() ? $validator->setSelect('inp-setting-general-slider-type', $type) : ($type == $errorItemTypes[$k]->getValue() ? 'selected="selected"' : ''); ?>>
                                                             <?= $text; ?>
                                                         </option>
                                                     <?php endforeach; ?>

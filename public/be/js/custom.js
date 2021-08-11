@@ -96,6 +96,28 @@
             edit: '/ajax/deposit-type/edit',
             remove: '/ajax/deposit-type/remove',
         },
+        report: {
+            user: {
+                filter: '/ajax/report/users/filter',
+                filterClear: '/ajax/report/users/filter/clear',
+                excelExport: '/ajax/report/users/export/excel',
+            },
+            product: {
+                filter: '/ajax/report/products/filter',
+                filterClear: '/ajax/report/products/filter/clear',
+                excelExport: '/ajax/report/products/export/excel',
+            },
+            order: {
+                filter: '/ajax/report/orders/filter',
+                filterClear: '/ajax/report/orders/filter/clear',
+                excelExport: '/ajax/report/orders/export/excel',
+            },
+            wallet: {
+                filter: '/ajax/report/wallet/filter',
+                filterClear: '/ajax/report/wallet/filter/clear',
+                excelExport: '/ajax/report/wallet/export/excel',
+            },
+        },
     });
     window.MyGlobalVariables.elements = $.extend(true, window.MyGlobalVariables.elements, {
         addAddress: {
@@ -1712,6 +1734,7 @@
             //-----
             currentTable = null,
             currentCategoryId = null,
+            currentModal = null,
             editAddrId = null,
             editUnitId = null,
             editFAQId = null,
@@ -3379,12 +3402,12 @@
          * @param [table]
          */
         function editAddressBtnClick(btn, table) {
-            var id, editModal;
+            var id;
             id = $(btn).attr('data-edit-id');
-            editModal = $('#modal_form_address_edit');
+            currentModal = $('#modal_form_address_edit');
             // clear element after each call
             $(variables.elements.editAddress.form).get(0).reset();
-            if (id && editModal.length) {
+            if (id && currentModal.length) {
                 admin.request(variables.url.address.get + '/' + userId + '/' + id, 'get', function () {
                     var _ = this;
                     var provincesSelect = $('select[name="' + variables.elements.editAddress.inputs.province + '"]'),
@@ -3395,10 +3418,10 @@
                         //-----
                         admin.loadProvinces(provincesSelect.attr('data-current-province', _.data['province_id']));
                         admin.loadCities(citiesSelect.attr('data-current-city', _.data['city_id']));
-                        editModal.find('[name="' + variables.elements.editAddress.inputs.province + '"]').val(_.data['full_name']);
-                        editModal.find('[name="' + variables.elements.editAddress.inputs.mobile + '"]').val(_.data['mobile']);
-                        editModal.find('[name="' + variables.elements.editAddress.inputs.postalCode + '"]').val(_.data['postal_code']);
-                        editModal.find('[name="' + variables.elements.editAddress.inputs.address + '"]').val(_.data['address']);
+                        currentModal.find('[name="' + variables.elements.editAddress.inputs.province + '"]').val(_.data['full_name']);
+                        currentModal.find('[name="' + variables.elements.editAddress.inputs.mobile + '"]').val(_.data['mobile']);
+                        currentModal.find('[name="' + variables.elements.editAddress.inputs.postalCode + '"]').val(_.data['postal_code']);
+                        currentModal.find('[name="' + variables.elements.editAddress.inputs.address + '"]').val(_.data['address']);
                     }
                 });
             }
@@ -3409,20 +3432,20 @@
          * @param [table]
          */
         function editUnitBtnClick(btn, table) {
-            var id, editModal;
+            var id;
             id = $(btn).attr('data-edit-id');
-            editModal = $('#modal_form_edit_unit');
+            currentModal = $('#modal_form_edit_unit');
             // clear element after each call
             $(variables.elements.editUnit.form).get(0).reset();
-            if (id && editModal.length) {
+            if (id && currentModal.length) {
                 admin.request(variables.url.unit.get + '/' + id, 'get', function () {
                     var _ = this;
                     if (core.objSize(_.data)) {
                         currentTable = table;
                         editUnitId = id;
                         //-----
-                        editModal.find('[name="' + variables.elements.editUnit.inputs.title + '"]').val(_.data['title']);
-                        editModal.find('[name="' + variables.elements.editUnit.inputs.sign + '"]').val(_.data['sign']);
+                        currentModal.find('[name="' + variables.elements.editUnit.inputs.title + '"]').val(_.data['title']);
+                        currentModal.find('[name="' + variables.elements.editUnit.inputs.sign + '"]').val(_.data['sign']);
                     }
                 });
             }
@@ -3433,23 +3456,23 @@
          * @param [table]
          */
         function editFAQBtnClick(btn, table) {
-            var id, editModal;
+            var id;
             id = $(btn).attr('data-edit-id');
-            editModal = $('#modal_form_edit_faq');
+            currentModal = $('#modal_form_edit_faq');
             // clear element after each call
             $(variables.elements.editFaq.form).get(0).reset();
-            if (id && editModal.length) {
+            if (id && currentModalcurrentModalcurrentModal.length) {
                 admin.request(variables.url.faq.get + '/' + id, 'get', function () {
                     var
                         _ = this,
-                        status = editModal.find('[name="' + variables.elements.editFaq.inputs.status + '"]');
+                        status = currentModalcurrentModalcurrentModal.find('[name="' + variables.elements.editFaq.inputs.status + '"]');
                     if (core.objSize(_.data)) {
                         currentTable = table;
                         editFAQId = id;
                         //-----
-                        editModal.find('[name="' + variables.elements.editFaq.inputs.question + '"]').val(_.data['question']);
-                        editModal.find('[name="' + variables.elements.editFaq.inputs.answer + '"]').html(_.data['answer']);
-                        editModal.find('[name="' + variables.elements.editFaq.inputs.tags + '"]').val(_.data['tags']);
+                        currentModalcurrentModalcurrentModal.find('[name="' + variables.elements.editFaq.inputs.question + '"]').val(_.data['question']);
+                        currentModal.find('[name="' + variables.elements.editFaq.inputs.answer + '"]').html(_.data['answer']);
+                        currentModalcurrentModalcurrentModal.find('[name="' + variables.elements.editFaq.inputs.tags + '"]').val(_.data['tags']);
                         switcheryStatusChange(status, _.data['publish']);
                         initializeAllPlugins();
                     }
@@ -3462,25 +3485,25 @@
          * @param [table]
          */
         function editSlideBtnClick(btn, table) {
-            var id, editModal;
+            var id;
             id = $(btn).attr('data-edit-id');
-            editModal = $('#modal_form_edit_slide');
+            currentModal = $('#modal_form_edit_slide');
             // clear element after each call
             $(variables.elements.editSlide.form).get(0).reset();
-            if (id && editModal.length) {
+            if (id && currentModal.length) {
                 admin.request(variables.url.slider.get + '/' + id, 'get', function () {
                     var _ = this;
                     if (core.objSize(_.data)) {
                         currentTable = table;
                         editSlideId = id;
                         //-----
-                        var imgEl = editModal.find('[name="' + variables.elements.editSlide.inputs.image + '"]');
+                        var imgEl = currentModal.find('[name="' + variables.elements.editSlide.inputs.image + '"]');
                         imgEl.val(_.data['image']);
                         addImageToPlaceholder(imgEl, _.data['image']);
-                        editModal.find('[name="' + variables.elements.editSlide.inputs.title + '"]').val(_.data['title']);
-                        editModal.find('[name="' + variables.elements.editSlide.inputs.subTitle + '"]').val(_.data['note']);
-                        editModal.find('[name="' + variables.elements.editSlide.inputs.link + '"]').val(_.data['link']);
-                        editModal.find('[name="' + variables.elements.editSlide.inputs.priority + '"]').val(_.data['priority']);
+                        currentModal.find('[name="' + variables.elements.editSlide.inputs.title + '"]').val(_.data['title']);
+                        currentModal.find('[name="' + variables.elements.editSlide.inputs.subTitle + '"]').val(_.data['note']);
+                        currentModal.find('[name="' + variables.elements.editSlide.inputs.link + '"]').val(_.data['link']);
+                        currentModal.find('[name="' + variables.elements.editSlide.inputs.priority + '"]').val(_.data['priority']);
                     }
                 });
             }
@@ -3491,22 +3514,22 @@
          * @param [table]
          */
         function editInstagramImageBtnClick(btn, table) {
-            var id, editModal;
+            var id;
             id = $(btn).attr('data-edit-id');
-            editModal = $('#modal_form_edit_ins_image');
+            currentModal = $('#modal_form_edit_ins_image');
             // clear element after each call
             $(variables.elements.editInstagramImage.form).get(0).reset();
-            if (id && editModal.length) {
+            if (id && currentModal.length) {
                 admin.request(variables.url.instagram.get + '/' + id, 'get', function () {
                     var _ = this;
                     if (core.objSize(_.data)) {
                         currentTable = table;
                         editInstagramImageId = id;
                         //-----
-                        var imgEl = editModal.find('[name="' + variables.elements.editInstagramImage.inputs.image + '"]');
+                        var imgEl = currentModal.find('[name="' + variables.elements.editInstagramImage.inputs.image + '"]');
                         imgEl.val(_.data['image']);
                         addImageToPlaceholder(imgEl, _.data['image']);
-                        editModal.find('[name="' + variables.elements.editInstagramImage.inputs.link + '"]').val(_.data['link']);
+                        currentModal.find('[name="' + variables.elements.editInstagramImage.inputs.link + '"]').val(_.data['link']);
                     }
                 });
             }
@@ -3517,22 +3540,22 @@
          * @param [table]
          */
         function editBadgeBtnClick(btn, table) {
-            var id, editModal;
+            var id;
             id = $(btn).attr('data-edit-id');
-            editModal = $('#modal_form_edit_badges');
+            currentModal = $('#modal_form_edit_badges');
             // clear element after each call
             $(variables.elements.editBadge.form).get(0).reset();
-            if (id && editModal.length) {
+            if (id && currentModal.length) {
                 admin.request(variables.url.badge.get + '/' + id, 'get', function () {
                     var
                         _ = this,
-                        canReturnOrder = editModal.find('[name="' + variables.elements.editBadge.inputs.canReturnOrder + '"]');
+                        canReturnOrder = currentModal.find('[name="' + variables.elements.editBadge.inputs.canReturnOrder + '"]');
                     if (core.objSize(_.data)) {
                         currentTable = table;
                         editBadgeId = id;
                         //-----
-                        editModal.find('[name="' + variables.elements.editBadge.inputs.title + '"]').val(_.data['title']);
-                        editModal
+                        currentModal.find('[name="' + variables.elements.editBadge.inputs.title + '"]').val(_.data['title']);
+                        currentModal
                             .find('[name="' + variables.elements.editBadge.inputs.color + '"]')
                             .val(_.data['color'])
                             .spectrum("set", _.data['color']);
@@ -3562,13 +3585,13 @@
          * @param [table]
          */
         function editCategoryImageBtnClick(btn, table) {
-            var id, cId, editModal;
+            var id, cId;
             id = $(btn).attr('data-edit-id');
             cId = $(btn).attr('data-edit-category-id');
-            editModal = $('#modal_form_edit_cat_img');
+            currentModal = $('#modal_form_edit_cat_img');
             // clear element after each call
             $(variables.elements.editCategoryImage.form).get(0).reset();
-            if (id && cId && editModal.length) {
+            if (id && cId && currentModal.length) {
                 admin.request(variables.url.categoryImage.get + '/' + cId + '/' + id, 'get', function () {
                     var _ = this;
                     if (core.objSize(_.data)) {
@@ -3576,10 +3599,10 @@
                         currentCategoryId = id;
                         editCategoryImageId = cId;
                         //-----
-                        var imgEl = editModal.find('[name="' + variables.elements.editCategoryImage.inputs.image + '"]');
+                        var imgEl = currentModal.find('[name="' + variables.elements.editCategoryImage.inputs.image + '"]');
                         imgEl.val(_.data['image']);
                         addImageToPlaceholder(imgEl, _.data['image']);
-                        editModal.find('[name="' + variables.elements.editCategoryImage.inputs.category + '"]').val(_.data['link']);
+                        currentModal.find('[name="' + variables.elements.editCategoryImage.inputs.category + '"]').val(_.data['link']);
                     }
                 });
             }
@@ -3590,21 +3613,21 @@
          * @param [table]
          */
         function editSecurityQuestionBtnClick(btn, table) {
-            var id, editModal;
+            var id;
             id = $(btn).attr('data-edit-id');
-            editModal = $('#modal_form_edit_sec_question');
+            currentModal = $('#modal_form_edit_sec_question');
             // clear element after each call
             $(variables.elements.editSecurityQuestion.form).get(0).reset();
-            if (id && editModal.length) {
+            if (id && currentModal.length) {
                 admin.request(variables.url.securityQuestion.get + '/' + id, 'get', function () {
                     var
                         _ = this,
-                        status = editModal.find('[name="' + variables.elements.editSecurityQuestion.inputs.status + '"]');
+                        status = currentModal.find('[name="' + variables.elements.editSecurityQuestion.inputs.status + '"]');
                     if (core.objSize(_.data)) {
                         currentTable = table;
                         editSecurityQuestionId = id;
                         //-----
-                        editModal.find('[name="' + variables.elements.editSecurityQuestion.inputs.question + '"]').val(_.data['question']);
+                        currentModal.find('[name="' + variables.elements.editSecurityQuestion.inputs.question + '"]').val(_.data['question']);
                         switcheryStatusChange(status, _.data['publish']);
                     }
                 });
@@ -3616,20 +3639,20 @@
          * @param [table]
          */
         function editDepositTypeBtnClick(btn, table) {
-            var id, editModal;
+            var id;
             id = $(btn).attr('data-edit-id');
-            editModal = $('#modal_form_edit_type');
+            currentModal = $('#modal_form_edit_type');
             // clear element after each call
             $(variables.elements.editDepositType.form).get(0).reset();
-            if (id && editModal.length) {
+            if (id && currentModal.length) {
                 admin.request(variables.url.depositType.get + '/' + id, 'get', function () {
                     var _ = this;
                     if (core.objSize(_.data)) {
                         currentTable = table;
                         editDepositTypeId = id;
                         //-----
-                        editModal.find('[name="' + variables.elements.editDepositType.inputs.title + '"]').val(_.data['title']);
-                        editModal.find('[name="' + variables.elements.editDepositType.inputs.desc + '"]').val(_.data['desc']);
+                        currentModal.find('[name="' + variables.elements.editDepositType.inputs.title + '"]').val(_.data['title']);
+                        currentModal.find('[name="' + variables.elements.editDepositType.inputs.desc + '"]').val(_.data['desc']);
                     }
                 });
             }
@@ -3640,29 +3663,29 @@
          * @param [table]
          */
         function loadOrderInfo(btn, table) {
-            var id, infoModal;
+            var id;
             id = $(btn).attr('data-ajax-order-info');
-            infoModal = $('#modal_form_receiver_detail');
+            currentModal = $('#modal_form_receiver_detail');
             // make all data to error loading
-            if (id && infoModal.length) {
+            if (id && currentModal.length) {
                 $('#__receiver_info_full_name,#__receiver_info_phone,#__receiver_info_province,#__receiver_info_city,#__receiver_info_postal_code,#__receiver_info_address')
                     .html('خطا در بارگذاری');
 
                 admin.request(variables.url.orders.info + '/' + id, 'get', function () {
                     var _ = this;
                     if (core.objSize(_.data)) {
-                        infoModal.find('#__receiver_info_full_name')
-                            .val(_.data['receiver_name'] ? _.data['receiver_name'] : '<i class="icon-minus2" aria-hidden="true"></i>');
-                        infoModal.find('#__receiver_info_phone')
-                            .val(_.data['receiver_mobile'] ? _.data['receiver_mobile'] : '<i class="icon-minus2" aria-hidden="true"></i>');
-                        infoModal.find('#__receiver_info_province')
-                            .val(_.data['province'] ? _.data['province'] : '<i class="icon-minus2" aria-hidden="true"></i>');
-                        infoModal.find('#__receiver_info_city')
-                            .val(_.data['city'] ? _.data['city'] : '<i class="icon-minus2" aria-hidden="true"></i>');
-                        infoModal.find('#__receiver_info_postal_code')
-                            .val(_.data['postal_code'] ? _.data['postal_code'] : '<i class="icon-minus2" aria-hidden="true"></i>');
-                        infoModal.find('#__receiver_info_address')
-                            .val(_.data['address'] ? _.data['address'] : '<i class="icon-minus2" aria-hidden="true"></i>');
+                        currentModal.find('#__receiver_info_full_name')
+                            .text(_.data['receiver_name'] ? _.data['receiver_name'] : '<i class="icon-minus2" aria-hidden="true"></i>');
+                        currentModal.find('#__receiver_info_phone')
+                            .text(_.data['receiver_mobile'] ? _.data['receiver_mobile'] : '<i class="icon-minus2" aria-hidden="true"></i>');
+                        currentModal.find('#__receiver_info_province')
+                            .text(_.data['province'] ? _.data['province'] : '<i class="icon-minus2" aria-hidden="true"></i>');
+                        currentModal.find('#__receiver_info_city')
+                            .text(_.data['city'] ? _.data['city'] : '<i class="icon-minus2" aria-hidden="true"></i>');
+                        currentModal.find('#__receiver_info_postal_code')
+                            .text(_.data['postal_code'] ? _.data['postal_code'] : '<i class="icon-minus2" aria-hidden="true"></i>');
+                        currentModal.find('#__receiver_info_address')
+                            .text(_.data['address'] ? _.data['address'] : '<i class="icon-minus2" aria-hidden="true"></i>');
                     }
                 });
             }
@@ -3814,6 +3837,87 @@
         createDatatable();
 
         //---------------------------------------------------------------
+        // REPORT USER SECTION
+        //---------------------------------------------------------------
+        var
+            the_query_builder,
+            query_builder_reset_btn,
+            query_builder_filter_btn,
+            //-----
+            filterUrl,
+            filterClearUrl,
+            excelExportUrl;
+
+        //***************************
+        //******* User Report *******
+        //***************************
+        the_query_builder = $('#builder-basic');
+        query_builder_reset_btn = $('#btn-reset-user');
+        query_builder_filter_btn = $('#btn-filter-user');
+        filterUrl = variables.url.report.user.filter;
+        filterClearUrl = variables.url.report.user.filterClear;
+        excelExportUrl = variables.url.report.user.excelExport;
+
+        if (core.isDefined(window.report_variable_filters)) {
+            // create query builder object
+            the_query_builder.queryBuilder({
+                filters: window.report_variable_filters,
+                lang: 'fa-IR',
+            });
+
+            query_builder_filter_btn.on('click', function () {
+                var result = the_query_builder.queryBuilder('getSQL', 'named');
+
+                if (result && result.sql.length) {
+                    // do ajax
+                    if (createLoader) {
+                        createLoader = false;
+                        loaderId = admin.showLoader();
+                    }
+                    var data = new FormData();
+                    data.append('filtered_qb', JSON.stringify({
+                        sql: result.sql,
+                        params: JSON.stringify(result.params, null, 2),
+                    }));
+                    admin.request(filterUrl, 'post', function () {
+                        admin.hideLoader(loaderId);
+                        createDatatable();
+                        //-----
+                        createLoader = true;
+                    }, {
+                        data: data,
+                    }, true, function () {
+                        createLoader = true;
+                        admin.hideLoader(loaderId);
+                    });
+                }
+            });
+
+            query_builder_reset_btn.on('click', function () {
+                the_query_builder.queryBuilder('reset');
+
+                // do ajax
+                if (createLoader) {
+                    createLoader = false;
+                    loaderId = admin.showLoader();
+                }
+                admin.request(filterClearUrl, 'get', function () {
+                    admin.hideLoader(loaderId);
+                    createDatatable();
+                    //-----
+                    createLoader = true;
+                }, {}, true, function () {
+                    createLoader = true;
+                    admin.hideLoader(loaderId);
+                });
+            });
+        }
+
+        $('#excelExport').on('click', function () {
+            window.location = excelExportUrl;
+        });
+
+        //---------------------------------------------------------------
         // ADD ADDRESS FORM
         //---------------------------------------------------------------
         admin.forms.submitForm('addAddress', constraints.addAddress, function (values) {
@@ -3864,6 +3968,10 @@
                     $('select[name="' + variables.elements.editAddress.inputs.province + '"]').removeAttr('data-current-province');
                     $('select[name="' + variables.elements.editAddress.inputs.city + '"]').removeAttr('data-current-city');
                     editAddrId = null;
+                    if (currentModal) {
+                        currentModal.modal('hide');
+                        currentModal = null;
+                    }
                     if (currentTable) {
                         $(currentTable).DataTable().ajax.reload();
                         createDatatable(currentTable);
@@ -3937,6 +4045,10 @@
                     // clear element after success
                     $(variables.elements.editUnit.form).get(0).reset();
                     editUnitId = null;
+                    if (currentModal) {
+                        currentModal.modal('hide');
+                        currentModal = null;
+                    }
                     if (currentTable) {
                         $(currentTable).DataTable().ajax.reload();
                         createDatatable(currentTable);
@@ -4048,6 +4160,10 @@
                     $(variables.elements.editFaq.form).get(0).reset();
                     initializeAllPlugins();
                     editFAQId = null;
+                    if (currentModal) {
+                        currentModal.modal('hide');
+                        currentModal = null;
+                    }
                     if (currentTable) {
                         $(currentTable).DataTable().ajax.reload();
                         createDatatable(currentTable);
@@ -4140,6 +4256,10 @@
                     $(variables.elements.editSlide.form).get(0).reset();
                     removeImageFromPlaceholder($(variables.elements.editSlide.form).find('[name="' + variables.elements.editSlide.inputs.image + '"]'));
                     editSlideId = null;
+                    if (currentModal) {
+                        currentModal.modal('hide');
+                        currentModal = null;
+                    }
                     if (currentTable) {
                         $(currentTable).DataTable().ajax.reload();
                         createDatatable(currentTable);
@@ -4211,6 +4331,10 @@
                     $(variables.elements.editInstagramImage.form).get(0).reset();
                     removeImageFromPlaceholder($(variables.elements.editInstagramImage.form).find('[name="' + variables.elements.editInstagramImage.inputs.image + '"]'));
                     editInstagramImageId = null;
+                    if (currentModal) {
+                        currentModal.modal('hide');
+                        currentModal = null;
+                    }
                     if (currentTable) {
                         $(currentTable).DataTable().ajax.reload();
                         createDatatable(currentTable);
@@ -4364,6 +4488,10 @@
                             .click();
                     }
                     editBadgeId = null;
+                    if (currentModal) {
+                        currentModal.modal('hide');
+                        currentModal = null;
+                    }
                     if (currentTable) {
                         $(currentTable).DataTable().ajax.reload();
                         createDatatable(currentTable);
@@ -4460,6 +4588,10 @@
                     $(variables.elements.editCategoryImage.form).get(0).reset();
                     currentCategoryId = null;
                     editCategoryImageId = null;
+                    if (currentModal) {
+                        currentModal.modal('hide');
+                        currentModal = null;
+                    }
                     if (currentTable) {
                         $(currentTable).DataTable().ajax.reload();
                         createDatatable(currentTable);
@@ -4591,6 +4723,10 @@
                             .click();
                     }
                     editSecurityQuestionId = null;
+                    if (currentModal) {
+                        currentModal.modal('hide');
+                        currentModal = null;
+                    }
                     if (currentTable) {
                         $(currentTable).DataTable().ajax.reload();
                         createDatatable(currentTable);
@@ -4859,6 +4995,10 @@
                     // clear element after success
                     $(variables.elements.editDepositType.form).get(0).reset();
                     editDepositTypeId = null;
+                    if (currentModal) {
+                        currentModal.modal('hide');
+                        currentModal = null;
+                    }
                     if (currentTable) {
                         $(currentTable).DataTable().ajax.reload();
                         createDatatable(currentTable);

@@ -15,7 +15,7 @@
     <?= $css['top'] ?? ''; ?>
     <?= $js['top'] ?? ''; ?>
 </head>
-<body>
+<body class="navbar-top">
 
 <!-- Main navbar -->
 <?php load_partial('admin/main-nav', ['main_user_info' => $main_user_info]); ?>

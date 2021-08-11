@@ -21,6 +21,7 @@
             inputs: {
                 username: 'inp-register-username',
                 captcha: 'inp-register-captcha',
+                ruleCheckbox: 'inp-register-terms-chk',
             },
         },
         registerStep3: {
@@ -126,6 +127,16 @@
     window.MyGlobalVariables.validation = $.extend(true, window.MyGlobalVariables.validation, {
         constraints: {
             register: {
+                ruleCheckbox: {
+                    presence: {
+                        allowEmpty: false,
+                        message: '^' + 'نیاز به موافقت با شرایط و سیاست سایت است.',
+                    },
+                    inclusion: {
+                        within: [true],
+                        message: '^' + 'نیاز به موافقت با شرایط و سیاست سایت است.',
+                    },
+                },
                 password: {
                     presence: {
                         allowEmpty: false,
@@ -333,7 +344,7 @@
             showLoader: function () {
                 var id = core.idGenerator('loader');
                 $('body').append(
-                    $('<div class="preloader preloader-opacity" id="' + id + '" />').append(
+                    $('<div class="preloader preloader-opacity" data-is-preloader="true" id="' + id + '" />').append(
                         $('<div class="lds-ellipsis" />')
                             .append($('<span/>'))
                             .append($('<span/>'))
@@ -401,6 +412,7 @@
             register: {
                 username: variables.validation.common.mobile,
                 captcha: variables.validation.common.captcha,
+                ruleCheckbox: variables.validation.constraints.register.ruleCheckbox,
             },
             registerStep3: {
                 password: variables.validation.constraints.register.password,

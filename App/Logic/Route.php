@@ -25,7 +25,10 @@ use App\Logic\Controllers\Admin\{BlogController as AdminBlogController,
     OrderController as AdminOrderController,
     PaymentMethodController as AdminPaymentMethodController,
     ProductFestivalController as AdminProductFestivalController,
-    ReportUserController as AdminReportUserController,
+    Report\ReportOrderController as AdminReportOrderController,
+    Report\ReportProductController as AdminReportProductController,
+    Report\ReportUserController as AdminReportUserController,
+    Report\ReportWalletController as AdminReportWalletController,
     ReturnOrderController as AdminReturnOrderController,
     SecurityQuestionController as AdminSecurityQuestionController,
     SendMethodController as AdminSendMethodController,
@@ -40,7 +43,7 @@ use App\Logic\Controllers\Admin\{BlogController as AdminBlogController,
     AddressController as AdminAddressController};
 use App\Logic\Controllers\API\CsrfController;
 use App\Logic\Controllers\CheckoutController;
-use App\Logic\Controllers\OrderResult;
+use App\Logic\Controllers\OrderResultController;
 use App\Logic\Controllers\User\{AddressController as UserAddressController,
     CommentController as UserCommentController,
     HomeController as UserHomeController,
@@ -130,7 +133,7 @@ class Route implements IInitialize
 
         // Add event that fires when a route is matched
         $eventHandler->register(EventHandler::EVENT_MATCH_ROUTE, function () {
-            csrf_token_regenerate();
+            csrf_token_generate();
         });
 
         // Add event that fires when a route is rendered
@@ -406,8 +409,31 @@ class Route implements IInitialize
                 /**
                  * Report User Route
                  */
-                Router::get('/report/users', [AdminReportUserController::class, 'usersReport'])->name('admin.report.users');
-                Router::get('/report/users/dt', [AdminReportUserController::class, 'userFilter'])->name('admin.report.users.dt');
+                Router::get('/report/users', [AdminReportUserController::class, 'report'])
+                    ->name('admin.report.users');
+                Router::post('/report/users/dt', [AdminReportUserController::class, 'getPaginatedDatatable'])
+                    ->name('admin.report.users.dt');
+                /**
+                 * Report Product Route
+                 */
+                Router::get('/report/products', [AdminReportProductController::class, 'report'])
+                    ->name('admin.report.products');
+                Router::post('/report/products/dt', [AdminReportProductController::class, 'getPaginatedDatatable'])
+                    ->name('admin.report.products.dt');
+                /**
+                 * Report Order Route
+                 */
+                Router::get('/report/orders', [AdminReportOrderController::class, 'report'])
+                    ->name('admin.report.orders');
+                Router::post('/report/orders/dt', [AdminReportOrderController::class, 'getPaginatedDatatable'])
+                    ->name('admin.report.orders.dt');
+                /**
+                 * Report Wallet Route
+                 */
+                Router::get('/report/wallet', [AdminReportWalletController::class, 'report'])
+                    ->name('admin.report.wallet');
+                Router::post('/report/wallet/dt', [AdminReportWalletController::class, 'getPaginatedDatatable'])
+                    ->name('admin.report.wallet.dt');
 
                 /**
                  * Wallet Route
@@ -542,7 +568,7 @@ class Route implements IInitialize
                  * comment routes
                  */
                 Router::get('/comments', [UserCommentController::class, 'index'])->name('user.comments');
-                Router::post('/comment/decider/{id}', [UserCommentController::class, 'decider'])->where([
+                Router::get('/comment/decider/{id}', [UserCommentController::class, 'decider'])->where([
                     'id' => '[0-9]+',
                 ])->name('user.comment.decider');
                 Router::form('/comment/edit/{id}', [UserCommentController::class, 'edit'])->where([
@@ -636,7 +662,7 @@ class Route implements IInitialize
                     Router::get('/checkout', [CheckoutController::class, 'checkout'])->name('home.checkout');
                 });
             });
-            Router::form('/finish/{type}/{method}/{code}', [OrderResult::class, 'index'])->where([
+            Router::form('/finish/{type}/{method}/{code}', [OrderResultController::class, 'index'])->where([
                 'type' => '[a-zA-Z0-9]+',
                 'method' => '[a-zA-Z0-9]+',
                 'code' => '[a-zA-Z0-9]+',
@@ -685,7 +711,7 @@ class Route implements IInitialize
             /**
              * csrf route
              */
-            Router::post('/csrf-token', [CsrfController::class, 'show'])->name('ajax.csrf_token');
+            Router::get('/csrf-token', [CsrfController::class, 'show'])->name('ajax.csrf_token');
 
             /**
              * newsletter route
@@ -1129,6 +1155,43 @@ class Route implements IInitialize
                 Router::delete('/complaints/remove/{id}', [AdminComplaintsController::class, 'remove'])->where([
                     'id' => '[0-9]+',
                 ])->name('ajax.complaints.remove');
+
+                /**
+                 * Report User Route
+                 */
+                Router::post('/report/users/filter', [AdminReportUserController::class, 'filterReport'])
+                    ->name('ajax.admin.report.users.filter');
+                Router::get('/report/users/filter/clear', [AdminReportUserController::class, 'filterClear'])
+                    ->name('ajax.admin.report.users.filter.clear');
+                Router::get('/report/users/export/excel', [AdminReportUserController::class, 'exportExcel'])
+                    ->name('ajax.admin.report.users.export.excel');
+                /**
+                 * Report Product Route
+                 */
+                Router::post('/report/products/filter', [AdminReportProductController::class, 'filterReport'])
+                    ->name('ajax.admin.report.products.filter');
+                Router::get('/report/products/filter/clear', [AdminReportProductController::class, 'filterClear'])
+                    ->name('ajax.admin.report.products.filter.clear');
+                Router::get('/report/products/export/excel', [AdminReportProductController::class, 'exportExcel'])
+                    ->name('ajax.admin.report.products.export.excel');
+                /**
+                 * Report Order Route
+                 */
+                Router::post('/report/orders/filter', [AdminReportOrderController::class, 'filterReport'])
+                    ->name('ajax.admin.report.orders.filter');
+                Router::get('/report/orders/filter/clear', [AdminReportOrderController::class, 'filterClear'])
+                    ->name('ajax.admin.report.orders.filter.clear');
+                Router::get('/report/orders/export/excel', [AdminReportOrderController::class, 'exportExcel'])
+                    ->name('ajax.admin.report.orders.export.excel');
+                /**
+                 * Report Wallet Route
+                 */
+                Router::post('/report/wallet/filter', [AdminReportWalletController::class, 'filterReport'])
+                    ->name('ajax.admin.report.wallet.filter');
+                Router::get('/report/wallet/filter/clear', [AdminReportWalletController::class, 'filterClear'])
+                    ->name('ajax.admin.report.wallet.filter.clear');
+                Router::get('/report/wallet/export/excel', [AdminReportWalletController::class, 'exportExcel'])
+                    ->name('ajax.admin.report.wallet.export.excel');
 
                 /**
                  * File Manager Route

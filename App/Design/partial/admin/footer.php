@@ -7,7 +7,10 @@
     </div>
 
     <div class="navbar-collapse collapse mb-1" id="navbar-footer">
-        <span class="form-text text-center text-muted">توسعه داده شده توسط <a href="#">تیم هیوا</a> </span>
+        <span class="form-text text-center text-muted">
+            توسعه داده شده توسط
+            <a href="#">تیم هیوا</a>
+        </span>
 
         <!--        <ul class="navbar-nav ml-lg-auto">-->
         <!--            <li class="nav-item"><a href="https://kopyov.ticksy.com/" class="navbar-nav-link" target="_blank"><i class="icon-lifebuoy mr-2"></i> Support</a></li>-->

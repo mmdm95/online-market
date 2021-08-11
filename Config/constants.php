@@ -21,7 +21,7 @@ use Sim\I18n\ISOLanguageCodes;
  *     1.2.5.0 instead of 1.2.5-a
  *     1.2.5.0.1 instead of 1.2.5-a1 (I'm not sure)
  */
-defined("APP_VERSION") OR define("APP_VERSION", "0.3.3.2");
+defined("APP_VERSION") OR define("APP_VERSION", "0.3.11.2");
 
 /***************************************
  * You can add your constants here
@@ -304,6 +304,9 @@ defined("DEFAULT_TIME_FORMAT") OR define("DEFAULT_TIME_FORMAT", 'j F Y');
 // archive tags time format
 defined("ARCHIVE_TAGS_TIME_FORMAT") OR define("ARCHIVE_TAGS_TIME_FORMAT", 'F Y');
 
+// report time format
+defined("REPORT_TIME_FORMAT") OR define("REPORT_TIME_FORMAT", 'j F Y در ساعت H و i دقیقه');
+
 // default select option value
 defined("DEFAULT_OPTION_VALUE") OR define("DEFAULT_OPTION_VALUE", -1);
 
@@ -312,6 +315,18 @@ defined("MINIMUM_WARNING_STOCK_VALUE") OR define("MINIMUM_WARNING_STOCK_VALUE", 
 
 // max category level number
 defined("MAX_CATEGORY_LEVEL") OR define("MAX_CATEGORY_LEVEL", 3);
+
+// query builder sessions
+defined("SESSION_QUERY_BUILDER_USER") OR define("SESSION_QUERY_BUILDER_USER", 'session_query_builder_user');
+defined("SESSION_QUERY_BUILDER_PRODUCT") OR define("SESSION_QUERY_BUILDER_PRODUCT", 'session_query_builder_product');
+defined("SESSION_QUERY_BUILDER_ORDER") OR define("SESSION_QUERY_BUILDER_ORDER", 'session_query_builder_order');
+defined("SESSION_QUERY_BUILDER_WALLET") OR define("SESSION_QUERY_BUILDER_WALLET", 'session_query_builder_wallet');
+
+// report after datatable filter sessions
+defined("SESSION_REPORT_FILTERED_USER") OR define("SESSION_REPORT_FILTERED_USER", 'session_report_filtered_user');
+defined("SESSION_REPORT_FILTERED_PRODUCT") OR define("SESSION_REPORT_FILTERED_PRODUCT", 'session_report_filtered_product');
+defined("SESSION_REPORT_FILTERED_ORDER") OR define("SESSION_REPORT_FILTERED_ORDER", 'session_report_filtered_order');
+defined("SESSION_REPORT_FILTERED_WALLET") OR define("SESSION_REPORT_FILTERED_WALLET", 'session_report_filtered_wallet');
 
 // order array info session key constant
 defined("SESSION_ORDER_ARR_INFO") OR define("SESSION_ORDER_ARR_INFO", 'session_order_arr_info_custom');

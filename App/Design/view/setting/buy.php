@@ -24,6 +24,7 @@ $validator = form_validator();
                     'warning' => $setting_buy_warning ?? '',
                 ]); ?>
 
+                <input type="hidden" name="csrf_token" value="<?= csrf_token(); ?>" data-ignored>
                 <!-- Sidebars overview -->
                 <div class="card">
                     <?php load_partial('admin/setting-header', ['header_title' => 'تنظیمات خرید']); ?>

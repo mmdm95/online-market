@@ -31,7 +31,7 @@ use Sim\Utils\StringUtil;
                             <td><?= Jdf::jdate(DEFAULT_TIME_FORMAT, $order['ordered_at']); ?></td>
                             <td>
                                 <?php load_partial('admin/parser/status-badge', [
-                                    'title' => $order['send_status_title'],
+                                    'text' => $order['send_status_title'],
                                     'bg' => $order['send_status_color'],
                                 ]); ?>
                             </td>
@@ -44,7 +44,7 @@ use Sim\Utils\StringUtil;
                                 تومان
                             </td>
                             <td>
-                                <a href="<?= url('user.order.detail', ['id' => $order['id']])->getRelativeUrl(); ?>"
+                                <a href="<?= url('user.order.detail', ['id' => $order['id']])->getRelativeUrlTrimmed(); ?>"
                                    class="btn btn-fill-out btn-sm">
                                     نمایش
                                 </a>
