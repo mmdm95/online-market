@@ -16,19 +16,21 @@
             </div>
         </div>
 
-        <div class="card-body border-bottom">
-            <div id="builder-basic" class="mb-3"></div>
-            <div class="text-right">
-                <button id="btn-filter-user" class="btn btn-primary mr-2">
-                    <i class="icon-filter3 mr-2" aria-hidden="true"></i>
-                    فیلتر اطلاعات
-                </button>
-                <button id="btn-reset-user" class="btn btn-warning">
-                    <i class="icon-trash mr-2" aria-hidden="true"></i>
-                    پاک کردن
-                </button>
+        <?php if (count($query_builder ?? [])): ?>
+            <div class="card-body border-bottom">
+                <div id="builder-basic-user" class="mb-3"></div>
+                <div class="text-right">
+                    <button id="btn-filter-user" class="btn btn-primary mr-2">
+                        <i class="icon-filter3 mr-2" aria-hidden="true"></i>
+                        فیلتر اطلاعات
+                    </button>
+                    <button id="btn-reset-user" class="btn btn-warning">
+                        <i class="icon-trash mr-2" aria-hidden="true"></i>
+                        پاک کردن
+                    </button>
+                </div>
             </div>
-        </div>
+        <?php endif; ?>
 
         <table class="table table-bordered table-hover datatable-highlight"
                data-columns='[{"data":"id"}, {"data":"first_name"}, {"data":"last_name"}, {"data":"roles"}, {"data":"mobile"}, {"data":"created_at"}, {"data":"status"}, {"data":"operations"}]'

@@ -136,8 +136,7 @@ $validator = form_validator();
                 <div class="col-lg-6 pt-2 pt-lg-0 mt-4 mt-lg-0">
                     <div id="map" class="contact_map2" data-zoom="14"
                          data-latitude="<?= \config()->get('settings.lat_lng.value.lat'); ?>"
-                         data-longitude="<?= \config()->get('settings.lat_lng.value.lng'); ?>"
-                         data-icon="<?= asset_path('image/marker.png', false); ?>"></div>
+                         data-longitude="<?= \config()->get('settings.lat_lng.value.lng'); ?>"></div>
                 </div>
             </div>
         </div>

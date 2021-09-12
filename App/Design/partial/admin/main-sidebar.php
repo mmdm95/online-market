@@ -150,13 +150,13 @@ $authAdmin = auth_admin();
                     <!--                    <ul class="nav nav-group-sub">-->
                     <!--                        <li class="nav-item">-->
                     <!--                            <a href="" class="nav-link">-->
-                    <?= '';//url('admin.send_method.add');                                            ?>
+                    <?= '';//url('admin.send_method.add');                                             ?>
                     <!--                                افزودن روش ارسال جدید-->
                     <!--                            </a>-->
                     <!--                        </li>-->
                     <!--                        <li class="nav-item">-->
                     <!--                            <a href="" class="nav-link">-->
-                    <?= '';//url('admin.send_method.view', '');                                            ?>
+                    <?= '';//url('admin.send_method.view', '');                                             ?>
                     <!--                                لیست روش‌های ارسال-->
                     <!--                            </a>-->
                     <!--                        </li>-->
@@ -359,7 +359,7 @@ $authAdmin = auth_admin();
 
                     <!--                <li class="nav-item">-->
                     <!--                    <a href="" class="nav-link"-->
-                    <?= '';//url('admin.return.order.view');                                        ?>
+                    <?= '';//url('admin.return.order.view');                                         ?>
                     <!--                       data-popup="tooltip"-->
                     <!--                       data-original-title="سفارشات مرجوعی"-->
                     <!--                       data-boundary="window"-->
@@ -386,7 +386,8 @@ $authAdmin = auth_admin();
 
                     <?php if ($allowReportUser): ?>
                         <li class="nav-item">
-                            <a href="<?= url('admin.report.users'); ?>" class="nav-link"
+                            <a href="<?= url('admin.report.users'); ?>"
+                               class="nav-link <?= url()->contains(url('admin.report.users')->getRelativeUrlTrimmed()) ? 'active' : ''; ?>"
                                data-popup="tooltip"
                                data-original-title="گزارش‌گیری از کاربران"
                                data-boundary="window"
@@ -399,7 +400,8 @@ $authAdmin = auth_admin();
 
                     <?php if ($allowReportProduct): ?>
                         <li class="nav-item">
-                            <a href="<?= url(''); ?>" class="nav-link"
+                            <a href="<?= url('admin.report.products'); ?>"
+                               class="nav-link <?= url()->contains(url('admin.report.products')->getRelativeUrlTrimmed()) ? 'active' : ''; ?>"
                                data-popup="tooltip"
                                data-original-title="گزارش‌گیری از محصولات"
                                data-boundary="window"
@@ -410,22 +412,10 @@ $authAdmin = auth_admin();
                         </li>
                     <?php endif; ?>
 
-                    <?php if ($allowReportWallet): ?>
-                        <li class="nav-item">
-                            <a href="<?= url(''); ?>" class="nav-link"
-                               data-popup="tooltip"
-                               data-original-title="گزارش‌گیری از کیف پول"
-                               data-boundary="window"
-                               data-placement="left">
-                                <i class="icon-archive"></i>
-                                <span>گزارش‌گیری از کیف پول</span>
-                            </a>
-                        </li>
-                    <?php endif; ?>
-
                     <?php if ($allowReportOrder): ?>
                         <li class="nav-item">
-                            <a href="<?= url(''); ?>" class="nav-link"
+                            <a href="<?= url('admin.report.orders'); ?>"
+                               class="nav-link <?= url()->contains(url('admin.report.orders')->getRelativeUrlTrimmed()) ? 'active' : ''; ?>"
                                data-popup="tooltip"
                                data-original-title="گزارش‌گیری از سفارشات"
                                data-boundary="window"
@@ -435,6 +425,21 @@ $authAdmin = auth_admin();
                             </a>
                         </li>
                     <?php endif; ?>
+
+                    <!--                    --><?php //if ($allowReportWallet): ?>
+                    <!--                        <li class="nav-item">-->
+                    <!--                            <a href="--><? //= url('admin.report.wallet'); ?><!--"-->
+                    <!--                               class="nav-link "-->
+                    <?= '';//url()->contains(url('admin.report.wallet')->getRelativeUrlTrimmed()) ? 'active' : '';  ?>
+                    <!--                               data-popup="tooltip"-->
+                    <!--                               data-original-title="گزارش‌گیری از کیف پول"-->
+                    <!--                               data-boundary="window"-->
+                    <!--                               data-placement="left">-->
+                    <!--                                <i class="icon-archive"></i>-->
+                    <!--                                <span>گزارش‌گیری از کیف پول</span>-->
+                    <!--                            </a>-->
+                    <!--                        </li>-->
+                    <!--                    --><?php //endif; ?>
                     <!-- /report -->
                 <?php endif; ?>
 

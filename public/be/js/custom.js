@@ -667,73 +667,85 @@
         constraints: {
             addAddress: {
                 province: {
-                    presence: {
-                        allowEmpty: false,
-                        message: '^' + 'فیلد استان را خالی نگذارید.',
+                    rules: {
+                        requiredNotEmpty: true,
+                    },
+                    messages: {
+                        requiredNotEmpty: 'فیلد استان را خالی نگذارید.',
                     },
                 },
                 city: {
-                    presence: {
-                        allowEmpty: false,
-                        message: '^' + 'فیلد شهر را خالی نگذارید.',
+                    rules: {
+                        requiredNotEmpty: true,
+                    },
+                    messages: {
+                        requiredNotEmpty: 'فیلد شهر را خالی نگذارید.',
                     },
                 },
                 postalCode: {
-                    presence: {
-                        allowEmpty: false,
-                        message: '^' + 'فیلد کد پستی را خالی نگذارید.',
+                    rules: {
+                        requiredNotEmpty: true,
+                        format: /^\d{1,10}$/,
                     },
-                    format: {
-                        pattern: /^\d{1,10}$/,
-                        message: '^' + 'کد پستی باید از نوع عددی و دارای حداکثر ۱۰ رقم باشد.',
+                    messages: {
+                        requiredNotEmpty: 'فیلد کد پستی را خالی نگذارید.',
+                        format: 'کد پستی باید از نوع عددی و دارای حداکثر ۱۰ رقم باشد.',
                     },
                 },
                 address: {
-                    presence: {
-                        allowEmpty: false,
-                        message: '^' + 'فیلد آدرس را خالی نگذارید.',
+                    rules: {
+                        requiredNotEmpty: true,
+                    },
+                    messages: {
+                        requiredNotEmpty: 'فیلد آدرس را خالی نگذارید.',
                     },
                 },
             },
             editAddress: {
                 province: {
-                    presence: {
-                        allowEmpty: false,
-                        message: '^' + 'فیلد استان را خالی نگذارید.',
+                    rules: {
+                        requiredNotEmpty: true,
+                    },
+                    messages: {
+                        requiredNotEmpty: 'فیلد استان را خالی نگذارید.',
                     },
                 },
                 city: {
-                    presence: {
-                        allowEmpty: false,
-                        message: '^' + 'فیلد شهر را خالی نگذارید.',
+                    rules: {
+                        requiredNotEmpty: true,
+                    },
+                    messages: {
+                        requiredNotEmpty: 'فیلد شهر را خالی نگذارید.',
                     },
                 },
                 postalCode: {
-                    presence: {
-                        allowEmpty: false,
-                        message: '^' + 'فیلد کد پستی را خالی نگذارید.',
+                    rules: {
+                        requiredNotEmpty: true,
+                        format: /^\d{1,10}$/,
                     },
-                    format: {
-                        pattern: /^\d{1,10}$/,
-                        message: '^' + 'کد پستی باید از نوع عددی و دارای حداکثر ۱۰ رقم باشد.',
+                    messages: {
+                        requiredNotEmpty: 'فیلد کد پستی را خالی نگذارید.',
+                        format: 'کد پستی باید از نوع عددی و دارای حداکثر ۱۰ رقم باشد.',
                     },
                 },
                 address: {
-                    presence: {
-                        allowEmpty: false,
-                        message: '^' + 'فیلد آدرس را خالی نگذارید.',
+                    rules: {
+                        requiredNotEmpty: true,
+                    },
+                    messages: {
+                        requiredNotEmpty: 'فیلد آدرس را خالی نگذارید.',
                     },
                 },
             },
             addUnit: {
                 title: {
-                    presence: {
-                        allowEmpty: false,
-                        message: '^' + 'فیلد عنوان واحد را خالی نگذارید.',
+                    rules: {
+                        requiredNotEmpty: true,
+                        maxlength: 250,
                     },
-                    length: {
-                        maximum: 250,
-                        message: '^' + 'عنوان باید حداکثر ۲۵۰ کاراکتر باشد.',
+                    messages: {
+                        requiredNotEmpty: 'فیلد عنوان واحد را خالی نگذارید.',
+                        maxlength: 'عنوان باید حداکثر ۲۵۰ کاراکتر باشد.',
                     },
                 },
                 sign: {
@@ -745,933 +757,1099 @@
             },
             addBlog: {
                 image: {
-                    presence: {
-                        allowEmpty: false,
-                        message: '^' + 'فیلد تصویر را خالی نگذارید.',
+                    rules: {
+                        requiredNotEmpty: true,
+                    },
+                    messages: {
+                        requiredNotEmpty: 'فیلد تصویر را خالی نگذارید.',
                     },
                 },
                 title: {
-                    presence: {
-                        allowEmpty: false,
-                        message: '^' + 'فیلد عنوان را خالی نگذارید.',
+                    rules: {
+                        requiredNotEmpty: true,
+                    },
+                    messages: {
+                        requiredNotEmpty: 'فیلد عنوان را خالی نگذارید.',
                     },
                 },
                 abstract: {
-                    presence: {
-                        allowEmpty: false,
-                        message: '^' + 'فیلد توضیح مختصر را خالی نگذارید.',
+                    rules: {
+                        requiredNotEmpty: true,
+                    },
+                    messages: {
+                        requiredNotEmpty: 'فیلد توضیح مختصر را خالی نگذارید.',
                     },
                 },
                 desc: {
-                    presence: {
-                        allowEmpty: false,
-                        message: '^' + 'فیلد توضیحات را خالی نگذارید.',
+                    rules: {
+                        requiredNotEmpty: true,
+                    },
+                    messages: {
+                        requiredNotEmpty: 'فیلد توضیحات را خالی نگذارید.',
                     },
                 },
             },
             editBlog: {
                 image: {
-                    presence: {
-                        allowEmpty: false,
-                        message: '^' + 'فیلد تصویر را خالی نگذارید.',
+                    rules: {
+                        requiredNotEmpty: true,
+                    },
+                    messages: {
+                        requiredNotEmpty: 'فیلد تصویر را خالی نگذارید.',
                     },
                 },
                 title: {
-                    presence: {
-                        allowEmpty: false,
-                        message: '^' + 'فیلد عنوان را خالی نگذارید.',
+                    rules: {
+                        requiredNotEmpty: true,
+                    },
+                    messages: {
+                        requiredNotEmpty: 'فیلد عنوان را خالی نگذارید.',
                     },
                 },
                 abstract: {
-                    presence: {
-                        allowEmpty: false,
-                        message: '^' + 'فیلد توضیح مختصر را خالی نگذارید.',
+                    rules: {
+                        requiredNotEmpty: true,
+                    },
+                    messages: {
+                        requiredNotEmpty: 'فیلد توضیح مختصر را خالی نگذارید.',
                     },
                 },
                 desc: {
-                    presence: {
-                        allowEmpty: false,
-                        message: '^' + 'فیلد توضیحات را خالی نگذارید.',
+                    rules: {
+                        requiredNotEmpty: true,
+                    },
+                    messages: {
+                        requiredNotEmpty: 'فیلد توضیحات را خالی نگذارید.',
                     },
                 },
             },
             addFaq: {
                 question: {
-                    presence: {
-                        allowEmpty: false,
-                        message: '^' + 'فیلد سؤال را خالی نگذارید.',
+                    rules: {
+                        requiredNotEmpty: true,
+                    },
+                    messages: {
+                        requiredNotEmpty: 'فیلد سؤال را خالی نگذارید.',
                     },
                 },
                 answer: {
-                    presence: {
-                        allowEmpty: false,
-                        message: '^' + 'فیلد پاسخ را خالی نگذارید.',
+                    rules: {
+                        requiredNotEmpty: true,
+                    },
+                    messages: {
+                        requiredNotEmpty: 'فیلد پاسخ را خالی نگذارید.',
                     },
                 },
                 tags: {
-                    presence: {
-                        allowEmpty: false,
-                        message: '^' + 'فیلد برچسب را خالی نگذارید.',
+                    rules: {
+                        requiredNotEmpty: true,
+                    },
+                    messages: {
+                        requiredNotEmpty: 'فیلد برچسب را خالی نگذارید.',
                     },
                 },
             },
             editFaq: {
                 question: {
-                    presence: {
-                        allowEmpty: false,
-                        message: '^' + 'فیلد سؤال را خالی نگذارید.',
+                    rules: {
+                        requiredNotEmpty: true,
+                    },
+                    messages: {
+                        requiredNotEmpty: 'فیلد سؤال را خالی نگذارید.',
                     },
                 },
                 answer: {
-                    presence: {
-                        allowEmpty: false,
-                        message: '^' + 'فیلد پاسخ را خالی نگذارید.',
+                    rules: {
+                        requiredNotEmpty: true,
+                    },
+                    messages: {
+                        requiredNotEmpty: 'فیلد پاسخ را خالی نگذارید.',
                     },
                 },
                 tags: {
-                    presence: {
-                        allowEmpty: false,
-                        message: '^' + 'فیلد برچسب را خالی نگذارید.',
+                    rules: {
+                        requiredNotEmpty: true,
+                    },
+                    messages: {
+                        requiredNotEmpty: 'فیلد برچسب را خالی نگذارید.',
                     },
                 },
             },
             addColor: {
                 name: {
-                    presence: {
-                        allowEmpty: false,
-                        message: '^' + 'فیلد نام را خالی نگذارید.',
+                    rules: {
+                        requiredNotEmpty: true,
+                        maxlength: 250,
                     },
-                    length: {
-                        maximum: 250,
-                        message: '^' + 'نام رنگ باید حداکثر ۲۵۰ کاراکتر باشد.',
+                    messages: {
+                        requiredNotEmpty: 'فیلد نام را خالی نگذارید.',
+                        maxlength: 'نام رنگ باید حداکثر ۲۵۰ کاراکتر باشد.',
                     },
                 },
                 color: {
-                    presence: {
-                        allowEmpty: false,
-                        message: '^' + 'یک رنگ انتخاب کنید.',
+                    rules: {
+                        requiredNotEmpty: true,
+                    },
+                    messages: {
+                        requiredNotEmpty: 'یک رنگ انتخاب کنید.',
                     },
                 },
             },
             editColor: {
                 name: {
-                    presence: {
-                        allowEmpty: false,
-                        message: '^' + 'فیلد نام را خالی نگذارید.',
+                    rules: {
+                        requiredNotEmpty: true,
+                        maxlength: 250,
                     },
-                    length: {
-                        maximum: 250,
-                        message: '^' + 'نام رنگ باید حداکثر ۲۵۰ کاراکتر باشد.',
+                    messages: {
+                        requiredNotEmpty: 'فیلد نام را خالی نگذارید.',
+                        maxlength: 'نام رنگ باید حداکثر ۲۵۰ کاراکتر باشد.',
                     },
                 },
                 color: {
-                    presence: {
-                        allowEmpty: false,
-                        message: '^' + 'یک رنگ انتخاب کنید.',
+                    rules: {
+                        requiredNotEmpty: true,
+                    },
+                    messages: {
+                        requiredNotEmpty: 'یک رنگ انتخاب کنید.',
                     },
                 },
             },
             addSlide: {
                 image: {
-                    presence: {
-                        allowEmpty: false,
-                        message: '^' + 'تصویر اسلاید را انتخاب کنید.',
+                    rules: {
+                        requiredNotEmpty: true,
+                    },
+                    messages: {
+                        requiredNotEmpty: 'تصویر اسلاید را انتخاب کنید.',
                     },
                 },
                 title: {
-                    length: {
-                        maximum: 250,
-                        message: '^' + 'عنوان باید حداکثر ۲۵۰ کاراکتر باشد.',
+                    rules: {
+                        maxlength: 250,
+                    },
+                    messages: {
+                        maxlength: 'عنوان باید حداکثر ۲۵۰ کاراکتر باشد.',
                     },
                 },
                 subTitle: {
-                    length: {
-                        maximum: 250,
-                        message: '^' + 'زیر عنوان باید حداکثر ۲۵۰ کاراکتر باشد.',
+                    rules: {
+                        maxlength: 250,
+                    },
+                    messages: {
+                        maxlength: 'زیر عنوان باید حداکثر ۲۵۰ کاراکتر باشد.',
                     },
                 },
             },
             editSlide: {
                 image: {
-                    presence: {
-                        allowEmpty: false,
-                        message: '^' + 'تصویر اسلاید را انتخاب کنید.',
+                    rules: {
+                        requiredNotEmpty: true,
+                    },
+                    messages: {
+                        requiredNotEmpty: 'تصویر اسلاید را انتخاب کنید.',
                     },
                 },
                 title: {
-                    length: {
-                        maximum: 250,
-                        message: '^' + 'عنوان باید حداکثر ۲۵۰ کاراکتر باشد.',
+                    rules: {
+                        maxlength: 250,
+                    },
+                    messages: {
+                        maxlength: 'عنوان باید حداکثر ۲۵۰ کاراکتر باشد.',
                     },
                 },
                 subTitle: {
-                    length: {
-                        maximum: 250,
-                        message: '^' + 'زیر عنوان باید حداکثر ۲۵۰ کاراکتر باشد.',
+                    rules: {
+                        maxlength: 250,
+                    },
+                    messages: {
+                        maxlength: 'زیر عنوان باید حداکثر ۲۵۰ کاراکتر باشد.',
                     },
                 },
             },
             addBlogCategory: {
                 name: {
-                    presence: {
-                        allowEmpty: false,
-                        message: '^' + 'نام دسته‌بندی را وارد کنید.',
+                    rules: {
+                        requiredNotEmpty: true,
+                    },
+                    messages: {
+                        requiredNotEmpty: 'نام دسته‌بندی را وارد کنید.',
                     },
                 },
             },
             editBlogCategory: {
                 name: {
-                    presence: {
-                        allowEmpty: false,
-                        message: '^' + 'نام دسته‌بندی را وارد کنید.',
+                    rules: {
+                        requiredNotEmpty: true,
+                    },
+                    messages: {
+                        requiredNotEmpty: 'نام دسته‌بندی را وارد کنید.',
                     },
                 },
             },
             addBrand: {
                 image: {
-                    presence: {
-                        allowEmpty: false,
-                        message: '^' + 'تصویر برند را انتخاب کنید.',
+                    rules: {
+                        requiredNotEmpty: true,
+                    },
+                    messages: {
+                        requiredNotEmpty: 'تصویر برند را انتخاب کنید.',
                     },
                 },
             },
             editBrand: {
                 image: {
-                    presence: {
-                        allowEmpty: false,
-                        message: '^' + 'تصویر برند را انتخاب کنید.',
+                    rules: {
+                        requiredNotEmpty: true,
+                    },
+                    messages: {
+                        requiredNotEmpty: 'تصویر برند را انتخاب کنید.',
                     },
                 },
             },
             addInstagramImage: {
                 image: {
-                    presence: {
-                        allowEmpty: false,
-                        message: '^' + 'تصویر را انتخاب کنید.',
+                    rules: {
+                        requiredNotEmpty: true,
+                    },
+                    messages: {
+                        requiredNotEmpty: 'تصویر را انتخاب کنید.',
                     },
                 },
             },
             editInstagramImage: {
                 image: {
-                    presence: {
-                        allowEmpty: false,
-                        message: '^' + 'تصویر را انتخاب کنید.',
+                    rules: {
+                        requiredNotEmpty: true,
+                    },
+                    messages: {
+                        requiredNotEmpty: 'تصویر را انتخاب کنید.',
                     },
                 },
             },
             addBadge: {
                 title: {
-                    presence: {
-                        allowEmpty: false,
-                        message: '^' + 'فیلد عنوان را خالی نگذارید.',
+                    rules: {
+                        requiredNotEmpty: true,
+                        maxlength: 250,
                     },
-                    length: {
-                        maximum: 250,
-                        message: '^' + 'وضعیت باید حداکثر ۲۵۰ کاراکتر باشد.',
+                    messages: {
+                        requiredNotEmpty: 'فیلد عنوان را خالی نگذارید.',
+                        maxlength: 'وضعیت باید حداکثر ۲۵۰ کاراکتر باشد.',
                     },
                 },
                 color: {
-                    presence: {
-                        allowEmpty: false,
-                        message: '^' + 'یک رنگ انتخاب کنید.',
+                    rules: {
+                        requiredNotEmpty: true,
+                    },
+                    messages: {
+                        requiredNotEmpty: 'یک رنگ انتخاب کنید.',
                     },
                 },
             },
             editBadge: {
                 title: {
-                    presence: {
-                        allowEmpty: false,
-                        message: '^' + 'فیلد عنوان را خالی نگذارید.',
+                    rules: {
+                        requiredNotEmpty: true,
+                        maxlength: 250,
                     },
-                    length: {
-                        maximum: 250,
-                        message: '^' + 'وضعیت باید حداکثر ۲۵۰ کاراکتر باشد.',
+                    messages: {
+                        requiredNotEmpty: 'فیلد عنوان را خالی نگذارید.',
+                        maxlength: 'وضعیت باید حداکثر ۲۵۰ کاراکتر باشد.',
                     },
                 },
                 color: {
-                    presence: {
-                        allowEmpty: false,
-                        message: '^' + 'یک رنگ انتخاب کنید.',
+                    rules: {
+                        requiredNotEmpty: true,
+                    },
+                    messages: {
+                        requiredNotEmpty: 'یک رنگ انتخاب کنید.',
                     },
                 },
             },
             addCategory: {
                 name: {
-                    presence: {
-                        allowEmpty: false,
-                        message: '^' + 'نام دسته‌بندی را خالی نگذارید.',
+                    rules: {
+                        requiredNotEmpty: true,
+                        maxlength: 100,
                     },
-                    length: {
-                        maximum: 100,
-                        message: '^' + 'نام دسته‌بندی باید حداکثر ۱۰۰ کاراکتر باشد.',
+                    messages: {
+                        requiredNotEmpty: 'نام دسته‌بندی را خالی نگذارید.',
+                        maxlength: 'نام دسته‌بندی باید حداکثر ۱۰۰ کاراکتر باشد.',
                     },
                 },
                 parent: {
-                    presence: {
-                        allowEmpty: false,
-                        message: '^' + 'والد دسته‌بندی را خالی نگذارید.',
+                    rules: {
+                        requiredNotEmpty: true,
+                    },
+                    messages: {
+                        requiredNotEmpty: 'والد دسته‌بندی را خالی نگذارید.',
                     },
                 },
                 priority: {
-                    presence: {
-                        allowEmpty: false,
-                        message: '^' + 'فیلد اولویت را خالی نگذارید.',
+                    rules: {
+                        requiredNotEmpty: true,
+                    },
+                    messages: {
+                        requiredNotEmpty: 'فیلد اولویت را خالی نگذارید.',
                     },
                 },
             },
             editCategory: {
                 name: {
-                    presence: {
-                        allowEmpty: false,
-                        message: '^' + 'نام دسته‌بندی را خالی نگذارید.',
+                    rules: {
+                        requiredNotEmpty: true,
+                        maxlength: 100,
                     },
-                    length: {
-                        maximum: 100,
-                        message: '^' + 'نام دسته‌بندی باید حداکثر ۱۰۰ کاراکتر باشد.',
+                    messages: {
+                        requiredNotEmpty: 'نام دسته‌بندی را خالی نگذارید.',
+                        maxlength: 'نام دسته‌بندی باید حداکثر ۱۰۰ کاراکتر باشد.',
                     },
                 },
                 parent: {
-                    presence: {
-                        allowEmpty: false,
-                        message: '^' + 'والد دسته‌بندی را خالی نگذارید.',
+                    rules: {
+                        requiredNotEmpty: true,
+                    },
+                    messages: {
+                        requiredNotEmpty: 'والد دسته‌بندی را خالی نگذارید.',
                     },
                 },
                 priority: {
-                    presence: {
-                        allowEmpty: false,
-                        message: '^' + 'فیلد اولویت را خالی نگذارید.',
+                    rules: {
+                        requiredNotEmpty: true,
+                    },
+                    messages: {
+                        requiredNotEmpty: 'فیلد اولویت را خالی نگذارید.',
                     },
                 },
             },
             addCategoryImage: {
                 image: {
-                    presence: {
-                        allowEmpty: false,
-                        message: '^' + 'تصویر را انتخاب کنید.',
+                    rules: {
+                        requiredNotEmpty: true,
+                    },
+                    messages: {
+                        requiredNotEmpty: 'تصویر را انتخاب کنید.',
                     },
                 },
                 category: {
-                    presence: {
-                        allowEmpty: false,
-                        message: '^' + 'دسته‌بندی را انتخاب کنید.',
+                    rules: {
+                        requiredNotEmpty: true,
+                    },
+                    messages: {
+                        requiredNotEmpty: 'دسته‌بندی را انتخاب کنید.',
                     },
                 },
             },
             editCategoryImage: {
                 image: {
-                    presence: {
-                        allowEmpty: false,
-                        message: '^' + 'تصویر را انتخاب کنید.',
+                    rules: {
+                        requiredNotEmpty: true,
+                    },
+                    messages: {
+                        requiredNotEmpty: 'تصویر را انتخاب کنید.',
                     },
                 },
                 category: {
-                    presence: {
-                        allowEmpty: false,
-                        message: '^' + 'دسته‌بندی را انتخاب کنید.',
+                    rules: {
+                        requiredNotEmpty: true,
+                    },
+                    messages: {
+                        requiredNotEmpty: 'دسته‌بندی را انتخاب کنید.',
                     },
                 },
             },
             addStaticPage: {
                 title: {
-                    presence: {
-                        allowEmpty: false,
-                        message: '^' + 'عنوان را وارد کنید.',
+                    rules: {
+                        requiredNotEmpty: true,
+                        maxlength: 300,
                     },
-                    length: {
-                        maximum: 300,
-                        message: '^' + 'عنوان ضفحه باید حداکثر ۳۰۰ کاراکتر باشد.',
+                    messages: {
+                        requiredNotEmpty: 'عنوان را وارد کنید.',
+                        maxlength: 'عنوان ضفحه باید حداکثر ۳۰۰ کاراکتر باشد.',
                     },
                 },
                 url: {
-                    format: {
-                        pattern: /[a-zA-Z0-9-_\/]+/,
-                        message: '^' + 'آدرس صفحه باید از حروف و اعداد انگلیسی، خط تیره، آندرلاین و اسلش تشکیل شده باشد.',
+                    rules: {
+                        format: /[a-zA-Z0-9-_\/]+/,
+                    },
+                    messages: {
+                        format: 'آدرس صفحه باید از حروف و اعداد انگلیسی، خط تیره، آندرلاین و اسلش تشکیل شده باشد.',
                     },
                 },
                 desc: {
-                    presence: {
-                        allowEmpty: false,
-                        message: '^' + 'توضیحات را وارد کنید.',
+                    rules: {
+                        requiredNotEmpty: true,
+                    },
+                    messages: {
+                        requiredNotEmpty: 'توضیحات را وارد کنید.',
                     },
                 },
             },
             editStaticPage: {
                 title: {
-                    presence: {
-                        allowEmpty: false,
-                        message: '^' + 'عنوان را وارد کنید.',
+                    rules: {
+                        requiredNotEmpty: true,
+                        maxlength: 300,
                     },
-                    length: {
-                        maximum: 300,
-                        message: '^' + 'عنوان ضفحه باید حداکثر ۳۰۰ کاراکتر باشد.',
+                    messages: {
+                        requiredNotEmpty: 'عنوان را وارد کنید.',
+                        maxlength: 'عنوان ضفحه باید حداکثر ۳۰۰ کاراکتر باشد.',
                     },
                 },
                 url: {
-                    format: {
-                        pattern: /[a-zA-Z0-9-_\/]+/,
-                        message: '^' + 'آدرس صفحه باید از حروف و اعداد انگلیسی، خط تیره، آندرلاین و اسلش تشکیل شده باشد.',
+                    rules: {
+                        format: /[a-zA-Z0-9-_\/]+/,
+                    },
+                    messages: {
+                        format: 'آدرس صفحه باید از حروف و اعداد انگلیسی، خط تیره، آندرلاین و اسلش تشکیل شده باشد.',
                     },
                 },
                 desc: {
-                    presence: {
-                        allowEmpty: false,
-                        message: '^' + 'توضیحات را وارد کنید.',
+                    rules: {
+                        requiredNotEmpty: true,
+                    },
+                    messages: {
+                        requiredNotEmpty: 'توضیحات را وارد کنید.',
                     },
                 },
             },
             addCoupon: {
                 code: {
-                    presence: {
-                        allowEmpty: false,
-                        message: '^' + 'عنوان کوپن را وارد کنید.',
+                    rules: {
+                        requiredNotEmpty: true,
+                        maxlength: 20,
+                        format: /[0-9a-zA-Z-_]+/,
                     },
-                    format: {
-                        pattern: /[0-9a-zA-Z-_]+/,
-                        message: '^' + 'کد کوپن باید از حروف انگلیسی، اعداد، خط تیره و آندرلاین تشکیل شده باشد.',
-                    },
-                    length: {
-                        maximum: 20,
-                        message: '^' + 'کد کوپن باید حداکثر ۲۰ کاراکتر باشد.',
+                    messages: {
+                        requiredNotEmpty: 'عنوان کوپن را وارد کنید.',
+                        maxlength: 'کد کوپن باید حداکثر ۲۰ کاراکتر باشد.',
+                        format: 'کد کوپن باید از حروف انگلیسی، اعداد، خط تیره و آندرلاین تشکیل شده باشد.',
                     },
                 },
                 title: {
-                    presence: {
-                        allowEmpty: false,
-                        message: '^' + 'عنوان کوپن را وارد کنید.',
+                    rules: {
+                        requiredNotEmpty: true,
+                        maxlength: 250,
                     },
-                    length: {
-                        maximum: 250,
-                        message: '^' + 'عنوان کوپن باید حداکثر ۲۵۰ کاراکتر باشد.',
+                    messages: {
+                        requiredNotEmpty: 'عنوان کوپن را وارد کنید.',
+                        maxlength: 'عنوان کوپن باید حداکثر ۲۵۰ کاراکتر باشد.',
                     },
                 },
                 price: {
-                    presence: {
-                        allowEmpty: false,
-                        message: '^' + 'عنوان کوپن را وارد کنید.',
+                    rules: {
+                        requiredNotEmpty: true,
+                        format: /\d+/,
                     },
-                    format: {
-                        pattern: /\d+/,
-                        message: '^' + 'قیمت باید از نوع عددی باشد.',
+                    messages: {
+                        requiredNotEmpty: 'عنوان کوپن را وارد کنید.',
+                        format: 'قیمت باید از نوع عددی باشد.',
                     },
                 },
                 minPrice: {
-                    format: {
-                        pattern: /\d+/,
-                        message: '^' + 'کمترین قیمت اعمال موپن قیمت باید از نوع عددی باشد.',
+                    rules: {
+                        format: /\d+/,
+                    },
+                    messages: {
+                        format: 'کمترین قیمت اعمال موپن قیمت باید از نوع عددی باشد.',
                     },
                 },
                 maxPrice: {
-                    format: {
-                        pattern: /\d+/,
-                        message: '^' + 'بیشترین قیمت اعمال موپن قیمت باید از نوع عددی باشد.',
+                    rules: {
+                        format: /\d+/,
+                    },
+                    messages: {
+                        format: 'بیشترین قیمت اعمال موپن قیمت باید از نوع عددی باشد.',
                     },
                 },
                 count: {
-                    presence: {
-                        allowEmpty: false,
-                        message: '^' + 'تعداد کوپن را وارد کنید.',
+                    rules: {
+                        requiredNotEmpty: true,
+                        format: /\d+/,
                     },
-                    format: {
-                        pattern: /\d+/,
-                        message: '^' + 'تعداد باید از نوع عددی باشد.',
+                    messages: {
+                        requiredNotEmpty: 'تعداد کوپن را وارد کنید.',
+                        format: 'تعداد باید از نوع عددی باشد.',
                     },
                 },
                 useAfter: {
-                    format: {
-                        pattern: /\d+/,
-                        message: '^' + 'استفاده بعد از تعداد روز باید از نوع عددی باشد.',
+                    rules: {
+                        format: /\d+/,
+                    },
+                    messages: {
+                        format: 'استفاده بعد از تعداد روز باید از نوع عددی باشد.',
                     },
                 },
                 start: {
-                    format: {
-                        pattern: /\d+/,
-                        message: '^' + 'تاریخ شروع نامعتبر است.',
+                    rules: {
+                        format: /\d+/,
+                    },
+                    messages: {
+                        format: 'تاریخ شروع نامعتبر است.',
                     },
                 },
                 end: {
-                    format: {
-                        pattern: /\d+/,
-                        message: '^' + 'تاریخ پایان نامعتبر است.',
+                    rules: {
+                        format: /\d+/,
+                    },
+                    messages: {
+                        format: 'تاریخ پایان نامعتبر است.',
                     },
                 },
             },
             editCoupon: {
                 code: {
-                    presence: {
-                        allowEmpty: false,
-                        message: '^' + 'عنوان کوپن را وارد کنید.',
+                    rules: {
+                        requiredNotEmpty: true,
+                        maxlength: 20,
+                        format: /[0-9a-zA-Z-_]+/,
                     },
-                    format: {
-                        pattern: /[0-9a-zA-Z-_]+/,
-                        message: '^' + 'کد کوپن باید از حروف انگلیسی، اعداد، خط تیره و آندرلاین تشکیل شده باشد.',
-                    },
-                    length: {
-                        maximum: 20,
-                        message: '^' + 'کد کوپن باید حداکثر ۲۰ کاراکتر باشد.',
+                    messages: {
+                        requiredNotEmpty: 'عنوان کوپن را وارد کنید.',
+                        maxlength: 'کد کوپن باید حداکثر ۲۰ کاراکتر باشد.',
+                        format: 'کد کوپن باید از حروف انگلیسی، اعداد، خط تیره و آندرلاین تشکیل شده باشد.',
                     },
                 },
                 title: {
-                    presence: {
-                        allowEmpty: false,
-                        message: '^' + 'عنوان کوپن را وارد کنید.',
+                    rules: {
+                        requiredNotEmpty: true,
+                        maxlength: 250,
                     },
-                    length: {
-                        maximum: 250,
-                        message: '^' + 'عنوان کوپن باید حداکثر ۲۵۰ کاراکتر باشد.',
+                    messages: {
+                        requiredNotEmpty: 'عنوان کوپن را وارد کنید.',
+                        maxlength: 'عنوان کوپن باید حداکثر ۲۵۰ کاراکتر باشد.',
                     },
                 },
                 price: {
-                    presence: {
-                        allowEmpty: false,
-                        message: '^' + 'عنوان کوپن را وارد کنید.',
+                    rules: {
+                        requiredNotEmpty: true,
+                        format: /\d+/,
                     },
-                    format: {
-                        pattern: /\d+/,
-                        message: '^' + 'قیمت باید از نوع عددی باشد.',
+                    messages: {
+                        requiredNotEmpty: 'عنوان کوپن را وارد کنید.',
+                        format: 'قیمت باید از نوع عددی باشد.',
                     },
                 },
                 minPrice: {
-                    format: {
-                        pattern: /\d+/,
-                        message: '^' + 'کمترین قیمت اعمال موپن قیمت باید از نوع عددی باشد.',
+                    rules: {
+                        format: /\d+/,
+                    },
+                    messages: {
+                        format: 'کمترین قیمت اعمال موپن قیمت باید از نوع عددی باشد.',
                     },
                 },
                 maxPrice: {
-                    format: {
-                        pattern: /\d+/,
-                        message: '^' + 'بیشترین قیمت اعمال موپن قیمت باید از نوع عددی باشد.',
+                    rules: {
+                        format: /\d+/,
+                    },
+                    messages: {
+                        format: 'بیشترین قیمت اعمال موپن قیمت باید از نوع عددی باشد.',
                     },
                 },
                 count: {
-                    presence: {
-                        allowEmpty: false,
-                        message: '^' + 'تعداد کوپن را وارد کنید.',
+                    rules: {
+                        requiredNotEmpty: true,
+                        format: /\d+/,
                     },
-                    format: {
-                        pattern: /\d+/,
-                        message: '^' + 'تعداد باید از نوع عددی باشد.',
+                    messages: {
+                        requiredNotEmpty: 'تعداد کوپن را وارد کنید.',
+                        format: 'تعداد باید از نوع عددی باشد.',
                     },
                 },
                 useAfter: {
-                    format: {
-                        pattern: /\d+/,
-                        message: '^' + 'استفاده بعد از تعداد روز باید از نوع عددی باشد.',
+                    rules: {
+                        format: /\d+/,
+                    },
+                    messages: {
+                        format: 'استفاده بعد از تعداد روز باید از نوع عددی باشد.',
                     },
                 },
                 start: {
-                    format: {
-                        pattern: /\d+/,
-                        message: '^' + 'تاریخ شروع نامعتبر است.',
+                    rules: {
+                        format: /\d+/,
+                    },
+                    messages: {
+                        format: 'تاریخ شروع نامعتبر است.',
                     },
                 },
                 end: {
-                    format: {
-                        pattern: /\d+/,
-                        message: '^' + 'تاریخ پایان نامعتبر است.',
+                    rules: {
+                        format: /\d+/,
+                    },
+                    messages: {
+                        format: 'تاریخ پایان نامعتبر است.',
                     },
                 },
             },
             addSecurityQuestion: {
                 question: {
-                    presence: {
-                        allowEmpty: false,
-                        message: '^' + 'متن سؤال را وارد کنید.',
+                    rules: {
+                        requiredNotEmpty: true,
+                    },
+                    messages: {
+                        requiredNotEmpty: 'متن سؤال را وارد کنید.',
                     },
                 },
             },
             editSecurityQuestion: {
                 question: {
-                    presence: {
-                        allowEmpty: false,
-                        message: '^' + 'متن سؤال را وارد کنید.',
+                    rules: {
+                        requiredNotEmpty: true,
+                    },
+                    messages: {
+                        requiredNotEmpty: 'متن سؤال را وارد کنید.',
                     },
                 },
             },
             addPaymentMethod: {
                 image: {
-                    presence: {
-                        allowEmpty: false,
-                        message: '^' + 'تصویر روش پرداخت را انتخاب کنید.',
+                    rules: {
+                        requiredNotEmpty: true,
+                    },
+                    messages: {
+                        requiredNotEmpty: 'تصویر روش پرداخت را انتخاب کنید.',
                     },
                 },
                 title: {
-                    presence: {
-                        allowEmpty: false,
-                        message: '^' + 'عنوان روش پرداخت را وارد کنید.',
+                    rules: {
+                        requiredNotEmpty: true,
+                        maxlength: 250,
                     },
-                    length: {
-                        maximum: 250,
-                        message: '^' + 'عنوان روش پرداخت باید حداکثر ۲۵۰ کاراکتر باشد.',
+                    messages: {
+                        requiredNotEmpty: 'عنوان روش پرداخت را وارد کنید.',
+                        maxlength: 'عنوان روش پرداخت باید حداکثر ۲۵۰ کاراکتر باشد.',
                     },
                 },
                 method: {
-                    presence: {
-                        allowEmpty: false,
-                        message: '^' + 'نوع روش پرداخت را وارد کنید.',
+                    rules: {
+                        requiredNotEmpty: true,
+                    },
+                    messages: {
+                        requiredNotEmpty: 'نوع روش پرداخت را وارد کنید.',
                     },
                 },
             },
             editPaymentMethod: {
                 image: {
-                    presence: {
-                        allowEmpty: false,
-                        message: '^' + 'تصویر روش پرداخت را انتخاب کنید.',
+                    rules: {
+                        requiredNotEmpty: true,
+                    },
+                    messages: {
+                        requiredNotEmpty: 'تصویر روش پرداخت را انتخاب کنید.',
                     },
                 },
                 title: {
-                    presence: {
-                        allowEmpty: false,
-                        message: '^' + 'عنوان روش پرداخت را وارد کنید.',
+                    rules: {
+                        requiredNotEmpty: true,
+                        maxlength: 250,
                     },
-                    length: {
-                        maximum: 250,
-                        message: '^' + 'عنوان روش پرداخت باید حداکثر ۲۵۰ کاراکتر باشد.',
+                    messages: {
+                        requiredNotEmpty: 'عنوان روش پرداخت را وارد کنید.',
+                        maxlength: 'عنوان روش پرداخت باید حداکثر ۲۵۰ کاراکتر باشد.',
                     },
                 },
                 method: {
-                    presence: {
-                        allowEmpty: false,
-                        message: '^' + 'نوع روش پرداخت را وارد کنید.',
+                    rules: {
+                        requiredNotEmpty: true,
+                    },
+                    messages: {
+                        requiredNotEmpty: 'نوع روش پرداخت را وارد کنید.',
                     },
                 },
             },
             addSendMethod: {
                 image: {
-                    presence: {
-                        allowEmpty: false,
-                        message: '^' + 'تصویر روش ارسال را انتخاب کنید.',
+                    rules: {
+                        requiredNotEmpty: true,
+                    },
+                    messages: {
+                        requiredNotEmpty: 'تصویر روش ارسال را انتخاب کنید.',
                     },
                 },
                 title: {
-                    presence: {
-                        allowEmpty: false,
-                        message: '^' + 'عنوان روش ارسال را وارد کنید.',
+                    rules: {
+                        requiredNotEmpty: true,
+                        maxlength: 250,
                     },
-                    length: {
-                        maximum: 250,
-                        message: '^' + 'عنوان روش ارسال باید حداکثر ۲۵۰ کاراکتر باشد.',
+                    messages: {
+                        requiredNotEmpty: 'عنوان روش ارسال را وارد کنید.',
+                        maxlength: 'عنوان روش ارسال باید حداکثر ۲۵۰ کاراکتر باشد.',
                     },
                 },
                 desc: {
-                    length: {
-                        maximum: 250,
-                        message: '^' + 'توضیحات روش ارسال باید حداکثر ۲۵۰ کاراکتر باشد.',
+                    rules: {
+                        maxlength: 250,
+                    },
+                    messages: {
+                        maxlength: 'توضیحات روش ارسال باید حداکثر ۲۵۰ کاراکتر باشد.',
                     },
                 },
             },
             editSendMethod: {
                 image: {
-                    presence: {
-                        allowEmpty: false,
-                        message: '^' + 'تصویر روش ارسال را انتخاب کنید.',
+                    rules: {
+                        requiredNotEmpty: true,
+                    },
+                    messages: {
+                        requiredNotEmpty: 'تصویر روش ارسال را انتخاب کنید.',
                     },
                 },
                 title: {
-                    presence: {
-                        allowEmpty: false,
-                        message: '^' + 'عنوان روش ارسال را وارد کنید.',
+                    rules: {
+                        requiredNotEmpty: true,
+                        maxlength: 250,
                     },
-                    length: {
-                        maximum: 250,
-                        message: '^' + 'عنوان روش ارسال باید حداکثر ۲۵۰ کاراکتر باشد.',
+                    messages: {
+                        requiredNotEmpty: 'عنوان روش ارسال را وارد کنید.',
+                        maxlength: 'عنوان روش ارسال باید حداکثر ۲۵۰ کاراکتر باشد.',
                     },
                 },
                 desc: {
-                    length: {
-                        maximum: 250,
-                        message: '^' + 'توضیحات روش ارسال باید حداکثر ۲۵۰ کاراکتر باشد.',
+                    rules: {
+                        maxlength: 250,
+                    },
+                    messages: {
+                        maxlength: 'توضیحات روش ارسال باید حداکثر ۲۵۰ کاراکتر باشد.',
                     },
                 },
             },
             addFestival: {
                 title: {
-                    presence: {
-                        allowEmpty: false,
-                        message: '^' + 'عنوان جشنواره را وارد کنید.',
+                    rules: {
+                        requiredNotEmpty: true,
+                        maxlength: 250,
                     },
-                    length: {
-                        maximum: 250,
-                        message: '^' + 'عنوان جشنواره باید حداکثر ۲۵۰ کاراکتر باشد.',
+                    messages: {
+                        requiredNotEmpty: 'عنوان جشنواره را وارد کنید.',
+                        maxlength: 'عنوان جشنواره باید حداکثر ۲۵۰ کاراکتر باشد.',
                     },
                 },
                 start: {
-                    presence: {
-                        allowEmpty: false,
-                        message: '^' + 'تاریخ شروع را انتخاب کنید.',
+                    rules: {
+                        requiredNotEmpty: true,
+                        format: /\d+/,
                     },
-                    format: {
-                        pattern: /\d+/,
-                        message: '^' + 'تاریخ شروع نامعتبر است.',
+                    messages: {
+                        requiredNotEmpty: 'تاریخ شروع را انتخاب کنید.',
+                        format: 'تاریخ شروع نامعتبر است.',
                     },
                 },
                 end: {
-                    presence: {
-                        allowEmpty: false,
-                        message: '^' + 'تاریخ پایان را انتخاب کنید.',
+                    rules: {
+                        requiredNotEmpty: true,
+                        format: /\d+/,
                     },
-                    format: {
-                        pattern: /\d+/,
-                        message: '^' + 'تاریخ پایان نامعتبر است.',
+                    messages: {
+                        requiredNotEmpty: 'تاریخ پایان را انتخاب کنید.',
+                        format: 'تاریخ پایان نامعتبر است.',
                     },
                 },
             },
             editFestival: {
                 title: {
-                    presence: {
-                        allowEmpty: false,
-                        message: '^' + 'عنوان جشنواره را وارد کنید.',
+                    rules: {
+                        requiredNotEmpty: true,
+                        maxlength: 250,
                     },
-                    length: {
-                        maximum: 250,
-                        message: '^' + 'عنوان جشنواره باید حداکثر ۲۵۰ کاراکتر باشد.',
+                    messages: {
+                        requiredNotEmpty: 'عنوان جشنواره را وارد کنید.',
+                        maxlength: 'عنوان جشنواره باید حداکثر ۲۵۰ کاراکتر باشد.',
                     },
                 },
                 start: {
-                    presence: {
-                        allowEmpty: false,
-                        message: '^' + 'تاریخ شروع را انتخاب کنید.',
+                    rules: {
+                        requiredNotEmpty: true,
+                        format: /\d+/,
                     },
-                    format: {
-                        pattern: /\d+/,
-                        message: '^' + 'تاریخ شروع نامعتبر است.',
+                    messages: {
+                        requiredNotEmpty: 'تاریخ شروع را انتخاب کنید.',
+                        format: 'تاریخ شروع نامعتبر است.',
                     },
                 },
                 end: {
-                    presence: {
-                        allowEmpty: false,
-                        message: '^' + 'تاریخ پایان را انتخاب کنید.',
+                    rules: {
+                        requiredNotEmpty: true,
+                        format: /\d+/,
                     },
-                    format: {
-                        pattern: /\d+/,
-                        message: '^' + 'تاریخ پایان نامعتبر است.',
+                    messages: {
+                        requiredNotEmpty: 'تاریخ پایان را انتخاب کنید.',
+                        format: 'تاریخ پایان نامعتبر است.',
                     },
                 },
             },
             addProductFestival: {
                 product: {
-                    presence: {
-                        allowEmpty: false,
-                        message: '^' + 'محصول را انتخاب کنید.',
+                    rules: {
+                        requiredNotEmpty: true,
+                    },
+                    messages: {
+                        requiredNotEmpty: 'محصول را انتخاب کنید.',
                     },
                 },
             },
             modifyProductFestival: {
                 category: {
-                    presence: {
-                        allowEmpty: false,
-                        message: '^' + 'دسته‌بندی را انتخاب کنید.',
+                    rules: {
+                        requiredNotEmpty: true,
+                    },
+                    messages: {
+                        requiredNotEmpty: 'دسته‌بندی را انتخاب کنید.',
                     },
                 },
             },
             addSteppedPrice: {
                 min: {
-                    format: {
-                        pattern: /[0-9]*/,
-                        message: '^' + 'حداقل تعداد در سبد خرید باید از نوع عددی باشد.',
+                    rules: {
+                        format: /[0-9]*/,
+                    },
+                    messages: {
+                        format: 'حداقل تعداد در سبد خرید باید از نوع عددی باشد.',
                     },
                 },
                 max: {
-                    format: {
-                        pattern: /[0-9]*/,
-                        message: '^' + 'حداکثر تعداد در سبد خرید باید از نوع عددی باشد.',
+                    rules: {
+                        format: /[0-9]*/,
+                    },
+                    messages: {
+                        format: 'حداکثر تعداد در سبد خرید باید از نوع عددی باشد.',
                     },
                 },
                 price: {
-                    presence: {
-                        allowEmpty: false,
-                        message: '^' + 'قیمت را وارد کنید.',
+                    rules: {
+                        requiredNotEmpty: true,
+                    },
+                    messages: {
+                        requiredNotEmpty: 'قیمت را وارد کنید.',
                     },
                 },
                 discount: {
-                    presence: {
-                        allowEmpty: false,
-                        message: '^' + 'قیمت با تخفیف را وارد کنید.',
+                    rules: {
+                        requiredNotEmpty: true,
+                    },
+                    messages: {
+                        requiredNotEmpty: 'قیمت با تخفیف را وارد کنید.',
                     },
                 },
             },
             editSteppedPrice: {
                 min: {
-                    format: {
-                        pattern: /[0-9]*/,
-                        message: '^' + 'حداقل تعداد در سبد خرید باید از نوع عددی باشد.',
+                    rules: {
+                        format: /[0-9]*/,
+                    },
+                    messages: {
+                        format: 'حداقل تعداد در سبد خرید باید از نوع عددی باشد.',
                     },
                 },
                 max: {
-                    format: {
-                        pattern: /[0-9]*/,
-                        message: '^' + 'حداکثر تعداد در سبد خرید باید از نوع عددی باشد.',
+                    rules: {
+                        format: /[0-9]*/,
+                    },
+                    messages: {
+                        format: 'حداکثر تعداد در سبد خرید باید از نوع عددی باشد.',
                     },
                 },
                 price: {
-                    presence: {
-                        allowEmpty: false,
-                        message: '^' + 'قیمت را وارد کنید.',
+                    rules: {
+                        requiredNotEmpty: true,
+                    },
+                    messages: {
+                        requiredNotEmpty: 'قیمت را وارد کنید.',
                     },
                 },
                 discount: {
-                    presence: {
-                        allowEmpty: false,
-                        message: '^' + 'قیمت با تخفیف را وارد کنید.',
+                    rules: {
+                        requiredNotEmpty: true,
+                    },
+                    messages: {
+                        requiredNotEmpty: 'قیمت با تخفیف را وارد کنید.',
                     },
                 },
             },
             addDepositType: {
                 title: {
-                    presence: {
-                        allowEmpty: false,
-                        message: '^' + 'عنوان نوع تراکنش را وارد کنید.',
+                    rules: {
+                        requiredNotEmpty: true,
+                        maxlength: 250,
                     },
-                    length: {
-                        maximum: 250,
-                        message: '^' + 'عنوان نوع تراکنش باید حداکثر ۲۵۰ کاراکتر باشد.',
+                    messages: {
+                        requiredNotEmpty: 'عنوان نوع تراکنش را وارد کنید.',
+                        maxlength: 'عنوان نوع تراکنش باید حداکثر ۲۵۰ کاراکتر باشد.',
                     },
                 },
                 desc: {
-                    presence: {
-                        allowEmpty: false,
-                        message: '^' + 'توضیح نوع تراکنش را وارد کنید.',
+                    rules: {
+                        requiredNotEmpty: true,
+                        maxlength: 250,
                     },
-                    length: {
-                        maximum: 250,
-                        message: '^' + 'توضیح نوع تراکنش باید حداکثر ۲۵۰ کاراکتر باشد.',
+                    messages: {
+                        requiredNotEmpty: 'توضیح نوع تراکنش را وارد کنید.',
+                        maxlength: 'توضیح نوع تراکنش باید حداکثر ۲۵۰ کاراکتر باشد.',
                     },
                 },
             },
             editDepositType: {
                 title: {
-                    presence: {
-                        allowEmpty: false,
-                        message: '^' + 'عنوان نوع تراکنش را وارد کنید.',
+                    rules: {
+                        requiredNotEmpty: true,
+                        maxlength: 250,
                     },
-                    length: {
-                        maximum: 250,
-                        message: '^' + 'عنوان نوع تراکنش باید حداکثر ۲۵۰ کاراکتر باشد.',
+                    messages: {
+                        requiredNotEmpty: 'عنوان نوع تراکنش را وارد کنید.',
+                        maxlength: 'عنوان نوع تراکنش باید حداکثر ۲۵۰ کاراکتر باشد.',
                     },
                 },
                 desc: {
-                    presence: {
-                        allowEmpty: false,
-                        message: '^' + 'توضیح نوع تراکنش را وارد کنید.',
+                    rules: {
+                        requiredNotEmpty: true,
+                        maxlength: 250,
                     },
-                    length: {
-                        maximum: 250,
-                        message: '^' + 'توضیح نوع تراکنش باید حداکثر ۲۵۰ کاراکتر باشد.',
+                    messages: {
+                        requiredNotEmpty: 'توضیح نوع تراکنش را وارد کنید.',
+                        maxlength: 'توضیح نوع تراکنش باید حداکثر ۲۵۰ کاراکتر باشد.',
                     },
                 },
             },
             settingMain: {
                 logo: {
-                    presence: {
-                        allowEmpty: false,
-                        message: '^' + 'تصویر لوگو را انتخاب کنید.',
+                    rules: {
+                        requiredNotEmpty: true,
+                    },
+                    messages: {
+                        requiredNotEmpty: 'تصویر لوگو را انتخاب کنید.',
                     },
                 },
                 logoWhite: {
-                    presence: {
-                        allowEmpty: false,
-                        message: '^' + 'تصویر لوگوی سفید را انتخاب کنید.',
+                    rules: {
+                        requiredNotEmpty: true,
+                    },
+                    messages: {
+                        requiredNotEmpty: 'تصویر لوگوی سفید را انتخاب کنید.',
                     },
                 },
                 fav: {
-                    presence: {
-                        allowEmpty: false,
-                        message: '^' + 'تصویر فاو آیکون را انتخاب کنید.',
+                    rules: {
+                        requiredNotEmpty: true,
+                    },
+                    messages: {
+                        requiredNotEmpty: 'تصویر فاو آیکون را انتخاب کنید.',
                     },
                 },
                 logoFooter: {
-                    presence: {
-                        allowEmpty: false,
-                        message: '^' + 'تصویر لوگوی پاورقی را انتخاب کنید.',
+                    rules: {
+                        requiredNotEmpty: true,
+                    },
+                    messages: {
+                        requiredNotEmpty: 'تصویر لوگوی پاورقی را انتخاب کنید.',
                     },
                 },
                 logoFooterWhite: {
-                    presence: {
-                        allowEmpty: false,
-                        message: '^' + 'تصویر سفید لوگوی پاورقی را انتخاب کنید.',
+                    rules: {
+                        requiredNotEmpty: true,
+                    },
+                    messages: {
+                        requiredNotEmpty: 'تصویر سفید لوگوی پاورقی را انتخاب کنید.',
                     },
                 },
                 title: {
-                    presence: {
-                        allowEmpty: false,
-                        message: '^' + 'عنوان سایت را وارد کنید.',
+                    rules: {
+                        requiredNotEmpty: true,
+                        maxlength: 50,
                     },
-                    length: {
-                        maximum: 50,
-                        message: '^' + 'عنوان سایت باید حداکثر ۵۰ کاراکتر باشد.',
+                    messages: {
+                        requiredNotEmpty: 'عنوان سایت را وارد کنید.',
+                        maxlength: 'عنوان سایت باید حداکثر ۵۰ کاراکتر باشد.',
                     },
                 },
             },
             settingBuy: {
                 province: {
-                    presence: {
-                        allowEmpty: false,
-                        message: '^' + 'انتخاب استان محل فروشگاه اجباری است.',
+                    rules: {
+                        requiredNotEmpty: true,
+                    },
+                    messages: {
+                        requiredNotEmpty: 'انتخاب استان محل فروشگاه اجباری است.',
                     },
                 },
                 city: {
-                    presence: {
-                        allowEmpty: false,
-                        message: '^' + 'انتخاب شهر محل فروشگاه اجباری است.',
+                    rules: {
+                        requiredNotEmpty: true,
+                    },
+                    messages: {
+                        requiredNotEmpty: 'انتخاب شهر محل فروشگاه اجباری است.',
                     },
                 },
             },
             settingSMS: {
                 activation: {
-                    presence: {
-                        allowEmpty: false,
-                        message: '^' + 'متن پیامک فعالسازی حساب اجباری است.',
+                    rules: {
+                        requiredNotEmpty: true,
+                    },
+                    messages: {
+                        requiredNotEmpty: 'متن پیامک فعالسازی حساب اجباری است.',
                     },
                 },
                 recoverPass: {
-                    presence: {
-                        allowEmpty: false,
-                        message: '^' + 'متن پیامک بازیابی کلمه عبور اجباری است.',
+                    rules: {
+                        requiredNotEmpty: true,
+                    },
+                    messages: {
+                        requiredNotEmpty: 'متن پیامک بازیابی کلمه عبور اجباری است.',
                     },
                 },
                 buy: {
-                    presence: {
-                        allowEmpty: false,
-                        message: '^' + 'متن پیامک خرید کالا اجباری است.',
+                    rules: {
+                        requiredNotEmpty: true,
+                    },
+                    messages: {
+                        requiredNotEmpty: 'متن پیامک خرید کالا اجباری است.',
                     },
                 },
                 orderStatus: {
-                    presence: {
-                        allowEmpty: false,
-                        message: '^' + 'متن پیامک تغییر وضعیت سفارش اجباری است.',
+                    rules: {
+                        requiredNotEmpty: true,
+                    },
+                    messages: {
+                        requiredNotEmpty: 'متن پیامک تغییر وضعیت سفارش اجباری است.',
                     },
                 },
                 walletCharge: {
-                    presence: {
-                        allowEmpty: false,
-                        message: '^' + 'متن پیامک شارژ حساب کاربری اجباری است.',
+                    rules: {
+                        requiredNotEmpty: true,
+                    },
+                    messages: {
+                        requiredNotEmpty: 'متن پیامک شارژ حساب کاربری اجباری است.',
                     },
                 },
             },
             settingOther: {
                 storeProvince: {
-                    presence: {
-                        allowEmpty: false,
-                        message: '^' + 'استان محل فروشگاه اجباری است.',
+                    rules: {
+                        requiredNotEmpty: true,
+                    },
+                    messages: {
+                        requiredNotEmpty: 'استان محل فروشگاه اجباری است.',
                     },
                 },
                 productPagination: {
-                    presence: {
-                        allowEmpty: false,
-                        message: '^' + 'تعداد کالا در هر صفحه اجباری است.',
+                    rules: {
+                        requiredNotEmpty: true,
+                        format: /[0-9]*/,
                     },
-                    format: {
-                        pattern: /[0-9]*/,
-                        message: '^' + 'تعداد کالا در هر صفحه باید از نوع عددی باشد.',
+                    messages: {
+                        requiredNotEmpty: 'تعداد کالا در هر صفحه اجباری است.',
+                        format: 'تعداد کالا در هر صفحه باید از نوع عددی باشد.',
                     },
                 },
                 blogPagination: {
-                    presence: {
-                        allowEmpty: false,
-                        message: '^' + 'تعداد بلاگ در هر صفحه اجباری است.',
+                    rules: {
+                        requiredNotEmpty: true,
+                        format: /[0-9]*/,
                     },
-                    format: {
-                        pattern: /[0-9]*/,
-                        message: '^' + 'تعداد بلاگ در هر صفحه باید از نوع عددی باشد.',
+                    messages: {
+                        requiredNotEmpty: 'تعداد بلاگ در هر صفحه اجباری است.',
+                        format: 'تعداد بلاگ در هر صفحه باید از نوع عددی باشد.',
                     },
                 },
             },
@@ -2059,9 +2237,7 @@
             var target;
             target = $($(this).attr('data-clipboard-target'));
             if (target.length) {
-                target.each(function () {
-                    copyTextToClipboard($(this).val());
-                });
+                copyTextToClipboard(target.last().val());
                 admin.toasts.toast('متن در کلیپ بورد کپی شد.', {
                     type: variables.toasts.types.success,
                 });
@@ -2083,6 +2259,15 @@
                 }
             });
         });
+
+        function initSearchString(table, search, isAjax) {
+            table.api().search(search).draw();
+            if (isAjax) {
+                setTimeout(function () {
+                    $(table).DataTable().ajax.reload();
+                }, 0);
+            }
+        }
 
         function createDatatable(selector) {
             if ($().DataTable) {
@@ -2250,10 +2435,11 @@
 
                 selector = selector ? $(selector) : $('.datatable-highlight');
                 $.each(selector, function () {
-                    var $this, table, url;
+                    var $this, table, url, search;
                     $this = $(this);
 
                     url = $this.attr('data-ajax-url');
+                    search = $this.attr('data-search') || '';
                     if (url) {
                         table = $this.DataTable({
                             stateSave: true,
@@ -2266,6 +2452,7 @@
                             }),
                             deferRender: true,
                             initComplete: function () {
+                                initSearchString(this, search, true);
                                 datatableInitCompleteActions($this);
                             },
                         });
@@ -2273,6 +2460,7 @@
                         table = $this.DataTable({
                             stateSave: true,
                             initComplete: function () {
+                                initSearchString(this, search, false);
                                 datatableInitCompleteActions($this);
                             },
                         });
@@ -3202,7 +3390,6 @@
                             };
                         },
                         processResults: function (data, params) {
-
                             // parse the results into the format expected by Select2
                             // since we are using custom formatting functions we do not need to
                             // alter the remote JSON data, except to indicate that infinite
@@ -3210,7 +3397,7 @@
                             params.page = params.page || 1;
 
                             return {
-                                results: data.items,
+                                results: data.results || {},
                                 pagination: {
                                     more: (params.page * limit) < data.total_count
                                 }
@@ -3669,7 +3856,7 @@
             // make all data to error loading
             if (id && currentModal.length) {
                 $('#__receiver_info_full_name,#__receiver_info_phone,#__receiver_info_province,#__receiver_info_city,#__receiver_info_postal_code,#__receiver_info_address')
-                    .html('خطا در بارگذاری');
+                    .html('در حال بارگذاری');
 
                 admin.request(variables.url.orders.info + '/' + id, 'get', function () {
                     var _ = this;
@@ -3840,7 +4027,7 @@
         // REPORT USER SECTION
         //---------------------------------------------------------------
         var
-            the_query_builder,
+            the_query_builder = null,
             query_builder_reset_btn,
             query_builder_filter_btn,
             //-----
@@ -3851,14 +4038,56 @@
         //***************************
         //******* User Report *******
         //***************************
-        the_query_builder = $('#builder-basic');
-        query_builder_reset_btn = $('#btn-reset-user');
-        query_builder_filter_btn = $('#btn-filter-user');
-        filterUrl = variables.url.report.user.filter;
-        filterClearUrl = variables.url.report.user.filterClear;
-        excelExportUrl = variables.url.report.user.excelExport;
+        if ($('#builder-basic-user').length) {
+            the_query_builder = $('#builder-basic-user');
+            query_builder_reset_btn = $('#btn-reset-user');
+            query_builder_filter_btn = $('#btn-filter-user');
+            filterUrl = variables.url.report.user.filter;
+            filterClearUrl = variables.url.report.user.filterClear;
+            excelExportUrl = variables.url.report.user.excelExport;
+        }
 
-        if (core.isDefined(window.report_variable_filters)) {
+        //***************************
+        //***** PRODUCT Report ******
+        //***************************
+        if ($('#builder-basic-product').length) {
+            the_query_builder = $('#builder-basic-product');
+            query_builder_reset_btn = $('#btn-reset-product');
+            query_builder_filter_btn = $('#btn-filter-product');
+            filterUrl = variables.url.report.product.filter;
+            filterClearUrl = variables.url.report.product.filterClear;
+            excelExportUrl = variables.url.report.product.excelExport;
+        }
+
+        //***************************
+        //****** Order Report *******
+        //***************************
+        if ($('#builder-basic-order').length) {
+            the_query_builder = $('#builder-basic-order');
+            query_builder_reset_btn = $('#btn-reset-order');
+            query_builder_filter_btn = $('#btn-filter-order');
+            filterUrl = variables.url.report.order.filter;
+            filterClearUrl = variables.url.report.order.filterClear;
+            excelExportUrl = variables.url.report.order.excelExport;
+        }
+
+        //***************************
+        //****** Wallet Report ******
+        //***************************
+        if ($('#builder-basic-wallet').length) {
+            the_query_builder = $('#builder-basic-wallet');
+            query_builder_reset_btn = $('#btn-reset-wallet');
+            query_builder_filter_btn = $('#btn-filter-wallet');
+            filterUrl = variables.url.report.wallet.filter;
+            filterClearUrl = variables.url.report.wallet.filterClear;
+            excelExportUrl = variables.url.report.wallet.excelExport;
+        }
+
+        if (
+            core.isDefined(the_query_builder) &&
+            the_query_builder.length &&
+            core.isDefined(window.report_variable_filters)
+        ) {
             // create query builder object
             the_query_builder.queryBuilder({
                 filters: window.report_variable_filters,
@@ -4367,10 +4596,6 @@
                 createLoader = false;
                 loaderId = admin.showLoader();
             }
-
-            // for (var pair of values.entries()) {
-            //     console.log(pair[0] + ', ' + pair[1]);
-            // }
 
             admin.request(variables.url.newsletter.add, 'post', function () {
                 admin.hideLoader(loaderId);

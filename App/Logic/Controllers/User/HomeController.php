@@ -14,6 +14,7 @@ use App\Logic\Models\CommentModel;
 use App\Logic\Models\OrderModel;
 use App\Logic\Models\ProductModel;
 use App\Logic\Models\ReturnOrderModel;
+use App\Logic\Models\SecurityQuestionModel;
 use App\Logic\Models\WalletFlowModel;
 use App\Logic\Models\WalletModel;
 use Jenssegers\Agent\Agent;
@@ -123,9 +124,15 @@ class HomeController extends AbstractUserController
      */
     public function info()
     {
-        $user = $this->getDefaultArguments()['user'];
+        /**
+         * @var SecurityQuestionModel $secModel
+         */
+        $secModel = container()->get(SecurityQuestionModel::class);
 
+        $user = $this->getDefaultArguments()['user'];
         $data = [];
+        $data['security_questions'] = $secModel->get(['id', 'question'], 'publish=:pub', ['pub' => DB_YES]);
+
         if (is_post()) {
             session()->setFlash('the-current-user-id', $user['id']);
 

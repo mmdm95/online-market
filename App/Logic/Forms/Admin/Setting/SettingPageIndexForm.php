@@ -112,10 +112,10 @@ class SettingPageIndexForm implements IPageForm
             $link = input()->post('inp-setting-tabbed-slider-side-image-link');
             $assembled = [];
 
-            if (is_image_exists($image)) {
+            if (is_image_exists($image) || empty($image)) {
                 $assembled = [
-                    'image' => $image,
-                    'link' => $link,
+                    'image' => $image->getValue(),
+                    'link' => $link->getValue(),
                 ];
             }
 

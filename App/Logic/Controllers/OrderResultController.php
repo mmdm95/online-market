@@ -40,18 +40,17 @@ class OrderResultController extends AbstractHomeController
              * @var GatewayModel $gatewayModel
              */
             $gatewayModel = container()->get(GatewayModel::class);
-            $info = $gatewayModel->getUserAndOrderInfoFromGatewayFlowCode($code);
-            $username = $info['user']['username'] ?? null;
-            $orderCode = $info['order']['code'] ?? null;
+            $info = $gatewayModel->getFirstUserAndOrderInfoFromGatewayFlowCode($code);
+            $username = $info['username'] ?? null;
+            $orderCode = $info['code'] ?? null;
             if (!is_null($username) && !is_null($orderCode)) {
                 // send success order sms
-                $body = 'سفارش شما با موفقیت ثبت گردید.' . "\n" .
-                    'کد سفارش شما : ' . $orderCode . "\n" .
-                    'برای پیگیری به آدرس ' .
-                    url('user.order.detail', ['id' => $info['order']['id']])->getRelativeUrlTrimmed() .
-                    ' مراجعه نمایید.';
+                $body = replaced_sms_body(SMS_TYPE_BUY, [
+                    SMS_REPLACEMENTS['mobile'] => $username,
+                    SMS_REPLACEMENTS['orderCode'] => $orderCode,
+                ]);
                 $smsRes = SMSUtil::send([$username], $body);
-                SMSUtil::logSMS([$username], $body, $smsRes, SMS_LOG_TYPE_ORDER_SUCCESS, SMS_LOG_SENDER_SYSTEM);
+                SMSUtil::logSMS([$username], $body, $smsRes, SMS_LOG_TYPE_BUY, SMS_LOG_SENDER_SYSTEM);
             }
         }
 

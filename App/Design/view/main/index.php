@@ -27,10 +27,10 @@
     <!-- END SECTION SHOP -->
 
     <!-- START SECTION SHOP DYNAMIC -->
-    <?php foreach ($general_slider['items'] ?? [] as $slider): ?>
+    <?php foreach ($general_slider ?? [] as $slider): ?>
         <?php load_partial('main/slider-general', [
-            'slider' => $slider ?? [],
-            'info' => $general_slider['info'] ?? [],
+            'slider' => $slider['items'] ?? [],
+            'info' => $slider['info'] ?? [],
         ]); ?>
     <?php endforeach; ?>
     <!-- END SECTION SHOP DYNAMIC -->

@@ -24,25 +24,19 @@
                     <span class="price_symbole">تومان</span>
                 </del>
                 <div class="on_sale">
+                    <?= $product['festival_discount']; ?>
                     <span>
                         ٪
                         <?php if (isset($product['festival_discount'])): ?>
                             <?= local_number($product['festival_discount']); ?>
                         <?php else: ?>
-                            <?= local_number(get_percentage($product['price'], $product['discounted_price'])); ?>
+                            <?= local_number(get_percentage($product['discounted_price'], $product['price'])); ?>
                         <?php endif; ?>
                          تخفیف
                     </span>
                 </div>
             <?php endif; ?>
         </div>
-        <?php if (trim($product['guarantee']) != ''): ?>
-            <div class="pr_desc mt-3">
-                <p>
-                    <?= $product['guarantee']; ?>
-                </p>
-            </div>
-        <?php endif; ?>
     <?php else: ?>
         <div class="product_price">
             <span class="badge badge-danger d-block py-3">ناموجود</span>

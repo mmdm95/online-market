@@ -2,6 +2,8 @@
 
 namespace App\Logic\Handlers;
 
+use Sim\Utils\StringUtil;
+
 class Select2Handler
 {
     /**
@@ -12,8 +14,9 @@ class Select2Handler
     public static function handle($request, $columns): array
     {
         $cols = self::columnsNAliases($columns);
+        [$where, $bindValues] = self::filter($request, $columns);
         [$limit, $offset] = self::limit($request);
-        $res = emitter()->dispatch('select2.ajax:load', [$cols, $limit, $offset])->getReturnValue();
+        $res = emitter()->dispatch('select2.ajax:load', [$cols, $where, $bindValues, $limit, $offset])->getReturnValue();
         if (is_array($res)) {
             [$data, $recordsTotal] = $res;
         } else {
@@ -31,6 +34,52 @@ class Select2Handler
 
     /**
      * @param $request
+     * @param $columns
+     * @return array
+     */
+    private static function filter($request, $columns): array
+    {
+        $globalSearch = [];
+        $bindValues = [];
+        $bindCounter = 0;
+        $str = $request['q'] ?? '';
+
+        if ($str != '') {
+            foreach ($columns as $column) {
+                // create where only on searchable columns
+                if (!isset($column['searchable']) || !(bool)$column['searchable']) continue;
+
+                // english
+                $binding = 'binding' . $bindCounter++;
+                $bindValues[$binding] = '%' . StringUtil::toEnglish($str) . '%';
+                $phrase = '(' . $column['db'] . " LIKE :" . $binding . ' OR ';
+
+                // persian
+                $binding = 'binding' . $bindCounter++;
+                $bindValues[$binding] = '%' . StringUtil::toPersian($str) . '%';
+                $phrase .= $column['db'] . " LIKE :" . $binding . ' OR ';
+
+                // arabic
+                $binding = 'binding' . $bindCounter++;
+                $bindValues[$binding] = '%' . StringUtil::toArabic($str) . '%';
+                $phrase .= $column['db'] . " LIKE :" . $binding . ')';
+
+                $globalSearch[] = $phrase;
+            }
+        }
+
+        // Combine the filters into a single string
+        $where = '';
+
+        if (count($globalSearch)) {
+            $where = '(' . implode(' OR ', $globalSearch) . ')';
+        }
+
+        return [$where, $bindValues];
+    }
+
+    /**
+     * @param $request
      * @return array
      */
     private static function limit($request)
@@ -38,7 +87,7 @@ class Select2Handler
         $limit = [null, 0];
 
         if (isset($request['page'])) {
-            $limit = [intval($request['length']), intval($request['page'])];
+            $limit = [intval($request['length']), intval($request['length']) * intval($request['page'])];
         }
 
         return $limit;

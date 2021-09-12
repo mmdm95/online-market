@@ -104,7 +104,8 @@
                             !empty($sideImages[1]['image']) &&
                             is_image_exists($sideImages[1]['image'])
                         ): ?>
-                            <div class="shop_banner2 el_banner2">
+                            <div class="shop_banner2 el_banner2"
+                                 style="background-color: <?= $sideImages[1]['color']; ?>;">
                                 <a href="<?= $sideImages[1]['link'] ?? '#'; ?>"
                                    class="hover_effect1">
                                     <?php if (isset($sideImages[1]['title']) || isset($sideImages[1]['sub_title'])): ?>

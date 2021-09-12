@@ -306,7 +306,7 @@ class ProductController extends AbstractAdminController implements IDatatableCon
                     return false;
                 }
 
-                if ($auth->hasRole(ROLE_DEVELOPER) || $auth->hasRole(ROLE_SUPER_USER)) {
+                if ($auth->userHasRole(ROLE_DEVELOPER) || $auth->userHasRole(ROLE_SUPER_USER)) {
                     return true;
                 }
 
@@ -597,7 +597,7 @@ class ProductController extends AbstractAdminController implements IDatatableCon
              */
             $agent = container()->get(Agent::class);
             if (!$agent->isRobot()) {
-                emitter()->addListener('select2.ajax:load', function (IEvent $event, $cols, $limit, $offset) {
+                emitter()->addListener('select2.ajax:load', function (IEvent $event, $cols, $where, $bindValues, $limit, $offset) {
                     $event->stopPropagation();
 
                     /**
@@ -605,20 +605,31 @@ class ProductController extends AbstractAdminController implements IDatatableCon
                      */
                     $productModel = container()->get(ProductModel::class);
 
-                    $where = 'publish=:pub';
-                    $bindValues = ['pub' => DB_YES];
+                    if (!empty($where)) {
+                        $where .= ' AND ';
+                    }
+
+                    $where .= 'publish=:pub';
+                    $bindValues['pub'] = DB_YES;
 
                     $data = $productModel->get($cols, $where, $bindValues, ['id DESC'], $limit, $offset);
                     //-----
-                    $recordsTotal = $productModel->count();
+                    $recordsTotal = $productModel->count($where, $bindValues);
 
                     return [$data, $recordsTotal];
                 });
 
                 $columns = [
                     ['db' => 'id', 'db_alias' => 'id', 's2' => 'id'],
-                    ['db' => 'title', 'db_alias' => 'title', 's2' => 'text'],
-                    ['db' => 'image', 'db_alias' => 'image', 's2' => 'image'],
+                    ['db' => 'title', 'db_alias' => 'title', 's2' => 'text', 'searchable' => true],
+                    [
+                        'db' => 'image',
+                        'db_alias' => 'image',
+                        's2' => 'image',
+                        'formatter' => function ($d) {
+                            return url('image.show', ['filename' => $d])->getRelativeUrl();
+                        }
+                    ],
                 ];
 
                 $response = Select2Handler::handle($_GET, $columns);

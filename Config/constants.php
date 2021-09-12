@@ -19,9 +19,9 @@ use Sim\I18n\ISOLanguageCodes;
  *     3 for (final) release
  *   ie.
  *     1.2.5.0 instead of 1.2.5-a
- *     1.2.5.0.1 instead of 1.2.5-a1 (I'm not sure)
+ *     1.2.5.0.1 instead of 1.2.5-a.1 (I'm not sure)
  */
-defined("APP_VERSION") OR define("APP_VERSION", "0.3.11.2");
+defined("APP_VERSION") OR define("APP_VERSION", "0.3.16.2");
 
 /***************************************
  * You can add your constants here
@@ -300,6 +300,7 @@ defined("ADDRESS_MAX_COUNT") OR define("ADDRESS_MAX_COUNT", 10);
 
 // default time format
 defined("DEFAULT_TIME_FORMAT") OR define("DEFAULT_TIME_FORMAT", 'j F Y');
+defined("DEFAULT_TIME_FORMAT_WITH_TIME") OR define("DEFAULT_TIME_FORMAT_WITH_TIME", 'j F Y در ساعت H و i دقیقه');
 
 // archive tags time format
 defined("ARCHIVE_TAGS_TIME_FORMAT") OR define("ARCHIVE_TAGS_TIME_FORMAT", 'F Y');

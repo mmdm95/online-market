@@ -2,7 +2,6 @@
 
 namespace App\Logic;
 
-use App\Logic\Adapters\SessionTokenProvider;
 use App\Logic\Controllers\Admin\{BlogController as AdminBlogController,
     BlogCategoryController as AdminBlogCategoryController,
     BrandController as AdminBrandController,
@@ -44,6 +43,7 @@ use App\Logic\Controllers\Admin\{BlogController as AdminBlogController,
 use App\Logic\Controllers\API\CsrfController;
 use App\Logic\Controllers\CheckoutController;
 use App\Logic\Controllers\OrderResultController;
+use App\Logic\Controllers\RecoverPassController;
 use App\Logic\Controllers\User\{AddressController as UserAddressController,
     CommentController as UserCommentController,
     HomeController as UserHomeController,
@@ -251,7 +251,7 @@ class Route implements IInitialize
                  */
                 Router::form('/pay-method/add', [AdminPaymentMethodController::class, 'add'])->name('admin.pay_method.add');
                 Router::form('/pay-method/edit/{id}', [AdminPaymentMethodController::class, 'edit'])->where([
-                    'id' => '[0-9]',
+                    'id' => '[0-9]+',
                 ])->name('admin.pay_method.edit');
                 Router::get('/pay-method/view', [AdminPaymentMethodController::class, 'view'])->name('admin.pay_method.view');
                 Router::post('/pay-method/view/dt', [AdminPaymentMethodController::class, 'getPaginatedDatatable'])->name('admin.pay_method.dt.view');
@@ -261,7 +261,7 @@ class Route implements IInitialize
                  */
 //                Router::form('/send-method/add', [AdminSendMethodController::class, 'add'])->name('admin.send_method.add');
 //                Router::form('/send-method/edit/{id}', [AdminSendMethodController::class, 'edit'])->where([
-//                    'id' => '[0-9]',
+//                    'id' => '[0-9]+',
 //                ])->name('admin.send_method.edit');
 //                Router::get('/send-method/view', [AdminSendMethodController::class, 'view'])->name('admin.send_method.view');
 //                Router::post('/send-method/view/dt', [AdminSendMethodController::class, 'getPaginatedDatatable'])->name('admin.send_method.dt.view');
@@ -271,7 +271,7 @@ class Route implements IInitialize
                  */
                 Router::form('/color/add', [AdminColorController::class, 'add'])->name('admin.color.add');
                 Router::form('/color/edit/{id}', [AdminColorController::class, 'edit'])->where([
-                    'id' => '[0-9]',
+                    'id' => '[0-9]+',
                 ])->name('admin.color.edit');
                 Router::get('/color/view', [AdminColorController::class, 'view'])->name('admin.color.view');
                 Router::post('/color/view/dt', [AdminColorController::class, 'getPaginatedDatatable'])->name('admin.color.dt.view');
@@ -388,7 +388,7 @@ class Route implements IInitialize
                 Router::form('/order/detail/{id}', [AdminOrderController::class, 'detail'])->where([
                     'id' => '[0-9]+',
                 ])->name('admin.order.detail');
-                Router::get('/order/view', [AdminOrderController::class, 'view'])->name('admin.order.view');
+                Router::get('/order/view/{status?}', [AdminOrderController::class, 'view'])->name('admin.order.view');
                 Router::post('/order/view/dt', [AdminOrderController::class, 'getPaginatedDatatable'])->name('admin.order.dt.view');
 
                 /**
@@ -641,7 +641,7 @@ class Route implements IInitialize
              * login & signup routes
              */
             Router::form('/login', [LoginController::class, 'index'])->name('home.login');
-            Router::form('/forget-password/{step?}', [LoginController::class, 'forgetPassword'])->where([
+            Router::form('/forget-password/{step?}', [RecoverPassController::class, 'forgetPassword'])->where([
                 'step' => 'step[1|2|3|4]',
             ])->name('home.forget-password');
             Router::form('/signup', [RegisterController::class, 'index'])->name('home.signup');
@@ -708,6 +708,12 @@ class Route implements IInitialize
             'prefix' => '/ajax/',
             'exceptionHandler' => CustomExceptionHandler::class,
         ], function () {
+            /**
+             * resend recover forget password route
+             */
+            Router::post('/resend-recover-forget-password', [RecoverPassController::class, 'resendRecoverCode'])
+                ->name('ajax.resend-recover-forget-password');
+
             /**
              * csrf route
              */
@@ -1186,12 +1192,12 @@ class Route implements IInitialize
                 /**
                  * Report Wallet Route
                  */
-                Router::post('/report/wallet/filter', [AdminReportWalletController::class, 'filterReport'])
-                    ->name('ajax.admin.report.wallet.filter');
-                Router::get('/report/wallet/filter/clear', [AdminReportWalletController::class, 'filterClear'])
-                    ->name('ajax.admin.report.wallet.filter.clear');
-                Router::get('/report/wallet/export/excel', [AdminReportWalletController::class, 'exportExcel'])
-                    ->name('ajax.admin.report.wallet.export.excel');
+//                Router::post('/report/wallet/filter', [AdminReportWalletController::class, 'filterReport'])
+//                    ->name('ajax.admin.report.wallet.filter');
+//                Router::get('/report/wallet/filter/clear', [AdminReportWalletController::class, 'filterClear'])
+//                    ->name('ajax.admin.report.wallet.filter.clear');
+//                Router::get('/report/wallet/export/excel', [AdminReportWalletController::class, 'exportExcel'])
+//                    ->name('ajax.admin.report.wallet.export.excel');
 
                 /**
                  * File Manager Route

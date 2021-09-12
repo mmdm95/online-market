@@ -28,7 +28,7 @@
     "ext-mbstring": "*",
     "jenssegers/agent": "^2.6",
     "mmdm/sim-i18n": "^1.0",
-    "mmdm/sim-cookie": "^2.0",
+    "mmdm/sim-cookie": "^3.0",
     "mmdm/sim-session": "^1.0",
     "mmdm/sim-captcha": "^1.0",
     "mmdm/sim-csrf": "^1.0",

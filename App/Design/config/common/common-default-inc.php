@@ -16,7 +16,7 @@ return [
             'bottom' => [
                 e(
                     '<script type="text/javascript" src="' .
-                    asset_path('plugins/validate.min.js') .
+                    asset_path('plugins/jquery-validation/jquery.validate.min.js') .
                     '"></script>'
                 ),
                 e(
@@ -61,17 +61,17 @@ return [
             'bottom' => [
                 e(
                     '<script type="text/javascript" src="' .
-                    asset_path('js/scripts.js') .
-                    '"></script>'
-                ),
-                e(
-                    '<script type="text/javascript" src="' .
                     asset_path('js/globals.js') .
                     '"></script>'
                 ),
                 e(
                     '<script type="text/javascript" src="' .
                     asset_path('js/index.js') .
+                    '"></script>'
+                ),
+                e(
+                    '<script type="text/javascript" src="' .
+                    asset_path('js/scripts.js') .
                     '"></script>'
                 ),
             ],
@@ -120,15 +120,6 @@ return [
                     '<link href="' .
                     asset_path('plugins/leaflet/leaflet.css') .
                     '" rel="stylesheet" type="text/css">'
-                ),
-            ],
-        ],
-    ],
-    'default-google-map' => [
-        'js' => [
-            'top' => [
-                e(
-                    '<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD7TypZFTl4Z3gVtikNOdGSfNTpnmq-ahQ&amp;"></script>'
                 ),
             ],
         ],

@@ -94,17 +94,20 @@ class ForgetFormStep1 implements IPageForm
             $res = false;
             $username = input()->post('inp-forget-mobile', '')->getValue();
             if (!empty($username)) {
-                $code = StringUtil::randomString(6, StringUtil::RS_NUMBER);
-                // insert to database
-                $res = $userModel->update([
-                    'forget_password_code' => $code,
-                    'activate_code_request_free_at' => time() + TIME_ACTIVATE_CODE,
-                ], 'username=:username', [
-                    'username' => $username
-                ]);
+                if($userModel->count('username=:username AND recover_password_type=:rpt', ['username' => $username, 'rpt' => RECOVER_PASS_TYPE_SMS])) {
+                    $code = StringUtil::randomString(6, StringUtil::RS_NUMBER);
+                    // insert to database
+                    $res = $userModel->update([
+                        'forget_password_code' => $code,
+                    ], 'username=:username', [
+                        'username' => $username
+                    ]);
 
-                if ($res) {
-                    session()->setFlash('forget.code', $code);
+                    if ($res) {
+                        session()->setFlash('forget.code', $code);
+                    }
+                } else {
+                    return true;
                 }
             }
         } catch (\Exception $e) {

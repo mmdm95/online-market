@@ -107,7 +107,7 @@
         // search string changed
         function querySubmitting() {
             shop.forms.submitForm('product', constraints.product, function (values) {
-                uriParser.push('q', values[variables.elements.product.inputs.search], true);
+                uriParser.push('q', $("[name='" + variables.elements.product.inputs.search + "']").val(), true);
                 loadProduct();
                 return false;
             }, function (errors) {

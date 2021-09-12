@@ -1,7 +1,7 @@
 <div class="sidebar sidebar-light sidebar-component sidebar-component-left sidebar-expand-xl">
 
     <!-- Sidebar content -->
-    <div class="sidebar-content mb-3">
+    <div class="sidebar-content mb-3 mb-xl-0">
 
         <!-- Sub navigation -->
         <div class="card">

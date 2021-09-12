@@ -79,7 +79,7 @@
                                 <?php if (isset($item['festival_discount'])): ?>
                                     <?= local_number($item['festival_discount']); ?>
                                 <?php else: ?>
-                                    <?= local_number(get_percentage($item['price'], $item['discounted_price'])); ?>
+                                    <?= local_number(get_percentage($item['discounted_price'], $item['price'])); ?>
                                 <?php endif; ?>
                                  تخفیف
                             </span>

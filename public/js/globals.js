@@ -11,6 +11,7 @@ window.MyGlobalVariables = {
     },
     messages: {
         request: {
+            tokenError: 'درخواست توکن امنیتی با خطا روبرو شد، لطفا دوباره تلاش نمایید.',
             error: 'ارسال/دریافت اطلاعات با خطا روبرو شد!',
         },
     },
@@ -139,6 +140,9 @@ window.MyGlobalVariables = {
         captcha: '/ajax/captcha',
         csrfToken: '/ajax/csrf-token',
         image: '/images',
+        resendCode: {
+            forgetPassword: '/ajax/resend-recover-forget-password',
+        },
     },
     elements: {
         captcha: {
@@ -147,79 +151,147 @@ window.MyGlobalVariables = {
             refreshBtn: '.__captcha_regenerate_btn',
         },
     },
+    validationSetting: {
+        methods: {
+            requiredNotEmpty: function (value) {
+                return $.trim(value) !== '';
+            },
+            format: function (value, element, regex) {
+                return this.optional(element) || (new RegExp(regex,)).test(value);
+            },
+            length: function (value, element, length) {
+                if (isNaN(parseInt(length, 10))) {
+                    return this.optional(element) || false;
+                }
+                return this.optional(element) || $(element).val().length === parseInt(length, 10);
+            },
+        },
+        messages: {
+            requiredNotEmpty: 'تکمیل این فیلد اجباری است.',
+            format: 'مقدار وارد شده با فرمت مورد نظر مغایرت دارد.',
+        },
+    },
     validation: {
         common: {
             captcha: {
-                presence: {
-                    allowEmpty: false,
-                    message: '^' + 'فیلد کد تصویر را خالی نگذارید.',
+                rules: {
+                    requiredNotEmpty: true,
+                },
+                messages: {
+                    requiredNotEmpty: 'فیلد کد تصویر را خالی نگذارید.',
                 },
             },
             name: {
-                presence: {
-                    allowEmpty: false,
-                    message: '^' + 'فیلد ' + '{{name}}' + ' را خالی نگذارید.',
+                rules: {
+                    requiredNotEmpty: true,
+                    format: /^[پچجحخهعغفقثصضشسیبلاتنمکگوئدذرزطظژؤإأآءًٌٍَُِّ\s]+$/u,
                 },
-                format: {
-                    pattern: /^[پچجحخهعغفقثصضشسیبلاتنمکگوئدذرزطظژؤإأآءًٌٍَُِّ\s]+$/u,
-                    message: '^' + '{{name}}' + ' باید دارای حروف فارسی باشد.',
+                messages: {
+                    requiredNotEmpty: 'فیلد ' + '{{name}}' + ' را خالی نگذارید.',
+                    format: '{{name}}' + ' باید دارای حروف فارسی باشد.',
                 },
             },
             lastName: {
-                presence: {
-                    allowEmpty: false,
-                    message: '^' + 'فیلد ' + '{{last-name}}' + ' را خالی نگذارید.',
+                rules: {
+                    requiredNotEmpty: true,
+                    format: /^[پچجحخهعغفقثصضشسیبلاتنمکگوئدذرزطظژؤإأآءًٌٍَُِّ\s]+$/u,
                 },
-                format: {
-                    pattern: /^[پچجحخهعغفقثصضشسیبلاتنمکگوئدذرزطظژؤإأآءًٌٍَُِّ\s]+$/u,
-                    message: '^' + '{{last-name}}' + ' باید دارای حروف فارسی باشد.',
+                messages: {
+                    requiredNotEmpty: 'فیلد ' + '{{last-name}}' + ' را خالی نگذارید.',
+                    format: '{{last-name}}' + ' باید دارای حروف فارسی باشد.',
                 },
             },
             enName: {
-                presence: {
-                    allowEmpty: false,
-                    message: '^' + 'فیلد ' + '{{en-name}}' + ' را خالی نگذارید.',
+                rules: {
+                    requiredNotEmpty: true,
+                    format: /[a-zA-Z-_\s]*/,
                 },
-                format: {
-                    pattern: /[a-zA-Z-_\s]*/,
-                    message: '^' + '{{en-name}}' + ' باید دارای حروف انگلیسی باشد.',
+                messages: {
+                    requiredNotEmpty: 'فیلد ' + '{{en-name}}' + ' را خالی نگذارید.',
+                    format: '{{en-name}}' + ' باید دارای حروف انگلیسی باشد.',
                 },
             },
             email: {
-                email: {
-                    message: '^' + 'ایمیل نامعتبر است.',
-                }
+                rules: {
+                    email: true
+                },
+                messages: {
+                    email: 'ایمیل نامعتبر است.',
+                },
             },
             mobile: {
-                presence: {
-                    allowEmpty: false,
-                    message: '^' + 'فیلد موبایل را خالی نگذارید.',
+                rules: {
+                    requiredNotEmpty: true,
+                    format: /^(098|\+98|0)?9\d{9}$/,
+                    length: 11,
                 },
-                format: {
-                    pattern: /^(098|\+98|0)?9\d{9}$/,
-                    message: '^' + 'موبایل وارد شده نامعتبر است.',
+                messages: {
+                    requiredNotEmpty: 'فیلد موبایل را خالی نگذارید.',
+                    format: 'موبایل وارد شده نامعتبر است.',
+                    length: 'موبایل باید عددی ۱۱ رقمی باشد.',
                 },
-                length: {
-                    is: 11,
-                    message: '^' + 'موبایل باید عددی ۱۱ رقمی باشد.',
-                }
             },
             link: {
-                format: {
-                    pattern: /(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,})/gi,
-                    message: '^' + 'لینک وارد شده نامعتبر است.',
+                rules: {
+                    format: /(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,})/gi,
+                },
+                messages: {
+                    format: 'لینک وارد شده نامعتبر است.',
                 },
             },
             percent: {
-                length: {
-                    minimum: 0,
-                    maximum: 100,
-                    message: '^' + '{percent}' + ' باید بین ۰ و ۱۰۰ باشد.',
+                rules: {
+                    min: 0,
+                    max: 100,
                 },
-            }
+                messages: {
+                    min: '{percent}' + ' باید بین ۰ و ۱۰۰ باشد.',
+                    max: '{percent}' + ' باید بین ۰ و ۱۰۰ باشد.',
+                },
+            },
         },
     },
 };
+
+(function (factory) {
+    if (typeof define === "function" && define.amd) {
+        define(["jquery", "../jquery.validate"], factory);
+    } else if (typeof module === "object" && module.exports) {
+        module.exports = factory(require("jquery"));
+    } else {
+        factory(jQuery);
+    }
+}(function ($) {
+
+    /*
+     * Translated default messages for the jQuery validation plugin.
+     * Locale: FA (Persian; فارسی)
+     */
+    $.extend($.validator.messages, {
+        required: "تکمیل این فیلد اجباری است.",
+        remote: "لطفا این فیلد را تصحیح کنید.",
+        email: "لطفا یک ایمیل صحیح وارد کنید.",
+        url: "لطفا آدرس صحیح وارد کنید.",
+        date: "لطفا تاریخ صحیح وارد کنید.",
+        dateFA: "لطفا یک تاریخ صحیح وارد کنید.",
+        dateISO: "لطفا تاریخ صحیح وارد کنید (ISO).",
+        number: "لطفا عدد صحیح وارد کنید.",
+        digits: "لطفا تنها رقم وارد کنید.",
+        creditcard: "لطفا کریدیت کارت صحیح وارد کنید.",
+        equalTo: "لطفا مقدار برابری وارد کنید.",
+        extension: "لطفا مقداری وارد کنید که",
+        alphanumeric: "لطفا مقدار را عدد (انگلیسی) وارد کنید.",
+        maxlength: $.validator.format("لطفا بیشتر از {0} حرف وارد نکنید."),
+        minlength: $.validator.format("لطفا کمتر از {0} حرف وارد نکنید."),
+        rangelength: $.validator.format("لطفا مقداری بین {0} تا {1} حرف وارد کنید."),
+        range: $.validator.format("لطفا مقداری بین {0} تا {1} حرف وارد کنید."),
+        max: $.validator.format("لطفا مقداری کمتر از {0} وارد کنید."),
+        min: $.validator.format("لطفا مقداری بیشتر از {0} وارد کنید."),
+        minWords: $.validator.format("لطفا حداقل {0} کلمه وارد کنید."),
+        maxWords: $.validator.format("لطفا حداکثر {0} کلمه وارد کنید.")
+    });
+    return $;
+}));
 
 (function ($) {
     'use strict';
@@ -283,6 +355,9 @@ window.MyGlobalVariables = {
                 }
                 return JSON.stringify(obj) === JSON.stringify({});
             },
+            isJqueryElement: function (o) {
+                return o && this.isString(o.jquery);
+            },
             objSize: function (obj) {
                 var size = 0, key;
                 for (key in obj) {
@@ -310,9 +385,11 @@ window.MyGlobalVariables = {
                 gap = gap && !isNaN(parseInt(gap, 10)) ? parseInt(gap, 10) : 0;
                 speed = speed && !isNaN(parseInt(speed, 10)) ? parseInt(speed, 10) : 250;
 
-                $('html, body').animate({
-                    scrollTop: el.offset().top - gap,
-                }, speed);
+                if (el.length) {
+                    $('html, body').animate({
+                        scrollTop: el.offset().top - gap,
+                    }, speed);
+                }
             },
             /**
              * @see https://stackoverflow.com/a/6969486/12154893
@@ -437,7 +514,36 @@ window.MyGlobalVariables = {
      */
     window.TheShopBase = (function () {
         function ShopBase() {
-            // nothing for now!
+            var self = this;
+
+            $.validator.setDefaults({
+                ignore: '[data-ignored]',
+                onfocusout: false,
+                onkeyup: false,
+                onclick: false,
+                onsubmit: false,
+                errorClass: 'border border-danger text-danger',
+                validClass: 'border border-success text-success',
+                normalizer: function (value) {
+                    return $.trim(self.forms.convertFormValueNumbersToEnglish(value));
+                },
+                errorPlacement: function (error, element) {
+                    // do nothing
+                },
+                invalidHandler: function (event, validator) {
+                    // do nothing
+                },
+            });
+            //
+            for (var o in window.MyGlobalVariables.validationSetting.methods) {
+                if (window.MyGlobalVariables.validationSetting.methods.hasOwnProperty(o)) {
+                    $.validator.addMethod(
+                        o,
+                        window.MyGlobalVariables.validationSetting.methods[o],
+                        window.MyGlobalVariables.validationSetting.messages[o] || ''
+                    );
+                }
+            }
         }
 
         $.extend(ShopBase.prototype, {
@@ -547,11 +653,17 @@ window.MyGlobalVariables = {
                 options = typeof options === typeof {} ? options : {};
                 showError = true === showError;
                 errorCallback = window.TheCore.isFunction(errorCallback) ? errorCallback : window.TheCore.noop;
-                window.axios($.extend(options, {
-                    method: method,
-                    url: url,
-                }))
-                    .then(function (response) {
+                window.axios({
+                    method: 'GET',
+                    url: window.MyGlobalVariables.url.csrfToken,
+                }).then(function (csrfRes) {
+                    // reset csrf token of axios
+                    window.axios.defaults.headers.common['X-CSRF-TOKEN'] = csrfRes.data.csrfToken;
+
+                    window.axios($.extend(options, {
+                        method: method,
+                        url: url,
+                    })).then(function (response) {
                         var data = _.handleAPIData(response.data);
                         if (null === data.error) {
                             if (window.TheCore.isFunction(successCallback)) {
@@ -569,8 +681,7 @@ window.MyGlobalVariables = {
                                 }
                             }
                         }
-                    })
-                    .catch(function (error) {
+                    }).catch(function (error) {
                         $('[data-is-preloader]').remove();
 
                         errorCallback.call({catchErr: error});
@@ -598,6 +709,11 @@ window.MyGlobalVariables = {
                             }
                         }
                     });
+                }).catch(function () {
+                    _.toasts.toast(window.MyGlobalVariables.messages.request.tokenError, {
+                        type: 'warning',
+                    });
+                });
             },
 
             forms: {
@@ -628,25 +744,6 @@ window.MyGlobalVariables = {
                         defaultReturn = true;
                     }
 
-                    function formatErrors(errors, mapping) {
-                        for (var attrName in errors) {
-                            if (errors.hasOwnProperty(attrName)) {
-                                for (var i = 0; i < errors[attrName].length; i++) {
-                                    (function (i) {
-                                        for (var alias in mapping) {
-                                            if (mapping.hasOwnProperty(alias)) {
-                                                errors[attrName][i] = errors[attrName][i].replace(
-                                                    alias,
-                                                    mapping[alias]);
-                                            }
-                                        }
-                                    })(i);
-                                }
-                            }
-                        }
-                        return errors;
-                    }
-
                     validationSuccessCallback = window.TheCore.isFunction(validationSuccessCallback) ? validationSuccessCallback : null;
                     validationErrorCallback = window.TheCore.isFunction(validationErrorCallback) ? validationErrorCallback : null;
                     check = !(false === check);
@@ -654,10 +751,11 @@ window.MyGlobalVariables = {
                     form = $(window.MyGlobalVariables.elements[formKey].form);
 
                     if (form.length) {
+
                         form.submit(function () {
                             if (check) {
                                 try {
-                                    formValues = self.convertFormObjectNumbersToEnglish(window.validate.collectFormValues(this), formKey);
+                                    formValues = self.convertFormObjectNumbersToEnglish(self.collectFormValues(this), formKey);
                                     // remap form values to its config name
                                     var data = new FormData();
                                     var val;
@@ -679,17 +777,24 @@ window.MyGlobalVariables = {
                                     //     console.log(pair[0] + ', ' + pair[1]);
                                     // }
 
-                                    /**
-                                     * @see https://github.com/ansman/validate.js/issues/69#issuecomment-567751903
-                                     * @type {ValidationResult}
-                                     */
-                                    formErrors = window.validate(formValues, constraints);
-                                    if (!formErrors) {
+                                    var
+                                        theConstraints = {},
+                                        formattedConstraints;
+
+                                    formattedConstraints = self.formatConstraints(constraints, window.MyGlobalVariables.elements[formKey].inputs);
+                                    theConstraints.rules = formattedConstraints.rules;
+                                    theConstraints.messages = self.replaceFormAliases(formattedConstraints.messages, aliases);
+                                    theConstraints.showErrors = function (errorMap, errorList) {
+                                        formErrors = errorMap;
+                                    };
+
+                                    var validator = form.validate(theConstraints);
+                                    var isValid = validator.form();
+                                    validator.resetForm();
+
+                                    if (isValid) {
                                         return validationSuccessCallback ? validationSuccessCallback.apply(null, [data]) : true;
                                     }
-
-                                    formErrors = formatErrors(formErrors, aliases);
-
                                     return validationErrorCallback ? validationErrorCallback.apply(null, [formErrors]) : true;
                                 } catch (e) {
                                     return defaultReturn;
@@ -700,12 +805,61 @@ window.MyGlobalVariables = {
                 },
 
                 /**
+                 * @param constraints
+                 * @param inputs
+                 * @return {{messages, rules}}
+                 */
+                formatConstraints: function (constraints, inputs) {
+                    var
+                        rules = {},
+                        messages = {};
+
+                    for (var o in constraints) {
+                        if (constraints.hasOwnProperty(o) && inputs.hasOwnProperty(o)) {
+                            rules[inputs[o]] = constraints[o].rules;
+                            messages[inputs[o]] = constraints[o].messages;
+                        }
+                    }
+
+                    return {
+                        rules,
+                        messages,
+                    };
+                },
+
+                /**
+                 * @param errors
+                 * @param mapping
+                 * @return {*}
+                 */
+                replaceFormAliases: function (errors, mapping) {
+                    for (var attrName in errors) {
+                        if (errors.hasOwnProperty(attrName)) {
+                            for (var i = 0; i < errors[attrName].length; i++) {
+                                (function (i) {
+                                    for (var alias in mapping) {
+                                        if (mapping.hasOwnProperty(alias)) {
+                                            errors[attrName][i] = errors[attrName][i].replace(
+                                                alias,
+                                                mapping[alias]);
+                                        }
+                                    }
+                                })(i);
+                            }
+                        }
+                    }
+
+                    return errors;
+                },
+
+                /**
                  * @param obj
                  * @param formKey
-                 * @return {{}}
+                 * @return {object}
                  */
                 convertFormObjectNumbersToEnglish: function (obj, formKey) {
                     var
+                        self = this,
                         keyFromVal,
                         newFormValues = {};
                     for (var prop in obj) {
@@ -715,7 +869,7 @@ window.MyGlobalVariables = {
                         // get key from value and if its null return false
                         keyFromVal = window.TheCore.getKeyByValue(window.MyGlobalVariables.elements[formKey].inputs, prop);
                         if (null !== keyFromVal) {
-                            newFormValues[keyFromVal] = window.TheCore.toEnglishNumbers(obj[prop]);
+                            newFormValues[keyFromVal] = self.convertFormValueNumbersToEnglish(obj[prop]);
                         }
                     }
 
@@ -723,28 +877,139 @@ window.MyGlobalVariables = {
                 },
 
                 /**
+                 * @param value
+                 * @return {*}
+                 */
+                convertFormValueNumbersToEnglish: function (value) {
+                    return window.TheCore.toEnglishNumbers(value);
+                },
+
+                /**
                  * @param errors
                  */
                 showFormErrors: function (errors) {
-                    var shop = new ShopBase();
-                    var s, p, a;
+                    if (errors && !window.TheCore.isEmptyObject(errors)) {
+                        var shop = new ShopBase();
+                        var s, p, a;
 
-                    s = '<h5 class="text-white">' + 'خطا در اعتبار سنجی فرم' + '</h5><hr>';
-                    for (p in errors) {
-                        if (errors.hasOwnProperty(p)) {
-                            for (a of errors[p]) {
-                                s += a + "<br>";
+                        s = '<h5 class="text-white">' + 'خطا در اعتبار سنجی فرم' + '</h5><hr>';
+                        for (p in errors) {
+                            if (errors.hasOwnProperty(p)) {
+                                if (window.TheCore.isObject(errors[p]) || window.TheCore.isArray(errors[p])) {
+                                    for (a of errors[p]) {
+                                        s += a + "<br>";
+                                    }
+                                } else {
+                                    s += errors[p];
+                                }
+                                s += "<br>";
                             }
-                            s += "<br>";
                         }
+                        shop.toasts.toast(s, {
+                            type: 'error',
+                            layout: 'center',
+                            modal: true,
+                            closeWith: ['click', 'backdrop'],
+                            timeout: null,
+                        });
                     }
-                    shop.toasts.toast(s, {
-                        type: 'error',
-                        layout: 'center',
-                        modal: true,
-                        closeWith: ['click', 'backdrop'],
-                        timeout: null,
-                    });
+                },
+
+                /**
+                 * This returns an object with all the values of the form.
+                 * It uses the input name as key and the value as value
+                 * So for example this:
+                 * <input type="text" name="email" value="foo@bar.com" />
+                 * would return:
+                 * {email: "foo@bar.com"}
+                 *
+                 * @external From validate.js plugin
+                 *
+                 * @param form
+                 * @param options
+                 */
+                collectFormValues: function (form, options) {
+                    var self = this;
+                    var values = {}
+                        , i
+                        , j
+                        , input
+                        , inputs
+                        , option
+                        , value;
+
+                    if (window.TheCore.isJqueryElement(form)) {
+                        form = form[0];
+                    }
+
+                    if (!form) {
+                        return values;
+                    }
+
+                    options = options || {};
+
+                    inputs = form.querySelectorAll("input[name], textarea[name]");
+                    for (i = 0; i < inputs.length; ++i) {
+                        input = inputs.item(i);
+
+                        if (window.TheCore.isDefined(input.getAttribute("data-ignored"))) {
+                            continue;
+                        }
+
+                        var name = input.name.replace(/\./g, "\\\\.");
+                        value = self.sanitizeFormValue(input.value, options);
+                        if (input.type === "number") {
+                            value = value ? +value : null;
+                        } else if (input.type === "checkbox") {
+                            if (input.attributes.value) {
+                                if (!input.checked) {
+                                    value = values[name] || null;
+                                }
+                            } else {
+                                value = input.checked;
+                            }
+                        } else if (input.type === "radio") {
+                            if (!input.checked) {
+                                value = values[name] || null;
+                            }
+                        }
+                        values[name] = value;
+                    }
+
+                    inputs = form.querySelectorAll("select[name]");
+                    for (i = 0; i < inputs.length; ++i) {
+                        input = inputs.item(i);
+                        if (window.TheCore.isDefined(input.getAttribute("data-ignored"))) {
+                            continue;
+                        }
+
+                        if (input.multiple) {
+                            value = [];
+                            for (j in input.options) {
+                                option = input.options[j];
+                                if (option && option.selected) {
+                                    value.push(self.sanitizeFormValue(option.value, options));
+                                }
+                            }
+                        } else {
+                            var _val = typeof input.options[input.selectedIndex] !== 'undefined' ? input.options[input.selectedIndex].value : /* istanbul ignore next */ '';
+                            value = self.sanitizeFormValue(_val, options);
+                        }
+                        values[input.name] = value;
+                    }
+
+                    return values;
+                },
+
+                sanitizeFormValue: function (value, options) {
+                    if (options.trim && window.TheCore.isString(value)) {
+                        value = value.trim();
+                    }
+
+                    if (options.nullify !== false && value === "") {
+                        return null;
+                    }
+                    return value;
                 },
             },
 
@@ -808,11 +1073,11 @@ window.MyGlobalVariables = {
              * @param provincesSelect
              */
             loadProvinces: function (provincesSelect) {
-                this.getProvinces(function () {
-                    var _, $this, newOption, i, len;
-                    var currProvince;
-                    _ = this;
-                    if (provincesSelect.length) {
+                if (provincesSelect.length) {
+                    this.getProvinces(function () {
+                        var _, $this, newOption, i, len;
+                        var currProvince;
+                        _ = this;
                         provincesSelect.each(function () {
                             $this = $(this);
                             currProvince = provincesSelect.attr('data-current-province');
@@ -835,8 +1100,8 @@ window.MyGlobalVariables = {
                                 provincesSelect.trigger('change');
                             }
                         });
-                    }
-                });
+                    });
+                }
             },
 
             /**

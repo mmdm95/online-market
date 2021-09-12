@@ -204,7 +204,7 @@ $authAdmin = auth_admin();
             <?php foreach ($order_badges_count as $value): ?>
                 <div class="col-sm-6 col-lg-4">
                     <div class="card">
-                        <a href="#"
+                        <a href="<?= url('admin.order.view', ['status' => $value['code']])->getRelativeUrlTrimmed(); ?>"
                            class="p-1 border-2 rounded"
                            style="color: <?= get_color_from_bg($value['color']); ?>; border-color: <?= $value['color']; ?> !important;">
                             <div class="p-2 rounded" style="background-color: <?= $value['color']; ?>;">

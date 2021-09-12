@@ -105,6 +105,13 @@ class ChangeSendStatus implements IPageForm
             $id = session()->getFlash('curr_order_detail_id', null);
             $code = input()->post('inp-change-order-send-status', '')->getValue();
             $badge = $badgeModel->getFirst(['title', 'color'], 'code=:code', ['code' => $code]);
+            $order = $orderModel->getFirst(['code', 'mobile'], 'id=:id', ['id' => $id]) ?? null;
+
+            if (is_null($order)) return false;
+
+            session()->setFlash('send.status.title', $badge['title']);
+            session()->setFlash('send.status.username', $order['mobile']);
+            session()->setFlash('send.status.order_code', $order['code']);
 
             return $orderModel->update([
                 'send_status_code' => $xss->xss_clean(trim($code)),

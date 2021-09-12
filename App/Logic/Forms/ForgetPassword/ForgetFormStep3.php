@@ -34,6 +34,7 @@ class ForgetFormStep3 implements IPageForm
         // aliases
         $validator->setFieldsAlias([
             'inp-forget-new-password' => 'کلمه عبور',
+            'inp-forget-new-re-password' => 'تکرار کلمه عبور',
         ]);
         // password
         $validator

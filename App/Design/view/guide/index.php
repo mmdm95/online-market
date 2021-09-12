@@ -395,6 +395,16 @@
                         <code dir="ltr">540 x 300</code>
                         پیکسل استفاده شود.
                     </div>
+
+                    <div class="form-group">
+                        <h5 class="text-info">
+                            اندازه تصاویر کنار اسلایدر
+                        </h5>
+
+                        از تصاویر با اندازه
+                        <code dir="ltr">350 x 486</code>
+                        پیکسل استفاده شود.
+                    </div>
                 </div>
             </div>
         </div>

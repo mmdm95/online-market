@@ -99,10 +99,10 @@ $validator = form_validator();
                             <div class="form-group col-xl-3">
                                 <label>تاریخ شروع استفاده:</label>
                                 <?php
-                                $sd = $validator->setInput('inp-add-coupon-start-date', time());
+                                $sd = date('Y/m/d H:i', $validator->setInput('inp-add-coupon-start-date', time()));
                                 ?>
                                 <input type="hidden" name="inp-add-coupon-start-date"
-                                       id="altStartDate" value="<?= $sd; ?>">
+                                       id="altStartDate">
                                 <div class="d-flex">
                                     <input type="text" class="form-control range-from"
                                            placeholder="انتخاب تاریخ" readonly data-ignored
@@ -119,10 +119,10 @@ $validator = form_validator();
                             <div class="form-group col-xl-3">
                                 <label>تاریخ پایان استفاده:</label>
                                 <?php
-                                $ed = $validator->setInput('inp-add-coupon-end-date', time());
+                                $ed = date('Y/m/d H:i', $validator->setInput('inp-add-coupon-end-date', time()));
                                 ?>
                                 <input type="hidden" name="inp-add-coupon-end-date"
-                                       id="altEndDate" value="<?= $ed; ?>">
+                                       id="altEndDate">
                                 <div class="d-flex">
                                     <input type="text" class="form-control range-to"
                                            placeholder="انتخاب تاریخ" readonly data-ignored

@@ -33,6 +33,7 @@ abstract class BaseModel
     const TBL_MAIN_SLIDER = 'main_slider';
     const TBL_NEWSLETTERS = 'newsletters';
     const TBL_ORDERS = 'orders';
+    const TBL_ORDER_ADVANCED = 'order_advanced';
     const TBL_ORDER_BADGES = 'order_badges';
     const TBL_ORDER_ITEMS = 'order_items';
     const TBL_ORDER_RESERVED = 'order_reserved';

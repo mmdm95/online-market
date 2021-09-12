@@ -4,14 +4,14 @@ $col_1 = 'col-xl-3';
 $col_2 = 'col-xl-9';
 $hasSideImage = true;
 
-if (!isset($slider['image']) || empty($slider['image'])) {
+if (!isset($info['image']) || empty($info['image'])) {
     $col_1 = '';
     $col_2 = 'col-xl-12';
     $hasSideImage = false;
 }
 ?>
 
-<?php if (count($slider['items'] ?? [])): ?>
+<?php if (count($slider ?? [])): ?>
     <div class="section small_pt small_pb">
         <div class="custom-container container">
 
@@ -19,8 +19,9 @@ if (!isset($slider['image']) || empty($slider['image'])) {
                 <?php if ($hasSideImage): ?>
                     <div class="<?= $col_1; ?> d-none d-xl-block">
                         <div class="sale-banner">
-                            <a class="hover_effect1" href="#">
-                                <img src="assets/images/shop_banner_img10.jpg" alt="shop_banner_img10">
+                            <a class="hover_effect1" href="<?= $info['image_link']; ?>">
+                                <img src="<?= url('image.show', ['filename' => $info['image']])->getRelativeUrlTrimmed(); ?>"
+                                     alt="<?= $info['image']; ?>">
                             </a>
                         </div>
                     </div>

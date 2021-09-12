@@ -18,7 +18,7 @@
                                 <h3>تغییر کلمه عبور</h3>
                             </div>
                             <form action="<?= url('home.forget-password', [
-                                'step' => 'step2'
+                                'step' => 'step3'
                             ])->getRelativeUrlTrimmed(); ?>#__forget_form_container"
                                   method="post" id="__forget_form_step3">
                                 <?php load_partial('main/message/message-form', [

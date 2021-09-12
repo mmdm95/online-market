@@ -6,6 +6,7 @@ return [
         'common' => [
             'admin-base',
             'admin-table',
+            'admin-date',
             'admin-query-builder',
             'admin',
         ],
@@ -19,6 +20,75 @@ return [
             ],
             [
                 'text' => 'گزارش‌گیری از کاربران',
+                'is_active' => true,
+            ],
+        ],
+    ],
+    'view/report/product' => [
+        'title' => title_concat(\config()->get('settings.title.value'), 'گزارش‌گیری از محصولات'),
+        'common' => [
+            'admin-base',
+            'admin-table',
+            'admin-date',
+            'admin-query-builder',
+            'admin',
+        ],
+        'sub_title' => 'گزارش‌گیری از محصولات',
+        'breadcrumb' => [
+            [
+                'url' => url('admin.index')->getRelativeUrl(),
+                'icon' => 'icon-home2',
+                'text' => 'خانه',
+                'is_active' => false,
+            ],
+            [
+                'text' => 'گزارش‌گیری از محصولات',
+                'is_active' => true,
+            ],
+        ],
+    ],
+    'view/report/order' => [
+        'title' => title_concat(\config()->get('settings.title.value'), 'گزارش‌گیری از سفارشات'),
+        'common' => [
+            'admin-base',
+            'admin-table',
+            'admin-date',
+            'admin-query-builder',
+            'admin',
+        ],
+        'sub_title' => 'گزارش‌گیری از سفارشات',
+        'breadcrumb' => [
+            [
+                'url' => url('admin.index')->getRelativeUrl(),
+                'icon' => 'icon-home2',
+                'text' => 'خانه',
+                'is_active' => false,
+            ],
+            [
+                'text' => 'گزارش‌گیری از سفارشات',
+                'is_active' => true,
+            ],
+        ],
+    ],
+    'view/report/wallet' => [
+        'title' => title_concat(\config()->get('settings.title.value'), 'گزارش‌گیری از کیف پول'),
+        'common' => [
+            'admin-base',
+            'admin-table',
+            'admin-date',
+            'admin-query-builder',
+            'admin',
+        ],
+        'sub_title' => 'گزارش‌گیری از کیف پول',
+        'breadcrumb' => [
+            [
+                'url' => url('admin.index')->getRelativeUrl(),
+                'icon' => 'icon-home2',
+                'text' => 'خانه',
+                'is_active' => false,
+            ],
+            [
+                'text' => 'گزارش‌گیری از کیف پول',
                 'is_active' => true,
             ],
         ],

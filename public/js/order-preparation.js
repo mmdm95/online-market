@@ -334,13 +334,18 @@
                     } else {
                         var data = this.data;
                         if (data.redirect) {
+                            shop.toasts.toast('لطفا چند لحظه صبر کنید...', {
+                                type: 'info',
+                                layout: 'topCenter',
+                            });
+
                             // Simulate an HTTP redirect:
                             window.location.replace(data.url);
                         } else {
                             // create a new form and submit it with hidden inputs
                             var frm = $('<form method="post" action="' +
                                 data.url +
-                                '" style="display: none; position: absolute; top: -9999px; left: -9999px; visibility: hidden; opacity: 0;" />');
+                                '" style="display: none; position: absolute; top: -9999px; left: -9999px; visibility: hidden; opacity: 0; border: 0; background: transparent;" />');
                             for (var i = 0; i < data.inputs.length; ++i) {
                                 frm.append($('<input type="hidden" value="' + data.inputs[i].value + '" name="' + data.inputs[i].name + '">'));
                             }

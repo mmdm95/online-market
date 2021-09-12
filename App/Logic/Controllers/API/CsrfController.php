@@ -6,7 +6,8 @@ class CsrfController
 {
     public function show()
     {
-        response()->httpCode(204);
-        echo '';
+        response()->httpCode(200)->json([
+            'csrfToken' => csrf_token(),
+        ]);
     }
 }

@@ -104,7 +104,6 @@ class RegisterFormStep1 implements IPageForm
             // insert to database
             $res = $userModel->insert([
                 'username' => $xss->xss_clean(StringUtil::toEnglish($username)),
-                'password' => '',
                 'image' => PLACEHOLDER_USER_IMAGE,
                 'is_activated' => DB_NO,
                 'activate_code' => $code,

@@ -6,7 +6,7 @@ return [
         'common' => [
             'default',
             'default-changeable',
-            'default-google-map',
+            'default-map',
         ],
         'sub_title' => 'تماس با ما',
         'breadcrumb' => [

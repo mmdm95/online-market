@@ -146,7 +146,7 @@ class Bootstrap
         }
 
         // Start session and other things that need start at first
-        if (PHP_SESSION_NONE == session_status()) {
+        if (PHP_SESSION_NONE == session_status() && !headers_sent()) {
             session_start();
         }
 

@@ -9,7 +9,7 @@ class ForgetCodeCheckMiddleware extends AbstractMiddleware
 {
     public function handle(...$_): bool
     {
-        $code = session()->getFlash('forger.code-step', null, false);
+        $code = session()->getFlash('forget.code-step', null, false);
         if (is_null($code)) return false;
 
         $isValid = 'I am ready to set password' === $code;

@@ -10,11 +10,14 @@
             تغییر کلمه عبور
         </a>
     </li>
-    <li class="nav-item">
-        <a class="nav-link" data-toggle="tab" href="#changeOther">
-            تنظیمات
-        </a>
-    </li>
+
+    <?php if (count($security_questions ?? [])): ?>
+        <li class="nav-item">
+            <a class="nav-link" data-toggle="tab" href="#changeOther">
+                تنظیمات
+            </a>
+        </li>
+    <?php endif; ?>
 </ul>
 
 <!-- Tab panes -->
@@ -166,58 +169,118 @@
         </div>
     </div>
 
-    <div class="tab-pane container fade p-0" id="changeOther">
-        <div class="dashboard_content">
-            <div class="card">
-                <div class="card-header">
-                    <h3>نوع بازیابی کلمه عبور</h3>
-                </div>
-                <div class="card-body">
-                    <form action="<?= url('user.info')->getRelativeUrlTrimmed(); ?>#changeOther"
-                          method="post" id="__form_change_recover_type">
-                        <?php load_partial('main/message/message-form', [
-                            'errors' => $other_change_errors ?? [],
-                            'success' => $other_change_success ?? '',
-                            'warning' => $other_change_warning ?? '',
-                        ]); ?>
+    <?php if (count($security_questions ?? [])): ?>
+        <div class="tab-pane container fade p-0" id="changeOther">
+            <div class="dashboard_content">
+                <div class="card">
+                    <div class="card-header">
+                        <h3>نوع بازیابی کلمه عبور</h3>
+                    </div>
+                    <div class="card-body">
+                        <form action="<?= url('user.info')->getRelativeUrlTrimmed(); ?>#changeOther"
+                              method="post" id="__form_change_recover_type">
+                            <?php load_partial('main/message/message-form', [
+                                'errors' => $other_change_errors ?? [],
+                                'success' => $other_change_success ?? '',
+                                'warning' => $other_change_warning ?? '',
+                            ]); ?>
 
-                        <input type="hidden" name="csrf_token" value="<?= csrf_token(); ?>"
-                               data-ignored>
-                        <div class="row">
-                            <div class="col-lg-6 form-group">
-                                <div class="custome-radio">
-                                    <input class="form-check-input" type="radio"
-                                           name="inp-recover-type"
-                                           value="<?= RECOVER_PASS_TYPE_SMS ?>"
-                                        <?= RECOVER_PASS_TYPE_SMS == $user['recover_password_type'] ? 'checked="checked"' : ''; ?>
-                                           id="smsChk">
-                                    <label class="form-check-label" for="smsChk">
-                                        <span>بازیابی با پیامک</span>
-                                    </label>
+                            <?php
+                            $isSecQuestionType = RECOVER_PASS_TYPE_SECURITY_QUESTION == $user['recover_password_type'];
+                            ?>
+
+                            <input type="hidden" name="csrf_token" value="<?= csrf_token(); ?>"
+                                   data-ignored>
+                            <div class="row">
+                                <div class="col-lg-6 form-group">
+                                    <div class="custome-radio">
+                                        <input class="form-check-input" type="radio"
+                                               name="inp-recover-type"
+                                               value="<?= RECOVER_PASS_TYPE_SMS ?>"
+                                            <?= RECOVER_PASS_TYPE_SMS == $user['recover_password_type'] ? 'checked="checked"' : ''; ?>
+                                               id="smsChk">
+                                        <label class="form-check-label" for="smsChk">
+                                            <span>بازیابی با پیامک</span>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <?php if (count($security_questions ?? [])): ?>
+                                    <div class="col-lg-6 form-group">
+                                        <div class="custome-radio">
+                                            <input class="form-check-input" type="radio"
+                                                   name="inp-recover-type"
+                                                   value="<?= RECOVER_PASS_TYPE_SECURITY_QUESTION ?>"
+                                                <?= $isSecQuestionType ? 'checked="checked"' : ''; ?>
+                                                   id="questionChk">
+                                            <label class="form-check-label" for="questionChk">
+                                                <span>بازیابی با سؤال امنیتی</span>
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-lg-12 collapse" id="secQuestionCollapse">
+                                        <div class="row mt-4">
+                                            <div class="col-lg-5 form-group">
+                                                <label>
+                                                    <span class="text-danger" aria-hidden="true">*</span>
+                                                    انتخاب سؤال امنیتی:
+                                                </label>
+                                                <select name="inp-recover-sec-question"
+                                                        class="selectric_dropdown">
+                                                    <option value="<?= DEFAULT_OPTION_VALUE ?>"
+                                                            selected="selected"
+                                                            disabled="disabled">
+                                                        انتخاب کنید
+                                                    </option>
+                                                    <?php foreach ($security_questions as $question): ?>
+                                                        <option value="<?= $question['id']; ?>">
+                                                            <?= $question['question']; ?>
+                                                        </option>
+                                                    <?php endforeach; ?>
+                                                </select>
+                                            </div>
+                                            <div class="col-lg-8 form-group">
+                                                <label>
+                                                    <span class="required">*</span>
+                                                    پاسخ به سؤال:
+                                                </label>
+                                                <input required="" class="form-control"
+                                                       name="inp-recover-sec-question-answer"
+                                                       type="text">
+                                            </div>
+                                        </div>
+                                    </div>
+                                <?php endif; ?>
+
+                                <div class="col-lg-12">
+                                    <button type="submit" class="btn btn-fill-out mt-3"
+                                            name="otherSubmit" value="Submit">
+                                        اعمال تغییرات
+                                    </button>
                                 </div>
                             </div>
-                            <div class="col-lg-6 form-group">
-                                <div class="custome-radio">
-                                    <input class="form-check-input" type="radio"
-                                           name="inp-recover-type"
-                                           value="<?= RECOVER_PASS_TYPE_SECURITY_QUESTION ?>"
-                                        <?= RECOVER_PASS_TYPE_SECURITY_QUESTION == $user['recover_password_type'] ? 'checked="checked"' : ''; ?>
-                                           id="questionChk">
-                                    <label class="form-check-label" for="questionChk">
-                                        <span>بازیابی با سؤال امنیتی</span>
-                                    </label>
-                                </div>
-                            </div>
-                            <div class="col-lg-12">
-                                <button type="submit" class="btn btn-fill-out mt-3"
-                                        name="otherSubmit" value="Submit">
-                                    اعمال تغییرات
-                                </button>
-                            </div>
-                        </div>
-                    </form>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+
+        <script>
+            (function ($) {
+                'use strict';
+
+                $(function () {
+                    var secCollapseContainer = $('#secQuestionCollapse');
+                    $('[name="inp-recover-type"]').on('change', function () {
+                        if($(this).val() == '<?= RECOVER_PASS_TYPE_SECURITY_QUESTION; ?>') {
+                            secCollapseContainer.collapse('show');
+                        } else {
+                            secCollapseContainer.collapse('hide');
+                        }
+                    });
+                });
+            })(jQuery);
+        </script>
+    <?php endif; ?>
 </div>

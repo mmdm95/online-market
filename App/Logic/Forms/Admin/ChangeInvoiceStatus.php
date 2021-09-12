@@ -44,7 +44,7 @@ class ChangeInvoiceStatus implements IPageForm
             ->stopValidationAfterFirstError(false)
             ->required()
             ->stopValidationAfterFirstError(true)
-            ->isIn(PAYMENT_STATUSES, '{alias} ' . 'نامعتبر است.');
+            ->isIn(array_keys(PAYMENT_STATUSES), '{alias} ' . 'نامعتبر است.');
 
         // check for id is not necessary here, but you can do it when needed
         // ...

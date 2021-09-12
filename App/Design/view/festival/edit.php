@@ -52,9 +52,12 @@
                         </label>
                         <?php
                         $sd = $validator->setInput('inp-edit-festival-start-date', '') ?: ($festival['start_at'] ?: '');
+                        if(!empty($sd)) {
+                            $sd = date('Y/m/d H:i', (int)$sd);
+                        }
                         ?>
                         <input type="hidden" name="inp-edit-festival-start-date"
-                               id="altStartDate" value="<?= $sd; ?>">
+                               id="altStartDate">
                         <div class="d-flex">
                             <input type="text" class="form-control range-from"
                                    placeholder="انتخاب تاریخ" readonly data-ignored
@@ -76,9 +79,12 @@
                         </label>
                         <?php
                         $ed = $validator->setInput('inp-edit-festival-end-date', '') ?: ($festival['expire_at'] ?: '');
+                        if (!empty($ed)) {
+                            $ed = date('Y/m/d H:i', (int)$ed);
+                        }
                         ?>
                         <input type="hidden" name="inp-edit-festival-end-date"
-                               id="altEndDate" value="<?= $ed; ?>">
+                               id="altEndDate">
                         <div class="d-flex">
                             <input type="text" class="form-control range-to"
                                    placeholder="انتخاب تاریخ" readonly data-ignored

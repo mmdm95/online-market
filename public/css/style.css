@@ -40,7 +40,13 @@ Version      : 1.0
 
 :root {
     --custom-primary-color--: #ff0a54;
+    --custom-primary-color-r--: 255;
+    --custom-primary-color-g--: 10;
+    --custom-primary-color-b--: 84;
     /*--custom-primary-color--: #52b9cc;*/
+    /*--custom-primary-color-r--: 82;*/
+    /*--custom-primary-color-g--: 185;*/
+    /*--custom-primary-color-b--: 204;*/
 }
 
 html, body {
@@ -6937,10 +6943,6 @@ footer .widget_title {
     min-height: auto;
 }
 
-#Additional-info table td:first-child {
-    width: 25%;
-}
-
 .product_tab_title span {
     font-weight: 600;
 }
@@ -7842,9 +7844,9 @@ footer .widget_recent_post .post_img img {
     padding: 5px 20px;
 }
 
-/*.nav-tabs .nav-item.show .nav-link, .nav-tabs .nav-link.active {*/
-/*border-bottom: 1px solid var(--custom-primary-color--);*/
-/*}*/
+.nav-tabs .nav-item.show .nav-link, .nav-tabs .nav-link.active {
+    border-bottom: 1px solid var(--custom-primary-color--);
+}
 
 .tab-content {
     margin-top: 25px;
@@ -8988,6 +8990,10 @@ body.switch-open {
   MY CUSTOM ELEMENT(S)
 *===================================*/
 
+#Description {
+    line-height: 2.5;
+}
+
 .custom-backdrop {
     background-color: rgba(0, 0, 0, .5);
     position: fixed;
@@ -9092,6 +9098,33 @@ body.switch-open {
 
 .selectric-open .selectric {
     border-color: #999;
+}
+
+.selectric-selectric-dropdown-products {
+    display: inline-block;
+}
+
+.selectric-selectric-dropdown-products .selectric {
+    border-radius: 50rem;
+    border-color: rgba(var(--custom-primary-color-r--), var(--custom-primary-color-g--), var(--custom-primary-color-b--), .15);
+    -webkit-box-shadow: 0 5px 15px 0 rgba(0, 0, 0, .15);
+    -moz-box-shadow: 0 5px 15px 0 rgba(0, 0, 0, .15);
+    box-shadow: 0 5px 15px 0 rgba(0, 0, 0, .15);
+}
+
+.selectric-selectric-dropdown-products .selectric-items {
+    top: calc(100% + .75rem);
+    border-radius: .75rem;
+}
+
+.selectric-selectric-dropdown-products .selectric-items li:first-child {
+    border-top-left-radius: .75rem;
+    border-top-right-radius: .75rem;
+}
+
+.selectric-selectric-dropdown-products .selectric-items li:last-child {
+    border-bottom-left-radius: .75rem;
+    border-bottom-right-radius: .75rem;
 }
 
 /* BOOTSTRAP TOOLTIP */
@@ -9334,7 +9367,7 @@ body.switch-open {
     opacity: 0;
 }
 
-.step-container .step-item:not(.active)::before {
+.step-container .step-item:not(.active, .done)::before {
     content: '';
     position: absolute;
     left: 50%;
@@ -9506,26 +9539,40 @@ body.switch-open {
     width: 100%;
     margin-bottom: 1rem;
     background-color: transparent;
-    border: 1px solid #dee2e6;
-    border-collapse: collapse !important;
+    border-collapse: separate;
+    border-spacing: 1rem .5rem;
+}
+
+#Additional-info table tr {
+    overflow: hidden;
+}
+
+#Additional-info table tr:nth-child(even) {
+    background-color: #f6f7f9;
 }
 
 #Additional-info table td,
 #Additional-info table th {
     padding: .75rem;
     vertical-align: top;
-    background-color: #fff !important;
-    border-top: 1px solid #dee2e6;
-    border-bottom-width: 2px;
+    border-radius: .5rem;
+    margin: 0 .5rem;
+    border: 1px solid #e6e7e9;
+    -webkit-box-shadow: 0 2px 7px 0 rgba(0, 0, 0, .1);
+    -moz-box-shadow: 0 2px 7px 0 rgba(0, 0, 0, .1);
+    box-shadow: 0 2px 7px 0 rgba(0, 0, 0, .1);
+}
+
+#Additional-info table td:first-child {
+    width: 25%;
+}
+
+#Additional-info table td:last-child {
+    vertical-align: middle;
 }
 
 #Additional-info table thead th {
     vertical-align: bottom;
-    border: 1px solid #dee2e6;
-}
-
-#Additional-info table + tbody {
-    border-top: 2px solid #dee2e6;
 }
 
 #Additional-info table table {

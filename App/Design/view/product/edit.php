@@ -282,10 +282,10 @@ $validator = form_validator();
                                         <div class="mt-3 col-lg-4">
                                             <label>تخفیف تا تاریخ:</label>
                                             <?php
-                                            $sd = $validator->setInput('inp-add-product-discount-date.' . $counter, time());
+                                            $sd = date('Y/m/d H:i', $validator->setInput('inp-add-product-discount-date.' . $counter, time()));
                                             ?>
                                             <input type="hidden" name="inp-edit-product-discount-date[]"
-                                                   id="altDate<?= $counter; ?>" value="<?= $sd; ?>">
+                                                   id="altDate<?= $counter; ?>">
                                             <input type="text" class="form-control myDatepickerWithEn"
                                                    placeholder="انتخاب تاریخ" readonly data-ignored
                                                    name="inp-edit-product-discount-date-tmp[]"
@@ -414,10 +414,10 @@ $validator = form_validator();
                                         <div class="mt-3 col-lg-4">
                                             <label>تخفیف تا تاریخ:</label>
                                             <?php
-                                            $sd = $property['discount_until'] ?: time();
+                                            $sd = date('Y/m/d H:i', $property['discount_until'] ?: time());
                                             ?>
                                             <input type="hidden" name="inp-edit-product-discount-date[]"
-                                                   id="altDate<?= $counter; ?>" value="<?= $sd; ?>">
+                                                   id="altDate<?= $counter; ?>">
                                             <input type="text" class="form-control myDatepickerWithEn"
                                                    placeholder="انتخاب تاریخ" readonly data-ignored
                                                    name="inp-edit-product-discount-date-tmp[]"
@@ -531,14 +531,14 @@ $validator = form_validator();
                                     <div class="mt-3 col-lg-4">
                                         <label>تخفیف تا تاریخ:</label>
                                         <input type="hidden" name="inp-edit-product-discount-date[]"
-                                               id="altDateField" value="<?= time(); ?>">
+                                               id="altDateField">
                                         <input type="text" class="form-control myDatepickerWithEn"
                                                placeholder="انتخاب تاریخ" readonly data-ignored
                                                name="inp-edit-product-discount-date-tmp[]"
                                                data-alt-field="#altDateField"
                                                data-format="YYYY/MM/DD HH:mm"
                                                data-time="true"
-                                               value="<?= time() ?>">
+                                               value="<?= date('Y/m/d H:i', time()); ?>">
                                     </div>
                                     <div class="mt-3 col alert-warning d-flex align-items-center rounded">
                                         <div class="form-check">

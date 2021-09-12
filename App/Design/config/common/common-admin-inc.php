@@ -36,7 +36,7 @@ return [
                 ),
                 e(
                     '<script type="text/javascript" src="' .
-                    asset_path('be/js/plugins/forms/validation/validate.min.js') .
+                    asset_path('be/js/plugins/forms/validation/jquery.validate.min.js') .
                     '"></script>'
                 ),
                 e(

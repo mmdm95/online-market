@@ -11,6 +11,7 @@
 
         <table class="table table-bordered table-hover datatable-highlight"
                data-columns='[{"data":"id"},{"data":"factor_code"},{"data":"user"},{"data":"user_mobile"},{"data":"info"},{"data":"order_status"},{"data":"order_date"},{"data":"status"},{"data":"operations"}]'
+            <?= !empty($status) ? 'data-search="' . $status . '"' : ''; ?>
                data-ajax-url="<?= url('admin.order.dt.view')->getRelativeUrlTrimmed(); ?>">
             <thead>
             <tr>

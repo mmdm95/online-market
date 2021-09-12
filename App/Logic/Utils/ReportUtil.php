@@ -2,9 +2,11 @@
 
 namespace App\Logic\Utils;
 
+use App\Logic\Models\OrderModel;
+use App\Logic\Models\ProductModel;
 use App\Logic\Models\UserModel;
+use App\Logic\Models\WalletModel;
 use Sim\File\Download;
-use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx as WriterXlsx;
 use Sim\Utils\StringUtil;
 
@@ -27,13 +29,6 @@ class ReportUtil
          * @var UserModel $userModel
          */
         $userModel = container()->get(UserModel::class);
-        // Spreadsheet name
-        $name = 'report-users';
-        $reportPath = path()->get('upload-report');
-        // remove previous excel files
-        ReportUtil::removeAllExcelReports($reportPath, $name . '*');
-        // Create IO for file
-        $spreadsheet = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
         $spreadsheetArray = [
             0 => [
                 '#',
@@ -49,15 +44,15 @@ class ReportUtil
             ]
         ];
         //-----
-        $totalUsers = 0;
+        $total = 0;
         $k = 0;
         $limit = 100;
         $offset = 0;
         // make memory management better in this way by fetching chunk of users each time
         do {
-            $users = $userModel->getUsers(['u.*'], $where, $bindValues, $limit, $offset * $limit);
-            $totalUsers += count($users);
-            foreach ($users as $item) {
+            $items = $userModel->getUsers(['u.*'], $where, $bindValues, $limit, $offset * $limit);
+            $total += count($items);
+            foreach ($items as $item) {
                 $spreadsheetArray[($k + 1)][] = $k + 1;
                 $spreadsheetArray[($k + 1)][] = $item['username'];
                 $spreadsheetArray[($k + 1)][] = $item['first_name'] . ' ' . $item['last_name'];
@@ -75,40 +70,470 @@ class ReportUtil
                 $spreadsheetArray[($k + 1)][] = !empty($item['activated_at'])
                     ? Jdf::jdate('j F Y در ساعت H:i', $item['activated_at'])
                     : '-';
-                $spreadsheetArray[($k + 1)][] = Jdf::jdate('j F Y در ساعت H:i', $item['created_at']);
+                $spreadsheetArray[($k + 1)][] = Jdf::jdate(REPORT_TIME_FORMAT, $item['created_at']);
                 //
                 $k++;
             }
             $offset++;
-        } while (count($users));
+        } while (count($items));
 
-        $spreadsheetArray[$totalUsers + 1][] = '';
-        $spreadsheetArray[$totalUsers + 1][] = 'تعداد کل کاربران';
-        $spreadsheetArray[$totalUsers + 1][] = StringUtil::toPersian(number_format(StringUtil::toEnglish($totalUsers)));
-        $spreadsheetArray[$totalUsers + 1][] = '';
-        $spreadsheetArray[$totalUsers + 1][] = '';
-        $spreadsheetArray[$totalUsers + 1][] = '';
+        $spreadsheetArray[$total + 1][] = '';
+        $spreadsheetArray[$total + 1][] = 'تعداد کل کاربران';
+        $spreadsheetArray[$total + 1][] = local_number(number_format(StringUtil::toEnglish($total)));
+        $spreadsheetArray[$total + 1][] = '';
+        $spreadsheetArray[$total + 1][] = '';
+        $spreadsheetArray[$total + 1][] = '';
+
+        self::exportExcel(
+            $spreadsheetArray,
+            'report-users',
+            'گزارش کاربران ' . Jdf::jdate(REPORT_TIME_FORMAT, time())
+        );
+    }
+
+    /**
+     * @param $where
+     * @param $bindValues
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
+     * @throws \PhpOffice\PhpSpreadsheet\Writer\Exception
+     * @throws \Sim\Exceptions\FileNotExistsException
+     * @throws \Sim\Exceptions\PathManager\PathNotRegisteredException
+     * @throws \Sim\File\Interfaces\IFileException
+     * @throws \Sim\Interfaces\IInvalidVariableNameException
+     */
+    public static function exportProductsExcel($where, $bindValues)
+    {
+        /**
+         * @var ProductModel $productModel
+         */
+        $productModel = container()->get(ProductModel::class);
+        $spreadsheetArray = [
+            0 => [
+                '#',
+                'عنوان',
+                'دسته‌بندی',
+                'برند',
+                'عنوان لاتین برند',
+                'عنوان واحد',
+                'وضعیت موجودی محصول',
+                'وضعیت نمایش',
+                'محصول ویژه',
+                //
+                'وضعیت موجودی',
+                'قیمت',
+                'قیمت با تخفیف',
+                'تخفیف تا تاریخ',
+                'رنگ',
+                'سایز',
+                'گارانتی',
+                'وزن (بر حسب گرم)',
+                'تعداد موجود',
+                //
+                'کلمات کلیدی',
+                'اضافه شده در تاریخ',
+            ]
+        ];
+        //-----
+        $total = 0;
+        $k = 0;
+        $limit = 100;
+        $offset = 0;
+        // make memory management better in this way by fetching chunk of users each time
+        do {
+            $items = $productModel->getLimitedProduct(
+                $where,
+                $bindValues,
+                ['pa.product_id DESC'],
+                $limit,
+                $offset * $limit,
+                ['pa.product_id'],
+                [
+                    'pa.title',
+                    'pa.category_name',
+                    'pa.brand_name',
+                    'pa.brand_latin_name',
+                    'pa.publish',
+                    'pa.product_availability',
+                    'pa.is_special',
+                    'pa.unit_title',
+                    'pa.keywords',
+                    'pa.created_at',
+                ]
+            );
+            $total += count($items);
+            foreach ($items as $item) {
+                $productProperties = $productModel->getProductProperty($item['id'], [
+                    'stock_count',
+                    'color_name',
+                    'size',
+                    'guarantee',
+                    'weight',
+                    'price',
+                    'discounted_price',
+                    'discount_until',
+                    'is_available',
+                ]);
+
+                $c = 1;
+                $avlStr = '';
+                $priceStr = '';
+                $disPriceStr = '';
+                $disDateStr = '';
+                $colorStr = '';
+                $sizeStr = '';
+                $guaranteeStr = '';
+                $weightStr = '';
+                $stockCountStr = '';
+                if (!count($productProperties)) {
+                    $avlStr = '-';
+                    $priceStr = '-';
+                    $disPriceStr = '-';
+                    $disDateStr = '-';
+                    $colorStr = '-';
+                    $sizeStr = '-';
+                    $guaranteeStr = '-';
+                    $weightStr = '-';
+                    $stockCountStr = '-';
+                }
+                foreach ($productProperties as $product) {
+                    $avlStr .= "$c) " . is_value_checked($product['is_available']) ? 'موجود' : 'ناموجود';
+                    $priceStr .= "$c) " . local_number(number_format(StringUtil::toEnglish($product['price'])));
+                    $disPriceStr .= "$c) " . local_number(number_format(StringUtil::toEnglish($product['discounted_price'])));
+                    $disDateStr .= "$c) " . !empty($product['discount_until']) ? Jdf::jdate(DEFAULT_TIME_FORMAT) : '-';
+                    $colorStr .= "$c) {$product['color_name']}";
+                    $sizeStr .= "$c) {$product['size']}";
+                    $guaranteeStr .= "$c) {$product['guarantee']}";
+                    $weightStr .= "$c) " . local_number(number_format(StringUtil::toEnglish($product['weight']))) . ' گرم';
+                    $stockCountStr .= "$c) " . local_number(number_format(StringUtil::toEnglish($product['stock_count'])));
+                    //
+                    $avlStr .= "\n";
+                    $priceStr .= "\n";
+                    $disPriceStr .= "\n";
+                    $disDateStr .= "\n";
+                    $colorStr .= "\n";
+                    $sizeStr .= "\n";
+                    $guaranteeStr .= "\n";
+                    $weightStr .= "\n";
+                    $stockCountStr .= "\n";
+                    //
+                    $c++;
+                }
+
+                $spreadsheetArray[($k + 1)][] = $k + 1;
+                $spreadsheetArray[($k + 1)][] = $item['title'];
+                $spreadsheetArray[($k + 1)][] = $item['category_name'];
+                $spreadsheetArray[($k + 1)][] = $item['brand_name'];
+                $spreadsheetArray[($k + 1)][] = $item['brand_latin_name'];
+                $spreadsheetArray[($k + 1)][] = $item['unit_title'];
+                $spreadsheetArray[($k + 1)][] = is_value_checked($item['product_availability']) ? 'موجود' : 'ناموجود';
+                $spreadsheetArray[($k + 1)][] = is_value_checked($item['publish']) ? 'نمایش' : 'عدم نمایش';
+                $spreadsheetArray[($k + 1)][] = is_value_checked($item['is_special']) ? 'ویژه' : '-';
+                // product properties
+                $spreadsheetArray[($k + 1)][] = $avlStr;
+                $spreadsheetArray[($k + 1)][] = $priceStr;
+                $spreadsheetArray[($k + 1)][] = $disPriceStr;
+                $spreadsheetArray[($k + 1)][] = $disDateStr;
+                $spreadsheetArray[($k + 1)][] = $colorStr;
+                $spreadsheetArray[($k + 1)][] = $sizeStr;
+                $spreadsheetArray[($k + 1)][] = $guaranteeStr;
+                $spreadsheetArray[($k + 1)][] = $weightStr;
+                $spreadsheetArray[($k + 1)][] = $stockCountStr;
+                //
+                $spreadsheetArray[($k + 1)][] = $item['keywords'];
+                $spreadsheetArray[($k + 1)][] = Jdf::jdate(REPORT_TIME_FORMAT, $item['created_at']);
+                //
+                $k++;
+            }
+            $offset++;
+        } while (count($items));
+
+        $spreadsheetArray[$total + 1][] = '';
+        $spreadsheetArray[$total + 1][] = 'تعداد کل';
+        $spreadsheetArray[$total + 1][] = local_number(number_format(StringUtil::toEnglish($total)));
+        $spreadsheetArray[$total + 1][] = '';
+        $spreadsheetArray[$total + 1][] = '';
+        $spreadsheetArray[$total + 1][] = '';
+
+        self::exportExcel(
+            $spreadsheetArray,
+            'report-products',
+            'گزارش محصولات ' . Jdf::jdate(REPORT_TIME_FORMAT, time())
+        );
+    }
+
+    /**
+     * @param $where
+     * @param $bindValues
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
+     * @throws \PhpOffice\PhpSpreadsheet\Writer\Exception
+     * @throws \Sim\Exceptions\FileNotExistsException
+     * @throws \Sim\Exceptions\PathManager\PathNotRegisteredException
+     * @throws \Sim\File\Interfaces\IFileException
+     * @throws \Sim\Interfaces\IInvalidVariableNameException
+     */
+    public static function exportOrdersExcel($where, $bindValues)
+    {
+        /**
+         * @var OrderModel $orderModel
+         */
+        $orderModel = container()->get(OrderModel::class);
+        $spreadsheetArray = [
+            0 => [
+                '#',
+                'کد سفارش',
+                'نام خریدار',
+                'موبایل خریدار',
+                'نام گیرنده',
+                'موبایل گیرنده',
+                //
+                'قیمت واحد',
+                'قیمت',
+                'قیمت با تخفیف',
+                'رنگ',
+                'سایز',
+                'گارانتی',
+                'وزن (بر حسب گرم)',
+                'تعداد خریداری شده',
+                //
+                'شهر',
+                'استان',
+                'آدرس',
+                'کد پستی',
+                'وضعیت پرداخت',
+                'شیوه پرداخت',
+                'عنوان شیوه پرداخت',
+                'کد کوپن',
+                'عنوان کوپن',
+                'قیمت کوپن',
+                'قیمت کل',
+                'مقدار تخفیف',
+                'هزینه ارسال',
+                'قیمت نهایی',
+                'وضعیت ارسال',
+                'تاریخ پرداخت',
+                'تاریخ ثبت سفارش',
+                'تاریخ تغییر وضعیت پرداخت',
+                'تغییر وضعیت پرداخت توسط',
+                'تاریخ تغییر وضعیت ارسال',
+                'تغییر وضعیت ارسال توسط',
+                'نام فعلی خریدار',
+                'موبایل فعلی خریدار',
+            ]
+        ];
+        //-----
+        $total = 0;
+        $k = 0;
+        $limit = 100;
+        $offset = 0;
+        // make memory management better in this way by fetching chunk of users each time
+        do {
+            $items = $orderModel->getOrdersWithAllInfo(
+                $where,
+                $bindValues,
+                ['ordered_at DESC'],
+                $limit,
+                $offset * $limit
+            );
+            $total += count($items);
+            foreach ($items as $item) {
+                $spreadsheetArray[($k + 1)][] = $k + 1;
+                $spreadsheetArray[($k + 1)][] = $item['code'];
+                $spreadsheetArray[($k + 1)][] = trim(($item['first_name'] ?? '') . ' ' . ($item['last_name'] ?? ''));
+                $spreadsheetArray[($k + 1)][] = $item['mobile'];
+                $spreadsheetArray[($k + 1)][] = $item['receiver_name'];
+                $spreadsheetArray[($k + 1)][] = $item['receiver_mobile'];
+                //-----
+                $orderItems = $orderModel->getOrderItems(['*'], 'order_code=:code', ['code' => $item['code']]);
+
+                $c = 1;
+                $unitPriceStr = '';
+                $priceStr = '';
+                $disPriceStr = '';
+                $colorStr = '';
+                $sizeStr = '';
+                $guaranteeStr = '';
+                $weightStr = '';
+                $productCountStr = '';
+                if (!count($orderItems)) {
+                    $unitPriceStr = '-';
+                    $priceStr = '-';
+                    $disPriceStr = '-';
+                    $colorStr = '-';
+                    $sizeStr = '-';
+                    $guaranteeStr = '-';
+                    $weightStr = '-';
+                    $productCountStr = '-';
+                }
+                foreach ($orderItems as $product) {
+                    $unitPriceStr .= "$c) " . local_number(number_format(StringUtil::toEnglish($product['unit_price'])));
+                    $priceStr .= "$c) " . local_number(number_format(StringUtil::toEnglish($product['price'])));
+                    $disPriceStr .= "$c) " . local_number(number_format(StringUtil::toEnglish($product['discounted_price'])));
+                    $colorStr .= "$c) {$product['color_name']}";
+                    $sizeStr .= "$c) {$product['size']}";
+                    $guaranteeStr .= "$c) {$product['guarantee']}";
+                    $weightStr .= "$c) " . local_number(number_format(StringUtil::toEnglish($product['weight']))) . ' گرم';
+                    $productCountStr .= "$c) " . local_number(number_format(StringUtil::toEnglish($product['product_count'])));
+                    //
+                    $priceStr .= "\n";
+                    $disPriceStr .= "\n";
+                    $colorStr .= "\n";
+                    $sizeStr .= "\n";
+                    $guaranteeStr .= "\n";
+                    $weightStr .= "\n";
+                    $productCountStr .= "\n";
+                    //
+                    $c++;
+                }
+                //-----
+                $spreadsheetArray[($k + 1)][] = $item['city'];
+                $spreadsheetArray[($k + 1)][] = $item['province'];
+                $spreadsheetArray[($k + 1)][] = $item['address'];
+                $spreadsheetArray[($k + 1)][] = $item['postal_code'];
+                $spreadsheetArray[($k + 1)][] = PAYMENT_STATUSES[$item['payment_status']] ?? 'نامشخص';
+                $spreadsheetArray[($k + 1)][] = METHOD_TYPES[$item['method_type']] ?? 'نامشخص';
+                $spreadsheetArray[($k + 1)][] = $item['method_title'];
+                $spreadsheetArray[($k + 1)][] = $item['coupon_code'];
+                $spreadsheetArray[($k + 1)][] = $item['coupon_title'];
+                $spreadsheetArray[($k + 1)][] = number_format(StringUtil::toEnglish($item['coupon_price']));
+                $spreadsheetArray[($k + 1)][] = number_format(StringUtil::toEnglish($item['total_price']));
+                $spreadsheetArray[($k + 1)][] = number_format(StringUtil::toEnglish($item['discount_price']));
+                $spreadsheetArray[($k + 1)][] = number_format(StringUtil::toEnglish($item['shipping_price']));
+                $spreadsheetArray[($k + 1)][] = number_format(StringUtil::toEnglish($item['final_price']));
+                $spreadsheetArray[($k + 1)][] = number_format(StringUtil::toEnglish($item['send_status_title']));
+                $spreadsheetArray[($k + 1)][] = Jdf::jdate(REPORT_TIME_FORMAT, $item['payed_at']);
+                $spreadsheetArray[($k + 1)][] = Jdf::jdate(REPORT_TIME_FORMAT, $item['ordered_at']);
+                $spreadsheetArray[($k + 1)][] = !empty($item['invoice_status_changed_at'])
+                    ? Jdf::jdate(REPORT_TIME_FORMAT, $item['invoice_status_changed_at'])
+                    : '-';
+                $spreadsheetArray[($k + 1)][] = !empty($item['invoice_status_changed_by'])
+                    ? (trim($item['invoice_user_first_name'] . ' ' . $item['invoice_user_last_name']) ?: $item['invoice_username'])
+                    : 'سیستمی';
+                $spreadsheetArray[($k + 1)][] = !empty($item['send_status_changed_at'])
+                    ? Jdf::jdate(REPORT_TIME_FORMAT, $item['send_status_changed_at'])
+                    : '-';
+                $spreadsheetArray[($k + 1)][] = !empty($item['send_status_changed_by'])
+                    ? (trim($item['sender_user_first_name'] . ' ' . $item['sender_user_last_name']) ?: $item['sender_username'])
+                    : 'سیستمی';
+                $spreadsheetArray[($k + 1)][] = trim($item['user_first_name'] . ' ' . $item['user_last_name']);
+                $spreadsheetArray[($k + 1)][] = $item['username'];
+
+                $k++;
+            }
+            $offset++;
+        } while (count($items));
+
+        $spreadsheetArray[$total + 1][] = '';
+        $spreadsheetArray[$total + 1][] = 'تعداد کل سفارشات';
+        $spreadsheetArray[$total + 1][] = local_number(number_format(StringUtil::toEnglish($total)));
+        $spreadsheetArray[$total + 1][] = '';
+        $spreadsheetArray[$total + 1][] = '';
+        $spreadsheetArray[$total + 1][] = '';
+
+        self::exportExcel(
+            $spreadsheetArray,
+            'report-orders',
+            'گزارش سفارشات ' . Jdf::jdate(REPORT_TIME_FORMAT, time())
+        );
+    }
+
+    /**
+     * @param $where
+     * @param $bindValues
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
+     * @throws \PhpOffice\PhpSpreadsheet\Writer\Exception
+     * @throws \Sim\Exceptions\FileNotExistsException
+     * @throws \Sim\Exceptions\PathManager\PathNotRegisteredException
+     * @throws \Sim\File\Interfaces\IFileException
+     * @throws \Sim\Interfaces\IInvalidVariableNameException
+     */
+    public static function exportWalletExcel($where, $bindValues)
+    {
+        // it should not be implement for now!
+        return;
+
+        /**
+         * @var WalletModel $walletModel
+         */
+        $walletModel = container()->get(WalletModel::class);
+        $spreadsheetArray = [
+            0 => [
+                '#',
+                '',
+            ]
+        ];
+        //-----
+        $total = 0;
+        $k = 0;
+        $limit = 100;
+        $offset = 0;
+        // make memory management better in this way by fetching chunk of users each time
+        do {
+            $items = $walletModel->get(
+                ['*'],
+                $where,
+                $bindValues,
+                ['id DESC'],
+                $limit,
+                $offset * $limit
+            );
+            $total += count($items);
+            foreach ($items as $item) {
+                $k++;
+            }
+            $offset++;
+        } while (count($items));
+
+        self::exportExcel(
+            $spreadsheetArray,
+            'report-wallet',
+            'گزارش کیف پول ' . Jdf::jdate(REPORT_TIME_FORMAT, time())
+        );
+    }
+
+    /**
+     * @param $array
+     * @param $filename
+     * @param $downloadFilename
+     * @throws \PhpOffice\PhpSpreadsheet\Writer\Exception
+     * @throws \Sim\Exceptions\FileNotExistsException
+     * @throws \Sim\Exceptions\PathManager\PathNotRegisteredException
+     * @throws \Sim\File\Interfaces\IFileException
+     * @throws \Sim\Interfaces\IInvalidVariableNameException
+     */
+    private static function exportExcel(
+        $array,
+        $filename,
+        $downloadFilename
+    )
+    {
+        // Spreadsheet name
+        $name = md5($filename . StringUtil::randomString(3, StringUtil::RS_NUMBER));
+        $reportPath = path()->get('upload-report');
+        // remove previous excel files
+        ReportUtil::removeAllExcelReports($reportPath, $filename . '*');
+        // Create IO for file
+        $spreadsheet = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
 
         // Add whole array to spreadsheet
         $spreadsheet
             ->getActiveSheet()
             ->setRightToLeft(true)
-            ->fromArray($spreadsheetArray);
+            ->fromArray($array);
         // Create writer
         $writer = new WriterXlsx($spreadsheet);
         $writer->save($reportPath . $name . ".xlsx");
         //
-        ReportUtil::downloadExcel(
-            $reportPath . $name . '.xlsx',
-            'گزارش کاربران ' . Jdf::jdate(REPORT_TIME_FORMAT, time())
-        );
+        ReportUtil::downloadExcel($reportPath . $name . '.xlsx', $downloadFilename);
     }
 
     /**
      * @param $path
      * @param string|null $rule
      */
-    public static function removeAllExcelReports($path, ?string $rule = null)
+    private static function removeAllExcelReports($path, ?string $rule = null)
     {
         if (!is_null($rule)) {
             $mask = rtrim($path, '\\/') . '/' . $rule . '.xlsx';
@@ -123,7 +548,7 @@ class ReportUtil
      * @param $name
      * @throws \Sim\File\Interfaces\IFileException
      */
-    public static function downloadExcel($path, $name)
+    private static function downloadExcel($path, $name)
     {
         $download = Download::makeDownloadFromPath($path);
         $download->download($name);

@@ -6,7 +6,17 @@
         <?php load_partial('admin/card-header', ['header_title' => 'لیست جشنواره‌ها']); ?>
 
         <div class="card-body">
-            با استفاده از ستون عملیات می‌توانید اقدام به حذف، ویرایش و مشاهده جشنواره‌ها کنید.
+            <div class="d-flex justify-content-between flex-lg-row flex-column">
+                <span class="mb-2 mb-lg-0">با استفاده از ستون عملیات می‌توانید اقدام به حذف، ویرایش و مشاهده جشنواره‌ها کنید.</span>
+
+                <div class="ml-0 ml-lg-3 d-block d-lg-flex">
+                    <a href="<?= url('admin.festival.add'); ?>"
+                       class="btn bg-primary mb-2 mb-sm-0 d-block d-sm-inline-block">
+                        افزودن جشنواره جدید
+                        <i class="icon-plus2 ml-2" aria-hidden="true"></i>
+                    </a>
+                </div>
+            </div>
         </div>
 
         <table class="table table-bordered table-hover datatable-highlight"

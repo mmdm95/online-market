@@ -141,6 +141,7 @@ class RegisterController extends AbstractHomeController
             $this->removeAllMiddlewares();
         }
 
+        $data = [];
         if (is_post()) {
             /**
              * @var RegisterFormStep3 $registerForm
@@ -162,7 +163,7 @@ class RegisterController extends AbstractHomeController
                             BaseModel::TBL_USERS . '.is_activated=:is_active',
                             ['is_active' => DB_YES]
                         );
-                        response()->redirect(url('user.index')->getRelativeUrlTrimmed());
+                        response()->redirect(url('user.index', null, null)->getRelativeUrlTrimmed());
                     } catch (InvalidUserException|IDBException $e) {
                         $data['register_warning'] = encode_html('خطا در عملیات ورود! لطفا از '
                             . "<a href=\"" . url('home.login')
@@ -180,6 +181,6 @@ class RegisterController extends AbstractHomeController
         }
 
         $this->setLayout($this->main_layout)->setTemplate('view/main/signup/step3');
-        return $this->render([]);
+        return $this->render($data);
     }
 }

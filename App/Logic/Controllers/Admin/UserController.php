@@ -217,8 +217,14 @@ class UserController extends AbstractAdminController implements IDatatableContro
          */
         $agent = container()->get(Agent::class);
         if (!$agent->isRobot()) {
-            $handler = new GeneralAjaxRemoveHandler();
-            $resourceHandler = $handler->handle(BaseModel::TBL_USERS, $id);
+            if ($auth->userHasRole(ROLE_DEVELOPER) ||
+                $auth->userHasRole(ROLE_SUPER_USER, $id)) {
+                $handler = new GeneralAjaxRemoveHandler();
+                $resourceHandler = $handler->handle(BaseModel::TBL_USERS, $id);
+            } else {
+                $handler = new GeneralAjaxRemoveHandler();
+                $resourceHandler = $handler->handle(BaseModel::TBL_USERS, $id, '', [], false, true);
+            }
         } else {
             response()->httpCode(403);
             $resourceHandler->errorMessage('خطا در ارتباط با سرور، لطفا دوباره تلاش کنید.');
@@ -262,17 +268,17 @@ class UserController extends AbstractAdminController implements IDatatableContro
                      */
                     $auth = container()->get('auth_admin');
 
-                    if (!empty($where)) {
-                        $where .= ' AND ';
-                    }
-                    $where .= ' u.is_deleted<>:del';
-                    if (!$auth->hasRole(ROLE_DEVELOPER)) {
+                    if (!$auth->userHasRole(ROLE_DEVELOPER)) {
+                        if (!empty($where)) {
+                            $where .= ' AND ';
+                        }
+
+                        $where .= ' u.is_deleted<>:del';
+                        $bindValues = array_merge($bindValues, [
+                            'del' => DB_YES,
+                        ]);
+
                         $where .= ' AND u.is_hidden<>:hidden';
-                    }
-                    $bindValues = array_merge($bindValues, [
-                        'del' => DB_YES,
-                    ]);
-                    if (!$auth->hasRole(ROLE_DEVELOPER)) {
                         $bindValues = array_merge($bindValues, [
                             'hidden' => DB_YES,
                         ]);
@@ -314,7 +320,7 @@ class UserController extends AbstractAdminController implements IDatatableContro
                         'db_alias' => 'created_at',
                         'dt' => 'created_at',
                         'formatter' => function ($d) {
-                            return Jdf::jdate(DEFAULT_TIME_FORMAT, $d);
+                            return Jdf::jdate(DEFAULT_TIME_FORMAT_WITH_TIME, $d);
                         }
                     ],
                     [

@@ -395,8 +395,8 @@ class EditProductForm implements IPageForm
                 'is_available' => is_value_checked($availability) ? DB_YES : DB_NO,
                 'is_returnable' => is_value_checked($returnable) ? DB_YES : DB_NO,
                 'allow_commenting' => is_value_checked($commenting) ? DB_YES : DB_NO,
-                'created_by' => $auth->getCurrentUser()['id'] ?? null,
-                'created_at' => time(),
+                'updated_by' => $auth->getCurrentUser()['id'] ?? null,
+                'updated_at' => time(),
             ];
 
             // get unit title and sign

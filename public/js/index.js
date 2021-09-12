@@ -128,194 +128,227 @@
         constraints: {
             register: {
                 ruleCheckbox: {
-                    presence: {
-                        allowEmpty: false,
-                        message: '^' + 'نیاز به موافقت با شرایط و سیاست سایت است.',
+                    rules: {
+                        required: true,
                     },
-                    inclusion: {
-                        within: [true],
-                        message: '^' + 'نیاز به موافقت با شرایط و سیاست سایت است.',
+                    messages: {
+                        required: 'نیاز به موافقت با شرایط و سیاست سایت است.',
                     },
                 },
                 password: {
-                    presence: {
-                        allowEmpty: false,
-                        message: '^' + 'فیلد کلمه عبور اجباری می‌باشد.',
+                    rules: {
+                        requiredNotEmpty: true,
+                        minlength: 8,
                     },
-                    length: {
-                        minimum: 8,
-                        message: '^' + 'فیلد کلمه عبور باید حداقل دارای ۸ کاراکتر باشد.',
-                    }
+                    messages: {
+                        requiredNotEmpty: 'فیلد کلمه عبور اجباری می‌باشد.',
+                        minlength: 'فیلد کلمه عبور باید حداقل دارای ۸ کاراکتر باشد.',
+                    },
                 },
                 confirmPassword: {
-                    equality: "password"
+                    rules: {
+                        equalTo: '[name="password"]',
+                    },
+                    messages: {
+                        equalTo: 'تکرار کلمه عبور با کلمه عبور یکسان نمی‌باشد.',
+                    },
                 },
             },
             forgetStep3: {
                 password: {
-                    presence: {
-                        allowEmpty: false,
-                        message: '^' + 'فیلد کلمه عبور اجباری می‌باشد.',
+                    rules: {
+                        requiredNotEmpty: true,
+                        minlength: 8,
                     },
-                    length: {
-                        minimum: 8,
-                        message: '^' + 'فیلد کلمه عبور باید حداقل دارای ۸ کاراکتر باشد.',
-                    }
+                    messages: {
+                        requiredNotEmpty: 'فیلد کلمه عبور اجباری می‌باشد.',
+                        minlength: 'فیلد کلمه عبور باید حداقل دارای ۸ کاراکتر باشد.',
+                    },
                 },
                 confirmPassword: {
-                    equality: "password"
+                    rules: {
+                        equalTo: '[name="password"]',
+                    },
+                    messages: {
+                        equalTo: 'تکرار کلمه عبور با کلمه عبور یکسان نمی‌باشد.',
+                    },
                 },
             },
             contactUs: {
                 subject: {
-                    presence: {
-                        allowEmpty: false,
-                        message: '^' + 'فیلد موضوع را خالی نگذارید.',
+                    rules: {
+                        requiredNotEmpty: true,
+                        maxlength: 250,
                     },
-                    length: {
-                        maximum: 250,
-                        message: '^' + 'فیلد موضوع باید حداکثر دارای ۲۵۰ کاراکتر باشد.',
-                    }
+                    messages: {
+                        requiredNotEmpty: 'فیلد موضوع را خالی نگذارید.',
+                        maxlength: 'فیلد موضوع باید حداکثر دارای ۲۵۰ کاراکتر باشد.',
+                    },
                 },
                 message: {
-                    presence: {
-                        allowEmpty: false,
-                        message: '^' + 'فیلد پیام خالی نگذارید.',
+                    rules: {
+                        requiredNotEmpty: true,
+                    },
+                    messages: {
+                        requiredNotEmpty: 'فیلد پیام خالی نگذارید.',
                     },
                 },
             },
             complaint: {
                 subject: {
-                    presence: {
-                        allowEmpty: false,
-                        message: '^' + 'فیلد موضوع را خالی نگذارید.',
+                    rules: {
+                        requiredNotEmpty: true,
+                        maxlength: 250,
                     },
-                    length: {
-                        maximum: 250,
-                        message: '^' + 'فیلد موضوع باید حداکثر دارای ۲۵۰ کاراکتر باشد.',
-                    }
+                    messages: {
+                        requiredNotEmpty: 'فیلد موضوع را خالی نگذارید.',
+                        maxlength: 'فیلد موضوع باید حداکثر دارای ۲۵۰ کاراکتر باشد.',
+                    },
                 },
                 message: {
-                    presence: {
-                        allowEmpty: false,
-                        message: '^' + 'فیلد پیام خالی نگذارید.',
+                    rules: {
+                        requiredNotEmpty: true,
+                    },
+                    messages: {
+                        requiredNotEmpty: 'فیلد پیام خالی نگذارید.',
                     },
                 },
             },
             addAddress: {
                 province: {
-                    presence: {
-                        allowEmpty: false,
-                        message: '^' + 'فیلد استان را خالی نگذارید.',
+                    rules: {
+                        requiredNotEmpty: true,
+                    },
+                    messages: {
+                        requiredNotEmpty: 'فیلد استان را خالی نگذارید.',
                     },
                 },
                 city: {
-                    presence: {
-                        allowEmpty: false,
-                        message: '^' + 'فیلد شهر را خالی نگذارید.',
+                    rules: {
+                        requiredNotEmpty: true,
+                    },
+                    messages: {
+                        requiredNotEmpty: 'فیلد شهر را خالی نگذارید.',
                     },
                 },
                 postalCode: {
-                    presence: {
-                        allowEmpty: false,
-                        message: '^' + 'فیلد کد پستی را خالی نگذارید.',
+                    rules: {
+                        requiredNotEmpty: true,
+                        format: /^\d{1,10}$/,
                     },
-                    format: {
-                        pattern: /^\d{1,10}$/,
-                        message: '^' + 'کد پستی باید از نوع عددی و دارای حداکثر ۱۰ رقم باشد.',
+                    messages: {
+                        requiredNotEmpty: 'فیلد کد پستی را خالی نگذارید.',
+                        format: 'کد پستی باید از نوع عددی و دارای حداکثر ۱۰ رقم باشد.',
                     },
                 },
                 address: {
-                    presence: {
-                        allowEmpty: false,
-                        message: '^' + 'فیلد آدرس را خالی نگذارید.',
+                    rules: {
+                        requiredNotEmpty: true,
+                    },
+                    messages: {
+                        requiredNotEmpty: 'فیلد آدرس را خالی نگذارید.',
                     },
                 },
             },
             editAddress: {
                 province: {
-                    presence: {
-                        allowEmpty: false,
-                        message: '^' + 'فیلد استان را خالی نگذارید.',
+                    rules: {
+                        requiredNotEmpty: true,
+                    },
+                    messages: {
+                        requiredNotEmpty: 'فیلد استان را خالی نگذارید.',
                     },
                 },
                 city: {
-                    presence: {
-                        allowEmpty: false,
-                        message: '^' + 'فیلد شهر را خالی نگذارید.',
+                    rules: {
+                        requiredNotEmpty: true,
+                    },
+                    messages: {
+                        requiredNotEmpty: 'فیلد شهر را خالی نگذارید.',
                     },
                 },
                 postalCode: {
-                    presence: {
-                        allowEmpty: false,
-                        message: '^' + 'فیلد کد پستی را خالی نگذارید.',
+                    rules: {
+                        requiredNotEmpty: true,
+                        format: /^\d{1,10}$/,
                     },
-                    format: {
-                        pattern: /^\d{1,10}$/,
-                        message: '^' + 'کد پستی باید از نوع عددی و دارای حداکثر ۱۰ رقم باشد.',
+                    messages: {
+                        requiredNotEmpty: 'فیلد کد پستی را خالی نگذارید.',
+                        format: 'کد پستی باید از نوع عددی و دارای حداکثر ۱۰ رقم باشد.',
                     },
                 },
                 address: {
-                    presence: {
-                        allowEmpty: false,
-                        message: '^' + 'فیلد آدرس را خالی نگذارید.',
+                    rules: {
+                        requiredNotEmpty: true,
+                    },
+                    messages: {
+                        requiredNotEmpty: 'فیلد آدرس را خالی نگذارید.',
                     },
                 },
             },
             changeUserInfo: {
                 shabaNum: {
-                    format: {
-                        pattern: /^[0-9]*$/,
-                        message: '^' + 'کد شبا باید از نوع عددی باشد.',
+                    rules: {
+                        format: /^[0-9]*$/,
+                    },
+                    messages: {
+                        format: 'کد شبا باید از نوع عددی باشد.',
                     },
                 },
             },
             changeUserPassword: {
                 prevPassword: {
-                    presence: {
-                        allowEmpty: false,
-                        message: '^' + 'فیلد کلمه عبور قبلی اجباری می‌باشد.',
+                    rules: {
+                        requiredNotEmpty: true,
+                        maxlength: 8,
                     },
-                    length: {
-                        minimum: 8,
-                        message: '^' + 'فیلد کلمه عبور باید حداقل دارای ۸ کاراکتر باشد.',
-                    }
+                    messages: {
+                        requiredNotEmpty: 'فیلد کلمه عبور قبلی اجباری می‌باشد.',
+                        maxlength: 'فیلد کلمه عبور باید حداقل دارای ۸ کاراکتر باشد.',
+                    },
                 },
                 password: {
-                    presence: {
-                        allowEmpty: false,
-                        message: '^' + 'فیلد کلمه عبور جدید اجباری می‌باشد.',
+                    rules: {
+                        requiredNotEmpty: true,
+                        maxlength: 8,
                     },
-                    length: {
-                        minimum: 8,
-                        message: '^' + 'فیلد کلمه عبور باید حداقل دارای ۸ کاراکتر باشد.',
-                    }
+                    messages: {
+                        requiredNotEmpty: 'فیلد کلمه عبور جدید اجباری می‌باشد.',
+                        maxlength: 'فیلد کلمه عبور باید حداقل دارای ۸ کاراکتر باشد.',
+                    },
                 },
                 rePassword: {
-                    presence: {
-                        allowEmpty: false,
-                        message: '^' + 'فیلد تکرار کلمه عبور اجباری می‌باشد.',
+                    password: {
+                        rules: {
+                            requiredNotEmpty: true,
+                            equalTo: '[name="password"]',
+                        },
+                        messages: {
+                            requiredNotEmpty: 'فیلد تکرار کلمه عبور اجباری می‌باشد.',
+                            equalTo: 'تکرار کلمه عبور با کلمه عبور یکسان نمی‌باشد.',
+                        },
                     },
-                    equality: "password",
                 },
             },
             recoverType: {
                 recoverType: {
-                    presence: {
-                        allowEmpty: false,
-                        message: '^' + 'فیلد نوع بازگردانی کلمه عبور را انتخاب کنید.',
+                    rules: {
+                        requiredNotEmpty: true,
+                        format: /^[0-9]*$/,
                     },
-                    format: {
-                        pattern: /^[0-9]*$/,
-                        message: '^' + 'نوع بازگردانی کلمه عبور باید از نوع عددی باشد.',
+                    messages: {
+                        requiredNotEmpty: 'فیلد نوع بازگردانی کلمه عبور را انتخاب کنید.',
+                        format: 'نوع بازگردانی کلمه عبور باید از نوع عددی باشد.',
                     },
                 },
             },
             userEditComment: {
                 message: {
-                    presence: {
-                        allowEmpty: false,
-                        message: '^' + 'فیلد متن نظر اجباری می‌باشد.',
+                    rules: {
+                        requiredNotEmpty: true,
+                    },
+                    messages: {
+                        requiredNotEmpty: 'فیلد متن نظر اجباری می‌باشد.',
                     },
                 },
             },

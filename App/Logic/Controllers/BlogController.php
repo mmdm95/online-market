@@ -4,6 +4,7 @@ namespace App\Logic\Controllers;
 
 use App\Logic\Abstracts\AbstractHomeController;
 use App\Logic\Handlers\ResourceHandler;
+use App\Logic\Models\BlogCategoryModel;
 use App\Logic\Models\BlogModel;
 use App\Logic\Utils\BlogUtil;
 use Jenssegers\Agent\Agent;
@@ -32,6 +33,10 @@ class BlogController extends AbstractHomeController
          * @var BlogModel $blogModel
          */
         $blogModel = container()->get(BlogModel::class);
+        /**
+         * @var BlogCategoryModel $blogCategoryModel
+         */
+        $blogCategoryModel = container()->get(BlogCategoryModel::class);
 
         $last_blog = $blogModel->get([
             'id', 'slug', 'title', 'image', 'created_at'
@@ -53,8 +58,15 @@ class BlogController extends AbstractHomeController
         }
         $tags = array_unique($tags);
 
+        $blogSideCategories = $blogCategoryModel->get(
+            ['id', 'name'],
+            'publish=:pub AND show_in_side=:sis',
+            ['pub' => DB_YES, 'sis' => DB_YES,]
+        );
+
         $this->setLayout($this->main_layout)->setTemplate('view/main/blog/index');
         return $this->render([
+            'blog_side_categories' => $blogSideCategories,
             'last_blog' => $last_blog,
             'archives' => $blogModel->getArchive(),
             'tags' => $tags,

@@ -8,6 +8,18 @@ Version      : 1.0
 PAGE JS
 *===================================*/
 
+var
+    shop,
+    core,
+    variables,
+    //-----
+    createLoader,
+    loaderId;
+
+core = window.TheCore;
+variables = window.MyGlobalVariables;
+shop = new window.TheShop();
+
 (function ($) {
     'use strict';
 
@@ -578,35 +590,39 @@ PAGE JS
                 optionsItemBuilder: function (itemData) {
                     var
                         el, str = '',
-                        colorHex, colorName, size,
-                        colorSpan = '', sizeSpan = '';
+                        colorHex, colorName, size, guarantee,
+                        colorSpan = '', sizeSpan = '', guaranteeSpan = '';
 
                     el = $(itemData.element);
 
-                    if(el.attr('data-show-text')) {
+                    if (el.attr('data-show-text')) {
                         str = itemData.text;
                     }
                     colorHex = el.attr('data-color-hex');
                     colorName = el.attr('data-color-name');
                     size = el.attr('data-size');
+                    guarantee = el.attr('data-guarantee');
 
                     if (colorHex && colorName) {
                         colorSpan = '<div class="product_color_switch d-inline-block mx-2">' +
-                            '<span style="background-color: ' + colorHex + ';"></span>' +
+                            '<span class="border" style="background-color: ' + colorHex + ';"></span>' +
                             '<div class="d-inline-block mr-2">' + colorName + '</div>' +
                             '</div>';
                     }
                     if (size) {
                         sizeSpan = '<span class="product_size_switch mx-2"><span>' + size + '</span></span>';
                     }
+                    if (guarantee) {
+                        guaranteeSpan = '<p class="mx-2 d-inline-block pr_desc">' + guarantee + '</p>';
+                    }
 
-                    return str + colorSpan + sizeSpan;
+                    return str + colorSpan + sizeSpan + guaranteeSpan;
                 },
                 labelBuilder: function (currItem) {
                     var
                         el, str = '',
-                        colorHex, colorName, size,
-                        colorSpan = '', sizeSpan = '';
+                        colorHex, colorName, size, guarantee,
+                        colorSpan = '', sizeSpan = '', guaranteeSpan = '';
 
                     el = $(currItem.element);
                     if (el.attr('data-show-text')) {
@@ -615,18 +631,22 @@ PAGE JS
                     colorHex = el.attr('data-color-hex');
                     colorName = el.attr('data-color-name');
                     size = el.attr('data-size');
+                    guarantee = el.attr('data-guarantee');
 
                     if (colorHex && colorName) {
                         colorSpan = '<div class="product_color_switch d-inline-block mx-2">' +
-                            '<span style="background-color: ' + colorHex + ';"></span>' +
+                            '<span class="border" style="background-color: ' + colorHex + ';"></span>' +
                             '<div class="d-inline-block mr-2">' + colorName + '</div>' +
                             '</div>';
                     }
                     if (size) {
                         sizeSpan = '<span class="product_size_switch mx-2"><span>' + size + '</span></span>';
                     }
+                    if (guarantee) {
+                        guaranteeSpan = '<p class="mx-2 d-inline-block pr_desc">' + guarantee + '</p>';
+                    }
 
-                    return str + colorSpan + sizeSpan;
+                    return str + colorSpan + sizeSpan + guaranteeSpan;
                 }
             });
         });
@@ -635,31 +655,25 @@ PAGE JS
     /*===================================*
     16.MAP JS
     *===================================*/
-    if ($("#map").length > 0) {
-        google.maps.event.addDomListener(window, 'load', init);
+    if (window.L) {
+        (function (leaflet) {
+            var map_selector = $('#map');
+            if (map_selector.length) {
+                var map = leaflet.map(
+                    map_selector.get(0)).setView([map_selector.data("latitude"), map_selector.data("longitude")],
+                    map_selector.data("zoom") || 14
+                );
+
+                leaflet.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                }).addTo(map);
+
+                leaflet.marker([map_selector.data("latitude"), map_selector.data("longitude")]).addTo(map)
+                    .bindPopup('ما اینجا هستیم')
+                    .openPopup();
+            }
+        })(window.L);
     }
-
-    var map_selector = $('#map');
-
-    function init() {
-
-        var mapOptions = {
-            zoom: map_selector.data("zoom"),
-            mapTypeControl: false,
-            center: new google.maps.LatLng(map_selector.data("latitude"), map_selector.data("longitude")), // New York
-        };
-        var mapElement = document.getElementById('map');
-        var map = new google.maps.Map(mapElement, mapOptions);
-        var marker = new google.maps.Marker({
-            position: new google.maps.LatLng(map_selector.data("latitude"), map_selector.data("longitude")),
-            map: map,
-            icon: map_selector.data("icon"),
-
-            title: map_selector.data("title"),
-        });
-        marker.setAnimation(google.maps.Animation.BOUNCE);
-    }
-
 
     /*===================================*
     17. COUNTDOWN JS
@@ -923,6 +937,29 @@ PAGE JS
         }
 
         lazyFn();
+    });
+
+    $(function () {
+        var recoverCodeBtn = $('#resendCode');
+        recoverCodeBtn.on('click', function () {
+            if (createLoader) {
+                createLoader = false;
+                loaderId = shop.showLoader();
+            }
+            shop.request(variables.url.resendCode.forgetPassword, 'POST', function () {
+                shop.hideLoader(loaderId);
+                var type, message;
+                type = this.type;
+                message = this.data;
+                shop.toasts.toast(message, {
+                    type: type,
+                });
+                createLoader = true;
+            }, {}, true, function () {
+                shop.hideLoader(loaderId);
+                createLoader = true;
+            });
+        });
     });
 
     /*===================================*

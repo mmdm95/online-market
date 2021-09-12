@@ -16,7 +16,7 @@ $auth = auth_admin();
                     <i class="icon-eye"></i>
                     مشاهده جزئیات
                 </a>
-                <?php if ($auth->hasRole(ROLE_DEVELOPER)): ?>
+                <?php if ($auth->userHasRole(ROLE_DEVELOPER)): ?>
                     <a href="javascript:void(0);" data-remove-url="<?= url('ajax.user.order.remove'); ?>"
                        data-remove-id="<?= $row['id']; ?>"
                        class="dropdown-item text-danger __item_remover_btn">

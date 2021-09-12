@@ -42,6 +42,9 @@ class SMSUtil implements ISMS
      * @param $senderType
      * @throws \DI\DependencyException
      * @throws \DI\NotFoundException
+     * @throws \Sim\Exceptions\ConfigManager\ConfigNotRegisteredException
+     * @throws \Sim\Interfaces\IFileNotExistsException
+     * @throws \Sim\Interfaces\IInvalidVariableNameException
      */
     public static function logSMS(
         array $numbers,
@@ -51,8 +54,7 @@ class SMSUtil implements ISMS
         $senderType
     )
     {
-        $auth = auth_admin();
-        if (!$auth->isLoggedIn()) return;
+        $auth = auth_admin()->isLoggedIn() ? auth_admin() : (auth_home()->isLoggedIn() ? auth_home() : null);
 
         /**
          * @var AbstractSMS $sms
@@ -69,12 +71,12 @@ class SMSUtil implements ISMS
             'type' => $type,
             'status' => $status,
             'message' => $body,
-            'numbers' => $numbers,
+            'numbers' => implode(',', $numbers),
             'sender' => $senderType,
             'sent_at' => time(),
         ];
 
-        if (SMS_LOG_SENDER_USER == $senderType) {
+        if (SMS_LOG_SENDER_USER == $senderType && !is_null($auth)) {
             $arr['sent_by'] = $auth->getCurrentUser()['id'];
         }
 

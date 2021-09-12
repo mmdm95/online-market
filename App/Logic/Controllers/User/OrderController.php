@@ -102,6 +102,7 @@ class OrderController extends AbstractUserController
             'mt' => $order['method_type'],
         ], ['payment_date DESC', 'id DESC']) ?: null;
         $order['payment_code'] = $paymentSuccess['payment_code'] ?? null;
+
         /**
          * @var WalletFlowModel $walletFlowModel
          */
@@ -110,7 +111,7 @@ class OrderController extends AbstractUserController
         $paymentInfo['gateway_flow'] = $gatewayModel->get([
             'id', 'price', 'msg', 'payment_code', 'is_success', 'method_type', 'payment_date'
         ], 'order_code=:oc AND user_id=:uId AND id!=:id', [
-            'id' => $paymentSuccess['id'],
+            'id' => $paymentSuccess['id'] ?? -1,
             'oc' => $order['code'],
             'uId' => $user['id'],
         ], ['payment_date DESC', 'id DESC']);

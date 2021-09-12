@@ -29,9 +29,11 @@ class SliderUtil
                 'pa.title', 'pa.slug', 'pa.image', 'pa.category_id', 'pa.is_special', 'pa.product_availability',
                 'pa.code', 'pa.product_id', 'pa.price', 'pa.discounted_price', 'pa.discount_until', 'pa.is_available',
                 'pa.festival_id', 'pa.festival_discount', 'pa.created_at', 'pa.stock_count', 'pa.max_cart_count',
-            ]);
+            ])
+            ->where('pa.publish=:pub')
+            ->bindValue('pub', DB_YES);
 
-        $info['limit'] = isset($info['limit']) && (int)$info['limit'] > 0 ? (int)$info['limit'] : 3;
+        $info['limit'] = isset($info['limit']) && (int)$info['limit'] > 0 ? (int)$info['limit'] : 4;
         switch ($info['type']) {
             case SLIDER_TABBED_NEWEST:
                 $select->orderBy(['pa.product_id DESC']);
@@ -78,8 +80,11 @@ class SliderUtil
 
         if (isset($info['category']) && !empty($info['category']) && $info['category'] != DEFAULT_OPTION_VALUE) {
             $select
-                ->where('pa.category_id=:cat_id')
-                ->bindValue('cat_id', $info['category']);
+                ->where('(pa.category_id=:cat_id OR pa.category_all_parents_id REGEXP :p_category_all_parents_id)')
+                ->bindValues([
+                    'cat_id' => $info['category'],
+                    'p_category_all_parents_id' => '([^0-9]|^)' . preg_quote($info['category']) . '([^0-9]|$)',
+                ]);
         }
 
         return $model->get($select);

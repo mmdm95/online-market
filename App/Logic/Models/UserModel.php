@@ -191,20 +191,13 @@ class UserModel extends BaseModel
         }
         // update user info
         $update = $this->connector->update();
-        $res = $update
+        $update
             ->table($this->table)
             ->cols($user_info)
             ->where($where)
             ->bindValues($bind_values);
-
-        // get role id
-        $roleId = $roleModel->getIDFromRoleName(ROLE_USER);
-
-        // if there is no role with specific id
-        if (empty($roleId)) {
-            $this->db->rollBack();
-            return false;
-        }
+        $stmt = $this->db->prepare($update->getStatement());
+        $res = $stmt->execute($update->getBindValues());
 
         // add role to user
         $insert = $this->connector->insert();
@@ -268,7 +261,6 @@ class UserModel extends BaseModel
      */
     public function getIDFromUsername(?string $username): ?int
     {
-        if (empty($id)) return null;
         $select = $this->connector->select();
         $select
             ->from($this->table)

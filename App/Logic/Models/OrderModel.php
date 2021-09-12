@@ -34,7 +34,7 @@ class OrderModel extends BaseModel
             'o.*',
             'u.username',
             'u.first_name AS user_first_name',
-            'u.last_name AS user_last_name'
+            'u.last_name AS user_last_name',
         ]
     ): array
     {
@@ -79,6 +79,139 @@ class OrderModel extends BaseModel
     {
         $res = $this->getOrders($where, $bind_values, [], null, 0, ['COUNT(DISTINCT(o.id)) AS count']);
         if (count($res)) return (int)$res[0]['count'];
+        return 0;
+    }
+
+    /**
+     * Use [o for orders], [u for users]
+     *
+     * @param string|null $where
+     * @param array $bind_values
+     * @param array $order_by
+     * @param int|null $limit
+     * @param int $offset
+     * @param array $columns
+     * @return array
+     */
+    public function getOrdersWithAllInfo(
+        ?string $where = null,
+        array $bind_values = [],
+        array $order_by = ['o.id DESC'],
+        ?int $limit = null,
+        int $offset = 0,
+        array $columns = [
+            'o.*',
+            'u.username',
+            'u.first_name AS user_first_name',
+            'u.last_name AS user_last_name',
+            'iu.username AS invoice_username',
+            'iu.first_name AS invoice_user_first_name',
+            'iu.last_name AS invoice_user_last_name',
+            'su.username AS sender_username',
+            'su.first_name AS sender_user_first_name',
+            'su.last_name AS sender_user_last_name',
+        ]
+    ): array
+    {
+        $select = $this->connector->select();
+        $select
+            ->from($this->table . ' AS o')
+            ->cols($columns)
+            ->offset($offset)
+            ->orderBy($order_by);
+
+        try {
+            $select
+                ->leftJoin(
+                    self::TBL_USERS . ' AS u',
+                    'u.id=o.user_id'
+                )
+                ->leftJoin(
+                    self::TBL_USERS . ' AS iu',
+                    'u.id=o.invoice_status_changed_by'
+                )
+                ->leftJoin(
+                    self::TBL_USERS . ' AS su',
+                    'u.id=o.send_status_changed_by'
+                );
+        } catch (AuraException $e) {
+            return [];
+        }
+
+        if (!empty($where)) {
+            $select
+                ->where($where)
+                ->bindValues($bind_values);
+        }
+
+        if (!empty($limit) && $limit > 0) {
+            $select->limit($limit);
+        }
+
+        return $this->db->fetchAll($select->getStatement(), $select->getBindValues());
+    }
+
+    /**
+     * Use [oa] instead of [order_advanced]
+     *
+     * @param string|null $where
+     * @param array $bind_values
+     * @param array $order_by
+     * @param int|null $limit
+     * @param int $offset
+     * @param array $group_by
+     * @param array $columns
+     * @return array
+     */
+    public function getLimitedOrder(
+        ?string $where = null,
+        array $bind_values = [],
+        array $order_by = ['oa.product_id DESC'],
+        ?int $limit = null,
+        int $offset = 0,
+        array $group_by = ['oa.product_id'],
+        array $columns = [
+            'oa.*',
+        ]
+    ): array
+    {
+        $select = $this->connector->select();
+        $select
+            ->from(self::TBL_ORDER_ADVANCED . ' AS oa')
+            ->cols($columns)
+            ->offset($offset)
+            ->orderBy($order_by)
+            ->groupBy($group_by);
+
+        if (!empty($where)) {
+            $select
+                ->where($where)
+                ->bindValues($bind_values);
+        }
+
+        if (!empty($limit) && $limit > 0) {
+            $select->limit($limit);
+        }
+
+        return $this->db->fetchAll($select->getStatement(), $select->getBindValues());
+    }
+
+    /**
+     * Use [oa] instead of [order_advanced]
+     *
+     * @param string|null $where
+     * @param array $bind_values
+     * @return int
+     */
+    public function getLimitedOrderCount(
+        ?string $where = null,
+        array $bind_values = []
+    ): int
+    {
+        $res = $this->getLimitedOrder($where, $bind_values, [], null, 0, [], ['COUNT(DISTINCT(pa.product_id)) AS count']);
+        if (count($res)) {
+            return (int)$res[0]['count'];
+        }
         return 0;
     }
 
@@ -285,8 +418,9 @@ class OrderModel extends BaseModel
                     'product_id' => $item['product_id'],
                     'product_code' => $item['code'],
                     'product_title' => $item['title'],
+                    'weight' => $item['weight'],
                     'price' => ($item['qnt'] * $item['price']),
-                    'discounted_price' => ($item['qnt'] * $item['discounted_price']),
+                    'discounted_price' => ($item['qnt'] * (float)get_discount_price($item)[0]),
                     'unit_price' => $item['price'],
                     'product_count' => $item['qnt'],
                     'unit_title' => $item['unit_title'],
@@ -353,10 +487,6 @@ class OrderModel extends BaseModel
          */
         $reserveModel = container()->get(OrderReserveModel::class);
         /**
-         * @var CouponModel $couponModel
-         */
-        $couponModel = container()->get(CouponModel::class);
-        /**
          * @var Model $model
          */
         $model = container()->get(Model::class);
@@ -385,6 +515,8 @@ class OrderModel extends BaseModel
 
         if (!$res || !$res2 || !$couponRes) {
             $this->db->rollBack();
+
+            $this->update(['must_delete_later' => DB_YES,], 'code=:code', ['code' => $orderCode]);
         }
         $this->db->commit();
     }

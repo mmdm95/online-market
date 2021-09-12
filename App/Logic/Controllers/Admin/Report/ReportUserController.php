@@ -38,11 +38,6 @@ class ReportUserController extends AbstractAdminController implements
     protected $report_layout = 'admin-report';
 
     /**
-     * @var string
-     */
-    protected $report_excel_layout = 'admin-report-excel';
-
-    /**
      * @return string
      * @throws ConfigNotRegisteredException
      * @throws ControllerException
@@ -180,6 +175,8 @@ class ReportUserController extends AbstractAdminController implements
                     $where .= $newWhere;
                     $bindValues = array_merge($bindValues, $newBindValues);
 
+                    $where = trim(trim($where), 'AND');
+
                     $data = $userModel->getUsers($cols, $where, $bindValues, $limit, $offset, $order);
                     // get user roles and put it to user object
                     foreach ($data as $k => &$user) {
@@ -269,15 +266,12 @@ class ReportUserController extends AbstractAdminController implements
      */
     private function getQBFiltered(): array
     {
+        $auth = auth_admin();
+
         $where = '';
         $bindValues = [];
 
-        /**
-         * @var DBAuth $auth
-         */
-        $auth = container()->get('auth_admin');
-
-        if (!$auth->hasRole(ROLE_DEVELOPER)) {
+        if (!$auth->userHasRole(ROLE_DEVELOPER)) {
             $where .= ' u.is_deleted<>:del';
             $where .= ' AND u.is_hidden<>:hidden';
             $bindValues = array_merge($bindValues, [
@@ -292,22 +286,13 @@ class ReportUserController extends AbstractAdminController implements
 
         // use query builder sql and params
         $qb = session()->get(SESSION_QUERY_BUILDER_USER);
-        if (
-            (isset($qb['sql']) && !empty($qb['sql'])) &&
-            (isset($qb['params']) && !empty($qb['params']) && !is_null(json_decode($qb['params'], true)))) {
-            $newBind = [];
-            foreach (json_decode($qb['params'], true) as $k => $p) {
-                $newK = str_replace('.', '_', $k);
-                $qb['sql'] = str_replace($k, $newK, $qb['sql']);
-                $newBind[$newK] = $p;
-            }
+        [$newWhere, $newBind] = ReportQBUtil::getNormalizedQBStatement($qb);
 
-            if (!empty(trim($where))) {
-                $where .= ' AND ';
-            }
-            $where .= $qb['sql'];
-            $bindValues = array_merge($bindValues, $newBind);
+        if (!empty(trim($where))) {
+            $where .= ' AND ';
         }
+        $where .= $newWhere;
+        $bindValues = array_merge($bindValues, $newBind);
 
         return [$where, $bindValues];
     }

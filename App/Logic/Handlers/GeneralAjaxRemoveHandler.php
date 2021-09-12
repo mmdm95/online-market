@@ -31,9 +31,11 @@ class GeneralAjaxRemoveHandler implements IHandler
      *   1. Send a [Table_Name] as first parameter.
      *   2. Send a [id] as second parameter and get
      *      a resource handler as return array.
-     *   3. Extra where parameter: string
-     *   4. Bind values for extra where parameter: array
-     *   5. ignore parameter to ignore id: bool
+     *   3. Extra where parameter: string [Default: '']
+     *   4. Bind values for extra where parameter: array [Default: []]
+     *   5. Ignore parameter to ignore id: bool [Default: false]
+     *   6. Use softDelete: bool [Default: false]
+     *   7. softDelete column: string [Default: 'is_deleted']
      *
      * @param mixed ...$_
      * @return ResourceHandler
@@ -51,6 +53,8 @@ class GeneralAjaxRemoveHandler implements IHandler
         $where = $_[2] ?? '';
         $bindValues = $_[3] ?? [];
         $ignoreId = $_[4] ?? false;
+        $useSoftDelete = $_[5] ?? false;
+        $softDeleteColumn = $_[6] ?? 'is_deleted';
 
         $canContinue = true;
         if ($this->authCallback instanceof \Closure) {
@@ -96,23 +100,31 @@ class GeneralAjaxRemoveHandler implements IHandler
                     $emRes = emitter()->dispatch('remove.general.ajax:custom_handler', [&$this->resourceHandler]);
 
                     if (is_null($emRes->getReturnValue()) || (bool)$emRes->getReturnValue()) {
-                        $delete = $model->delete();
-                        $delete
-                            ->from($table);
+                        if (!$useSoftDelete) {
+                            $query = $model->delete();
+                            $query
+                                ->from($table);
+                        } else {
+                            $query = $model->update();
+                            $query
+                                ->table($table)
+                                ->set($softDeleteColumn, DB_YES);
+                        }
 
                         if (!$ignoreId) {
-                            $delete
+                            $query
                                 ->where('id=:id')
                                 ->bindValue('id', $id);
                         }
 
                         if (!empty($where)) {
-                            $delete
+                            $query
                                 ->where($where)
                                 ->bindValues($bindValues);
                         }
 
-                        $res = $model->execute($delete);
+                        $res = $model->execute($query);
+
                         if ($res) {
                             $this->resourceHandler
                                 ->type(RESPONSE_TYPE_SUCCESS)

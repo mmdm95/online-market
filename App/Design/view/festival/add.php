@@ -57,10 +57,10 @@ $validator = form_validator();
                             تاریخ شروع جشنواره:
                         </label>
                         <?php
-                        $sd = $validator->setInput('inp-add-festival-start-date', time());
+                        $sd = date('Y/m/d H:i', $validator->setInput('inp-add-festival-start-date', time()));
                         ?>
                         <input type="hidden" name="inp-add-festival-start-date"
-                               id="altStartDate" value="<?= $sd; ?>">
+                               id="altStartDate">
                         <div class="d-flex">
                             <input type="text" class="form-control range-from"
                                    placeholder="انتخاب تاریخ" readonly data-ignored
@@ -81,10 +81,10 @@ $validator = form_validator();
                             تاریخ پایان جشنواره:
                         </label>
                         <?php
-                        $ed = $validator->setInput('inp-add-festival-end-date', time());
+                        $ed = date('Y/m/d H:i', $validator->setInput('inp-add-festival-end-date', time()));
                         ?>
                         <input type="hidden" name="inp-add-festival-end-date"
-                               id="altEndDate" value="<?= $ed; ?>">
+                               id="altEndDate">
                         <div class="d-flex">
                             <input type="text" class="form-control range-to"
                                    placeholder="انتخاب تاریخ" readonly data-ignored

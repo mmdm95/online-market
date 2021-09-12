@@ -30,11 +30,6 @@ class ReportWalletController extends AbstractAdminController implements
     protected $report_layout = 'admin-report';
 
     /**
-     * @var string
-     */
-    protected $report_excel_layout = 'admin-report-excel';
-
-    /**
      * @return string
      * @throws ConfigNotRegisteredException
      * @throws ControllerException
@@ -51,7 +46,6 @@ class ReportWalletController extends AbstractAdminController implements
          * @var UserModel $userModel
          */
         $userModel = container()->get(UserModel::class);
-
 
         $this->setLayout($this->main_layout)->setTemplate('view/report/wallet');
         return $this->render([

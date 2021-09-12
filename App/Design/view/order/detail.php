@@ -34,7 +34,7 @@ use Sim\Utils\StringUtil;
                                 </option>
                                 <?php foreach (PAYMENT_STATUSES as $status => $text): ?>
                                     <option value="<?= $status; ?>"
-                                        <?= $status === $order['payment_status'] ? 'selected="selected"' : ''; ?>>
+                                        <?= $status == $order['payment_status'] ? 'selected="selected"' : ''; ?>>
                                         <?= $text; ?>
                                     </option>
                                 <?php endforeach; ?>
@@ -76,7 +76,7 @@ use Sim\Utils\StringUtil;
                                 <?php foreach ($badges as $badge): ?>
                                     <option value="<?= $badge['code']; ?>"
                                             style="background-color: <?= $badge['color']; ?>; color: <?= get_color_from_bg($badge['color']); ?>;"
-                                        <?= $badge['code'] === $order['send_status_code'] ? 'selected="selected"' : ''; ?>>
+                                        <?= $badge['code'] == $order['send_status_code'] ? 'selected="selected"' : ''; ?>>
                                         <?= $badge['title']; ?>
                                     </option>
                                 <?php endforeach; ?>
@@ -301,7 +301,9 @@ use Sim\Utils\StringUtil;
                                 <?php endif; ?>
                                 <div class="text-muted">
                                     رنگ
-                                    <?= $item['color']; ?>
+                                    <span class="btn-icon rounded-full p-3"
+                                          style="background-color: <?= $item['color_name']; ?>"></span>
+                                    <?= $item['color_name']; ?>
                                     <?php if (!empty($item['size'])): ?>
                                         ,
                                         سایز

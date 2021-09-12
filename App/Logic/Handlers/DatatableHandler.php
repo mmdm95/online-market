@@ -54,31 +54,55 @@ class DatatableHandler
         $bindCounter = 0;
 
         if (isset($request['search']) && $request['search']['value'] != '') {
-            $str = $request['search']['value'];
+            $str = trim($request['search']['value']);
 
             for ($i = 0, $ien = count($request['columns']); $i < $ien; $i++) {
                 $requestColumn = $request['columns'][$i];
                 $columnIdx = array_search($requestColumn['data'], $dtColumns);
                 $column = $columns[$columnIdx];
+                $searchOn = $column['search_on'] ?? [];
 
                 if ($requestColumn['searchable'] == 'true') {
                     if (!empty($column['db'])) {
-                        // english
-                        $binding = 'binding' . $bindCounter++;
-                        $bindValues[$binding] = '%' . StringUtil::toEnglish($str) . '%';
-                        $phrase = '(' . $column['db'] . " LIKE :" . $binding . ' OR ';
+                        $phrase = '';
 
-                        // persian
-                        $binding = 'binding' . $bindCounter++;
-                        $bindValues[$binding] = '%' . StringUtil::toPersian($str) . '%';
-                        $phrase .= $column['db'] . " LIKE :" . $binding . ' OR ';
+                        if (count($searchOn)) {
+                            $tmpSearchOn = [];
+                            foreach ($searchOn as $k => $s) {
+                                if (
+                                    mb_strpos($s, StringUtil::toEnglish($str)) !== false ||
+                                    mb_strpos($s, StringUtil::toPersian($str)) !== false ||
+                                    mb_strpos($s, StringUtil::toArabic($str)) !== false
+                                ) {
+                                    $binding = 'binding' . $bindCounter++;
+                                    $bindValues[$binding] = $k;
+                                    $tmpSearchOn[] = $column['db'] . "=:" . $binding;
+                                }
+                            }
 
-                        // arabic
-                        $binding = 'binding' . $bindCounter++;
-                        $bindValues[$binding] = '%' . StringUtil::toArabic($str) . '%';
-                        $phrase .= $column['db'] . " LIKE :" . $binding . ')';
+                            if (!empty($tmpSearchOn)) {
+                                $phrase .= '(' . implode(' OR ', $tmpSearchOn) . ')';
+                            }
+                        } else {
+                            // english
+                            $binding = 'binding' . $bindCounter++;
+                            $bindValues[$binding] = '%' . StringUtil::toEnglish($str) . '%';
+                            $phrase .= '(' . $column['db'] . " LIKE :" . $binding . ' OR ';
 
-                        $globalSearch[] = $phrase;
+                            // persian
+                            $binding = 'binding' . $bindCounter++;
+                            $bindValues[$binding] = '%' . StringUtil::toPersian($str) . '%';
+                            $phrase .= $column['db'] . " LIKE :" . $binding . ' OR ';
+
+                            // arabic
+                            $binding = 'binding' . $bindCounter++;
+                            $bindValues[$binding] = '%' . StringUtil::toArabic($str) . '%';
+                            $phrase .= $column['db'] . " LIKE :" . $binding . ')';
+                        }
+
+                        if (!empty($phrase)) {
+                            $globalSearch[] = $phrase;
+                        }
                     }
                 }
             }
@@ -90,15 +114,30 @@ class DatatableHandler
                 $requestColumn = $request['columns'][$i];
                 $columnIdx = array_search($requestColumn['data'], $dtColumns);
                 $column = $columns[$columnIdx];
+                $searchOn = $column['search_on'] ?? [];
 
-                $str = $requestColumn['search']['value'];
+                $str = trim($requestColumn['search']['value']);
 
                 if ($requestColumn['searchable'] == 'true' &&
                     $str != '') {
                     if (!empty($column['db'])) {
-                        $binding = 'binding' . $bindCounter++;
-                        $bindValues[$binding] = '%' . $str . '%';
-                        $columnSearch[] = $column['db'] . " LIKE :" . $binding;
+                        if (count($searchOn)) {
+                            foreach ($searchOn as $k => $s) {
+                                if (
+                                    mb_strpos($s, StringUtil::toEnglish($str)) !== false ||
+                                    mb_strpos($s, StringUtil::toPersian($str)) !== false ||
+                                    mb_strpos($s, StringUtil::toArabic($str)) !== false
+                                ) {
+                                    $binding = 'binding' . $bindCounter++;
+                                    $bindValues[$binding] = $k;
+                                    $columnSearch[] = $column['db'] . "=:" . $binding;
+                                }
+                            }
+                        } else {
+                            $binding = 'binding' . $bindCounter++;
+                            $bindValues[$binding] = '%' . $str . '%';
+                            $columnSearch[] = $column['db'] . " LIKE :" . $binding;
+                        }
                     }
                 }
             }

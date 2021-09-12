@@ -191,7 +191,7 @@ $validator = form_validator();
                                    placeholder="تا ۵۰ کاراکتر"
                                    maxlength="50"
                                    name="inp-setting-sec2-title"
-                                   value="<?= !$validator->getStatus() ? ($validator->setInput('inp-setting-sec2-title') ?: ($footerSection1['title'] ?? '')) : ($footerSection1['title'] ?? ''); ?>">
+                                   value="<?= !$validator->getStatus() ? ($validator->setInput('inp-setting-sec2-title') ?: ($footerSection2['title'] ?? '')) : ($footerSection2['title'] ?? ''); ?>">
                         </div>
                         <div class="d-flex align-items-end">
                             <div class="col __footer_sec2_container">

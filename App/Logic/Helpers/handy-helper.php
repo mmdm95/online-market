@@ -70,6 +70,26 @@ function not_implemented_yet()
     response()->json($resourceHandler->getReturnData());
 }
 
+function notify_or_redirect_logged_in_user(DBAuth $auth)
+{
+    if ($auth->isLoggedIn()) {
+        if (request()->isAjax()) {
+            $url = $auth->getNamespace() == 'admin'
+                ? url('admin.login')->getRelativeUrl()
+                : url('home.index')->getRelativeUrl();
+
+            response()->redirect($url, 301);
+        } else {
+            $resourceHandler = new ResourceHandler();
+            $resourceHandler
+                ->type(RESPONSE_TYPE_ERROR)
+                ->errorMessage('در حال حاضر شما وارد حساب کاربری خود شده‌اید.');
+            response()->httpCode(301)->json($resourceHandler->getReturnData());
+        }
+        exit();
+    }
+}
+
 /**
  * @param mixed ...$_
  * @return string
@@ -139,7 +159,7 @@ function get_discount_price(array $item): array
     $hasDiscount = false;
     $discountPrice = (float)$item['price'];
 
-    if (!empty($item['festival_expire']) && $item['festival_expire'] > time() && isset($item['festival_discount']) && 0 != $item['festival_discount']) {
+    if (isset($item['festival_expire']) && !empty($item['festival_expire']) && $item['festival_expire'] > time() && isset($item['festival_discount']) && 0 != $item['festival_discount']) {
         $hasDiscount = true;
         $discountPrice = (float)$item['price'] * (float)$item['festival_discount'];
     } elseif (isset($item['discount_until']) && $item['discount_until'] >= time()) {

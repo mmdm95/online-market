@@ -94,9 +94,12 @@
                                 <label>تاریخ شروع استفاده:</label>
                                 <?php
                                 $sd = $validator->setInput('inp-edit-coupon-start-date', '') ?: ($coupon['start_at'] ?: '');
+                                if(!empty($sd)) {
+                                    $sd = date('Y/m/d H:i', (int)$sd);
+                                }
                                 ?>
                                 <input type="hidden" name="inp-edit-coupon-start-date"
-                                       id="altStartDate" value="<?= $sd; ?>">
+                                       id="altStartDate">
                                 <div class="d-flex">
                                     <input type="text" class="form-control range-from"
                                            placeholder="انتخاب تاریخ" readonly data-ignored
@@ -114,6 +117,9 @@
                                 <label>تاریخ پایان استفاده:</label>
                                 <?php
                                 $ed = $validator->setInput('inp-edit-coupon-end-date', '') ?: ($coupon['expire_at'] ?: '');
+                                if(!empty($ed)) {
+                                    $ed = date('Y/m/d H:i', (int)$ed);
+                                }
                                 ?>
                                 <input type="hidden" name="inp-edit-coupon-end-date"
                                        id="altEndDate" value="<?= $ed; ?>">

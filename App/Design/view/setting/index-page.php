@@ -614,7 +614,7 @@ $validator = form_validator();
                         <div class="row">
                             <div class="col-12 __all_general_slider_container">
                                 <?php
-                                $items = config()->get('settings.index_general_sliders.value.items') ?: [];
+                                $items = config()->get('settings.index_general_sliders.value') ?: [];
                                 $errorItemImages = input()->post('inp-setting-general-slider-image');
                                 $errorItemTitles = input()->post('inp-setting-general-slider-title');
                                 $errorItemTypes = input()->post('inp-setting-general-slider-type');

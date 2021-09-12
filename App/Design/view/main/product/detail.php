@@ -13,22 +13,40 @@
                         <div id="pr_item_gallery" class="product_gallery_item slick_slider" data-vertical="true"
                              data-vertical-swiping="true" data-slides-to-show="5" data-slides-to-scroll="5"
                              data-infinite="false">
-                            <?php foreach ($gallery as $k => $item): ?>
+                            <?php if (count($gallery ?? [])): ?>
+                                <?php foreach (($gallery ?? []) as $k => $item): ?>
+                                    <div class="item">
+                                        <a href="javascript:void(0);"
+                                           class="product_gallery_item <?= 0 == $k ? 'active' : ''; ?>"
+                                           data-image="<?= url('image.show') . $item['image']; ?>"
+                                           data-zoom-image="<?= url('image.show') . $item['image']; ?>">
+                                            <img src="" data-src="<?= url('image.show') . $item['image']; ?>"
+                                                 alt="image gallery" class="lazy">
+                                        </a>
+                                    </div>
+                                <?php endforeach; ?>
+                            <?php else: ?>
                                 <div class="item">
                                     <a href="javascript:void(0);"
-                                       class="product_gallery_item <?= 0 == $k ? 'active' : ''; ?>"
-                                       data-image="<?= url('image.show') . $item['image']; ?>"
-                                       data-zoom-image="<?= url('image.show') . $item['image']; ?>">
-                                        <img src="" data-src="<?= url('image.show') . $item['image']; ?>"
+                                       class="product_gallery_item active"
+                                       data-image="<?= url('image.show') . $product['image']; ?>"
+                                       data-zoom-image="<?= url('image.show') . $product['image']; ?>">
+                                        <img src="" data-src="<?= url('image.show') . $product['image']; ?>"
                                              alt="image gallery" class="lazy">
                                     </a>
                                 </div>
-                            <?php endforeach; ?>
+                            <?php endif; ?>
                         </div>
                         <div class="product_img_box">
-                            <img id="product_img" src='<?= url('image.show') . $product['image']; ?>'
-                                 data-zoom-image="<?= url('image.show') . $product['image']; ?>"
-                                 alt="<?= $product['title']; ?>"/>
+                            <?php if (count($gallery ?? [])): ?>
+                                <img id="product_img" src='<?= url('image.show') . $gallery[0]['image']; ?>'
+                                     data-zoom-image="<?= url('image.show') . $gallery[0]['image']; ?>"
+                                     alt="<?= $product['title']; ?>"/>
+                            <?php else: ?>
+                                <img id="product_img" src='<?= url('image.show') . $product['image']; ?>'
+                                     data-zoom-image="<?= url('image.show') . $product['image']; ?>"
+                                     alt="<?= $product['title']; ?>"/>
+                            <?php endif; ?>
                             <a href="javascript:void(0);" class="product_img_zoom" title="Zoom">
                                 <span class="linearicons-zoom-in"></span>
                             </a>
@@ -79,16 +97,20 @@
                             <!-- START CHANGEABLE STUFFS -->
                             <div>
                                 <select name="changeable-stuffs"
-                                        class="form-control d-block selectric_dropdown selectric_dropdown_changeable_stuffs">
+                                        class="form-control d-block selectric_dropdown selectric-dropdown-products selectric_dropdown_changeable_stuffs">
                                     <?php foreach ($colors_and_sizes as $k => $prd): ?>
                                         <option value='<?= $prd['code']; ?>' <?= 0 === $k ? 'selected="selected"' : ''; ?>
                                                 data-color-hex="<?= $prd['color_hex'] ?>"
                                                 data-color-name="<?= $prd['color_name']; ?>"
-                                                data-size="<?= $prd['size']; ?>">
+                                                data-size="<?= $prd['size']; ?>"
+                                                data-guarantee="<?= $prd['guarantee']; ?>">
                                             رنگ
                                             <?= $prd['color_name']; ?>
-                                            <?php if ($prd['size']): ?>
+                                            <?php if (trim($prd['size']) != ''): ?>
                                                 <?= ' - ' . $prd['size']; ?>
+                                            <?php endif; ?>
+                                            <?php if (trim($prd['guarantee']) != ''): ?>
+                                                <?= ' - ' . $prd['guarantee']; ?>
                                             <?php endif; ?>
                                         </option>
                                     <?php endforeach; ?>
@@ -116,7 +138,7 @@
                                 </button>
                                 <!--                                <a class="add_compare" href=""-->
                                 <!--                                   data-toggle="tooltip" data-placement="top" title="لیست مقایسه">-->
-                                <?= '';//url('home.compare');         ?>
+                                <?= '';//url('home.compare');                  ?>
                                 <!--                                    <i class="linearicons-shuffle"></i>-->
                                 <!--                                </a>-->
                                 <a class="add_wishlist <?= $is_in_wishlist ? 'active' : ''; ?>"
@@ -188,7 +210,7 @@
                                        onClick="window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=300,width=600');return false;"
                                        target="_blank" title="اشتراک گذاری در تلگرام"
                                        data-toggle="tooltip" data-placement="top">
-                                        <i class="ion-ios-paperplane-outline"></i>
+                                        <i class="linearicons-paper-plane"></i>
                                     </a>
                                 </li>
                                 <li>
@@ -286,7 +308,7 @@
                                         <h5 class="mt-5 mb-3 text-info"><?= $property['title']; ?></h5>
 
                                         <?php if (isset($property['children']) && is_array($property['children']) && count($property['children']) > 0): ?>
-                                            <table class="table table-bordered">
+                                            <table class="table">
                                                 <?php foreach ($property['children'] as $child): ?>
                                                     <tr>
                                                         <td>
@@ -307,13 +329,13 @@
                                                                         <?php ++$counter; ?>
                                                                     <?php endforeach; ?>
                                                                 <?php else: ?>
-                                                                    <div class="p-2">
+                                                                    <div class="px-2 py-3">
                                                                         <i class="linearicons-minus"
                                                                            aria-hidden="true"></i>
                                                                     </div>
                                                                 <?php endif; ?>
                                                             <?php else: ?>
-                                                                <div class="p-2">
+                                                                <div class="px-2 py-3">
                                                                     <i class="linearicons-minus"
                                                                        aria-hidden="true"></i>
                                                                 </div>
@@ -364,7 +386,7 @@
                                                 </form>
                                             </div>
                                         <?php else: ?>
-                                            <div class="d-flex justify-content-between align-items-center">
+                                            <div class="d-flex align-items-center">
                                                 <span>برای ارسال نظر، ابتدا باید به پنل کاربری خود وارد شوید.</span>
                                                 <a class="btn btn-fill-line ml-3" href="<?= url('home.login', null, [
                                                     'back_url' => url('home.product.show', [

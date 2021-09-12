@@ -15,6 +15,12 @@
                         <?php load_partial('main/blog/section-search'); ?>
                         <!-- END SECTION SEARCH -->
 
+                        <!-- START SECTION BLOG CATEGORIES -->
+                        <?php load_partial('main/blog/blog-side-category', [
+                            'blog_side_categories' => $blog_side_categories ?? [],
+                        ]); ?>
+                        <!-- END SECTION BLOG CATEGORIES -->
+
                         <!-- START SECTION LAST BLOG -->
                         <?php load_partial('main/blog/last-blogs', [
                             'last_blog' => $last_blog ?? [],

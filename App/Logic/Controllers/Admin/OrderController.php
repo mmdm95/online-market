@@ -13,6 +13,7 @@ use App\Logic\Models\GatewayModel;
 use App\Logic\Models\OrderBadgeModel;
 use App\Logic\Models\OrderModel;
 use App\Logic\Utils\Jdf;
+use App\Logic\Utils\SMSUtil;
 use Jenssegers\Agent\Agent;
 use ReflectionException;
 use Sim\Auth\DBAuth;
@@ -28,6 +29,7 @@ use Sim\Interfaces\IInvalidVariableNameException;
 class OrderController extends AbstractAdminController implements IDatatableController
 {
     /**
+     * @param $status
      * @return string
      * @throws ConfigNotRegisteredException
      * @throws ControllerException
@@ -39,7 +41,7 @@ class OrderController extends AbstractAdminController implements IDatatableContr
      * @throws \DI\DependencyException
      * @throws \DI\NotFoundException
      */
-    public function view()
+    public function view($status = null)
     {
         /**
          * @var DBAuth $auth
@@ -49,8 +51,18 @@ class OrderController extends AbstractAdminController implements IDatatableContr
             show_403();
         }
 
+        if (!empty($status)) {
+            /**
+             * @var OrderBadgeModel $badgeModel
+             */
+            $badgeModel = container()->get(OrderBadgeModel::class);
+            $badge = $badgeModel->getFirst(['title'], 'code=:code', ['code' => $status]);
+        }
+
         $this->setLayout($this->main_layout)->setTemplate('view/order/view');
-        return $this->render();
+        return $this->render([
+            'status' => $badge['title'] ?? '',
+        ]);
     }
 
     /**
@@ -65,6 +77,7 @@ class OrderController extends AbstractAdminController implements IDatatableContr
      * @throws ReflectionException
      * @throws \DI\DependencyException
      * @throws \DI\NotFoundException
+     * @throws \Sim\SMS\Exceptions\SMSException
      */
     public function detail($id)
     {
@@ -98,6 +111,18 @@ class OrderController extends AbstractAdminController implements IDatatableContr
             } elseif (!is_null(input()->post('changeSendStatusBtn')->getValue())) {
                 $formHandler = new GeneralFormHandler();
                 $data = $formHandler->handle(ChangeSendStatus::class, 'send_change');
+
+                $username = session()->getFlash('send.status.username');
+
+                if (!count($data['send_change_errors'] ?? []) && !is_null($username)) {
+                    // send sms
+                    $body = replaced_sms_body(SMS_TYPE_ORDER_STATUS, [
+                        SMS_REPLACEMENTS['status'] => session()->getFlash('send.status.title', ''),
+                        SMS_REPLACEMENTS['orderCode'] => session()->getFlash('send.status.order_code', ''),
+                    ]);
+                    $smsRes = SMSUtil::send([$username], $body);
+                    SMSUtil::logSMS([$username], $body, $smsRes, SMS_LOG_TYPE_ORDER_STATUS, SMS_LOG_SENDER_USER);
+                }
             }
         }
 
@@ -213,8 +238,8 @@ class OrderController extends AbstractAdminController implements IDatatableContr
 
                     $data = $orderModel->getOrders($where, $bindValues, $order, $limit, $offset, $cols);
                     //-----
-                    $recordsFiltered = $orderModel->count($where, $bindValues);
-                    $recordsTotal = $orderModel->count();
+                    $recordsFiltered = $orderModel->getOrdersCount($where, $bindValues);
+                    $recordsTotal = $orderModel->getOrdersCount();
 
                     return [$data, $recordsFiltered, $recordsTotal];
                 });
@@ -265,6 +290,7 @@ class OrderController extends AbstractAdminController implements IDatatableContr
                         'db' => 'o.payment_status',
                         'db_alias' => 'payment_status',
                         'dt' => 'order_status',
+                        'search_on' => PAYMENT_STATUSES,
                         'formatter' => function ($d) {
                             $this->setTemplate('partial/admin/parser/status-creation');
                             return $this->render([
