@@ -722,7 +722,8 @@
             shop.request(variables.url.newsletter.add, 'post', function () {
                 shop.hideLoader(loaderId);
                 // clear element after success
-                $(variables.elements.newsletter.form).reset();
+                $(variables.elements.newsletter.form).get(0).reset();
+                $(variables.elements.newsletter.form).find('input[type="hidden"]').val('');
                 shop.toasts.toast(this.data, {
                     type: variables.toasts.types.success,
                 });
@@ -813,7 +814,8 @@
             shop.request(variables.url.address.add, 'post', function () {
                 shop.hideLoader(loaderId);
                 // clear element after success
-                $(variables.elements.addAddress.form).reset();
+                $(variables.elements.addAddress.form).get(0).reset();
+                $(variables.elements.addAddress.form).find('input[type="hidden"]').val('');
                 //-----
                 shop.toasts.toast(this.data, {
                     type: variables.toasts.types.success,
@@ -846,7 +848,8 @@
                 shop.request(variables.url.address.edit + '/' + editAddrId, 'post', function () {
                     shop.hideLoader(loaderId);
                     // clear element after success
-                    $(variables.elements.editAddress.form).reset();
+                    $(variables.elements.editAddress.form).get(0).reset();
+                    $(variables.elements.editAddress.form).find('input[type="hidden"]').val('');
                     // remove current id for province and city and reset current address id
                     $('select[name="' + variables.elements.editAddress.inputs.province + '"]').removeAttr('data-current-province');
                     $('select[name="' + variables.elements.editAddress.inputs.city + '"]').removeAttr('data-current-city');

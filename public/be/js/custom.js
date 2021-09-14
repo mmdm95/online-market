@@ -4159,6 +4159,7 @@
                 admin.hideLoader(loaderId);
                 // clear element after success
                 $(variables.elements.addAddress.form).get(0).reset();
+                $(variables.elements.addAddress.form).find('input[type="hidden"]').val('');
                 createDatatable();
                 //-----
                 admin.toasts.toast(this.data, {
@@ -4193,6 +4194,7 @@
                     admin.hideLoader(loaderId);
                     // clear element after success
                     $(variables.elements.editAddress.form).get(0).reset();
+                    $(variables.elements.editAddress.form).find('input[type="hidden"]').val('');
                     // remove current id for province and city and reset current address id
                     $('select[name="' + variables.elements.editAddress.inputs.province + '"]').removeAttr('data-current-province');
                     $('select[name="' + variables.elements.editAddress.inputs.city + '"]').removeAttr('data-current-city');
@@ -4239,6 +4241,7 @@
                 admin.hideLoader(loaderId);
                 // clear element after success
                 $(variables.elements.addUnit.form).get(0).reset();
+                $(variables.elements.addUnit.form).find('input[type="hidden"]').val('');
                 // currentTable is undefined but is must add data-current-table to working form for refresh data after add
                 // ... (postponed)
                 createDatatable(currentTable);
@@ -4273,6 +4276,7 @@
                     admin.hideLoader(loaderId);
                     // clear element after success
                     $(variables.elements.editUnit.form).get(0).reset();
+                    $(variables.elements.editUnit.form).find('input[type="hidden"]').val('');
                     editUnitId = null;
                     if (currentModal) {
                         currentModal.modal('hide');
@@ -4354,6 +4358,7 @@
                 admin.hideLoader(loaderId);
                 // clear element after success
                 $(variables.elements.addFaq.form).get(0).reset();
+                $(variables.elements.addFaq.form).find('input[type="hidden"]').val('');
                 initializeAllPlugins();
                 createDatatable();
                 //-----
@@ -4387,6 +4392,7 @@
                     admin.hideLoader(loaderId);
                     // clear element after success
                     $(variables.elements.editFaq.form).get(0).reset();
+                    $(variables.elements.editFaq.form).find('input[type="hidden"]').val('');
                     initializeAllPlugins();
                     editFAQId = null;
                     if (currentModal) {
@@ -4450,6 +4456,7 @@
                 admin.hideLoader(loaderId);
                 // clear element after success
                 $(variables.elements.addSlide.form).get(0).reset();
+                $(variables.elements.addSlide.form).find('input[type="hidden"]').val('');
                 removeImageFromPlaceholder($(variables.elements.addSlide.form).find('[name="' + variables.elements.addSlide.inputs.image + '"]'));
                 createDatatable();
                 //-----
@@ -4483,6 +4490,7 @@
                     admin.hideLoader(loaderId);
                     // clear element after success
                     $(variables.elements.editSlide.form).get(0).reset();
+                    $(variables.elements.editSlide.form).find('input[type="hidden"]').val('');
                     removeImageFromPlaceholder($(variables.elements.editSlide.form).find('[name="' + variables.elements.editSlide.inputs.image + '"]'));
                     editSlideId = null;
                     if (currentModal) {
@@ -4525,6 +4533,7 @@
                 admin.hideLoader(loaderId);
                 // clear element after success
                 $(variables.elements.addInstagramImage.form).get(0).reset();
+                $(variables.elements.addInstagramImage.form).find('input[type="hidden"]').val('');
                 removeImageFromPlaceholder($(variables.elements.addInstagramImage.form).find('[name="' + variables.elements.addInstagramImage.inputs.image + '"]'));
                 createDatatable();
                 //-----
@@ -4558,6 +4567,7 @@
                     admin.hideLoader(loaderId);
                     // clear element after success
                     $(variables.elements.editInstagramImage.form).get(0).reset();
+                    $(variables.elements.editInstagramImage.form).find('input[type="hidden"]').val('');
                     removeImageFromPlaceholder($(variables.elements.editInstagramImage.form).find('[name="' + variables.elements.editInstagramImage.inputs.image + '"]'));
                     editInstagramImageId = null;
                     if (currentModal) {
@@ -4601,6 +4611,7 @@
                 admin.hideLoader(loaderId);
                 // clear element after success
                 $(variables.elements.addNewsletter.form).get(0).reset();
+                $(variables.elements.addNewsletter.form).find('input[type="hidden"]').val('');
                 createDatatable();
                 //-----
                 admin.toasts.toast(this.data, {
@@ -4662,6 +4673,7 @@
                 prevStat = status.is(':checked');
                 // clear element after success
                 $(variables.elements.addBadge.form).get(0).reset();
+                $(variables.elements.addBadge.form).find('input[type="hidden"]').val('');
                 if (status.is(':checked') && !prevStat) {
                     status
                         .parent()
@@ -4705,6 +4717,7 @@
                     prevStat = status.is(':checked');
                     // clear element after success
                     $(variables.elements.editBadge.form).get(0).reset();
+                    $(variables.elements.editBadge.form).find('input[type="hidden"]').val('');
                     if (status.is(':checked') && !prevStat) {
                         status
                             .parent()
@@ -4777,6 +4790,7 @@
                     admin.hideLoader(loaderId);
                     // clear element after success
                     $(variables.elements.addCategoryImage.form).get(0).reset();
+                    $(variables.elements.addCategoryImage.form).find('input[type="hidden"]').val('');
                     addCategoryImageId = null;
                     createDatatable();
                     //-----
@@ -4811,6 +4825,7 @@
                     admin.hideLoader(loaderId);
                     // clear element after success
                     $(variables.elements.editCategoryImage.form).get(0).reset();
+                    $(variables.elements.editCategoryImage.form).find('input[type="hidden"]').val('');
                     currentCategoryId = null;
                     editCategoryImageId = null;
                     if (currentModal) {
@@ -4897,6 +4912,7 @@
                 prevStat = status.is(':checked');
                 // clear element after success
                 $(variables.elements.addSecurityQuestion.form).get(0).reset();
+                $(variables.elements.addSecurityQuestion.form).find('input[type="hidden"]').val('');
                 if (status.is(':checked') && !prevStat) {
                     status
                         .parent()
@@ -4940,6 +4956,7 @@
                     prevStat = status.is(':checked');
                     // clear element after success
                     $(variables.elements.editSecurityQuestion.form).get(0).reset();
+                    $(variables.elements.editSecurityQuestion.form).find('input[type="hidden"]').val('');
                     if (status.is(':checked') && !prevStat) {
                         status
                             .parent()
@@ -5048,6 +5065,7 @@
                 admin.hideLoader(loaderId);
                 // clear element after success
                 $(variables.elements.addProductFestival.form).get(0).reset();
+                $(variables.elements.addProductFestival.form).find('input[type="hidden"]').val('');
                 createDatatable();
                 //-----
                 admin.toasts.toast(this.data, {
@@ -5081,6 +5099,7 @@
                 admin.hideLoader(loaderId);
                 // clear element after success
                 $(variables.elements.modifyProductFestival.form).get(0).reset();
+                $(variables.elements.modifyProductFestival.form).find('input[type="hidden"]').val('');
                 if (currentTable) {
                     $(currentTable).DataTable().ajax.reload();
                     createDatatable(currentTable);
@@ -5187,6 +5206,7 @@
                 admin.hideLoader(loaderId);
                 // clear element after success
                 $(variables.elements.addDepositType.form).get(0).reset();
+                $(variables.elements.addDepositType.form).find('input[type="hidden"]').val('');
                 createDatatable();
                 //-----
                 admin.toasts.toast(this.data, {
@@ -5218,7 +5238,8 @@
                 admin.request(variables.url.depositType.edit + '/' + editDepositTypeId, 'post', function () {
                     admin.hideLoader(loaderId);
                     // clear element after success
-                    $(variables.elements.editDepositType.form).get(0).reset();
+                    $(variables.elements.editDepositType.form).get(0).reset()
+                    $(variables.elements.editDepositType.form).find('input[type="hidden"]').val('');
                     editDepositTypeId = null;
                     if (currentModal) {
                         currentModal.modal('hide');

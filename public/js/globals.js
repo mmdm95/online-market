@@ -653,66 +653,87 @@ window.MyGlobalVariables = {
                 options = typeof options === typeof {} ? options : {};
                 showError = true === showError;
                 errorCallback = window.TheCore.isFunction(errorCallback) ? errorCallback : window.TheCore.noop;
-                window.axios({
-                    method: 'GET',
-                    url: window.MyGlobalVariables.url.csrfToken,
-                }).then(function (csrfRes) {
-                    // reset csrf token of axios
-                    window.axios.defaults.headers.common['X-CSRF-TOKEN'] = csrfRes.data.csrfToken;
+                if (!csrfSafeMethod(method)) {
+                    window.axios({
+                        method: 'GET',
+                        url: window.MyGlobalVariables.url.csrfToken,
+                    }).then(function (csrfRes) {
+                        // reset csrf token of axios
+                        window.axios.defaults.headers.common['X-CSRF-TOKEN'] = csrfRes.data.csrfToken;
 
-                    window.axios($.extend(options, {
-                        method: method,
-                        url: url,
-                    })).then(function (response) {
-                        var data = _.handleAPIData(response.data);
-                        if (null === data.error) {
-                            if (window.TheCore.isFunction(successCallback)) {
-                                successCallback.call(data);
-                            }
-                        } else {
-                            errorCallback.call(data);
-                            if (data.error) {
-                                if (showError) {
-                                    _.toasts.toast(data.error, {
-                                        type: 'error',
-                                    });
-                                } else {
-                                    console.error(data.error);
-                                }
+                        _.unsafeRequest(url, method, successCallback, options, showError, errorCallback);
+                    }).catch(function () {
+                        _.toasts.toast(window.MyGlobalVariables.messages.request.tokenError, {
+                            type: 'warning',
+                        });
+                    });
+                } else {
+                    _.unsafeRequest(url, method, successCallback, options, showError, errorCallback);
+                }
+            },
+
+            /**
+             * @param url
+             * @param method
+             * @param successCallback
+             * @param options
+             * @param showError
+             * @param errorCallback
+             */
+            unsafeRequest: function (url, method, successCallback, options, showError, errorCallback) {
+                var _ = this;
+                options = typeof options === typeof {} ? options : {};
+                showError = true === showError;
+                errorCallback = window.TheCore.isFunction(errorCallback) ? errorCallback : window.TheCore.noop;
+
+                window.axios($.extend(options, {
+                    method: method,
+                    url: url,
+                })).then(function (response) {
+                    var data = _.handleAPIData(response.data);
+                    if (null === data.error) {
+                        if (window.TheCore.isFunction(successCallback)) {
+                            successCallback.call(data);
+                        }
+                    } else {
+                        errorCallback.call(data);
+                        if (data.error) {
+                            if (showError) {
+                                _.toasts.toast(data.error, {
+                                    type: 'error',
+                                });
+                            } else {
+                                console.error(data.error);
                             }
                         }
-                    }).catch(function (error) {
-                        $('[data-is-preloader]').remove();
+                    }
+                }).catch(function (error) {
+                    $('[data-is-preloader]').remove();
 
-                        errorCallback.call({catchErr: error});
-                        if (error.response) {
-                            // The request was made and the server responded with a status code
-                            // that falls out of the range of 2xx
-                            console.log(error.response.data);
-                            console.log(error.response.status);
-                            if (showError) {
-                                _.toasts.toast(window.MyGlobalVariables.messages.request.error, {
-                                    type: 'error',
-                                });
-                            }
-                        } else if (error.request) {
-                            if (showError) {
-                                _.toasts.toast(window.MyGlobalVariables.messages.request.error, {
-                                    type: 'error',
-                                });
-                            }
-                        } else {
-                            if (showError) {
-                                _.toasts.toast(error.message, {
-                                    type: 'error',
-                                });
-                            }
+                    errorCallback.call({catchErr: error});
+                    if (error.response) {
+                        // The request was made and the server responded with a status code
+                        // that falls out of the range of 2xx
+                        console.log(error.response.data);
+                        console.log(error.response.status);
+                        if (showError) {
+                            _.toasts.toast(window.MyGlobalVariables.messages.request.error, {
+                                type: 'error',
+                            });
                         }
-                    });
-                }).catch(function () {
-                    _.toasts.toast(window.MyGlobalVariables.messages.request.tokenError, {
-                        type: 'warning',
-                    });
+                    } else if (error.request) {
+                        if (showError) {
+                            _.toasts.toast(window.MyGlobalVariables.messages.request.error, {
+                                type: 'error',
+                            });
+                        }
+                    } else {
+                        if (showError) {
+                            _.toasts.toast(error.message, {
+                                type: 'error',
+                            });
+                        }
+                    }
                 });
             },
 

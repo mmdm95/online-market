@@ -325,8 +325,6 @@
 
             if (canSubmit) {
                 shop.request(variables.url.checkout.check, 'post', function () {
-                    createLoader = true;
-                    //-----
                     if (this.type !== variables.toasts.types.success) {
                         shop.toasts.toast(this.data, {
                             type: variables.toasts.types.warning,

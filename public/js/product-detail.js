@@ -178,7 +178,8 @@
                 shop.request(variables.url.products.add.comment + '/' + currentProductId, 'post', function () {
                     shop.hideLoader(loaderId);
                     // clear element after success
-                    $(variables.elements.productComment.form).reset();
+                    $(variables.elements.productComment.form).get(0).reset();
+                    $(variables.elements.productComment.form).find('input[type="hidden"]').val('');
                     shop.toasts.toast(this.data, {
                         type: 'success',
                     });

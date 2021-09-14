@@ -361,7 +361,7 @@ class StringUtil
         if (\is_array($text)) {
             $newArr = [];
             foreach ($text as $k => $v) {
-                $newArr[$k] = replaceBadUTF8Chars($text[$k]);
+                $newArr[$k] = self::replaceBadUTF8Chars($text[$k]);
             }
             return $newArr;
         }
