@@ -1019,16 +1019,16 @@
         },
         {
             "name": "mmdm/sim-fa-payment",
-            "version": "v0.2.14",
+            "version": "v0.2.15",
             "source": {
                 "type": "git",
                 "url": "https://github.com/mmdm95/sim-fa-payment.git",
-                "reference": "bcc49e3260f1b68d504ef3f9ef21947b0ef48a16"
+                "reference": "528c8b35a2da1e949a3b2fc29ae29531a3090576"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mmdm95/sim-fa-payment/zipball/bcc49e3260f1b68d504ef3f9ef21947b0ef48a16",
-                "reference": "bcc49e3260f1b68d504ef3f9ef21947b0ef48a16",
+                "url": "https://api.github.com/repos/mmdm95/sim-fa-payment/zipball/528c8b35a2da1e949a3b2fc29ae29531a3090576",
+                "reference": "528c8b35a2da1e949a3b2fc29ae29531a3090576",
                 "shasum": ""
             },
             "require": {
@@ -1058,9 +1058,9 @@
             "description": "A simple yet nice iranian payment library",
             "support": {
                 "issues": "https://github.com/mmdm95/sim-fa-payment/issues",
-                "source": "https://github.com/mmdm95/sim-fa-payment/tree/v0.2.14"
+                "source": "https://github.com/mmdm95/sim-fa-payment/tree/v0.2.15"
             },
-            "time": "2021-09-14T15:43:48+00:00"
+            "time": "2021-09-14T16:25:39+00:00"
         },
         {
             "name": "mmdm/sim-fa-sms",

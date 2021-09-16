@@ -21,7 +21,7 @@ use Sim\I18n\ISOLanguageCodes;
  *     1.2.5.0 instead of 1.2.5-a
  *     1.2.5.0.1 instead of 1.2.5-a.1 (I'm not sure)
  */
-defined("APP_VERSION") OR define("APP_VERSION", "0.3.16.2");
+defined("APP_VERSION") OR define("APP_VERSION", "0.4.16.2");
 
 /***************************************
  * You can add your constants here
@@ -166,6 +166,7 @@ defined("SMS_LOG_TYPE_BUY") OR define("SMS_LOG_TYPE_BUY", 3);
 defined("SMS_LOG_TYPE_ORDER_STATUS") OR define("SMS_LOG_TYPE_ORDER_STATUS", 4);
 defined("SMS_LOG_TYPE_WALLET_CHARGE") OR define("SMS_LOG_TYPE_WALLET_CHARGE", 5);
 defined("SMS_LOG_TYPE_ORDER_SUCCESS") OR define("SMS_LOG_TYPE_ORDER_SUCCESS", 6);
+defined("SMS_LOG_TYPE_ORDER_NOTIFY") OR define("SMS_LOG_TYPE_ORDER_NOTIFY", 7);
 defined("SMS_LOG_TYPE_OTHERS") OR define("SMS_LOG_TYPE_OTHERS", 100);
 
 // sms log sender
@@ -215,12 +216,14 @@ defined("METHOD_TYPE_GATEWAY_IDPAY") OR define("METHOD_TYPE_GATEWAY_IDPAY", 2);
 defined("METHOD_TYPE_GATEWAY_MABNA") OR define("METHOD_TYPE_GATEWAY_MABNA", 3);
 defined("METHOD_TYPE_GATEWAY_ZARINPAL") OR define("METHOD_TYPE_GATEWAY_ZARINPAL", 4);
 defined("METHOD_TYPE_GATEWAY_SADAD") OR define("METHOD_TYPE_GATEWAY_SADAD", 5);
+defined("METHOD_TYPE_GATEWAY_TAP") OR define("METHOD_TYPE_GATEWAY_TAP", 6);
 defined("METHOD_TYPES") OR define("METHOD_TYPES", [
     METHOD_TYPE_GATEWAY_BEH_PARDAKHT => 'درگاه بانک - به پرداخت',
     METHOD_TYPE_GATEWAY_IDPAY => 'درگاه بانک - آیدی پی',
     METHOD_TYPE_GATEWAY_MABNA => 'درگاه بانک - پرداخت الکترونیک سپهر (مبنا)',
     METHOD_TYPE_GATEWAY_ZARINPAL => 'درگاه بانک - زرین پال',
     METHOD_TYPE_GATEWAY_SADAD => 'درگاه بانک - سداد',
+    METHOD_TYPE_GATEWAY_TAP => 'درگاه بانک - تجارت الکترونیک پارسیان (تاپ)',
 ]);
 
 // needed payment method type for payment result
@@ -229,6 +232,7 @@ defined("METHOD_RESULT_TYPE_IDPAY") OR define("METHOD_RESULT_TYPE_IDPAY", 'idpay
 defined("METHOD_RESULT_TYPE_MABNA") OR define("METHOD_RESULT_TYPE_MABNA", 'mabna');
 defined("METHOD_RESULT_TYPE_ZARINPAL") OR define("METHOD_RESULT_TYPE_ZARINPAL", 'zarinpal');
 defined("METHOD_RESULT_TYPE_SADAD") OR define("METHOD_RESULT_TYPE_SADAD", 'sadad');
+defined("METHOD_RESULT_TYPE_TAP") OR define("METHOD_RESULT_TYPE_TAP", 'tap');
 
 // deposit type codes
 defined("DEPOSIT_TYPE_PAYED") OR define("DEPOSIT_TYPE_PAYED", "a1b2c3d4e5f6");

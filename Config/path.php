@@ -77,6 +77,7 @@ return [
         'i18n' => __DIR__ . '/i18n.php',
         'log' => __DIR__ . '/log.php',
         'mail' => __DIR__ . '/mail.php',
+        'notify' => __DIR__ . '/notify.php',
         'payment' => __DIR__ . '/payment.php',
         'router' => __DIR__ . '/router.php',
         'security' => __DIR__ . '/security.php',

@@ -11,6 +11,7 @@ use Sim\Exceptions\Mvc\Controller\ControllerException;
 use Sim\Exceptions\PathManager\PathNotRegisteredException;
 use Sim\Interfaces\IFileNotExistsException;
 use Sim\Interfaces\IInvalidVariableNameException;
+use Sim\Utils\StringUtil;
 
 class OrderResultController extends AbstractHomeController
 {
@@ -51,6 +52,20 @@ class OrderResultController extends AbstractHomeController
                 ]);
                 $smsRes = SMSUtil::send([$username], $body);
                 SMSUtil::logSMS([$username], $body, $smsRes, SMS_LOG_TYPE_BUY, SMS_LOG_SENDER_SYSTEM);
+
+                // alert user(s) that an order is in queue
+                $body = 'سلام مدیر' .
+                    "\n" .
+                    'سفارش ' . $orderCode . ' ثبت شده است و هم اکنون در وضعیت در انتظار بررسی می باشد.' .
+                    "\n" .
+                    'آیتم های سفارش : ' . '[مراجعه به سایت]' .
+                    "\n" .
+                    'مبلغ سفارش : ' . local_number(number_format(StringUtil::toEnglish($info['final_price']))) . ' تومان';
+                $users = config()->get('orders.successful.users');
+                if (count($users)) {
+                    $smsRes = SMSUtil::send($users, $body);
+                    SMSUtil::logSMS($users, $body, $smsRes, SMS_LOG_TYPE_ORDER_NOTIFY, SMS_LOG_SENDER_SYSTEM);
+                }
             }
         }
 

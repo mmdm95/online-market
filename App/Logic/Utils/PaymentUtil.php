@@ -12,6 +12,7 @@ use Sim\Payment\Factories\BehPardakht;
 use Sim\Payment\Factories\IDPay;
 use Sim\Payment\Factories\Mabna;
 use Sim\Payment\Factories\Sadad;
+use Sim\Payment\Factories\TAP\TapPayment\TapPayment;
 use Sim\Payment\Factories\Zarinpal;
 use Sim\Payment\PaymentFactory;
 use Sim\Payment\Providers\BehPardakht\BehPardakhtAdviceResultProvider;
@@ -31,6 +32,10 @@ use Sim\Payment\Providers\Sadad\SadadAdviceResultProvider;
 use Sim\Payment\Providers\Sadad\SadadHandlerProvider;
 use Sim\Payment\Providers\Sadad\SadadRequestProvider;
 use Sim\Payment\Providers\Sadad\SadadRequestResultProvider;
+use Sim\Payment\Providers\TAP\Payment\TapAdviceResultProvider;
+use Sim\Payment\Providers\TAP\Payment\TapHandlerProvider;
+use Sim\Payment\Providers\TAP\Payment\TapRequestProvider;
+use Sim\Payment\Providers\TAP\Payment\TapRequestResultProvider;
 use Sim\Payment\Providers\Zarinpal\ZarinpalAdviceProvider;
 use Sim\Payment\Providers\Zarinpal\ZarinpalAdviceResultProvider;
 use Sim\Payment\Providers\Zarinpal\ZarinpalHandlerProvider;
@@ -305,6 +310,53 @@ class PaymentUtil
                     function (IEvent $event, $code, $msg) use (&$res) {
                         $res = false;
                         self::logConnectionError(METHOD_TYPE_GATEWAY_SADAD, $code, $msg);
+                    }
+                );
+                //
+                $gateway->createRequest($provider);
+                break;
+            case METHOD_TYPE_GATEWAY_TAP:
+                /**
+                 * @var TapPayment $gateway
+                 */
+                // $loginAccount
+                $gateway = PaymentFactory::instance(
+                    PaymentFactory::GATEWAY_TAP,
+                    $gatewayInfo['login_account']
+                );
+                // provider
+                $provider = new TapRequestProvider();
+                $provider
+                    ->setCallBackUrl(rtrim(get_base_url(), '/') . url('home.finish', [
+                            'type' => METHOD_RESULT_TYPE_TAP,
+                            'method' => $gatewayCode,
+                            'code' => $newCode,
+                        ])->getRelativeUrlTrimmed())
+                    ->setAmount(($orderArr['final_price'] * 10))
+                    ->setOrderId((int)$orderArr['code']);
+                // events
+                $gateway->createRequestOkClosure(
+                    function (
+                        IEvent $event,
+                        TapRequestResultProvider $result
+                    ) use ($auth, $gatewayModel, $orderArr, $newCode, &$gatewayRes) {
+                        // store gateway info to store all order things at once
+                        $gatewayRes = $result;
+                        $gatewayModel->insert([
+                            'code' => $newCode,
+                            'order_code' => $orderArr['code'],
+                            'user_id' => $auth->getCurrentUser()['id'] ?? 0,
+                            'price' => $orderArr['final_price'],
+                            'is_success' => DB_NO,
+                            'method_type' => METHOD_TYPE_GATEWAY_SADAD,
+                            'in_step' => PAYMENT_GATEWAY_FLOW_STATUS_CREATE_REQUEST,
+                            'issue_date' => time(),
+                        ]);
+                    }
+                )->createRequestNotOkClosure(
+                    function (IEvent $event, $code, $msg) use (&$res) {
+                        $res = false;
+                        self::logConnectionError(METHOD_TYPE_GATEWAY_TAP, $code, $msg);
                     }
                 );
                 //
@@ -744,6 +796,68 @@ class PaymentUtil
                             ], 'code=:code AND is_success=:suc', ['code' => $gatewayCode, 'suc' => DB_NO]);
 
                             $res = [false, GATEWAY_ERROR_MESSAGE, $adviceProvider->getSystemTraceNo('')];
+                        }
+                    )->sendAdvice();
+                break;
+            case METHOD_RESULT_TYPE_TAP:
+                /**
+                 * @var TapPayment $gateway
+                 */
+                // $loginAccount
+                $gateway = PaymentFactory::instance(
+                    PaymentFactory::GATEWAY_TAP,
+                    $gatewayInfo['login_account']
+                );
+                $gateway
+                    ->handleResultNotOkClosure(function () use (&$res) {
+                        $res = [false, GATEWAY_INVALID_PARAMETERS_MESSAGE, null];
+                    })->sendAdviceOkClosure(
+                        function (
+                            IEvent $event,
+                            TapAdviceResultProvider $adviceProvider,
+                            TapHandlerProvider $resultProvider
+                        ) use ($gatewayModel, $orderModel, $orderReserveModel, $gatewayCode, $flow, &$res) {
+                            $gatewayModel->update([
+                                'payment_code' => $adviceProvider->getRRN(''),
+                                'status' => $adviceProvider->getStatus(),
+                                'msg' => $adviceProvider->getMessage(),
+                                'is_success' => DB_YES,
+                                'in_step' => PAYMENT_GATEWAY_FLOW_STATUS_ADVICE,
+                                'payment_date' => time(),
+                                'extra_info' => json_encode([
+                                    'result' => $resultProvider->getParameters(),
+                                    'advice' => $adviceProvider->getParameters(),
+                                ]),
+                            ], 'code=:code', ['code' => $gatewayCode]);
+                            $orderModel->update([
+                                'payment_status' => PAYMENT_STATUS_SUCCESS,
+                                'payed_at' => time(),
+                            ], 'code=:code', ['code' => $flow['order_code']]);
+                            $orderReserveModel->delete('order_code=:code', ['code' => $flow['order_code']]);
+
+                            $res = [true, GATEWAY_SUCCESS_MESSAGE, $adviceProvider->getRRN('')];
+                        }
+                    )->sendAdviceNotOkClosure(
+                        function (
+                            IEvent $event,
+                            $code,
+                            $msg,
+                            TapAdviceResultProvider $adviceProvider,
+                            TapHandlerProvider $resultProvider
+                        ) use ($gatewayModel, $gatewayCode, &$res) {
+                            $gatewayModel->update([
+                                'payment_code' => $adviceProvider->getRRN(''),
+                                'status' => $code,
+                                'msg' => $msg,
+                                'in_step' => PAYMENT_GATEWAY_FLOW_STATUS_HANDLE_RESULT,
+                                'payment_date' => time(),
+                                'extra_info' => json_encode([
+                                    'result' => $resultProvider->getParameters(),
+                                    'advice' => $adviceProvider->getParameters(),
+                                ]),
+                            ], 'code=:code AND is_success=:suc', ['code' => $gatewayCode, 'suc' => DB_NO]);
+
+                            $res = [false, GATEWAY_ERROR_MESSAGE, $adviceProvider->getRRN('')];
                         }
                     )->sendAdvice();
                 break;

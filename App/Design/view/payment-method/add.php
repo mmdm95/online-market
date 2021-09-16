@@ -135,6 +135,44 @@ $validator = form_validator();
                             </div>
 
                             <div class="card">
+                                <div class="card-header" id="tapHeading">
+                                    <div class="form-check form-check-inline">
+                                        <label class="form-check-label align-items-center">
+                                            <input type="radio"
+                                                   data-toggle="collapse"
+                                                   aria-expanded="false"
+                                                   class="form-check-input-styled"
+                                                   data-target="#collapseTap"
+                                                   aria-controls="collapseTap"
+                                                   value="<?= METHOD_TYPE_GATEWAY_TAP; ?>"
+                                                   name="inp-add-pay-method-method"
+                                                   data-fouc>
+                                            <img src="" data-src="<?= asset_path('image/gateways/tap.jpg', false); ?>"
+                                                 alt="تجارت الکترونیک پارسیان (تاپ)" class="rounded mr-2 lazy"
+                                                 width="auto" height="40">
+                                            <?= METHOD_TYPES[METHOD_TYPE_GATEWAY_TAP]; ?>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="form-group collapse" id="collapseTap"
+                                     aria-labelledby="TapHeading" data-parent="#radioAccordion">
+                                    <div class="row m-0">
+                                        <div class="col-lg-6 mb-3">
+                                            <label>
+                                                <span class="text-danger">*</span>
+                                                رمز پذیرنده:
+                                            </label>
+                                            <input type="text"
+                                                   class="form-control"
+                                                   placeholder=""
+                                                   name="inp-add-pay-method-tap-login-account">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card">
                                 <div class="card-header" id="behPardakhtHeading">
                                     <div class="form-check form-check-inline">
                                         <label class="form-check-label align-items-center">

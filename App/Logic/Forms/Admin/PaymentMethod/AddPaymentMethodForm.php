@@ -42,6 +42,7 @@ class AddPaymentMethodForm implements IPageForm
                 'inp-add-pay-method-sadad-key' => 'کلید سداد',
                 'inp-add-pay-method-sadad-terminal' => 'شماره ترمینال سداد',
                 'inp-add-pay-method-sadad-merchant' => 'شماره مرچنت سداد',
+                'inp-add-pay-method-tap-login-account' => 'رمز پذیرنده',
                 'inp-add-pay-method-beh-pardakht-terminal' => 'شماره ترمینال به پرداخت',
                 'inp-add-pay-method-beh-pardakht-username' => 'نام کاربری به پرداخت',
                 'inp-add-pay-method-beh-pardakht-password' => 'کلمه عبور به پرداخت',
@@ -80,6 +81,12 @@ class AddPaymentMethodForm implements IPageForm
                     'inp-add-pay-method-sadad-terminal',
                     'inp-add-pay-method-sadad-merchant',
                 ])
+                ->stopValidationAfterFirstError(false)
+                ->required()
+                ->stopValidationAfterFirstError(true);
+        } elseif ($method == METHOD_TYPE_GATEWAY_TAP) {
+            $validator
+                ->setFields('inp-add-pay-method-tap-login-account')
                 ->stopValidationAfterFirstError(false)
                 ->required()
                 ->stopValidationAfterFirstError(true);
@@ -166,6 +173,12 @@ class AddPaymentMethodForm implements IPageForm
                     'key' => $sadadKey,
                     'terminal' => $sadadTerminal,
                     'merchant' => $sadadMerchant,
+                ]);
+            } elseif ($method == METHOD_TYPE_GATEWAY_TAP) {
+                $loginAccount = input()->post('inp-add-pay-method-tap-login-account', '')->getValue();
+                //
+                $meta = json_encode([
+                    'login_account' => $loginAccount,
                 ]);
             } elseif ($method == METHOD_TYPE_GATEWAY_BEH_PARDAKHT) {
                 $behTerminal = input()->post('inp-add-pay-method-beh-pardakht-terminal', '')->getValue();
