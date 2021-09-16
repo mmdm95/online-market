@@ -43,11 +43,13 @@ $authAdmin = auth_admin();
                                 <?= $main_user_info['role'][0]['description']; ?>
                             </span>
                         </div>
-                        <div class="ml-3 align-self-center">
-                            <a href="<?= url('admin.setting.main')->getRelativeUrl(); ?>" class="text-white">
-                                <i class="icon-cog3"></i>
-                            </a>
-                        </div>
+                        <?php if ($authAdmin->isAllow(RESOURCE_SETTING, OWN_PERMISSIONS)): ?>
+                            <div class="ml-3 align-self-center">
+                                <a href="<?= url('admin.setting.main')->getRelativeUrl(); ?>" class="text-white">
+                                    <i class="icon-cog3"></i>
+                                </a>
+                            </div>
+                        <?php endif; ?>
                     </div>
 
                     <a href="<?= url('home.index')->getRelativeUrl(); ?>"
@@ -150,13 +152,13 @@ $authAdmin = auth_admin();
                     <!--                    <ul class="nav nav-group-sub">-->
                     <!--                        <li class="nav-item">-->
                     <!--                            <a href="" class="nav-link">-->
-                    <?= '';//url('admin.send_method.add');                                             ?>
+                    <?= '';//url('admin.send_method.add');                                              ?>
                     <!--                                افزودن روش ارسال جدید-->
                     <!--                            </a>-->
                     <!--                        </li>-->
                     <!--                        <li class="nav-item">-->
                     <!--                            <a href="" class="nav-link">-->
-                    <?= '';//url('admin.send_method.view', '');                                             ?>
+                    <?= '';//url('admin.send_method.view', '');                                              ?>
                     <!--                                لیست روش‌های ارسال-->
                     <!--                            </a>-->
                     <!--                        </li>-->
@@ -359,7 +361,7 @@ $authAdmin = auth_admin();
 
                     <!--                <li class="nav-item">-->
                     <!--                    <a href="" class="nav-link"-->
-                    <?= '';//url('admin.return.order.view');                                         ?>
+                    <?= '';//url('admin.return.order.view');                                          ?>
                     <!--                       data-popup="tooltip"-->
                     <!--                       data-original-title="سفارشات مرجوعی"-->
                     <!--                       data-boundary="window"-->
@@ -430,7 +432,7 @@ $authAdmin = auth_admin();
                     <!--                        <li class="nav-item">-->
                     <!--                            <a href="--><? //= url('admin.report.wallet'); ?><!--"-->
                     <!--                               class="nav-link "-->
-                    <?= '';//url()->contains(url('admin.report.wallet')->getRelativeUrlTrimmed()) ? 'active' : '';  ?>
+                    <?= '';//url()->contains(url('admin.report.wallet')->getRelativeUrlTrimmed()) ? 'active' : '';   ?>
                     <!--                               data-popup="tooltip"-->
                     <!--                               data-original-title="گزارش‌گیری از کیف پول"-->
                     <!--                               data-boundary="window"-->
