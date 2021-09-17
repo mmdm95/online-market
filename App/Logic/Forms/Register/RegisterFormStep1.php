@@ -54,9 +54,9 @@ class RegisterFormStep1 implements IPageForm
                  * @var UserModel $userModel
                  */
                 $userModel = container()->get(UserModel::class);
-                if ($userModel->count('username=:username AND is_activated=:active', [
+                if ($userModel->count('username=:username AND password IS NOT NULL AND is_activated=:active', [
                     'username' => trim($value->getValue()),
-                    'active' => DB_YES
+                    'active' => DB_YES,
                 ])) {
                     return false;
                 } else {

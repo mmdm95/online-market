@@ -172,7 +172,6 @@ class SteppedPriceController extends AbstractAdminController
 
         $product = $product[0];
         $title = $productModel->getFirst(['title'], 'id=:id', ['id' => $product['product_id']])['title'];
-        $product = [];
 
         session()->setFlash('stepped-add-curr-code', $code);
 

@@ -198,7 +198,7 @@ class ReportQBUtil
             ['pa.product_id'],
             ['pa.product_id']
         );
-        $newProducts = array_column($products, 'id');
+        $newProducts = array_column($products, 'product_id');
         //-----
         $categories = $categoryModel->get(['id', 'name'], 'publish=:pub', ['pub' => DB_YES]);
         $newCategories = array_column($categories, 'name', 'id');

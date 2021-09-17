@@ -200,8 +200,8 @@ class SettingModel extends BaseModel
             'setting_value' => $info[SETTING_BLOG_EACH_PAGE],
         ], 'setting_name=:name', ['name' => SETTING_BLOG_EACH_PAGE]);
         $res3 = $this->update([
-            'setting_value' => $info[SETTING_STORE_PROVINCE],
-        ], 'setting_name=:name', ['name' => SETTING_STORE_PROVINCE]);
+            'setting_value' => $info[SETTING_DEFAULT_IMAGE_PLACEHOLDER],
+        ], 'setting_name=:name', ['name' => SETTING_DEFAULT_IMAGE_PLACEHOLDER]);
 
         return $res1 && $res2 && $res3;
     }

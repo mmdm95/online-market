@@ -345,7 +345,7 @@ class Route implements IInitialize
                 ])->name('admin.stepped-price.view');
                 Router::get('/product/stepped-price/view-all/{code}', [AdminSteppedPriceController::class, 'viewStepped'])->where([
                     'code' => '[a-zA-Z0-9]+',
-                ])->name('admin.stepped-price.view');
+                ])->name('admin.stepped-price.view_all');
 
                 /**
                  * Comment Route

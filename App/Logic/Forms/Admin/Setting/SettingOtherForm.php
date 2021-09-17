@@ -36,6 +36,7 @@ class SettingOtherForm implements IPageForm
             ->setFieldsAlias([
                 'inp-setting-product-pagination' => 'تعداد کالا در هر صفحه',
                 'inp-setting-blog-pagination' => 'تعداد بلاگ در هر صفحه',
+                'inp-setting-default-image-placeholder' => 'تصویر پیش فرض پیش از بارگذاری تصویر',
             ]);
 
         // product and blog pagination number
@@ -48,6 +49,13 @@ class SettingOtherForm implements IPageForm
             ->required()
             ->stopValidationAfterFirstError(true)
             ->isInteger();
+        // default image placeholder
+        $validator
+            ->setFields('inp-setting-default-image-placeholder')
+            ->stopValidationAfterFirstError(false)
+            ->required()
+            ->stopValidationAfterFirstError(true)
+            ->imageExists();
 
         // to reset form values and not set them again
         if ($validator->getStatus()) {
@@ -84,10 +92,12 @@ class SettingOtherForm implements IPageForm
         try {
             $productPagination = input()->post('inp-setting-product-pagination', '')->getValue();
             $blogPagination = input()->post('inp-setting-blog-pagination', '')->getValue();
+            $defaultImagePlaceholder = input()->post('inp-setting-default-image-placeholder', '')->getValue();
 
             return $settingModel->updateOtherSetting([
                 SETTING_PRODUCT_EACH_PAGE => $xss->xss_clean(trim($productPagination)),
                 SETTING_BLOG_EACH_PAGE => $xss->xss_clean(trim($blogPagination)),
+                SETTING_DEFAULT_IMAGE_PLACEHOLDER => $xss->xss_clean(trim($defaultImagePlaceholder)),
             ]);
         } catch (\Exception $e) {
             return false;

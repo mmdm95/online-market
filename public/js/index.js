@@ -147,7 +147,7 @@
                 },
                 confirmPassword: {
                     rules: {
-                        equalTo: '[name="password"]',
+                        equalTo: '[name="inp-register-password"]',
                     },
                     messages: {
                         equalTo: 'تکرار کلمه عبور با کلمه عبور یکسان نمی‌باشد.',

@@ -29,6 +29,33 @@
 
                     <div class="list-feed">
                         <div class="list-feed-item border-warning-400">
+                            لینک مطالب:
+                            <a href="<?= url('home.blog')->getRelativeUrlTrimmed(); ?>" dir="ltr" target="_blank">
+                                blog
+                            </a>
+
+                            <div class="row my-3">
+                                <div class="col-xl-9 col-lg-12 col-md-12">
+                                    <div class="form-group-feedback form-group-feedback-left">
+                                        <input type="text" class="form-control ltr px-3 rounded-full"
+                                               id="blogLinkPlaceholder" disabled
+                                               style="border: 1px dashed !important;"
+                                               value="<?= $base . url('home.blog')->getRelativeUrlTrimmed(); ?>">
+                                        <div class="form-control-feedback form-control-feedback-lg">
+                                            <button type="button"
+                                                    class="btn btn-dark btn-icon rounded-full copy-to-clipboard"
+                                                    data-clipboard-target="#blogLinkPlaceholder"
+                                                    data-popup="tooltip" data-original-title="کپی"
+                                                    data-placement="right">
+                                                <i class="icon-copy"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="list-feed-item border-warning-400">
                             لینک درباره ما:
                             <a href="<?= url('home.about')->getRelativeUrlTrimmed(); ?>" dir="ltr" target="_blank">
                                 about

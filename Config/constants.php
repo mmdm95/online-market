@@ -21,7 +21,7 @@ use Sim\I18n\ISOLanguageCodes;
  *     1.2.5.0 instead of 1.2.5-a
  *     1.2.5.0.1 instead of 1.2.5-a.1 (I'm not sure)
  */
-defined("APP_VERSION") OR define("APP_VERSION", "0.4.16.2");
+defined("APP_VERSION") OR define("APP_VERSION", "0.4.18.2");
 
 /***************************************
  * You can add your constants here
@@ -141,6 +141,7 @@ defined("SETTING_INDEX_TABBED_SLIDER_SIDE_IMAGE") OR define("SETTING_INDEX_TABBE
 defined("SETTING_INDEX_GENERAL_SLIDERS") OR define("SETTING_INDEX_GENERAL_SLIDERS", 'index_general_sliders');
 defined("SETTING_ABOUT_SECTION") OR define("SETTING_ABOUT_SECTION", 'about_section');
 defined("SETTING_TOP_MENU") OR define("SETTING_TOP_MENU", 'top_menu');
+defined("SETTING_DEFAULT_IMAGE_PLACEHOLDER") OR define("SETTING_DEFAULT_IMAGE_PLACEHOLDER", 'default_image_placeholder');
 
 // define all roles
 defined("ROLE_DEVELOPER") OR define("ROLE_DEVELOPER", 'developer');

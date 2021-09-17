@@ -217,8 +217,16 @@ class UserController extends AbstractAdminController implements IDatatableContro
          */
         $agent = container()->get(Agent::class);
         if (!$agent->isRobot()) {
-            if ($auth->userHasRole(ROLE_DEVELOPER) ||
-                $auth->userHasRole(ROLE_SUPER_USER, $id)) {
+            if ($auth->userHasRole(ROLE_DEVELOPER) && !$auth->userHasRole(ROLE_DEVELOPER, $id)) {
+                $handler = new GeneralAjaxRemoveHandler();
+                $resourceHandler = $handler->handle(BaseModel::TBL_USERS, $id);
+            } elseif (
+                $auth->userHasRole(ROLE_SUPER_USER) &&
+                (
+                    !$auth->userHasRole(ROLE_DEVELOPER, $id) ||
+                    !$auth->userHasRole(ROLE_SUPER_USER, $id)
+                )
+            ) {
                 $handler = new GeneralAjaxRemoveHandler();
                 $resourceHandler = $handler->handle(BaseModel::TBL_USERS, $id);
             } else {
@@ -268,6 +276,9 @@ class UserController extends AbstractAdminController implements IDatatableContro
                      */
                     $auth = container()->get('auth_admin');
 
+                    $countWhere = '';
+                    $countBindValues = [];
+
                     if (!$auth->userHasRole(ROLE_DEVELOPER)) {
                         if (!empty($where)) {
                             $where .= ' AND ';
@@ -282,18 +293,32 @@ class UserController extends AbstractAdminController implements IDatatableContro
                         $bindValues = array_merge($bindValues, [
                             'hidden' => DB_YES,
                         ]);
+
+                        $countWhere .= ' u.is_deleted<>:del';
+                        $countBindValues = array_merge($countBindValues, [
+                            'del' => DB_YES,
+                        ]);
+                        $countWhere .= ' AND u.is_hidden<>:hidden';
+                        $countBindValues = array_merge($countBindValues, [
+                            'hidden' => DB_YES,
+                        ]);
+                    }
+
+                    $roleWhere = '';
+                    $roleBindValues = [];
+                    if (!$auth->userHasRole(ROLE_DEVELOPER) && !$auth->userHasRole(ROLE_SUPER_USER)) {
+                        $roleWhere .= 'r.show_to_user=:stu';
+                        $roleBindValues['stu'] = DB_YES;
                     }
 
                     $data = $userModel->getUsers($cols, $where, $bindValues, $limit, $offset, $order);
                     // get user roles and put it to user object
                     foreach ($data as $k => &$user) {
-                        $user['role_name'] = $userModel->getUserRoles($user['id'], 'r.show_to_user=:stu', [
-                            'stu' => DB_YES,
-                        ], ['r.description']);
+                        $user['role_name'] = $userModel->getUserRoles($user['id'], $roleWhere, $roleBindValues, ['r.description']);
                     }
                     //-----
                     $recordsFiltered = $userModel->getUsersCount($where, $bindValues);
-                    $recordsTotal = $userModel->getUsersCount();
+                    $recordsTotal = $userModel->getUsersCount($countWhere, $countBindValues);
 
                     return [$data, $recordsFiltered, $recordsTotal];
                 });

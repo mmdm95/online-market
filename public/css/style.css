@@ -6002,6 +6002,7 @@ footer .widget_title {
     -webkit-transition: all 0.3s ease-in-out;
     -ms-transition: all 0.3s ease-in-out;
     transition: all 0.3s ease-in-out;
+    width: 100%;
 }
 
 .product_img .product_hover_img {
@@ -6156,6 +6157,7 @@ footer .widget_title {
 .product_img {
     position: relative;
     overflow: hidden;
+    min-height: 200px;
 }
 
 .product_img::before {
@@ -6833,6 +6835,7 @@ footer .widget_title {
     float: left;
     width: 100%;
     max-width: 280px;
+    min-height: unset;
 }
 
 .shop_container.list .product .product_title {

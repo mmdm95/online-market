@@ -12,7 +12,7 @@ $validator = form_validator();
         <?php load_partial('admin/card-header', ['header_title' => 'ویرایش کاربر']); ?>
 
         <div class="card-body">
-            <form action="<?= url('admin.user.edit') . $user['id']; ?>" method="post">
+            <form action="<?= url('admin.user.edit', ['id' => $user['id']])->getRelativeUrlTrimmed(); ?>" method="post">
                 <?php load_partial('admin/message/message-form', [
                     'errors' => $user_edit_errors ?? [],
                     'success' => $user_edit_success ?? '',

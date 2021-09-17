@@ -359,7 +359,7 @@ use Sim\Utils\StringUtil;
                         <table class="table table-bordered">
                             <?php foreach ($property['children'] as $child): ?>
                                 <tr>
-                                    <td>
+                                    <td width="28%">
                                         <?= $child['title']; ?>
                                     </td>
                                     <td class="p-0">

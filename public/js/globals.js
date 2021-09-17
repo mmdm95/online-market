@@ -856,16 +856,16 @@ window.MyGlobalVariables = {
                 replaceFormAliases: function (errors, mapping) {
                     for (var attrName in errors) {
                         if (errors.hasOwnProperty(attrName)) {
-                            for (var i = 0; i < errors[attrName].length; i++) {
-                                (function (i) {
+                            for (var constraint in errors[attrName]) {
+                                if(errors[attrName].hasOwnProperty(constraint)) {
                                     for (var alias in mapping) {
                                         if (mapping.hasOwnProperty(alias)) {
-                                            errors[attrName][i] = errors[attrName][i].replace(
+                                            errors[attrName][constraint] = errors[attrName][constraint].replace(
                                                 alias,
                                                 mapping[alias]);
                                         }
                                     }
-                                })(i);
+                                }
                             }
                         }
                     }

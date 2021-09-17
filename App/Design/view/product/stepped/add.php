@@ -19,11 +19,11 @@ $validator = form_validator();
                 ]); ?>
 
                 <?php load_partial('admin/message/message-info', [
-                    'info' => 'حداقل یکی از دو فیلد ' .
+                    'info' => 'وارد کردن یکی از دو فیلد ' .
                         '<span class="badge bg-white text-dark mx-1">حداقل تعداد در سبد خرید</span>' .
                         ' یا' .
                         '<span class="badge bg-white text-dark mx-1">حداکثر تعداد در سبد خرید</span>' .
-                        ' باید وارد شود.',
+                        ' الزامی است',
                     'dismissible' => false,
                 ]); ?>
 

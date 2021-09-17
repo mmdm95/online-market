@@ -23,7 +23,7 @@ $validator = form_validator();
                         '<span class="badge bg-white text-dark mx-1">حداقل تعداد در سبد خرید</span>' .
                         ' یا' .
                         '<span class="badge bg-white text-dark mx-1">حداکثر تعداد در سبد خرید</span>' .
-                        ' الزامی است.',
+                        ' الزامی است',
                     'dismissible' => false,
                 ]); ?>
 

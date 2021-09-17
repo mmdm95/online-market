@@ -13,7 +13,8 @@
                 'id' => $item['product_id'],
                 'slug' => $item['slug'],
             ]); ?>" <?= ($new_tab ?? false) ? 'target="_blank"' : ''; ?>>
-                <img src="" data-src="<?= url('image.show') . $item['image']; ?>"
+                <img src="<?= (config()->get('settings.default_image_placeholder.value') != '') ? url('image.show', ['filename' => config()->get('settings.default_image_placeholder.value')]) : ''; ?>"
+                     data-src="<?= url('image.show') . $item['image']; ?>"
                      alt="<?= $item['title']; ?>" class="lazy">
             </a>
 
