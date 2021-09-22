@@ -41,7 +41,7 @@ use Sim\Utils\StringUtil;
                             </select>
                         </div>
                         <div class="text-right">
-                            <button type="submit" name="changeInvoiceStatusBtn" class="btn bg-indigo-400">
+                            <button type="submit" name="changeInvoiceStatusBtn" class="btn bg-indigo-400 btn-show-loading">
                                 تغییر وضعیت پرداخت
                             </button>
                         </div>
@@ -83,7 +83,7 @@ use Sim\Utils\StringUtil;
                             </select>
                         </div>
                         <div class="text-right">
-                            <button type="submit" name="changeSendStatusBtn" class="btn bg-success-400">
+                            <button type="submit" name="changeSendStatusBtn" class="btn bg-success-400 btn-show-loading">
                                 تغییر وضعیت ارسال
                             </button>
                         </div>
@@ -324,7 +324,7 @@ use Sim\Utils\StringUtil;
                         </td>
 
                         <?php
-                        $isChecked = is_value_checked($item['is_returnable']);
+                        $isChecked = is_value_checked($item['is_returned']);
                         ?>
                         <td class="<?= $isChecked ? 'table-success' : 'table-warning'; ?>">
                             <?php if ($isChecked): ?>

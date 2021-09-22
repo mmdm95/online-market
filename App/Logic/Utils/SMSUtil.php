@@ -17,7 +17,7 @@ class SMSUtil implements ISMS
      * @throws \DI\DependencyException
      * @throws \DI\NotFoundException
      */
-    public static function send(array $numbers, string $body): bool
+    public static function send(array $numbers, string $body)
     {
         /**
          * @var NiazPardaz $sms
@@ -31,13 +31,13 @@ class SMSUtil implements ISMS
 
         $sms->send($provider);
 
-        return $sms->isSuccessful();
+        return $sms;
     }
 
     /**
      * @param array $numbers
      * @param string $body
-     * @param $status
+     * @param AbstractSMS $smsFactory
      * @param $type
      * @param $senderType
      * @throws \DI\DependencyException
@@ -49,7 +49,7 @@ class SMSUtil implements ISMS
     public static function logSMS(
         array $numbers,
         string $body,
-        $status,
+        AbstractSMS $smsFactory,
         $type,
         $senderType
     )
@@ -65,13 +65,18 @@ class SMSUtil implements ISMS
          */
         $smsModel = container()->get(SMSLogsModel::class);
 
+        // contains [code] and [message]
+        $status = $smsFactory->getStatus();
+
         $arr = [
             'sms_panel_number' => config()->get('sms.niaz.from') ?: 'unknown',
             'sms_panel_name' => $sms->getPanelName(),
             'type' => $type,
-            'status' => $status,
+            'status' => $smsFactory->isSuccessful(),
             'message' => $body,
             'numbers' => implode(',', $numbers),
+            'code' => $status['code'] ?? null,
+            'result_msg' => $status['message'] ?? '',
             'sender' => $senderType,
             'sent_at' => time(),
         ];

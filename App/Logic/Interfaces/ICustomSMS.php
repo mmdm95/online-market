@@ -7,7 +7,7 @@ interface ICustomSMS
     /**
      * @param array $numbers
      * @param string $body
-     * @return bool
+     * @return mixed
      */
-    public static function send(array $numbers, string $body): bool;
+    public static function send(array $numbers, string $body);
 }

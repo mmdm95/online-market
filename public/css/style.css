@@ -9116,8 +9116,15 @@ body.switch-open {
 }
 
 .selectric-selectric-dropdown-products .selectric-items {
-    top: calc(100% + .75rem);
     border-radius: .75rem;
+}
+
+.selectric-selectric-dropdown-products.selectric-below .selectric-items {
+    top: calc(100% + .75rem);
+}
+
+.selectric-selectric-dropdown-products.selectric-above .selectric-items {
+    bottom: calc(100% + .75rem);
 }
 
 .selectric-selectric-dropdown-products .selectric-items li:first-child {

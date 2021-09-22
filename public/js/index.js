@@ -674,6 +674,7 @@
         // REGISTER FORM - STEP 1
         //---------------------------------------------------------------
         shop.forms.submitForm('register', constraints.register, function () {
+            loaderId = shop.showLoader();
             return true;
         }, function (errors) {
             shop.forms.showFormErrors(errors);
@@ -684,6 +685,7 @@
         // REGISTER FORM - STEP 3
         //---------------------------------------------------------------
         shop.forms.submitForm('registerStep3', constraints.registerStep3, function () {
+            loaderId = shop.showLoader();
             return true;
         }, function (errors) {
             shop.forms.showFormErrors(errors);
@@ -694,6 +696,7 @@
         // FORGET PASSWORD FORM - STEP 1
         //---------------------------------------------------------------
         shop.forms.submitForm('forgetStep1', constraints.forgetStep1, function () {
+            loaderId = shop.showLoader();
             return true;
         }, function (errors) {
             shop.forms.showFormErrors(errors);
@@ -704,6 +707,7 @@
         // FORGET PASSWORD FORM - STEP 3
         //---------------------------------------------------------------
         shop.forms.submitForm('forgetStep3', constraints.forgetStep3, function () {
+            loaderId = shop.showLoader();
             return true;
         }, function (errors) {
             shop.forms.showFormErrors(errors);
@@ -743,6 +747,7 @@
         // CONTACT US FORM
         //---------------------------------------------------------------
         shop.forms.submitForm('contactUs', constraints.contactUs, function () {
+            loaderId = shop.showLoader();
             return true;
         }, function (errors) {
             shop.forms.showFormErrors(errors);
@@ -755,6 +760,7 @@
         // COMPLAINT FORM
         //---------------------------------------------------------------
         shop.forms.submitForm('complaint', constraints.complaint, function () {
+            loaderId = shop.showLoader();
             return true;
         }, function (errors) {
             shop.forms.showFormErrors(errors);
@@ -882,6 +888,7 @@
         // CHANGE USER INFO FORM
         //---------------------------------------------------------------
         shop.forms.submitForm('changeUserInfo', constraints.changeUserInfo, function () {
+            loaderId = shop.showLoader();
             return true;
         }, function (errors) {
             shop.forms.showFormErrors(errors);
@@ -895,6 +902,7 @@
         // CHANGE USER PASSWORD FORM
         //---------------------------------------------------------------
         shop.forms.submitForm('changeUserPassword', constraints.changeUserPassword, function () {
+            loaderId = shop.showLoader();
             return true;
         }, function (errors) {
             shop.forms.showFormErrors(errors);
@@ -905,6 +913,7 @@
         // CHANGE USER OTHER SETTING FORM
         //---------------------------------------------------------------
         shop.forms.submitForm('recoverType', constraints.recoverType, function () {
+            loaderId = shop.showLoader();
             return true;
         }, function (errors) {
             shop.forms.showFormErrors(errors);
@@ -915,6 +924,7 @@
         // EDIT USER COMMENT FORM
         //---------------------------------------------------------------
         shop.forms.submitForm('userEditComment', constraints.userEditComment, function () {
+            loaderId = shop.showLoader();
             return true;
         }, function (errors) {
             shop.forms.showFormErrors(errors);

@@ -6,6 +6,7 @@ use App\Logic\Abstracts\AbstractHomeController;
 use App\Logic\Forms\Order\CheckoutForm;
 use App\Logic\Handlers\GeneralAjaxFormHandler;
 use App\Logic\Handlers\ResourceHandler;
+use App\Logic\Middlewares\Logic\AllowCheckoutMiddleware;
 use App\Logic\Models\AddressModel;
 use App\Logic\Models\OrderModel;
 use App\Logic\Models\PaymentMethodModel;
@@ -21,6 +22,7 @@ use Sim\Exceptions\PathManager\PathNotRegisteredException;
 use Sim\Interfaces\IFileNotExistsException;
 use Sim\Interfaces\IInvalidVariableNameException;
 use Sim\Payment\Providers\Sadad\SadadRequestResultProvider;
+use Sim\Payment\Providers\TAP\Payment\TapRequestResultProvider;
 
 class CheckoutController extends AbstractHomeController
 {
@@ -61,6 +63,9 @@ class CheckoutController extends AbstractHomeController
      */
     public function checkout()
     {
+        $this->setMiddleWare(AllowCheckoutMiddleware::class);
+        $this->middlewareResult();
+
         /**
          * @var PaymentMethodModel $methodModel
          */
@@ -87,10 +92,15 @@ class CheckoutController extends AbstractHomeController
 
     /**
      * Issue a factor, reserve products and make connection to gateway
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
      */
     public function issuingFactorNConnectToGateway()
     {
         $resourceHandler = new ResourceHandler();
+
+        $this->setMiddleWare(AllowCheckoutMiddleware::class, [false]);
+        $this->middlewareResult();
 
         try {
             /**
@@ -152,9 +162,12 @@ class CheckoutController extends AbstractHomeController
                                 METHOD_TYPE_GATEWAY_MABNA,
                                 METHOD_TYPE_GATEWAY_ZARINPAL,
                                 METHOD_TYPE_GATEWAY_SADAD,
+                                METHOD_TYPE_GATEWAY_TAP,
                             ]
                         )
                     ) {
+                        $canContinue = true;
+
                         $url = '#';
                         $inputs = [];
                         $redirect = false;
@@ -170,32 +183,42 @@ class CheckoutController extends AbstractHomeController
                                 $url = $gatewayInfo->getUrl();
                                 $redirect = true;
                                 break;
+                            case METHOD_TYPE_GATEWAY_TAP:
+                                /**
+                                 * @var TapRequestResultProvider $gatewayInfo
+                                 */
+                                $url = $gatewayInfo->getUrl();
+                                $redirect = true;
+                                break;
+                            default:
+                                $resourceHandler
+                                    ->type(RESPONSE_TYPE_WARNING)
+                                    ->data('روش پرداخت انتخاب شده نامعتبر است!');
+                                $canContinue = false;
+                                break;
                         }
 
-                        // remove all cart items
-                        cart()->destroy();
-                        // remove order array that stored before to prevent any error due to traces
-                        session()->remove(SESSION_ORDER_ARR_INFO);
-                        // remove other traces
-                        session()->remove(SESSION_APPLIED_COUPON_CODE);
-                        session()->remove(SESSION_APPLIED_POST_PRICE);
+                        if ($canContinue) {
+                            // remove all cart items
+                            cart()->destroy();
+                            // remove order array that stored before to prevent any error due to traces
+                            session()->remove(SESSION_ORDER_ARR_INFO);
+                            // remove other traces
+                            session()->remove(SESSION_APPLIED_COUPON_CODE);
+                            session()->remove(SESSION_APPLIED_POST_PRICE);
 
-                        $resourceHandler
-                            ->type(RESPONSE_TYPE_SUCCESS)
-                            ->data([
-                                'redirect' => $redirect,
-                                'url' => $url,
-                                'inputs' => $inputs,
-                            ]);
+                            $resourceHandler
+                                ->type(RESPONSE_TYPE_SUCCESS)
+                                ->data([
+                                    'redirect' => $redirect,
+                                    'url' => $url,
+                                    'inputs' => $inputs,
+                                ]);
+                        } else {
+                            $this->removeIssuedFactor();
+                        }
                     } else {
-                        /**
-                         * @var OrderModel $orderModel
-                         */
-                        $orderModel = container()->get(OrderModel::class);
-                        $orderArr = session()->get(SESSION_ORDER_ARR_INFO);
-                        // reverse all db action
-                        $orderModel->removeIssuedFactor($orderArr['code']);
-                        session()->remove(SESSION_ORDER_ARR_INFO);
+                        $this->removeIssuedFactor();
                         $resourceHandler
                             ->type(RESPONSE_TYPE_ERROR)
                             ->errorMessage('خطا در ارتباط با درگاه بانک، لطفا دوباره تلاش کنید.');
@@ -221,10 +244,15 @@ class CheckoutController extends AbstractHomeController
      *
      * @throws IFileNotExistsException
      * @throws IInvalidVariableNameException
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
      */
     public function calculateSendPrice()
     {
         $resourceHandler = new ResourceHandler();
+
+        $this->setMiddleWare(AllowCheckoutMiddleware::class, [false]);
+        $this->middlewareResult();
 
         try {
             /**
@@ -285,5 +313,21 @@ class CheckoutController extends AbstractHomeController
         }
 
         response()->json($resourceHandler->getReturnData());
+    }
+
+    /**
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
+     */
+    private function removeIssuedFactor()
+    {
+        /**
+         * @var OrderModel $orderModel
+         */
+        $orderModel = container()->get(OrderModel::class);
+        $orderArr = session()->get(SESSION_ORDER_ARR_INFO);
+        // reverse all db action
+        $orderModel->removeIssuedFactor($orderArr['code']);
+        session()->remove(SESSION_ORDER_ARR_INFO);
     }
 }

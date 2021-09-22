@@ -335,6 +335,7 @@
                             shop.toasts.toast('لطفا چند لحظه صبر کنید...', {
                                 type: 'info',
                                 layout: 'topCenter',
+                                timeout: false,
                             });
 
                             // Simulate an HTTP redirect:

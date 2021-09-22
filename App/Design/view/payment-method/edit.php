@@ -10,7 +10,7 @@ $validator = form_validator();
         <?php load_partial('admin/card-header', ['header_title' => 'ویرایش روش پرداخت']); ?>
 
         <div class="card-body">
-            <form action="<?= url('admin.pay_method.edit')->getRelativeUrl() . $payment['id']; ?>" method="post"
+            <form action="<?= url('admin.pay_method.edit', ['id' => $payment['id']])->getRelativeUrlTrimmed(); ?>" method="post"
                   id="__form_edit_pay_method">
                 <?php load_partial('admin/message/message-form', [
                     'errors' => $pay_method_edit_errors ?? [],
@@ -182,11 +182,6 @@ $validator = form_validator();
                                         <?php
                                         $loginAccount = $validator->setInput('inp-edit-pay-method-tap-login-account');
                                         ?>
-                                        <?php if (METHOD_TYPE_GATEWAY_TAP == $method): ?>
-                                            <?php
-                                            $loginAccount = $loginAccount ?: ($payment['meta_parameters']['login_account'] ?: '');
-                                            ?>
-                                        <?php endif; ?>
                                         <div class="col-lg-6 mb-3">
                                             <label>
                                                 <span class="text-danger">*</span>

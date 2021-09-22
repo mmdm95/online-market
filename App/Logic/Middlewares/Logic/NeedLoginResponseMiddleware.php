@@ -21,8 +21,8 @@ class NeedLoginResponseMiddleware extends AbstractMiddleware
          */
         $auth = container()->get('auth_home');
 
-        $resourceHandler = new ResourceHandler();
         if (!$auth->isLoggedIn()) {
+            $resourceHandler = new ResourceHandler();
             $resourceHandler->type(RESPONSE_TYPE_WARNING)->data('لطفا ابتدا به پنل کاربری خود وارد شوید.');
             response()->json($resourceHandler->getReturnData());
             return false;

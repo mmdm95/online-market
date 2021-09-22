@@ -2,8 +2,6 @@
 
 namespace Sim\Abstracts\Mvc\Controller;
 
-use Pecee\Http\Response;
-use Pecee\SimpleRouter\SimpleRouter;
 use Sim\Abstracts\Mvc\Controller\Middleware\AbstractMiddleware;
 use Sim\Exceptions\ConfigManager\ConfigNotRegisteredException;
 use Sim\Exceptions\Mvc\Controller\ControllerException;
@@ -229,12 +227,14 @@ abstract class AbstractController implements ITemplateFactory, ITemplateRenderer
 
     /**
      * {@inheritdoc}
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
      */
     public function middlewareResult(): bool
     {
         $this->makeMiddlewareNested();
         if (!$this->hasMiddleware()) return true;
-        return $this->middleware_bottleneck->handle(request());
+        return $this->middleware_bottleneck->handle(request(), ...$this->middlewareParameters);
     }
 
     /**
@@ -255,8 +255,10 @@ abstract class AbstractController implements ITemplateFactory, ITemplateRenderer
      * @throws ControllerException
      * @throws IFileNotExistsException
      * @throws IInvalidVariableNameException
-     * @throws \ReflectionException
      * @throws PathNotRegisteredException
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
+     * @throws \ReflectionException
      */
     public function render(array $arguments = [], $middlewareErrorCallback = null): string
     {
@@ -295,6 +297,8 @@ abstract class AbstractController implements ITemplateFactory, ITemplateRenderer
      * @throws IFileNotExistsException
      * @throws IInvalidVariableNameException
      * @throws PathNotRegisteredException
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
      * @throws \ReflectionException
      */
     public function show404(array $arguments = [], ?string $layout = null, string $template = ''): string
@@ -325,6 +329,8 @@ abstract class AbstractController implements ITemplateFactory, ITemplateRenderer
      * @throws IFileNotExistsException
      * @throws IInvalidVariableNameException
      * @throws PathNotRegisteredException
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
      * @throws \ReflectionException
      */
     public function show500(array $arguments = [], ?string $layout = null, string $template = ''): string
@@ -345,6 +351,9 @@ abstract class AbstractController implements ITemplateFactory, ITemplateRenderer
 
     /**
      * Make all middleware inside each other to check them by calling one of them
+     *
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
      */
     private function makeMiddlewareNested()
     {

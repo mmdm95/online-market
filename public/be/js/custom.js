@@ -2233,6 +2233,10 @@
 
         //-----------------------------------------------------------------
 
+        $('.btn-show-loading').on('click' + variables.namespace, function () {
+            loaderId = admin.showLoader();
+        });
+
         $('.copy-to-clipboard').on('click' + variables.namespace, function () {
             var target;
             target = $($(this).attr('data-clipboard-target'));

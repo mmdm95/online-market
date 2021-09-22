@@ -613,7 +613,7 @@ shop = new window.TheShop();
                         sizeSpan = '<span class="product_size_switch mx-2"><span>' + size + '</span></span>';
                     }
                     if (guarantee) {
-                        guaranteeSpan = '<p class="mx-2 d-inline-block pr_desc">' + guarantee + '</p>';
+                        guaranteeSpan = '<p class="mx-2 mb-0 d-inline-block pr_desc">' + guarantee + '</p>';
                     }
 
                     return str + colorSpan + sizeSpan + guaranteeSpan;
@@ -643,7 +643,7 @@ shop = new window.TheShop();
                         sizeSpan = '<span class="product_size_switch mx-2"><span>' + size + '</span></span>';
                     }
                     if (guarantee) {
-                        guaranteeSpan = '<p class="mx-2 d-inline-block pr_desc">' + guarantee + '</p>';
+                        guaranteeSpan = '<p class="mx-2 mb-0 d-inline-block pr_desc">' + guarantee + '</p>';
                     }
 
                     return str + colorSpan + sizeSpan + guaranteeSpan;
