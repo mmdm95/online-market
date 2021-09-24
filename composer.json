@@ -51,6 +51,7 @@
     "predis/predis": "v1.1.6",
     "php-di/php-di": "^6.3",
     "fzaninotto/faker": "^1.9",
-    "phpoffice/phpspreadsheet": "^1.18"
+    "phpoffice/phpspreadsheet": "^1.18",
+    "mpdf/mpdf": "^8.0"
   }
 }

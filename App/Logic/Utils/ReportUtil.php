@@ -6,6 +6,10 @@ use App\Logic\Models\OrderModel;
 use App\Logic\Models\ProductModel;
 use App\Logic\Models\UserModel;
 use App\Logic\Models\WalletModel;
+use Mpdf\Config\ConfigVariables;
+use Mpdf\Config\FontVariables;
+use Mpdf\Mpdf;
+use Mpdf\Output\Destination;
 use Sim\File\Download;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx as WriterXlsx;
 use Sim\Utils\StringUtil;
@@ -494,6 +498,24 @@ class ReportUtil
     }
 
     /**
+     * @param $order
+     * @param $html
+     * @param string|null $watermark
+     * @throws \Mpdf\MpdfException
+     * @throws \Sim\Exceptions\FileNotExistsException
+     * @throws \Sim\Exceptions\PathManager\PathNotRegisteredException
+     * @throws \Sim\Interfaces\IInvalidVariableNameException
+     */
+    public static function exportOrderPdf($order, $html, ?string $watermark = null)
+    {
+        $filename = 'آیتم‌های سفارش شماره ';
+        $filename .= $order['code'] . ' ';
+        $filename .= Jdf::jdate(REPORT_TIME_FORMAT);
+
+        self::exportPdf($filename, $html, $watermark);
+    }
+
+    /**
      * @param $array
      * @param $filename
      * @param $downloadFilename
@@ -526,7 +548,53 @@ class ReportUtil
         $writer = new WriterXlsx($spreadsheet);
         $writer->save($reportPath . $name . ".xlsx");
         //
-        ReportUtil::downloadExcel($reportPath . $name . '.xlsx', $downloadFilename);
+        ReportUtil::downloadExport($reportPath . $name . '.xlsx', $downloadFilename);
+    }
+
+    /**
+     * @param $filename
+     * @param $html
+     * @param string|null $watermark
+     * @throws \Mpdf\MpdfException
+     * @throws \Sim\Exceptions\FileNotExistsException
+     * @throws \Sim\Exceptions\PathManager\PathNotRegisteredException
+     * @throws \Sim\Interfaces\IInvalidVariableNameException
+     */
+    private static function exportPdf($filename, $html, ?string $watermark = null)
+    {
+        $defaultConfig = (new ConfigVariables())->getDefaults();
+        $fontDirs = $defaultConfig['fontDir'];
+
+        $defaultFontConfig = (new FontVariables())->getDefaults();
+        $fontData = $defaultFontConfig['fontdata'];
+
+        $mpdf = new Mpdf([
+            'mode' => 'utf-8',
+            'format' => 'A4',
+            'fontDir' => array_merge($fontDirs, [
+                path()->get('fonts'),
+            ]),
+            'fontdata' => $fontData + [
+                    'IRS' => [
+                        'R' => 'IRANSansWeb.ttf',
+                        'B' => 'IRANSansWeb_Bold.ttf',
+                    ]
+                ],
+            'default_font' => 'IRS'
+        ]);
+        $mpdf->SetFont('IRS');
+        $mpdf->SetDirectionality('rtl');
+        $mpdf->CSSselectMedia = 'mpdf';
+
+        if (!empty(trim((string)$watermark))) {
+            $mpdf->SetWatermarkText($watermark);
+            $mpdf->showWatermarkText = true;
+            $mpdf->watermarkTextAlpha = 0.1;
+        }
+
+        $mpdf->WriteHTML($html);
+
+        $mpdf->Output($filename . '.pdf', Destination::DOWNLOAD);
     }
 
     /**
@@ -548,7 +616,7 @@ class ReportUtil
      * @param $name
      * @throws \Sim\File\Interfaces\IFileException
      */
-    private static function downloadExcel($path, $name)
+    private static function downloadExport($path, $name)
     {
         $download = Download::makeDownloadFromPath($path);
         $download->download($name);

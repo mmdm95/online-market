@@ -10,6 +10,7 @@ use App\Logic\Interfaces\Report\IReporter;
 use App\Logic\Interfaces\Report\IReportExcel;
 use App\Logic\Interfaces\Report\IReportFilter;
 use App\Logic\Interfaces\Report\IReportPdf;
+use App\Logic\Models\GatewayModel;
 use App\Logic\Models\OrderBadgeModel;
 use App\Logic\Models\OrderModel;
 use App\Logic\Utils\Jdf;
@@ -132,9 +133,65 @@ class ReportOrderController extends AbstractAdminController implements
         ReportUtil::exportOrdersExcel($where, $bindValues);
     }
 
-    public function exportPdfOne()
+    /**
+     * @param $id
+     * @throws ConfigNotRegisteredException
+     * @throws ControllerException
+     * @throws IFileNotExistsException
+     * @throws IInvalidVariableNameException
+     * @throws PathNotRegisteredException
+     * @throws ReflectionException
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
+     * @throws \Mpdf\MpdfException
+     */
+    public function exportPdfOne($id)
     {
-        not_implemented_yet();
+        /**
+         * @var OrderModel $orderModel
+         */
+        $orderModel = container()->get(OrderModel::class);
+        /**
+         * @var GatewayModel $gatewayModel
+         */
+        $gatewayModel = container()->get(GatewayModel::class);
+
+        $order = $orderModel->getFirst(['*'], 'id=:id', ['id' => $id]);
+
+        if (count($order)) {
+            $gatewayInfo = $gatewayModel->getFirst(['*'], 'order_code=:code', ['code' => $order['code']], ['issue_date DESC']);
+            $orderItems = $orderModel->getOrderItems(['oi.*'], 'order_code=:code', ['code' => $order['code']]);
+
+            $order['info']['successful'] = [];
+            $order['info']['failed'] = [];
+
+            // filter successful order info first then if there is nothing, find last failed info
+            foreach ($gatewayInfo as $info) {
+                if (DB_YES == $info['is_success']) {
+                    $order['info']['successful'] = $info;
+                } else {
+                    $order['info']['failed'] = $info;
+                }
+
+                if (!empty($order['info']['successful']) && !empty($order['info']['failed'])) break;
+            }
+
+            if (count($orderItems)) {
+                $html = $this
+                    ->setLayout($this->report_layout)
+                    ->setTemplate('partial/admin/report-templates/order-pdf')
+                    ->render([
+                        'title' => 'گزارش آیتم‌های سفارش به شماره ' . $order['code'],
+                        'order' => $order,
+                        'items' => $orderItems,
+                    ]);
+                ReportUtil::exportOrderPdf($order, $html, config()->get('settings.title.value'));
+            } else {
+                show_500('هیچ سفارشی پیدا نشد!');
+            }
+        } else {
+            show_500('هیچ سفارشی پیدا نشد!');
+        }
     }
 
     /**

@@ -93,4 +93,16 @@ return [
             ],
         ],
     ],
+
+    'partial/admin/report-templates/order-pdf' => [
+        'css' => [
+            'top' => [
+                e(
+                    '<link href="' .
+                    asset_path('be/css/report.css') .
+                    '" rel="stylesheet" type="text/css"> media="mpdf"'
+                ),
+            ],
+        ],
+    ],
 ];

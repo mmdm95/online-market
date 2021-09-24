@@ -41,7 +41,8 @@ use Sim\Utils\StringUtil;
                             </select>
                         </div>
                         <div class="text-right">
-                            <button type="submit" name="changeInvoiceStatusBtn" class="btn bg-indigo-400 btn-show-loading">
+                            <button type="submit" name="changeInvoiceStatusBtn"
+                                    class="btn bg-indigo-400 btn-show-loading">
                                 تغییر وضعیت پرداخت
                             </button>
                         </div>
@@ -83,7 +84,8 @@ use Sim\Utils\StringUtil;
                             </select>
                         </div>
                         <div class="text-right">
-                            <button type="submit" name="changeSendStatusBtn" class="btn bg-success-400 btn-show-loading">
+                            <button type="submit" name="changeSendStatusBtn"
+                                    class="btn bg-success-400 btn-show-loading">
                                 تغییر وضعیت ارسال
                             </button>
                         </div>
@@ -252,14 +254,12 @@ use Sim\Utils\StringUtil;
         <div class="card-header bg-transparent header-elements-inline">
             <h6 class="card-title">آیتم‌های خریداری شده</h6>
             <div class="header-elements">
-                <form action="#" method="post">
-                    <input type="hidden" name="csrf_token" value="<?= csrf_token(); ?>" data-ignored>
-                    <button type="button" name=""
-                            class="btn btn-sm btn-danger">
-                        <i class="icon-file-pdf mr-2"></i>
-                        دانلود فاکتور
-                    </button>
-                </form>
+                <button type="button" id="excelPdfOrder"
+                        class="btn btn-sm bg-orange-800"
+                        data-export-id="<?= $order_id ?>">
+                    <i class="icon-file-pdf mr-2"></i>
+                    دانلود فاکتور
+                </button>
             </div>
         </div>
 

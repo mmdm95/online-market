@@ -49,6 +49,9 @@ return [
     // Public path(s)
     'public' => BASE_ROOT . 'public/',
 
+    // Fonts path(s)
+    'fonts' => BASE_ROOT . 'public/fonts/',
+
     // Resource path(s)
     'resource' => BASE_ROOT . 'resource/',
 

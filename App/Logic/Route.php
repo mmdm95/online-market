@@ -642,7 +642,7 @@ class Route implements IInitialize
              */
             Router::form('/login', [LoginController::class, 'index'])->name('home.login');
             Router::form('/forget-password/{step?}', [RecoverPassController::class, 'forgetPassword'])->where([
-                'step' => 'step[1|2|3|4]',
+                'step' => 'step(1|2|3|4)',
             ])->name('home.forget-password');
             Router::form('/signup', [RegisterController::class, 'index'])->name('home.signup');
             Router::form('/signup/code', [RegisterController::class, 'enterCode'])->name('home.signup.code');
@@ -1189,6 +1189,8 @@ class Route implements IInitialize
                     ->name('ajax.admin.report.orders.filter.clear');
                 Router::get('/report/orders/export/excel', [AdminReportOrderController::class, 'exportExcel'])
                     ->name('ajax.admin.report.orders.export.excel');
+                Router::get('/report/order/export/pdf/{id}', [AdminReportOrderController::class, 'exportPdfOne'])
+                    ->name('ajax.admin.report.order.export.pdf');
                 /**
                  * Report Wallet Route
                  */

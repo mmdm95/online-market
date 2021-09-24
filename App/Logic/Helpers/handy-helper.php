@@ -39,6 +39,25 @@ function show_403()
 }
 
 /**
+ * Show 404 error somehow
+ */
+function show_404()
+{
+    if (request()->isAjax()) {
+        $resourceHandler = new ResourceHandler();
+        $resourceHandler
+            ->type(RESPONSE_TYPE_ERROR)
+            ->errorMessage('صفحه پیدا نشد');
+        response()->httpCode(404)->json($resourceHandler->getReturnData());
+    } else {
+        header_remove("Content-Type");
+        response()->httpCode(404)->header('HTTP/1.1 404 Not Found');
+        echo 'صفحه پیدا نشد';
+        exit(0);
+    }
+}
+
+/**
  * Show 500 error somehow
  * @param string|null $content
  */

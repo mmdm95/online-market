@@ -111,6 +111,7 @@
                 filter: '/ajax/report/orders/filter',
                 filterClear: '/ajax/report/orders/filter/clear',
                 excelExport: '/ajax/report/orders/export/excel',
+                pdfExport: '/ajax/report/order/export/pdf',
             },
             wallet: {
                 filter: '/ajax/report/wallet/filter',
@@ -3652,18 +3653,18 @@
             currentModal = $('#modal_form_edit_faq');
             // clear element after each call
             $(variables.elements.editFaq.form).get(0).reset();
-            if (id && currentModalcurrentModalcurrentModal.length) {
+            if (id && currentModal.length) {
                 admin.request(variables.url.faq.get + '/' + id, 'get', function () {
                     var
                         _ = this,
-                        status = currentModalcurrentModalcurrentModal.find('[name="' + variables.elements.editFaq.inputs.status + '"]');
+                        status = currentModal.find('[name="' + variables.elements.editFaq.inputs.status + '"]');
                     if (core.objSize(_.data)) {
                         currentTable = table;
                         editFAQId = id;
                         //-----
-                        currentModalcurrentModalcurrentModal.find('[name="' + variables.elements.editFaq.inputs.question + '"]').val(_.data['question']);
+                        currentModal.find('[name="' + variables.elements.editFaq.inputs.question + '"]').val(_.data['question']);
                         currentModal.find('[name="' + variables.elements.editFaq.inputs.answer + '"]').html(_.data['answer']);
-                        currentModalcurrentModalcurrentModal.find('[name="' + variables.elements.editFaq.inputs.tags + '"]').val(_.data['tags']);
+                        currentModal.find('[name="' + variables.elements.editFaq.inputs.tags + '"]').val(_.data['tags']);
                         switcheryStatusChange(status, _.data['publish']);
                         initializeAllPlugins();
                     }
@@ -4148,6 +4149,13 @@
 
         $('#excelExport').on('click', function () {
             window.location = excelExportUrl;
+        });
+
+        $('#excelPdfOrder').on('click', function () {
+            var id = $(this).attr('data-export-id');
+            if(id) {
+                window.location = variables.url.report.order.pdfExport + '/' + id;
+            }
         });
 
         //---------------------------------------------------------------
