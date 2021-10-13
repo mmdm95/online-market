@@ -88,7 +88,7 @@ foreach ($items as $item) {
             </td>
         </tr>
         <tr>
-            <th>جمع</th>
+            <th>مبلغ قابل پرداخت</th>
             <td class="product-subtotal">
                 <?php
                 $theTotalPrice = (float)$totalPrice + (float)$couponPrice + (float)$postPrice;

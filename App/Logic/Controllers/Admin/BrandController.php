@@ -15,6 +15,7 @@ use App\Logic\Interfaces\IDatatableController;
 use App\Logic\Models\BaseModel;
 use App\Logic\Models\BrandModel;
 use App\Logic\Utils\Jdf;
+use App\Logic\Utils\LogUtil;
 use Jenssegers\Agent\Agent;
 use ReflectionException;
 use Sim\Auth\DBAuth;
@@ -218,6 +219,7 @@ class BrandController extends AbstractAdminController implements IDatatableContr
                     ->errorMessage('خطا در ارتباط با سرور، لطفا دوباره تلاش کنید.');
             }
         } catch (\Exception $e) {
+            LogUtil::logException($e, __LINE__, self::class);
             $resourceHandler
                 ->type(RESPONSE_TYPE_ERROR)
                 ->errorMessage('خطا در ارتباط با سرور، لطفا دوباره تلاش کنید.');
@@ -346,6 +348,7 @@ class BrandController extends AbstractAdminController implements IDatatableContr
                 ];
             }
         } catch (\Exception $e) {
+            LogUtil::logException($e, __LINE__, self::class);
             $response = [
                 'error' => 'خطا در ارتباط با سرور، لطفا دوباره تلاش کنید.',
             ];

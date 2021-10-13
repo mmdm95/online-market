@@ -2771,8 +2771,8 @@
                 var cps = $(".colorpicker-show-input");
                 cps.each(function () {
                     var $this = $(this);
-
-                    $this.spectrum({
+                    var parent = $this.closest('.modal');
+                    var obj = {
                         color: $this.attr('data-color') ? $this.attr('data-color') : "#2196f3",
                         cancelText: "لغو",
                         chooseText: "انتخاب",
@@ -2783,7 +2783,13 @@
                         maxSelectionSize: 5,
                         clickoutFiresChange: false,
                         showInitial: true,
-                    })
+                    };
+
+                    if (parent.length) {
+                        obj['appendTo'] = parent;
+                    }
+
+                    $this.spectrum(obj)
                 });
             }
 
@@ -4153,7 +4159,7 @@
 
         $('#excelPdfOrder').on('click', function () {
             var id = $(this).attr('data-export-id');
-            if(id) {
+            if (id) {
                 window.location = variables.url.report.order.pdfExport + '/' + id;
             }
         });

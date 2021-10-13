@@ -13,6 +13,7 @@ use App\Logic\Interfaces\IAjaxController;
 use App\Logic\Interfaces\IDatatableController;
 use App\Logic\Models\BaseModel;
 use App\Logic\Models\SecurityQuestionModel;
+use App\Logic\Utils\LogUtil;
 use Jenssegers\Agent\Agent;
 use Sim\Auth\DBAuth;
 use Sim\Auth\Interfaces\IAuth;
@@ -284,6 +285,7 @@ class SecurityQuestionController extends AbstractAdminController implements IAja
                 ];
             }
         } catch (\Exception $e) {
+            LogUtil::logException($e, __LINE__, self::class);
             $response = [
                 'error' => 'خطا در ارتباط با سرور، لطفا دوباره تلاش کنید.',
             ];

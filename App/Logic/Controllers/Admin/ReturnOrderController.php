@@ -7,6 +7,7 @@ use App\Logic\Handlers\DatatableHandler;
 use App\Logic\Interfaces\IDatatableController;
 use App\Logic\Models\ReturnOrderModel;
 use App\Logic\Utils\Jdf;
+use App\Logic\Utils\LogUtil;
 use Jenssegers\Agent\Agent;
 use Sim\Event\Interfaces\IEvent;
 use Sim\Exceptions\ConfigManager\ConfigNotRegisteredException;
@@ -223,6 +224,7 @@ class ReturnOrderController extends AbstractAdminController implements IDatatabl
                 ];
             }
         } catch (\Exception $e) {
+            LogUtil::logException($e, __LINE__, self::class);
             $response = [
                 'error' => 'خطا در ارتباط با سرور، لطفا دوباره تلاش کنید.',
             ];

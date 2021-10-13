@@ -9,7 +9,7 @@ class AllowCheckoutMiddleware extends AbstractMiddleware
 {
     public function handle(...$_): bool
     {
-        $items = cart()->getItems();
+        $items = cart()->restore(true)->getItems();
         $redirect = $_[1] ?? true;
 
         if (!count($items)) {

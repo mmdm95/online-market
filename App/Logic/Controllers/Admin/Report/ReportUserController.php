@@ -12,6 +12,7 @@ use App\Logic\Interfaces\Report\IReportFilter;
 use App\Logic\Interfaces\Report\IReportPdf;
 use App\Logic\Models\UserModel;
 use App\Logic\Utils\Jdf;
+use App\Logic\Utils\LogUtil;
 use App\Logic\Utils\ReportQBUtil;
 use App\Logic\Utils\ReportUtil;
 use Jenssegers\Agent\Agent;
@@ -131,7 +132,7 @@ class ReportUserController extends AbstractAdminController implements
         ReportUtil::exportUsersExcel($where, $bindValues);
     }
 
-    public function exportPdfOne()
+    public function exportPdfOne($id)
     {
         not_implemented_yet();
     }
@@ -250,6 +251,7 @@ class ReportUserController extends AbstractAdminController implements
                 ];
             }
         } catch (\Exception $e) {
+            LogUtil::logException($e, __LINE__, self::class);
             $response = [
                 'error' => 'خطا در ارتباط با سرور، لطفا دوباره تلاش کنید.',
             ];

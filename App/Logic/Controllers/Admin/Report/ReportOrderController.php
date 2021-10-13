@@ -14,6 +14,7 @@ use App\Logic\Models\GatewayModel;
 use App\Logic\Models\OrderBadgeModel;
 use App\Logic\Models\OrderModel;
 use App\Logic\Utils\Jdf;
+use App\Logic\Utils\LogUtil;
 use App\Logic\Utils\ReportQBUtil;
 use App\Logic\Utils\ReportUtil;
 use Jenssegers\Agent\Agent;
@@ -185,7 +186,12 @@ class ReportOrderController extends AbstractAdminController implements
                         'order' => $order,
                         'items' => $orderItems,
                     ]);
-                ReportUtil::exportOrderPdf($order, $html, config()->get('settings.title.value'));
+
+                $filename = 'آیتم‌های سفارش شماره ';
+                $filename .= $order['code'] . ' ';
+                $filename .= Jdf::jdate(REPORT_TIME_FORMAT);
+
+                ReportUtil::exportPdf($filename, $html, config()->get('settings.title.value'));
             } else {
                 show_500('هیچ سفارشی پیدا نشد!');
             }
@@ -385,6 +391,7 @@ class ReportOrderController extends AbstractAdminController implements
                 ];
             }
         } catch (\Exception $e) {
+            LogUtil::logException($e, __LINE__, self::class);
             $response = [
                 'error' => 'خطا در ارتباط با سرور، لطفا دوباره تلاش کنید.',
             ];

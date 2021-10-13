@@ -15,6 +15,7 @@ use App\Logic\Interfaces\IDatatableController;
 use App\Logic\Models\BaseModel;
 use App\Logic\Models\CategoryModel;
 use App\Logic\Models\Model;
+use App\Logic\Utils\LogUtil;
 use Jenssegers\Agent\Agent;
 use ReflectionException;
 use Sim\Auth\DBAuth;
@@ -243,6 +244,7 @@ class CategoryController extends AbstractAdminController implements IDatatableCo
                     ->errorMessage('خطا در ارتباط با سرور، لطفا دوباره تلاش کنید.');
             }
         } catch (\Exception $e) {
+            LogUtil::logException($e, __LINE__, self::class);
             $resourceHandler
                 ->type(RESPONSE_TYPE_ERROR)
                 ->errorMessage('خطا در ارتباط با سرور، لطفا دوباره تلاش کنید.');
@@ -356,6 +358,7 @@ class CategoryController extends AbstractAdminController implements IDatatableCo
                 ];
             }
         } catch (\Exception $e) {
+            LogUtil::logException($e, __LINE__, self::class);
             $response = [
                 'error' => 'خطا در ارتباط با سرور، لطفا دوباره تلاش کنید.',
             ];

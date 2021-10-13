@@ -196,8 +196,13 @@
                         .off('click' + variables.namespace + ' touchend' + variables.namespace)
                         .on('click' + variables.namespace + ' touchend' + variables.namespace, function (e) {
                             e.preventDefault();
-                            cart.removeNPlaceCartFunctionality($(this));
-                            loadNPlaceCartItemsNInfo();
+                            cart.removeNPlaceCartFunctionality($(this), function () {
+                                if (this.code == 301) {
+                                    window.location.reload();
+                                } else {
+                                    loadNPlaceCartItemsNInfo();
+                                }
+                            }, false);
                         });
 
                     shop.hideLoaderFromInsideElement(shopCartTable);
@@ -219,14 +224,12 @@
                     val = val && !isNaN(parseInt(val, 10)) ? parseInt(val, 10) : 1;
 
                     if (code) {
-                        cart.update(code, val, function () {
-                            shop.toasts.toast(this.data, {
-                                type: variables.toasts.types.success,
-                            });
-                            loadNPlaceCartItemsNInfo();
-                        });
+                        cart.update(code, val);
                     }
                 });
+
+            // just need to show and load table's info for just one time
+            loadNPlaceCartItemsNInfo();
         });
 
         // check and apply coupon

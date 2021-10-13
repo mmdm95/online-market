@@ -211,7 +211,6 @@ use Sim\Utils\StringUtil;
                         <div class="mb-2">
                             وضعیت پرداخت
                         </div>
-                        <?php $text = PAYMENT_STATUSES[$order['payment_status']] ?: 'نامشخص'; ?>
                         <?php load_partial('admin/parser/payment-status', ['status' => $order['payment_status']]); ?>
                     </div>
                     <div class="col-lg-6 border py-2 px-3">

@@ -48,7 +48,7 @@ class GatewayModel extends BaseModel
                     'gf.order_code=o.code'
                 )
                 ->leftJoin(
-                    self::TBL_ORDERS . ' AS u',
+                    self::TBL_USERS . ' AS u',
                     'u.id=o.user_id'
                 );
         } catch (AuraException $e) {

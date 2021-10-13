@@ -39,7 +39,9 @@
              */
             function addORUpdate(url, method, code, qnt, successCallback) {
                 shop.request(url + '/' + code, method, function () {
-                    successCallback.call(this);
+                    if (window.TheCore.isFunction(successCallback)) {
+                        successCallback.call(this);
+                    }
                 }, {
                     data: {
                         qnt: qnt ? qnt : 1,
@@ -123,18 +125,27 @@
 
             /**
              * @param btn
+             * @param successCallback
+             * @param showMessage
              */
-            _.removeNPlaceCartFunctionality = function (btn) {
+            _.removeNPlaceCartFunctionality = function (btn, successCallback, showMessage) {
                 var code;
                 btn = $(btn);
+                showMessage = !(false === showMessage);
                 code = btn.attr(dataItemCode);
                 if (code) {
                     shop.toasts.confirm('آیا مطمئن هستید؟', function () {
                         cart.remove(code, function () {
-                            shop.toasts.toast(this.data, {
-                                type: variables.toasts.types.info,
-                            });
+                            if (true === showMessage) {
+                                shop.toasts.toast(this.data, {
+                                    type: variables.toasts.types.info,
+                                });
+                            }
                             cart.getNPlaceCart();
+
+                            if (window.TheCore.isFunction(successCallback)) {
+                                successCallback.apply(this);
+                            }
                         });
                     });
                 } else {

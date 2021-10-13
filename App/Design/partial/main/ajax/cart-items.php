@@ -20,13 +20,13 @@ $items = $cart->getItems();
         </tr>
         </thead>
         <tbody>
-        <?php foreach ($items as &$item): ?>
+        <?php foreach ($items as $item): ?>
             <?php $price = (float)get_discount_price($item)[0]; ?>
             <tr>
-                <td class="product-thumbnail">
+                <td class="product-thumbnail" width="100">
                     <a href="<?= url('home.product.show', [
                         'id' => $item['product_id'],
-                        'slug' => $item['slug'],
+                        'slug' => $item['slug'] ?? '',
                     ])->getRelativeUrl(); ?>">
                         <img src="<?= url('image.show', ['filename' => $item['image']])->getRelativeUrl(); ?>"
                              alt="<?= $item['title']; ?>">

@@ -15,6 +15,7 @@ use App\Logic\Models\UserModel;
 use App\Logic\Models\WalletFlowModel;
 use App\Logic\Models\WalletModel;
 use App\Logic\Utils\Jdf;
+use App\Logic\Utils\LogUtil;
 use Jenssegers\Agent\Agent;
 use ReflectionException;
 use Sim\Auth\DBAuth;
@@ -330,6 +331,7 @@ class WalletController extends AbstractAdminController implements IDatatableCont
                 ];
             }
         } catch (\Exception $e) {
+            LogUtil::logException($e, __LINE__, self::class);
             $response = [
                 'error' => 'خطا در ارتباط با سرور، لطفا دوباره تلاش کنید.',
             ];
@@ -431,6 +433,7 @@ class WalletController extends AbstractAdminController implements IDatatableCont
                 ];
             }
         } catch (\Exception $e) {
+            LogUtil::logException($e, __LINE__, self::class);
             $response = [
                 'error' => 'خطا در ارتباط با سرور، لطفا دوباره تلاش کنید.',
             ];

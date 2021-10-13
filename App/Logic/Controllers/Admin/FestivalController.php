@@ -14,6 +14,7 @@ use App\Logic\Interfaces\IDatatableController;
 use App\Logic\Models\BaseModel;
 use App\Logic\Models\FestivalModel;
 use App\Logic\Utils\Jdf;
+use App\Logic\Utils\LogUtil;
 use Jenssegers\Agent\Agent;
 use ReflectionException;
 use Sim\Auth\DBAuth;
@@ -214,6 +215,7 @@ class FestivalController extends AbstractAdminController implements IDatatableCo
                     ->errorMessage('خطا در ارتباط با سرور، لطفا دوباره تلاش کنید.');
             }
         } catch (\Exception $e) {
+            LogUtil::logException($e, __LINE__, self::class);
             $resourceHandler
                 ->type(RESPONSE_TYPE_ERROR)
                 ->errorMessage('خطا در ارتباط با سرور، لطفا دوباره تلاش کنید.');
@@ -274,6 +276,7 @@ class FestivalController extends AbstractAdminController implements IDatatableCo
                     ->errorMessage('خطا در ارتباط با سرور، لطفا دوباره تلاش کنید.');
             }
         } catch (\Exception $e) {
+            LogUtil::logException($e, __LINE__, self::class);
             $resourceHandler
                 ->type(RESPONSE_TYPE_ERROR)
                 ->errorMessage('خطا در ارتباط با سرور، لطفا دوباره تلاش کنید.');
@@ -412,6 +415,7 @@ class FestivalController extends AbstractAdminController implements IDatatableCo
                 ];
             }
         } catch (\Exception $e) {
+            LogUtil::logException($e, __LINE__, self::class);
             $response = [
                 'error' => 'خطا در ارتباط با سرور، لطفا دوباره تلاش کنید.',
             ];

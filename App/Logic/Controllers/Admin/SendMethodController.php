@@ -12,6 +12,7 @@ use App\Logic\Handlers\ResourceHandler;
 use App\Logic\Interfaces\IDatatableController;
 use App\Logic\Models\BaseModel;
 use App\Logic\Models\SendMethodModel;
+use App\Logic\Utils\LogUtil;
 use Jenssegers\Agent\Agent;
 use Sim\Event\Interfaces\IEvent;
 use Sim\Exceptions\ConfigManager\ConfigNotRegisteredException;
@@ -203,6 +204,7 @@ class SendMethodController extends AbstractAdminController implements IDatatable
                 ];
             }
         } catch (\Exception $e) {
+            LogUtil::logException($e, __LINE__, self::class);
             $response = [
                 'error' => 'خطا در ارتباط با سرور، لطفا دوباره تلاش کنید.',
             ];

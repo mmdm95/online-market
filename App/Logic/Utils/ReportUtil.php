@@ -498,7 +498,7 @@ class ReportUtil
     }
 
     /**
-     * @param $order
+     * @param $filename
      * @param $html
      * @param string|null $watermark
      * @throws \Mpdf\MpdfException
@@ -506,13 +506,41 @@ class ReportUtil
      * @throws \Sim\Exceptions\PathManager\PathNotRegisteredException
      * @throws \Sim\Interfaces\IInvalidVariableNameException
      */
-    public static function exportOrderPdf($order, $html, ?string $watermark = null)
+    public static function exportPdf($filename, $html, ?string $watermark = null)
     {
-        $filename = 'آیتم‌های سفارش شماره ';
-        $filename .= $order['code'] . ' ';
-        $filename .= Jdf::jdate(REPORT_TIME_FORMAT);
+        $defaultConfig = (new ConfigVariables())->getDefaults();
+        $fontDirs = $defaultConfig['fontDir'];
 
-        self::exportPdf($filename, $html, $watermark);
+        $defaultFontConfig = (new FontVariables())->getDefaults();
+        $fontData = $defaultFontConfig['fontdata'];
+
+        $mpdf = new Mpdf([
+            'mode' => 'utf-8',
+            'format' => 'A4',
+            'fontDir' => array_merge($fontDirs, [
+                path()->get('fonts'),
+            ]),
+            'fontdata' => $fontData + [
+                    'IRS' => [
+                        'R' => 'IRANSansWeb.ttf',
+                        'B' => 'IRANSansWeb_Bold.ttf',
+                    ]
+                ],
+            'default_font' => 'IRS'
+        ]);
+        $mpdf->SetFont('IRS');
+        $mpdf->SetDirectionality('rtl');
+        $mpdf->CSSselectMedia = 'mpdf';
+
+        if (!empty(trim((string)$watermark))) {
+            $mpdf->SetWatermarkText($watermark);
+            $mpdf->showWatermarkText = true;
+            $mpdf->watermarkTextAlpha = 0.1;
+        }
+
+        $mpdf->WriteHTML($html);
+
+        $mpdf->Output($filename . '.pdf', Destination::DOWNLOAD);
     }
 
     /**
@@ -549,52 +577,6 @@ class ReportUtil
         $writer->save($reportPath . $name . ".xlsx");
         //
         ReportUtil::downloadExport($reportPath . $name . '.xlsx', $downloadFilename);
-    }
-
-    /**
-     * @param $filename
-     * @param $html
-     * @param string|null $watermark
-     * @throws \Mpdf\MpdfException
-     * @throws \Sim\Exceptions\FileNotExistsException
-     * @throws \Sim\Exceptions\PathManager\PathNotRegisteredException
-     * @throws \Sim\Interfaces\IInvalidVariableNameException
-     */
-    private static function exportPdf($filename, $html, ?string $watermark = null)
-    {
-        $defaultConfig = (new ConfigVariables())->getDefaults();
-        $fontDirs = $defaultConfig['fontDir'];
-
-        $defaultFontConfig = (new FontVariables())->getDefaults();
-        $fontData = $defaultFontConfig['fontdata'];
-
-        $mpdf = new Mpdf([
-            'mode' => 'utf-8',
-            'format' => 'A4',
-            'fontDir' => array_merge($fontDirs, [
-                path()->get('fonts'),
-            ]),
-            'fontdata' => $fontData + [
-                    'IRS' => [
-                        'R' => 'IRANSansWeb.ttf',
-                        'B' => 'IRANSansWeb_Bold.ttf',
-                    ]
-                ],
-            'default_font' => 'IRS'
-        ]);
-        $mpdf->SetFont('IRS');
-        $mpdf->SetDirectionality('rtl');
-        $mpdf->CSSselectMedia = 'mpdf';
-
-        if (!empty(trim((string)$watermark))) {
-            $mpdf->SetWatermarkText($watermark);
-            $mpdf->showWatermarkText = true;
-            $mpdf->watermarkTextAlpha = 0.1;
-        }
-
-        $mpdf->WriteHTML($html);
-
-        $mpdf->Output($filename . '.pdf', Destination::DOWNLOAD);
     }
 
     /**

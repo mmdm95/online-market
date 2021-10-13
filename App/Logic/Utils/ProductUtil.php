@@ -142,7 +142,7 @@ class ProductUtil
             }
             $inClause = trim($inClause, ',');
             if (!empty($inClause)) {
-                $where .= " AND pa.color IN ({$inClause})";
+                $where .= " AND pa.color_hex IN ({$inClause})";
             }
         }
         // size parameter

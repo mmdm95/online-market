@@ -495,6 +495,22 @@ class OrderModel extends BaseModel
 
         $order = $this->getFirst(['coupon_id', 'coupon_code'], 'code=:code', ['code' => $orderCode]);
 
+        $res3 = true;
+        $items = $this->getOrderItems(['product_code', 'product_count'], 'order_code=:code', ['code' => $orderCode]);
+        foreach ($items as $item) {
+            /**
+             * @var Update $update
+             */
+            $update = $this->connector->update();
+            $update
+                ->table(self::TBL_PRODUCT_PROPERTY)
+                ->set('stock_count', 'stock_count+' . $item['product_count'])
+                ->where('code=:code')
+                ->bindValue('code', $item['product_code']);
+            $res3 = $model->execute($update);
+            if (!$res3) break;
+        }
+
         $res = $this->delete('code=:code', ['code' => $orderCode]);
         $res2 = $reserveModel->delete('order_code=:code', ['code' => $orderCode]);
 
@@ -513,10 +529,10 @@ class OrderModel extends BaseModel
             $couponRes = $model->execute($couponUpdate);
         }
 
-        if (!$res || !$res2 || !$couponRes) {
+        if (!$res || !$res2 || !$res3 || !$couponRes) {
             $this->db->rollBack();
-
             $this->update(['must_delete_later' => DB_YES,], 'code=:code', ['code' => $orderCode]);
+            return;
         }
         $this->db->commit();
     }

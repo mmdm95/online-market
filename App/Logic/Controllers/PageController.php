@@ -220,7 +220,7 @@ class PageController extends AbstractHomeController
                     'id', 'name'
                 ], 'is_deleted=:del', [
                     'del' => DB_NO,
-                ]));
+                ], ['name ASC']));
         } else {
             response()->httpCode(403);
             $resourceHandler
@@ -256,7 +256,7 @@ class PageController extends AbstractHomeController
                 ], 'province_id=:pId AND is_deleted=:del', [
                     'pId' => $province_id,
                     'del' => DB_NO,
-                ]));
+                ], ['name ASC']));
         } else {
             response()->httpCode(403);
             $resourceHandler

@@ -12,6 +12,7 @@ use App\Logic\Models\OrderModel;
 use App\Logic\Models\PaymentMethodModel;
 use App\Logic\Models\ProvinceModel;
 use App\Logic\Models\UserModel;
+use App\Logic\Utils\LogUtil;
 use App\Logic\Utils\PaymentUtil;
 use App\Logic\Utils\PostPriceUtil;
 use Jenssegers\Agent\Agent;
@@ -177,15 +178,9 @@ class CheckoutController extends AbstractHomeController
 
                         switch ((int)$gatewayMethod['method_type']) {
                             case METHOD_TYPE_GATEWAY_SADAD:
-                                /**
-                                 * @var SadadRequestResultProvider $gatewayInfo
-                                 */
-                                $url = $gatewayInfo->getUrl();
-                                $redirect = true;
-                                break;
                             case METHOD_TYPE_GATEWAY_TAP:
                                 /**
-                                 * @var TapRequestResultProvider $gatewayInfo
+                                 * @var SadadRequestResultProvider|TapRequestResultProvider $gatewayInfo
                                  */
                                 $url = $gatewayInfo->getUrl();
                                 $redirect = true;
@@ -231,6 +226,7 @@ class CheckoutController extends AbstractHomeController
                     ->errorMessage('خطا در ارتباط با سرور، لطفا دوباره تلاش کنید.');
             }
         } catch (\Exception $e) {
+            LogUtil::logException($e, __LINE__, self::class);
             $resourceHandler
                 ->type(RESPONSE_TYPE_ERROR)
                 ->errorMessage('خطا در ارتباط با سرور، لطفا دوباره تلاش کنید.');
@@ -307,6 +303,7 @@ class CheckoutController extends AbstractHomeController
                     ->errorMessage('خطا در ارتباط با سرور، لطفا دوباره تلاش کنید.');
             }
         } catch (\Exception $e) {
+            LogUtil::logException($e, __LINE__, self::class);
             $resourceHandler
                 ->type(RESPONSE_TYPE_ERROR)
                 ->errorMessage('خطا در ارتباط با سرور، لطفا دوباره تلاش کنید.');

@@ -56,12 +56,12 @@ class OrderResultController extends AbstractHomeController
                 // alert user(s) that an order is in queue
                 $body = 'سلام مدیر' .
                     "\n" .
-                    'سفارش ' . $orderCode . ' ثبت شده است و هم اکنون در وضعیت در انتظار بررسی می باشد.' .
+                    'سفارش ' . $orderCode . ' ثبت شده است و هم اکنون در وضعیت ' . $info['send_status_title'] . ' می باشد.' .
                     "\n" .
                     'آیتم های سفارش : ' . '[مراجعه به سایت]' .
                     "\n" .
                     'مبلغ سفارش : ' . local_number(number_format(StringUtil::toEnglish($info['final_price']))) . ' تومان';
-                $users = config()->get('orders.successful.users');
+                $users = config()->get('notify.orders.successful.users');
                 if (count($users)) {
                     $smsRes = SMSUtil::send($users, $body);
                     SMSUtil::logSMS($users, $body, $smsRes, SMS_LOG_TYPE_ORDER_NOTIFY, SMS_LOG_SENDER_SYSTEM);

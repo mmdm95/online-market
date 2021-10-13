@@ -7,6 +7,7 @@ use App\Logic\Handlers\ResourceHandler;
 use App\Logic\Middlewares\Logic\NonePublicFolderAccessMiddleware;
 use App\Logic\Middlewares\Logic\PublicFolderModifyMiddleware;
 use App\Logic\Models\UserModel;
+use App\Logic\Utils\LogUtil;
 use Sim\Auth\DBAuth;
 use Sim\Auth\Interfaces\IAuth;
 use Sim\Auth\Interfaces\IDBException;
@@ -194,6 +195,7 @@ class FileController extends AbstractAdminController
                 \response()->json($this->data->getReturnData());
             }
         } catch (\Exception $e) {
+            LogUtil::logException($e, __LINE__, self::class);
             $this->data->resetData()->statusCode(412)->errorMessage($e->getMessage());
             \response()->json($this->data->getReturnData());
         }
@@ -247,6 +249,7 @@ class FileController extends AbstractAdminController
                 \response()->json($this->data->getReturnData());
             }
         } catch (\Exception $e) {
+            LogUtil::logException($e, __LINE__, self::class);
             $this->data->resetData()->statusCode(412)->errorMessage($e->getMessage());
             \response()->json($this->data->getReturnData());
         }

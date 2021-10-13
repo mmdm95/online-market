@@ -15,6 +15,7 @@ use App\Logic\Models\OrderModel;
 use App\Logic\Models\RoleModel;
 use App\Logic\Models\UserModel;
 use App\Logic\Utils\Jdf;
+use App\Logic\Utils\LogUtil;
 use function DI\get;
 use Jenssegers\Agent\Agent;
 use ReflectionException;
@@ -382,6 +383,7 @@ class UserController extends AbstractAdminController implements IDatatableContro
                 ];
             }
         } catch (\Exception $e) {
+            LogUtil::logException($e, __LINE__, self::class);
             $response = [
                 'error' => 'خطا در ارتباط با سرور، لطفا دوباره تلاش کنید.',
             ];
@@ -551,6 +553,7 @@ class UserController extends AbstractAdminController implements IDatatableContro
                 ];
             }
         } catch (\Exception $e) {
+            LogUtil::logException($e, __LINE__, self::class);
             $response = [
                 'error' => 'خطا در ارتباط با سرور، لطفا دوباره تلاش کنید.',
             ];

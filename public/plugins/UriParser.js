@@ -186,7 +186,12 @@
              * @returns {string}
              */
             decodeUri: function (str) {
-                return decodeURIComponent(str.replace(/\+/g, " "));
+                try {
+                    return decodeURIComponent(str.replace(/\+/g, " "));
+                } catch (e) {
+                    // for debugging purposes, uncomment below line
+                    // console.error(e);
+                }
             },
 
             /**
@@ -210,6 +215,20 @@
                 });
             },
 
+            removeBrackets: function (str) {
+                try {
+                    if (this.isString(str)) {
+                        str = decodeURIComponent(str.replace(/\+/g, " "));
+                        str = str.replace(/\[/g, '').replace(/]/g, '');
+                    }
+                } catch (e) {
+                    // for debugging purposes, uncomment below line
+                    // console.error(e);
+                }
+
+                return str;
+            },
+
             /**
              * @see https://stackoverflow.com/a/4215753/12154893
              * @param arr
@@ -224,7 +243,12 @@
                 if (this.isObject(arr)) {
                     for (i in arr) {
                         if (arr.hasOwnProperty(i)) {
-                            rv[i] = this.toObjectRecursively(arr[i], unique, definedValues, encoded);
+                            t = arr[i];
+                            //
+                            delete arr[i];
+                            i = self.removeBrackets(i);
+                            //
+                            rv[i] = this.toObjectRecursively(t, unique, definedValues, encoded);
                         }
                     }
                 } else if (this.isArray(arr)) {
@@ -241,7 +265,12 @@
                     var newArr = [];
                     for (i = 0; i < len; ++i) {
                         if (this.isObject(arr[i]) || this.isArray(arr[i])) {
-                            newArr[i] = this.toObjectRecursively(arr[i], unique, definedValues, encoded);
+                            t = arr[i];
+                            //
+                            delete arr[i];
+                            i = self.removeBrackets(i);
+                            //
+                            newArr[i] = this.toObjectRecursively(t, unique, definedValues, encoded);
                         } else {
                             t = arr[i];
                             if (true === t) {
@@ -249,6 +278,10 @@
                             } else if (false === t) {
                                 t = 0;
                             }
+                            //
+                            delete arr[i];
+                            i = self.removeBrackets(i);
+                            //
                             if (encoded) {
                                 newArr[i] = this.encodeUri(t);
                             } else {

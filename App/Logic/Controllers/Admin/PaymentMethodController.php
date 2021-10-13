@@ -12,6 +12,7 @@ use App\Logic\Handlers\ResourceHandler;
 use App\Logic\Interfaces\IDatatableController;
 use App\Logic\Models\BaseModel;
 use App\Logic\Models\PaymentMethodModel;
+use App\Logic\Utils\LogUtil;
 use Jenssegers\Agent\Agent;
 use Sim\Auth\DBAuth;
 use Sim\Auth\Interfaces\IAuth;
@@ -268,6 +269,7 @@ class PaymentMethodController extends AbstractAdminController implements IDatata
                 ];
             }
         } catch (\Exception $e) {
+            LogUtil::logException($e, __LINE__, self::class);
             $response = [
                 'error' => 'خطا در ارتباط با سرور، لطفا دوباره تلاش کنید.',
             ];

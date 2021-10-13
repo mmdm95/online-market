@@ -7,6 +7,7 @@ use App\Logic\Handlers\ResourceHandler;
 use App\Logic\Models\ProductModel;
 use App\Logic\Utils\CartUtil;
 use App\Logic\Utils\CouponUtil;
+use App\Logic\Utils\LogUtil;
 use Jenssegers\Agent\Agent;
 use Sim\Cart\Interfaces\IDBException as ICartDBException;
 use Sim\Exceptions\ConfigManager\ConfigNotRegisteredException;
@@ -24,6 +25,8 @@ class CartController extends AbstractHomeController
      * @throws IFileNotExistsException
      * @throws IInvalidVariableNameException
      * @throws PathNotRegisteredException
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
      * @throws \ReflectionException
      */
     public function index()
@@ -157,7 +160,7 @@ class CartController extends AbstractHomeController
                 );
                 if (count($extraInfo)) {
                     if ($qnt > 0) {
-                        cart()->update($product_code, array_merge($extraInfo, [
+                        cart()->update($product_code, array_merge($extraInfo[0], [
                             'qnt' => $qnt,
                         ]))->store();
                         $resourceHandler
@@ -181,6 +184,7 @@ class CartController extends AbstractHomeController
                     ->errorMessage('خطا در ارتباط با سرور، لطفا دوباره تلاش کنید.');
             }
         } catch (\Exception $e) {
+            LogUtil::logException($e, __LINE__, self::class);
             $resourceHandler
                 ->type(RESPONSE_TYPE_ERROR)
                 ->errorMessage('خطا در ارتباط با سرور، لطفا دوباره تلاش کنید.');
@@ -208,6 +212,10 @@ class CartController extends AbstractHomeController
                     ->type(RESPONSE_TYPE_SUCCESS)
                     ->data('محصول از سبد خرید حذف شد.');
                 CouponUtil::checkCoupon(CouponUtil::getStoredCouponCode());
+
+                if(!count(cart()->getItems())) {
+                    $resourceHandler->statusCode(301);
+                }
             } else {
                 $resourceHandler
                     ->type(RESPONSE_TYPE_ERROR)

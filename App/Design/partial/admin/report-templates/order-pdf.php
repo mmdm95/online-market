@@ -32,7 +32,7 @@ if (count($order ?? []) && count($items ?? [])): ?>
                         کد فاکتور:
                     </small>
                     <strong>
-                        <?= $order['code']; ?>
+                        <?= local_number(StringUtil::toEnglish($order['code'])); ?>
                     </strong>
                 </div>
                 <div class='section-half'>
@@ -70,7 +70,7 @@ if (count($order ?? []) && count($items ?? [])): ?>
                     <?php elseif (!empty($order['info']['failed'])): ?>
                         ناموفق
                     <?php else: ?>
-                        -
+                        <?= PAYMENT_STATUSES[$order['payment_status']] ?: 'نامشخص'; ?>
                     <?php endif; ?>
                 </strong>
             </div>
@@ -236,7 +236,7 @@ if (count($order ?? []) && count($items ?? [])): ?>
                         کد پستی:
                     </small>
                     <strong>
-                        <?= $order['postal_code']; ?>
+                        <?= local_number(StringUtil::toEnglish($order['postal_code'])); ?>
                     </strong>
                 </div>
             </div>

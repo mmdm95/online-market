@@ -2336,10 +2336,6 @@
     .login_form .panel-body, .coupon_form .panel-body {
         padding: 15px;
     }
-
-    .custome-radio input[type="radio"] + .form-check-label::after {
-        top: 7px;
-    }
 }
 
 /* -------------------------------------------------

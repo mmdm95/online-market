@@ -25,7 +25,7 @@ abstract class AbstractMainController extends AbstractController
         parent::__construct();
 
         // restore all items from cookie storage
-        cart()->restore();
+        cart()->restore(true);
 
         /**
          * @var CartUtil $cartUtil

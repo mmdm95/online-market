@@ -138,7 +138,7 @@
                                 </button>
                                 <!--                                <a class="add_compare" href=""-->
                                 <!--                                   data-toggle="tooltip" data-placement="top" title="لیست مقایسه">-->
-                                <?= '';//url('home.compare');                  ?>
+                                <?= '';//url('home.compare');                   ?>
                                 <!--                                    <i class="linearicons-shuffle"></i>-->
                                 <!--                                </a>-->
                                 <a class="add_wishlist <?= $is_in_wishlist ? 'active' : ''; ?>"

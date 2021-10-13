@@ -74,9 +74,9 @@ class ReportWalletController extends AbstractAdminController implements
         // TODO: Implement exportExcel() method.
     }
 
-    public function exportPdfOne()
+    public function exportPdfOne($id)
     {
-        // TODO: Implement exportPdfOne() method.
+        not_implemented_yet();
     }
 
     /**

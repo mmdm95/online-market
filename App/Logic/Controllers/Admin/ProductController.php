@@ -21,6 +21,7 @@ use App\Logic\Models\OrderModel;
 use App\Logic\Models\ProductModel;
 use App\Logic\Models\UnitModel;
 use App\Logic\Utils\Jdf;
+use App\Logic\Utils\LogUtil;
 use Jenssegers\Agent\Agent;
 use Sim\Auth\DBAuth;
 use Sim\Auth\Interfaces\IAuth;
@@ -374,6 +375,7 @@ class ProductController extends AbstractAdminController implements IDatatableCon
                     ->errorMessage('خطا در ارتباط با سرور، لطفا دوباره تلاش کنید.');
             }
         } catch (\Exception $e) {
+            LogUtil::logException($e, __LINE__, self::class);
             $resourceHandler
                 ->type(RESPONSE_TYPE_ERROR)
                 ->errorMessage('خطا در ارتباط با سرور، لطفا دوباره تلاش کنید.');
@@ -423,6 +425,7 @@ class ProductController extends AbstractAdminController implements IDatatableCon
                     ->errorMessage('خطا در ارتباط با سرور، لطفا دوباره تلاش کنید.');
             }
         } catch (\Exception $e) {
+            LogUtil::logException($e, __LINE__, self::class);
             $resourceHandler
                 ->type(RESPONSE_TYPE_ERROR)
                 ->errorMessage('خطا در ارتباط با سرور، لطفا دوباره تلاش کنید.');
@@ -566,6 +569,7 @@ class ProductController extends AbstractAdminController implements IDatatableCon
                 ];
             }
         } catch (\Exception $e) {
+            LogUtil::logException($e, __LINE__, self::class);
             $response = [
                 'error' => 'خطا در ارتباط با سرور، لطفا دوباره تلاش کنید.',
             ];
@@ -640,6 +644,7 @@ class ProductController extends AbstractAdminController implements IDatatableCon
                 ];
             }
         } catch (\Exception $e) {
+            LogUtil::logException($e, __LINE__, self::class);
             $response = [
                 'error' => 'خطا در ارتباط با سرور، لطفا دوباره تلاش کنید.',
             ];
@@ -759,6 +764,7 @@ class ProductController extends AbstractAdminController implements IDatatableCon
                 ];
             }
         } catch (\Exception $e) {
+            LogUtil::logException($e, __LINE__, self::class);
             $response = [
                 'error' => 'خطا در ارتباط با سرور، لطفا دوباره تلاش کنید.',
             ];
@@ -830,6 +836,7 @@ class ProductController extends AbstractAdminController implements IDatatableCon
                 ];
             }
         } catch (\Exception $e) {
+            LogUtil::logException($e, __LINE__, self::class);
             $response = [
                 'error' => 'خطا در ارتباط با سرور، لطفا دوباره تلاش کنید.',
             ];

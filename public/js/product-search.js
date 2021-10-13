@@ -253,7 +253,7 @@
         }
 
         function makeAdjustmentsAccordingToObj(obj) {
-            var el;
+            var el, o;
 
             // search query
             if (obj['q'] && core.isString(obj['q'])) {
@@ -286,7 +286,7 @@
             }
             // sizes activate
             if (obj['size'] && core.isArray(obj['size'])) {
-                for (var o in obj['size']) {
+                for (o in obj['size']) {
                     if (obj['size'].hasOwnProperty(o)) {
                         obj['size'][o] = decodeURIComponent(obj['size'][o].replace(/\+/g, " "));
                     }
@@ -361,11 +361,13 @@
 
         // load product functionality
         function loadProduct() {
-            makeAdjustmentsAccordingToObj(uriParser.get(null, {}, true));
+            var obj = uriParser.get(null, {}, true);
+
+            makeAdjustmentsAccordingToObj(obj);
             if (!isInProgress) {
                 // push query to window state
                 if (canPushState) {
-                    uriParser.pushState({obj: uriParser.get(null, {}, true)});
+                    uriParser.pushState({obj});
                 }
                 //-----
                 isInProgress = true;
@@ -388,7 +390,7 @@
                     shop.lazyFn();
                     cart.assignEventsToAddOrUpdateBtn();
                 }, {
-                    params: uriParser.get(null, {}, true),
+                    params: obj,
                 }, true, function () {
                     shop.hideLoader(loaderId);
                     canPushState = true;

@@ -15,6 +15,7 @@ use App\Logic\Models\BaseModel;
 use App\Logic\Models\CouponModel;
 use App\Logic\Models\OrderModel;
 use App\Logic\Utils\Jdf;
+use App\Logic\Utils\LogUtil;
 use Jenssegers\Agent\Agent;
 use ReflectionException;
 use Sim\Auth\DBAuth;
@@ -349,6 +350,7 @@ class CouponController extends AbstractAdminController implements IDatatableCont
                 ];
             }
         } catch (\Exception $e) {
+            LogUtil::logException($e, __LINE__, self::class);
             $response = [
                 'error' => 'خطا در ارتباط با سرور، لطفا دوباره تلاش کنید.',
             ];

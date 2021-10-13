@@ -19,7 +19,6 @@ use Sim\Form\Exceptions\FormException;
 use Sim\Form\FormValue;
 use Sim\Interfaces\IFileNotExistsException;
 use Sim\Interfaces\IInvalidVariableNameException;
-use Sim\Utils\StringUtil;
 use voku\helper\AntiXSS;
 
 class CheckoutForm implements IPageForm
@@ -291,6 +290,9 @@ class CheckoutForm implements IPageForm
                     'invoice_status_changed_at' => time(),
                     'send_status_changed_at' => time(),
                 ]);
+
+                // remove any order array from session
+                session()->remove(SESSION_ORDER_ARR_INFO);
 
                 // store order array in flash session for gateway usage
                 session()->set(SESSION_ORDER_ARR_INFO, $orderArr);
