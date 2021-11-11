@@ -13,14 +13,15 @@ class OrderUtil
      * @throws \DI\DependencyException
      * @throws \DI\NotFoundException
      */
-    public static function getUniqueOrderCode($length = 20): string
+    public static function getUniqueOrderCode($length = 15): string
     {
         /**
          * @var OrderModel $orderModel
          */
         $orderModel = container()->get(OrderModel::class);
         do {
-            $uniqueStr = StringUtil::randomString($length, StringUtil::RS_NUMBER);
+            $uniqueStr = StringUtil::randomString($length, StringUtil::RS_NUMBER, ['0']);
+
         } while ($orderModel->count('code=:code', ['code' => $uniqueStr]));
         return $uniqueStr;
     }

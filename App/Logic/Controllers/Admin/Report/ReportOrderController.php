@@ -160,7 +160,7 @@ class ReportOrderController extends AbstractAdminController implements
         $order = $orderModel->getFirst(['*'], 'id=:id', ['id' => $id]);
 
         if (count($order)) {
-            $gatewayInfo = $gatewayModel->getFirst(['*'], 'order_code=:code', ['code' => $order['code']], ['issue_date DESC']);
+            $gatewayInfo = $gatewayModel->get(['*'], 'order_code=:code', ['code' => $order['code']], ['issue_date DESC']);
             $orderItems = $orderModel->getOrderItems(['oi.*'], 'order_code=:code', ['code' => $order['code']]);
 
             $order['info']['successful'] = [];

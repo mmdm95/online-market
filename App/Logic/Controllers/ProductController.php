@@ -99,7 +99,7 @@ class ProductController extends AbstractHomeController
         $sizesNModels = $model->get($select);
         $sizes = [];
         foreach ($sizesNModels as $item) {
-            $sizes[] = $item['size'];
+            if (trim($item['size']) != '') $sizes[] = $item['size'];
         }
 
         // get max price

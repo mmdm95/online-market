@@ -6599,7 +6599,15 @@ footer .widget_title {
 }
 
 .slick-list {
+    position: relative;
+    display: block;
+    overflow: hidden;
+    margin: 0;
     padding: 0 !important;
+}
+
+.slick-track {
+    position: relative;
 }
 
 .product_gallery_item.slick-slider .slick-slide {

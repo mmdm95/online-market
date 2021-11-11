@@ -62,6 +62,9 @@ class OrderResultController extends AbstractHomeController
                     "\n" .
                     'مبلغ سفارش : ' . local_number(number_format(StringUtil::toEnglish($info['final_price']))) . ' تومان';
                 $users = config()->get('notify.orders.successful.users');
+                $users = array_filter($users, function ($value) {
+                    return is_string($value) && trim($value) != '';
+                });
                 if (count($users)) {
                     $smsRes = SMSUtil::send($users, $body);
                     SMSUtil::logSMS($users, $body, $smsRes, SMS_LOG_TYPE_ORDER_NOTIFY, SMS_LOG_SENDER_SYSTEM);

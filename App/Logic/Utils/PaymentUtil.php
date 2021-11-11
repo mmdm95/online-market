@@ -115,6 +115,9 @@ class PaymentUtil
                             'method_type' => METHOD_TYPE_GATEWAY_BEH_PARDAKHT,
                             'in_step' => PAYMENT_GATEWAY_FLOW_STATUS_CREATE_REQUEST,
                             'issue_date' => time(),
+                            'extra_info' => json_encode([
+                                'result' => $result->getParameters(),
+                            ]),
                         ]);
                     }
                 )->createRequestNotOkClosure(
@@ -162,6 +165,9 @@ class PaymentUtil
                             'method_type' => METHOD_TYPE_GATEWAY_IDPAY,
                             'in_step' => PAYMENT_GATEWAY_FLOW_STATUS_CREATE_REQUEST,
                             'issue_date' => time(),
+                            'extra_info' => json_encode([
+                                'result' => $result->getParameters(),
+                            ]),
                         ]);
                     }
                 )->createRequestNotOkClosure(
@@ -209,6 +215,9 @@ class PaymentUtil
                             'method_type' => METHOD_TYPE_GATEWAY_MABNA,
                             'in_step' => PAYMENT_GATEWAY_FLOW_STATUS_CREATE_REQUEST,
                             'issue_date' => time(),
+                            'extra_info' => json_encode([
+                                'result' => $result->getParameters(),
+                            ]),
                         ]);
                     }
                 )->createRequestNotOkClosure(
@@ -255,6 +264,9 @@ class PaymentUtil
                             'method_type' => METHOD_TYPE_GATEWAY_ZARINPAL,
                             'in_step' => PAYMENT_GATEWAY_FLOW_STATUS_CREATE_REQUEST,
                             'issue_date' => time(),
+                            'extra_info' => json_encode([
+                                'result' => $result->getParameters(),
+                            ]),
                         ]);
                     }
                 )->createRequestNotOkClosure(
@@ -304,6 +316,9 @@ class PaymentUtil
                             'method_type' => METHOD_TYPE_GATEWAY_SADAD,
                             'in_step' => PAYMENT_GATEWAY_FLOW_STATUS_CREATE_REQUEST,
                             'issue_date' => time(),
+                            'extra_info' => json_encode([
+                                'result' => $result->getParameters(),
+                            ]),
                         ]);
                     }
                 )->createRequestNotOkClosure(
@@ -348,9 +363,12 @@ class PaymentUtil
                             'user_id' => $auth->getCurrentUser()['id'] ?? 0,
                             'price' => $orderArr['final_price'],
                             'is_success' => DB_NO,
-                            'method_type' => METHOD_TYPE_GATEWAY_SADAD,
+                            'method_type' => METHOD_TYPE_GATEWAY_TAP,
                             'in_step' => PAYMENT_GATEWAY_FLOW_STATUS_CREATE_REQUEST,
                             'issue_date' => time(),
+                            'extra_info' => json_encode([
+                                'result' => $result->getParameters(),
+                            ]),
                         ]);
                     }
                 )->createRequestNotOkClosure(

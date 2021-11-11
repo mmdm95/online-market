@@ -255,6 +255,8 @@
         function makeAdjustmentsAccordingToObj(obj) {
             var el, o;
 
+            setCategoryToSearchParams();
+
             // search query
             if (obj['q'] && core.isString(obj['q'])) {
                 $(variables.elements.product.form).val(obj['q']);

@@ -90,7 +90,7 @@ if (!function_exists('loader')) {
     function loader(): Loader
     {
         /**
-         * @var \Sim\Traits\TraitLoader $loader
+         * @var \Sim\Loader\Loader $loader
          */
         $loader = \container()->get(Loader::class);
         return $loader;

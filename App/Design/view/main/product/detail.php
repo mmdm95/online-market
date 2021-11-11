@@ -8,20 +8,20 @@
                 <input type="hidden" value="<?= $product['product_id']; ?>" id="__current_product_id">
 
                 <!-- START GALLERY -->
-                <div class="col-lg-6 col-md-6 mb-4 mb-md-0">
+                <div class="col-lg-6 col-md-6 mb-5 mb-md-0">
                     <div class="product-image vertical_gallery">
                         <div id="pr_item_gallery" class="product_gallery_item slick_slider" data-vertical="true"
                              data-vertical-swiping="true" data-slides-to-show="5" data-slides-to-scroll="5"
                              data-infinite="false">
                             <?php if (count($gallery ?? [])): ?>
-                                <?php foreach (($gallery ?? []) as $k => $item): ?>
+                                <?php foreach ($gallery ?? [] as $k => $item): ?>
                                     <div class="item">
                                         <a href="javascript:void(0);"
                                            class="product_gallery_item <?= 0 == $k ? 'active' : ''; ?>"
                                            data-image="<?= url('image.show') . $item['image']; ?>"
                                            data-zoom-image="<?= url('image.show') . $item['image']; ?>">
-                                            <img src="" data-src="<?= url('image.show') . $item['image']; ?>"
-                                                 alt="image gallery" class="lazy">
+                                            <img src="<?= url('image.show') . $item['image']; ?>"
+                                                 alt="image gallery">
                                         </a>
                                     </div>
                                 <?php endforeach; ?>
@@ -31,12 +31,13 @@
                                        class="product_gallery_item active"
                                        data-image="<?= url('image.show') . $product['image']; ?>"
                                        data-zoom-image="<?= url('image.show') . $product['image']; ?>">
-                                        <img src="" data-src="<?= url('image.show') . $product['image']; ?>"
-                                             alt="image gallery" class="lazy">
+                                        <img src="<?= url('image.show') . $product['image']; ?>"
+                                             alt="image gallery">
                                     </a>
                                 </div>
                             <?php endif; ?>
                         </div>
+
                         <div class="product_img_box">
                             <?php if (count($gallery ?? [])): ?>
                                 <img id="product_img" src='<?= url('image.show') . $gallery[0]['image']; ?>'
@@ -138,7 +139,7 @@
                                 </button>
                                 <!--                                <a class="add_compare" href=""-->
                                 <!--                                   data-toggle="tooltip" data-placement="top" title="لیست مقایسه">-->
-                                <?= '';//url('home.compare');                   ?>
+                                <?= '';//url('home.compare');                       ?>
                                 <!--                                    <i class="linearicons-shuffle"></i>-->
                                 <!--                                </a>-->
                                 <a class="add_wishlist <?= $is_in_wishlist ? 'active' : ''; ?>"

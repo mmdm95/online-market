@@ -140,7 +140,10 @@ class OrderController extends AbstractAdminController implements IDatatableContr
         $orderItems = $orderModel->getOrderItems([
             'oi.*', 'p.image AS product_image'
         ], 'oi.order_code=:code', ['code' => $order['code']]);
-        $order['payment_code'] = $gatewayModel->getFirst(['payment_code'], 'method_type=:mt', ['mt' => $order['method_type']])['payment_code'] ?? null;
+        $order['payment_code'] = $gatewayModel->getFirst(['payment_code'], 'order_code=:oc AND method_type=:mt', [
+                'oc' => $order['code'],
+                'mt' => $order['method_type'],
+            ])['payment_code'] ?? null;
 
         $badges = $badgeModel->get(['code', 'title', 'color'], 'is_deleted=:del', ['del' => DB_NO]);
 

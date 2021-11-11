@@ -54,42 +54,71 @@ class StringUtil
      *
      * @param $length
      * @param int $type
-     * @return string
+     * @param array $exclude_characters_from_first
+     * @return string - first character will be ? if there is nothing to go first
      */
-    public static function randomString($length, $type = StringUtil::RS_ALL)
+    public static function randomString($length, $type = StringUtil::RS_ALL, array $exclude_characters_from_first = [])
     {
         $charactersMap = [
             'number' => '0123456789',
             'lower' => 'abcdefghijklmnopqrstuvwxyz',
-            'upper' => 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+            'upper' => 'ABCDEFGHIJKLMNOPQRSTUVWXYZ',
+        ];
+        $excludedCharactersMap = [
+            'number' => \implode('', \array_diff([
+                '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
+            ], $exclude_characters_from_first)),
+            'lower' => \implode('', \array_diff([
+                'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i',
+                'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r',
+                's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
+            ], $exclude_characters_from_first)),
+            'upper' => \implode('', \array_diff([
+                'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I',
+                'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R',
+                'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
+            ], $exclude_characters_from_first)),
         ];
 
         $characters = '';
+        $excludedCharacters = '';
         $haveType = StringUtil::RS_ALL;
 
         if ($type & StringUtil::RS_NUMBER) {
             $characters .= $charactersMap['number'];
+            $excludedCharacters .= $excludedCharactersMap['number'];
             $haveType = $haveType ^ StringUtil::RS_NUMBER;
         }
         if ($type & StringUtil::RS_LOWER_CHAR) {
             $characters .= $charactersMap['lower'];
+            $excludedCharacters .= $excludedCharactersMap['lower'];
             $haveType = $haveType ^ StringUtil::RS_LOWER_CHAR;
         }
         if ($type & StringUtil::RS_UPPER_CHAR) {
             $characters .= $charactersMap['upper'];
+            $excludedCharacters .= $excludedCharactersMap['upper'];
             $haveType = $haveType ^ StringUtil::RS_UPPER_CHAR;
         }
         if ((StringUtil::RS_ALL ^ $haveType) == 0) {
             $characters = $charactersMap['number'] . $charactersMap['lower'] . $charactersMap['upper'];
+            $excludedCharacters = $excludedCharactersMap['number'] . $excludedCharactersMap['lower'] . $excludedCharactersMap['upper'];
         }
 
         $charactersLength = \strlen($characters);
+        $excludedCharactersLength = \strlen($excludedCharacters);
 
         \mt_srand((double)\microtime() * 1000000);
 
         $randomString = '';
         for ($i = 0; $i < $length; $i++) {
-            $randomString .= $characters[mt_rand(0, $charactersLength - 1)];
+            if ($i == 0) {
+                $char = $excludedCharactersLength > 0
+                    ? $excludedCharacters[mt_rand(0, $excludedCharactersLength - 1)]
+                    : '?';
+            } else {
+                $char = $characters[mt_rand(0, $charactersLength - 1)];
+            }
+            $randomString .= $char;
         }
 
         return $randomString;

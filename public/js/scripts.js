@@ -491,6 +491,8 @@ variables = window.MyGlobalVariables;
             $('.slick_slider').each(function () {
                 var $slick_carousel = $(this);
                 $slick_carousel.slick({
+                    prevArrow: '<button type="button" class="btn slick-prev"></button>',
+                    nextArrow: '<button type="button" class="btn slick-next"></button>',
                     arrows: $slick_carousel.data("arrows"),
                     dots: $slick_carousel.data("dots"),
                     infinite: $slick_carousel.data("infinite"),
@@ -509,7 +511,8 @@ variables = window.MyGlobalVariables;
                     swipeToSlide: true,
                     asNavFor: $slick_carousel.data("as-nav-for"),
                     focusOnSelect: $slick_carousel.data("focus-on-select"),
-                    responsive: $slick_carousel.data("responsive")
+                    responsive: $slick_carousel.data("responsive"),
+                    useTransform: true,
                 });
             });
         }

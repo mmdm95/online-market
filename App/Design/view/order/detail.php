@@ -197,6 +197,49 @@ use Sim\Utils\StringUtil;
                             <?= $order['send_status_title']; ?>
                         </span>
                     </div>
+
+                    <div class="col-lg-6 border py-2 px-3">
+                        <div class="mb-2">
+                            طریقه ارسال
+                        </div>
+                        <div class="text-info-800">
+                            <?= $order['send_method_title']; ?>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 border py-2 px-3">
+                        <div class="mb-2">
+                            هزینه ارسال
+                        </div>
+                        <div class="text-info-800">
+                            <?= StringUtil::toPersian(number_format(StringUtil::toEnglish($order['shipping_price']))); ?>
+                            <small>تومان</small>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 border py-2 px-3">
+                        <div class="mb-2">
+                            عنوان کوپن
+                        </div>
+                        <div class="text-info-800">
+                            <?php if (!empty($order['coupon_title'])): ?>
+                                <?= $order['coupon_title']; ?>
+                            <?php else: ?>
+                                <i class="icon-minus2" aria-hidden="true"></i>
+                            <?php endif; ?>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 border py-2 px-3">
+                        <div class="mb-2">
+                            مبلغ کوپن
+                        </div>
+                        <div class="text-info-800">
+                            <?php if (!empty($order['coupon_price'])): ?>
+                                <?= StringUtil::toPersian(number_format(StringUtil::toEnglish($order['coupon_price']))); ?>
+                                <small>تومان</small>
+                            <?php else: ?>
+                                <i class="icon-minus2" aria-hidden="true"></i>
+                            <?php endif; ?>
+                        </div>
+                    </div>
                 </div>
             </fieldset>
 

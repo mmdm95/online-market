@@ -27,7 +27,7 @@ foreach ($items as $item) {
             <tr>
                 <td>
                     <span class="d-inline-block"><?= $item['title']; ?></span>
-                    <span class="product-qty" dir="ltr">x <?= local_number($item['qnt']); ?></span>
+                    <span class="product-qty" dir="ltr"><?= local_number($item['qnt']); ?> x</span>
                 </td>
                 <td>
                     <?php
