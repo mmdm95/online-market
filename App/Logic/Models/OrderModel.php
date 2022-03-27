@@ -208,7 +208,7 @@ class OrderModel extends BaseModel
         array $bind_values = []
     ): int
     {
-        $res = $this->getLimitedOrder($where, $bind_values, [], null, 0, [], ['COUNT(DISTINCT(pa.product_id)) AS count']);
+        $res = $this->getLimitedOrder($where, $bind_values, [], null, 0, [], ['COUNT(DISTINCT(oa.product_id)) AS count']);
         if (count($res)) {
             return (int)$res[0]['count'];
         }

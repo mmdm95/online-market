@@ -314,6 +314,16 @@ class Route implements IInitialize
                 Router::form('/product/edit/{id}', [AdminProductController::class, 'edit'])->where([
                     'id' => '[0-9]+',
                 ])->name('admin.product.edit');
+                Router::form('/product/batch-edit/{ids}', [AdminProductController::class, 'batchEdit'])
+                    ->where([
+                        'ids' => '[\d\/]*',
+                    ])
+                    ->name('admin.product.batch-edit');
+                Router::form('/product/batch-edit-price/{ids}', [AdminProductController::class, 'batchEditPrice'])
+                    ->where([
+                        'ids' => '[\d\/]*',
+                    ])
+                    ->name('admin.product.batch-edit-price');
                 Router::get('/product/view', [AdminProductController::class, 'view'])->name('admin.product.view');
                 Router::get('/product/detail/{id}', [AdminProductController::class, 'detail'])->where([
                     'id' => '[0-9]+',

@@ -16,6 +16,6 @@ foreach ($unwantedOrders as $order) {
     try {
         $orderModel->removeIssuedFactor($order['code']);
     } catch (\DI\DependencyException|\DI\NotFoundException  $e) {
-        // do nothing or now
+        // do nothing for now
     }
 }

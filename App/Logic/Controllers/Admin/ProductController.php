@@ -4,6 +4,8 @@ namespace App\Logic\Controllers\Admin;
 
 use App\Logic\Abstracts\AbstractAdminController;
 use App\Logic\Forms\Admin\Product\AddProductForm;
+use App\Logic\Forms\Admin\Product\BatchEditProductForm;
+use App\Logic\Forms\Admin\Product\BatchEditProductPriceForm;
 use App\Logic\Forms\Admin\Product\EditProductForm;
 use App\Logic\Handlers\DatatableHandler;
 use App\Logic\Handlers\GeneralAjaxRemoveHandler;
@@ -270,6 +272,138 @@ class ProductController extends AbstractAdminController implements IDatatableCon
     }
 
     /**
+     * @param $ids
+     * @return string
+     * @throws ConfigNotRegisteredException
+     * @throws ControllerException
+     * @throws IDBException
+     * @throws IFileNotExistsException
+     * @throws IInvalidVariableNameException
+     * @throws PathNotRegisteredException
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
+     * @throws \ReflectionException
+     */
+    public function batchEdit($ids)
+    {
+        /**
+         * @var DBAuth $auth
+         */
+        $auth = container()->get('auth_admin');
+        if (!$auth->isAllow(RESOURCE_PRODUCT, IAuth::PERMISSION_UPDATE)) {
+            show_403();
+        }
+
+        // use session to store ids to use in form action
+        session()->setFlash('product-curr-ids', $ids);
+
+        $products = $this->getBatchEditProducts($ids);
+        if (!count($products)) {
+            return $this->show404();
+        }
+
+        $data = [];
+        if (is_post()) {
+            $formHandler = new GeneralFormHandler();
+            $data = $formHandler->handle(BatchEditProductForm::class, 'product_batch_edit');
+        }
+
+        /**
+         * @var BrandModel $brandModel
+         */
+        $brandModel = container()->get(BrandModel::class);
+        /**
+         * @var ColorModel $colorModel
+         */
+        $colorModel = container()->get(ColorModel::class);
+        /**
+         * @var CategoryModel $categoryModel
+         */
+        $categoryModel = container()->get(CategoryModel::class);
+        /**
+         * @var UnitModel $unitModel
+         */
+        $unitModel = container()->get(UnitModel::class);
+
+        $this->setLayout($this->main_layout)->setTemplate('view/product/batch-edit');
+
+        return $this->render(array_merge($data, [
+            'ids' => $ids,
+            'products' => $products,
+            'colors' => $colorModel->get(['hex', 'name']),
+            'units' => $unitModel->get(['id', 'title', 'sign']),
+            'brands' => $brandModel->get(['id', 'name'], 'publish=:pub', ['pub' => DB_YES]),
+            'categories' => $categoryModel->get(['id', 'name'], 'publish=:pub', ['pub' => DB_YES]),
+        ]));
+    }
+
+    /**
+     * @param $ids
+     * @return string
+     * @throws ConfigNotRegisteredException
+     * @throws ControllerException
+     * @throws IDBException
+     * @throws IFileNotExistsException
+     * @throws IInvalidVariableNameException
+     * @throws PathNotRegisteredException
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
+     * @throws \ReflectionException
+     */
+    public function batchEditPrice($ids)
+    {
+        /**
+         * @var DBAuth $auth
+         */
+        $auth = container()->get('auth_admin');
+        if (!$auth->isAllow(RESOURCE_PRODUCT, IAuth::PERMISSION_UPDATE)) {
+            show_403();
+        }
+
+        // use session to store ids to use in form action
+        session()->setFlash('product-curr-ids', $ids);
+
+        $products = $this->getBatchEditProducts($ids);
+        if (!count($products)) {
+            return $this->show404();
+        }
+
+        $data = [];
+        if (is_post()) {
+            $formHandler = new GeneralFormHandler();
+            $data = $formHandler->handle(BatchEditProductPriceForm::class, 'product_batch_edit');
+        }
+
+        /**
+         * @var BrandModel $brandModel
+         */
+        $brandModel = container()->get(BrandModel::class);
+        /**
+         * @var ColorModel $colorModel
+         */
+        $colorModel = container()->get(ColorModel::class);
+        /**
+         * @var CategoryModel $categoryModel
+         */
+        $categoryModel = container()->get(CategoryModel::class);
+        /**
+         * @var UnitModel $unitModel
+         */
+        $unitModel = container()->get(UnitModel::class);
+
+        $this->setLayout($this->main_layout)->setTemplate('view/product/batch-edit-price');
+
+        return $this->render(array_merge($data, [
+            'ids' => $ids,
+            'products' => $products,
+            'colors' => $colorModel->get(['hex', 'name']),
+            'units' => $unitModel->get(['id', 'title', 'sign']),
+            'brands' => $brandModel->get(['id', 'name'], 'publish=:pub', ['pub' => DB_YES]),
+            'categories' => $categoryModel->get(['id', 'name'], 'publish=:pub', ['pub' => DB_YES]),
+        ]));
+    }
+
+    /**
      * @param $id
      * @throws IDBException
      * @throws \DI\DependencyException
@@ -476,6 +610,17 @@ class ProductController extends AbstractAdminController implements IDatatableCon
                 });
 
                 $columns = [
+                    [
+                        'db' => 'pa.product_id',
+                        'db_alias' => 'chk_id',
+                        'dt' => 'chkId',
+                        'formatter' => function ($d) {
+                            return $this->setTemplate('partial/admin/parser/product-checkbox')
+                                ->render([
+                                    'id' => $d,
+                                ]);
+                        }
+                    ],
                     ['db' => 'pa.product_id', 'db_alias' => 'id', 'dt' => 'id'],
                     [
                         'db' => 'pa.title',
@@ -843,5 +988,33 @@ class ProductController extends AbstractAdminController implements IDatatableCon
         }
 
         response()->json($response);
+    }
+
+    /**
+     * @param $ids
+     * @return array
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
+     */
+    private function getBatchEditProducts($ids)
+    {
+        /**
+         * @var $productModel ProductModel
+         */
+        $productModel = container()->get(ProductModel::class);
+
+        $idsArr = explode('/', str_replace('\\', '/', $ids));
+        $idInClause = '';
+        $idBindParams = [];
+        foreach ($idsArr as $k => $id) {
+            $idInClause .= ":id{$k},";
+            $idBindParams["id{$k}"] = $id;
+        }
+        $idInClause = rtrim($idInClause, ',');
+        $products = $productModel->get([
+            'title', 'image',
+        ], 'id IN (' . $idInClause . ')', $idBindParams);
+
+        return $products;
     }
 }

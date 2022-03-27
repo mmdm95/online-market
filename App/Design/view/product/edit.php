@@ -180,7 +180,7 @@ $validator = form_validator();
                                     data-sample-element="#__sample_all_product"
                                     data-clearable-elements='["inp-edit-product-stock-count[]","inp-edit-product-max-count[]","inp-edit-product-color[]","inp-edit-product-size[]","inp-edit-product-weight[]","inp-edit-product-guarantee[]","inp-edit-product-price[]","inp-edit-product-discount-price[]","inp-edit-product-discount-date[]","inp-edit-product-product-availability[]","inp-edit-product-consider-discount-date[]"]'
                                     data-alt-field='["inp-edit-product-discount-date-tmp[]"]'
-                                    data-edit-remove="true">
+                                    data-add-remove="true">
                                 افزودن محصول جدید
                                 <i class="icon-plus2 ml-2" aria-hidden="true"></i>
                             </button>

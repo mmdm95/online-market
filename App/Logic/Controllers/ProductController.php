@@ -6,6 +6,7 @@ use App\Logic\Abstracts\AbstractHomeController;
 use App\Logic\Handlers\ResourceHandler;
 use App\Logic\Middlewares\Logic\NeedLoginResponseMiddleware;
 use App\Logic\Models\BaseModel;
+use App\Logic\Models\CategoryModel;
 use App\Logic\Models\CommentModel;
 use App\Logic\Models\Model;
 use App\Logic\Models\ProductModel;
@@ -39,9 +40,25 @@ class ProductController extends AbstractHomeController
          * @var Model $model
          */
         $model = container()->get(Model::class);
+        /**
+         * @var ProductModel $productModel
+         */
+        $productModel = container()->get(ProductModel::class);
+        /**
+         * @var CategoryModel $categoryModel
+         */
+        $categoryModel = container()->get(CategoryModel::class);
+
+        $hasCategory = false;
+        if(is_numeric($category)) {
+            $hasCategory = (bool)$categoryModel->count(
+                'id=:id AND publish=:pub',
+                ['id' => $category, 'pub' => DB_YES]
+            );
+        }
 
         // load side categories
-        if (is_numeric($category)) {
+        if (is_numeric($category) && $hasCategory) {
             $select = $model->select();
             $select
                 ->from(BaseModel::TBL_CATEGORIES)
@@ -70,44 +87,70 @@ class ProductController extends AbstractHomeController
         }
 
         // load brands
-        $select = $model->select();
-        $select
-            ->from(BaseModel::TBL_BRANDS)
-            ->cols(['id', 'name'])
-            ->where('publish=:pub')
-            ->bindValues([
-                'pub' => DB_YES,
-            ]);
-        $brands = $model->get($select);
+        if (is_numeric($category) && $hasCategory) {
+            $brands = $productModel->getBrandsFromProductCategory($category, ['id', 'name']);
+        } else {
+            $select = $model->select();
+            $select
+                ->from(BaseModel::TBL_BRANDS)
+                ->cols(['id', 'name'])
+                ->where('publish=:pub')
+                ->bindValues([
+                    'pub' => DB_YES,
+                ]);
+            $brands = $model->get($select);
+        }
 
         // load colors
-        $select = $model->select();
-        $select
-            ->from(BaseModel::TBL_COLORS)
-            ->cols(['name', 'hex'])
-            ->where('publish=:pub')
-            ->bindValues([
-                'pub' => DB_YES,
-            ]);
-        $colors = $model->get($select);
+        if (is_numeric($category) && $hasCategory) {
+            $colors = $productModel->getSmthFromProductCategory(
+                $category,
+                ['DISTINCT(pa.color_name) AS name', 'pa.color_hex AS hex']
+            );
+        } else {
+            $select = $model->select();
+            $select
+                ->from(BaseModel::TBL_COLORS)
+                ->cols(['DISTINCT(name)', 'hex'])
+                ->where('publish=:pub')
+                ->bindValues([
+                    'pub' => DB_YES,
+                ]);
+            $colors = $model->get($select);
+        }
 
         // load sizes and models
-        $select = $model->select();
-        $select
-            ->from(BaseModel::TBL_PRODUCT_PROPERTY)
-            ->cols(['distinct(size)']);
-        $sizesNModels = $model->get($select);
         $sizes = [];
+        if (is_numeric($category) && $hasCategory) {
+            $sizesNModels = $productModel->getSmthFromProductCategory($category, ['DISTINCT(pa.size)']);
+        } else {
+            $select = $model->select();
+            $select
+                ->from(BaseModel::TBL_PRODUCT_PROPERTY)
+                ->cols(['DISTINCT(size)']);
+            $sizesNModels = $model->get($select);
+        }
+
         foreach ($sizesNModels as $item) {
             if (trim($item['size']) != '') $sizes[] = $item['size'];
         }
 
         // get max price
-        $select = $model->select();
-        $select
-            ->from(BaseModel::TBL_PRODUCT_PROPERTY)
-            ->cols(['MAX(price) AS max_price']);
-        $maxPrice = $model->get($select);
+        $where = '';
+        $bindValues = [];
+        if (is_numeric($category) && $hasCategory) {
+            $where .= 'pa.category_id=:cId';
+            $bindValues['cId'] = $category;
+        }
+        $maxPrice = $productModel->getLimitedProduct(
+            $where,
+            $bindValues,
+            ['pa.product_id DESC'],
+            1,
+            0,
+            ['pa.product_id'],
+            ['MAX(price) AS max_price']
+        );
         if (count($maxPrice)) {
             $maxPrice = $maxPrice[0]['max_price'];
         } else {

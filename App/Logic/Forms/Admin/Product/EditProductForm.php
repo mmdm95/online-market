@@ -6,7 +6,6 @@ use App\Logic\Interfaces\IPageForm;
 use App\Logic\Models\BrandModel;
 use App\Logic\Models\CategoryModel;
 use App\Logic\Models\ColorModel;
-use App\Logic\Models\FestivalModel;
 use App\Logic\Models\ProductModel;
 use App\Logic\Models\UnitModel;
 use App\Logic\Utils\ProductUtil;
@@ -159,11 +158,13 @@ class EditProductForm implements IPageForm
             ->stopValidationAfterFirstError(false)
             ->required()
             ->stopValidationAfterFirstError(true)
-            ->isInteger();
+            ->isInteger()
+            ->greaterThan(0);
         // alert product
         $validator
             ->setFields('inp-edit-product-alert-product')
-            ->isInteger();
+            ->isInteger()
+            ->greaterThan(0);
         // related products
         $validator
             ->setFields('inp-edit-product-related.*')

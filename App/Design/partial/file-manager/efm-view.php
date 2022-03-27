@@ -164,7 +164,7 @@
                             clickedItem = $(this);
                         }
                     });
-            }
+            };
 
             /**
              * @param filename

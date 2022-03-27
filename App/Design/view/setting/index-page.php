@@ -616,6 +616,7 @@ $validator = form_validator();
                                 <?php
                                 $items = config()->get('settings.index_general_sliders.value') ?: [];
                                 $errorItemImages = input()->post('inp-setting-general-slider-image');
+                                $errorItemImagesLinks = input()->post('inp-setting-general-slider-image-link');
                                 $errorItemTitles = input()->post('inp-setting-general-slider-title');
                                 $errorItemTypes = input()->post('inp-setting-general-slider-type');
                                 $errorItemLimits = input()->post('inp-setting-general-slider-limit');
@@ -657,9 +658,7 @@ $validator = form_validator();
                                                                         <i class="icon-plus2"></i>
                                                                     </div>
                                                                 </div>
-                                                                <?php if (0 != $counter): ?>
-                                                                    <?php load_partial('admin/parser/image-cleaner-btn'); ?>
-                                                                <?php endif; ?>
+                                                                <?php load_partial('admin/parser/image-cleaner-btn'); ?>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -671,7 +670,7 @@ $validator = form_validator();
                                                                class="form-control"
                                                                placeholder="برای مثال: http://www.example.com"
                                                                name="inp-setting-general-slider-image-link[]"
-                                                               value="<?= $validator->setInput('inp-setting-general-slider-image-link.' . $counter, isset($errorItemLinks[$k]) ? $errorItemLinks[$k]->getValue() : ''); ?>">
+                                                               value="<?= $validator->setInput('inp-setting-general-slider-image-link.' . $counter, isset($errorItemImagesLinks[$k]) ? $errorItemImagesLinks[$k]->getValue() : ''); ?>">
                                                     </div>
                                                 </div>
                                             </div>
@@ -689,7 +688,7 @@ $validator = form_validator();
                                                 <label>
                                                     نوع محصولات:
                                                 </label>
-                                                <select data-placeholder="نوع تب‌بندی را انتخاب کنید..."
+                                                <select data-placeholder="نوع اسلایدر را انتخاب کنید..."
                                                         class="form-control form-control-select2"
                                                         name="inp-setting-general-slider-type[]" data-fouc>
                                                     <option value="<?= DEFAULT_OPTION_VALUE; ?>"
@@ -786,9 +785,7 @@ $validator = form_validator();
                                                                             <i class="icon-plus2"></i>
                                                                         </div>
                                                                     </div>
-                                                                    <?php if (0 != $counter): ?>
-                                                                        <?php load_partial('admin/parser/image-cleaner-btn'); ?>
-                                                                    <?php endif; ?>
+                                                                    <?php load_partial('admin/parser/image-cleaner-btn'); ?>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -819,7 +816,7 @@ $validator = form_validator();
                                                 <label>
                                                     نوع محصولات:
                                                 </label>
-                                                <select data-placeholder="نوع تب‌بندی را انتخاب کنید..."
+                                                <select data-placeholder="نوع اسلایدر را انتخاب کنید..."
                                                         class="form-control form-control-select2"
                                                         name="inp-setting-general-slider-type[]" data-fouc>
                                                     <option value="<?= DEFAULT_OPTION_VALUE; ?>"
@@ -901,9 +898,7 @@ $validator = form_validator();
                                                                     <i class="icon-plus2"></i>
                                                                 </div>
                                                             </div>
-                                                            <?php if (0 != $counter++): ?>
-                                                                <?php load_partial('admin/parser/image-cleaner-btn'); ?>
-                                                            <?php endif; ?>
+                                                            <?php load_partial('admin/parser/image-cleaner-btn'); ?>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -931,7 +926,7 @@ $validator = form_validator();
                                             <label>
                                                 نوع محصولات:
                                             </label>
-                                            <select data-placeholder="نوع تب‌بندی را انتخاب کنید..."
+                                            <select data-placeholder="نوع اسلایدر را انتخاب کنید..."
                                                     class="form-control form-control-select2"
                                                     name="inp-setting-general-slider-type[]" data-fouc>
                                                 <option value="<?= DEFAULT_OPTION_VALUE; ?>"

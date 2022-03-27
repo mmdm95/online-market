@@ -231,9 +231,9 @@ class ReportOrderController extends AbstractAdminController implements
                      */
                     $orderModel = container()->get(OrderModel::class);
 
-                    $cols[] = 'u.id AS main_user_id';
-                    $cols[] = 'o.send_status_code';
-                    $cols[] = 'o.send_status_color';
+                    $cols[] = 'oa.user_id AS main_user_id';
+                    $cols[] = 'oa.send_status_code';
+                    $cols[] = 'oa.send_status_color';
 
                     if (!empty($where)) {
                         $where .= ' AND ';

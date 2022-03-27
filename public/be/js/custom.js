@@ -1925,7 +1925,10 @@
             editSecurityQuestionId = null,
             editDepositTypeId = null,
             //-----
-            switcheryElements = [];
+            switcheryElements = [],
+            //-----
+            tableFabMenu,
+            checkboxes;
 
         admin = new window.TheAdmin();
 
@@ -2473,7 +2476,7 @@
 
                     // reInitialize
                     table.on('draw', function () {
-                        datatableInitCompleteActions($this);
+                        datatableInitCompleteActions($this, table);
                     });
 
                     // Highlighting rows and columns on mouseover
@@ -3890,9 +3893,87 @@
         }
 
         /**
-         * Actions to take after a datatable initialize(reinitialize)
+         * Checkbox actions for datatable multiple selection
          */
-        function datatableInitCompleteActions(table) {
+
+        tableFabMenu = $('#tableFabMenu');
+        checkboxes = [];
+
+        function addItemToChkArr(chk) {
+            var id;
+            chk.each(function () {
+                id = $(this).attr('data-product-id');
+                id = parseInt(id, 10);
+                if (id && id !== -1 && $.inArray(id, checkboxes) === -1) {
+                    checkboxes.push(id);
+                    chk.closest('tr').addClass('selected');
+                    showTableFabMenu();
+                }
+            });
+            // update selected items count
+            tableFabMenu.find('.selItemsCount').text(checkboxes.length);
+        }
+
+        function removeItemFromChkArr(chk) {
+            var id;
+            chk.each(function () {
+                id = $(this).attr('data-product-id');
+                id = parseInt(id, 10);
+                if (id && id !== -1 && $.inArray(id, checkboxes) !== -1) {
+                    checkboxes.splice(checkboxes.indexOf(id), 1);
+                    chk.closest('tr').removeClass('selected');
+                }
+                if (!checkboxes.length) {
+                    hideTableFabMenu();
+                }
+            });
+            // update selected items count
+            tableFabMenu.find('.selItemsCount').text(checkboxes.length);
+        }
+
+        function checkItemChk(chkContainer) {
+            chkContainer.find('input[type="checkbox"]').attr('checked', 'checked').prop('checked', 'checked');
+            chkContainer.find('span').addClass('checked');
+            chkContainer.closest('tr').addClass('selected');
+
+            if (checkboxes.length) {
+                showTableFabMenu();
+            } else {
+                hideTableFabMenu();
+            }
+        }
+
+        function uncheckItemChk(chkContainer) {
+            chkContainer.find('input[type="checkbox"]').removeAttr('checked').prop('checked', 'false');
+            chkContainer.find('span').removeClass('checked');
+            chkContainer.closest('tr').removeClass('selected');
+
+            if (checkboxes.length) {
+                showTableFabMenu();
+            } else {
+                hideTableFabMenu();
+            }
+        }
+
+        function showTableFabMenu() {
+            if (tableFabMenu.is(':hidden')) {
+                tableFabMenu.hide();
+            }
+            tableFabMenu.removeClass('hide').stop().fadeIn(300);
+        }
+
+        function hideTableFabMenu() {
+            tableFabMenu.stop().fadeOut(300, function () {
+                $(this).hide().addClass('hide');
+            });
+        }
+
+        hideTableFabMenu();
+
+        /**
+         * Actions to take after a datatable initialize/reinitialize
+         */
+        function datatableInitCompleteActions(table, dtTable) {
             // Initialize select inputs in datatable
             $('.dataTables_length select').select2({
                 minimumResultsForSearch: Infinity,
@@ -3926,8 +4007,8 @@
 
             // change status button click event
             $('.__item_status_changer_btn')
-                .off('change')
-                .on('change', function () {
+                .off('change' + variables.namespace)
+                .on('change' + variables.namespace, function () {
                     changeOperation($(this), table);
                 });
 
@@ -4014,6 +4095,57 @@
                 .on('click' + variables.namespace, function () {
                     editDepositTypeBtnClick($(this), table);
                 });
+
+            initializeAllPlugins();
+
+            if (dtTable) {
+                dtTable.rows().every(function (rowIdx, tableLoop, rowLoop) {
+                    var data = this.data();
+                    var row = this;
+                    $.each(checkboxes, function (idx, val) {
+                        if (parseInt(val, 10) === parseInt(data.id, 10)) {
+                            checkItemChk($(row.node()).find('.select-item-chk'));
+                        }
+                    });
+                });
+            }
+
+            // select all items feature
+            $('#SelectAllItems').off('click' + variables.namespace).on('click' + variables.namespace, function () {
+                var chk2;
+                var chk = $(this).find('input[type="checkbox"]');
+                if (chk) {
+                    if (chk.is(':checked')) {
+                        $('.select-item-chk').each(function () {
+                            chk2 = $(this).find('input[type="checkbox"]');
+                            if (chk2) {
+                                addItemToChkArr(chk2);
+                                checkItemChk($(this));
+                            }
+                        });
+                    } else {
+                        $('.select-item-chk').each(function () {
+                            chk2 = $(this).find('input[type="checkbox"]');
+                            if (chk2) {
+                                removeItemFromChkArr(chk2);
+                                uncheckItemChk($(this));
+                            }
+                        });
+                    }
+                }
+            });
+
+            // make all items selectable if it has that feature
+            $('.select-item-chk').off('click' + variables.namespace).on('click' + variables.namespace, function () {
+                var chk = $(this).find('input[type="checkbox"]');
+                if (chk) {
+                    if (chk.is(':checked')) {
+                        addItemToChkArr(chk);
+                    } else {
+                        removeItemFromChkArr(chk);
+                    }
+                }
+            });
         }
 
         // Add bottom spacing if reached bottom,
@@ -4161,6 +4293,37 @@
             var id = $(this).attr('data-export-id');
             if (id) {
                 window.location = variables.url.report.order.pdfExport + '/' + id;
+            }
+        });
+
+        //---------------------------------------------------------------
+        // When Batch Edit of Product Clicked
+        //---------------------------------------------------------------
+        var pSubmitUrl, pSubmitUrlPrice;
+        var pBatchEditBtn = $('#productBatchEdit');
+
+        pSubmitUrl = pBatchEditBtn.attr('data-submit-url');
+        pBatchEditBtn.on('click' + variables.namespace, function (e) {
+            e.preventDefault();
+            //
+            if (checkboxes.length) {
+                var frm = $('<form class="tempProductFrm" action="' + pSubmitUrl + '/' + checkboxes.join('/') + '" method="get" />');
+                $(this).find('.tempProductFrm').remove();
+                $(this).append(frm);
+                frm.submit();
+            }
+        });
+
+        var pBatchEditPriceBtn = $('#productBatchEditPrice');
+        pSubmitUrlPrice = pBatchEditPriceBtn.attr('data-submit-url');
+        pBatchEditPriceBtn.on('click' + variables.namespace, function (e) {
+            e.preventDefault();
+            //
+            if (checkboxes.length) {
+                var frm = $('<form class="tempProductPriceFrm" action="' + pSubmitUrlPrice + '/' + checkboxes.join('/') + '" method="get" />');
+                $(this).find('.tempProductPriceFrm').remove();
+                $(this).append(frm);
+                frm.submit();
             }
         });
 

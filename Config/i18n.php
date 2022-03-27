@@ -10,13 +10,13 @@ return [
 
     /**
      * Site language
-     * Default is ** en ** or ** ISOLanguageCodes::LANGUAGE_ENGLISH **
+     * Default is **en** or **ISOLanguageCodes::LANGUAGE_ENGLISH**
      */
     'language' => ISOLanguageCodes::LANGUAGE_PERSIAN_FARSI,
 
     /**
      * Is it a RTL language
-     * Default is ** false **
+     * Default is **false**
      */
     'is_rtl' => true,
 ];

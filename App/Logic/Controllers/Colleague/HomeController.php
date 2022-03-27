@@ -13,12 +13,14 @@ class HomeController extends AbstractColleagueController
 {
     /**
      * @return string
-     * @throws \ReflectionException
      * @throws ConfigNotRegisteredException
      * @throws ControllerException
-     * @throws PathNotRegisteredException
      * @throws IFileNotExistsException
      * @throws IInvalidVariableNameException
+     * @throws PathNotRegisteredException
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
+     * @throws \ReflectionException
      */
     public function index()
     {

@@ -3,6 +3,7 @@
 namespace App\Logic\Models;
 
 use Aura\SqlQuery\Exception as AuraException;
+use Dotenv\Util\Str;
 use Sim\Utils\StringUtil;
 
 class ProductModel extends BaseModel
@@ -187,6 +188,7 @@ class ProductModel extends BaseModel
             ->from(self::TBL_PRODUCT_ADVANCED)
             ->cols($columns)
             ->where('product_id IN (' . $inClause . ')')
+            ->bindValues($bind_values)
             ->groupBy($group_by);
 
         return $this->db->fetchAll($select->getStatement(), $select->getBindValues());
@@ -513,7 +515,7 @@ class ProductModel extends BaseModel
         $productSelect
             ->cols(['color_hex', 'color_name'])
             ->from(self::TBL_PRODUCT_PROPERTY)
-            ->where('product_id=:pId',)
+            ->where('product_id=:pId')
             ->bindValues(['pId' => $product_id]);
         $prevProduct = $this->db->fetchAll($productSelect->getStatement(), $productSelect->getBindValues());
         $prevProduct = count($prevProduct) ? $prevProduct[0] : [];
@@ -594,6 +596,95 @@ class ProductModel extends BaseModel
         }
 
         if ($res && $res2 && $res3) {
+            $this->db->commit();
+            return true;
+        }
+
+        $this->db->rollBack();
+        return false;
+    }
+
+    /**
+     * @param array $ids
+     * @param array $info
+     * @return bool
+     */
+    public function updateBatchProducts(array $ids, array $info)
+    {
+        $this->db->beginTransaction();
+        //
+        $inClause = '';
+        $bindParams = [];
+        foreach ($ids as $k => $id) {
+            $inClause .= ":id{$k},";
+            $bindParams["id{$k}"] = $id;
+        }
+        $inClause = rtrim($inClause, ',');
+        //
+        $update = $this->connector->update();
+        $update
+            ->table($this->table)
+            ->cols($info)
+            ->where('id IN (' . $inClause . ')')
+            ->bindValues($bindParams);
+
+        $stmt = $this->db->prepare($update->getStatement());
+        $res = $stmt->execute($update->getBindValues());
+
+        if ($res) {
+            $this->db->commit();
+            return true;
+        }
+
+        $this->db->rollBack();
+        return false;
+    }
+
+    /**
+     * @param array $ids
+     * @param array $rawInfo
+     * @param array $productInfo
+     * @return bool
+     */
+    public function updateBatchProductsPrice(array $ids, array $rawInfo = [], array $productInfo = [])
+    {
+        $this->db->beginTransaction();
+
+        $update = $this->connector->update();
+        $update
+            ->table(BaseModel::TBL_PRODUCTS)
+            ->cols($productInfo);
+
+        $stmt = $this->db->prepare($update->getStatement());
+        $res = $stmt->execute($update->getBindValues());
+
+        if (!$res) {
+            $this->db->rollBack();
+            return false;
+        }
+        //
+        $inClause = '';
+        $bindParams = [];
+        foreach ($ids as $k => $id) {
+            $inClause .= ":id{$k},";
+            $bindParams["id{$k}"] = $id;
+        }
+        $inClause = rtrim($inClause, ',');
+        //
+        $update = $this->connector->update();
+        $update
+            ->table(BaseModel::TBL_PRODUCT_PROPERTY)
+            ->where('product_id IN (' . $inClause . ')')
+            ->bindValues($bindParams);
+
+        foreach ($rawInfo as $k => $v) {
+            $update->set($k, $v);
+        }
+
+        $stmt = $this->db->prepare($update->getStatement());
+        $res = $stmt->execute($update->getBindValues());
+
+        if ($res) {
             $this->db->commit();
             return true;
         }
@@ -765,5 +856,72 @@ class ProductModel extends BaseModel
 
         $stmt = $this->db->prepare($update->getStatement());
         return $stmt->execute($update->getBindValues());
+    }
+
+    /**
+     * @param int $categoryId
+     * @param array $columns
+     * @return array
+     */
+    public function getBrandsFromProductCategory(int $categoryId = -1, array $columns = ['*']): array
+    {
+        // first get all products' brands in specific category
+        $select = $this->connector->select();
+        $select
+            ->from(self::TBL_PRODUCT_ADVANCED . ' AS pa')
+            ->cols(['pa.brand_id'])
+            ->groupBy(['pa.brand_id'])
+            ->where('pa.category_id=:cId')
+            ->bindValue('cId', $categoryId)
+            ->orWhere('pa.category_all_parents_id REGEXP :cIdReg')
+            ->bindValue('cIdReg', '([^0-9]|^)' . preg_quote($categoryId) . '([^0-9]|$)');
+
+        $productBrands = $this->db->fetchAll($select->getStatement(), $select->getBindValues());
+
+        // next it's time to get all brands information from previous query
+        $inClause = '';
+        $bind_values = [];
+        foreach ($productBrands as $item) {
+            $inClause .= ":id{$item['brand_id']},";
+            $bind_values["id{$item['brand_id']}"] = $item['brand_id'];
+        }
+        $inClause = trim($inClause, ',');
+        //-----
+        if (empty($inClause)) return [];
+
+        $select = $this->connector->select();
+        $select
+            ->from(self::TBL_BRANDS)
+            ->cols($columns)
+            ->where('id IN (' . $inClause . ')')
+            ->bindValues($bind_values);
+
+        return $this->db->fetchAll($select->getStatement(), $select->getBindValues());
+    }
+
+    /**
+     * Use [pa for product_advanced]
+     *
+     * @param int $categoryId
+     * @param array $columns
+     * @return array
+     */
+    public function getSmthFromProductCategory(int $categoryId = -1, array $columns = ['*']): array
+    {
+        $where = 'pa.category_id=:cId OR pa.category_all_parents_id REGEXP :cIdReg';
+        $bindValues = [
+            'cId' => $categoryId,
+            'cIdReg' => '([^0-9]|^)' . preg_quote($categoryId) . '([^0-9]|$)',
+        ];
+
+        return $this->getLimitedProduct(
+            $where,
+            $bindValues,
+            ['pa.product_id DESC'],
+            null,
+            0,
+            ['pa.product_id'],
+            $columns
+        );
     }
 }
