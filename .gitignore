@@ -197,12 +197,9 @@ vendor/*
 resource/*
 !resource/.keep
 .env
-<<<<<<< HEAD
 .env.my
 .env.*
 !.env.example
-=======
->>>>>>> parent of a90033e (fix: some problems has been solved with backend ans search struffs)
 .js.env
 node_modules
 build/*
