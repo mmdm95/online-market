@@ -93,12 +93,11 @@ class CategoryImageController extends AbstractAdminController implements IDatata
 
     /**
      * @param $c_id
-     * @param $id
      * @throws IDBException
      * @throws \DI\DependencyException
      * @throws \DI\NotFoundException
      */
-    public function edit($c_id, $id)
+    public function edit($c_id)
     {
         /**
          * @var DBAuth $auth
@@ -116,7 +115,6 @@ class CategoryImageController extends AbstractAdminController implements IDatata
         $agent = container()->get(Agent::class);
         if (!$agent->isRobot()) {
             session()->setFlash('cat-img-edit-cat-id', $c_id);
-            session()->setFlash('cat-img-edit-id', $id);
             $formHandler = new GeneralAjaxFormHandler();
             $resourceHandler = $formHandler
                 ->setSuccessMessage('تصویر دسته با موفقیت ویرایش شد.')
@@ -132,12 +130,11 @@ class CategoryImageController extends AbstractAdminController implements IDatata
 
     /**
      * @param $c_id
-     * @param $id
      * @throws IDBException
      * @throws \DI\DependencyException
      * @throws \DI\NotFoundException
      */
-    public function remove($c_id, $id)
+    public function remove($c_id)
     {
         /**
          * @var DBAuth $auth
@@ -155,7 +152,7 @@ class CategoryImageController extends AbstractAdminController implements IDatata
         $agent = container()->get(Agent::class);
         if (!$agent->isRobot()) {
             $handler = new GeneralAjaxRemoveHandler();
-            $resourceHandler = $handler->handle(BaseModel::TBL_CATEGORY_IMAGES, $id, 'category_id=:cId', ['cId' => $c_id]);
+            $resourceHandler = $handler->handle(BaseModel::TBL_CATEGORY_IMAGES, null, 'category_id=:cId', ['cId' => $c_id], true);
         } else {
             response()->httpCode(403);
             $resourceHandler
@@ -168,12 +165,11 @@ class CategoryImageController extends AbstractAdminController implements IDatata
 
     /**
      * @param $c_id
-     * @param $id
      * @throws IDBException
      * @throws \DI\DependencyException
      * @throws \DI\NotFoundException
      */
-    public function get($c_id, $id)
+    public function get($c_id)
     {
         /**
          * @var DBAuth $auth
@@ -194,7 +190,7 @@ class CategoryImageController extends AbstractAdminController implements IDatata
              * @var CategoryImageModel $categoryModel
              */
             $categoryModel = container()->get(CategoryImageModel::class);
-            $res = $categoryModel->getFirst(['*'], 'category_id=:cId AND id=:id', ['cId' => $c_id, 'id' => $id]);
+            $res = $categoryModel->getFirst(['*'], 'category_id=:cId', ['cId' => $c_id]);
             if (count($res)) {
                 $resourceHandler
                     ->type(RESPONSE_TYPE_SUCCESS)

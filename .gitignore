@@ -197,6 +197,8 @@ vendor/*
 resource/*
 !resource/.keep
 .env
+.env.my
+.env.*
 .js.env
 node_modules
 build/*

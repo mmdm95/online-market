@@ -492,6 +492,8 @@ class UserController extends AbstractAdminController implements IDatatableContro
                                 ->setTemplate('partial/admin/parser/active-status')
                                 ->render([
                                     'status' => $d,
+                                    'active' => 'پرداخت شده',
+                                    'deactive' => 'پرداخت نشده',
                                 ]);
                             return $status;
                         }

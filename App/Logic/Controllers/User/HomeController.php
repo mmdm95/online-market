@@ -18,6 +18,7 @@ use App\Logic\Models\SecurityQuestionModel;
 use App\Logic\Models\WalletFlowModel;
 use App\Logic\Models\WalletModel;
 use Jenssegers\Agent\Agent;
+use Sim\Auth\DBAuth;
 use Sim\Exceptions\ConfigManager\ConfigNotRegisteredException;
 use Sim\Exceptions\Mvc\Controller\ControllerException;
 use Sim\Exceptions\PathManager\PathNotRegisteredException;
@@ -151,6 +152,16 @@ class HomeController extends AbstractUserController
                 $formHandler = new GeneralFormHandler();
                 $data = $formHandler->handle(ChangeUserOtherForm::class, 'other_change');
             }
+
+            /**
+             * @var DBAuth $auth
+             */
+            $auth = container()->get('auth_home');
+
+            // get current user info
+            $this->extendDefaultArguments([
+                'user' => get_current_authenticated_user($auth),
+            ]);
         }
 
         $this->setLayout($this->main_layout)->setTemplate('view/main/user/info');

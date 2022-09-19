@@ -63,20 +63,9 @@ class EditCategoryImageForm implements IPageForm
             ->setFields('inp-edit-cat-img-link')
             ->url();
 
-        $id = session()->getFlash('cat-img-edit-id', null, false);
-        if (!empty($id)) {
-            if (0 === $categoryModel->count('id=:id', ['id' => $id])) {
-                $validator->setError('inp-edit-cat-img-img', 'شناسه تصویر دسته مورد نظر نامعتبر است.');
-            }
-        } else {
-            $validator
-                ->setStatus(false)
-                ->setError('inp-edit-cat-img-img', 'شناسه تصویر دسته مورد نظر نامعتبر است.');
-        }
-
         $category = session()->getFlash('cat-img-edit-cat-id', null, false);
         if (!empty($category)) {
-            if (0 === $categoryImageModel->count('id=:id', ['id' => $category])) {
+            if (0 === $categoryImageModel->count('category_id=:id', ['id' => $category])) {
                 $validator->setError('inp-edit-cat-img-img', 'شناسه دسته مورد نظر نامعتبر است.');
             }
         } else {
@@ -118,7 +107,6 @@ class EditCategoryImageForm implements IPageForm
         $auth = container()->get('auth_admin');
 
         try {
-            $id = session()->getFlash('cat-img-edit-id', null);
             $category = session()->getFlash('cat-img-add-cat-id', null);
             $image = input()->post('inp-add-cat-img-img', '')->getValue();
             $link = input()->post('inp-add-cat-img-link', '')->getValue();
@@ -128,7 +116,7 @@ class EditCategoryImageForm implements IPageForm
                 'link' => $xss->xss_clean($link) ?: null,
                 'updated_at' => time(),
                 'updated_by' => $auth->getCurrentUser()['id'] ?? null,
-            ], 'id=:id AND category_id=:cId', ['id' => $id, 'cId' => $category]);
+            ], 'category_id=:cId', ['cId' => $category]);
             return $res;
         } catch (\Exception $e) {
             return false;
