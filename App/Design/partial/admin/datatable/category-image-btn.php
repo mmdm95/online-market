@@ -6,8 +6,8 @@
             data-edit-id="<?= $row['id']; ?>">
         ویرایش تصویر
     </button>
-    <button type="button" class="btn-outline-danger __item_remover_btn"
-            data-remove-url="<?= url('ajax.unit.remove'); ?>"
+    <button type="button" class="btn btn-outline-danger __item_remover_btn"
+            data-remove-url="<?= url('ajax.category.image.remove'); ?>"
             data-remove-id="<?= $row['id']; ?>">
         حذف تصویر
     </button>

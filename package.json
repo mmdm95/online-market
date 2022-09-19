@@ -16,7 +16,12 @@
     "prod": "npm run production",
     "production": "cross-env NODE_ENV=production webpack --config=node_modules/laravel-mix/setup/webpack.config.js",
     "test": "jest",
-    "watch:test": "npm test -- --watch"
+    "watch:test": "npm test -- --watch",
+    "mix:dev": "mix",
+    "mix:prod": "mix --production",
+    "mix:watch": "mix watch",
+    "mix:watch-poll": "mix watch -- --watch-options-poll=1000",
+    "mix:hot": "mix watch --hot"
   },
   "dependencies": {
     "axios": "^0.21.4",

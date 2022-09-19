@@ -153,6 +153,7 @@ class ReportUtil
                 $offset * $limit,
                 ['pa.product_id'],
                 [
+                    'pa.product_id',
                     'pa.title',
                     'pa.category_name',
                     'pa.brand_name',
@@ -167,7 +168,7 @@ class ReportUtil
             );
             $total += count($items);
             foreach ($items as $item) {
-                $productProperties = $productModel->getProductProperty($item['id'], [
+                $productProperties = $productModel->getProductProperty($item['product_id'], [
                     'stock_count',
                     'color_name',
                     'size',
@@ -201,13 +202,22 @@ class ReportUtil
                     $stockCountStr = '-';
                 }
                 foreach ($productProperties as $product) {
+                    $sizeStr = "$c) -";
+                    $guaranteeStr = "$c) -";
+                    //
                     $avlStr .= "$c) " . is_value_checked($product['is_available']) ? 'موجود' : 'ناموجود';
                     $priceStr .= "$c) " . local_number(number_format(StringUtil::toEnglish($product['price'])));
                     $disPriceStr .= "$c) " . local_number(number_format(StringUtil::toEnglish($product['discounted_price'])));
                     $disDateStr .= "$c) " . !empty($product['discount_until']) ? Jdf::jdate(DEFAULT_TIME_FORMAT) : '-';
                     $colorStr .= "$c) {$product['color_name']}";
-                    $sizeStr .= "$c) {$product['size']}";
-                    $guaranteeStr .= "$c) {$product['guarantee']}";
+                    if(trim($product['size']) != '') {
+                        $sizeStr .= "$c) {$product['size']}";
+                        $sizeStr .= "\n";
+                    }
+                    if(trim($product['guarantee']) != '') {
+                        $guaranteeStr .= "$c) {$product['guarantee']}";
+                        $guaranteeStr .= "\n";
+                    }
                     $weightStr .= "$c) " . local_number(number_format(StringUtil::toEnglish($product['weight']))) . ' گرم';
                     $stockCountStr .= "$c) " . local_number(number_format(StringUtil::toEnglish($product['stock_count'])));
                     //
@@ -216,8 +226,6 @@ class ReportUtil
                     $disPriceStr .= "\n";
                     $disDateStr .= "\n";
                     $colorStr .= "\n";
-                    $sizeStr .= "\n";
-                    $guaranteeStr .= "\n";
                     $weightStr .= "\n";
                     $stockCountStr .= "\n";
                     //

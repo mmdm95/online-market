@@ -91,7 +91,7 @@
                     e.preventDefault();
                     //-----
                     var page = parseInt($(this).attr('data-page-no'), 10);
-                    if (!isNaN(page) && 0 !== page) {
+                    if (!isNaN(page) && 0 !== page && uriParser.get('page') != page) {
                         uriParser.push('page', page, true);
                         loadProduct();
                     }
@@ -364,7 +364,6 @@
         // load product functionality
         function loadProduct() {
             var obj = uriParser.get(null, {}, true);
-
             makeAdjustmentsAccordingToObj(obj);
             if (!isInProgress) {
                 // push query to window state

@@ -156,6 +156,16 @@ abstract class AbstractController implements ITemplateFactory, ITemplateRenderer
     }
 
     /**
+     * @param array $arguments
+     * @return static
+     */
+    public function extendDefaultArguments(array $arguments)
+    {
+        $this->default_arguments = array_merge($this->getDefaultArguments(), $arguments);
+        return $this;
+    }
+
+    /**
      * @return array
      */
     public function getDefaultArguments(): array
