@@ -77,7 +77,7 @@
 
                     <div class="modal-footer">
                         <button type="button" class="btn btn-link" data-dismiss="modal">بستن</button>
-                        <button type="submit" class="btn btn-primary">افزودن تصویر</button>
+                        <button type="submit" class="btn btn-primary">افزودن اسلاید</button>
                     </div>
                 </form>
             </div>
@@ -90,7 +90,7 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header bg-success">
-                    <h5 class="modal-title">ویرایش تصویر دسته‌بندی</h5>
+                    <h5 class="modal-title">ویرایش اسلاید</h5>
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                 </div>
 
@@ -126,7 +126,7 @@
 
                     <div class="modal-footer">
                         <button type="button" class="btn btn-link" data-dismiss="modal">بستن</button>
-                        <button type="submit" class="btn btn-success">ویرایش تصویر</button>
+                        <button type="submit" class="btn btn-success">ویرایش اسلاید</button>
                     </div>
                 </form>
 

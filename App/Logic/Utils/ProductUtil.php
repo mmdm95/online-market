@@ -36,7 +36,7 @@ class ProductUtil
             $limit = config()->get('settings.product_each_page.value');
             $page = 1;
         }
-        $limit = max($limit, 1);
+        $limit = $limit > 0 ? $limit : 1;
         $offset = ((int)$page - 1) * $limit;
 
         // where clause
@@ -50,7 +50,7 @@ class ProductUtil
         if (!is_array($q)) {
             $q = $q->getValue();
             $q = urldecode($q);
-            if (!empty(trim($q))) {
+            if (is_string($q) && !empty(trim($q))) {
                 $where .= ' AND (pa.category_name LIKE :q_p_category';
                 $where .= ' OR pa.title LIKE :q_p_the_title';
                 $where .= ' OR pa.fa_title LIKE :q_p_fa_title';

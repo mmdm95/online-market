@@ -91,7 +91,7 @@ class AddressModel extends BaseModel
      */
     public function getUserAddressesCount(?string $where = null, array $bind_values = []): int
     {
-        $res = $this->getUserAddresses(['COUNT(DISTINCT(u_addr.id)) AS count'], $where, $bind_values);
+        $res = $this->getUserAddresses(['COUNT(DISTINCT(u.id)) AS count'], $where, $bind_values);
         if (count($res)) {
             return (int)$res[0]['count'];
         }

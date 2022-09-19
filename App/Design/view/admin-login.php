@@ -68,7 +68,7 @@ $validator = form_validator();
 
                         <div class="form-group">
                             <button type="submit" class="btn bg-primary btn-block">
-                                ورود
+                                بیا تو دم در بده
                             </button>
                         </div>
 

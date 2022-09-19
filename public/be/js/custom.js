@@ -3793,7 +3793,7 @@
             // clear element after each call
             $(variables.elements.editCategoryImage.form).get(0).reset();
             if (id && cId && currentModal.length) {
-                admin.request(variables.url.categoryImage.get + '/' + cId, 'get', function () {
+                admin.request(variables.url.categoryImage.get + '/' + cId + '/' + id, 'get', function () {
                     var _ = this;
                     if (core.objSize(_.data)) {
                         currentTable = table;
@@ -3944,7 +3944,7 @@
         }
 
         function uncheckItemChk(chkContainer) {
-            chkContainer.find('input[type="checkbox"]').removeAttr('checked').prop('checked', false);
+            chkContainer.find('input[type="checkbox"]').removeAttr('checked').prop('checked', 'false');
             chkContainer.find('span').removeClass('checked');
             chkContainer.closest('tr').removeClass('selected');
 
@@ -4972,7 +4972,6 @@
                     // clear element after success
                     $(variables.elements.addCategoryImage.form).get(0).reset();
                     $(variables.elements.addCategoryImage.form).find('input[type="hidden"]').val('');
-                    removeImageFromPlaceholder($(variables.elements.addCategoryImage.form).find('[name="' + variables.elements.addCategoryImage.inputs.image + '"]'));
                     addCategoryImageId = null;
                     createDatatable();
                     //-----
@@ -5008,7 +5007,6 @@
                     // clear element after success
                     $(variables.elements.editCategoryImage.form).get(0).reset();
                     $(variables.elements.editCategoryImage.form).find('input[type="hidden"]').val('');
-                    removeImageFromPlaceholder($(variables.elements.editCategoryImage.form).find('[name="' + variables.elements.editCategoryImage.inputs.image + '"]'));
                     currentCategoryId = null;
                     editCategoryImageId = null;
                     if (currentModal) {

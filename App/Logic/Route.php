@@ -1122,14 +1122,17 @@ class Route implements IInitialize
                 Router::post('/category/image/add/{c_id}', [AdminCategoryImageController::class, 'add'])->where([
                     'c_id' => '[0-9]+',
                 ])->name('ajax.category.image.add');
-                Router::post('/category/image/edit/{c_id}', [AdminCategoryImageController::class, 'edit'])->where([
+                Router::post('/category/image/edit/{c_id}/{id}', [AdminCategoryImageController::class, 'edit'])->where([
                     'c_id' => '[0-9]+',
+                    'id' => '[0-9]+',
                 ])->name('ajax.category.image.edit');
-                Router::get('/category/image/get/{c_id}', [AdminCategoryImageController::class, 'get'])->where([
+                Router::get('/category/image/get/{c_id}/{id}', [AdminCategoryImageController::class, 'get'])->where([
                     'c_id' => '[0-9]+',
+                    'id' => '[0-9]+',
                 ])->name('ajax.category.image.get');
-                Router::delete('/category/image/remove/{c_id}', [AdminCategoryImageController::class, 'remove'])->where([
+                Router::delete('/category/image/remove/{c_id}/{id}', [AdminCategoryImageController::class, 'remove'])->where([
                     'c_id' => '[0-9]+',
+                    'id' => '[0-9]+',
                 ])->name('ajax.category.image.remove');
 
                 /**

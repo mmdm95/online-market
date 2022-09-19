@@ -240,7 +240,6 @@
                 var self = this, rv = {}, i, len, t;
                 encoded = !(false === encoded);
                 unique = true === unique;
-
                 if (this.isObject(arr)) {
                     for (i in arr) {
                         if (arr.hasOwnProperty(i)) {
@@ -470,7 +469,7 @@
             },
         };
 
-    window.UriParser = (function (helper) {
+    window.UriParser = (function () {
         function UriParser() {
             //------------------------------------------
             // PRIVATE VARIABLES
@@ -593,7 +592,7 @@
 
                 self.canCallChangeState = false;
 
-                // if you want to overwrite the object
+                // if want to overwrite the object
                 if (true === overwrite) {
                     self.clear();
                 }
@@ -768,7 +767,6 @@
             pushState: function (stateObj) {
                 var self = this;
                 stateObj = stateObj && utils.isObject(stateObj) ? stateObj : {};
-                self.obj = stateObj.obj;
                 self.updateSearch();
 
                 // in case you are using Turbolinks
@@ -791,7 +789,6 @@
             replaceState: function (stateObj) {
                 var self = this;
                 stateObj = stateObj && utils.isObject(stateObj) ? stateObj : {};
-                self.obj = stateObj.obj;
                 self.updateSearch();
 
                 history.replaceState(stateObj, '', self.search);
@@ -812,11 +809,15 @@
              * @returns {UriParser}
              */
             updateSearch: function () {
-                this.search = this.query(null, true, false, this.numberedQuery);
+                if (this.numberedQuery) {
+                    this.search = this.query(null, true, false, true);
+                } else {
+                    this.search = this.query(null, true, false, false);
+                }
                 return this;
             },
         });
 
         return UriParser;
-    })(helper);
+    })();
 })();
