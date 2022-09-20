@@ -62,8 +62,8 @@
                         <div id="navCatContent" class="nav_cat navbar collapse">
                             <ul>
                                 <?php
-                                $arr = array_slice($menu, 0, 12);
-                                $othersArr = array_slice($menu, 12);
+                                $arr = array_slice($menu, 0, 10);
+                                $othersArr = array_slice($menu, 10);
                                 ?>
                                 <?php foreach ($arr as $m): ?>
                                     <?php

@@ -2922,7 +2922,7 @@ input.text {
 #navCatContent li a {
     text-transform: capitalize;
     font-size: 14px;
-    min-height: 38px;
+    min-height: 52px;
 }
 
 #navCatContent li a i {
