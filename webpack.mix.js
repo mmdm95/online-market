@@ -4,9 +4,8 @@ let mix = require('laravel-mix');
 mix
     .setPublicPath('public')
     .setResourceRoot('../')
-    .js('public/js/plugins/MyUriParser.js', 'public/js/uri-parser.js')
-    // .css('public/css/all/app.css', 'public/css/app.css')
-    // .css('public/css/all/main.css', 'public/css/main.css')
+    .css('public/css/all/app.css', 'public/css/app.css')
+    .css('public/css/all/main.css', 'public/css/main.css')
     // .autoload({
     //     jquery: ['$', 'window.jQuery'],
     //     axios: ['window.axios'],
