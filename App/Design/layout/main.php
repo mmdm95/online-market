@@ -12,6 +12,19 @@
 
     <title><?= $title ?? ''; ?></title>
 
+    <?php
+    // meta creator
+    if (count($meta ?? [])) {
+        foreach ($meta as $m) {
+            if (is_array($m) && isset($m['name']) && !empty($m['name'])) {
+                echo '<meta name="' . $m['name'] . '" content="' . $m['content'] . '">';
+            } elseif (is_string($m)) {
+                echo $m;
+            }
+        }
+    }
+    ?>
+
     <!-- Favicon Icon -->
     <link rel="shortcut icon" type="image/x-icon"
           href="<?= url('image.show') . \config()->get('settings.favicon.value'); ?>">

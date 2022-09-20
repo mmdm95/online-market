@@ -12,7 +12,7 @@ use App\Logic\Utils\Jdf;
                 <li>
                     <div class="post_footer">
                         <div class="post_img">
-                            <a href="<?= url('home.blog', [
+                            <a href="<?= url('home.blog.show', [
                                 'id' => $item['id'],
                                 'slug' => $item['slug'],
                             ]); ?>">
@@ -22,7 +22,7 @@ use App\Logic\Utils\Jdf;
                         </div>
                         <div class="post_content">
                             <h6>
-                                <a href="<?= url('home.blog', [
+                                <a href="<?= url('home.blog.show', [
                                     'id' => $item['id'],
                                     'slug' => $item['slug'],
                                 ]); ?>">

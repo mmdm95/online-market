@@ -190,7 +190,7 @@ $validator = form_validator();
                         <?php
                         $stockCounts = input()->post('inp-edit-product-stock-count');
                         ?>
-                        <?php if (is_array($stockCounts) && count($stockCounts)): ?>
+                        <?php if ((count($product_edit_errors ?? [])) && is_array($stockCounts) && count($stockCounts)): ?>
                             <?php $counter = 0; ?>
                             <?php foreach ($stockCounts as $count): ?>
                                 <fieldset
@@ -230,7 +230,7 @@ $validator = form_validator();
                                                 <?php foreach ($colors as $color): ?>
                                                     <option value="<?= $color['hex']; ?>"
                                                             data-color="<?= $color['hex']; ?>"
-                                                        <?= $validator->setSelect('inp-edit-product-color', $color['hex']) ?: ($color['hex'] == ($product_properties[$counter]['color_hex'] ?? '') ? 'selected="selected"' : ''); ?>>
+                                                        <?= $validator->setSelect('inp-edit-product-color.' . $counter, $color['hex']) ?: ($color['hex'] == ($product_properties[$counter]['color_hex'] ?? '') ? 'selected="selected"' : ''); ?>>
                                                         <?= $color['name']; ?>
                                                     </option>
                                                 <?php endforeach; ?>
@@ -299,7 +299,7 @@ $validator = form_validator();
                                                 <label class="form-check-label">
                                                     <input type="checkbox"
                                                            name="inp-edit-product-consider-discount-date[]"
-                                                           value="<?= $validator->setCheckbox('inp-edit-product-consider-discount-date', '') ?>"
+                                                           value="<?= $validator->setCheckbox('inp-edit-product-consider-discount-date.' . $counter, '') ?>"
                                                            class="styled form-input-styled">
                                                     عدم درنظرگیری تاریخ تخفیف
                                                 </label>

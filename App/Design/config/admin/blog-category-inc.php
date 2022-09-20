@@ -53,7 +53,7 @@ return [
                 'is_active' => false,
             ],
             [
-                'url' => url('admin.category.view')->getRelativeUrl(),
+                'url' => url('admin.blog.category.view')->getRelativeUrl(),
                 'text' => 'دسته‌بندی‌ها',
                 'is_active' => false,
             ],

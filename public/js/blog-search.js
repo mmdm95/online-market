@@ -96,6 +96,8 @@
                     isInProgress = false;
                     // reload function(s)
                     paginationClick();
+                    //
+                    shop.lazyFn();
                 }, {
                     params: uriParser.get(null, {}, true),
                 }, true, function () {

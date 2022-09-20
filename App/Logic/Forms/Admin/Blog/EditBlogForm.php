@@ -88,7 +88,7 @@ class EditBlogForm implements IPageForm
                  * @var BlogCategoryModel $categoryModel
                  */
                 $categoryModel = container()->get(BlogCategoryModel::class);
-                if ($categoryModel->count('id=:id', ['id' => $value->getValue()]) === 0) return true;
+                if ($categoryModel->count('id=:id', ['id' => $value->getValue()]) !== 0) return true;
                 return false;
             }, '{alias} ' . 'وارد شده وجود ندارد.');
         // abstract

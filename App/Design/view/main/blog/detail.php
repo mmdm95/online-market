@@ -60,43 +60,48 @@ use Sim\Utils\StringUtil;
                             </div>
                         </div>
                     </div>
-                    <div class="post_navigation bg_gray mb-5">
-                        <div class="row align-items-center justify-content-between p-4">
-                            <?php if (count($prev_blog ?? [])): ?>
-                                <div class="col-5">
-                                    <a href="<?= url('home.blog.show', [
-                                        'id' => $prev_blog['id'],
-                                        'slug' => $prev_blog['slug'],
-                                    ]); ?>">
-                                        <div class="post_nav post_nav_prev">
-                                            <i class="ti-arrow-left"></i>
-                                            <span><?= $prev_blog['title']; ?></span>
-                                        </div>
-                                    </a>
-                                </div>
-                            <?php endif; ?>
-                            <?php if (!count($prev_blog ?? []) || !count($next_blog ?? [])): ?>
-                                <div class="col-2">
-                                    <a class="post_nav_home">
-                                        <i class="ti-layout-grid2"></i>
-                                    </a>
-                                </div>
-                            <?php endif; ?>
-                            <?php if (count($next_blog ?? [])): ?>
-                                <div class="col-5">
-                                    <a href="<?= url('home.blog.show', [
-                                        'id' => $next_blog['id'],
-                                        'slug' => $next_blog['slug'],
-                                    ]); ?>">
-                                        <div class="post_nav post_nav_next">
-                                            <i class="ti-arrow-right"></i>
-                                            <span><?= $next_blog['title']; ?></span>
-                                        </div>
-                                    </a>
-                                </div>
-                            <?php endif; ?>
+                    <?php if (count($prev_blog ?? []) || count($next_blog ?? [])): ?>
+                        <div class="post_navigation bg_gray mb-5">
+                            <div class="row align-items-center justify-content-between p-4">
+                                <?php if (count($prev_blog ?? [])): ?>
+                                    <div class="col-5">
+                                        <a href="<?= url('home.blog.show', [
+                                            'id' => $prev_blog['id'],
+                                            'slug' => $prev_blog['slug'],
+                                        ]); ?>">
+                                            <div class="post_nav post_nav_prev">
+                                                <i class="ti-arrow-left"></i>
+                                                <span><?= $prev_blog['title']; ?></span>
+                                            </div>
+                                        </a>
+                                    </div>
+                                <?php endif; ?>
+                                <?php if (!count($prev_blog ?? []) || !count($next_blog ?? [])): ?>
+                                    <div class="col-2">
+                                        <a class="post_nav_home">
+                                            <i class="ti-layout-grid2"></i>
+                                        </a>
+                                    </div>
+                                <?php endif; ?>
+                                <?php if (count($next_blog ?? [])): ?>
+                                    <div class="col-5">
+                                        <a href="<?= url('home.blog.show', [
+                                            'id' => $next_blog['id'],
+                                            'slug' => $next_blog['slug'],
+                                        ]); ?>">
+                                            <div class="post_nav post_nav_next">
+                                                <i class="ti-arrow-right"></i>
+                                                <span><?= $next_blog['title']; ?></span>
+                                            </div>
+                                        </a>
+                                    </div>
+                                <?php endif; ?>
+                            </div>
                         </div>
-                    </div>
+                    <?php else: ?>
+                        <hr>
+                    <?php endif; ?>
+
                     <?php if (count($related_blog ?? [])): ?>
                         <div class="related_post">
                             <div class="content_title">

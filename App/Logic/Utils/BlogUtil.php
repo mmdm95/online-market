@@ -78,6 +78,15 @@ class BlogUtil
                 $bindValues['b_t2'] = get_today_end_of_time($time);
             }
         }
+        // archive tag parameter
+        $archive = input()->get('archive', null);
+        if (!is_array($archive)) {
+            $archive = $archive->getValue();
+            if (is_string($archive) && !empty($archive)) {
+                $where .= ' AND b.archive_tag=:be_archive';
+                $bindValues['be_archive'] = $archive;
+            }
+        }
         // tag parameter
         $tag = input()->get('tag', null);
         if (!is_array($tag)) {

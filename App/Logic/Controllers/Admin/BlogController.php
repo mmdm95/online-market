@@ -140,10 +140,17 @@ class BlogController extends AbstractAdminController implements IDatatableContro
         }
 
         $blog = $blogModel->getFirst(['*'], 'id=:id', ['id' => $id]);
+        
+        /**
+         * @var BlogCategoryModel $categoryModel
+         */
+        $categoryModel = container()->get(BlogCategoryModel::class);
+        $categories = $categoryModel->get(['id', 'name'], 'publish=:pub', ['pub' => DB_YES]);
 
         $this->setLayout($this->main_layout)->setTemplate('view/blog/edit');
         return $this->render(array_merge($data, [
             'blog' => $blog,
+            'categories' => $categories,
         ]));
     }
 

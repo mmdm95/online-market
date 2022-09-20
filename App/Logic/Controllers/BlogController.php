@@ -39,7 +39,7 @@ class BlogController extends AbstractHomeController
         $blogCategoryModel = container()->get(BlogCategoryModel::class);
 
         $last_blog = $blogModel->get([
-            'id', 'slug', 'title', 'image', 'created_at'
+            'id', 'slug', 'title', 'image', 'created_at', 'keywords',
         ], 'publish=:pub', [
             'pub' => DB_YES
         ], ['id DESC'], 4);
@@ -120,7 +120,7 @@ class BlogController extends AbstractHomeController
 
         $related_blog = $blogModel->getRelatedBlog(['keywords' => $keywords], 2);
 
-        $this->setLayout($this->main_layout)->setTemplate('view/main/blog/index');
+        $this->setLayout($this->main_layout)->setTemplate('view/main/blog/detail');
         return $this->render([
             'title' => title_concat(\config()->get('settings.title.value'), 'بلاگ', $blog['title']),
             'sub_title' => $blog['title'],

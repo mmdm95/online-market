@@ -11,6 +11,7 @@ use App\Logic\Models\CommentModel;
 use App\Logic\Models\Model;
 use App\Logic\Models\ProductModel;
 use App\Logic\Utils\ProductUtil;
+use App\Logic\Utils\TorobUtil;
 use Jenssegers\Agent\Agent;
 use Sim\Auth\DBAuth;
 use Sim\Exceptions\ConfigManager\ConfigNotRegisteredException;
@@ -269,6 +270,8 @@ class ProductController extends AbstractHomeController
 
         $this->setLayout($this->main_layout)->setTemplate('view/main/product/detail');
         return $this->render([
+            'meta' => TorobUtil::getMetaOfProduct($product),
+            //
             'title' => title_concat(\config()->get('settings.title.value'), 'محصولات', $product['title']),
             'sub_title' => $product['title'],
             //-----

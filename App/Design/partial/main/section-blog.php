@@ -48,7 +48,7 @@ use Sim\Utils\StringUtil;
                                         </li>
                                     </ul>
                                     <p>
-                                        <?= StringUtil::truncate_word($item['abstract'], 150); ?>
+                                        <?= StringUtil::truncate_word($item['abstract'], 200); ?>
                                     </p>
                                 </div>
                             </div>

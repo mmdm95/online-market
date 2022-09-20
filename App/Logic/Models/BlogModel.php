@@ -231,7 +231,7 @@ class BlogModel extends BaseModel
         $where = trim($where, ' OR');
 
         return $this->getBlog([
-            'b.id', 'b.slug', 'b.title', 'b.image', 'b.created_at'
+            'b.id', 'b.slug', 'b.abstract', 'b.title', 'b.image', 'b.created_at'
         ], $where, $bindValues, ['b.id DESC'], $limit);
     }
 

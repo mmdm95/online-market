@@ -518,7 +518,6 @@ class ProductModel extends BaseModel
             ->where('product_id=:pId')
             ->bindValues(['pId' => $product_id]);
         $prevProduct = $this->db->fetchAll($productSelect->getStatement(), $productSelect->getBindValues());
-        $prevProduct = count($prevProduct) ? $prevProduct[0] : [];
         //
         $delete = $this->connector->delete();
         $delete
@@ -534,7 +533,9 @@ class ProductModel extends BaseModel
         }
 
         $res7 = false;
-        foreach ($products as $product) {
+        foreach ($products as $k => $product) {
+            if(!($product['color_hex'] ?? false) && (!$prevProduct[$k]['color_hex'] ?? false)) continue;
+
             $insert = $this->connector->insert();
             $insert
                 ->into(self::TBL_PRODUCT_PROPERTY)
@@ -547,8 +548,8 @@ class ProductModel extends BaseModel
                     'discounted_price' => $product['discount_price'],
                     'discount_until' => $product['discount_until'] ?: null,
                     'is_available' => $product['available'],
-                    'color_hex' => $product['color_hex'] ?: $prevProduct['color_hex'],
-                    'color_name' => $product['color_name'] ?: $prevProduct['color_name'],
+                    'color_hex' => $product['color_hex'] ?: $prevProduct[$k]['color_hex'],
+                    'color_name' => $product['color_name'] ?: $prevProduct[$k]['color_name'],
                     'size' => $product['size'] ?: null,
                     'guarantee' => $product['guarantee'] ?: null,
                     'weight' => $product['weight'],

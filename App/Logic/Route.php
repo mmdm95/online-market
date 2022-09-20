@@ -705,6 +705,7 @@ class Route implements IInitialize
             Router::get('/blog/', [BlogController::class, 'index'])->name('home.blog');
             Router::get('/blog/{id}/{slug?}', [BlogController::class, 'show'])->where([
                 'id' => '[0-9]+',
+                'slug' => '.*',
             ])->name('home.blog.show');
         });
     }

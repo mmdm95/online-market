@@ -338,7 +338,7 @@ class StringUtil
     }
 
     /**
-     * @see https://stackoverflow.com/a/16239689/12154893
+     * @see laravel limit method
      * @param string $string
      * @param int $length
      * @param string $delimiter
@@ -346,11 +346,15 @@ class StringUtil
      */
     public static function truncate(string $string, int $length, string $delimiter = '...'): string
     {
-        return \mb_strimwidth($string, 0, $length, $delimiter);
+        if (mb_strwidth($string, 'UTF-8') <= $length) {
+            return $string;
+        }
+
+        return rtrim(mb_strimwidth($string, 0, $length, '', 'UTF-8')) . $delimiter;
     }
 
     /**
-     * @see https://stackoverflow.com/a/16239689/12154893
+     * @see https://stackoverflow.com/a/79986/12154893
      * @param string $string
      * @param int $length
      * @param string $delimiter
@@ -358,16 +362,9 @@ class StringUtil
      */
     public static function truncate_word(string $string, int $length, string $delimiter = '…'): string
     {
-        // we don't want new lines in our preview
-        $text_only_spaces = \preg_replace('/\s+/', ' ', $string);
-
-        // truncates the text
-        $text_truncated = \mb_substr($text_only_spaces, 0, \mb_strpos($text_only_spaces, ' ', $length));
-
-        // prevents last word truncation
-        $preview = \trim(\mb_substr($text_truncated, 0, \mb_strrpos($text_truncated, ' '))) . $delimiter;
-
-        return $preview;
+        $preview = mb_substr($string, 0, mb_strpos(wordwrap($string, $length), "\n"));
+        if(trim($preview) == '') return $string . $delimiter;
+        return $preview . $delimiter;
     }
 
     /**
