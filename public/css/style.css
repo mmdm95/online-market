@@ -3004,7 +3004,6 @@ input.text {
     -webkit-box-pack: start;
     -ms-flex-pack: start;
     justify-content: flex-start;
-    width: 25%;
     font-size: 1rem;
     line-height: 30px;
     font-weight: 700;
