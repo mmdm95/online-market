@@ -69,20 +69,6 @@ class EditUserForm implements IPageForm
         $validator
             ->setFields('inp-user-ban-desc')
             ->requiredWith('inp-user-ban-status', '{alias} ' . 'اجباری می‌باشد.');
-        // mobile
-        $validator
-            ->setFields('inp-user-mobile')
-            ->stopValidationAfterFirstError(false)
-            ->required()
-            ->stopValidationAfterFirstError(true)
-            ->persianMobile('{alias} ' . 'نامعتبر است.')
-            ->custom(function (FormValue $formValue) use ($userModel) {
-                $mobile = $formValue->getValue();
-                if (0 === $userModel->count('username=:username', ['username' => $mobile])) {
-                    return true;
-                }
-                return false;
-            }, 'این' . ' {alias} ' . 'قبلا ثبت شده، لطفا دوباره تلاش کنید.');
         // email
         $validator
             ->setFields('inp-user-email')
@@ -134,6 +120,10 @@ class EditUserForm implements IPageForm
         // check for username(mobile) duplicate
         $validator
             ->setFields('inp-user-mobile')
+            ->stopValidationAfterFirstError(false)
+            ->required()
+            ->stopValidationAfterFirstError(true)
+            ->persianMobile('{alias} ' . 'نامعتبر است.')
             ->custom(function (FormValue $value) {
                 $prevMobile = session()->getFlash('prev-username', '', false);
                 if ($prevMobile === $value->getValue()) return true;
