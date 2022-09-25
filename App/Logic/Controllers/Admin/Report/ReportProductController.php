@@ -179,7 +179,7 @@ class ReportProductController extends AbstractAdminController implements
                     $where .= $newWhere;
                     $bindValues = array_merge($bindValues, $newBindValues);
 
-                    $where = trim(trim($where), 'AND');
+                    $where = rtrim(trim($where), 'AND');
 
                     $data = $productModel->getLimitedProduct($where, $bindValues, $order, $limit, $offset, ['pa.product_id'], $cols);
                     //-----
@@ -321,6 +321,8 @@ class ReportProductController extends AbstractAdminController implements
         }
         $where .= $newWhere;
         $bindValues = array_merge($bindValues, $newBind);
+
+        $where = rtrim(trim($where), 'AND');
 
         return [$where, $bindValues];
     }
