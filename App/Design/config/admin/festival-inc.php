@@ -18,7 +18,7 @@ return [
                 'is_active' => false,
             ],
             [
-                'url' => url('admin.festival.add')->getRelativeUrl(),
+                'url' => url('admin.festival.view')->getRelativeUrl(),
                 'text' => 'مدیریت جشنواره',
                 'is_active' => false,
             ],
