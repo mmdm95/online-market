@@ -415,7 +415,7 @@ class EditProductForm implements IPageForm
                 $updateArr,
                 $gallery,
                 $products,
-                $relatedProducts->getValue() ?: []
+                is_array($relatedProducts) ? $relatedProducts : []
             );
         } catch (\Exception $e) {
             return false;

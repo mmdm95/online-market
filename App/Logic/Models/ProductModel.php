@@ -4,6 +4,7 @@ namespace App\Logic\Models;
 
 use Aura\SqlQuery\Exception as AuraException;
 use Dotenv\Util\Str;
+use Pecee\Http\Input\InputItem;
 use Sim\Utils\StringUtil;
 
 class ProductModel extends BaseModel
@@ -158,7 +159,10 @@ class ProductModel extends BaseModel
             ->where('product_id=:pId')
             ->bindValue('pId', $product_id);
 
-        return $this->db->fetchAll($select->getStatement(), $select->getBindValues());
+        $ids = $this->db->fetchAll($select->getStatement(), $select->getBindValues());
+        return array_map(function($id) {
+            return $id['related_id'];
+        }, $ids);
     }
 
     /**
@@ -175,9 +179,9 @@ class ProductModel extends BaseModel
 
         $inClause = '';
         $bind_values = [];
-        foreach ($ids as $id) {
-            $inClause .= ":id{$id},";
-            $bind_values["id{$id}"] = $id;
+        foreach ($ids as $k => $id) {
+            $inClause .= ":id{$k},";
+            $bind_values["id{$k}"] = $id;
         }
         $inClause = trim($inClause, ',');
         //-----
@@ -441,13 +445,16 @@ class ProductModel extends BaseModel
 
         $res3 = true;
         $related_products = array_unique($related_products);
+        /**
+         * @var InputItem $related
+         */
         foreach ($related_products as $related) {
             $insert = $this->connector->insert();
             $insert
                 ->into(self::TBL_PRODUCT_RELATED)
                 ->cols([
                     'product_id' => $productId,
-                    'related_id' => $related,
+                    'related_id' => $related->getValue(),
                 ]);
             $stmt = $this->db->prepare($insert->getStatement());
             $res3 = $stmt->execute($insert->getBindValues());
@@ -582,13 +589,16 @@ class ProductModel extends BaseModel
 
         $res3 = true;
         $related_products = array_unique($related_products);
+        /**
+         * @var InputItem $related
+         */
         foreach ($related_products as $related) {
             $insert = $this->connector->insert();
             $insert
                 ->into(self::TBL_PRODUCT_RELATED)
                 ->cols([
                     'product_id' => $product_id,
-                    'related_id' => $related,
+                    'related_id' => $related->getValue(),
                 ]);
             $stmt = $this->db->prepare($insert->getStatement());
             $res3 = $stmt->execute($insert->getBindValues());

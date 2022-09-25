@@ -590,19 +590,18 @@ $validator = form_validator();
                                          */
                                         $productsModel = container()->get(ProductModel::class);
                                         $items = input()->post('inp-edit-product-related');
+                                        $items = is_array($items) && count($items) ? $items : $related;
                                         ?>
-                                        <?php if (is_array($items) && count($items)): ?>
-                                            <?php foreach ($items as $item): ?>
-                                                <?php
-                                                $p = $productsModel->getFirst(['title'], 'id=:id', ['id' => $item]);
-                                                ?>
-                                                <?php if (count($p)): ?>
-                                                    <option value="<?= $item; ?>" selected>
-                                                        <?= $p['title']; ?>
-                                                    </option>
-                                                <?php endif; ?>
-                                            <?php endforeach; ?>
-                                        <?php endif; ?>
+                                        <?php foreach ($items as $item): ?>
+                                            <?php
+                                            $p = $productsModel->getFirst(['title'], 'id=:id', ['id' => $item]);
+                                            ?>
+                                            <?php if (count($p)): ?>
+                                                <option value="<?= $item; ?>" selected>
+                                                    <?= $p['title']; ?>
+                                                </option>
+                                            <?php endif; ?>
+                                        <?php endforeach; ?>
                                     </select>
                                 </div>
                             </div>

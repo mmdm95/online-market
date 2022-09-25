@@ -76,7 +76,6 @@ class ProductUtil
             $tag = $tag->getValue();
             $tag = urldecode($tag);
             if (is_string($tag) && !empty(trim($tag))) {
-                $tag = urldecode($tag);
                 $where .= ' AND (pa.fa_title LIKE :tag_p_fa_title';
                 $where .= ' OR pa.slug LIKE :tag_p_slug';
                 $where .= ' OR pa.keywords LIKE :tag_p_keywords)';
