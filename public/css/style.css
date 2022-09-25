@@ -39,14 +39,14 @@ Version      : 1.0
 *===================================*/
 
 :root {
-    /*--custom-primary-color--: #ff0a54;*/
-    /*--custom-primary-color-r--: 255;*/
-    /*--custom-primary-color-g--: 10;*/
-    /*--custom-primary-color-b--: 84;*/
-    --custom-primary-color--: #52b9cc;
-    --custom-primary-color-r--: 82;
-    --custom-primary-color-g--: 185;
-    --custom-primary-color-b--: 204;
+    --custom-primary-color--: #ff0a54;
+    --custom-primary-color-r--: 255;
+    --custom-primary-color-g--: 10;
+    --custom-primary-color-b--: 84;
+    /*--custom-primary-color--: #52b9cc;*/
+    /*--custom-primary-color-r--: 82;*/
+    /*--custom-primary-color-g--: 185;*/
+    /*--custom-primary-color-b--: 204;*/
 }
 
 html, body {
