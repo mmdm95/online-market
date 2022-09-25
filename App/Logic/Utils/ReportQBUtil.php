@@ -791,9 +791,9 @@ class ReportQBUtil
         $newBind = [];
         if (
             (isset($qb['sql']) && !empty($qb['sql'])) &&
-            (isset($qb['params']) && !empty($qb['params']) && !is_null(json_decode($qb['params'], true)))
+            (isset($qb['params']) && !empty($qb['params']) && !is_null($params = json_decode($qb['params'], true)))
         ) {
-            foreach (json_decode($qb['params'], true) as $k => $p) {
+            foreach ($params as $k => $p) {
                 $newK = str_replace('.', '_', $k);
                 $qb['sql'] = str_replace($k, $newK, $qb['sql']);
                 $newBind[$newK] = $p;
