@@ -63,7 +63,6 @@ class BlogUtil
                 $bindValues['b_keywords'] = '%' . $q . '%';
                 $bindValues['b_writer'] = '%' . $q . '%';
                 $bindValues['b_abstract'] = '%' . $q . '%';
-                $bindValues['b_slug'] = '%' . $q . '%';
                 $bindValues['c_f_name'] = '%' . $q . '%';
             }
         }
@@ -92,6 +91,7 @@ class BlogUtil
         if (!is_array($tag)) {
             $tag = $tag->getValue();
             if (is_string($tag) && !empty($tag)) {
+                $tag = urldecode($tag);
                 $where .= ' AND b.keywords LIKE :be_keywords';
                 $bindValues['be_keywords'] = '%' . $tag . '%';
             }

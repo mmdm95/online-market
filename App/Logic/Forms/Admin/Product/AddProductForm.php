@@ -383,7 +383,7 @@ class AddProductForm implements IPageForm
                 'allow_commenting' => is_value_checked($commenting) ? DB_YES : DB_NO,
                 'created_by' => $auth->getCurrentUser()['id'] ?? null,
                 'created_at' => time(),
-            ], $gallery, $products, $relatedProducts->getValue() ?: []);
+            ], $gallery, $products, is_array($relatedProducts) ? $relatedProducts : []);
         } catch (\Exception $e) {
             return false;
         }

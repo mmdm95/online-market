@@ -238,6 +238,9 @@ class ProductController extends AbstractAdminController implements IDatatableCon
 
         $productProperties = $productModel->getProductProperty($id);
         $related = $productModel->getRelatedProductsWithInfo($id);
+        $related = array_map(function($r) {
+            return $r['product_id'];
+        }, $related);
         $gallery = $productModel->getImageGallery($id);
 
         /**
