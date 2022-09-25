@@ -96,7 +96,7 @@ class HomeController extends AbstractHomeController
         return $this->render([
             'menu' => $menuUtil->getMainMenuItems(),
             'menu_images' => $menuImages,
-            'categories' => $catModel->get(['id', 'name'], 'level=:lvl AND publish=:pub', ['pub' => DB_YES, 'lvl' => 1], ['name ASC']),
+            'categories' => $catModel->get(['id', 'name'], 'level=:lvl AND publish=:pub', ['pub' => DB_YES, 'lvl' => 1], ['priority DESC', 'id ASC']),
             'main_slider' => $indexModel->getMainSlider(),
             'tabbed_slider_side_image' => \config()->get('settings.index_tabbed_slider_side_image.value'),
             'tabbed_slider' => [
