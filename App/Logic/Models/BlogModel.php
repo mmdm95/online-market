@@ -147,7 +147,7 @@ class BlogModel extends BaseModel
         if ($with_category) {
             try {
                 $select
-                    ->cols(['category_name' => 'bc.name'])
+                    ->cols(['bc.name AS category_name'])
                     ->innerJoin(self::TBL_BLOG_CATEGORIES . ' AS bc', 'b.category_id=bc.id');
             } catch (AuraException $e) {
                 return [];

@@ -146,8 +146,8 @@
                                                         <div class="dropdown-menu">
                                                             <ul class="mega-menu d-lg-flex align-items-lg-center">
                                                                 <?php
-                                                                $hasImage = isset($menu_images[$m['id']]['image']);
-                                                                $menuColSize = !$hasImage ? 'col-lg-12' : 'col-lg-7';
+                                                                $hasImage = isset($menu_images[$m['id']][0]['image']);
+                                                                $menuColSize = !$hasImage ? 'col-lg-12' : 'col-lg-8';
                                                                 ?>
 
                                                                 <li class="mega-menu-col <?= $menuColSize; ?>">
@@ -177,13 +177,12 @@
                                                                 </li>
 
                                                                 <?php if ($hasImage): ?>
-                                                                    <li class="mega-menu-col col-lg-5">
+                                                                    <li class="mega-menu-col col-lg-4">
                                                                         <div class="header-banner2">
                                                                             <a href="<?= url('home.search', ['category' => $m['id']])->getRelativeUrl(); ?>">
                                                                                 <img src=""
-                                                                                     data-src="<?= url('image.show') . $menu_images[$m['id']]['image']; ?>"
-                                                                                     alt="<?= $m['name']; ?>"
-                                                                                     class="lazy">
+                                                                                     data-src="<?= url('image.show') . $menu_images[$m['id']][0]['image']; ?>"
+                                                                                     alt="<?= $m['name']; ?>" class="lazy">
                                                                             </a>
                                                                         </div>
                                                                     </li>
