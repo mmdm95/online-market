@@ -73,7 +73,7 @@ class ProductFestivalController extends AbstractAdminController implements IData
         $categoryModel = container()->get(CategoryModel::class);
 
         $products = $productModel->get(['id', 'title'], 'publish=:pub AND is_available=:av', ['pub' => DB_YES, 'av' => DB_YES]);
-        $categories = $categoryModel->get(['id', 'name'], 'publish=:pub AND level=:lvl', ['pub' => DB_YES, 'lvl' => 3]);
+        $categories = $categoryModel->get(['id', 'name'], 'publish=:pub AND level>=:lvlMin AND level<=:lvlMax', ['pub' => DB_YES, 'lvlMin' => 3, 'lvlMax' => 5]);
 
         $this->setLayout($this->main_layout)->setTemplate('view/festival/detail');
         return $this->render([
@@ -312,6 +312,18 @@ class ProductFestivalController extends AbstractAdminController implements IData
                     ['db' => 'pf.id', 'db_alias' => 'id', 'dt' => 'id'],
                     ['db' => 'p.title', 'db_alias' => 'product_name', 'dt' => 'product_name'],
                     ['db' => 'c.name', 'db_alias' => 'category_name', 'dt' => 'category_name'],
+                    [
+                        'db' => 'pf.discount',
+                        'db_alias' => 'discount',
+                        'dt' => 'discount',
+                        'formatter' => function ($d, $row) {
+                            return $this->setTemplate('partial/admin/parser/status-badge')
+                                ->render([
+                                    'text' => $d . ' درصد',
+                                    'bg' => '#4caf50',
+                                ]);
+                        }
+                    ],
                     [
                         'db' => 'p.image',
                         'db_alias' => 'product_image',

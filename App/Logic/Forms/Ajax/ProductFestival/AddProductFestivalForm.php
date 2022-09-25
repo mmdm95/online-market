@@ -118,7 +118,7 @@ class AddProductFestivalForm implements IPageForm
             $product = input()->post('inp-add-product-festival-product', '')->getValue();
             $percent = input()->post('inp-add-product-festival-percent', '')->getValue();
 
-            if (0 !== $festivalModel->count('product_id=:pId AND festival_id=fId', ['pId' => $xss->xss_clean($product), 'fId' => $xss->xss_clean($fId)])) {
+            if (0 !== $festivalModel->count('product_id=:pId AND festival_id=:fId', ['pId' => $xss->xss_clean($product), 'fId' => $xss->xss_clean($fId)])) {
                 return true;
             }
 

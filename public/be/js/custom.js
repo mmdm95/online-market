@@ -5248,7 +5248,6 @@
                 admin.hideLoader(loaderId);
                 // clear element after success
                 $(variables.elements.addProductFestival.form).get(0).reset();
-                $(variables.elements.addProductFestival.form).find('input[type="hidden"]').val('');
                 createDatatable();
                 //-----
                 admin.toasts.toast(this.data, {
@@ -5282,11 +5281,12 @@
                 admin.hideLoader(loaderId);
                 // clear element after success
                 $(variables.elements.modifyProductFestival.form).get(0).reset();
-                $(variables.elements.modifyProductFestival.form).find('input[type="hidden"]').val('');
                 if (currentTable) {
                     $(currentTable).DataTable().ajax.reload();
                     createDatatable(currentTable);
                     currentTable = null;
+                } else {
+                    createDatatable();
                 }
                 //-----
                 admin.toasts.toast(this.data, {
@@ -5311,48 +5311,34 @@
         // REMOVE CATEGORY FROM FESTIVAL FORM
         //---------------------------------------------------------------
         $('#__btn_remove_product_festival').on('click' + variables.namespace, function () {
-            var formValues, formErrors, constraints, aliases;
-            aliases = {
-                '{percent}': 'درصد تخفیف',
-            };
-            constraints = {
-                category: variables.validation.constraints.modifyProductFestival.category,
-            };
-            formValues = admin.forms.convertFormObjectNumbersToEnglish(window.validate.collectFormValues(variables.elements.modifyProductFestival.form), 'modifyProductFestival');
-            formErrors = window.validate(formValues, constraints, {
-                prettify: function prettify(string) {
-                    return aliases[string] || validate.prettify(string);
-                },
-            });
-            // check form first
-            if (!formErrors) {
-                // do ajax
-                if (createLoader) {
-                    createLoader = false;
-                    loaderId = admin.showLoader();
-                }
-                admin.request(variables.url.productFestival.removeCategory + '/' + festivalId, 'post', function () {
-                    admin.hideLoader(loaderId);
-                    // clear element after success
-                    $(variables.elements.modifyProductFestival.form).get(0).reset();
-                    if (currentTable) {
-                        $(currentTable).DataTable().ajax.reload();
-                        createDatatable(currentTable);
-                        currentTable = null;
+            var cat = $(variables.elements.modifyProductFestival.form)
+                .find('[name="' + variables.elements.modifyProductFestival.inputs.category + '"]');
+            if (cat) {
+                var data = new FormData();
+                data.append(variables.elements.modifyProductFestival.inputs.category, cat.val());
+
+                admin.toasts.confirm(MyGlobalVariables.messages.confirm, function () {// do ajax
+                    if (createLoader) {
+                        createLoader = false;
+                        loaderId = admin.showLoader();
                     }
-                    //-----
-                    admin.toasts.toast(this.data, {
-                        type: variables.toasts.types.success,
+                    admin.request(variables.url.productFestival.removeCategory + '/' + festivalId, 'post', function () {
+                        admin.hideLoader(loaderId);
+                        // clear element after success
+                        $(variables.elements.modifyProductFestival.form).get(0).reset();
+                        createDatatable();
+                        //-----
+                        admin.toasts.toast(this.data, {
+                            type: variables.toasts.types.success,
+                        });
+                        createLoader = true;
+                    }, {
+                        data: data,
+                    }, true, function () {
+                        createLoader = true;
+                        admin.hideLoader(loaderId);
                     });
-                    createLoader = true;
-                }, {
-                    data: formValues,
-                }, true, function () {
-                    createLoader = true;
-                    admin.hideLoader(loaderId);
                 });
-            } else {
-                admin.forms.showFormErrors(formErrors);
             }
         });
 

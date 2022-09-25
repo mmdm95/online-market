@@ -7,7 +7,7 @@
             <div class="card">
                 <?php load_partial('admin/card-header', ['header_title' => 'افزودن محصول به جشنواره']); ?>
 
-                <input type="hidden" data-festival-id="<?= $festivalId; ?>">
+                <input type="hidden" data-festival-id="true" value="<?= $festivalId; ?>">
                 <div class="card-body">
                     <form action="#" id="__form_add_product_festival">
                         <div class="row">
@@ -96,13 +96,14 @@
         </div>
 
         <table class="table table-bordered table-hover datatable-highlight"
-               data-columns='[{"data":"id"},{"data":"product_image"},{"data":"product_name"},{"data":"category_name"},{"data":"operations"}]'
+               data-columns='[{"data":"id"},{"data":"product_image"},{"data":"product_name"},{"data":"discount"},{"data":"category_name"},{"data":"operations"}]'
                data-ajax-url="<?= url('admin.product.festival.dt.view')->getRelativeUrl() . $festivalId; ?>">
             <thead>
             <tr>
                 <th>#</th>
                 <th>تصویر محصول</th>
                 <th>نام محصول</th>
+                <th>درصد تخفیف</th>
                 <th>نام دسته‌بندی</th>
                 <th class="text-center">عملیات</th>
             </tr>
@@ -112,6 +113,7 @@
                 <th>#</th>
                 <th>تصویر محصول</th>
                 <th>نام محصول</th>
+                <th>درصد تخفیف</th>
                 <th>نام دسته‌بندی</th>
                 <th class="text-center">عملیات</th>
             </tr>
