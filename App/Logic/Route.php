@@ -981,7 +981,7 @@ class Route implements IInitialize
                 Router::post('/product/festival/add-category/{f_id}', [AdminProductFestivalController::class, 'addCategory'])->where([
                     'f_id' => '[0-9]+',
                 ])->name('ajax.product.festival.category.add');
-                Router::delete('/product/festival/category/remove/{f_id}', [AdminProductFestivalController::class, 'removeCategory'])->where([
+                Router::post('/product/festival/category/remove/{f_id}', [AdminProductFestivalController::class, 'removeCategory'])->where([
                     'f_id' => '[0-9]+',
                 ])->name('ajax.product.festival.category.remove');
                 Router::delete('/product/festival/remove/{id}', [AdminProductFestivalController::class, 'remove'])->where([

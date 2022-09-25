@@ -96,10 +96,12 @@ class ProductFestivalModel extends BaseModel
     {
         $select = $this->connector->select();
         $select
-            ->from(self::TBL_PRODUCTS)
-            ->cols(['id'])
-            ->where('category_id=:cId')
-            ->bindValue('cId', $category_id);
+            ->from(self::TBL_PRODUCT_ADVANCED . ' AS pa')
+            ->cols(['pa.product_id AS id'])
+            ->where('pa.category_id=:cId')
+            ->orWhere('pa.category_all_parents_id REGEXP :capi')
+            ->bindValue('cId', $category_id)
+            ->bindValue('capi', '([^0-9]|^)' . preg_quote($category_id) . '([^0-9]|$)');
         $products = $this->db->fetchAll($select->getStatement(), $select->getBindValues());
 
         // if there is no products, there is no need for further operations
