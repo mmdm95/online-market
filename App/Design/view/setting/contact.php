@@ -35,7 +35,7 @@ $validator = form_validator();
                         <div class="form-group">
                             <label>
                                 <span class="text-danger">*</span>
-                                شمار تماس اصلی:
+                                شماره تماس اصلی:
                             </label>
                             <input type="text" class="form-control"
                                    placeholder="وارد کنید"
