@@ -1,10 +1,16 @@
+<?php
+
+$validator = form_validator();
+
+?>
+
 <!-- Content area -->
 <div class="content">
     <div class="card col-lg-9">
         <?php load_partial('admin/card-header', ['header_title' => 'ویرایش کوپن تخفیف']); ?>
 
         <div class="card-body">
-            <form action="<?= url('admin.coupon.edit')->getRelativeUrl() . $coupon['id']; ?>" method="post"
+            <form action="<?= url('admin.coupon.edit', ['id' => $coupon['id']])->getRelativeUrlTrimmed(); ?>" method="post"
                   id="__form_edit_coupon">
                 <?php load_partial('admin/message/message-form', [
                     'errors' => $coupon_edit_errors ?? [],

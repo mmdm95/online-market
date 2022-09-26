@@ -277,7 +277,7 @@ class WalletController extends AbstractAdminController implements IDatatableCont
                 });
 
                 $columns = [
-                    ['db' => 'id', 'db_alias' => 'id', 'dt' => 'id'],
+                    ['db' => 'w.id', 'db_alias' => 'id', 'dt' => 'id'],
                     [
                         'db' => '(CASE WHEN (u.id IS NOT NULL) THEN CONCAT(u.first_name, " ", u.last_name) ELSE w.username END)',
                         'db_alias' => 'full_name',
@@ -314,11 +314,10 @@ class WalletController extends AbstractAdminController implements IDatatableCont
                     [
                         'dt' => 'operations',
                         'formatter' => function ($row) {
-                            $operations = $this->setTemplate('partial/admin/datatable/actions-wallet')
+                            return $this->setTemplate('partial/admin/datatable/actions-wallet')
                                 ->render([
                                     'row' => $row,
                                 ]);
-                            return $operations;
                         }
                     ],
                 ];

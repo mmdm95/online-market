@@ -4,7 +4,7 @@
         <?php load_partial('admin/card-header', ['header_title' => 'ویرایش جشنواره']); ?>
 
         <div class="card-body">
-            <form action="<?= url('admin.festival.edit')->getRelativeUrl() . $festival['id']; ?>" method="post"
+            <form action="<?= url('admin.festival.edit', ['id' => $festival['id']])->getRelativeUrlTrimmed(); ?>" method="post"
                   id="__form_edit_festival">
                 <?php load_partial('admin/message/message-form', [
                     'errors' => $festival_edit_errors ?? [],

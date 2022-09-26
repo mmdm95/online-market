@@ -259,11 +259,10 @@ class DepositTypeController extends AbstractAdminController implements IAjaxCont
                     [
                         'dt' => 'operations',
                         'formatter' => function ($row) {
-                            $operations = $this->setTemplate('partial/admin/datatable/actions-deposit-type')
+                            return $this->setTemplate('partial/admin/datatable/actions-deposit-type')
                                 ->render([
                                     'row' => $row,
                                 ]);
-                            return $operations;
                         }
                     ],
                 ];

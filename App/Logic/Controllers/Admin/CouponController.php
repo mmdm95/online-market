@@ -312,10 +312,11 @@ class CouponController extends AbstractAdminController implements IDatatableCont
                         'db_alias' => 'use_count',
                         'dt' => 'used_from_whole',
                         'formatter' => function ($d, $row) {
-                            return $this->setTemplate('partial/admin/parser/range_colored')->render([
-                                'min' => $row['used_count'],
-                                'max' => $row['use_count'],
-                            ]);
+                            return $this->setTemplate('partial/admin/parser/range-colored')
+                                ->render([
+                                    'min' => $row['used_count'],
+                                    'max' => $row['use_count'],
+                                ]);
                         }
                     ],
                     [
@@ -323,21 +324,19 @@ class CouponController extends AbstractAdminController implements IDatatableCont
                         'db_alias' => 'publish',
                         'dt' => 'status',
                         'formatter' => function ($d) {
-                            $status = $this->setTemplate('partial/admin/parser/active-status')
+                            return $this->setTemplate('partial/admin/parser/active-status')
                                 ->render([
                                     'status' => $d,
                                 ]);
-                            return $status;
                         }
                     ],
                     [
                         'dt' => 'operations',
                         'formatter' => function ($row) {
-                            $operations = $this->setTemplate('partial/admin/datatable/actions-coupon')
+                            return $this->setTemplate('partial/admin/datatable/actions-coupon')
                                 ->render([
                                     'row' => $row,
                                 ]);
-                            return $operations;
                         }
                     ],
                 ];
