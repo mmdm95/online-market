@@ -34,6 +34,40 @@
                                 blog
                             </a>
 
+                            <div class="alert alert-primary">
+                                <div class="alert-heading">
+                                    آپشن‌های اضافی که می‌توانید در انتهای آدرس و پس از علامت
+                                    <code>?</code>
+                                    قرار دهید عبارتند از:
+                                </div>
+                                <ul class="list-unstyled mt-2 mb-0">
+                                    <li>
+                                        <strong dir="ltr">category</strong>
+                                        -
+                                        شناسه دسته‌بندی مورد نظر
+                                    </li>
+                                    <li>
+                                        <strong dir="ltr">q</strong>
+                                        -
+                                        رشته مورد نظر برای جستجو
+                                    </li>
+                                    <li>
+                                        <strong dir="ltr">tag</strong>
+                                        -
+                                        رشته مورد نظر برای جستجو برچسب
+                                    </li>
+                                    <li>
+                                        <strong dir="ltr">time</strong>
+                                        -
+                                        زمان از نوع تایم استمپ برای یافتن مطالب در زمان مشخص
+                                    </li>
+                                    <li>
+                                        <strong dir="ltr">archive</strong>
+                                        -
+                                        رشته آرشیو برای یافتن مطالب در آرشیو زمانی خاص
+                                    </li>
+                                </ul>
+                            </div>
                             <div class="row my-3">
                                 <div class="col-xl-9 col-lg-12 col-md-12">
                                     <div class="form-group-feedback form-group-feedback-left">
@@ -276,10 +310,7 @@
                         <div class="list-feed-item border-brown-400">
                             لینک تمامی محصولات:
                             <div class="alert alert-info">
-                                بعد از لینک زیر، شناسه دسته‌بندی مورد نظر خود را که در هنگام ایجاد صفحه ثابت وارد
-                                کرده‌اید
-                                را
-                                قرار دهید.
+                                بعد از لینک زیر، شناسه دسته‌بندی مورد نظر خود را قرار دهید.
                             </div>
                             <div class="alert alert-primary">
                                 <div class="alert-heading">
@@ -288,6 +319,11 @@
                                     قرار دهید عبارتند از:
                                 </div>
                                 <ul class="list-unstyled mt-2 mb-0">
+                                    <li>
+                                        <strong dir="ltr">category</strong>
+                                        -
+                                        شناسه دسته‌بندی مورد نظر
+                                    </li>
                                     <li>
                                         <strong dir="ltr">q</strong>
                                         -
