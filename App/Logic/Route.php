@@ -1042,9 +1042,7 @@ class Route implements IInitialize
                 Router::get('/deposit-type/get/{id}', [AdminDepositTypeController::class, 'get'])->where([
                     'id' => '[0-9]+',
                 ])->name('ajax.deposit-type.get');
-                Router::post('/deposit-type/add/{user_id}', [AdminDepositTypeController::class, 'add'])->where([
-                    'user_id' => '[0-9]+',
-                ])->name('ajax.deposit-type.add');
+                Router::post('/deposit-type/add', [AdminDepositTypeController::class, 'add'])->name('ajax.deposit-type.add');
                 Router::post('/deposit-type/edit/{id}', [AdminDepositTypeController::class, 'edit'])->where([
                     'id' => '[0-9]+',
                 ])->name('ajax.deposit-type.edit');
