@@ -255,7 +255,7 @@ class DepositTypeController extends AbstractAdminController implements IAjaxCont
                 $columns = [
                     ['db' => 'id', 'db_alias' => 'id', 'dt' => 'id'],
                     ['db' => 'title', 'db_alias' => 'title', 'dt' => 'title'],
-                    ['db' => 'desc', 'db_alias' => 'desc', 'dt' => 'description'],
+                    ['db' => '`desc`', 'db_alias' => 'desc', 'dt' => 'description'],
                     [
                         'dt' => 'operations',
                         'formatter' => function ($row) {

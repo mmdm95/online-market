@@ -68,7 +68,7 @@ class EditDepositTypeForm implements IPageForm
                     ->custom(function (FormValue $value) use ($depositModel, $id) {
                         $title = $depositModel->getFirst(['title'], 'id=:id', ['id' => $id])['title'];
                         if (
-                            $title != trim($value->getValue()) &&
+                            $title == trim($value->getValue()) ||
                             0 === $depositModel->count('title=:title', ['title' => trim($value->getValue())])
                         ) {
                             return true;
