@@ -70,7 +70,7 @@ class AddCouponForm implements IPageForm
             ->stopValidationAfterFirstError(false)
             ->required()
             ->stopValidationAfterFirstError(true)
-            ->regex('/[0-9a-zA-Z-_]+/g', '{alias} ' . 'باید از حروف انگلیسی، اعداد، خط تیره و آندرلاین تشکیل شده باشد.')
+            ->regex('/[0-9a-zA-Z-_]+/', '{alias} ' . 'باید از حروف انگلیسی، اعداد، خط تیره و آندرلاین تشکیل شده باشد.')
             ->lessThanEqualLength(20)
             ->custom(function (FormValue $value) use ($couponModel) {
                 if (0 === $couponModel->count('code=:code', ['code' => trim($value->getValue())])) return true;
