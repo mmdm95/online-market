@@ -4,6 +4,7 @@ namespace App\Logic\Controllers\Admin;
 
 use App\Logic\Abstracts\AbstractAdminController;
 use App\Logic\Forms\Admin\LoginForm as AdminLoginForm;
+use App\Logic\Handlers\ResourceHandler;
 use App\Logic\Models\BaseModel;
 use App\Logic\Models\BlogCategoryModel;
 use App\Logic\Models\BlogModel;
@@ -27,7 +28,9 @@ use App\Logic\Models\SliderModel;
 use App\Logic\Models\StaticPageModel;
 use App\Logic\Models\UnitModel;
 use App\Logic\Models\UserModel;
+use App\Logic\Utils\ChartUtil;
 use App\Logic\Utils\Jdf;
+use Jenssegers\Agent\Agent;
 use Sim\Auth\DBAuth;
 use Sim\Auth\Exceptions\IncorrectPasswordException;
 use Sim\Auth\Exceptions\InvalidUserException;
@@ -409,5 +412,45 @@ class HomeController extends AbstractAdminController
     {
         auth_admin()->logout();
         response()->redirect(url('admin.login')->getRelativeUrl(), 301);
+    }
+
+    //------------------------------------------------
+    // Chart Methods
+    //------------------------------------------------
+
+    /**
+     * @return void
+     * @throws IDBException
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
+     */
+    public function chartBoughtStatus()
+    {
+        /**
+         * @var DBAuth $auth
+         */
+        $auth = container()->get('auth_admin');
+        if (!$auth->userHasRole(ROLE_DEVELOPER) && !$auth->userHasRole(ROLE_SUPER_USER)) {
+            show_403();
+        }
+
+        $resourceHandler = new ResourceHandler();
+
+        /**
+         * @var Agent $agent
+         */
+        $agent = container()->get(Agent::class);
+        if (!$agent->isRobot()) {
+            $resourceHandler
+                ->type(RESPONSE_TYPE_SUCCESS)
+                ->data(ChartUtil::getBoughStatus());
+        } else {
+            response()->httpCode(403);
+            $resourceHandler
+                ->type(RESPONSE_TYPE_ERROR)
+                ->errorMessage('خطا در ارتباط با سرور، لطفا دوباره تلاش کنید.');
+        }
+
+        response()->json($resourceHandler->getReturnData());
     }
 }

@@ -307,6 +307,9 @@ defined("ADDRESS_MAX_COUNT") OR define("ADDRESS_MAX_COUNT", 10);
 defined("DEFAULT_TIME_FORMAT") OR define("DEFAULT_TIME_FORMAT", 'j F Y');
 defined("DEFAULT_TIME_FORMAT_WITH_TIME") OR define("DEFAULT_TIME_FORMAT_WITH_TIME", 'j F Y در ساعت H و i دقیقه');
 
+// chart time format
+defined("CHART_BOUGHT_STATUS_TIME_FORMAT") OR define("CHART_BOUGHT_STATUS_TIME_FORMAT", 'j F');
+
 // archive tags time format
 defined("ARCHIVE_TAGS_TIME_FORMAT") OR define("ARCHIVE_TAGS_TIME_FORMAT", 'F Y');
 

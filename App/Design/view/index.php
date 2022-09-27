@@ -4,38 +4,64 @@ use Sim\Utils\StringUtil;
 
 $authAdmin = auth_admin();
 
+$allowContact = $authAdmin->isAllow(RESOURCE_CONTACT_US, OWN_PERMISSIONS);
+$allowComplaint = $authAdmin->isAllow(RESOURCE_CONTACT_US, OWN_PERMISSIONS);
+$allowUser = $authAdmin->isAllow(RESOURCE_USER, OWN_PERMISSION_READ);
+$allowProduct = $authAdmin->isAllow(RESOURCE_PRODUCT, OWN_PERMISSION_READ);
+$allowOrder = $authAdmin->isAllow(RESOURCE_ORDER, OWN_PERMISSION_READ);
+$allowBlog = $authAdmin->isAllow(RESOURCE_BLOG, OWN_PERMISSION_READ);
+$allowStaticPage = $authAdmin->isAllow(RESOURCE_STATIC_PAGE, OWN_PERMISSION_READ);
+$allowSlideShow = $authAdmin->isAllow(RESOURCE_SLIDESHOW, OWN_PERMISSION_READ);
+$allowFileManager = $authAdmin->isAllow(RESOURCE_FILEMANAGER, OWN_PERMISSION_READ);
+$allowSetting = $authAdmin->isAllow(RESOURCE_SETTING, OWN_PERMISSION_READ);
+
 ?>
 
 <!-- Content area -->
 <div class="content">
-    <div class="d-block d-lg-inline-block">
-        <div class="d-block d-sm-flex mb-2">
-            <span class="py-2 px-3 text-center bg-slate-700 d-block d-lg-inline-block rounded-left col"><?= $today_date; ?></span>
-            <span class="py-2 px-3 text-center bg-slate d-block d-lg-inline-block ltr rounded-right"
-                  id="simpleClock">0:00:00 AM</span>
+    <div class="d-block d-xl-flex justify-content-between">
+        <div class="d-block d-lg-inline-block">
+            <div class="d-block d-sm-flex mb-2">
+                <span class="py-2 px-3 text-center bg-slate-700 d-block d-lg-inline-block rounded-left col"><?= $today_date; ?></span>
+                <span class="py-2 px-3 text-center bg-slate d-block d-lg-inline-block ltr rounded-right"
+                      id="simpleClock">0:00:00 AM</span>
+            </div>
         </div>
-    </div>
-    <?php
-    $allowContact = $authAdmin->isAllow(RESOURCE_CONTACT_US, OWN_PERMISSIONS);
-    $allowComplaint = $authAdmin->isAllow(RESOURCE_CONTACT_US, OWN_PERMISSIONS);
-    ?>
-    <?php if ($allowContact || $allowComplaint): ?>
-        <div>
-            <?php if ($allowContact): ?>
-                <a href="<?= url('admin.contact-us.view', '')->getRelativeUrl(); ?>"
-                   class="btn bg-blue py-2 px-3 d-block d-md-inline-block mb-2 border-0">
-                    پیام‌های خوانده نشده:
-                    <?= StringUtil::toPersian($unread_contact_count); ?>
-                </a>
-            <?php endif; ?>
+        <?php if ($allowContact || $allowComplaint): ?>
+            <div class="text-right">
+                <?php if ($allowContact): ?>
+                    <a href="<?= url('admin.contact-us.view', '')->getRelativeUrl(); ?>"
+                       class="btn bg-blue py-2 px-3 d-block d-md-inline-block mb-2 border-0">
+                        پیام‌های خوانده نشده:
+                        <?= StringUtil::toPersian($unread_contact_count); ?>
+                    </a>
+                <?php endif; ?>
 
-            <?php if ($allowComplaint): ?>
-                <a href="<?= url('admin.complaints.view', '')->getRelativeUrl(); ?>"
-                   class="btn bg-warning py-2 px-3 d-block d-md-inline-block ml-0 ml-md-2 mb-2 border-0">
-                    شکایات خوانده نشده:
-                    <?= StringUtil::toPersian($unread_complaint_count); ?>
-                </a>
-            <?php endif; ?>
+                <?php if ($allowComplaint): ?>
+                    <a href="<?= url('admin.complaints.view', '')->getRelativeUrl(); ?>"
+                       class="btn bg-warning py-2 px-3 d-block d-md-inline-block ml-0 ml-md-2 mb-2 border-0">
+                        شکایات خوانده نشده:
+                        <?= StringUtil::toPersian($unread_complaint_count); ?>
+                    </a>
+                <?php endif; ?>
+            </div>
+        <?php endif; ?>
+    </div>
+
+    <?php if ($allowOrder && count($order_badges_count)): ?>
+        <div class="d-flex flex-wrap justify-content-center">
+            <?php foreach ($order_badges_count as $value): ?>
+                <div class="card mx-2" style="background-color: <?= $value['color']; ?>;">
+                    <a href="<?= url('admin.order.view', ['status' => $value['code']])->getRelativeUrlTrimmed(); ?>"
+                       class="card-body text-white py-1" data-popup="tooltip" data-title="<?= $value['title']; ?>">
+                        <div class="d-flex align-items-center">
+                            <h3 class="font-weight-semibold mb-0">
+                                <?= StringUtil::toPersian($value['count']); ?>
+                            </h3>
+                        </div>
+                    </a>
+                </div>
+            <?php endforeach; ?>
         </div>
     <?php endif; ?>
 
@@ -47,17 +73,6 @@ $authAdmin = auth_admin();
                 </h5>
             </div>
         </div>
-
-        <?php
-        $allowUser = $authAdmin->isAllow(RESOURCE_USER, OWN_PERMISSION_READ);
-        $allowProduct = $authAdmin->isAllow(RESOURCE_PRODUCT, OWN_PERMISSION_READ);
-        $allowOrder = $authAdmin->isAllow(RESOURCE_ORDER, OWN_PERMISSION_READ);
-        $allowBlog = $authAdmin->isAllow(RESOURCE_BLOG, OWN_PERMISSION_READ);
-        $allowStaticPage = $authAdmin->isAllow(RESOURCE_STATIC_PAGE, OWN_PERMISSION_READ);
-        $allowSlideShow = $authAdmin->isAllow(RESOURCE_SLIDESHOW, OWN_PERMISSION_READ);
-        $allowFileManager = $authAdmin->isAllow(RESOURCE_FILEMANAGER, OWN_PERMISSION_READ);
-        $allowSetting = $authAdmin->isAllow(RESOURCE_SETTING, OWN_PERMISSION_READ);
-        ?>
 
         <?php if ($allowUser): ?>
             <div class="col-sm-6 col-lg-3">
@@ -187,6 +202,12 @@ $authAdmin = auth_admin();
             </div>
         <?php endif; ?>
     </div>
+
+    <?php if ($authAdmin->userHasRole(ROLE_DEVELOPER) || $authAdmin->userHasRole(ROLE_SUPER_USER)): ?>
+        <hr>
+
+        <?php load_partial('admin/chart-bought-products-in-status'); ?>
+    <?php endif; ?>
 
     <?php if ($allowOrder && count($order_badges_count)): ?>
         <hr>

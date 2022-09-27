@@ -119,6 +119,11 @@
                 excelExport: '/ajax/report/wallet/export/excel',
             },
         },
+        chart: {
+            index: {
+                boughtStatus: '/ajax/chart/bought-status',
+            }
+        },
     });
     window.MyGlobalVariables.elements = $.extend(true, window.MyGlobalVariables.elements, {
         addAddress: {
@@ -5476,5 +5481,192 @@
             admin.forms.showFormErrors(errors);
             return false;
         });
+
+        //---------------------------------------------------------------
+        //---------------------------------------------------------------
+        //---------------------------------------------------------------
+
+        //---------------------------------------------------------------
+        // CHART LOADING
+        //---------------------------------------------------------------
+
+        var
+            chartBoughtStatus = $('#__chart-of_bought-status'),
+            chartBoughtStatusChart,
+            chartBoughtStatusContentLoaded = false;
+        if (chartBoughtStatus.length) {
+            // do ajax
+            admin.request(variables.url.chart.index.boughtStatus, 'get', function () {
+                chartBoughtStatus.parent().find('.container-static-loader').remove();
+                chartBoughtStatusContentLoaded = true;
+                //
+                var d = this.data;
+                var seriesObj = [];
+                var o, oo;
+
+                var findInObjTitles = function (needle) {
+                    for(o in d.items) {
+                        var obj = [];
+                        if(d.items.hasOwnProperty(o)) {
+                            if(d.items[o]['title'] === needle) {
+                                for(oo in d.times) {
+                                    if(d.times.hasOwnProperty(oo)) {
+                                        obj.push(d.items[o]['data'][d.times[oo]]);
+                                    }
+                                }
+                                return obj;
+                            }
+                        }
+                    }
+                }
+
+                for (o in d.titles) {
+                    if(d.titles.hasOwnProperty(o)) {
+                        seriesObj.push({
+                            name: d.titles[o],
+                            type: 'bar',
+                            data: findInObjTitles(d.titles[o]),
+                            itemStyle: {
+                                normal: {
+                                    label: {
+                                        show: true,
+                                        position: 'top',
+                                        textStyle: {
+                                            fontWeight: 500,
+                                        }
+                                    }
+                                }
+                            },
+                            markLine: {
+                                data: [{type: 'average', name: 'Average'}]
+                            }
+                        });
+                    }
+                }
+
+                // Initialize chart
+                chartBoughtStatusChart = echarts.init(chartBoughtStatus[0]);
+
+                //
+                // Chart config
+                //
+
+                // Options
+                chartBoughtStatusChart.setOption({
+
+                    // Define colors
+                    color: d.colors,
+
+                    // Global text styles
+                    textStyle: {
+                        fontFamily: 'IRANSansWeb, Roboto, Arial, Verdana, sans-serif',
+                        fontSize: 13,
+                    },
+
+                    // Chart animation duration
+                    animationDuration: 750,
+
+                    // Setup grid
+                    grid: {
+                        left: 10,
+                        right: 40,
+                        top: 60,
+                        bottom: 0,
+                        containLabel: true
+                    },
+
+                    // Add legend
+                    legend: {
+                        data: d.titles,
+                        type: 'scroll',
+                        itemHeight: 8,
+                        itemGap: 20,
+                        textStyle: {
+                            padding: [0, 5],
+                        },
+                    },
+
+                    // Add tooltip
+                    tooltip: {
+                        trigger: 'axis',
+                        backgroundColor: 'rgba(0,0,0,0.75)',
+                        padding: [10, 15],
+                        textStyle: {
+                            fontSize: 13,
+                            fontFamily: 'IRANSansWeb, Roboto, sans-serif',
+                        }
+                    },
+
+                    // Horizontal axis
+                    xAxis: [{
+                        type: 'category',
+                        data: d.times,
+                        axisLabel: {
+                            color: '#333',
+                        },
+                        axisLine: {
+                            lineStyle: {
+                                color: '#999'
+                            }
+                        },
+                        splitLine: {
+                            show: true,
+                            lineStyle: {
+                                color: '#eee',
+                                type: 'dashed'
+                            }
+                        }
+                    }],
+
+                    // Vertical axis
+                    yAxis: [{
+                        type: 'value',
+                        axisLabel: {
+                            color: '#333'
+                        },
+                        axisLine: {
+                            lineStyle: {
+                                color: '#999'
+                            }
+                        },
+                        splitLine: {
+                            lineStyle: {
+                                color: ['#eee']
+                            }
+                        },
+                        splitArea: {
+                            show: true,
+                            areaStyle: {
+                                color: ['rgba(250,250,250,0.1)', 'rgba(0,0,0,0.01)']
+                            }
+                        }
+                    }],
+
+                    // Add series
+                    series: seriesObj,
+                });
+            }, {}, false);
+        }
+
+        // Resize function
+        var triggerChartResize = function() {
+            chartBoughtStatus.length && chartBoughtStatusContentLoaded && chartBoughtStatusChart.resize();
+        };
+
+        // On sidebar width change
+        $(document).on('click', '.sidebar-control', function() {
+            setTimeout(function () {
+                triggerChartResize();
+            }, 0);
+        });
+
+        // On window resize
+        var resizeCharts;
+        window.onresize = function () {
+            clearTimeout(resizeCharts);
+            resizeCharts = setTimeout(function () {
+                triggerChartResize();
+            }, 200);
+        };
     });
 })(jQuery);

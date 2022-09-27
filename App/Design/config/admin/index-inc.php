@@ -6,6 +6,7 @@ return [
         'common' => [
             'admin-base',
             'admin',
+            'admin-e-chart',
         ],
     ],
 ];
