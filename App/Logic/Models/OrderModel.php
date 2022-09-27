@@ -372,7 +372,7 @@ class OrderModel extends BaseModel
         array $bind_values = []
     ): int
     {
-        $res = $this->getUsersFromProductId($product_id, ['COUNT(DISTINCT(u.id)) AS count'], $where, $bind_values);
+        $res = $this->getUsersFromProductId($product_id, ['COUNT(o.id) AS count'], $where, $bind_values);
         if (count($res)) {
             return (int)$res[0]['count'];
         }
