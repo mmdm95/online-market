@@ -297,4 +297,15 @@ return [
             ]
         ]
     ],
+    'admin-e-chart' => [
+        'js' => [
+            'bottom' => [
+                e(
+                    '<script type="text/javascript" src="' .
+                    asset_path('be/js/plugins/visualization/echarts/echarts.min.js') .
+                    '"></script>'
+                ),
+            ],
+        ],
+    ],
 ];

@@ -1095,9 +1095,7 @@ class Route implements IInitialize
                 Router::get('/badge/get/{id}', [AdminOrderBadgeController::class, 'get'])->where([
                     'id' => '[0-9]+',
                 ])->name('ajax.badge.get');
-                Router::post('/badge/add/{user_id}', [AdminOrderBadgeController::class, 'add'])->where([
-                    'user_id' => '[0-9]+',
-                ])->name('ajax.badge.add');
+                Router::post('/badge/add', [AdminOrderBadgeController::class, 'add'])->name('ajax.badge.add');
                 Router::post('/badge/edit/{id}', [AdminOrderBadgeController::class, 'edit'])->where([
                     'id' => '[0-9]+',
                 ])->name('ajax.badge.edit');
@@ -1206,6 +1204,12 @@ class Route implements IInitialize
 //                    ->name('ajax.admin.report.wallet.filter.clear');
 //                Router::get('/report/wallet/export/excel', [AdminReportWalletController::class, 'exportExcel'])
 //                    ->name('ajax.admin.report.wallet.export.excel');
+
+                /**
+                 * Chart Route
+                 */
+                Router::get('/chart/bought-status', [AdminHomeController::class, 'chartBoughtStatus'])
+                    ->name('ajax.admin.chart.bought-status');
 
                 /**
                  * File Manager Route
