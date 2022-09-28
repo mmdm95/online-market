@@ -2,3 +2,13 @@ User-agent: *
 Disallow: /build/
 Disallow: /be/
 Disallow: /js/variables.js
+Disallow: /App/
+Disallow: /Config/
+Disallow: /Data/
+Disallow: /I18n/
+Disallow: /node_modules/
+Disallow: /resource/
+Disallow: /Tests/
+Disallow: /Uploads/
+Disallow: /vendor/
+Disallow: /webpack/

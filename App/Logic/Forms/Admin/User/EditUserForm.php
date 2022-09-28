@@ -97,9 +97,16 @@ class EditUserForm implements IPageForm
             ->setFields('inp-user-role')
             ->required();
         // role (continue.)
+        $auth = auth_admin();
+        $acceptableRoles = ROLES_ARRAY_ACCEPTABLE;
+        if($auth->userHasRole(ROLE_SUPER_USER)) {
+            $acceptableRoles = ROLES_ARRAY_ACCEPTABLE_ALL_SUPER_USER;
+        } elseif ($auth->userHasRole(ROLE_DEVELOPER)) {
+            $acceptableRoles = ROLES_ARRAY_ACCEPTABLE_ALL;
+        }
         $validator
             ->setFields('inp-user-role.*')
-            ->isIn(ROLES_ARRAY_ACCEPTABLE, '{alias} ' . 'انتخاب شده نامعتبر است!');
+            ->isIn($acceptableRoles, '{alias} ' . 'انتخاب شده نامعتبر است!');
         // name
         $validator
             ->setFields('inp-user-first-name')

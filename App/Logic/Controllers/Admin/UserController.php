@@ -186,7 +186,13 @@ class UserController extends AbstractAdminController implements IDatatableContro
          * @var RoleModel $roleModel
          */
         $roleModel = container()->get(RoleModel::class);
-        $roles = $roleModel->get(['name', 'description', 'is_admin'], 'show_to_user=:stu', ['stu' => DB_YES]);
+        if($auth->userHasRole(ROLE_DEVELOPER)) {
+            $roles = $roleModel->get(['name', 'description', 'is_admin'], null, []);
+        } elseif($auth->userHasRole(ROLE_SUPER_USER)) {
+            $roles = $roleModel->get(['name', 'description', 'is_admin'], 'name!=:n', ['n' => ROLE_DEVELOPER]);
+        } else {
+            $roles = $roleModel->get(['name', 'description', 'is_admin'], 'show_to_user=:stu', ['stu' => DB_YES]);
+        }
 
         $this->setLayout($this->main_layout)->setTemplate('view/user/edit');
         return $this->render(array_merge($data, [

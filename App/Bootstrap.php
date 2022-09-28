@@ -8,6 +8,9 @@ use App\Logic\Route as RouteDefinition;
 use App\Logic\Event as EventDefinition;
 use App\Logic\Helper as HelperDefinition;
 
+use Sim\Command\ApplicationKeyGeneratorCommand;
+use Sim\Command\CleanWebpackFiles;
+use Sim\Command\MoveWebpackFiles;
 use Sim\ConfigManager\ConfigManager;
 use Sim\ConfigManager\ConfigManagerSingleton;
 
@@ -35,9 +38,16 @@ use DI\Container as Container;
 
 use Dotenv\Dotenv;
 
+use Symfony\Component\Console\Application as ConsoleApplication;
+
 class Bootstrap
 {
     const REQUIRED_PHP_VERSION = '7.2';
+
+    /**
+     * @var ConsoleApplication $consoleApp
+     */
+    protected $consoleApp = null;
 
     /**
      * @var ILoader $loader
@@ -58,6 +68,19 @@ class Bootstrap
      * @var bool $route_needed
      */
     protected $route_needed = true;
+
+    /**
+     * @var array $commands
+     */
+    protected $commands = [
+        // base needed commands
+        CleanWebpackFiles::class,
+        MoveWebpackFiles::class,
+        ApplicationKeyGeneratorCommand::class,
+
+        // my custom commands
+        // ...
+    ];
 
     /**
      * @var array $vendor_helpers_path
@@ -94,19 +117,37 @@ class Bootstrap
     }
 
     /**
+     * @return ConsoleApplication
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
+     */
+    public function getConsoleApplication(): ConsoleApplication
+    {
+        if(is_null($this->consoleApp)) {
+            $this->consoleApp = new ConsoleApplication();
+        }
+
+        foreach ($this->commands as $command) {
+            $this->consoleApp->add(\container()->make($command));
+        }
+
+        return $this->consoleApp;
+    }
+
+    /**
      * Define framework constants
      */
     protected function defineConstants()
     {
         //******** Root Directory *********
-        defined('BASE_ROOT') OR define('BASE_ROOT', str_replace('\\', '/', dirname(__DIR__) . '/'));
+        defined('BASE_ROOT') or define('BASE_ROOT', str_replace('\\', '/', dirname(__DIR__) . '/'));
 
         //********* Error Handler *********
-        defined("E_FATAL") OR define("E_FATAL", E_ERROR | E_USER_ERROR | E_PARSE | E_CORE_ERROR | E_COMPILE_ERROR | E_RECOVERABLE_ERROR);
+        defined("E_FATAL") or define("E_FATAL", E_ERROR | E_USER_ERROR | E_PARSE | E_CORE_ERROR | E_COMPILE_ERROR | E_RECOVERABLE_ERROR);
 
         //************* Modes *************
-        defined("MODE_DEVELOPMENT") OR define("MODE_DEVELOPMENT", 0x1);
-        defined("MODE_PRODUCTION") OR define("MODE_PRODUCTION", 0x2);
+        defined("MODE_DEVELOPMENT") or define("MODE_DEVELOPMENT", 0x1);
+        defined("MODE_PRODUCTION") or define("MODE_PRODUCTION", 0x2);
     }
 
     /**
@@ -167,7 +208,7 @@ class Bootstrap
         ]);
 
         // Load constants first
-        LoaderSingleton::getInstance()->load(__DIR__ . '/../Config/constants.php', null, Loader::TYPE_REQUIRE_ONCE);
+        LoaderSingleton::getInstance()->load(__DIR__ . '/../Config/constants.php', null, ILoader::TYPE_REQUIRE_ONCE);
 
         // Call needed functionality
         $this->defineConfig();
@@ -180,8 +221,7 @@ class Bootstrap
         if ($this->route_needed) {
             $this->defineEvents();
             $this->defineContainer();
-        }
-        if ($this->route_needed) {
+            //
             $this->customErrorHandler();
             $this->defineRoute();
         }
