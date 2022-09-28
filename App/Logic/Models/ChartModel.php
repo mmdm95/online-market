@@ -23,7 +23,7 @@ class ChartModel extends BaseModel
             ->from($this->table . ' AS oa')
             ->cols([
                 'oa.send_status_code AS status_code',
-                'COUNT(oa.id) AS badge_count',
+                'COUNT(oa.product_code) AS count',
             ])
             ->where('oa.ordered_at BETWEEN :d1 AND :d2')
             ->bindValues([
@@ -37,6 +37,44 @@ class ChartModel extends BaseModel
                 ->innerJoin(
                     self::TBL_ORDER_BADGES . ' AS ob',
                     'oa.send_status_code=ob.code'
+                );
+        } catch (AuraException $e) {
+            return [];
+        }
+
+        return $this->db->fetchAll($select->getStatement(), $select->getBindValues());
+    }
+
+    /**
+     * @param int $topN
+     * @param $fromDate
+     * @param $toDate
+     * @return array
+     */
+    public function getTopNBoughtProductsCount(int $topN, $fromDate, $toDate): array
+    {
+        $select = $this->connector->select();
+        $select
+            ->from($this->table . ' AS oa')
+            ->cols([
+                '(CASE WHEN (oa.title IS NOT NULL) THEN (oa.title) ELSE (oa.order_item_product_title) END) AS product_title',
+                '(CASE WHEN (oa.category_name IS NOT NULL) THEN (oa.category_name) ELSE ("") END) AS category_name',
+                'COUNT(DISTINCT(oa.id)) AS count',
+            ])
+            ->where('oa.ordered_at BETWEEN :d1 AND :d2')
+            ->bindValues([
+                'd1' => $fromDate,
+                'd2' => $toDate,
+            ])
+            ->orderBy(['3 DESC'])
+            ->limit($topN)
+            ->groupBy(['oa.product_id']);
+
+        try {
+            $select
+                ->innerJoin(
+                    self::TBL_PRODUCT_PROPERTY . ' AS pp',
+                    'oa.product_id=pp.product_id'
                 );
         } catch (AuraException $e) {
             return [];

@@ -122,6 +122,7 @@
         chart: {
             index: {
                 boughtStatus: '/ajax/chart/bought-status',
+                topBoughtProducts: '/ajax/chart/top-bought-products',
             }
         },
     });
@@ -5491,7 +5492,7 @@
         //---------------------------------------------------------------
 
         var
-            chartBoughtStatus = $('#__chart-of_bought-status'),
+            chartBoughtStatus = $('#__chart-of-bought-status'),
             chartBoughtStatusChart,
             chartBoughtStatusContentLoaded = false;
         if (chartBoughtStatus.length) {
@@ -5505,12 +5506,12 @@
                 var o, oo;
 
                 var findInObjTitles = function (needle) {
-                    for(o in d.items) {
+                    for (o in d.items) {
                         var obj = [];
-                        if(d.items.hasOwnProperty(o)) {
-                            if(d.items[o]['title'] === needle) {
-                                for(oo in d.times) {
-                                    if(d.times.hasOwnProperty(oo)) {
+                        if (d.items.hasOwnProperty(o)) {
+                            if (d.items[o]['title'] === needle) {
+                                for (oo in d.times) {
+                                    if (d.times.hasOwnProperty(oo)) {
                                         obj.push(d.items[o]['data'][d.times[oo]]);
                                     }
                                 }
@@ -5521,7 +5522,7 @@
                 }
 
                 for (o in d.titles) {
-                    if(d.titles.hasOwnProperty(o)) {
+                    if (d.titles.hasOwnProperty(o)) {
                         seriesObj.push({
                             name: d.titles[o],
                             type: 'bar',
@@ -5648,13 +5649,138 @@
             }, {}, false);
         }
 
+        var
+            chartTopBoughtProducts = $('#__chart-of-top-bought-products'),
+            chartTopBoughtProductsChart,
+            chartTopBoughtProductsContentLoaded = false;
+        if (chartTopBoughtProducts.length) {
+            // do ajax
+            admin.request(variables.url.chart.index.topBoughtProducts, 'get', function () {
+                chartTopBoughtProducts.parent().find('.container-static-loader').remove();
+                chartTopBoughtProductsContentLoaded = true;
+                //
+                var d = this.data;
+                var indicator = [];
+                var o, oo;
+
+                for (o in d.titles) {
+                    if (d.titles.hasOwnProperty(o)) {
+                        indicator.push({
+                            name: d.titles[o],
+                            max: d.max,
+                        });
+                    }
+                }
+
+                // Initialize chart
+                chartTopBoughtProductsChart = echarts.init(chartTopBoughtProducts[0]);
+
+                //
+                // Chart config
+                //
+
+                // Options
+                chartTopBoughtProductsChart.setOption({
+
+                    // Global text styles
+                    textStyle: {
+                        fontFamily: 'IRANSansWeb, Roboto, Arial, Verdana, sans-serif',
+                        fontSize: 13,
+                    },
+
+                    // Add legend
+                    legend: {
+                        data: d.time,
+                        bottom: 5,
+                        itemGap: 20,
+                        textStyle: {
+                            fontSize: 14
+                        },
+                    },
+
+                    // Setup polar coordinates
+                    radar: {
+                        radius: '60%',
+                        indicator: indicator,
+                        shape: 'circle',
+                        splitNumber: 5,
+                        name: {
+                            color: '#444'
+                        },
+                        axisName: {
+                            color: 'rgb(238, 197, 102)'
+                        },
+                        splitLine: {
+                            lineStyle: {
+                                color: [
+                                    'rgba(56, 189, 36, .2)',
+                                    'rgba(189, 164, 36, .3)',
+                                    'rgba(229, 98, 42, .5)',
+                                    'rgba(229, 42, 42, .7)',
+                                    'rgba(229, 42, 142, .9)',
+                                    'rgba(160, 42, 229, 1)',
+                                ].reverse()
+                            }
+                        },
+                        splitArea: {
+                            show: false
+                        },
+                        axisLine: {
+                            lineStyle: {
+                                color: 'rgba(238, 197, 102, 0.5)'
+                            }
+                        }
+                    },
+
+                    // Add series
+                    series: [
+                        {
+                            name: d.time,
+                            type: 'radar',
+                            data: [
+                                {
+                                    value: d.items,
+                                    symbolSize: 10,
+                                    label: {
+                                        show: true,
+                                        formatter: function (params) {
+                                            return params.value;
+                                        },
+                                        fontSize: 15,
+                                        fontWeight: 500,
+                                        backgroundColor: 'rgba(0, 0, 0, .75)',
+                                        color: 'rgba(255, 255, 255, 1)',
+                                        borderRadius: 5,
+                                        padding: 7,
+                                    }
+                                }
+                            ],
+                            itemStyle: {
+                                color: 'rgba(0, 0, 0, 1)',
+                            },
+                            lineStyle: {
+                                width: 1,
+                                opacity: 0.7,
+                                color: 'rgba(40, 211, 205, 1)',
+                            },
+                            areaStyle: {
+                                opacity: 0.3,
+                                color: 'rgba(40, 211, 205, 1)',
+                            }
+                        },
+                    ],
+                });
+            }, {}, false);
+        }
+
         // Resize function
-        var triggerChartResize = function() {
+        var triggerChartResize = function () {
             chartBoughtStatus.length && chartBoughtStatusContentLoaded && chartBoughtStatusChart.resize();
+            chartTopBoughtProducts.length && chartTopBoughtProductsContentLoaded && chartTopBoughtProductsChart.resize();
         };
 
         // On sidebar width change
-        $(document).on('click', '.sidebar-control', function() {
+        $(document).on('click', '.sidebar-control', function () {
             setTimeout(function () {
                 triggerChartResize();
             }, 0);

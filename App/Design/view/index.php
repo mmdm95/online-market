@@ -207,6 +207,7 @@ $allowSetting = $authAdmin->isAllow(RESOURCE_SETTING, OWN_PERMISSION_READ);
         <hr>
 
         <?php load_partial('admin/chart-bought-products-in-status'); ?>
+        <?php load_partial('admin/chart-top-bought-products'); ?>
     <?php endif; ?>
 
     <?php if ($allowOrder && count($order_badges_count)): ?>

@@ -453,4 +453,40 @@ class HomeController extends AbstractAdminController
 
         response()->json($resourceHandler->getReturnData());
     }
+
+    /**
+     * @return void
+     * @throws IDBException
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
+     */
+    public function chartTopBoughtProducts()
+    {
+        /**
+         * @var DBAuth $auth
+         */
+        $auth = container()->get('auth_admin');
+        if (!$auth->userHasRole(ROLE_DEVELOPER) && !$auth->userHasRole(ROLE_SUPER_USER)) {
+            show_403();
+        }
+
+        $resourceHandler = new ResourceHandler();
+
+        /**
+         * @var Agent $agent
+         */
+        $agent = container()->get(Agent::class);
+        if (!$agent->isRobot()) {
+            $resourceHandler
+                ->type(RESPONSE_TYPE_SUCCESS)
+                ->data(ChartUtil::getTopBoughtProducts(10));
+        } else {
+            response()->httpCode(403);
+            $resourceHandler
+                ->type(RESPONSE_TYPE_ERROR)
+                ->errorMessage('خطا در ارتباط با سرور، لطفا دوباره تلاش کنید.');
+        }
+
+        response()->json($resourceHandler->getReturnData());
+    }
 }
