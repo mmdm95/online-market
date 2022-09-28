@@ -885,7 +885,7 @@ class ProductModel extends BaseModel
             ->where('pa.category_id=:cId')
             ->bindValue('cId', $categoryId)
             ->orWhere('pa.category_all_parents_id REGEXP :cIdReg')
-            ->bindValue('cIdReg', '([^0-9]|^)' . preg_quote($categoryId) . '([^0-9]|$)');
+            ->bindValue('cIdReg', getDBCommaRegexString($categoryId));
 
         $productBrands = $this->db->fetchAll($select->getStatement(), $select->getBindValues());
 
@@ -922,7 +922,7 @@ class ProductModel extends BaseModel
         $where = 'pa.category_id=:cId OR pa.category_all_parents_id REGEXP :cIdReg';
         $bindValues = [
             'cId' => $categoryId,
-            'cIdReg' => '([^0-9]|^)' . preg_quote($categoryId) . '([^0-9]|$)',
+            'cIdReg' => getDBCommaRegexString($categoryId),
         ];
 
         return $this->getLimitedProduct(

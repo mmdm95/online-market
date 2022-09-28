@@ -51,41 +51,41 @@ class ProductController extends AbstractHomeController
         $categoryModel = container()->get(CategoryModel::class);
 
         $hasCategory = false;
-        if(is_numeric($category)) {
+        if (is_numeric($category)) {
             $hasCategory = (bool)$categoryModel->count(
                 'id=:id AND publish=:pub',
                 ['id' => $category, 'pub' => DB_YES]
             );
         }
 
-        // load side categories
+        $categoryInfo = [];
         if (is_numeric($category) && $hasCategory) {
-            $select = $model->select();
-            $select
-                ->from(BaseModel::TBL_CATEGORIES)
-                ->cols(['id', 'name'])
-                ->where('publish=:pub')
-                ->bindValues([
-                    'pub' => DB_YES,
-                ])
-                ->orderBy([
-                    'priority DESC',
-                    'name DESC'
-                ]);
-            $categories = $model->get($select);
-        } else {
-            $select = $model->select();
-            $select
-                ->from(BaseModel::TBL_CATEGORIES)
-                ->cols(['id', 'name',])
-                ->where('publish=:pub')
-                ->where('level=:lvl')
-                ->bindValues([
-                    'pub' => DB_YES,
-                    'lvl' => 1,
-                ]);
-            $categories = $model->get($select);
+            $categoryInfo = $categoryModel->getFirst(
+                ['name'],
+                'id=:id AND publish=:pub',
+                ['id' => $category, 'pub' => DB_YES]
+            );
         }
+
+        // load side categories
+        $select = $model->select();
+        $select
+            ->from(BaseModel::TBL_CATEGORIES)
+            ->cols(['id', 'name'])
+            ->where('publish=:pub')
+            ->bindValue('pub', DB_YES)->orderBy([
+                'priority DESC',
+                'name DESC'
+            ]);
+        if (is_numeric($category) && $hasCategory) {
+            $select->where('all_parents_id REGEXP :apid')
+                ->bindValue('apid', getDBCommaRegexString($category));
+        } else {
+            $select
+                ->where('level=:lvl')
+                ->bindValue('lvl', 1);
+        }
+        $categories = $model->get($select);
 
         // load brands
         if (is_numeric($category) && $hasCategory) {
@@ -160,6 +160,9 @@ class ProductController extends AbstractHomeController
 
         $this->setLayout($this->main_layout)->setTemplate('view/main/product/index');
         return $this->render([
+            'sub_title' => 'محصولات'
+                . (!empty($categoryInfo) ? ('<small>' . ' «در دسته - ' . $categoryInfo['name'] . '»') . '</small>' : ''),
+            //
             'category' => $category,
             'side_categories' => $categories,
             'max_price' => $maxPrice,
