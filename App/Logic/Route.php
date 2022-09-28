@@ -1210,6 +1210,8 @@ class Route implements IInitialize
                  */
                 Router::get('/chart/bought-status', [AdminHomeController::class, 'chartBoughtStatus'])
                     ->name('ajax.admin.chart.bought-status');
+                Router::get('/chart/top-bought-products', [AdminHomeController::class, 'chartTopBoughtProducts'])
+                    ->name('ajax.admin.chart.top-bought-products');
 
                 /**
                  * File Manager Route
