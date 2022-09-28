@@ -2,6 +2,7 @@
 
 namespace App\Logic;
 
+use App\Logic\Controllers\SitemapController;
 use App\Logic\Controllers\Admin\{BlogController as AdminBlogController,
     BlogCategoryController as AdminBlogCategoryController,
     BrandController as AdminBrandController,
@@ -39,7 +40,8 @@ use App\Logic\Controllers\Admin\{BlogController as AdminBlogController,
     UserController as AdminUserController,
     WalletController as AdminWalletController,
     ProductController as AdminProductController,
-    AddressController as AdminAddressController};
+    AddressController as AdminAddressController
+};
 use App\Logic\Controllers\API\CsrfController;
 use App\Logic\Controllers\CheckoutController;
 use App\Logic\Controllers\OrderResultController;
@@ -49,7 +51,8 @@ use App\Logic\Controllers\User\{AddressController as UserAddressController,
     HomeController as UserHomeController,
     OrderController as UserOrderController,
     ReturnOrderController as UserReturnOrderController,
-    WalletController as UserWalletController};
+    WalletController as UserWalletController
+};
 use App\Logic\Controllers\Colleague\{HomeController as ColleagueHomeController};
 use App\Logic\Controllers\BlogController;
 use App\Logic\Controllers\BrandController;
@@ -707,6 +710,12 @@ class Route implements IInitialize
                 'id' => '[0-9]+',
                 'slug' => '.*',
             ])->name('home.blog.show');
+
+
+            /**
+             * sitemap routes
+             */
+            Router::get('/sitemap/', [SitemapController::class, 'index'])->name('home.sitemap');
         });
     }
 

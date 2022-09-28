@@ -5701,7 +5701,24 @@
                     // Setup polar coordinates
                     radar: {
                         radius: '60%',
-                        indicator: indicator,
+                        indicator: indicator.length ? indicator : [
+                            {
+                                name: '',
+                                max: 1,
+                            },
+                            {
+                                name: '',
+                                max: 1,
+                            },
+                            {
+                                name: '',
+                                max: 1,
+                            },
+                            {
+                                name: '',
+                                max: 1,
+                            },
+                        ],
                         shape: 'circle',
                         splitNumber: 5,
                         name: {

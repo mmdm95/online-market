@@ -26,6 +26,7 @@
     "ext-openssl": "*",
     "ext-pdo": "*",
     "ext-mbstring": "*",
+    "ext-xmlwriter": "*",
     "jenssegers/agent": "^2.6",
     "mmdm/sim-i18n": "^1.0",
     "mmdm/sim-cookie": "^3.0",
