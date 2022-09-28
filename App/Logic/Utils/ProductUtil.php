@@ -94,7 +94,7 @@ class ProductUtil
                 $where .= ' OR pa.category_all_parents_id REGEXP :p_category_all_parents_id)';
                 $bindValues['p_category_id'] = $category;
                 $bindValues['p_category_parent_id'] = $category;
-                $bindValues['p_category_all_parents_id'] = '([^0-9]|^)' . preg_quote($category) . '([^0-9]|$)';
+                $bindValues['p_category_all_parents_id'] = getDBCommaRegexString($category);
             }
         }
         // category from main page parameter
@@ -107,7 +107,7 @@ class ProductUtil
                 $where .= ' OR pa.category_all_parents_id REGEXP :p_t_category_all_parents_id)';
                 $bindValues['p_t_category_id'] = $tmpCategory;
                 $bindValues['p_t_category_parent_id'] = $tmpCategory;
-                $bindValues['p_t_category_all_parents_id'] = '([^0-9]|^)' . preg_quote($tmpCategory) . '([^0-9]|$)';
+                $bindValues['p_t_category_all_parents_id'] = getDBCommaRegexString($tmpCategory);
             }
         }
         // price parameter

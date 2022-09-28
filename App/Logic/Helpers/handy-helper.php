@@ -367,3 +367,11 @@ function get_color_from_bg(string $bgColor, string $lightColor = '#ffffff', stri
     $brightness = round((($r * 299) + ($g * 587) + ($b * 114)) / 1000);
     return $brightness > 150 ? $darkColor : $lightColor;
 }
+
+/**
+ * @param $needle
+ * @return string
+ */
+function getDBCommaRegexString($needle): string {
+    return '([^0-9]|^)' . preg_quote($needle) . '([^0-9]|$)';
+}

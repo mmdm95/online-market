@@ -83,7 +83,7 @@ class SliderUtil
                 ->where('(pa.category_id=:cat_id OR pa.category_all_parents_id REGEXP :p_category_all_parents_id)')
                 ->bindValues([
                     'cat_id' => $info['category'],
-                    'p_category_all_parents_id' => '([^0-9]|^)' . preg_quote($info['category']) . '([^0-9]|$)',
+                    'p_category_all_parents_id' => getDBCommaRegexString($info['category']),
                 ]);
         }
 

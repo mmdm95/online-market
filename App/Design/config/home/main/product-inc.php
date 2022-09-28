@@ -9,7 +9,6 @@ return [
             'default-changeable',
             'default-theia-sticky-sidebar',
         ],
-        'sub_title' => 'محصولات',
         'breadcrumb' => [
             [
                 'url' => url('home.index')->getRelativeUrl(),

@@ -101,7 +101,7 @@ class ProductFestivalModel extends BaseModel
             ->where('pa.category_id=:cId')
             ->orWhere('pa.category_all_parents_id REGEXP :capi')
             ->bindValue('cId', $category_id)
-            ->bindValue('capi', '([^0-9]|^)' . preg_quote($category_id) . '([^0-9]|$)');
+            ->bindValue('capi', getDBCommaRegexString($category_id));
         $products = $this->db->fetchAll($select->getStatement(), $select->getBindValues());
 
         // if there is no products, there is no need for further operations

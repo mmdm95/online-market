@@ -186,7 +186,7 @@ class CategoryController extends AbstractAdminController implements IDatatableCo
                     // old: (,(?<![0-9])id(?![0-9])|(?<![0-9])id(?![0-9])|(?<![0-9])id(?![0-9]),)
                     // new: ([^0-9]|^)id([^0-9]|$)
                     // will match "id", ",id", "id," literally
-                    ->set('all_parents_id', 'REGEXP_REPLACE("all_parents_id", ([^0-9]|^)' . preg_quote($id) . '([^0-9]|$), ",")');
+                    ->set('all_parents_id', 'REGEXP_REPLACE("all_parents_id", ' . getDBCommaRegexString($id) . ', ",")');
                 $model->execute($update);
             });
             $handler = new GeneralAjaxRemoveHandler();
