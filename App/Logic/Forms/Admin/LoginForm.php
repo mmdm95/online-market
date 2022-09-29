@@ -69,11 +69,6 @@ class LoginForm implements IPageForm
             $validator->setStatus(false)->setError('inp-username', $info['ban_desc']);
         }
 
-        // to reset form values and not set them again
-        if ($validator->getStatus()) {
-            $validator->resetBagValues();
-        }
-
         return [
             $validator->getStatus(),
             $validator->getUniqueErrors(),
