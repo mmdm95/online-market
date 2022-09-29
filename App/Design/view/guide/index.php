@@ -28,7 +28,7 @@
                     ?>
 
                     <div class="list-feed">
-                        <div class="list-feed-item border-warning-400">
+                        <div class="list-feed-item border-green-400">
                             لینک مطالب:
                             <a href="<?= url('home.blog')->getRelativeUrlTrimmed(); ?>" dir="ltr" target="_blank">
                                 blog
@@ -404,6 +404,29 @@
                                             <button type="button"
                                                     class="btn btn-dark btn-icon rounded-full copy-to-clipboard"
                                                     data-clipboard-target="#searchLinkPlaceholder"
+                                                    data-popup="tooltip" data-original-title="کپی"
+                                                    data-placement="right">
+                                                <i class="icon-copy"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="list-feed-item border-blue-400">
+                            لینک سایت مپ:
+                            <div class="row my-3">
+                                <div class="col-xl-9 col-lg-12 col-md-12">
+                                    <div class="form-group-feedback form-group-feedback-left">
+                                        <input type="text" class="form-control ltr px-3 rounded-full"
+                                               id="sitemapLinkPlaceholder" disabled
+                                               style="border: 1px dashed !important;"
+                                               value="<?= $base . url('home.sitemap')->getRelativeUrlTrimmed(); ?>">
+                                        <div class="form-control-feedback form-control-feedback-lg">
+                                            <button type="button"
+                                                    class="btn btn-dark btn-icon rounded-full copy-to-clipboard"
+                                                    data-clipboard-target="#sitemapLinkPlaceholder"
                                                     data-popup="tooltip" data-original-title="کپی"
                                                     data-placement="right">
                                                 <i class="icon-copy"></i>
