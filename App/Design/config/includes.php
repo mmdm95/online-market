@@ -68,6 +68,7 @@ $adminReport = config()->getDirectly(__DIR__ . '/admin/report-inc.php');
 $adminSecurityQuestion = config()->getDirectly(__DIR__ . '/admin/security-question-inc.php');
 $adminSendMethod = config()->getDirectly(__DIR__ . '/admin/send-method-inc.php');
 $adminSetting = config()->getDirectly(__DIR__ . '/admin/setting-inc.php');
+$adminSMS = config()->getDirectly(__DIR__ . '/admin/sms-inc.php');
 $adminStaticPage = config()->getDirectly(__DIR__ . '/admin/static-page-inc.php');
 $adminUnit = config()->getDirectly(__DIR__ . '/admin/unit-inc.php');
 $adminUser = config()->getDirectly(__DIR__ . '/admin/user-inc.php');
@@ -213,6 +214,7 @@ return [
         $adminSecurityQuestion,
         $adminSendMethod,
         $adminSetting,
+        $adminSMS,
         $adminStaticPage,
         $adminUnit,
         $adminUser,
