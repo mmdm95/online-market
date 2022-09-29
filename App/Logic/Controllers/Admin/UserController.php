@@ -186,9 +186,9 @@ class UserController extends AbstractAdminController implements IDatatableContro
          * @var RoleModel $roleModel
          */
         $roleModel = container()->get(RoleModel::class);
-        if($auth->userHasRole(ROLE_DEVELOPER)) {
+        if ($auth->userHasRole(ROLE_DEVELOPER)) {
             $roles = $roleModel->get(['name', 'description', 'is_admin'], null, []);
-        } elseif($auth->userHasRole(ROLE_SUPER_USER)) {
+        } elseif ($auth->userHasRole(ROLE_SUPER_USER)) {
             $roles = $roleModel->get(['name', 'description', 'is_admin'], 'name!=:n', ['n' => ROLE_DEVELOPER]);
         } else {
             $roles = $roleModel->get(['name', 'description', 'is_admin'], 'show_to_user=:stu', ['stu' => DB_YES]);
@@ -209,6 +209,7 @@ class UserController extends AbstractAdminController implements IDatatableContro
      */
     public function remove($id)
     {
+        $id = (int)$id;
         /**
          * @var DBAuth $auth
          */
@@ -236,14 +237,11 @@ class UserController extends AbstractAdminController implements IDatatableContro
             ) {
                 $handler = new GeneralAjaxRemoveHandler();
                 $resourceHandler = $handler->handle(BaseModel::TBL_USERS, $id);
+            } elseif ($auth->userHasRole(ROLE_DEVELOPER, $id) || $auth->userHasRole(ROLE_SUPER_USER, $id)) {
+                $resourceHandler->errorMessage('امکان حذف کاربر با سطح برابر یا بیشتر وجود ندارد!');
             } else {
-                if(!$auth->userHasRole(ROLE_DEVELOPER, $id) ||
-                    !$auth->userHasRole(ROLE_SUPER_USER, $id)) {
-                    $resourceHandler->errorMessage('امکان حذف کاربر با سطح برابر یا بیشتر وجود ندارد!');
-                } else {
-                    $handler = new GeneralAjaxRemoveHandler();
-                    $resourceHandler = $handler->handle(BaseModel::TBL_USERS, $id, '', [], false, true);
-                }
+                $handler = new GeneralAjaxRemoveHandler();
+                $resourceHandler = $handler->handle(BaseModel::TBL_USERS, $id, '', [], false, true);
             }
         } else {
             response()->httpCode(403);
