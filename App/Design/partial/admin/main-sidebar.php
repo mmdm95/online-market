@@ -669,6 +669,20 @@ $authAdmin = auth_admin();
                     </li>
                 <?php endif; ?>
 
+                <?php if ($authAdmin->userHasRole(ROLE_DEVELOPER) || $authAdmin->userHasRole(ROLE_SUPER_USER)): ?>
+                    <li class="nav-item">
+                        <a href="<?= url('admin.sms.logs'); ?>"
+                           class="nav-link <?= url()->contains(url('admin.sms.logs')->getRelativeUrlTrimmed()) ? 'active' : ''; ?>"
+                           data-popup="tooltip"
+                           data-original-title="لاگ پیامک"
+                           data-boundary="window"
+                           data-placement="left">
+                            <i class="icon-envelop3"></i>
+                            <span>لاگ پیامک</span>
+                        </a>
+                    </li>
+                <?php endif; ?>
+
                 <li class="nav-item">
                     <a href="<?= url('admin.guide'); ?>"
                        class="nav-link <?= url()->contains(url('admin.guide')->getRelativeUrlTrimmed()) ? 'active' : ''; ?>"

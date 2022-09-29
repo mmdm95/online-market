@@ -34,14 +34,14 @@ use App\Logic\Controllers\Admin\{BlogController as AdminBlogController,
     SendMethodController as AdminSendMethodController,
     SettingController as AdminSettingController,
     SliderController as AdminSliderController,
+    SMSController as AdminSMSController,
     StaticPageController as AdminStaticPageController,
     SteppedPriceController as AdminSteppedPriceController,
     UnitController as AdminUnitController,
     UserController as AdminUserController,
     WalletController as AdminWalletController,
     ProductController as AdminProductController,
-    AddressController as AdminAddressController
-};
+    AddressController as AdminAddressController};
 use App\Logic\Controllers\API\CsrfController;
 use App\Logic\Controllers\CheckoutController;
 use App\Logic\Controllers\OrderResultController;
@@ -467,6 +467,12 @@ class Route implements IInitialize
                  */
                 Router::get('/deposit-type/view', [AdminDepositTypeController::class, 'view'])->name('admin.deposit-type.view');
                 Router::post('/deposit-type/view/dt', [AdminDepositTypeController::class, 'getPaginatedDatatable'])->name('admin.deposit-type.dt.view');
+
+                /**
+                 * SMS Route
+                 */
+                Router::get('/sms/logs', [AdminSMSController::class, 'logs'])->name('admin.sms.logs');
+                Router::post('/sms/logs/dt', [AdminSMSController::class, 'getLogsPaginatedDatatable'])->name('admin.sms.dt.logs');
 
                 /**
                  * Static Page Route
