@@ -30,6 +30,7 @@ use App\Logic\Models\UnitModel;
 use App\Logic\Models\UserModel;
 use App\Logic\Utils\ChartUtil;
 use App\Logic\Utils\Jdf;
+use App\Logic\Validations\ExtendedValidator;
 use Jenssegers\Agent\Agent;
 use Sim\Auth\DBAuth;
 use Sim\Auth\Exceptions\IncorrectPasswordException;
@@ -328,6 +329,11 @@ class HomeController extends AbstractAdminController
             $auth->logout();
             try {
                 /**
+                 * @var ExtendedValidator $validator
+                 */
+                $validator = form_validator();
+
+                /**
                  * @var AdminLoginForm $loginForm
                  */
                 $loginForm = container()->get(AdminLoginForm::class);
@@ -341,6 +347,10 @@ class HomeController extends AbstractAdminController
                             'isActive' => DB_YES
                         ]);
                     if ($auth->isLoggedIn()) {
+                        if ($validator->getStatus()) {
+                            $validator->resetBagValues();
+                        }
+
                         $backUrl = ArrayUtil::get($_GET, 'back_url', null);
                         $backUrl = urldecode($backUrl);
                         if (!empty($backUrl)) {
