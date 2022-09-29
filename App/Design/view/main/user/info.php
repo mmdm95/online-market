@@ -32,9 +32,9 @@
                     <form action="<?= url('user.info')->getRelativeUrlTrimmed(); ?>#changeInfo"
                           method="post" id="__form_change_info">
                         <?php load_partial('main/message/message-form', [
-                            'errors' => $password_change_errors ?? [],
-                            'success' => $password_change_success ?? '',
-                            'warning' => $password_change_warning ?? '',
+                            'errors' => $info_change_errors ?? [],
+                            'success' => $info_change_success ?? '',
+                            'warning' => $info_change_warning ?? '',
                         ]); ?>
 
                         <input type="hidden" name="csrf_token" value="<?= csrf_token(); ?>"
@@ -121,9 +121,9 @@
                     <form action="<?= url('user.info')->getRelativeUrlTrimmed(); ?>#changePassword"
                           method="post" id="__form_change_password">
                         <?php load_partial('main/message/message-form', [
-                            'errors' => $info_change_errors ?? [],
-                            'success' => $info_change_success ?? '',
-                            'warning' => $info_change_warning ?? '',
+                            'errors' => $password_change_errors ?? [],
+                            'success' => $password_change_success ?? '',
+                            'warning' => $password_change_warning ?? '',
                         ]); ?>
 
                         <input type="hidden" name="csrf_token" value="<?= csrf_token(); ?>"
