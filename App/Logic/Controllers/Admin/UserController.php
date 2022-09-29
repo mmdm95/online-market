@@ -230,15 +230,20 @@ class UserController extends AbstractAdminController implements IDatatableContro
             } elseif (
                 $auth->userHasRole(ROLE_SUPER_USER) &&
                 (
-                    !$auth->userHasRole(ROLE_DEVELOPER, $id) ||
+                    !$auth->userHasRole(ROLE_DEVELOPER, $id) &&
                     !$auth->userHasRole(ROLE_SUPER_USER, $id)
                 )
             ) {
                 $handler = new GeneralAjaxRemoveHandler();
                 $resourceHandler = $handler->handle(BaseModel::TBL_USERS, $id);
             } else {
-                $handler = new GeneralAjaxRemoveHandler();
-                $resourceHandler = $handler->handle(BaseModel::TBL_USERS, $id, '', [], false, true);
+                if(!$auth->userHasRole(ROLE_DEVELOPER, $id) ||
+                    !$auth->userHasRole(ROLE_SUPER_USER, $id)) {
+                    $resourceHandler->errorMessage('امکان حذف کاربر با سطح برابر یا بیشتر وجود ندارد!');
+                } else {
+                    $handler = new GeneralAjaxRemoveHandler();
+                    $resourceHandler = $handler->handle(BaseModel::TBL_USERS, $id, '', [], false, true);
+                }
             }
         } else {
             response()->httpCode(403);
