@@ -191,9 +191,11 @@ class ProductUtil
         if (!is_array($isAvailable)) {
             $isAvailable = $isAvailable->getValue();
             if (is_numeric($isAvailable)) {
+                $where .= ' AND pa.product_availability=:p_p_available';
                 $where .= ' AND pa.is_available=:p_is_available';
                 $where .= ' AND pa.max_cart_count>:p_max_cart_count';
                 $where .= ' AND pa.stock_count>:p_stock_count';
+                $bindValues['p_p_available'] = DB_YES;
                 $bindValues['p_is_available'] = DB_YES;
                 $bindValues['p_max_cart_count'] = 0;
                 $bindValues['p_stock_count'] = 0;
