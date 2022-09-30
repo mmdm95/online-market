@@ -227,7 +227,7 @@
         }
 
         function availabilitySwitchClick() {
-            availabilitySwitch.mSwitch('options', {
+            availabilitySwitch.mSwitch({
                 onTurnOn: function () {
                     uriParser.push('is_available', 1, true);
                     loadProduct();
@@ -240,7 +240,7 @@
         }
 
         function offersSwitchClick() {
-            offerSwitch.mSwitch('options', {
+            offerSwitch.mSwitch({
                 onTurnOn: function () {
                     uriParser.push('is_special', 1, true);
                     loadProduct();
