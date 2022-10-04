@@ -41,6 +41,12 @@
     ]); ?>
     <!-- END SECTION BLOG -->
 
+    <!-- START SECTION INSTAGRAM IMAGES -->
+    <?php load_partial('main/instagram-images', [
+        'instagram_images' => $instagram_images ?? [],
+    ]); ?>
+    <!-- END SECTION INSTAGRAM IMAGES -->
+
     <!-- START SECTION CLIENT LOGO -->
     <?php load_partial('main/slider-brands', [
         'brands' => $brands ?? [],
