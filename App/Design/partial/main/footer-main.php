@@ -127,7 +127,7 @@ use App\Logic\Utils\Jdf;
                     <?php
                     ksort($section1['links']);
                     ?>
-                    <div class="col-lg-2 col-md-4 col-sm-6">
+                    <div class="col-lg-2 col-md-3 col-sm-6">
                         <div class="widget">
                             <h6 class="widget_title"><?= $section1['title']; ?></h6>
                             <ul class="widget_links">
@@ -142,7 +142,7 @@ use App\Logic\Utils\Jdf;
                     <?php
                     ksort($section2['links']);
                     ?>
-                    <div class="col-lg-2 col-md-4 col-sm-6">
+                    <div class="col-lg-2 col-md-3 col-sm-6">
                         <div class="widget">
                             <h6 class="widget_title"><?= $section2['title']; ?></h6>
                             <ul class="widget_links">

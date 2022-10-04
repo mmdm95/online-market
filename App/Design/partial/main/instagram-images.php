@@ -11,9 +11,9 @@
 
                         <i class="ti-instagram"></i>
                         <h3>اینستاگرام</h3>
-                        <a href="http://www.instagram.com/<?= $instagramAccount; ?>" target="_blank"
+                        <a href="<?= $instagramAccount; ?>" target="_blank"
                            class="ltr d-inline-block">
-                            @<?= $instagramAccount; ?>
+                            به ما بپیوندید
                         </a>
                     </div>
 
