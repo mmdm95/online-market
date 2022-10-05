@@ -22,8 +22,9 @@ $allowSetting = $authAdmin->isAllow(RESOURCE_SETTING, OWN_PERMISSION_READ);
     <div class="d-block d-xl-flex justify-content-between">
         <div class="d-block d-lg-inline-block">
             <div class="d-block d-sm-flex mb-2">
-                <span class="py-2 px-3 text-center bg-slate-700 d-block d-lg-inline-block rounded-left col"><?= $today_date; ?></span>
-                <span class="py-2 px-3 text-center bg-slate d-block d-lg-inline-block ltr rounded-right"
+                <span class="py-2 px-3 text-center bg-dark d-block d-lg-inline-block rounded-left col"><?= $today_date; ?></span>
+                <span class="p-1 bg-green d-block d-lg-inline-block"></span>
+                <span class="py-2 px-3 text-center bg-dark d-block d-lg-inline-block ltr rounded-right"
                       id="simpleClock">0:00:00 AM</span>
             </div>
         </div>
