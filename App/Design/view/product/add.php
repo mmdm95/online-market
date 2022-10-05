@@ -435,6 +435,19 @@ $validator = form_validator();
                         <div class="row">
                             <div class="col-12 p-2">
                                 <div class="border p-1" style="border-radius: 50rem;">
+                                    <?php
+                                    /**
+                                     * @var ProductModel $productsModel
+                                     */
+                                    $productsModel = container()->get(ProductModel::class);
+                                    $items = input()->post('inp-add-product-related');
+                                    $items = array_map(function ($v) {
+                                        if ($v instanceof \Pecee\Http\Input\IInputItem) {
+                                            return $v->getValue();
+                                        }
+                                        return $v;
+                                    }, $items);
+                                    ?>
                                     <select class="form-control select-remote-data"
                                             name="inp-add-product-related[]"
                                             data-remote-placeholder="انتخاب کالا"
@@ -442,13 +455,6 @@ $validator = form_validator();
                                             data-remote-limit="15"
                                             multiple
                                             data-fouc>
-                                        <?php
-                                        /**
-                                         * @var ProductModel $productsModel
-                                         */
-                                        $productsModel = container()->get(ProductModel::class);
-                                        $items = input()->post('inp-add-product-related');
-                                        ?>
                                         <?php if (is_array($items) && count($items)): ?>
                                             <?php foreach ($items as $item): ?>
                                                 <?php

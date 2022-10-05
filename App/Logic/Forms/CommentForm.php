@@ -6,6 +6,7 @@ use App\Logic\Interfaces\IPageForm;
 use App\Logic\Models\CommentModel;
 use App\Logic\Models\ProductModel;
 use App\Logic\Models\UserModel;
+use App\Logic\Utils\LogUtil;
 use App\Logic\Validations\ExtendedValidator;
 use Sim\Auth\DBAuth;
 use Sim\Exceptions\ConfigManager\ConfigNotRegisteredException;
@@ -65,7 +66,7 @@ class CommentForm implements IPageForm
         );
         if (0 === count($product)) {
             $validator->setStatus(false)->setError('inp-comment-message', 'کالای مورد نظر وجود ندارد!');
-        } elseif (DB_YES == $product[0]['allow_commenting']) {
+        } elseif (DB_NO == $product[0]['allow_commenting']) {
             $validator->setStatus(false)->setError('inp-comment-message', 'امکان ارسال نظر برای این محصول، وجود ندارد.');
         }
 
@@ -129,7 +130,7 @@ class CommentForm implements IPageForm
                     'user_id' => $userId,
                     'body' => $xss->xss_clean($message),
                     'status' => COMMENT_STATUS_NOT_READ,
-                    'condition' => COMMENT_CONDITION_NOT_SET,
+                    'the_condition' => COMMENT_CONDITION_NOT_SET,
                     'sent_at' => time(),
                 ]);
             }

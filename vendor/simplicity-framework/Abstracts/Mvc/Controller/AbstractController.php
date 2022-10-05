@@ -274,17 +274,16 @@ abstract class AbstractController implements ITemplateFactory, ITemplateRenderer
     {
         $arguments = array_replace_recursive($this->default_arguments, $arguments);
 
-        $allow = !$this->hasMiddleware() ? true : $this->middlewareResult();
+        $allow = !$this->hasMiddleware() || $this->middlewareResult();
         if ($allow) {
-            // Check if want json string
+            // Check if page need to be json
             if (true === $this->is_json) {
                 \response()->json($arguments);
                 return '';
             }
 
             $view = new ViewRenderer($this->getLayout(), $this->getTemplate(), $arguments);
-            $page = $view->render();
-            return $page;
+            return $view->render();
         }
         if ($middlewareErrorCallback instanceof \Closure) {
             $reflection = new \ReflectionFunction($middlewareErrorCallback);
@@ -316,7 +315,7 @@ abstract class AbstractController implements ITemplateFactory, ITemplateRenderer
         $routerConfig = $this->config->get('router');
         $this->setLayout(!is_null($layout) ? $layout : (!is_null($routerConfig['notfound_route']['layout']) ? $routerConfig['notfound_route']['layout'] : ''));
         // Check for not found template that at least set in here or in default config
-        if (empty($template) && (!isset($routerConfig['notfound_route']['template']) || empty($routerConfig['notfound_route']['template']))) {
+        if (empty($template) && (empty($routerConfig['notfound_route']['template']))) {
             throw new ControllerException('Not found page must have a template to show! Please add it here or in router config.');
         }
         $this->setTemplate(!empty($template) ? $template : (!empty($routerConfig['notfound_route']['template']) ? $routerConfig['notfound_route']['template'] : null));

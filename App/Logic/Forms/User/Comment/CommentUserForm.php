@@ -115,7 +115,7 @@ class CommentUserForm implements IPageForm
             return $commentModel->update([
                 'body' => $xss->xss_clean($message),
                 'status' => COMMENT_STATUS_NOT_READ,
-                'condition' => COMMENT_CONDITION_NOT_SET,
+                'the_condition' => COMMENT_CONDITION_NOT_SET,
                 'sent_at' => time(),
             ], 'id=:id AND user_id=:uId', [
                 'id' => $id,

@@ -55,7 +55,6 @@ class Event
         $eventProvider->addEvent(new TheEvent('status.general.ajax:before_update'));
 
         // general ajax multi status change events
-        $eventProvider->addEvent(new TheEvent('multi.status.general.ajax:auth'));
         $eventProvider->addEvent(new TheEvent('multi.status.general.ajax:invalid_status'));
         $eventProvider->addEvent(new TheEvent('multi.status.general.ajax:invalid_id'));
         $eventProvider->addEvent(new TheEvent('multi.status.general.ajax:not_exists'));

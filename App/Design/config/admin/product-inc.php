@@ -263,6 +263,7 @@ return [
         'common' => [
             'admin-base',
             'admin-table',
+            'admin-no-ui-slider',
             'admin',
         ],
         'breadcrumb' => [

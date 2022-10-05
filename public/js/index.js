@@ -579,30 +579,33 @@
             });
 
         $('.__send_data_through_request').each(function () {
-            var $this, url, status;
+            var _, url, status;
 
-            $this = $(this);
-            url = $this.attr('data-internal-request-url');
-            status = $this.attr('data-internal-request-status');
+            _ = $(this);
+            _.off('click' + variables.namespace).on('click' + variables.namespace, function () {
+                var $this = $(this);
+                url = $this.attr('data-internal-request-url');
+                status = $this.attr('data-internal-request-status');
 
-            if (url && status) {
-                shop.toasts.confirm(null, function () {
-                    shop.request(url, 'post', function () {
-                        var _ = this;
-                        if (_.type === variables.api.types.warning) {
-                            shop.toasts.toast(_.data);
-                        } else {
-                            shop.toasts.toast(_.data, {
-                                type: variables.toasts.types.success,
-                            });
-                        }
-                    }, {
-                        data: {
-                            'status': status,
-                        },
-                    }, true);
-                });
-            }
+                if (url && status) {
+                    shop.toasts.confirm(null, function () {
+                        shop.request(url, 'post', function () {
+                            var _ = this;
+                            if (_.type === variables.api.types.warning) {
+                                shop.toasts.toast(_.data);
+                            } else {
+                                shop.toasts.toast(_.data, {
+                                    type: variables.toasts.types.success,
+                                });
+                            }
+                        }, {
+                            data: {
+                                'status': status,
+                            },
+                        }, true);
+                    });
+                }
+            });
         });
 
         //---------------------------------------------------------------

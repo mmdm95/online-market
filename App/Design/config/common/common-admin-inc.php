@@ -308,4 +308,15 @@ return [
             ],
         ],
     ],
+    'admin-no-ui-slider' => [
+        'js' => [
+            'bottom' => [
+                e(
+                    '<script type="text/javascript" src="' .
+                    asset_path('be/js/plugins/sliders/nouislider.min.js') .
+                    '"></script>'
+                ),
+            ],
+        ],
+    ],
 ];

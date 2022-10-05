@@ -79,6 +79,7 @@
             if (!loadedPrices[code]['is_really_available']) {
                 inpQuantity.closest('.cart-product-quantity').addClass('d-none');
             }
+            shop.lazyFn();
         }
 
         /**
@@ -115,6 +116,7 @@
             shop.request(variables.url.products.get.comments + '/' + currentProductId, 'get', function () {
                 commentsContainer.html(this.data);
                 paginationClick();
+                shop.lazyFn();
             }, {
                 params: {
                     page: page,
@@ -168,7 +170,7 @@
         //---------------------------------------------------------------
         // PRODUCT COMMENT FORM
         //---------------------------------------------------------------
-        shop.forms.submitForm('productComment', constraints.productComment, function () {
+        shop.forms.submitForm('productComment', constraints.productComment, function (data) {
             shop.toasts.confirm('آیا از ارسال نظر مطمئن هستید؟', function () {
                 // do ajax
                 if (createLoader) {
@@ -185,7 +187,10 @@
                     });
                     paginationClick();
                     createLoader = true;
-                }, {}, true, function () {
+                }, {
+                    data: data,
+                }, true, function () {
+                    shop.hideLoader(loaderId);
                     createLoader = true;
                 });
             });

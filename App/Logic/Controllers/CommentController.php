@@ -3,7 +3,7 @@
 namespace App\Logic\Controllers;
 
 use App\Logic\Abstracts\AbstractHomeController;
-use App\Logic\Forms\User\Comment\CommentUserForm;
+use App\Logic\Forms\CommentForm;
 use App\Logic\Handlers\ResourceHandler;
 use App\Logic\Utils\CommentUtil;
 use Jenssegers\Agent\Agent;
@@ -59,17 +59,13 @@ class CommentController extends AbstractHomeController
 
     /**
      * @param $product_id
+     * @return void
      * @throws ConfigNotRegisteredException
      * @throws FormException
      * @throws IFileNotExistsException
      * @throws IInvalidVariableNameException
      * @throws \DI\DependencyException
      * @throws \DI\NotFoundException
-     * @throws \ReflectionException
-     * @throws \Sim\Container\Exceptions\MethodNotFoundException
-     * @throws \Sim\Container\Exceptions\ParameterHasNoDefaultValueException
-     * @throws \Sim\Container\Exceptions\ServiceNotFoundException
-     * @throws \Sim\Container\Exceptions\ServiceNotInstantiableException
      */
     public function saveComment($product_id)
     {
@@ -83,9 +79,9 @@ class CommentController extends AbstractHomeController
         $agent = container()->get(Agent::class);
         if (!$agent->isRobot()) {
             /**
-             * @var CommentUserForm $commentForm
+             * @var CommentForm $commentForm
              */
-            $commentForm = container()->get(CommentUserForm::class);
+            $commentForm = container()->get(CommentForm::class);
             [$status, $formattedErrors] = $commentForm->validate();
             if ($status) {
                 $res = $commentForm->store();
@@ -93,13 +89,14 @@ class CommentController extends AbstractHomeController
                 if ($res) {
                     $resourceHandler
                         ->type(RESPONSE_TYPE_SUCCESS)
-                        ->data('نظر شما با موفقیت ثبت شد و پس از تایید در سایت نمایش داده می‌شود.');
+                        ->data('نظر شما با موفقیت ثبت شد و پس از تایید در سایت نمایش داده خواهد شد.');
                 } else {
                     $resourceHandler
                         ->type(RESPONSE_TYPE_ERROR)
                         ->errorMessage('خطا در ارتباط با سرور، لطفا دوباره تلاش کنید.');
                 }
             } else {
+                $formattedErrors = implode(PHP_EOL, $formattedErrors);
                 $resourceHandler
                     ->type(RESPONSE_TYPE_ERROR)
                     ->errorMessage(encode_html($formattedErrors));
