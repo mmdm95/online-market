@@ -4,7 +4,6 @@ namespace Sim\Mvc\Controller\Renderer;
 
 use Sim\Abstracts\Mvc\Controller\Renderer\AbstractViewRenderer;
 use Sim\Interfaces\IFileNotExistsException;
-use Sim\Loader\Loader;
 
 class PHPRenderer extends AbstractViewRenderer
 {
@@ -34,8 +33,9 @@ class PHPRenderer extends AbstractViewRenderer
     }
 
     /**
-     * @param string $content
-     * @return bool
+     * @param string $filename
+     * @return string
+     * @throws IFileNotExistsException
      */
     protected function getContent(string $filename): string
     {

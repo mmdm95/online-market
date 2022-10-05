@@ -102,9 +102,9 @@ class AddCommentReplyForm implements IPageForm
     public function store(): bool
     {
         /**
-         * @var PaymentMethodModel $payModel
+         * @var CommentModel $commentModel
          */
-        $payModel = container()->get(PaymentMethodModel::class);
+        $commentModel = container()->get(CommentModel::class);
         /**
          * @var AntiXSS $xss
          */
@@ -119,7 +119,7 @@ class AddCommentReplyForm implements IPageForm
             $pId = session()->getFlash('current-comment-product-id');
             $id = session()->getFlash('current-comment-id');
 
-            return $payModel->update([
+            return $commentModel->update([
                 'reply' => $xss->xss_clean(trim($body)),
                 'reply_by' => $auth->getCurrentUser()['id'] ?? null,
                 'reply_at' => time(),

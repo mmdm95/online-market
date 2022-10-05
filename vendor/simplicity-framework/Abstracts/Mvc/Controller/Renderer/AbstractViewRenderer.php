@@ -114,7 +114,7 @@ abstract class AbstractViewRenderer implements IViewRenderer
 //            $isDesktop = $agent->isDesktop();
 
             // Include file decision
-            // This decision work as follow:
+            // This decision work as follows:
             //   All included key value from upper priority, will replace to lower priority
             //   e.g. mobile will replace in tablet and desktop and tablet will replace in desktop and desktop will be itself.
             if ($isMobile) {

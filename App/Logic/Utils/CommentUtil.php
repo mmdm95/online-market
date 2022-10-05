@@ -22,10 +22,14 @@ class CommentUtil
         $limit = 10;
         $offset = ((int)$page - 1) * $limit;
 
+        $where = '';
+        $bindValues = [];
+
         // where clause
-        $where = 'c.status=:status';
-        $bindValues = ['status' => COMMENT_CONDITION_ACCEPT];
-        // add product id to where
+        // - add condition clause
+        $where .= 'c.the_condition=:condition';
+        $bindValues['condition'] = COMMENT_CONDITION_ACCEPT;
+        // - add product id to where
         $where .= ' AND c.product_id=:p_id';
         $bindValues['p_id'] = $product_id;
 
@@ -39,7 +43,20 @@ class CommentUtil
                 $bindValues,
                 $limit,
                 $offset,
-                ),
+                ['c.id DESC'],
+                [
+                    'c.product_id',
+                    'c.user_id',
+                    'c.body',
+                    'c.reply',
+                    'c.status',
+                    'c.the_condition',
+                    'c.sent_at',
+                    'c.reply_at',
+                    'u.first_name',
+                    'u.image AS user_image',
+                ]
+            ),
             'pagination' => [
                 'base_url' => url('home.search')->getRelativeUrlTrimmed(),
                 'total' => $total,

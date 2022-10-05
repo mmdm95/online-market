@@ -106,6 +106,11 @@ class CommentController extends AbstractAdminController implements IDatatableCon
             return $this->show404();
         }
 
+        if (is_post()) {
+            $formHandler = new GeneralFormHandler();
+            $data = $formHandler->handle(AddCommentReplyForm::class, 'comment_answer');
+        }
+
         /**
          * @var CommentModel $commentModel
          */
@@ -125,11 +130,6 @@ class CommentController extends AbstractAdminController implements IDatatableCon
         // store product and comment id to check against
         session()->setFlash('current-comment-product-id', $p_id);
         session()->setFlash('current-comment-id', $id);
-
-        if (is_post()) {
-            $formHandler = new GeneralFormHandler();
-            $data = $formHandler->handle(AddCommentReplyForm::class, 'comment_answer');
-        }
 
         // change comment status to read if it is not
         if ($comment['status'] == COMMENT_STATUS_NOT_READ) {
@@ -240,6 +240,11 @@ class CommentController extends AbstractAdminController implements IDatatableCon
                         COMMENT_CONDITION_REJECT => 'وضعیت نظر به تایید نشده تغییر یافت.',
                         COMMENT_CONDITION_ACCEPT => 'وضعیت نظر به تایید شده تغییر یافت.',
                     ])
+                    ->setStatusType([
+                        COMMENT_CONDITION_NOT_SET => RESPONSE_TYPE_WARNING,
+                        COMMENT_CONDITION_REJECT => RESPONSE_TYPE_WARNING,
+                        COMMENT_CONDITION_ACCEPT => RESPONSE_TYPE_SUCCESS,
+                    ])
                     ->handle(
                         BaseModel::TBL_COMMENTS,
                         $id,
@@ -307,6 +312,9 @@ class CommentController extends AbstractAdminController implements IDatatableCon
                     ]);
 
                     $cols[] = 'c.user_id';
+                    $cols[] = 'c.product_id';
+                    $cols[] = 'u.first_name';
+                    $cols[] = 'u.last_name';
 
                     $data = $commentModel->getComments($where, $bindValues, $limit, $offset, $order, $cols);
                     //-----
@@ -317,13 +325,17 @@ class CommentController extends AbstractAdminController implements IDatatableCon
                 });
 
                 $columns = [
-                    ['db' => 'id', 'db_alias' => 'id', 'dt' => 'id'],
+                    ['db' => 'c.id', 'db_alias' => 'id', 'dt' => 'id'],
                     [
                         'db' => 'u.username',
                         'db_alias' => 'username',
                         'dt' => 'username',
                         'formatter' => function ($d, $row) {
-                            return "<a href='" . url('admin.user.view', ['id' => $row['user_id']])->getRelativeUrl() . "'> " . $d . "</a>";
+                            $user = $d;
+                            if(!empty(trim($row['first_name'])) || !empty(trim($row['last_name']))) {
+                                $user = trim(trim($row['first_name']) . ' ' . trim($row['last_name']));
+                            }
+                            return "<a href='" . url('admin.user.view', ['id' => $row['user_id']])->getRelativeUrl() . "'> " . $user . "</a>";
                         }
                     ],
                     [
@@ -360,7 +372,7 @@ class CommentController extends AbstractAdminController implements IDatatableCon
                         'db_alias' => 'the_condition',
                         'dt' => 'accept_status',
                         'formatter' => function ($d, $row) use ($product_id) {
-                            $status = $this->setTemplate('partial/admin/parser/multi-status-changer')
+                            return $this->setTemplate('partial/admin/parser/multi-status-changer')
                                 ->render([
                                     'status' => $d,
                                     'id' => $row['id'],
@@ -373,7 +385,6 @@ class CommentController extends AbstractAdminController implements IDatatableCon
                                     ],
                                     'url' => url('ajax.comment.condition', ['p_id' => $product_id, 'id' => $row['id']])->getRelativeUrlTrimmed(),
                                 ]);
-                            return $status;
                         }
                     ],
                     [
@@ -387,11 +398,10 @@ class CommentController extends AbstractAdminController implements IDatatableCon
                     [
                         'dt' => 'operations',
                         'formatter' => function ($row) {
-                            $operations = $this->setTemplate('partial/admin/datatable/actions-comment')
+                            return $this->setTemplate('partial/admin/datatable/actions-comment')
                                 ->render([
                                     'row' => $row,
                                 ]);
-                            return $operations;
                         }
                     ],
                 ];

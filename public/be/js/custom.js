@@ -2558,30 +2558,33 @@
         }
 
         $('.__send_data_through_request').each(function () {
-            var $this, url, status;
+            var _, url, status;
 
-            $this = $(this);
-            url = $this.attr('data-internal-request-url');
-            status = $this.attr('data-internal-request-status');
+            _ = $(this);
+            _.off('click' + variables.namespace).on('click' + variables.namespace, function () {
+                var $this = $(this);
+                url = $this.attr('data-internal-request-url');
+                status = $this.attr('data-internal-request-status');
 
-            if (url && status) {
-                var data = new FormData();
-                data.append('status', status);
-                admin.toasts.confirm(null, function () {
-                    admin.request(url, 'post', function () {
-                        var _ = this;
-                        if (_.type === variables.api.types.warning) {
-                            admin.toasts.toast(_.data);
-                        } else {
-                            admin.toasts.toast(_.data, {
-                                type: variables.toasts.types.success,
-                            });
-                        }
-                    }, {
-                        data: data,
-                    }, true);
-                });
-            }
+                if (url && status) {
+                    var data = new FormData();
+                    data.append('status', status);
+                    admin.toasts.confirm(null, function () {
+                        admin.request(url, 'post', function () {
+                            var _ = this;
+                            if (_.type === variables.api.types.warning) {
+                                admin.toasts.toast(_.data);
+                            } else {
+                                admin.toasts.toast(_.data, {
+                                    type: variables.toasts.types.success,
+                                });
+                            }
+                        }, {
+                            data: data,
+                        }, true);
+                    });
+                }
+            });
         });
 
         $('.__duplicator_btn').each(function (i, element) {
@@ -2757,23 +2760,34 @@
                 placeholder = $this.attr('data-slider-placeholder-element');
                 labels = JSON.parse($this.attr('data-slider-labels'));
 
-                noUiSlider.create(this, {
-                    start: [start],
-                    step: 1,
-                    range: {
-                        'min': [min],
-                        'max': [max]
-                    },
-                    direction: $('html').attr('dir') == 'rtl' ? 'rtl' : 'ltr'
-                });
+                min = parseInt(min, 10);
+                max = parseInt(max, 10);
 
-                // Display values
-                placeholder = $(placeholder);
-                this.noUiSlider.on('update', function (values, handle) {
-                    if (placeholder.length && labels[values[handle]]) {
-                        placeholder.val(labels[values[handle]]);
-                    }
-                });
+                var first = $this[0];
+
+                if (!first.noUiSlider) {
+                    noUiSlider.create(first, {
+                        start: [start],
+                        step: 1,
+                        range: {
+                            'min': [min],
+                            'max': [max]
+                        },
+                        direction: $('html').attr('dir') == 'rtl' ? 'rtl' : 'ltr'
+                    });
+
+                    // Display values
+                    placeholder = $('#' + placeholder);
+                    first.noUiSlider.on('update', function (values, handle) {
+                        if (placeholder.length && labels[parseInt(values[handle], 10)]) {
+                            placeholder.text(labels[parseInt(values[handle], 10)]);
+                        }
+                    });
+
+                    first.noUiSlider.on('change', function (values, handle) {
+                        changeMultiOperation($(first), values[handle]);
+                    });
+                }
             });
 
             if ($().spectrum) {
@@ -3569,6 +3583,7 @@
          * @param [table]
          */
         function changeMultiOperation(handlebar, value, table) {
+            var $this = $(handlebar);
             var url, val;
 
             url = $this.attr('data-slider-url');
@@ -4017,13 +4032,6 @@
                 .on('change' + variables.namespace, function () {
                     changeOperation($(this), table);
                 });
-
-            // change multi status button click event
-            $('.__item_multi_status_changer_btn').each(function () {
-                this.noUiSlider.on('change', function (values, handle) {
-                    changeMultiOperation($(this), values[handle], table);
-                });
-            });
 
             // edit address button click event
             $('.__item_address_editor_btn')
