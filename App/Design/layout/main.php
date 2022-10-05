@@ -7,8 +7,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
     <!-- Meta -->
-    <meta name="description" content="">
-    <meta name="keywords" content="">
+    <meta name="description" content="<?= \config()->get('settings.description.value'); ?>">
+    <meta name="keywords" content="<?= \config()->get('settings.keywords.value'); ?>">
 
     <title><?= $title ?? ''; ?></title>
 
