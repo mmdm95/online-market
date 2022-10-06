@@ -99,6 +99,7 @@ class AddressController extends AbstractUserController implements IAjaxControlle
             $user = $this->getDefaultArguments()['user'];
 
             session()->setFlash('user-address-edit-id', $user['id']);
+            session()->setFlash('user-address-edit-addr-id', $id);
             $formHandler = new GeneralAjaxFormHandler();
             $resourceHandler = $formHandler
                 ->setSuccessMessage('آدرس با موفقیت ویرایش شد.')
@@ -170,6 +171,53 @@ class AddressController extends AbstractUserController implements IAjaxControlle
                     ->type(RESPONSE_TYPE_ERROR)
                     ->errorMessage('آدرس درخواست شده نامعتبر است!');
             }
+        } else {
+            response()->httpCode(403);
+            $resourceHandler
+                ->type(RESPONSE_TYPE_ERROR)
+                ->errorMessage('خطا در ارتباط با سرور، لطفا دوباره تلاش کنید.');
+        }
+
+        response()->json($resourceHandler->getReturnData());
+    }
+
+    /**
+     * @return void
+     * @throws ConfigNotRegisteredException
+     * @throws ControllerException
+     * @throws IFileNotExistsException
+     * @throws IInvalidVariableNameException
+     * @throws PathNotRegisteredException
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
+     * @throws \ReflectionException
+     */
+    public function all(): void
+    {
+        $resourceHandler = new ResourceHandler();
+
+        /**
+         * @var Agent $agent
+         */
+        $agent = container()->get(Agent::class);
+        if (!$agent->isRobot()) {
+            /**
+             * @var AddressModel $addressModel
+             */
+            $addressModel = container()->get(AddressModel::class);
+
+            $user = $this->getDefaultArguments()['user'];
+            $addresses = $addressModel->getUserAddresses([
+                'u_addr.id', 'u_addr.full_name', 'u_addr.mobile', 'u_addr.address',
+                'u_addr.postal_code', 'c.name AS city_name', 'p.name AS province_name'
+            ], 'u_addr.user_id=:id', ['id' => $user['id']]);
+
+            $this->setTemplate('partial/main/user/addresses');
+            $resourceHandler
+                ->type(RESPONSE_TYPE_SUCCESS)
+                ->data($this->render([
+                    'addresses' => $addresses,
+                ]));
         } else {
             response()->httpCode(403);
             $resourceHandler

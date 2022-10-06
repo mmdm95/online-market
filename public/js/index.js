@@ -8,6 +8,7 @@
             add: '/ajax/user/address/add',
             edit: '/ajax/user/address/edit',
             remove: '/ajax/user/address/remove',
+            all: '/ajax/user/address/all',
         },
     });
     window.MyGlobalVariables.elements = $.extend(true, window.MyGlobalVariables.elements, {
@@ -75,23 +76,23 @@
         addAddress: {
             form: '#__form_add_address',
             inputs: {
-                fullName: 'inp-address-add-full-name',
-                mobile: 'inp-address-add-mobile',
-                province: 'inp-address-add-province',
-                city: 'inp-address-add-city',
-                postalCode: 'inp-address-add-postal-code',
-                address: 'inp-address-add-address',
+                fullName: 'inp-add-address-full-name',
+                mobile: 'inp-add-address-mobile',
+                province: 'inp-add-address-province',
+                city: 'inp-add-address-city',
+                postalCode: 'inp-add-address-postal-code',
+                address: 'inp-add-address-address',
             },
         },
         editAddress: {
             form: '#__form_edit_address',
             inputs: {
-                fullName: 'inp-address-edit-full-name',
-                mobile: 'inp-address-edit-mobile',
-                province: 'inp-address-edit-province',
-                city: 'inp-address-edit-city',
-                postalCode: 'inp-address-edit-postal-code',
-                address: 'inp-address-edit-address',
+                fullName: 'inp-edit-address-full-name',
+                mobile: 'inp-edit-address-mobile',
+                province: 'inp-edit-address-province',
+                city: 'inp-edit-address-city',
+                postalCode: 'inp-edit-address-postal-code',
+                address: 'inp-edit-address-address',
             },
         },
         changeUserInfo: {
@@ -433,9 +434,13 @@
             //-----
             createLoader = true,
             //
-            editAddrId = null;
+            editAddrId = null,
+            //
+            addressesContainer;
 
         shop = new window.TheShop();
+
+        addressesContainer = $('.address-elements-container');
 
         //-----
         constraints = {
@@ -509,6 +514,20 @@
             },
         };
 
+        function reloadUserAddresses() {
+            // append created address to address container
+            shop.showLoaderInsideElement(addressesContainer);
+            shop.request(variables.url.address.all, 'get', function () {
+                shop.hideLoaderFromInsideElement(addressesContainer);
+                addressesContainer.html(this.data);
+                setTimeout(function () {
+                    reAssignThings();
+                }, 100);
+            }, {}, false, function () {
+                shop.hideLoaderFromInsideElement(addressesContainer);
+            })
+        }
+
         /**
          * Delete anything from a specific url
          *
@@ -521,12 +540,95 @@
             id = $(btn).attr('data-remove-id');
 
             if (url && id) {
-                shop.deleteItem(url + id, function () {
+                shop.deleteItem(url + '/' + id, function () {
                     if (core.types.function === typeof onSuccess) {
                         onSuccess.apply(this);
                     }
                 }, {}, true);
             }
+        }
+
+        function reAssignThings() {
+            // delete button click event
+            $('.__item_remover_btn')
+                .off('click' + variables.namespace)
+                .on('click' + variables.namespace, function () {
+                    var $this = $(this);
+                    deleteOperation($this, function () {
+                        $this.closest('tr').fadeOut(300, function () {
+                            if (1 === $(this).parent().find('tr').length) {
+                                $(this).parent()
+                                    .append(
+                                        $('<tr/>')
+                                            .append(
+                                                $('<td class="text-center p-2" colspan="' +
+                                                    $(this).parent().find('tr').first().find('td').length +
+                                                    '"/>')
+                                                    .html('هیچ موردی وجود ندارد')
+                                            )
+                                    );
+                            }
+                            //
+                            $(this).remove();
+                        });
+                    });
+                });
+
+            // custom delete button click event
+            $('.__item_custom_remover_btn')
+                .off('click' + variables.namespace)
+                .on('click' + variables.namespace, function () {
+                    var $this = $(this);
+                    deleteOperation($this, function () {
+                        $this.closest('.remove-element-item').fadeOut(300, function () {
+                            if (1 === $(this).parent().find('.remove-element-item').length) {
+                                $(this).parent().append($('<p class="text-center border p-3"/>')
+                                    .html($('<i class="icon-info icon-2x d-block mb-1"/>'))
+                                    .append('هیچ موردی یافت نشد')
+                                );
+                            }
+                            //
+                            $(this).remove();
+                        });
+                    });
+                });
+
+            $('.__send_data_through_request').each(function () {
+                var _, url, status;
+
+                _ = $(this);
+                _.off('click' + variables.namespace)
+                    .on('click' + variables.namespace, function () {
+                        var $this = $(this);
+                        url = $this.attr('data-internal-request-url');
+                        status = $this.attr('data-internal-request-status');
+
+                        if (url && status) {
+                            shop.toasts.confirm(null, function () {
+                                shop.request(url, 'post', function () {
+                                    var _ = this;
+                                    if (_.type === variables.api.types.warning) {
+                                        shop.toasts.toast(_.data);
+                                    } else {
+                                        shop.toasts.toast(_.data, {
+                                            type: variables.toasts.types.success,
+                                        });
+                                    }
+                                }, {
+                                    data: {
+                                        'status': status,
+                                    },
+                                }, true);
+                            });
+                        }
+                    });
+            });
+
+            $('.edit-element-item')
+                .off('click' + variables.namespace)
+                .on('click' + variables.namespace, function () {
+                    editAddressBtnClick(this);
+                });
         }
 
         if ($.fn.theiaStickySidebar) {
@@ -537,76 +639,9 @@
             });
         }
 
-        // delete button click event
-        $('.__item_remover_btn')
-            .off('click' + variables.namespace)
-            .on('click' + variables.namespace, function () {
-                var $this = $(this);
-                deleteOperation($this, function () {
-                    $this.closest('tr').fadeOut(300, function () {
-                        if (1 === $(this).parent().find('tr').length) {
-                            $(this).parent()
-                                .append(
-                                    $('<tr/>')
-                                        .append(
-                                            $('<td class="text-center p-2" colspan="' +
-                                                $(this).parent().find('tr').first().find('td').length +
-                                                '"/>')
-                                                .html('هیچ موردی وجود ندارد')
-                                        )
-                                );
-                        }
-                        //
-                        $(this).remove();
-                    });
-                });
-            });
-
-        // custom delete button click event
-        $('.__item_custom_remover_btn')
-            .off('click' + variables.namespace)
-            .on('click' + variables.namespace, function () {
-                var $this = $(this);
-                deleteOperation($this, function () {
-                    $this.closest('.remove-element-item').fadeOut(300, function () {
-                        if (1 === $(this).parent().find('.remove-element-item').length) {
-                            $(this).parent().append($('<div class="text-center p-2"/>').html('هیچ موردی وجود ندارد'));
-                        }
-                        //
-                        $(this).remove();
-                    });
-                });
-            });
-
-        $('.__send_data_through_request').each(function () {
-            var _, url, status;
-
-            _ = $(this);
-            _.off('click' + variables.namespace).on('click' + variables.namespace, function () {
-                var $this = $(this);
-                url = $this.attr('data-internal-request-url');
-                status = $this.attr('data-internal-request-status');
-
-                if (url && status) {
-                    shop.toasts.confirm(null, function () {
-                        shop.request(url, 'post', function () {
-                            var _ = this;
-                            if (_.type === variables.api.types.warning) {
-                                shop.toasts.toast(_.data);
-                            } else {
-                                shop.toasts.toast(_.data, {
-                                    type: variables.toasts.types.success,
-                                });
-                            }
-                        }, {
-                            data: {
-                                'status': status,
-                            },
-                        }, true);
-                    });
-                }
-            });
-        });
+        //-----
+        reAssignThings();
+        //-----
 
         //---------------------------------------------------------------
         // Events
@@ -619,20 +654,20 @@
         function editAddressBtnClick(btn) {
             var id, editModal;
             id = $(btn).attr('data-edit-id');
-            editModal = $('#modal_form_address_edit');
+            editModal = $('#__user_addr_edit_modal');
             // clear element after each call
-            $(variables.elements.editAddress.form).reset();
+            $(variables.elements.editAddress.form).get(0).reset();
             if (id && editModal.length) {
                 shop.request(variables.url.address.get + '/' + id, 'get', function () {
                     var _ = this;
                     var provincesSelect = $('select[name="' + variables.elements.editAddress.inputs.province + '"]'),
                         citiesSelect = $(provincesSelect.attr('data-city-select-target'));
-                    if (_.data.length && provincesSelect.length && citiesSelect.length) {
+                    if (core.objSize(_.data) && provincesSelect.length && citiesSelect.length) {
                         editAddrId = id;
                         //-----
                         shop.loadProvinces(provincesSelect.attr('data-current-province', _.data['province_id']));
-                        shop.loadCities(citiesSelect.attr('data-current-city', _.data['city_id']));
-                        editModal.find('[name="' + variables.elements.editAddress.inputs.province + '"]').val(_.data['full_name']);
+                        shop.loadCities(citiesSelect.attr('data-current-city', _.data['city_id']), _.data['province_id']);
+                        editModal.find('[name="' + variables.elements.editAddress.inputs.fullName + '"]').val(_.data['full_name']);
                         editModal.find('[name="' + variables.elements.editAddress.inputs.mobile + '"]').val(_.data['mobile']);
                         editModal.find('[name="' + variables.elements.editAddress.inputs.postalCode + '"]').val(_.data['postal_code']);
                         editModal.find('[name="' + variables.elements.editAddress.inputs.address + '"]').val(_.data['address']);
@@ -640,10 +675,6 @@
                 });
             }
         }
-
-        $('.edit-element-item').on('click' + variables.namespace, function () {
-            editAddressBtnClick(this);
-        });
 
         //---------------------------------------------------------------
         // CHECK SCROLL TO ELEMENT
@@ -825,11 +856,19 @@
                 // clear element after success
                 $(variables.elements.addAddress.form).get(0).reset();
                 $(variables.elements.addAddress.form).find('input[type="hidden"]').val('');
+                // load province and city again
+                var p = $('select[name="' + variables.elements.addAddress.inputs.province + '"]');
+                var c = $('select[name="' + variables.elements.addAddress.inputs.city + '"]');
+                p.removeAttr('data-current-province');
+                shop.loadProvinces(p);
+                c.removeAttr('data-current-city');
+                shop.loadCities(c, -1);
                 //-----
                 shop.toasts.toast(this.data, {
                     type: variables.toasts.types.success,
                 });
                 createLoader = true;
+                reloadUserAddresses();
             }, {
                 data: values,
             }, true, function () {
@@ -859,19 +898,20 @@
                     // clear element after success
                     $(variables.elements.editAddress.form).get(0).reset();
                     $(variables.elements.editAddress.form).find('input[type="hidden"]').val('');
-                    // remove current id for province and city and reset current address id
-                    $('select[name="' + variables.elements.editAddress.inputs.province + '"]').removeAttr('data-current-province');
-                    $('select[name="' + variables.elements.editAddress.inputs.city + '"]').removeAttr('data-current-city');
+                    // load province and city again
+                    var p = $('select[name="' + variables.elements.editAddress.inputs.province + '"]');
+                    var c = $('select[name="' + variables.elements.editAddress.inputs.city + '"]');
+                    p.removeAttr('data-current-province');
+                    shop.loadProvinces(p);
+                    c.removeAttr('data-current-city');
+                    shop.loadCities(c, -1);
                     editAddrId = null;
                     //-----
                     shop.toasts.toast(this.data, {
                         type: variables.toasts.types.success,
                     });
                     createLoader = true;
-
-                    // append created address to address container
-                    var addr = $('');
-                    $('.address-elements-container').append(addr);
+                    reloadUserAddresses();
                 }, {
                     data: values,
                 }, true, function () {

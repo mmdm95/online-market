@@ -41,7 +41,8 @@ use App\Logic\Controllers\Admin\{BlogController as AdminBlogController,
     UserController as AdminUserController,
     WalletController as AdminWalletController,
     ProductController as AdminProductController,
-    AddressController as AdminAddressController};
+    AddressController as AdminAddressController
+};
 use App\Logic\Controllers\API\CsrfController;
 use App\Logic\Controllers\CheckoutController;
 use App\Logic\Controllers\OrderResultController;
@@ -844,9 +845,14 @@ class Route implements IInitialize
                 /**
                  * address route
                  */
+                Router::get('/user/address/all', [UserAddressController::class, 'all'])->name('ajax..user.address.all');
                 Router::get('/user/address/get/{id}', [UserAddressController::class, 'get'])->where([
                     'id' => '[0-9]+',
                 ])->name('ajax..user.address.get');
+                Router::post('/user/address/add', [UserAddressController::class, 'add'])->name('ajax.user.address.add');
+                Router::post('/user/address/edit/{id}', [UserAddressController::class, 'edit'])->where([
+                    'id' => '[0-9]+',
+                ])->name('ajax.user.address.edit');
                 Router::delete('/user/address/remove/{id}', [UserAddressController::class, 'remove'])->where([
                     'id' => '[0-9]+',
                 ])->name('ajax.user.address.remove');

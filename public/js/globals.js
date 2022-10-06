@@ -1087,7 +1087,9 @@ window.MyGlobalVariables = {
              */
             getCities: function (province_id, successCallback) {
                 var _ = this;
-                _.request(window.MyGlobalVariables.url.pages.get.city + '/' + province_id, 'get', successCallback, null, false);
+                if(province_id) {
+                    _.request(window.MyGlobalVariables.url.pages.get.city + '/' + province_id, 'get', successCallback, null, false);
+                }
             },
 
             /**
@@ -1130,6 +1132,7 @@ window.MyGlobalVariables = {
              * @param id
              */
             loadCities: function (citiesSelect, id) {
+                citiesSelect.find('.__removable_city_option').remove();
                 this.getCities(id, function () {
                     var _ = this, currCity, newOption;
                     var i, len;
