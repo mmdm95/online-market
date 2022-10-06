@@ -29,10 +29,10 @@ $allowSetting = $authAdmin->isAllow(RESOURCE_SETTING, OWN_PERMISSION_READ);
             </div>
         </div>
         <?php if ($allowContact || $allowComplaint): ?>
-            <div class="text-right">
+            <div class="text-right d-flex d-lg-block flex-column flex-sm-row justify-content-center justify-content-lg-end">
                 <?php if ($allowContact): ?>
                     <a href="<?= url('admin.contact-us.view', '')->getRelativeUrl(); ?>"
-                       class="btn bg-blue py-2 px-3 d-block d-md-inline-block mb-2 border-0">
+                       class="btn bg-blue py-2 px-3 d-block d-lg-inline-block mb-2 border-0 flex-fill">
                         پیام‌های خوانده نشده:
                         <?= StringUtil::toPersian($unread_contact_count); ?>
                     </a>
@@ -40,7 +40,7 @@ $allowSetting = $authAdmin->isAllow(RESOURCE_SETTING, OWN_PERMISSION_READ);
 
                 <?php if ($allowComplaint): ?>
                     <a href="<?= url('admin.complaints.view', '')->getRelativeUrl(); ?>"
-                       class="btn bg-warning py-2 px-3 d-block d-md-inline-block ml-0 ml-md-2 mb-2 border-0">
+                       class="btn bg-warning py-2 px-3 d-block d-lg-inline-block ml-0 ml-sm-2 mb-2 border-0 flex-fill">
                         شکایات خوانده نشده:
                         <?= StringUtil::toPersian($unread_complaint_count); ?>
                     </a>
