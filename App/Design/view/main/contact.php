@@ -1,6 +1,7 @@
 <?php
 
 $validator = form_validator();
+$userInfo = get_current_authenticated_user(auth_home());
 
 ?>
 
@@ -87,20 +88,20 @@ $validator = form_validator();
                                 <div class="form-group col-md-6">
                                     <input placeholder="نام را وارد کنید *"
                                            class="form-control" name="inp-contact-name" type="text" required
-                                           value="<?= $validator->setInput('inp-contact-name'); ?>">
+                                           value="<?= $validator->setInput('inp-contact-name', $userInfo['first_name'] ?? ''); ?>">
                                 </div>
                                 <div class="form-group col-md-6 ltr">
                                     <input placeholder="ایمیل را وارد کنید" class="form-control text-left"
-                                           name="inp-contact-email" type="text" required
-                                           value="<?= $validator->setInput('inp-contact-email'); ?>">
+                                           name="inp-contact-email" type="text"
+                                           value="<?= $validator->setInput('inp-contact-email', $userInfo['email'] ?? ''); ?>">
                                 </div>
                                 <div class="form-group col-md-6">
                                     <input placeholder="شماره موبایل خود را وارد کنید *"
                                            class="form-control" name="inp-contact-mobile" type="text" required
-                                           value="<?= $validator->setInput('inp-contact-mobile'); ?>">
+                                           value="<?= $validator->setInput('inp-contact-mobile', $userInfo['username'] ?? ''); ?>">
                                 </div>
                                 <div class="form-group col-md-6">
-                                    <input placeholder="موضوع را وارد کنید" class="form-control"
+                                    <input placeholder="موضوع را وارد کنید *" class="form-control"
                                            name="inp-contact-subject" type="text" required
                                            value="<?= $validator->setInput('inp-contact-subject'); ?>">
                                 </div>

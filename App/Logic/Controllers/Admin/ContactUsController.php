@@ -61,13 +61,15 @@ class ContactUsController extends AbstractAdminController implements IDatatableC
             }
 
             // change status to read
-            $contactModel->update([
-                'status' => CONTACT_STATUS_READ,
-                'changed_status_at' => time(),
-            ], 'id=:id AND status=:status', ['id' => $id, 'status' => CONTACT_STATUS_UNREAD]);
+            if (0 != $contactModel->count('id=:id AND status=:status', ['id' => $id, 'status' => CONTACT_STATUS_UNREAD])) {
+                $contactModel->update([
+                    'status' => CONTACT_STATUS_READ,
+                    'changed_status_at' => time(),
+                ], 'id=:id', ['id' => $id]);
+            }
 
             // get contact info with join to users table
-            $data['contact'] = $contactModel->getSingleContact('id=:id', ['id' => $id]);
+            $data['contact'] = $contactModel->getSingleContact('cu.id=:id', ['id' => $id]);
 
             $this->setLayout($this->main_layout)->setTemplate('view/contact-us/message');
         } else {

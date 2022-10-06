@@ -40,7 +40,7 @@ return [
                 'is_active' => false,
             ],
             [
-                'url' => url('admin.complaints.view')->getRelativeUrl(),
+                'url' => url('admin.complaints.view', [])->getRelativeUrl(),
                 'text' => 'مدیریت شکایات',
                 'is_active' => false,
             ],

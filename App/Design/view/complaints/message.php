@@ -15,19 +15,19 @@ use App\Logic\Utils\Jdf;
                 <ul class="list-inline list-inline-dotted text-muted mb-3">
                     <li class="list-inline-item">
                         <span class="text-muted">ارسال شده توسط:</span>
-                        <span class="text-info-600"><?= $complaint['name']; ?></span>
+                        <span class="text-dark"><?= $complaint['name']; ?></span>
                     </li>
                     <li class="list-inline-item">
                         <span class="text-muted">در تاریخ:</span>
-                        <span class="text-success"><?= Jdf::jdate(DEFAULT_TIME_FORMAT, $complaint['created_at']); ?></span>
+                        <span class="text-dark"><?= Jdf::jdate(DEFAULT_TIME_FORMAT, $complaint['created_at']); ?></span>
                     </li>
                     <li class="list-inline-item">
                         <span class="text-muted">موبایل:</span>
-                        <span class="text-success"><?= $complaint['mobile'] ?: "<i class='icon-minus2' aria-hidden='true'></i>"; ?></span>
+                        <span class="text-dark"><?= $complaint['mobile'] ?: "<i class='icon-minus2' aria-hidden='true'></i>"; ?></span>
                     </li>
                     <li class="list-inline-item">
                         <span class="text-muted">ایمیل:</span>
-                        <span class="text-success"><?= $complaint['email'] ?: "<i class='icon-minus2' aria-hidden='true'></i>"; ?></span>
+                        <span class="text-pink"><?= $complaint['email'] ?: "<i class='icon-minus2' aria-hidden='true'></i>"; ?></span>
                     </li>
                 </ul>
                 <div class="p-3 bg-light">
