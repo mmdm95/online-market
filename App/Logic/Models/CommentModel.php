@@ -94,6 +94,7 @@ class CommentModel extends BaseModel
      * @param int $offset
      * @param array $order_by
      * @param array $columns
+     * @param array|null $groupBy
      * @return array
      */
     public function getCommentsWithProductInfo(
@@ -114,7 +115,8 @@ class CommentModel extends BaseModel
             'p.is_available AS product_available',
             'pp.is_available AS product_item_available',
             'pp.code AS product_code',
-        ]
+        ],
+        ?array $groupBy = null
     ): array
     {
         $select = $this->connector->select();
@@ -123,6 +125,10 @@ class CommentModel extends BaseModel
             ->cols($columns)
             ->offset($offset)
             ->orderBy($order_by);
+
+        if (!empty($groupBy)) {
+            $select->groupBy($groupBy);
+        }
 
         try {
             $select

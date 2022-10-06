@@ -51,8 +51,11 @@ class CommentController extends AbstractUserController
                 'c.sent_at',
                 'p.image AS product_image',
                 'p.title AS product_title',
-                // if need add to cart, this column is required
+                // if add to cart is needed, this column is required
                 'pp.code AS product_code',
+            ],
+            [
+                'pp.product_id',
             ]);
 
         $this->setLayout($this->main_layout)->setTemplate('view/main/user/comment/index');
@@ -104,7 +107,7 @@ class CommentController extends AbstractUserController
          */
         $commentModel = container()->get(CommentModel::class);
 
-        if (0 === $commentModel->count('id=:id AND user_id=:uId', ['id' => '', 'uId' => $user['id']])) {
+        if (0 === $commentModel->count('id=:id AND user_id=:uId', ['id' => $id, 'uId' => $user['id']])) {
             return $this->show404();
         }
 
@@ -123,8 +126,9 @@ class CommentController extends AbstractUserController
         $productModel = container()->get(ProductModel::class);
 
         $comment = $commentModel->getFirst(['product_id', 'body'], 'id=:id AND user_id=:uId', ['id' => $id, 'uId' => $user['id']]);
-        $product = $productModel->getFirst(['title', 'slug', 'image', 'is_available']);
+        $product = $productModel->getFirst(['title', 'slug', 'image', 'is_available'], 'id=:id', ['id' => $comment['product_id']]);
         $price = $productModel->getProductPropertyWithInfo(['MIN(price) AS min_price', 'MAX(price) AS max_price'], 'product_id=:pId AND is_available=:av', ['pId' => $comment['product_id'], 'av' => DB_YES]);
+        $price = $price[0] ?? [];
 
         $this->setLayout($this->main_layout)->setTemplate('view/main/user/comment/edit');
         return $this->render(array_merge($data, [
