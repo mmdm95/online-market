@@ -25,15 +25,15 @@ use App\Logic\Utils\Jdf;
                     </li>
                     <li class="list-inline-item">
                         <span class="text-muted">در تاریخ:</span>
-                        <span class="text-success"><?= Jdf::jdate(DEFAULT_TIME_FORMAT, $contact['created_at']); ?></span>
+                        <span class="text-pink"><?= Jdf::jdate(DEFAULT_TIME_FORMAT, $contact['created_at']); ?></span>
                     </li>
                     <li class="list-inline-item">
                         <span class="text-muted">موبایل:</span>
-                        <span class="text-success"><?= $contact['mobile'] ?: "<i class='icon-minus2' aria-hidden='true'></i>"; ?></span>
+                        <span class="text-dark"><?= $contact['mobile'] ?: "<i class='icon-minus2' aria-hidden='true'></i>"; ?></span>
                     </li>
                     <li class="list-inline-item">
                         <span class="text-muted">ایمیل:</span>
-                        <span class="text-success"><?= $contact['email'] ?: "<i class='icon-minus2' aria-hidden='true'></i>"; ?></span>
+                        <span class="text-dark"><?= $contact['email'] ?: "<i class='icon-minus2' aria-hidden='true'></i>"; ?></span>
                     </li>
                 </ul>
                 <div class="p-3 bg-light">

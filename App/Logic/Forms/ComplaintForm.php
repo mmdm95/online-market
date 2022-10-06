@@ -131,8 +131,9 @@ class ComplaintForm implements IPageForm
             $message = input()->post('inp-complaint-message', '')->getValue();
             // if user is logged in, fetch his info
             if ($auth->isLoggedIn()) {
-                $user = $userModel->get(['first_name', 'mobile', 'email']);
-                $user = count($user) ? $user[0] : [];
+                $userId = $auth->getCurrentUser()[0]['id'] ?? 0;
+                $user = $userModel->getFirst(['first_name', 'username AS mobile', 'email'], 'id=:id', ['id' => $userId]);
+                $user = count($user) ? $user : [];
                 //-----
                 $name = isset($user['first_name']) && !empty($user['first_name']) ? $user['first_name'] : $name;
                 $email = isset($user['email']) && !empty($user['email']) ? $user['email'] : $email;

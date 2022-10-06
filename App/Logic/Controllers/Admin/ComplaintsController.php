@@ -61,10 +61,12 @@ class ComplaintsController extends AbstractAdminController implements IDatatable
             }
 
             // change status to read
-            $complaintModel->update([
-                'status' => COMPLAINT_STATUS_READ,
-                'changed_status_at' => time(),
-            ], 'id=:id AND status=:status', ['id' => $id, 'status' => COMPLAINT_STATUS_UNREAD]);
+            if (0 != $complaintModel->count('id=:id AND status=:status', ['id' => $id, 'status' => COMPLAINT_STATUS_UNREAD])) {
+                $complaintModel->update([
+                    'status' => COMPLAINT_STATUS_READ,
+                    'changed_status_at' => time(),
+                ], 'id=:id', ['id' => $id]);
+            }
 
             // get contact info with join to users table
             $data['complaint'] = $complaintModel->getFirst(['*'], 'id=:id', ['id' => $id]);

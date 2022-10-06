@@ -1,5 +1,8 @@
 <?php
+
 $validator = form_validator();
+$userInfo = get_current_authenticated_user(auth_home());
+
 ?>
 
 <!-- START MAIN COMPLAINT -->
@@ -28,20 +31,20 @@ $validator = form_validator();
                                 <div class="form-group col-md-6">
                                     <input placeholder="نام را وارد کنید *"
                                            class="form-control" name="inp-complaint-name" type="text" required
-                                           value="<?= $validator->setInput('inp-complaint-name'); ?>">
+                                           value="<?= $validator->setInput('inp-complaint-name', $userInfo['first_name'] ?? ''); ?>">
                                 </div>
                                 <div class="form-group col-md-6 ltr">
                                     <input placeholder="ایمیل را وارد کنید" class="form-control text-left"
-                                           name="inp-complaint-email" type="text" required
-                                           value="<?= $validator->setInput('inp-complaint-email'); ?>">
+                                           name="inp-complaint-email" type="text"
+                                           value="<?= $validator->setInput('inp-complaint-email', $userInfo['email'] ?? ''); ?>">
                                 </div>
                                 <div class="form-group col-md-6">
                                     <input placeholder="شماره موبایل خود را وارد کنید *"
                                            class="form-control" name="inp-complaint-mobile" type="text" required
-                                           value="<?= $validator->setInput('inp-complaint-mobile'); ?>">
+                                           value="<?= $validator->setInput('inp-complaint-mobile', $userInfo['username'] ?? ''); ?>">
                                 </div>
                                 <div class="form-group col-md-6">
-                                    <input placeholder="موضوع را وارد کنید" class="form-control"
+                                    <input placeholder="موضوع را وارد کنید *" class="form-control"
                                            name="inp-complaint-subject" type="text" required
                                            value="<?= $validator->setInput('inp-complaint-subject'); ?>">
                                 </div>
