@@ -89,7 +89,7 @@ use Sim\Utils\StringUtil;
                                 </td>
                                 <td class="product-remove" data-title="حذف">
                                     <a href="javascript:void(0);" class="__item_remover_btn"
-                                       data-remove-url="<?= url('ajax.user.favorite.remove')->getRelativeUrl(); ?>"
+                                       data-remove-url="<?= url('ajax.user.favorite.remove')->getRelativeUrlTrimmed(); ?>"
                                        data-remove-id="<?= $favorite['favorite_id']; ?>"
                                        data-toggle="tooltip" data-original-title="حذف از فهرست"
                                        data-placement="right">
