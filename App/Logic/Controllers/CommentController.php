@@ -96,7 +96,7 @@ class CommentController extends AbstractHomeController
                         ->errorMessage('خطا در ارتباط با سرور، لطفا دوباره تلاش کنید.');
                 }
             } else {
-                $formattedErrors = implode(PHP_EOL, $formattedErrors);
+                $formattedErrors = implode("<br>", $formattedErrors);
                 $resourceHandler
                     ->type(RESPONSE_TYPE_ERROR)
                     ->errorMessage(encode_html($formattedErrors));

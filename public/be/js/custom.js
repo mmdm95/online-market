@@ -3639,7 +3639,7 @@
                         editAddrId = id;
                         //-----
                         admin.loadProvinces(provincesSelect.attr('data-current-province', _.data['province_id']));
-                        admin.loadCities(citiesSelect.attr('data-current-city', _.data['city_id']));
+                        admin.loadCities(citiesSelect.attr('data-current-city', _.data['city_id']), _.data['province_id']);
                         currentModal.find('[name="' + variables.elements.editAddress.inputs.province + '"]').val(_.data['full_name']);
                         currentModal.find('[name="' + variables.elements.editAddress.inputs.mobile + '"]').val(_.data['mobile']);
                         currentModal.find('[name="' + variables.elements.editAddress.inputs.postalCode + '"]').val(_.data['postal_code']);
@@ -4355,6 +4355,13 @@
                 // clear element after success
                 $(variables.elements.addAddress.form).get(0).reset();
                 $(variables.elements.addAddress.form).find('input[type="hidden"]').val('');
+                // load province and city again
+                var p = $('select[name="' + variables.elements.addAddress.inputs.province + '"]');
+                var c = $('select[name="' + variables.elements.addAddress.inputs.city + '"]');
+                p.removeAttr('data-current-province');
+                admin.loadProvinces(p);
+                c.removeAttr('data-current-city');
+                admin.loadCities(c, -1);
                 createDatatable();
                 //-----
                 admin.toasts.toast(this.data, {
@@ -4390,9 +4397,13 @@
                     // clear element after success
                     $(variables.elements.editAddress.form).get(0).reset();
                     $(variables.elements.editAddress.form).find('input[type="hidden"]').val('');
-                    // remove current id for province and city and reset current address id
-                    $('select[name="' + variables.elements.editAddress.inputs.province + '"]').removeAttr('data-current-province');
-                    $('select[name="' + variables.elements.editAddress.inputs.city + '"]').removeAttr('data-current-city');
+                    // load province and city again
+                    var p = $('select[name="' + variables.elements.addAddress.inputs.province + '"]');
+                    var c = $('select[name="' + variables.elements.addAddress.inputs.city + '"]');
+                    p.removeAttr('data-current-province');
+                    admin.loadProvinces(p);
+                    c.removeAttr('data-current-city');
+                    admin.loadCities(c, -1);
                     editAddrId = null;
                     if (currentModal) {
                         currentModal.modal('hide');

@@ -40,7 +40,7 @@ class AddAddressForm implements IPageForm
             'inp-add-address-province' => 'استان',
             'inp-add-address-city' => 'شهر',
             'inp-add-address-postal-code' => 'کد پستی',
-            'inp-add-address-addr' => 'آدرس',
+            'inp-add-address-address' => 'آدرس',
         ]);
 
         // full name
@@ -71,7 +71,7 @@ class AddAddressForm implements IPageForm
             ->required();
         // address
         $validator
-            ->setFields('inp-add-address-addr')
+            ->setFields('inp-add-address-address')
             ->required();
 
         // check if user is exists
@@ -140,7 +140,7 @@ class AddAddressForm implements IPageForm
             $province = input()->post('inp-add-address-province', '')->getValue();
             $city = input()->post('inp-add-address-city', '')->getValue();
             $postalCode = input()->post('inp-add-address-postal-code', '')->getValue();
-            $address = input()->post('inp-add-address-addr', '')->getValue();
+            $address = input()->post('inp-add-address-address', '')->getValue();
 
             $res = $addressModel->insert([
                 'user_id' => $userId,

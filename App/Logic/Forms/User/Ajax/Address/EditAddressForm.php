@@ -40,7 +40,7 @@ class EditAddressForm implements IPageForm
             'inp-edit-address-province' => 'استان',
             'inp-edit-address-city' => 'شهر',
             'inp-edit-address-postal-code' => 'کد پستی',
-            'inp-edit-address-addr' => 'آدرس',
+            'inp-edit-address-address' => 'آدرس',
         ]);
 
         // full name
@@ -71,11 +71,11 @@ class EditAddressForm implements IPageForm
             ->required();
         // address
         $validator
-            ->setFields('inp-edit-address-addr')
+            ->setFields('inp-edit-address-address')
             ->required();
 
         // check if address is exists
-        $id = session()->getFlash('user-address-edit-id', null, false);
+        $id = session()->getFlash('user-address-edit-addr-id', null, false);
         if (!empty($id)) {
             /**
              * @var AddressModel $addressModel
@@ -93,7 +93,7 @@ class EditAddressForm implements IPageForm
         }
 
         // check if user is exists
-        $userId = session()->getFlash('addr-edit-user-id', null, false);
+        $userId = session()->getFlash('user-address-edit-id', null, false);
         if (!empty($userId)) {
             /**
              * @var UserModel $userModel
@@ -140,13 +140,13 @@ class EditAddressForm implements IPageForm
 
         try {
             $userId = session()->getFlash('user-address-edit-id', null);
-            $id = session()->getFlash('user-address-edit-id', null);
+            $id = session()->getFlash('user-address-edit-addr-id', null);
             $name = input()->post('inp-edit-address-full-name', '')->getValue();
             $mobile = input()->post('inp-edit-address-mobile', '')->getValue();
             $province = input()->post('inp-edit-address-province', '')->getValue();
             $city = input()->post('inp-edit-address-city', '')->getValue();
             $postalCode = input()->post('inp-edit-address-postal-code', '')->getValue();
-            $address = input()->post('inp-edit-address-addr', '')->getValue();
+            $address = input()->post('inp-edit-address-address', '')->getValue();
 
             $res = $addressModel->update([
                 'user_id' => $userId,

@@ -1,71 +1,6 @@
-<?php if (count($addresses)): ?>
-    <div class="address-elements-container">
-        <?php foreach ($addresses as $address): ?>
-            <div class="dashboard_content remove-element-item">
-                <div class="row">
-                    <div class="col-lg-12">
-                        <div class="card border border-light-alpha">
-                            <div class="card-body">
-                                <div class="text-right">
-                                    <button class="btn btn-outline-danger btn-sm px-3 mb-2 __item_custom_remover_btn"
-                                            data-remove-url="<?= url('ajax.user.address.remove')->getRelativeUrlTrimmed(); ?>"
-                                            data-remove-id="<?= $address['id']; ?>"
-                                            data-toggle="tooltip" data-original-title="حذف آدرس"
-                                            data-placement="right">
-                                        <i class="ti-trash icon-2x m-0" aria-hidden="true"></i>
-                                    </button>
-                                </div>
-                                <address>
-                                    <div class="mb-3">
-                                        <?= $address['address']; ?>
-                                    </div>
-                                </address>
-                                <div class="d-flex align-items-center mb-3">
-                                    <i class="linearicons-map-marker-user address-icon-size mr-2"
-                                       aria-hidden="true"></i>
-                                    <label class="m-0">
-                                        <?= $address['province_name']; ?>
-                                        ،
-                                        <?= $address['city_name']; ?>
-                                    </label>
-                                </div>
-                                <div class="d-flex align-items-center mb-3">
-                                    <i class="linearicons-envelope address-icon-size mr-2"
-                                       aria-hidden="true"></i>
-                                    <label class="m-0">
-                                        <?= $address['postal_code']; ?>
-                                    </label>
-                                </div>
-                                <div class="d-flex align-items-center mb-3">
-                                    <i class="linearicons-phone-bubble address-icon-size mr-2"
-                                       aria-hidden="true"></i>
-                                    <label class="m-0">
-                                        <?= $address['mobile']; ?>
-                                    </label>
-                                </div>
-                                <div class="d-flex align-items-center mb-3">
-                                    <i class="linearicons-user address-icon-size mr-2"
-                                       aria-hidden="true"></i>
-                                    <label class="m-0">
-                                        <?= $address['full_name']; ?>
-                                    </label>
-                                </div>
-                            </div>
-                            <button data-toggle="modal"
-                                    data-target="#__user_addr_edit_modal"
-                                    data-edit-id="<?= $address['id']; ?>"
-                                    class="btn btn-light btn-block rounded-0 edit-element-item">
-                                ویرایش
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        <?php endforeach; ?>
-    </div>
-<?php else: ?>
-    <?php load_partial('main/not-found-rows'); ?>
-<?php endif; ?>
+<div class="address-elements-container">
+    <?php load_partial('main/user/addresses', ['addresses' => $addresses ?? []]); ?>
+</div>
 
 <button type="button" class="btn btn-info btn-block"
         data-toggle="modal" data-target="#__user_addr_add_modal">
@@ -94,7 +29,7 @@
                                         <span class="text-danger" aria-hidden="true">*</span>
                                         نام و نام خانوادگی:
                                     </label>
-                                    <input name="inp-address-add-full-name" required type="text"
+                                    <input name="inp-add-address-full-name" required type="text"
                                            class="form-control" placeholder="حروف فارسی">
                                 </div>
                                 <div class="form-group">
@@ -102,7 +37,7 @@
                                         <span class="text-danger" aria-hidden="true">*</span>
                                         شماره تماس:
                                     </label>
-                                    <input name="inp-address-add-mobile" required type="text"
+                                    <input name="inp-add-address-mobile" required type="text"
                                            class="form-control" placeholder="برای مثال: 0912xxxxxxx">
                                 </div>
                                 <div class="form-group">
@@ -110,7 +45,7 @@
                                         <span class="text-danger" aria-hidden="true">*</span>
                                         استان:
                                     </label>
-                                    <select name="inp-address-add-province"
+                                    <select name="inp-add-address-province"
                                             class="selectric_dropdown city-loader-select"
                                             data-city-select-target="#addAddressCitySelect">
                                         <option value="<?= DEFAULT_OPTION_VALUE ?>"
@@ -125,7 +60,7 @@
                                         <span class="text-danger" aria-hidden="true">*</span>
                                         شهر:
                                     </label>
-                                    <select name="inp-address-add-city"
+                                    <select name="inp-add-address-city"
                                             class="selectric_dropdown"
                                             id="addAddressCitySelect">
                                         <option value="<?= DEFAULT_OPTION_VALUE ?>"
@@ -140,7 +75,7 @@
                                         <span class="text-danger" aria-hidden="true">*</span>
                                         کد پستی:
                                     </label>
-                                    <input name="inp-address-add-postal-code" required type="text"
+                                    <input name="inp-add-address-postal-code" required type="text"
                                            class="form-control" placeholder="از نوع عددی">
                                 </div>
                                 <div class="form-group">
@@ -150,7 +85,7 @@
                                     </label>
                                     <textarea
                                             class="form-control form-control-min-height"
-                                            name="inp-address-add-address"
+                                            name="inp-add-address-address"
                                             id=""
                                             cols="30"
                                             rows="10"
@@ -196,7 +131,7 @@
                                         <span class="text-danger" aria-hidden="true">*</span>
                                         نام و نام خانوادگی:
                                     </label>
-                                    <input name="inp-address-edit-full-name" required type="text"
+                                    <input name="inp-edit-address-full-name" required type="text"
                                            class="form-control" placeholder="حروف فارسی">
                                 </div>
                                 <div class="form-group">
@@ -204,7 +139,7 @@
                                         <span class="text-danger" aria-hidden="true">*</span>
                                         شماره تماس:
                                     </label>
-                                    <input name="inp-address-edit-mobile" required type="text"
+                                    <input name="inp-edit-address-mobile" required type="text"
                                            class="form-control" placeholder="برای مثال: 0912xxxxxxx">
                                 </div>
                                 <div class="form-group">
@@ -212,7 +147,7 @@
                                         <span class="text-danger" aria-hidden="true">*</span>
                                         استان:
                                     </label>
-                                    <select name="inp-address-edit-province"
+                                    <select name="inp-edit-address-province"
                                             class="selectric_dropdown city-loader-select"
                                             data-city-select-target="#editAddressCitySelect">
                                         <option value="<?= DEFAULT_OPTION_VALUE ?>"
@@ -227,7 +162,7 @@
                                         <span class="text-danger" aria-hidden="true">*</span>
                                         شهر:
                                     </label>
-                                    <select name="inp-address-edit-city"
+                                    <select name="inp-edit-address-city"
                                             class="selectric_dropdown"
                                             id="editAddressCitySelect">
                                         <option value="<?= DEFAULT_OPTION_VALUE ?>"
@@ -242,7 +177,7 @@
                                         <span class="text-danger" aria-hidden="true">*</span>
                                         کد پستی:
                                     </label>
-                                    <input name="inp-address-edit-postal-code" required type="text"
+                                    <input name="inp-edit-address-postal-code" required type="text"
                                            class="form-control" placeholder="از نوع عددی">
                                 </div>
                                 <div class="form-group">
@@ -252,7 +187,7 @@
                                     </label>
                                     <textarea
                                             class="form-control form-control-min-height"
-                                            name="inp-address-edit-address"
+                                            name="inp-edit-address-address"
                                             id=""
                                             cols="30"
                                             rows="10"
