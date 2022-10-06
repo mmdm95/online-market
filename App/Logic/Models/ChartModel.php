@@ -26,9 +26,11 @@ class ChartModel extends BaseModel
                 'COUNT(oa.product_code) AS count',
             ])
             ->where('oa.ordered_at BETWEEN :d1 AND :d2')
+            ->where('oa.payment_status=:ps')
             ->bindValues([
                 'd1' => $fromDate,
                 'd2' => $toDate,
+                'ps' => PAYMENT_STATUS_SUCCESS,
             ])
             ->groupBy(['ob.code']);
 
@@ -62,9 +64,11 @@ class ChartModel extends BaseModel
                 'COUNT(DISTINCT(oa.id)) AS count',
             ])
             ->where('oa.ordered_at BETWEEN :d1 AND :d2')
+            ->where('oa.payment_status=:ps')
             ->bindValues([
                 'd1' => $fromDate,
                 'd2' => $toDate,
+                'ps' => PAYMENT_STATUS_SUCCESS,
             ])
             ->orderBy(['3 DESC'])
             ->limit($topN)
