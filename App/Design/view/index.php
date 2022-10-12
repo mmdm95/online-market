@@ -54,7 +54,8 @@ $allowSetting = $authAdmin->isAllow(RESOURCE_SETTING, OWN_PERMISSION_READ);
             <?php foreach ($order_badges_count as $value): ?>
                 <div class="card mx-2" style="background-color: <?= $value['color']; ?>;">
                     <a href="<?= url('admin.order.view', ['status' => $value['code']])->getRelativeUrlTrimmed(); ?>"
-                       class="card-body text-white py-1" data-popup="tooltip" data-title="<?= $value['title']; ?>">
+                       style="color: <?= get_color_from_bg($value['color']); ?>; !important;"
+                       class="card-body py-1" data-popup="tooltip" data-title="<?= $value['title']; ?>">
                         <div class="d-flex align-items-center">
                             <h3 class="font-weight-semibold mb-0">
                                 <?= StringUtil::toPersian($value['count']); ?>
