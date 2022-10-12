@@ -88,26 +88,13 @@ class ProductUtil
         $category = input()->get('category', null);
         if (!is_array($category)) {
             $category = $category->getValue();
-            if (is_numeric($category)) {
+            if (is_numeric($category) && $category != DEFAULT_OPTION_VALUE) {
                 $where .= ' AND (pa.category_id=:p_category_id';
                 $where .= ' OR pa.category_parent_id=:p_category_parent_id';
                 $where .= ' OR pa.category_all_parents_id REGEXP :p_category_all_parents_id)';
                 $bindValues['p_category_id'] = $category;
                 $bindValues['p_category_parent_id'] = $category;
                 $bindValues['p_category_all_parents_id'] = getDBCommaRegexString($category);
-            }
-        }
-        // category from main page parameter
-        $tmpCategory = input()->get('search-categories-select-inp', null);
-        if (!is_array($tmpCategory)) {
-            $tmpCategory = $tmpCategory->getValue();
-            if (is_numeric($tmpCategory) && DEFAULT_OPTION_VALUE != $tmpCategory) {
-                $where .= ' AND (pa.category_id=:p_t_category_id';
-                $where .= ' OR pa.category_parent_id=:p_t_category_parent_id';
-                $where .= ' OR pa.category_all_parents_id REGEXP :p_t_category_all_parents_id)';
-                $bindValues['p_t_category_id'] = $tmpCategory;
-                $bindValues['p_t_category_parent_id'] = $tmpCategory;
-                $bindValues['p_t_category_all_parents_id'] = getDBCommaRegexString($tmpCategory);
             }
         }
         // price parameter
