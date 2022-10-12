@@ -26,11 +26,11 @@ class OrderModel extends BaseModel
      */
     public function getOrders(
         ?string $where = null,
-        array $bind_values = [],
-        array $order_by = ['o.id DESC'],
-        ?int $limit = null,
-        int $offset = 0,
-        array $columns = [
+        array   $bind_values = [],
+        array   $order_by = ['o.id DESC'],
+        ?int    $limit = null,
+        int     $offset = 0,
+        array   $columns = [
             'o.*',
             'u.username',
             'u.first_name AS user_first_name',
@@ -95,11 +95,11 @@ class OrderModel extends BaseModel
      */
     public function getOrdersWithAllInfo(
         ?string $where = null,
-        array $bind_values = [],
-        array $order_by = ['o.id DESC'],
-        ?int $limit = null,
-        int $offset = 0,
-        array $columns = [
+        array   $bind_values = [],
+        array   $order_by = ['o.id DESC'],
+        ?int    $limit = null,
+        int     $offset = 0,
+        array   $columns = [
             'o.*',
             'u.username',
             'u.first_name AS user_first_name',
@@ -165,12 +165,12 @@ class OrderModel extends BaseModel
      */
     public function getLimitedOrder(
         ?string $where = null,
-        array $bind_values = [],
-        array $order_by = ['oa.product_id DESC'],
-        ?int $limit = null,
-        int $offset = 0,
-        array $group_by = ['oa.product_id'],
-        array $columns = [
+        array   $bind_values = [],
+        array   $order_by = ['oa.product_id DESC'],
+        ?int    $limit = null,
+        int     $offset = 0,
+        array   $group_by = ['oa.product_id'],
+        array   $columns = [
             'oa.*',
         ]
     ): array
@@ -205,7 +205,7 @@ class OrderModel extends BaseModel
      */
     public function getLimitedOrderCount(
         ?string $where = null,
-        array $bind_values = []
+        array   $bind_values = []
     ): int
     {
         $res = $this->getLimitedOrder($where, $bind_values, [], null, 0, [], ['COUNT(DISTINCT(oa.product_id)) AS count']);
@@ -259,9 +259,9 @@ class OrderModel extends BaseModel
      * @return array
      */
     public function getOrderItemsWithReturnOrderItems(
-        array $columns,
+        array   $columns,
         ?string $where = null,
-        array $bind_values = []
+        array   $bind_values = []
     ): array
     {
         $select = $this->connector->select();
@@ -535,5 +535,51 @@ class OrderModel extends BaseModel
             return;
         }
         $this->db->commit();
+    }
+
+    /**
+     * @param $fromDate
+     * @param $toDate
+     * @return int
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
+     */
+    public function getSumOfBoughtOrders($fromDate = null, $toDate = null): int
+    {
+        /**
+         * @var Model $model
+         */
+        $model = container()->get(Model::class);
+
+        $bindValues = [];
+
+        $where = 'oa.payment_status=:status';
+        $bindValues['status'] = PAYMENT_STATUS_SUCCESS;
+
+        if (!is_null($fromDate) && !is_null($toDate)) {
+            $where .= ' AND oa.ordered_at BETWEEN :d1 AND :d2';
+            $bindValues['d1'] = $fromDate;
+            $bindValues['d2'] = $toDate;
+        }
+
+        $select = $model->select();
+        //
+        $subSelect = $model->select();
+        $subSelect
+            ->from(self::TBL_ORDER_ADVANCED . ' AS oa')
+            ->cols(['final_price', 'ordered_at', 'payment_status'])
+            ->groupBy(['oa.code']);
+        //
+        $select
+            ->fromSubSelect($subSelect, 'oa')
+            ->where($where)
+            ->bindValues($bindValues)
+            ->cols([
+                'SUM(final_price) AS price_sum',
+            ]);
+        $res = $model->get($select);
+
+        if (count($res)) return $res[0]['price_sum'];
+        return 0;
     }
 }

@@ -208,6 +208,49 @@ $allowSetting = $authAdmin->isAllow(RESOURCE_SETTING, OWN_PERMISSION_READ);
     <?php if ($authAdmin->userHasRole(ROLE_DEVELOPER) || $authAdmin->userHasRole(ROLE_SUPER_USER)): ?>
         <hr>
 
+        <div class="row justify-content-center">
+            <div class="col-lg-6 col-xl-5">
+                <div class="card bg-orange-400">
+                    <div class="card-body">
+                        <div class="d-flex">
+                            <h3 class="font-weight-semibold mb-0">
+                                <?= local_number(number_format($sum_orders)); ?>
+                                <small>تومان</small>
+                            </h3>
+                        </div>
+
+                        <div>
+                            مجموع خریدهای انجام شده تاکنون
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-6 col-xl-5">
+                <div class="card bg-purple-400">
+                    <div class="card-body">
+                        <div class="d-flex">
+                            <h3 class="font-weight-semibold mb-0">
+                                <?= local_number(number_format($sum_orders_monthly)); ?>
+                                <small>تومان</small>
+                            </h3>
+                        </div>
+
+                        <div>
+                            مجموع خریدهای انجام شده
+                            (
+                            <?= \App\Logic\Utils\Jdf::jdate(CHART_BOUGHT_STATUS_TIME_FORMAT, strtotime('today, -1 month', time())); ?>
+                            ←
+                            <?= \App\Logic\Utils\Jdf::jdate(CHART_BOUGHT_STATUS_TIME_FORMAT, strtotime('today, -1 second', time())); ?>
+                            )
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <hr>
+
         <?php load_partial('admin/chart-bought-products-in-status'); ?>
         <?php load_partial('admin/chart-top-bought-products'); ?>
     <?php endif; ?>

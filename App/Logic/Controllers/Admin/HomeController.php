@@ -171,6 +171,13 @@ class HomeController extends AbstractAdminController
             );
         }
 
+        //sum of orders
+        $sumOfOrders = $orderModel->getSumOfBoughtOrders();
+        $sumOfOrdersMonthly = $orderModel->getSumOfBoughtOrders(
+            strtotime('today, -1 month', time()),
+            strtotime('today, -1 second', time())
+        );
+
         $this
             ->setLayout($this->main_layout)
             ->setTemplate('view/index');
@@ -188,6 +195,9 @@ class HomeController extends AbstractAdminController
                     'status' => COMPLAINT_STATUS_UNREAD,
                 ]
             ),
+            //-----
+            'sum_orders' => $sumOfOrders,
+            'sum_orders_monthly' => $sumOfOrdersMonthly,
             //-----
             'order_badges_count' => $orderBadges,
             //-----
