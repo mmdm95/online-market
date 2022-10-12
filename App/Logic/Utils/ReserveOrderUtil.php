@@ -101,14 +101,15 @@ class ReserveOrderUtil
                     ], 'code=:oc', ['oc' => $orderCode]);
                 // return used coupon to not use status
                 $couponUpdate = $model->update();
-                $ok = $ok && $couponUpdate
-                        ->table(BaseModel::TBL_COUPONS)
-                        ->set('use_count', 'use_count+1')
-                        ->where('id=:id AND code=:code')
-                        ->bindValues([
-                            'id' => $theOrder['coupon_id'],
-                            'code' => $theOrder['coupon_code'],
-                        ]);
+                $couponUpdate
+                    ->table(BaseModel::TBL_COUPONS)
+                    ->set('use_count', 'use_count+1')
+                    ->where('id=:id AND code=:code')
+                    ->bindValues([
+                        'id' => $theOrder['coupon_id'],
+                        'code' => $theOrder['coupon_code'],
+                    ]);
+                $ok = $ok && $model->execute($couponUpdate);
                 //-----
                 if ($ok) {
                     connector()->getDb()->commit();
