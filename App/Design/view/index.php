@@ -212,15 +212,18 @@ $allowSetting = $authAdmin->isAllow(RESOURCE_SETTING, OWN_PERMISSION_READ);
             <div class="col-lg-6 col-xl-5">
                 <div class="card bg-orange-400">
                     <div class="card-body">
-                        <div class="d-flex">
-                            <h3 class="font-weight-semibold mb-0">
-                                <?= local_number(number_format($sum_orders)); ?>
-                                <small>تومان</small>
-                            </h3>
-                        </div>
+                        <div class="media">
+                            <div class="media-body">
+                                <h1 class="media-title font-weight-semibold">
+                                    <?= local_number(number_format($sum_orders)); ?>
+                                    <small>تومان</small>
+                                </h1>
+                                <span class="opacity-75">مجموع خریدهای انجام شده تاکنون</span>
+                            </div>
 
-                        <div>
-                            مجموع خریدهای انجام شده تاکنون
+                            <div class="ml-3 align-self-center">
+                                <i class="icon-coins icon-2x"></i>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -229,20 +232,25 @@ $allowSetting = $authAdmin->isAllow(RESOURCE_SETTING, OWN_PERMISSION_READ);
             <div class="col-lg-6 col-xl-5">
                 <div class="card bg-purple-400">
                     <div class="card-body">
-                        <div class="d-flex">
-                            <h3 class="font-weight-semibold mb-0">
-                                <?= local_number(number_format($sum_orders_monthly)); ?>
-                                <small>تومان</small>
-                            </h3>
-                        </div>
+                        <div class="media">
+                            <div class="media-body">
+                                <h1 class="media-title font-weight-semibold">
+                                    <?= local_number(number_format($sum_orders_monthly)); ?>
+                                    <small>تومان</small>
+                                </h1>
+                                <span class="opacity-75">
+                                    مجموع خریدهای انجام شده
+                                    (
+                                    <?= \App\Logic\Utils\Jdf::jdate(CHART_BOUGHT_STATUS_TIME_FORMAT, strtotime('today, -1 month', time())); ?>
+                                    ←
+                                    <?= \App\Logic\Utils\Jdf::jdate(CHART_BOUGHT_STATUS_TIME_FORMAT, strtotime('today, -1 second', time())); ?>
+                                    )
+                                </span>
+                            </div>
 
-                        <div>
-                            مجموع خریدهای انجام شده
-                            (
-                            <?= \App\Logic\Utils\Jdf::jdate(CHART_BOUGHT_STATUS_TIME_FORMAT, strtotime('today, -1 month', time())); ?>
-                            ←
-                            <?= \App\Logic\Utils\Jdf::jdate(CHART_BOUGHT_STATUS_TIME_FORMAT, strtotime('today, -1 second', time())); ?>
-                            )
+                            <div class="ml-3 align-self-center">
+                                <i class="icon-coin-dollar icon-2x"></i>
+                            </div>
                         </div>
                     </div>
                 </div>
