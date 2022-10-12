@@ -314,80 +314,68 @@ $allowSetting = $authAdmin->isAllow(RESOURCE_SETTING, OWN_PERMISSION_READ);
 
         <?php if ($allowUser): ?>
             <div class="col-sm-6 col-lg-4">
-                <div class="card d-flex flex-row p-1 align-items-center">
-                    <div class="p-3 bg-warning-300 d-flex align-items-center rounded">
-                        <i class="icon-user icon-half-x count-square-icon" aria-hidden="true"></i>
-                    </div>
-                    <div class="p-2 col">
-                        <div class="d-block d-sm-flex d-md-block d-xl-flex align-items-center justify-content-between">
-                            <div>
-                                <h4 class="font-weight-semibold mb-0">
-                                    <?= StringUtil::toPersian($users_count); ?>
-                                </h4>
-                            </div>
-                            <div>
-                                <span class="text-muted font-size-sm">کاربران</span>
-                            </div>
+                <div class="card card-body border-left-3 border-left-warning-300">
+                    <div class="media">
+                        <div class="mr-3 align-self-center">
+                            <i class="icon-user icon-3x text-warning-300"></i>
+                        </div>
+
+                        <div class="media-body">
+                            <h3 class="font-weight-semibold mb-0">
+                                <?= StringUtil::toPersian($users_count); ?>
+                            </h3>
+                            <span class="text-uppercase font-size-sm text-muted">کاربران</span>
                         </div>
                     </div>
                 </div>
             </div>
 
             <div class="col-sm-6 col-lg-4">
-                <div class="card d-flex flex-row p-1 align-items-center">
-                    <div class="p-3 bg-orange d-flex align-items-center rounded">
-                        <i class="icon-user icon-half-x count-square-icon" aria-hidden="true"></i>
-                    </div>
-                    <div class="p-2 col">
-                        <div class="d-block d-sm-flex d-md-block d-xl-flex align-items-center justify-content-between">
-                            <div>
-                                <h4 class="font-weight-semibold mb-0">
-                                    <?= StringUtil::toPersian($user_admin_count); ?>
-                                </h4>
-                            </div>
-                            <div>
-                                <span class="text-muted font-size-sm">کاربر ادمین</span>
-                            </div>
+                <div class="card card-body border-left-3 border-left-orange">
+                    <div class="media">
+                        <div class="mr-3 align-self-center">
+                            <i class="icon-user icon-3x text-orange"></i>
+                        </div>
+
+                        <div class="media-body">
+                            <h3 class="font-weight-semibold mb-0">
+                                <?= StringUtil::toPersian($user_admin_count); ?>
+                            </h3>
+                            <span class="text-uppercase font-size-sm text-muted">کاربر ادمین</span>
                         </div>
                     </div>
                 </div>
             </div>
 
             <div class="col-sm-6 col-lg-4">
-                <div class="card d-flex flex-row p-1 align-items-center">
-                    <div class="p-3 bg-orange-800 d-flex align-items-center rounded">
-                        <i class="icon-user icon-half-x count-square-icon" aria-hidden="true"></i>
-                    </div>
-                    <div class="p-2 col">
-                        <div class="d-block d-sm-flex d-md-block d-xl-flex align-items-center justify-content-between">
-                            <div>
-                                <h4 class="font-weight-semibold mb-0">
-                                    <?= StringUtil::toPersian($user_normal_count); ?>
-                                </h4>
-                            </div>
-                            <div>
-                                <span class="text-muted font-size-sm">کاربر عادی</span>
-                            </div>
+                <div class="card card-body border-left-3 border-left-orange-800">
+                    <div class="media">
+                        <div class="mr-3 align-self-center">
+                            <i class="icon-user icon-3x text-orange-800"></i>
+                        </div>
+
+                        <div class="media-body">
+                            <h3 class="font-weight-semibold mb-0">
+                                <?= StringUtil::toPersian($user_normal_count); ?>
+                            </h3>
+                            <span class="text-uppercase font-size-sm text-muted">کاربر عادی</span>
                         </div>
                     </div>
                 </div>
             </div>
 
             <div class="col-sm-6 col-lg-4">
-                <div class="card d-flex flex-row p-1 align-items-center">
-                    <div class="p-3 bg-pink-600 d-flex align-items-center rounded">
-                        <i class="icon-user icon-half-x count-square-icon" aria-hidden="true"></i>
-                    </div>
-                    <div class="p-2 col">
-                        <div class="d-block d-sm-flex d-md-block d-xl-flex align-items-center justify-content-between">
-                            <div>
-                                <h4 class="font-weight-semibold mb-0">
-                                    <?= StringUtil::toPersian($user_deactivate_count); ?>
-                                </h4>
-                            </div>
-                            <div>
-                                <span class="text-muted font-size-sm">کاربر غیرفعال</span>
-                            </div>
+                <div class="card card-body border-left-3 border-left-pink-600">
+                    <div class="media">
+                        <div class="mr-3 align-self-center">
+                            <i class="icon-user icon-3x text-pink-600"></i>
+                        </div>
+
+                        <div class="media-body">
+                            <h3 class="font-weight-semibold mb-0">
+                                <?= StringUtil::toPersian($user_deactivate_count); ?>
+                            </h3>
+                            <span class="text-uppercase font-size-sm text-muted">کاربر غیرفعال</span>
                         </div>
                     </div>
                 </div>
@@ -396,20 +384,17 @@ $allowSetting = $authAdmin->isAllow(RESOURCE_SETTING, OWN_PERMISSION_READ);
 
         <?php if ($authAdmin->isAllow(RESOURCE_PAY_METHOD, OWN_PERMISSION_READ)): ?>
             <div class="col-sm-6 col-lg-4">
-                <div class="card d-flex flex-row p-1 align-items-center">
-                    <div class="p-3 bg-pink-400 d-flex align-items-center rounded">
-                        <i class="icon-coin-dollar icon-half-x count-square-icon" aria-hidden="true"></i>
-                    </div>
-                    <div class="p-2 col">
-                        <div class="d-block d-sm-flex d-md-block d-xl-flex align-items-center justify-content-between">
-                            <div>
-                                <h4 class="font-weight-semibold mb-0">
-                                    <?= StringUtil::toPersian($payment_method_count); ?>
-                                </h4>
-                            </div>
-                            <div>
-                                <span class="text-muted font-size-sm">روش پرداخت</span>
-                            </div>
+                <div class="card card-body border-left-3 border-left-pink-400">
+                    <div class="media">
+                        <div class="mr-3 align-self-center">
+                            <i class="icon-coin-dollar icon-3x text-pink-400"></i>
+                        </div>
+
+                        <div class="media-body">
+                            <h3 class="font-weight-semibold mb-0">
+                                <?= StringUtil::toPersian($payment_method_count); ?>
+                            </h3>
+                            <span class="text-uppercase font-size-sm text-muted">روش پرداخت</span>
                         </div>
                     </div>
                 </div>
@@ -418,20 +403,17 @@ $allowSetting = $authAdmin->isAllow(RESOURCE_SETTING, OWN_PERMISSION_READ);
 
         <?php if ($authAdmin->isAllow(RESOURCE_COLOR, OWN_PERMISSION_READ)): ?>
             <div class="col-sm-6 col-lg-4">
-                <div class="card d-flex flex-row p-1 align-items-center">
-                    <div class="p-3 bg-violet-300 d-flex align-items-center rounded">
-                        <i class="icon-bucket icon-half-x count-square-icon" aria-hidden="true"></i>
-                    </div>
-                    <div class="p-2 col">
-                        <div class="d-block d-sm-flex d-md-block d-xl-flex align-items-center justify-content-between">
-                            <div>
-                                <h4 class="font-weight-semibold mb-0">
-                                    <?= StringUtil::toPersian($color_count); ?>
-                                </h4>
-                            </div>
-                            <div>
-                                <span class="text-muted font-size-sm">رنگ</span>
-                            </div>
+                <div class="card card-body border-left-3 border-left-violet-300">
+                    <div class="media">
+                        <div class="mr-3 align-self-center">
+                            <i class="icon-bucket icon-3x text-violet-300"></i>
+                        </div>
+
+                        <div class="media-body">
+                            <h3 class="font-weight-semibold mb-0">
+                                <?= StringUtil::toPersian($color_count); ?>
+                            </h3>
+                            <span class="text-uppercase font-size-sm text-muted">رنگ</span>
                         </div>
                     </div>
                 </div>
@@ -440,20 +422,17 @@ $allowSetting = $authAdmin->isAllow(RESOURCE_SETTING, OWN_PERMISSION_READ);
 
         <?php if ($authAdmin->isAllow(RESOURCE_BRAND, OWN_PERMISSION_READ)): ?>
             <div class="col-sm-6 col-lg-4">
-                <div class="card d-flex flex-row p-1 align-items-center">
-                    <div class="p-3 bg-violet-600 d-flex align-items-center rounded">
-                        <i class="icon-price-tags icon-half-x count-square-icon" aria-hidden="true"></i>
-                    </div>
-                    <div class="p-2 col">
-                        <div class="d-block d-sm-flex d-md-block d-xl-flex align-items-center justify-content-between">
-                            <div>
-                                <h4 class="font-weight-semibold mb-0">
-                                    <?= StringUtil::toPersian($brand_count); ?>
-                                </h4>
-                            </div>
-                            <div>
-                                <span class="text-muted font-size-sm">برند</span>
-                            </div>
+                <div class="card card-body border-left-3 border-left-violet-600">
+                    <div class="media">
+                        <div class="mr-3 align-self-center">
+                            <i class="icon-price-tags icon-3x text-violet-600"></i>
+                        </div>
+
+                        <div class="media-body">
+                            <h3 class="font-weight-semibold mb-0">
+                                <?= StringUtil::toPersian($brand_count); ?>
+                            </h3>
+                            <span class="text-uppercase font-size-sm text-muted">برند</span>
                         </div>
                     </div>
                 </div>
@@ -462,20 +441,17 @@ $allowSetting = $authAdmin->isAllow(RESOURCE_SETTING, OWN_PERMISSION_READ);
 
         <?php if ($authAdmin->isAllow(RESOURCE_CATEGORY, OWN_PERMISSION_READ)): ?>
             <div class="col-sm-6 col-lg-4">
-                <div class="card d-flex flex-row p-1 align-items-center">
-                    <div class="p-3 bg-purple d-flex align-items-center rounded">
-                        <i class="icon-lan2 icon-half-x count-square-icon" aria-hidden="true"></i>
-                    </div>
-                    <div class="p-2 col">
-                        <div class="d-block d-sm-flex d-md-block d-xl-flex align-items-center justify-content-between">
-                            <div>
-                                <h4 class="font-weight-semibold mb-0">
-                                    <?= StringUtil::toPersian($category_count); ?>
-                                </h4>
-                            </div>
-                            <div>
-                                <span class="text-muted font-size-sm">دسته‌بندی</span>
-                            </div>
+                <div class="card card-body border-left-3 border-left-purple">
+                    <div class="media">
+                        <div class="mr-3 align-self-center">
+                            <i class="icon-lan2 icon-3x text-purple"></i>
+                        </div>
+
+                        <div class="media-body">
+                            <h3 class="font-weight-semibold mb-0">
+                                <?= StringUtil::toPersian($category_count); ?>
+                            </h3>
+                            <span class="text-uppercase font-size-sm text-muted">دسته‌بندی</span>
                         </div>
                     </div>
                 </div>
@@ -484,20 +460,17 @@ $allowSetting = $authAdmin->isAllow(RESOURCE_SETTING, OWN_PERMISSION_READ);
 
         <?php if ($authAdmin->isAllow(RESOURCE_FESTIVAL, OWN_PERMISSION_READ)): ?>
             <div class="col-sm-6 col-lg-4">
-                <div class="card d-flex flex-row p-1 align-items-center">
-                    <div class="p-3 bg-purple-300 d-flex align-items-center rounded">
-                        <i class="icon-gift icon-half-x count-square-icon" aria-hidden="true"></i>
-                    </div>
-                    <div class="p-2 col">
-                        <div class="d-block d-sm-flex d-md-block d-xl-flex align-items-center justify-content-between">
-                            <div>
-                                <h4 class="font-weight-semibold mb-0">
-                                    <?= StringUtil::toPersian($festival_count); ?>
-                                </h4>
-                            </div>
-                            <div>
-                                <span class="text-muted font-size-sm">جشنواره</span>
-                            </div>
+                <div class="card card-body border-left-3 border-left-purple-300">
+                    <div class="media">
+                        <div class="mr-3 align-self-center">
+                            <i class="icon-gift icon-3x text-purple-300"></i>
+                        </div>
+
+                        <div class="media-body">
+                            <h3 class="font-weight-semibold mb-0">
+                                <?= StringUtil::toPersian($festival_count); ?>
+                            </h3>
+                            <span class="text-uppercase font-size-sm text-muted">جشنواره</span>
                         </div>
                     </div>
                 </div>
@@ -506,20 +479,17 @@ $allowSetting = $authAdmin->isAllow(RESOURCE_SETTING, OWN_PERMISSION_READ);
 
         <?php if ($authAdmin->isAllow(RESOURCE_UNIT, OWN_PERMISSION_READ)): ?>
             <div class="col-sm-6 col-lg-4">
-                <div class="card d-flex flex-row p-1 align-items-center">
-                    <div class="p-3 bg-indigo-300 d-flex align-items-center rounded">
-                        <i class="icon-unicode icon-half-x count-square-icon" aria-hidden="true"></i>
-                    </div>
-                    <div class="p-2 col">
-                        <div class="d-block d-sm-flex d-md-block d-xl-flex align-items-center justify-content-between">
-                            <div>
-                                <h4 class="font-weight-semibold mb-0">
-                                    <?= StringUtil::toPersian($unit_count); ?>
-                                </h4>
-                            </div>
-                            <div>
-                                <span class="text-muted font-size-sm">تعداد واحد</span>
-                            </div>
+                <div class="card card-body border-left-3 border-left-indigo-300">
+                    <div class="media">
+                        <div class="mr-3 align-self-center">
+                            <i class="icon-unicode icon-3x text-indigo-300"></i>
+                        </div>
+
+                        <div class="media-body">
+                            <h3 class="font-weight-semibold mb-0">
+                                <?= StringUtil::toPersian($unit_count); ?>
+                            </h3>
+                            <span class="text-uppercase font-size-sm text-muted">تعداد واحد</span>
                         </div>
                     </div>
                 </div>
@@ -528,20 +498,17 @@ $allowSetting = $authAdmin->isAllow(RESOURCE_SETTING, OWN_PERMISSION_READ);
 
         <?php if ($authAdmin->isAllow(RESOURCE_COUPON, OWN_PERMISSION_READ)): ?>
             <div class="col-sm-6 col-lg-4">
-                <div class="card d-flex flex-row p-1 align-items-center">
-                    <div class="p-3 bg-indigo d-flex align-items-center rounded">
-                        <i class="icon-percent icon-half-x count-square-icon" aria-hidden="true"></i>
-                    </div>
-                    <div class="p-2 col">
-                        <div class="d-block d-sm-flex d-md-block d-xl-flex align-items-center justify-content-between">
-                            <div>
-                                <h4 class="font-weight-semibold mb-0">
-                                    <?= StringUtil::toPersian($coupon_count); ?>
-                                </h4>
-                            </div>
-                            <div>
-                                <span class="text-muted font-size-sm">کوپن تخفیف</span>
-                            </div>
+                <div class="card card-body border-left-3 border-left-indigo">
+                    <div class="media">
+                        <div class="mr-3 align-self-center">
+                            <i class="icon-percent icon-3x text-indigo"></i>
+                        </div>
+
+                        <div class="media-body">
+                            <h3 class="font-weight-semibold mb-0">
+                                <?= StringUtil::toPersian($coupon_count); ?>
+                            </h3>
+                            <span class="text-uppercase font-size-sm text-muted">کوپن تخفیف</span>
                         </div>
                     </div>
                 </div>
@@ -550,20 +517,17 @@ $allowSetting = $authAdmin->isAllow(RESOURCE_SETTING, OWN_PERMISSION_READ);
 
         <?php if ($allowProduct): ?>
             <div class="col-sm-6 col-lg-4">
-                <div class="card d-flex flex-row p-1 align-items-center">
-                    <div class="p-3 bg-primary-600 d-flex align-items-center rounded">
-                        <i class="icon-box icon-half-x count-square-icon" aria-hidden="true"></i>
-                    </div>
-                    <div class="p-2 col">
-                        <div class="d-block d-sm-flex d-md-block d-xl-flex align-items-center justify-content-between">
-                            <div>
-                                <h4 class="font-weight-semibold mb-0">
-                                    <?= StringUtil::toPersian($product_count); ?>
-                                </h4>
-                            </div>
-                            <div>
-                                <span class="text-muted font-size-sm">محصول</span>
-                            </div>
+                <div class="card card-body border-left-3 border-left-primary-600">
+                    <div class="media">
+                        <div class="mr-3 align-self-center">
+                            <i class="icon-box icon-3x text-primary-600"></i>
+                        </div>
+
+                        <div class="media-body">
+                            <h3 class="font-weight-semibold mb-0">
+                                <?= StringUtil::toPersian($product_count); ?>
+                            </h3>
+                            <span class="text-uppercase font-size-sm text-muted">محصول</span>
                         </div>
                     </div>
                 </div>
@@ -572,20 +536,17 @@ $allowSetting = $authAdmin->isAllow(RESOURCE_SETTING, OWN_PERMISSION_READ);
 
         <?php if ($allowOrder): ?>
             <div class="col-sm-6 col-lg-4">
-                <div class="card d-flex flex-row p-1 align-items-center">
-                    <div class="p-3 bg-primary-300 d-flex align-items-center rounded">
-                        <i class="icon-basket icon-half-x count-square-icon" aria-hidden="true"></i>
-                    </div>
-                    <div class="p-2 col">
-                        <div class="d-block d-sm-flex d-md-block d-xl-flex align-items-center justify-content-between">
-                            <div>
-                                <h4 class="font-weight-semibold mb-0">
-                                    <?= StringUtil::toPersian($order_count); ?>
-                                </h4>
-                            </div>
-                            <div>
-                                <span class="text-muted font-size-sm">سفارش</span>
-                            </div>
+                <div class="card card-body border-left-3 border-left-primary-300">
+                    <div class="media">
+                        <div class="mr-3 align-self-center">
+                            <i class="icon-basket icon-3x text-primary-300"></i>
+                        </div>
+
+                        <div class="media-body">
+                            <h3 class="font-weight-semibold mb-0">
+                                <?= StringUtil::toPersian($order_count); ?>
+                            </h3>
+                            <span class="text-uppercase font-size-sm text-muted">سفارش</span>
                         </div>
                     </div>
                 </div>
@@ -594,20 +555,17 @@ $allowSetting = $authAdmin->isAllow(RESOURCE_SETTING, OWN_PERMISSION_READ);
 
         <?php if ($allowBlog): ?>
             <div class="col-sm-6 col-lg-4">
-                <div class="card d-flex flex-row p-1 align-items-center">
-                    <div class="p-3 bg-info-300 d-flex align-items-center rounded">
-                        <i class="icon-files-empty2 icon-half-x count-square-icon" aria-hidden="true"></i>
-                    </div>
-                    <div class="p-2 col">
-                        <div class="d-block d-sm-flex d-md-block d-xl-flex align-items-center justify-content-between">
-                            <div>
-                                <h4 class="font-weight-semibold mb-0">
-                                    <?= StringUtil::toPersian($blog_count); ?>
-                                </h4>
-                            </div>
-                            <div>
-                                <span class="text-muted font-size-sm">مطلب</span>
-                            </div>
+                <div class="card card-body border-left-3 border-left-info-300">
+                    <div class="media">
+                        <div class="mr-3 align-self-center">
+                            <i class="icon-files-empty2 icon-3x text-info-300"></i>
+                        </div>
+
+                        <div class="media-body">
+                            <h3 class="font-weight-semibold mb-0">
+                                <?= StringUtil::toPersian($blog_count); ?>
+                            </h3>
+                            <span class="text-uppercase font-size-sm text-muted">مطلب</span>
                         </div>
                     </div>
                 </div>
@@ -616,20 +574,17 @@ $allowSetting = $authAdmin->isAllow(RESOURCE_SETTING, OWN_PERMISSION_READ);
 
         <?php if ($authAdmin->isAllow(RESOURCE_BLOG_CATEGORY, OWN_PERMISSION_READ)): ?>
             <div class="col-sm-6 col-lg-4">
-                <div class="card d-flex flex-row p-1 align-items-center">
-                    <div class="p-3 bg-info d-flex align-items-center rounded">
-                        <i class="icon-stack2 icon-half-x count-square-icon" aria-hidden="true"></i>
-                    </div>
-                    <div class="p-2 col">
-                        <div class="d-block d-sm-flex d-md-block d-xl-flex align-items-center justify-content-between">
-                            <div>
-                                <h4 class="font-weight-semibold mb-0">
-                                    <?= StringUtil::toPersian($blog_category_count); ?>
-                                </h4>
-                            </div>
-                            <div>
-                                <span class="text-muted font-size-sm">دسته‌بندی مطلب</span>
-                            </div>
+                <div class="card card-body border-left-3 border-left-info">
+                    <div class="media">
+                        <div class="mr-3 align-self-center">
+                            <i class="icon-stack2 icon-3x text-info"></i>
+                        </div>
+
+                        <div class="media-body">
+                            <h3 class="font-weight-semibold mb-0">
+                                <?= StringUtil::toPersian($blog_category_count); ?>
+                            </h3>
+                            <span class="text-uppercase font-size-sm text-muted">دسته‌بندی مطلب</span>
                         </div>
                     </div>
                 </div>
@@ -638,20 +593,17 @@ $allowSetting = $authAdmin->isAllow(RESOURCE_SETTING, OWN_PERMISSION_READ);
 
         <?php if ($allowStaticPage): ?>
             <div class="col-sm-6 col-lg-4">
-                <div class="card d-flex flex-row p-1 align-items-center">
-                    <div class="p-3 bg-info-700 d-flex align-items-center rounded">
-                        <i class="icon-stack icon-half-x count-square-icon" aria-hidden="true"></i>
-                    </div>
-                    <div class="p-2 col">
-                        <div class="d-block d-sm-flex d-md-block d-xl-flex align-items-center justify-content-between">
-                            <div>
-                                <h4 class="font-weight-semibold mb-0">
-                                    <?= StringUtil::toPersian($static_page_count); ?>
-                                </h4>
-                            </div>
-                            <div>
-                                <span class="text-muted font-size-sm">نوشته ثابت</span>
-                            </div>
+                <div class="card card-body border-left-3 border-left-info-700">
+                    <div class="media">
+                        <div class="mr-3 align-self-center">
+                            <i class="icon-stack icon-3x text-info-700"></i>
+                        </div>
+
+                        <div class="media-body">
+                            <h3 class="font-weight-semibold mb-0">
+                                <?= StringUtil::toPersian($static_page_count); ?>
+                            </h3>
+                            <span class="text-uppercase font-size-sm text-muted">نوشته ثابت</span>
                         </div>
                     </div>
                 </div>
@@ -660,20 +612,17 @@ $allowSetting = $authAdmin->isAllow(RESOURCE_SETTING, OWN_PERMISSION_READ);
 
         <?php if ($allowContact): ?>
             <div class="col-sm-6 col-lg-4">
-                <div class="card d-flex flex-row p-1 align-items-center">
-                    <div class="p-3 bg-teal d-flex align-items-center rounded">
-                        <i class="icon-envelop5 icon-half-x count-square-icon" aria-hidden="true"></i>
-                    </div>
-                    <div class="p-2 col">
-                        <div class="d-block d-sm-flex d-md-block d-xl-flex align-items-center justify-content-between">
-                            <div>
-                                <h4 class="font-weight-semibold mb-0">
-                                    <?= StringUtil::toPersian($contact_count); ?>
-                                </h4>
-                            </div>
-                            <div>
-                                <span class="text-muted font-size-sm">تماس</span>
-                            </div>
+                <div class="card card-body border-left-3 border-left-teal">
+                    <div class="media">
+                        <div class="mr-3 align-self-center">
+                            <i class="icon-envelop5 icon-3x text-teal"></i>
+                        </div>
+
+                        <div class="media-body">
+                            <h3 class="font-weight-semibold mb-0">
+                                <?= StringUtil::toPersian($contact_count); ?>
+                            </h3>
+                            <span class="text-uppercase font-size-sm text-muted">تماس</span>
                         </div>
                     </div>
                 </div>
@@ -682,20 +631,17 @@ $allowSetting = $authAdmin->isAllow(RESOURCE_SETTING, OWN_PERMISSION_READ);
 
         <?php if ($allowComplaint): ?>
             <div class="col-sm-6 col-lg-4">
-                <div class="card d-flex flex-row p-1 align-items-center">
-                    <div class="p-3 bg-teal-300 d-flex align-items-center rounded">
-                        <i class="icon-balance icon-half-x count-square-icon" aria-hidden="true"></i>
-                    </div>
-                    <div class="p-2 col">
-                        <div class="d-block d-sm-flex d-md-block d-xl-flex align-items-center justify-content-between">
-                            <div>
-                                <h4 class="font-weight-semibold mb-0">
-                                    <?= StringUtil::toPersian($complaint_count); ?>
-                                </h4>
-                            </div>
-                            <div>
-                                <span class="text-muted font-size-sm">شکایت</span>
-                            </div>
+                <div class="card card-body border-left-3 border-left-teal-300">
+                    <div class="media">
+                        <div class="mr-3 align-self-center">
+                            <i class="icon-balance icon-3x text-teal-300"></i>
+                        </div>
+
+                        <div class="media-body">
+                            <h3 class="font-weight-semibold mb-0">
+                                <?= StringUtil::toPersian($complaint_count); ?>
+                            </h3>
+                            <span class="text-uppercase font-size-sm text-muted">شکایت</span>
                         </div>
                     </div>
                 </div>
@@ -704,20 +650,17 @@ $allowSetting = $authAdmin->isAllow(RESOURCE_SETTING, OWN_PERMISSION_READ);
 
         <?php if ($authAdmin->isAllow(RESOURCE_FAQ, OWN_PERMISSION_READ)): ?>
             <div class="col-sm-6 col-lg-4">
-                <div class="card d-flex flex-row p-1 align-items-center">
-                    <div class="p-3 bg-success-300 d-flex align-items-center rounded">
-                        <i class="icon-question7 icon-half-x count-square-icon" aria-hidden="true"></i>
-                    </div>
-                    <div class="p-2 col">
-                        <div class="d-block d-sm-flex d-md-block d-xl-flex align-items-center justify-content-between">
-                            <div>
-                                <h4 class="font-weight-semibold mb-0">
-                                    <?= StringUtil::toPersian($faq_count); ?>
-                                </h4>
-                            </div>
-                            <div>
-                                <span class="text-muted font-size-sm">سؤال متداول</span>
-                            </div>
+                <div class="card card-body border-left-3 border-left-success-300">
+                    <div class="media">
+                        <div class="mr-3 align-self-center">
+                            <i class="icon-question7 icon-3x text-success-300"></i>
+                        </div>
+
+                        <div class="media-body">
+                            <h3 class="font-weight-semibold mb-0">
+                                <?= StringUtil::toPersian($faq_count); ?>
+                            </h3>
+                            <span class="text-uppercase font-size-sm text-muted">سؤال متداول</span>
                         </div>
                     </div>
                 </div>
@@ -726,20 +669,17 @@ $allowSetting = $authAdmin->isAllow(RESOURCE_SETTING, OWN_PERMISSION_READ);
 
         <?php if ($authAdmin->isAllow(RESOURCE_NEWSLETTER, OWN_PERMISSION_READ)): ?>
             <div class="col-sm-6 col-lg-4">
-                <div class="card d-flex flex-row p-1 align-items-center">
-                    <div class="p-3 bg-success d-flex align-items-center rounded">
-                        <i class="icon-newspaper2 icon-half-x count-square-icon" aria-hidden="true"></i>
-                    </div>
-                    <div class="p-2 col">
-                        <div class="d-block d-sm-flex d-md-block d-xl-flex align-items-center justify-content-between">
-                            <div>
-                                <h4 class="font-weight-semibold mb-0">
-                                    <?= StringUtil::toPersian($newsletter_count); ?>
-                                </h4>
-                            </div>
-                            <div>
-                                <span class="text-muted font-size-sm">خبرنامه</span>
-                            </div>
+                <div class="card card-body border-left-3 border-left-success">
+                    <div class="media">
+                        <div class="mr-3 align-self-center">
+                            <i class="icon-newspaper2 icon-3x text-success"></i>
+                        </div>
+
+                        <div class="media-body">
+                            <h3 class="font-weight-semibold mb-0">
+                                <?= StringUtil::toPersian($newsletter_count); ?>
+                            </h3>
+                            <span class="text-uppercase font-size-sm text-muted">خبرنامه</span>
                         </div>
                     </div>
                 </div>
@@ -748,20 +688,17 @@ $allowSetting = $authAdmin->isAllow(RESOURCE_SETTING, OWN_PERMISSION_READ);
 
         <?php if ($authAdmin->isAllow(RESOURCE_SLIDESHOW, OWN_PERMISSION_READ)): ?>
             <div class="col-sm-6 col-lg-4">
-                <div class="card d-flex flex-row p-1 align-items-center">
-                    <div class="p-3 bg-green d-flex align-items-center rounded">
-                        <i class="icon-image-compare icon-half-x count-square-icon" aria-hidden="true"></i>
-                    </div>
-                    <div class="p-2 col">
-                        <div class="d-block d-sm-flex d-md-block d-xl-flex align-items-center justify-content-between">
-                            <div>
-                                <h4 class="font-weight-semibold mb-0">
-                                    <?= StringUtil::toPersian($slide_show_count); ?>
-                                </h4>
-                            </div>
-                            <div>
-                                <span class="text-muted font-size-sm">اسلاید</span>
-                            </div>
+                <div class="card card-body border-left-3 border-left-green">
+                    <div class="media">
+                        <div class="mr-3 align-self-center">
+                            <i class="icon-image-compare icon-3x text-green"></i>
+                        </div>
+
+                        <div class="media-body">
+                            <h3 class="font-weight-semibold mb-0">
+                                <?= StringUtil::toPersian($slide_show_count); ?>
+                            </h3>
+                            <span class="text-uppercase font-size-sm text-muted">اسلاید</span>
                         </div>
                     </div>
                 </div>
@@ -770,20 +707,17 @@ $allowSetting = $authAdmin->isAllow(RESOURCE_SETTING, OWN_PERMISSION_READ);
 
         <?php if ($authAdmin->isAllow(RESOURCE_INSTAGRAM, OWN_PERMISSION_READ)): ?>
             <div class="col-sm-6 col-lg-4">
-                <div class="card d-flex flex-row p-1 align-items-center">
-                    <div class="p-3 bg-green-300 d-flex align-items-center rounded">
-                        <i class="icon-instagram icon-half-x count-square-icon" aria-hidden="true"></i>
-                    </div>
-                    <div class="p-2 col">
-                        <div class="d-block d-sm-flex d-md-block d-xl-flex align-items-center justify-content-between">
-                            <div>
-                                <h4 class="font-weight-semibold mb-0">
-                                    <?= StringUtil::toPersian($instagram_image_count); ?>
-                                </h4>
-                            </div>
-                            <div>
-                                <span class="text-muted font-size-sm">تصویر اینستاگرام</span>
-                            </div>
+                <div class="card card-body border-left-3 border-left-green-300">
+                    <div class="media">
+                        <div class="mr-3 align-self-center">
+                            <i class="icon-instagram icon-3x text-green-300"></i>
+                        </div>
+
+                        <div class="media-body">
+                            <h3 class="font-weight-semibold mb-0">
+                                <?= StringUtil::toPersian($instagram_image_count); ?>
+                            </h3>
+                            <span class="text-uppercase font-size-sm text-muted">تصویر اینستاگرام</span>
                         </div>
                     </div>
                 </div>
@@ -792,20 +726,17 @@ $allowSetting = $authAdmin->isAllow(RESOURCE_SETTING, OWN_PERMISSION_READ);
 
         <?php if ($authAdmin->isAllow(RESOURCE_SEC_QUESTION, OWN_PERMISSION_READ)): ?>
             <div class="col-sm-6 col-lg-4">
-                <div class="card d-flex flex-row p-1 align-items-center">
-                    <div class="p-3 bg-brown-300 d-flex align-items-center rounded">
-                        <i class="icon-lock icon-half-x count-square-icon" aria-hidden="true"></i>
-                    </div>
-                    <div class="p-2 col">
-                        <div class="d-block d-sm-flex d-md-block d-xl-flex align-items-center justify-content-between">
-                            <div>
-                                <h4 class="font-weight-semibold mb-0">
-                                    <?= StringUtil::toPersian($security_question_count); ?>
-                                </h4>
-                            </div>
-                            <div>
-                                <span class="text-muted font-size-sm">سؤال امنیتی</span>
-                            </div>
+                <div class="card card-body border-left-3 border-left-brown-300">
+                    <div class="media">
+                        <div class="mr-3 align-self-center">
+                            <i class="icon-lock icon-3x text-brown-300"></i>
+                        </div>
+
+                        <div class="media-body">
+                            <h3 class="font-weight-semibold mb-0">
+                                <?= StringUtil::toPersian($security_question_count); ?>
+                            </h3>
+                            <span class="text-uppercase font-size-sm text-muted">سؤال امنیتی</span>
                         </div>
                     </div>
                 </div>
