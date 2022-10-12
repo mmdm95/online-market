@@ -23,7 +23,7 @@ class ChartModel extends BaseModel
             ->from($this->table . ' AS oa')
             ->cols([
                 'oa.send_status_code AS status_code',
-                'COUNT(oa.product_code) AS count',
+                'COUNT(*) AS count',
             ])
             ->where('oa.ordered_at BETWEEN :d1 AND :d2')
             ->bindValues([
