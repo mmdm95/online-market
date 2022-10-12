@@ -241,68 +241,72 @@
                 encoded = !(false === encoded);
                 unique = true === unique;
 
-                if (this.isObject(arr)) {
-                    for (i in arr) {
-                        if (arr.hasOwnProperty(i)) {
-                            t = arr[i];
-                            //
-                            delete arr[i];
-                            i = self.removeBrackets(i);
-                            //
-                            rv[i] = this.toObjectRecursively(t, unique, definedValues, encoded);
-                        }
-                    }
-                } else if (this.isArray(arr)) {
-                    // if defined values are only required
-                    if (true === definedValues) {
-                        arr = self.definedArray(arr);
-                    }
-                    // if unique values are only required
-                    if (unique) {
-                        arr = self.uniqueArray(arr);
-                    }
-                    len = arr.length;
-                    // then convert it to array
-                    var newArr = [];
-                    for (i = 0; i < len; ++i) {
-                        if (this.isObject(arr[i]) || this.isArray(arr[i])) {
-                            t = arr[i];
-                            //
-                            delete arr[i];
-                            i = self.removeBrackets(i);
-                            //
-                            newArr[i] = this.toObjectRecursively(t, unique, definedValues, encoded);
-                        } else {
-                            t = arr[i];
-                            if (true === t) {
-                                t = 1;
-                            } else if (false === t) {
-                                t = 0;
+                if(!this.isNull(arr)) {
+                    if (this.isObject(arr)) {
+                        for (i in arr) {
+                            if (arr.hasOwnProperty(i)) {
+                                t = arr[i];
+                                //
+                                delete arr[i];
+                                i = self.removeBrackets(i);
+                                //
+                                rv[i] = this.toObjectRecursively(t, unique, definedValues, encoded);
                             }
-                            //
-                            delete arr[i];
-                            i = self.removeBrackets(i);
-                            //
-                            if (encoded) {
-                                newArr[i] = this.encodeUri(t);
+                        }
+                    } else if (this.isArray(arr)) {
+                        // if defined values are only required
+                        if (true === definedValues) {
+                            arr = self.definedArray(arr);
+                        }
+                        // if unique values are only required
+                        if (unique) {
+                            arr = self.uniqueArray(arr);
+                        }
+                        len = arr.length;
+                        // then convert it to array
+                        var newArr = [];
+                        for (i = 0; i < len; ++i) {
+                            if (this.isObject(arr[i]) || this.isArray(arr[i])) {
+                                t = arr[i];
+                                //
+                                delete arr[i];
+                                i = self.removeBrackets(i);
+                                //
+                                newArr[i] = this.toObjectRecursively(t, unique, definedValues, encoded);
                             } else {
-                                newArr[i] = this.decodeUri(t);
+                                t = arr[i];
+                                if (true === t) {
+                                    t = 1;
+                                } else if (false === t) {
+                                    t = 0;
+                                }
+                                //
+                                delete arr[i];
+                                i = self.removeBrackets(i);
+                                //
+                                if (encoded) {
+                                    newArr[i] = this.encodeUri(t);
+                                } else {
+                                    newArr[i] = this.decodeUri(t);
+                                }
                             }
                         }
-                    }
-                    rv = newArr;
-                } else {
-                    t = arr;
-                    if (true === t) {
-                        t = 1;
-                    } else if (false === t) {
-                        t = 0;
-                    }
-                    if (encoded) {
-                        rv = this.encodeUri(t);
+                        rv = newArr;
                     } else {
-                        rv = this.decodeUri(t);
+                        t = arr;
+                        if (true === t) {
+                            t = 1;
+                        } else if (false === t) {
+                            t = 0;
+                        }
+                        if (encoded) {
+                            rv = this.encodeUri(t);
+                        } else {
+                            rv = this.decodeUri(t);
+                        }
                     }
+                } else {
+                    rv = '';
                 }
                 return rv;
             },
@@ -632,7 +636,11 @@
             push: function (key, value, replace, unique) {
                 var self = this;
 
+                console.log(self.obj, key, value);
+
                 helper.setIntoObject(self.obj, key, value, replace, unique);
+
+                console.log(self.obj, key, value);
 
                 if (self.canCallChangeState) {
                     // call on change state hook
@@ -668,6 +676,7 @@
              * @returns {UriParser}
              */
             pushObjOnly: function (obj) {
+
                 var self = this;
 
                 if (!utils.isObject(obj)) return self;

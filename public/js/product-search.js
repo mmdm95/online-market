@@ -107,7 +107,7 @@
         // search string changed
         function querySubmitting() {
             shop.forms.submitForm('product', constraints.product, function (values) {
-                uriParser.push('q', $("[name='" + variables.elements.product.inputs.search + "']").val(), true);
+                uriParser.push('q', $.trim($("[name='" + variables.elements.product.inputs.search + "']").val()), true);
                 loadProduct();
                 return false;
             }, function (errors) {
@@ -261,7 +261,7 @@
             if (obj['q'] && core.isString(obj['q'])) {
                 $(variables.elements.product.form).val(obj['q']);
             } else {
-                $(variables.elements.product.form).val('');
+                $(variables.elements.product.form).val('+');
             }
             // price filter
             if (obj['price'] && obj['price']['min'] && obj['price']['max']) {
