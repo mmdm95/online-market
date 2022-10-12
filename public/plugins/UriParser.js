@@ -636,11 +636,7 @@
             push: function (key, value, replace, unique) {
                 var self = this;
 
-                console.log(self.obj, key, value);
-
                 helper.setIntoObject(self.obj, key, value, replace, unique);
-
-                console.log(self.obj, key, value);
 
                 if (self.canCallChangeState) {
                     // call on change state hook
