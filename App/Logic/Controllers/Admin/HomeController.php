@@ -186,7 +186,7 @@ class HomeController extends AbstractAdminController
             'unread_contact_count' => $contactModel->count(
                 'status=:status',
                 [
-                    'status' => DB_NO,
+                    'status' => CONTACT_STATUS_UNREAD,
                 ]
             ),
             'unread_complaint_count' => $complaintModel->count(
