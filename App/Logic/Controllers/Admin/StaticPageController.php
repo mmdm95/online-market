@@ -243,6 +243,18 @@ class StaticPageController extends AbstractAdminController implements IDatatable
                         }
                     ],
                     [
+                        'db' => 'sp.url',
+                        'db_alias' => 'url',
+                        'dt' => 'url',
+                        'formatter' => function ($d) {
+                            return '<a style="direction: ltr;" target="__blank" href="' .
+                                url('home.pages', ['url' => $d]) .
+                                '">' .
+                                get_base_url() . ltrim(url('home.pages', ['url' => $d])->getRelativeUrlTrimmed(), '/') .
+                                '</a>';
+                        }
+                    ],
+                    [
                         'db' => 'sp.created_at',
                         'db_alias' => 'created_at',
                         'dt' => 'created_at',
