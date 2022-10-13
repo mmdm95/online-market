@@ -80,7 +80,7 @@ class WalletCharge implements IPageForm
         $id = session()->getFlash('wallet_charge_curr_id', null, false);
         if (!empty($id)) {
             $count = $walletModel->count('id=:id', ['id' => $id]);
-            if (empty($count) || 0 === (int)$count['count']) {
+            if (0 === $count) {
                 $validator->setError('inp-charge-wallet-price', 'شناسه کیف پول نامعتبر است.');
             }
         } else {
