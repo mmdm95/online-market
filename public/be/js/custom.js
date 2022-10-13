@@ -3695,6 +3695,7 @@
                         currentModal.find('[name="' + variables.elements.editFaq.inputs.question + '"]').val(_.data['question']);
                         currentModal.find('[name="' + variables.elements.editFaq.inputs.answer + '"]').html(_.data['answer']);
                         currentModal.find('[name="' + variables.elements.editFaq.inputs.tags + '"]').val(_.data['tags']);
+                        tinymce.get('inpEditFaqAEditor').setContent(_.data['answer']);
                         switcheryStatusChange(status, _.data['publish']);
                         initializeAllPlugins();
                     }

@@ -18,7 +18,7 @@
         </div>
 
         <table class="table table-bordered table-hover datatable-highlight"
-               data-columns='[{"data":"id"},{"data":"answer"},{"data":"question"},{"data":"tags"},{"data":"status"},{"data":"operations"}]'
+               data-columns='[{"data":"id"},{"data":"question"},{"data":"answer"},{"data":"tags"},{"data":"status"},{"data":"operations"}]'
                data-ajax-url="<?= url('admin.faq.dt.view')->getRelativeUrlTrimmed(); ?>">
             <thead>
             <tr>
@@ -152,6 +152,7 @@
                                 پاسخ:
                             </label>
                             <textarea name="inp-edit-faq-a"
+                                      id="inpEditFaqAEditor"
                                       cols="30"
                                       rows="10"
                                       placeholder="پاسخ سؤال را وارد کنید"
