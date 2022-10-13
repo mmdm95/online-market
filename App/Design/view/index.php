@@ -33,9 +33,9 @@ $allowSetting = $authAdmin->isAllow(RESOURCE_SETTING, OWN_PERMISSION_READ);
                 <?php if ($allowContact): ?>
 
                     <a href="<?= url('admin.contact-us.view', '')->getRelativeUrl(); ?>"
-                       class="btn bg-blue py-2 px-3 d-block d-lg-inline-block mb-2 border-0 flex-fill overflow-visible">
+                       class="btn bg-blue py-2 px-3 d-block d-lg-inline-block mb-2 border-0 flex-fill">
                         <?php if ($unread_contact_count > 0): ?>
-                            <span style="position: absolute; top: -3px; left: -3px; background: #e44444; width: 12px; height: 12px; border-radius: 50rem;"></span>
+                            <span style="position: absolute; top: 5px; left: 8px; background: #e44444; width: 10px; height: 10px; border-radius: 50rem;"></span>
                         <?php endif; ?>
                         پیام‌های خوانده نشده:
                         <?= StringUtil::toPersian($unread_contact_count); ?>
@@ -44,9 +44,9 @@ $allowSetting = $authAdmin->isAllow(RESOURCE_SETTING, OWN_PERMISSION_READ);
 
                 <?php if ($allowComplaint): ?>
                     <a href="<?= url('admin.complaints.view', '')->getRelativeUrl(); ?>"
-                       class="btn bg-warning py-2 px-3 d-block d-lg-inline-block ml-0 ml-sm-2 mb-2 border-0 flex-fill overflow-visible">
+                       class="btn bg-warning py-2 px-3 d-block d-lg-inline-block ml-0 ml-sm-2 mb-2 border-0 flex-fill">
                         <?php if ($unread_complaint_count > 0): ?>
-                            <span style="position: absolute; top: -3px; left: -3px; background: #e44444; width: 12px; height: 12px; border-radius: 50rem;"></span>
+                            <span style="position: absolute; top: 5px; left: 8px; background: #e44444; width: 10px; height: 10px; border-radius: 50rem;"></span>
                         <?php endif; ?>
                         شکایات خوانده نشده:
                         <?= StringUtil::toPersian($unread_complaint_count); ?>
