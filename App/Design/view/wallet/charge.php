@@ -15,6 +15,12 @@ $validator = form_validator();
                 <div class="card-body">
                     <form action="<?= url('admin.wallet.charge', ['id' => $wallet_id])->getRelativeUrlTrimmed(); ?>"
                           method="post" id="__form_charge_wallet">
+                        <?php load_partial('admin/message/message-form', [
+                            'errors' => $wallet_charge_errors ?? [],
+                            'success' => $wallet_charge_success ?? '',
+                            'warning' => $wallet_charge_warning ?? '',
+                        ]); ?>
+
                         <div class="row">
                             <div class="col-lg-12 col-xl-4 form-group">
                                 <label>
