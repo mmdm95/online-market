@@ -25,5 +25,14 @@ return [
                 'is_active' => true,
             ],
         ],
+        'js' => [
+            'bottom' => [
+                e(
+                    '<script type="text/javascript" src="' .
+                    asset_path('js/wallet-charge-preparation.js') .
+                    '"></script>'
+                ),
+            ],
+        ],
     ],
 ];

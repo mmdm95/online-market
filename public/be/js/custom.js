@@ -3513,7 +3513,10 @@
                 .closest('.__file_picker_handler')
                 .removeClass('has-image')
                 .find('.img-placeholder-image')
-                .remove();
+                .remove()
+                .end()
+                .find('input[type="hidden"]')
+                .val('');
         }
 
         /**

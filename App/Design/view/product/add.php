@@ -440,13 +440,13 @@ $validator = form_validator();
                                      * @var ProductModel $productsModel
                                      */
                                     $productsModel = container()->get(ProductModel::class);
-                                    $items = input()->post('inp-add-product-related');
+                                    $items = input()->post('inp-add-product-related')->getValue();
                                     $items = array_map(function ($v) {
                                         if ($v instanceof \Pecee\Http\Input\IInputItem) {
                                             return $v->getValue();
                                         }
                                         return $v;
-                                    }, $items);
+                                    }, $items ?? []);
                                     ?>
                                     <select class="form-control select-remote-data"
                                             name="inp-add-product-related[]"

@@ -1,15 +1,16 @@
 <?php
 
-namespace App\Logic\Forms\Admin\Wallet;
+namespace App\Logic\Forms\User\Wallet;
 
 use App\Logic\Interfaces\IPageForm;
 use App\Logic\Models\DepositTypeModel;
+use App\Logic\Models\UserModel;
+use App\Logic\Models\WalletFlowModel;
 use App\Logic\Models\WalletModel;
 use App\Logic\Validations\ExtendedValidator;
 use Sim\Auth\DBAuth;
 use Sim\Exceptions\ConfigManager\ConfigNotRegisteredException;
 use Sim\Form\Exceptions\FormException;
-use Sim\Form\FormValue;
 use Sim\Interfaces\IFileNotExistsException;
 use Sim\Interfaces\IInvalidVariableNameException;
 use Sim\Utils\StringUtil;
@@ -38,11 +39,10 @@ class WalletCharge implements IPageForm
         // aliases
         $validator
             ->setFieldsAlias([
-                'inp-charge-wallet-price' => 'قیمت شارژ',
-                'inp-charge-wallet-desc' => 'توضیح شارژ',
+                'inp-wallet-price' => 'قیمت شارژ',
             ])
             ->toEnglishValueFields([
-                'inp-charge-wallet-price'
+                'inp-wallet-price'
             ], true);
 
         /**
@@ -52,42 +52,11 @@ class WalletCharge implements IPageForm
 
         // price
         $validator
-            ->setFields('inp-charge-wallet-price')
+            ->setFields('inp-wallet-price')
             ->stopValidationAfterFirstError(false)
             ->required()
             ->stopValidationAfterFirstError(true)
             ->isInteger();
-        // desc
-        $validator
-            ->setFields('inp-charge-wallet-desc')
-            ->stopValidationAfterFirstError(false)
-            ->required()
-            ->stopValidationAfterFirstError(true)
-            ->custom(function (FormValue $value) {
-                /**
-                 * @var DepositTypeModel $depositModel
-                 */
-                $depositModel = container()->get(DepositTypeModel::class);
-
-                if (0 !== $depositModel->count('id=:id', ['id' => $value->getValue()])) {
-                    return true;
-                }
-                return false;
-            }, '{alias} ' . 'نامعتبر است.');
-
-        // check for id is not necessary here, but you can do it when needed
-        // ...
-        $id = session()->getFlash('wallet_charge_curr_id', null, false);
-        if (!empty($id)) {
-            $count = $walletModel->count('id=:id', ['id' => $id]);
-            if (0 === $count) {
-                $validator->setError('inp-charge-wallet-price', 'شناسه کیف پول نامعتبر است.');
-            }
-        } else {
-            $validator
-                ->setStatus(false)
-                ->setError('inp-charge-wallet-price', 'شناسه کیف پول نامعتبر است.');
-        }
 
         // to reset form values and not set them again
         if ($validator->getStatus()) {
@@ -113,9 +82,13 @@ class WalletCharge implements IPageForm
     public function store(): bool
     {
         /**
-         * @var WalletModel $walletModel
+         * @var UserModel $userModel
          */
-        $walletModel = container()->get(WalletModel::class);
+        $userModel = container()->get(UserModel::class);
+        /**
+         * @var WalletFlowModel $walletFlowModel
+         */
+        $walletFlowModel = container()->get(WalletFlowModel::class);
         /**
          * @var DepositTypeModel $depositTypes
          */
@@ -130,30 +103,32 @@ class WalletCharge implements IPageForm
         $auth = container()->get('auth_admin');
 
         try {
-            $id = session()->getFlash('wallet_charge_curr_id', null);
-            $username = session()->getFlash('wallet_charge_curr_username', null);
-            $price = input()->post('inp-charge-wallet-price', 0)->getValue();
-            //
-            $descId = input()->post('inp-charge-wallet-desc', 0)->getValue();
-            $desc = $depositTypes->getFirst(['code', 'title'], 'id=:id', ['id' => $descId]);
+            $userId = $auth->getCurrentUser()['id'] ?? null;
 
-            if (0 >= $price || count($desc) == 0) {
+            if(is_null($userId)) return false;
+
+            $username = $userModel->getFirst(['username'], 'id=:id', ['id' => $userId])['username'] ?? null;
+            $price = input()->post('inp-wallet-price', 0)->getValue();
+            //
+            $desc = $depositTypes->getFirst(['title'], 'code=:code', ['code' => DEPOSIT_TYPE_CHARGE]);
+
+            if (0 >= $price || count($desc) == 0 || is_null($username)) {
                 return false;
             }
 
-            return $walletModel->chargeWalletWithWalletId($id, [
-                'username' => $xss->xss_clean(trim($username)),
-            ], [
+            $arr = [
                 'order_code' => StringUtil::uniqidReal(12),
-                'username' => $xss->xss_clean(trim($username)),
+                'username' => $username,
                 'deposit_price' => $xss->xss_clean(trim($price)),
-                'deposit_type_code' => $xss->xss_clean(trim($desc['code'])),
+                'deposit_type_code' => DEPOSIT_TYPE_CHARGE,
                 'deposit_type_title' => $xss->xss_clean(trim($desc['title'])),
-                'payer_id' => $auth->getCurrentUser()['id'] ?? null,
+                'payer_id' => $userId,
                 'deposit_at' => time(),
-            ], [
-                'balance' => 'balance+' . (int)$xss->xss_clean(trim($price)),
-            ]);
+            ];
+
+            session()->set(SESSION_WALLET_CHARGE_ARR_INFO, $arr);
+
+            return $walletFlowModel->insert($arr);
         } catch (\Exception $e) {
             return false;
         }

@@ -14,14 +14,13 @@ class GatewayModel extends BaseModel
     /**
      * Use [gf for gateway_flow], [o for orders], [u for users]
      *
-     *
      * @param $code
      * @param array $columns
      * @return array
      */
     public function getFirstUserAndOrderInfoFromGatewayFlowCode(
         $code,
-        $columns = [
+        array $columns = [
             'o.*',
             'u.username',
             'u.first_name AS user_first_name',
@@ -29,11 +28,6 @@ class GatewayModel extends BaseModel
         ]
     )
     {
-        $ret = [
-            'user' => [],
-            'order' => [],
-        ];
-
         $select = $this->connector->select();
         $select
             ->from($this->table . ' AS gf')
@@ -52,7 +46,7 @@ class GatewayModel extends BaseModel
                     'u.id=o.user_id'
                 );
         } catch (AuraException $e) {
-            return $ret;
+            return [];
         }
 
         $res = $this->db->fetchAll($select->getStatement(), $select->getBindValues());
