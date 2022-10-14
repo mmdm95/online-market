@@ -21,7 +21,7 @@ use Sim\I18n\ISOLanguageCodes;
  *     1.2.5.0 instead of 1.2.5-a
  *     1.2.5.0.1 instead of 1.2.5-a.1 (I'm not sure)
  */
-defined("APP_VERSION") or define("APP_VERSION", "0.8.7");
+defined("APP_VERSION") or define("APP_VERSION", "0.8.8");
 
 /***************************************
  * You can add your constants here
@@ -241,6 +241,7 @@ defined("METHOD_RESULT_TYPE_TAP") or define("METHOD_RESULT_TYPE_TAP", 'tap');
 
 // deposit type codes
 defined("DEPOSIT_TYPE_PAYED") or define("DEPOSIT_TYPE_PAYED", "a1b2c3d4e5f6");
+defined("DEPOSIT_TYPE_CHARGE") or define("DEPOSIT_TYPE_CHARGE", "g7h8i9j1k2l3");
 
 // return order statuses
 defined("RETURN_ORDER_STATUS_CHECKING") or define("RETURN_ORDER_STATUS_CHECKING", 1);
@@ -349,6 +350,12 @@ defined("SESSION_APPLIED_COUPON_CODE") or define("SESSION_APPLIED_COUPON_CODE", 
 defined("SESSION_APPLIED_POST_PRICE") or define("SESSION_APPLIED_POST_PRICE", 'session_applied_post_price');
 // the gateway session key constant
 defined("SESSION_GATEWAY_RECORD") or define("SESSION_GATEWAY_RECORD", 'session_gateway_record_custom');
+// wallet charge array info session key constant
+defined("SESSION_WALLET_CHARGE_ARR_INFO") or define("SESSION_WALLET_CHARGE_ARR_INFO", 'session_wallet_charge_arr_info_custom');
+// the gateway wallet charge session key constant
+defined("SESSION_GATEWAY_CHARGE_RECORD") or define("SESSION_GATEWAY_CHARGE_RECORD", 'session_gateway_charge_record_custom');
+// the wallet charge code session key constant
+defined("SESSION_WALLET_CHARGE_CODE") or define("SESSION_WALLET_CHARGE_CODE", 'session_wallet_charge_code_custom');
 
 //
 // sitemap needed constants

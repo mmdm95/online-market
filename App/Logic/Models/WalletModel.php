@@ -24,11 +24,11 @@ class WalletModel extends BaseModel
      */
     public function getWalletInfo(
         ?string $where = null,
-        array $bind_values = [],
-        array $order_by = ['w.id DESC'],
-        ?int $limit = null,
-        int $offset = 0,
-        array $columns = [
+        array   $bind_values = [],
+        array   $order_by = ['w.id DESC'],
+        ?int    $limit = null,
+        int     $offset = 0,
+        array   $columns = [
             'w.*',
             'u.username',
             'u.first_name AS user_first_name',
@@ -89,7 +89,8 @@ class WalletModel extends BaseModel
     public function chargeWalletWithWalletId(
         $wallet_id,
         array $wallet_info,
-        array $wallet_flow_info
+        array $wallet_flow_info,
+        array $wallet_info_set
     ): bool
     {
         $this->db->beginTransaction();
@@ -103,6 +104,7 @@ class WalletModel extends BaseModel
         $res = $stmt->execute($insert->getBindValues());
 
         if (!$res) {
+            $this->db->rollBack();
             return false;
         }
 
@@ -113,8 +115,12 @@ class WalletModel extends BaseModel
             ->where('id=:id')
             ->bindValue('id', $wallet_id);
 
-        $stmt = $this->db->prepare($insert->getStatement());
-        $res = $stmt->execute($insert->getBindValues());
+        foreach ($wallet_info_set as $col => $info) {
+            $update->set($col, $info);
+        }
+
+        $stmt = $this->db->prepare($update->getStatement());
+        $res = $stmt->execute($update->getBindValues());
 
         if (!$res) {
             $this->db->rollBack();
@@ -122,5 +128,23 @@ class WalletModel extends BaseModel
         }
         $this->db->commit();
         return true;
+    }
+
+    /**
+     * @param $username
+     * @param $balance
+     * @return bool
+     */
+    public function increaseBalance($username, $balance): bool
+    {
+        $update = $this->connector->update();
+        $update
+            ->table($this->table)
+            ->where('username=:username')
+            ->bindValue('username', $username)
+            ->set('balance', 'balance+' . (int)$balance);
+
+        $stmt = $this->db->prepare($update->getStatement());
+        return $stmt->execute($update->getBindValues());
     }
 }

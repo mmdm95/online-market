@@ -6,6 +6,9 @@ use App\Logic\Models\GatewayModel;
 use App\Logic\Models\OrderModel;
 use App\Logic\Models\OrderReserveModel;
 use App\Logic\Models\PaymentMethodModel;
+use App\Logic\Models\UserModel;
+use App\Logic\Models\WalletFlowModel;
+use App\Logic\Models\WalletModel;
 use Sim\Auth\DBAuth;
 use Sim\Event\Interfaces\IEvent;
 use Sim\Payment\Factories\BehPardakht;
@@ -43,7 +46,7 @@ use Sim\Payment\Providers\Zarinpal\ZarinpalRequestProvider;
 use Sim\Payment\Providers\Zarinpal\ZarinpalRequestResultProvider;
 use Sim\Utils\StringUtil;
 
-class PaymentUtil
+class WalletChargeUtil
 {
     /**
      * @param $gatewayType
@@ -72,8 +75,8 @@ class PaymentUtil
 
         $res = true;
 
-        $orderArr = session()->get(SESSION_ORDER_ARR_INFO);
-        if (is_null($orderArr) || !count($orderArr)) return [$gatewayRes, false];
+        $walletArr = session()->get(SESSION_WALLET_CHARGE_ARR_INFO);
+        if (is_null($walletArr) || !count($walletArr)) return [$gatewayRes, false];
 
         switch ((int)$gatewayType) {
             case METHOD_TYPE_GATEWAY_BEH_PARDAKHT:
@@ -90,27 +93,27 @@ class PaymentUtil
                 // provider
                 $provider = new BehPardakhtRequestProvider();
                 $provider
-                    ->setCallbackUrl(rtrim(get_base_url(), '/') . url('home.finish', [
+                    ->setCallbackUrl(rtrim(get_base_url(), '/') . url('user.wallet.finish', [
                             'type' => METHOD_RESULT_TYPE_BEH_PARDAKHT,
                             'method' => $gatewayCode,
                             'code' => $newCode,
                         ])->getRelativeUrlTrimmed())
-                    ->setAmount(($orderArr['final_price'] * 10))
-                    ->setOrderId($orderArr['code'])
+                    ->setAmount(($walletArr['deposit_price'] * 10))
+                    ->setOrderId($walletArr['order_code'])
                     ->setPayerId(0);
                 // events
                 $gateway->createRequestOkClosure(
                     function (
                         IEvent $event,
                         BehPardakhtRequestResultProvider $result
-                    ) use ($auth, $gatewayModel, $orderArr, $newCode, &$gatewayRes) {
+                    ) use ($auth, $gatewayModel, $walletArr, $newCode, &$gatewayRes) {
                         // store gateway info to store all order things at once
                         $gatewayRes = $result;
                         $gatewayModel->insert([
                             'code' => $newCode,
-                            'order_code' => $orderArr['code'],
+                            'order_code' => $walletArr['order_code'],
                             'user_id' => $auth->getCurrentUser()['id'] ?? 0,
-                            'price' => $orderArr['final_price'],
+                            'price' => $walletArr['deposit_price'],
                             'is_success' => DB_NO,
                             'method_type' => METHOD_TYPE_GATEWAY_BEH_PARDAKHT,
                             'in_step' => PAYMENT_GATEWAY_FLOW_STATUS_CREATE_REQUEST,
@@ -141,26 +144,26 @@ class PaymentUtil
                 // provider
                 $provider = new IDPayRequestProvider();
                 $provider
-                    ->setCallbackUrl(rtrim(get_base_url(), '/') . url('home.finish', [
+                    ->setCallbackUrl(rtrim(get_base_url(), '/') . url('user.wallet.finish', [
                             'type' => METHOD_RESULT_TYPE_IDPAY,
                             'method' => $gatewayCode,
                             'code' => $newCode,
                         ])->getRelativeUrlTrimmed())
-                    ->setAmount(($orderArr['final_price'] * 10))
-                    ->setOrderId($orderArr['code']);
+                    ->setAmount(($walletArr['deposit_price'] * 10))
+                    ->setOrderId($walletArr['order_code']);
                 // events
                 $gateway->createRequestOkClosure(
                     function (
                         IEvent $event,
                         IDPayRequestResultProvider $result
-                    ) use ($auth, $gatewayModel, $orderArr, $newCode, &$gatewayRes) {
+                    ) use ($auth, $gatewayModel, $walletArr, $newCode, &$gatewayRes) {
                         // store gateway info to store all order things at once
                         $gatewayRes = $result;
                         $gatewayModel->insert([
                             'code' => $newCode,
-                            'order_code' => $orderArr['code'],
+                            'order_code' => $walletArr['order_code'],
                             'user_id' => $auth->getCurrentUser()['id'] ?? 0,
-                            'price' => $orderArr['final_price'],
+                            'price' => $walletArr['deposit_price'],
                             'is_success' => DB_NO,
                             'method_type' => METHOD_TYPE_GATEWAY_IDPAY,
                             'in_step' => PAYMENT_GATEWAY_FLOW_STATUS_CREATE_REQUEST,
@@ -191,26 +194,26 @@ class PaymentUtil
                 // provider
                 $provider = new MabnaRequestProvider();
                 $provider
-                    ->setCallbackUrl(rtrim(get_base_url(), '/') . url('home.finish', [
+                    ->setCallbackUrl(rtrim(get_base_url(), '/') . url('user.wallet.finish', [
                             'type' => METHOD_RESULT_TYPE_MABNA,
                             'method' => $gatewayCode,
                             'code' => $newCode,
                         ])->getRelativeUrlTrimmed())
-                    ->setAmount(($orderArr['final_price'] * 10))
-                    ->setInvoiceId($orderArr['code']);
+                    ->setAmount(($walletArr['deposit_price'] * 10))
+                    ->setInvoiceId($walletArr['order_code']);
                 // events
                 $gateway->createRequestOkClosure(
                     function (
                         IEvent $event,
                         MabnaRequestResultProvider $result
-                    ) use ($auth, $gatewayModel, $orderArr, $newCode, &$gatewayRes) {
+                    ) use ($auth, $gatewayModel, $walletArr, $newCode, &$gatewayRes) {
                         // store gateway info to store all order things at once
                         $gatewayRes = $result;
                         $gatewayModel->insert([
                             'code' => $newCode,
-                            'order_code' => $orderArr['code'],
+                            'order_code' => $walletArr['order_code'],
                             'user_id' => $auth->getCurrentUser()['id'] ?? 0,
-                            'price' => $orderArr['final_price'],
+                            'price' => $walletArr['deposit_price'],
                             'is_success' => DB_NO,
                             'method_type' => METHOD_TYPE_GATEWAY_MABNA,
                             'in_step' => PAYMENT_GATEWAY_FLOW_STATUS_CREATE_REQUEST,
@@ -241,25 +244,25 @@ class PaymentUtil
                 // provider
                 $provider = new ZarinpalRequestProvider();
                 $provider
-                    ->setCallbackUrl(rtrim(get_base_url(), '/') . url('home.finish', [
+                    ->setCallbackUrl(rtrim(get_base_url(), '/') . url('user.wallet.finish', [
                             'type' => METHOD_RESULT_TYPE_ZARINPAL,
                             'method' => $gatewayCode,
                             'code' => $newCode,
                         ])->getRelativeUrlTrimmed())
-                    ->setAmount(($orderArr['final_price'] * 10));
+                    ->setAmount(($walletArr['deposit_price'] * 10));
                 // events
                 $gateway->createRequestOkClosure(
                     function (
                         IEvent $event,
                         ZarinpalRequestResultProvider $result
-                    ) use ($auth, $gatewayModel, $orderArr, $newCode, &$gatewayRes) {
+                    ) use ($auth, $gatewayModel, $walletArr, $newCode, &$gatewayRes) {
                         // store gateway info to store all order things at once
                         $gatewayRes = $result;
                         $gatewayModel->insert([
                             'code' => $newCode,
-                            'order_code' => $orderArr['code'],
+                            'order_code' => $walletArr['order_code'],
                             'user_id' => $auth->getCurrentUser()['id'] ?? 0,
-                            'price' => $orderArr['final_price'],
+                            'price' => $walletArr['deposit_price'],
                             'is_success' => DB_NO,
                             'method_type' => METHOD_TYPE_GATEWAY_ZARINPAL,
                             'in_step' => PAYMENT_GATEWAY_FLOW_STATUS_CREATE_REQUEST,
@@ -292,26 +295,26 @@ class PaymentUtil
                 // provider
                 $provider = new SadadRequestProvider();
                 $provider
-                    ->setReturnUrl(rtrim(get_base_url(), '/') . url('home.finish', [
+                    ->setReturnUrl(rtrim(get_base_url(), '/') . url('user.wallet.finish', [
                             'type' => METHOD_RESULT_TYPE_SADAD,
                             'method' => $gatewayCode,
                             'code' => $newCode,
                         ])->getRelativeUrlTrimmed())
-                    ->setAmount(($orderArr['final_price'] * 10))
-                    ->setOrderId((int)$orderArr['code']);
+                    ->setAmount(($walletArr['deposit_price'] * 10))
+                    ->setOrderId((int)$walletArr['order_code']);
                 // events
                 $gateway->createRequestOkClosure(
                     function (
                         IEvent $event,
                         SadadRequestResultProvider $result
-                    ) use ($auth, $gatewayModel, $orderArr, $newCode, &$gatewayRes) {
+                    ) use ($auth, $gatewayModel, $walletArr, $newCode, &$gatewayRes) {
                         // store gateway info to store all order things at once
                         $gatewayRes = $result;
                         $gatewayModel->insert([
                             'code' => $newCode,
-                            'order_code' => $orderArr['code'],
+                            'order_code' => $walletArr['order_code'],
                             'user_id' => $auth->getCurrentUser()['id'] ?? 0,
-                            'price' => $orderArr['final_price'],
+                            'price' => $walletArr['deposit_price'],
                             'is_success' => DB_NO,
                             'method_type' => METHOD_TYPE_GATEWAY_SADAD,
                             'in_step' => PAYMENT_GATEWAY_FLOW_STATUS_CREATE_REQUEST,
@@ -342,26 +345,26 @@ class PaymentUtil
                 // provider
                 $provider = new TapRequestProvider();
                 $provider
-                    ->setCallBackUrl(rtrim(get_base_url(), '/') . url('home.finish', [
+                    ->setCallBackUrl(rtrim(get_base_url(), '/') . url('user.wallet.finish', [
                             'type' => METHOD_RESULT_TYPE_TAP,
                             'method' => $gatewayCode,
                             'code' => $newCode,
                         ])->getRelativeUrlTrimmed())
-                    ->setAmount(($orderArr['final_price'] * 10))
-                    ->setOrderId((int)$orderArr['code']);
+                    ->setAmount(($walletArr['deposit_price'] * 10))
+                    ->setOrderId((int)$walletArr['order_code']);
                 // events
                 $gateway->createRequestOkClosure(
                     function (
                         IEvent $event,
                         TapRequestResultProvider $result
-                    ) use ($auth, $gatewayModel, $orderArr, $newCode, &$gatewayRes) {
+                    ) use ($auth, $gatewayModel, $walletArr, $newCode, &$gatewayRes) {
                         // store gateway info to store all order things at once
                         $gatewayRes = $result;
                         $gatewayModel->insert([
                             'code' => $newCode,
-                            'order_code' => $orderArr['code'],
+                            'order_code' => $walletArr['order_code'],
                             'user_id' => $auth->getCurrentUser()['id'] ?? 0,
-                            'price' => $orderArr['final_price'],
+                            'price' => $walletArr['deposit_price'],
                             'is_success' => DB_NO,
                             'method_type' => METHOD_TYPE_GATEWAY_TAP,
                             'in_step' => PAYMENT_GATEWAY_FLOW_STATUS_CREATE_REQUEST,
@@ -405,19 +408,19 @@ class PaymentUtil
          */
         $gatewayModel = container()->get(GatewayModel::class);
         /**
-         * @var OrderModel $orderModel
+         * @var WalletFlowModel $walletFlowModel
          */
-        $orderModel = container()->get(OrderModel::class);
+        $walletFlowModel = container()->get(WalletFlowModel::class);
         /**
-         * @var OrderReserveModel $orderReserveModel
+         * @var WalletModel $walletModel
          */
-        $orderReserveModel = container()->get(OrderReserveModel::class);
+        $walletModel = container()->get(WalletModel::class);
         /**
          * @var PaymentMethodModel $methodModel
          */
         $methodModel = container()->get(PaymentMethodModel::class);
 
-        $res = [false, 'سفارش نامعتبر می‌باشد.', null];
+        $res = [false, 'کد شارژ کیف پول نامعتبر می‌باشد.', null];
 
         $flow = $gatewayModel->getFirst([
             'order_code',
@@ -430,12 +433,12 @@ class PaymentUtil
             return $res;
         }
 
-        $order = $orderModel->getFirst(['*'], 'code=:code', ['code' => $flow['order_code']]);
+        $walletOrder = $walletFlowModel->getFirst(['*'], 'order_code=:code', ['code' => $flow['order_code']]);
         $gateway = null;
         $provider = null;
 
         // check the order and see if it is a valid order
-        if (!count($order)) {
+        if (!count($walletOrder)) {
             return $res;
         }
 
@@ -497,7 +500,7 @@ class PaymentUtil
                             BehPardakhtSettleResultProvider $settleProvider,
                             BehPardakhtAdviceResultProvider $adviceProvider,
                             BehPardakhtHandlerProvider $resultProvider
-                        ) use ($gatewayModel, $orderModel, $orderReserveModel, $gatewayCode, $flow, &$res) {
+                        ) use ($gatewayModel, $walletModel, $walletOrder, $gatewayCode, $flow, &$res) {
                             $gatewayModel->update([
                                 'payment_code' => $resultProvider->getSaleReferenceId(''),
                                 'status' => $adviceProvider->getStatus(),
@@ -511,11 +514,7 @@ class PaymentUtil
                                     'settle' => $settleProvider->getParameters(),
                                 ]),
                             ], 'code=:code', ['code' => $gatewayCode]);
-                            $orderModel->update([
-                                'payment_status' => PAYMENT_STATUS_SUCCESS,
-                                'payed_at' => time(),
-                            ], 'code=:code', ['code' => $flow['order_code']]);
-                            $orderReserveModel->delete('order_code=:code', ['code' => $flow['order_code']]);
+                            $walletModel->increaseBalance($walletOrder['username'], $walletOrder['deposit_price']);
 
                             $res = [true, GATEWAY_SUCCESS_MESSAGE, $resultProvider->getSaleReferenceId('')];
                         }
@@ -562,7 +561,7 @@ class PaymentUtil
                             IEvent $event,
                             IDPayAdviceResultProvider $adviceProvider,
                             IDPayHandlerProvider $resultProvider
-                        ) use ($gatewayModel, $orderModel, $orderReserveModel, $gatewayCode, $flow, &$res) {
+                        ) use ($gatewayModel, $walletModel, $walletOrder, $gatewayCode, $flow, &$res) {
                             $gatewayModel->update([
                                 'payment_code' => $adviceProvider->getTrackId(''),
                                 'status' => $adviceProvider->getStatus(),
@@ -575,11 +574,7 @@ class PaymentUtil
                                     'advice' => $adviceProvider->getParameters(),
                                 ]),
                             ], 'code=:code', ['code' => $gatewayCode]);
-                            $orderModel->update([
-                                'payment_status' => PAYMENT_STATUS_SUCCESS,
-                                'payed_at' => time(),
-                            ], 'code=:code', ['code' => $flow['order_code']]);
-                            $orderReserveModel->delete('order_code=:code', ['code' => $flow['order_code']]);
+                            $walletModel->increaseBalance($walletOrder['username'], $walletOrder['deposit_price']);
 
                             $res = [true, GATEWAY_SUCCESS_MESSAGE, $adviceProvider->getTrackId('')];
                         }
@@ -624,7 +619,7 @@ class PaymentUtil
                             IEvent $event,
                             MabnaAdviceResultProvider $adviceProvider,
                             MabnaHandlerProvider $resultProvider
-                        ) use ($gatewayModel, $orderModel, $orderReserveModel, $gatewayCode, $flow, &$res) {
+                        ) use ($gatewayModel, $walletModel, $walletOrder, $gatewayCode, $flow, &$res) {
                             // most of information are in $resultProvider
                             $gatewayModel->update([
                                 'payment_code' => $resultProvider->getTraceNumber(''),
@@ -638,11 +633,7 @@ class PaymentUtil
                                     'advice' => $adviceProvider->getParameters(),
                                 ]),
                             ], 'code=:code', ['code' => $gatewayCode]);
-                            $orderModel->update([
-                                'payment_status' => PAYMENT_STATUS_SUCCESS,
-                                'payed_at' => time(),
-                            ], 'code=:code', ['code' => $flow['order_code']]);
-                            $orderReserveModel->delete('order_code=:code', ['code' => $flow['order_code']]);
+                            $walletModel->increaseBalance($walletOrder['username'], $walletOrder['deposit_price']);
 
                             $res = [true, GATEWAY_SUCCESS_MESSAGE, $resultProvider->getTraceNumber('')];
                         }
@@ -689,7 +680,7 @@ class PaymentUtil
                             IEvent $event,
                             ZarinpalAdviceResultProvider $adviceProvider,
                             ZarinpalHandlerProvider $resultProvider
-                        ) use ($gatewayModel, $orderModel, $orderReserveModel, $gatewayCode, $flow, &$res) {
+                        ) use ($gatewayModel, $walletModel, $walletOrder, $gatewayCode, $flow, &$res) {
                             $gatewayModel->update([
                                 'payment_code' => $adviceProvider->getRefID(''),
                                 'status' => $adviceProvider->getStatus(),
@@ -702,11 +693,7 @@ class PaymentUtil
                                     'advice' => $adviceProvider->getParameters(),
                                 ]),
                             ], 'code=:code', ['code' => $gatewayCode]);
-                            $orderModel->update([
-                                'payment_status' => PAYMENT_STATUS_SUCCESS,
-                                'payed_at' => time(),
-                            ], 'code=:code', ['code' => $flow['order_code']]);
-                            $orderReserveModel->delete('order_code=:code', ['code' => $flow['order_code']]);
+                            $walletModel->increaseBalance($walletOrder['username'], $walletOrder['deposit_price']);
 
                             $res = [true, GATEWAY_SUCCESS_MESSAGE, $adviceProvider->getRefID('')];
                         }
@@ -750,7 +737,7 @@ class PaymentUtil
                             $res = [false, GATEWAY_ERROR_MESSAGE, null];
                         }
                     )->sendAdvice(
-                        (new ZarinpalAdviceProvider())->setAmount($order['final_price'])
+                        (new ZarinpalAdviceProvider())->setAmount($walletOrder['deposit_price'])
                     );
                 break;
             case METHOD_RESULT_TYPE_SADAD:
@@ -772,7 +759,7 @@ class PaymentUtil
                             IEvent $event,
                             SadadAdviceResultProvider $adviceProvider,
                             SadadHandlerProvider $resultProvider
-                        ) use ($gatewayModel, $orderModel, $orderReserveModel, $gatewayCode, $flow, &$res) {
+                        ) use ($gatewayModel, $walletModel, $walletOrder, $gatewayCode, $flow, &$res) {
                             $gatewayModel->update([
                                 'payment_code' => $adviceProvider->getSystemTraceNo(''),
                                 'status' => $adviceProvider->getResCode(),
@@ -785,11 +772,7 @@ class PaymentUtil
                                     'advice' => $adviceProvider->getParameters(),
                                 ]),
                             ], 'code=:code', ['code' => $gatewayCode]);
-                            $orderModel->update([
-                                'payment_status' => PAYMENT_STATUS_SUCCESS,
-                                'payed_at' => time(),
-                            ], 'code=:code', ['code' => $flow['order_code']]);
-                            $orderReserveModel->delete('order_code=:code', ['code' => $flow['order_code']]);
+                            $walletModel->increaseBalance($walletOrder['username'], $walletOrder['deposit_price']);
 
                             $res = [true, GATEWAY_SUCCESS_MESSAGE, $adviceProvider->getSystemTraceNo('')];
                         }
@@ -834,7 +817,7 @@ class PaymentUtil
                             IEvent $event,
                             TapAdviceResultProvider $adviceProvider,
                             TapHandlerProvider $resultProvider
-                        ) use ($gatewayModel, $orderModel, $orderReserveModel, $gatewayCode, $flow, &$res) {
+                        ) use ($gatewayModel, $walletModel, $walletOrder, $gatewayCode, $flow, &$res) {
                             $gatewayModel->update([
                                 'payment_code' => $adviceProvider->getRRN(''),
                                 'status' => $adviceProvider->getStatus(),
@@ -847,11 +830,7 @@ class PaymentUtil
                                     'advice' => $adviceProvider->getParameters(),
                                 ]),
                             ], 'code=:code', ['code' => $gatewayCode]);
-                            $orderModel->update([
-                                'payment_status' => PAYMENT_STATUS_SUCCESS,
-                                'payed_at' => time(),
-                            ], 'code=:code', ['code' => $flow['order_code']]);
-                            $orderReserveModel->delete('order_code=:code', ['code' => $flow['order_code']]);
+                            $walletModel->increaseBalance($walletOrder['username'], $walletOrder['deposit_price']);
 
                             $res = [true, GATEWAY_SUCCESS_MESSAGE, $adviceProvider->getRRN('')];
                         }
@@ -912,7 +891,7 @@ class PaymentUtil
     private static function logConnectionError($type, $code, $msg)
     {
         logger_gateway()->error([
-            'section' => 'product',
+            'section' => 'wallet',
             'gateway_type' => $type,
             'code' => $code,
             'message' => $msg,

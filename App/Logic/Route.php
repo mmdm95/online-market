@@ -625,7 +625,11 @@ class Route implements IInitialize
                  * wallet routes
                  */
 //                Router::form('/wallet', [UserWalletController::class, 'index'])->name('user.wallet');
-//                Router::form('/wallet/charge', [UserWalletController::class, 'charge'])->name('user.wallet.charge');
+//                Router::form('/wallet/finish/{type}/{method}/{code}', [UserWalletController::class, 'chargeResult'])->where([
+//                    'type' => '[a-zA-Z0-9]+',
+//                    'method' => '[a-zA-Z0-9]+',
+//                    'code' => '[a-zA-Z0-9]+',
+//                ])->name('user.wallet.finish');
             });
 
             //==========================
@@ -777,11 +781,18 @@ class Route implements IInitialize
             Router::post('/cart/check-stored-coupon', [CartController::class, 'checkStoredCoupon'])->name('ajax.cart.check.stored.coupon');
             Router::post('/cart/check-post-price', [CheckoutController::class, 'calculateSendPrice'])->name('ajax.cart.check.post.price');
 
-            /**
-             * cart routes
-             */
             Router::group(['middleware' => AuthMiddleware::class], function () {
-                Router::post('/checkout/check', [CheckoutController::class, 'issuingFactorNConnectToGateway']);
+                /**
+                 * cart routes
+                 */
+                Router::post('/checkout/check', [CheckoutController::class, 'issuingFactorNConnectToGateway'])
+                    ->name('ajax.home.checkout.check');
+
+                /**
+                 * wallet routes
+                 */
+//                Router::post('/wallet/charge/check', [UserWalletController::class, 'chargeCheck'])
+//                    ->name('ajax.user.wallet.charge.check');
             });
 
             /**

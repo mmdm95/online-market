@@ -224,7 +224,7 @@ class WalletController extends AbstractAdminController implements IDatatableCont
                     $handler = new GeneralAjaxRemoveHandler();
                     $resourceHandler = $handler->handle(BaseModel::TBL_WALLET, $id);
                 } else {
-                    $resourceHandler->errorMessage('امکان حذف آیتم کیف پول وجود ندارد.');
+                    $resourceHandler->errorMessage('امکان حذف آیتم کیف پول وجود ندارد، برای حذف کیف پول ابتدا باید کاربر را حذف کنید.');
                 }
             }
         } else {
@@ -369,12 +369,12 @@ class WalletController extends AbstractAdminController implements IDatatableCont
                      */
                     $flowModel = container()->get(WalletFlowModel::class);
 
-                    $cols[] = 'u,id AS user_id';
+                    $cols[] = 'u.id AS user_id';
 
                     if (!empty($where)) {
                         $where .= ' AND wf.username=:username';
                     } else {
-                        $where = 'username=:username';
+                        $where = 'wf.username=:username';
                     }
                     $bindValues = array_merge($bindValues, [
                         'username' => $username,
