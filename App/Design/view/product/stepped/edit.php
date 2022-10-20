@@ -7,7 +7,7 @@ $validator = form_validator();
 <!-- Content area -->
 <div class="content">
     <div class="card col-lg-10">
-        <?php load_partial('admin/card-header', ['header_title' => 'افزودن قیمت پلکانی جدید']); ?>
+        <?php load_partial('admin/card-header', ['header_title' => 'تغییر قیمت پلکانی']); ?>
 
         <div class="card-body">
             <form action="<?= url('admin.stepped-price.add', ['code' => $product_code, 'id' => $product_id])->getRelativeUrlTrimmed(); ?>"
