@@ -267,14 +267,6 @@ class ProductFestivalController extends AbstractAdminController implements IData
             show_403();
         }
 
-        /**
-         * @var DBAuth $auth
-         */
-        $auth = container()->get('auth_admin');
-        if (!$auth->isAllow(RESOURCE_PRODUCT, IAuth::PERMISSION_READ)) {
-            show_403();
-        }
-
         try {
             [$f_id] = $_;
 
