@@ -295,7 +295,7 @@ class ProductFestivalController extends AbstractAdminController implements IData
                     $data = $festivalModel->getFestivalProducts($cols, $where, $bindValues, $order, $limit, $offset);
                     //-----
                     $recordsFiltered = $festivalModel->getFestivalProductsCount($where, $bindValues);
-                    $recordsTotal = $festivalModel->getFestivalProductsCount('festival_id=:fId', ['fId' => $f_id]);
+                    $recordsTotal = $festivalModel->getFestivalProductsCount($where, $bindValues);
 
                     return [$data, $recordsFiltered, $recordsTotal];
                 });
