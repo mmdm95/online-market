@@ -251,7 +251,8 @@ $authAdmin = auth_admin();
 
                     <?php if ($allowUnit): ?>
                         <li class="nav-item">
-                            <a href="<?= url('admin.unit.view', ''); ?>" class="nav-link"
+                            <a href="<?= url('admin.unit.view', ''); ?>"
+                               class="nav-link <?= url()->contains(url('admin.unit.view')->getRelativeUrlTrimmed()) ? 'active' : ''; ?>"
                                data-popup="tooltip"
                                data-original-title="واحد‌ها"
                                data-boundary="window"
