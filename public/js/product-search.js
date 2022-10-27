@@ -128,6 +128,32 @@
 
         function removeFiltersBtnClick() {
             removeFiltersBtn.on('click' + variables.namespace, function () {
+                // reset all filters in UI too
+                var el;
+                $('.list_attrs input[type="checkbox"]').each(function () {
+                    $(this).removeAttr('checked', 'checked').prop('checked', false);
+                });
+                $('.list_attrs input[type="radio"]').each(function () {
+                    $(this).removeAttr('checked', 'checked').prop('checked', false);
+                });
+                $('.list_brand input[type="checkbox"]').each(function () {
+                    $(this).removeAttr('checked', 'checked').prop('checked', false);
+                });
+                sizeChk.each(function () {
+                    el = $(this).find('span');
+                    if (el.length) {
+                        el.removeClass('active');
+                    }
+                });
+                colorChk.each(function () {
+                    el = $(this).find('span');
+                    if (el.length) {
+                        el.removeClass('active');
+                    }
+                });
+                availabilitySwitch.mSwitch('turnOff', availabilitySwitch);
+                offerSwitch.mSwitch('turnOff', offerSwitch);
+                //-----
                 uriParser.clear();
                 uriParser.push('category', category, true);
                 loadProduct();
