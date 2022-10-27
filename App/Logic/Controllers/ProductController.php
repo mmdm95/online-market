@@ -57,6 +57,11 @@ class ProductController extends AbstractHomeController
          */
         $attrModel = container()->get(ProductAttributeModel::class);
 
+        // get it from GET if parameter is not sent in url
+        if (empty($category)) {
+            $category = input()->get('category')->getValue();
+        }
+
         $hasCategory = false;
         if (is_numeric($category)) {
             $hasCategory = (bool)$categoryModel->count(
