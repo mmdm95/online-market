@@ -53,13 +53,14 @@ class ChartModel extends BaseModel
      */
     public function getTopNBoughtProductsCount(int $topN, $fromDate, $toDate): array
     {
-        $select = $this->connector->select();
-        $select
+        $subSelect = $this->connector->select();
+        $subSelect
             ->from($this->table . ' AS oa')
             ->cols([
                 '(CASE WHEN (oa.title IS NOT NULL) THEN (oa.title) ELSE (oa.order_item_product_title) END) AS product_title',
                 '(CASE WHEN (oa.category_name IS NOT NULL) THEN (oa.category_name) ELSE ("") END) AS category_name',
-                'COUNT(DISTINCT(oa.id)) AS count',
+                'oa.order_item_product_count AS oi_product_count',
+                'oa.product_id',
             ])
             ->where('oa.ordered_at BETWEEN :d1 AND :d2')
             ->where('oa.payment_status=:ps')
@@ -68,19 +69,20 @@ class ChartModel extends BaseModel
                 'd2' => $toDate,
                 'ps' => PAYMENT_STATUS_SUCCESS,
             ])
-            ->orderBy(['3 DESC'])
             ->limit($topN)
             ->groupBy(['oa.product_id']);
-
-        try {
-            $select
-                ->innerJoin(
-                    self::TBL_PRODUCT_PROPERTY . ' AS pp',
-                    'oa.product_id=pp.product_id'
-                );
-        } catch (AuraException $e) {
-            return [];
-        }
+        //
+        $select = $this->connector->select();
+        $select
+            ->fromSubSelect($subSelect, 'oa')
+            ->cols([
+                'SUM(oa.oi_product_count) AS count',
+                'oa.product_title',
+                'oa.category_name',
+                'oa.product_id',
+            ])
+            ->orderBy(['1 DESC'])
+            ->groupBy(['oa.product_id']);
 
         return $this->db->fetchAll($select->getStatement(), $select->getBindValues());
     }
