@@ -292,4 +292,211 @@ return [
             'admin',
         ],
     ],
+
+    //--------------------------------------------------------------------
+    // Products Search Attributes
+    //--------------------------------------------------------------------
+
+    'view/product/attribute/add' => [
+        'title' => title_concat(\config()->get('settings.title.value'), 'افزودن ویژگی جستجو'),
+        'common' => [
+            'admin-base',
+            'admin-form',
+            'admin'
+        ],
+        'sub_title' => 'افزودن ویژگی جستجو',
+        'breadcrumb' => [
+            [
+                'url' => url('admin.index')->getRelativeUrl(),
+                'icon' => 'icon-home2',
+                'text' => 'خانه',
+                'is_active' => false,
+            ],
+            [
+                'url' => url('admin.product.attr.view')->getRelativeUrl(),
+                'text' => 'مدیریت ویژگی‌های جستجو',
+                'is_active' => false,
+            ],
+            [
+                'text' => 'افزودن ویژگی جستجو',
+                'is_active' => true,
+            ],
+        ],
+    ],
+    'view/product/attribute/edit' => [
+        'title' => title_concat(\config()->get('settings.title.value'), 'ویرایش ویژگی جستجو'),
+        'common' => [
+            'admin-base',
+            'admin-form',
+            'admin'
+        ],
+        'sub_title' => 'ویرایش ویژگی جستجو',
+        'breadcrumb' => [
+            [
+                'url' => url('admin.index')->getRelativeUrl(),
+                'icon' => 'icon-home2',
+                'text' => 'خانه',
+                'is_active' => false,
+            ],
+            [
+                'url' => url('admin.product.attr.view')->getRelativeUrl(),
+                'text' => 'مدیریت ویژگی‌های جستجو',
+                'is_active' => false,
+            ],
+            [
+                'text' => 'ویرایش ویژگی جستجو',
+                'is_active' => true,
+            ],
+        ],
+    ],
+    'view/product/attribute/view' => [
+        'title' => title_concat(\config()->get('settings.title.value'), 'مدیریت ویژگی‌های جستجو'),
+        'common' => [
+            'admin-base',
+            'admin-table',
+            'admin'
+        ],
+        'sub_title' => 'ویژگی‌های جستجو',
+        'breadcrumb' => [
+            [
+                'url' => url('admin.index')->getRelativeUrl(),
+                'icon' => 'icon-home2',
+                'text' => 'خانه',
+                'is_active' => false,
+            ],
+            [
+                'text' => 'مدیریت ویژگی‌های جستجو',
+                'is_active' => true,
+            ],
+        ],
+    ],
+
+    //--------------------------------------------------------------------
+    // Products Search Attributes Categories
+    //--------------------------------------------------------------------
+
+    'view/product/attribute/category/add' => [
+        'title' => title_concat(\config()->get('settings.title.value'), 'افزودن دسته‌بندی ویژگی جستجو'),
+        'common' => [
+            'admin-base',
+            'admin-form',
+            'admin'
+        ],
+        'sub_title' => 'افزودن دسته‌بندی ویژگی جستجو',
+        'breadcrumb' => [
+            [
+                'url' => url('admin.index')->getRelativeUrl(),
+                'icon' => 'icon-home2',
+                'text' => 'خانه',
+                'is_active' => false,
+            ],
+            [
+                'url' => url('admin.product.attr.category.view')->getRelativeUrl(),
+                'text' => 'مدیریت دسته‌بندی ویژگی‌های جستجو',
+                'is_active' => false,
+            ],
+            [
+                'text' => 'افزودن دسته‌بندی ویژگی جستجو',
+                'is_active' => true,
+            ],
+        ],
+    ],
+    'view/product/attribute/category/edit' => [
+        'title' => title_concat(\config()->get('settings.title.value'), 'ویرایش دسته‌بندی ویژگی جستجو'),
+        'common' => [
+            'admin-base',
+            'admin-form',
+            'admin'
+        ],
+        'sub_title' => 'ویرایش دسته‌بندی ویژگی جستجو',
+        'breadcrumb' => [
+            [
+                'url' => url('admin.index')->getRelativeUrl(),
+                'icon' => 'icon-home2',
+                'text' => 'خانه',
+                'is_active' => false,
+            ],
+            [
+                'url' => url('admin.product.attr.category.view')->getRelativeUrl(),
+                'text' => 'مدیریت دسته‌بندی ویژگی‌های جستجو',
+                'is_active' => false,
+            ],
+            [
+                'text' => 'ویرایش دسته‌بندی ویژگی جستجو',
+                'is_active' => true,
+            ],
+        ],
+    ],
+    'view/product/attribute/category/view' => [
+        'title' => title_concat(\config()->get('settings.title.value'), 'مدیریت دسته‌بندی ویژگی‌های جستجو'),
+        'common' => [
+            'admin-base',
+            'admin-table',
+            'admin'
+        ],
+        'sub_title' => 'دسته‌بندی ویژگی‌های جستجو',
+        'breadcrumb' => [
+            [
+                'url' => url('admin.index')->getRelativeUrl(),
+                'icon' => 'icon-home2',
+                'text' => 'خانه',
+                'is_active' => false,
+            ],
+            [
+                'text' => 'مدیریت دسته‌بندی ویژگی‌های جستجو',
+                'is_active' => true,
+            ],
+        ],
+    ],
+
+    //--------------------------------------------------------------------
+    // Products Search Attributes Values
+    //--------------------------------------------------------------------
+
+    'view/product/attribute/value/view' => [
+        'title' => title_concat(\config()->get('settings.title.value'), 'مدیریت مقادیر ویژگی‌های جستجو'),
+        'common' => [
+            'admin-base',
+            'admin-table',
+            'admin'
+        ],
+        'breadcrumb' => [
+            [
+                'url' => url('admin.index')->getRelativeUrl(),
+                'icon' => 'icon-home2',
+                'text' => 'خانه',
+                'is_active' => false,
+            ],
+            [
+                'text' => 'مدیریت مقادیر ویژگی‌های جستجو',
+                'is_active' => true,
+            ],
+        ],
+    ],
+
+    'view/product/attribute/value/product-value' => [
+        'title' => title_concat(\config()->get('settings.title.value'), 'مدیریت مقادیر ویژگی‌های جستجوی محصول'),
+        'common' => [
+            'admin-base',
+            'admin-table',
+            'admin'
+        ],
+        'breadcrumb' => [
+            [
+                'url' => url('admin.index')->getRelativeUrl(),
+                'icon' => 'icon-home2',
+                'text' => 'خانه',
+                'is_active' => false,
+            ],
+            [
+                'url' => url('admin.product.view', '')->getRelativeUrl(),
+                'text' => 'مدیریت محصولات',
+                'is_active' => false,
+            ],
+            [
+                'text' => 'مدیریت مقادیر ویژگی‌های جستجوی محصول',
+                'is_active' => true,
+            ],
+        ],
+    ],
 ];

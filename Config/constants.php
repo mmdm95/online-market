@@ -21,7 +21,7 @@ use Sim\I18n\ISOLanguageCodes;
  *     1.2.5.0 instead of 1.2.5-a
  *     1.2.5.0.1 instead of 1.2.5-a.1 (I'm not sure)
  */
-defined("APP_VERSION") or define("APP_VERSION", "0.8.8");
+defined("APP_VERSION") or define("APP_VERSION", "0.9.0");
 
 /***************************************
  * You can add your constants here
@@ -384,3 +384,11 @@ defined("SITEMAP_PRIORITY_0_7") or define("SITEMAP_PRIORITY_0_7", 0.7);
 defined("SITEMAP_PRIORITY_0_8") or define("SITEMAP_PRIORITY_0_8", 0.8);
 defined("SITEMAP_PRIORITY_0_9") or define("SITEMAP_PRIORITY_0_9", 0.9);
 defined("SITEMAP_PRIORITY_1_0") or define("SITEMAP_PRIORITY_1_0", 1.0);
+
+//
+// products side search needed constants
+//
+
+// attribute types
+defined("PRODUCT_SIDE_SEARCH_ATTR_TYPE_SINGLE_SELECT") or define("PRODUCT_SIDE_SEARCH_ATTR_TYPE_SINGLE_SELECT", 'single-select');
+defined("PRODUCT_SIDE_SEARCH_ATTR_TYPE_MULTI_SELECT") or define("PRODUCT_SIDE_SEARCH_ATTR_TYPE_MULTI_SELECT", 'multi-select');

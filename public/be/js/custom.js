@@ -125,6 +125,14 @@
                 topBoughtProducts: '/ajax/chart/top-bought-products',
             }
         },
+        attr: {
+            val: {
+                get: '/ajax/product/attr/value/get',
+                add: '/ajax/product/attr/value/add',
+                edit: '/ajax/product/attr/value/edit',
+                remove: '/ajax/product/attr/value/remove',
+            }
+        }
     });
     window.MyGlobalVariables.elements = $.extend(true, window.MyGlobalVariables.elements, {
         addAddress: {
@@ -185,6 +193,20 @@
                 abstract: 'inp-edit-blog-abs',
                 keywords: 'inp-edit-blog-keywords',
                 desc: 'inp-edit-blog-desc',
+            },
+        },
+        addProductAttr: {
+            form: '#__form_add_product_attr',
+            inputs: {
+                title: 'inp-add-product-attr-title',
+                type: 'inp-add-product-attr-type',
+            },
+        },
+        editProductAttr: {
+            form: '#__form_edit_product_attr',
+            inputs: {
+                title: 'inp-edit-product-attr-title',
+                type: 'inp-edit-product-attr-type',
             },
         },
         addFaq: {
@@ -295,6 +317,18 @@
             inputs: {
                 image: 'inp-edit-ins-img',
                 link: 'inp-edit-ins-link',
+            },
+        },
+        addProductAttrVal: {
+            form: '#__form_add_attr_val',
+            inputs: {
+                value: 'inp-add-product-attr-val',
+            },
+        },
+        editProductAttrVal: {
+            form: '#__form_edit_attr_val',
+            inputs: {
+                value: 'inp-edit-product-attr-val',
             },
         },
         addBadge: {
@@ -830,6 +864,26 @@
                     },
                 },
             },
+            addProductAttr: {
+                title: {
+                    rules: {
+                        requiredNotEmpty: true,
+                    },
+                    messages: {
+                        requiredNotEmpty: 'فیلد عنوان ویژگی را خالی نگذارید.',
+                    },
+                },
+            },
+            editProductAttr: {
+                title: {
+                    rules: {
+                        requiredNotEmpty: true,
+                    },
+                    messages: {
+                        requiredNotEmpty: 'فیلد عنوان ویژگی را خالی نگذارید.',
+                    },
+                },
+            },
             addFaq: {
                 question: {
                     rules: {
@@ -1031,6 +1085,26 @@
                     },
                     messages: {
                         requiredNotEmpty: 'تصویر را انتخاب کنید.',
+                    },
+                },
+            },
+            addProductAttrVal: {
+                value: {
+                    rules: {
+                        requiredNotEmpty: true,
+                    },
+                    messages: {
+                        requiredNotEmpty: 'مقدار ویژگی را وارد کنید.',
+                    },
+                },
+            },
+            editProductAttrVal: {
+                value: {
+                    rules: {
+                        requiredNotEmpty: true,
+                    },
+                    messages: {
+                        requiredNotEmpty: 'مقدار ویژگی را وارد کنید.',
                     },
                 },
             },
@@ -1925,6 +1999,8 @@
             editFAQId = null,
             editSlideId = null,
             editInstagramImageId = null,
+            addAttrValueId = null,
+            editAttrValueId = null,
             editBadgeId = null,
             addCategoryImageId = null,
             editCategoryImageId = null,
@@ -1937,6 +2013,8 @@
             checkboxes;
 
         admin = new window.TheAdmin();
+
+        addAttrValueId = $('[name="inp-h-attr-id"][type="hidden"]').val();
 
         //-----
         constraints = {
@@ -1971,6 +2049,12 @@
                 title: variables.validation.constraints.editBlog.title,
                 abstract: variables.validation.constraints.editBlog.abstract,
                 desc: variables.validation.constraints.editBlog.desc,
+            },
+            addProductAttr: {
+                title: variables.validation.constraints.addProductAttr.title,
+            },
+            editProductAttr: {
+                title: variables.validation.constraints.editProductAttr.title,
             },
             addFaq: {
                 question: variables.validation.constraints.addFaq.question,
@@ -2028,6 +2112,12 @@
             editInstagramImage: {
                 image: variables.validation.constraints.editInstagramImage.image,
                 link: variables.validation.common.link,
+            },
+            addProductAttrVal: {
+                value: variables.validation.constraints.addProductAttrVal.value,
+            },
+            editProductAttrVal: {
+                value: variables.validation.constraints.editProductAttrVal.value,
             },
             addBadge: {
                 title: variables.validation.constraints.addBadge.title,
@@ -3765,6 +3855,29 @@
          * @param btn
          * @param [table]
          */
+        function editAttributeValueBtnClick(btn, table) {
+            var id;
+            id = $(btn).attr('data-edit-id');
+            currentModal = $('#modal_form_edit_attr_val');
+            // clear element after each call
+            $(variables.elements.editProductAttrVal.form).get(0).reset();
+            if (id && currentModal.length) {
+                admin.request(variables.url.attr.val.get + '/' + id, 'get', function () {
+                    var _ = this;
+                    if (core.objSize(_.data)) {
+                        currentTable = table;
+                        editAttrValueId = id;
+                        //-----
+                        currentModal.find('[name="' + variables.elements.editProductAttrVal.inputs.value + '"]').val(_.data['attr_val']);
+                    }
+                });
+            }
+        }
+
+        /**
+         * @param btn
+         * @param [table]
+         */
         function editBadgeBtnClick(btn, table) {
             var id;
             id = $(btn).attr('data-edit-id');
@@ -4070,6 +4183,13 @@
                 .off('click' + variables.namespace)
                 .on('click' + variables.namespace, function () {
                     editInstagramImageBtnClick($(this), table);
+                });
+
+            // edit attribute value button click event
+            $('.__item_attr_val_editor_btn')
+                .off('click' + variables.namespace)
+                .on('click' + variables.namespace, function () {
+                    editAttributeValueBtnClick($(this), table);
                 });
 
             // edit badge button click event
@@ -4536,6 +4656,26 @@
         });
 
         //---------------------------------------------------------------
+        // ADD PRODUCT ATTRIBUTE FORM
+        //---------------------------------------------------------------
+        admin.forms.submitForm('addProductAttr', constraints.addProductAttr, function () {
+            return true;
+        }, function (errors) {
+            admin.forms.showFormErrors(errors);
+            return false;
+        });
+
+        //---------------------------------------------------------------
+        // Edit PRODUCT ATTRIBUTE FORM
+        //---------------------------------------------------------------
+        admin.forms.submitForm('editProductAttr', constraints.editProductAttr, function () {
+            return true;
+        }, function (errors) {
+            admin.forms.showFormErrors(errors);
+            return false;
+        });
+
+        //---------------------------------------------------------------
         // ADD BLOG CATEGORY FORM
         //---------------------------------------------------------------
         admin.forms.submitForm('addBlogCategory', constraints.addBlogCategory, function () {
@@ -4780,6 +4920,81 @@
                     $(variables.elements.editInstagramImage.form).find('input[type="hidden"]').val('');
                     removeImageFromPlaceholder($(variables.elements.editInstagramImage.form).find('[name="' + variables.elements.editInstagramImage.inputs.image + '"]'));
                     editInstagramImageId = null;
+                    if (currentModal) {
+                        currentModal.modal('hide');
+                        currentModal = null;
+                    }
+                    if (currentTable) {
+                        $(currentTable).DataTable().ajax.reload();
+                        createDatatable(currentTable);
+                        currentTable = null;
+                    }
+                    //-----
+                    admin.toasts.toast(this.data, {
+                        type: variables.toasts.types.success,
+                    });
+                    createLoader = true;
+                }, {
+                    data: values,
+                }, true, function () {
+                    createLoader = true;
+                    admin.hideLoader(loaderId);
+                });
+            }
+            return false;
+        }, function (errors) {
+            admin.forms.showFormErrors(errors);
+            return false;
+        });
+
+        //---------------------------------------------------------------
+        // ADD ATTRIBUTE VALUE FORM
+        //---------------------------------------------------------------
+        admin.forms.submitForm('addProductAttrVal', constraints.addProductAttrVal, function (values) {
+            // do ajax
+            if (createLoader) {
+                createLoader = false;
+                loaderId = admin.showLoader();
+            }
+            admin.request(variables.url.attr.val.add + '/' + addAttrValueId, 'post', function () {
+                admin.hideLoader(loaderId);
+                // clear element after success
+                $(variables.elements.addProductAttrVal.form).get(0).reset();
+                $(variables.elements.addProductAttrVal.form).find('input[type="hidden"]').val('');
+                createDatatable();
+                //-----
+                admin.toasts.toast(this.data, {
+                    type: variables.toasts.types.success,
+                });
+                createLoader = true;
+            }, {
+                data: values,
+            }, true, function () {
+                createLoader = true;
+                admin.hideLoader(loaderId);
+            });
+            return false;
+        }, function (errors) {
+            admin.forms.showFormErrors(errors);
+            return false;
+        });
+
+        //---------------------------------------------------------------
+        // Edit ATTRIBUTE VALUE FORM
+        //---------------------------------------------------------------
+        admin.forms.submitForm('editProductAttrVal', constraints.editProductAttrVal, function (values) {
+            if (editAttrValueId) {
+                // do ajax
+                if (createLoader) {
+                    createLoader = false;
+                    loaderId = admin.showLoader();
+                }
+                admin.request(variables.url.attr.val.edit + '/' + editAttrValueId, 'post', function () {
+                    admin.hideLoader(loaderId);
+                    // clear element after success
+                    $(variables.elements.editProductAttrVal.form).get(0).reset();
+                    $(variables.elements.editProductAttrVal.form).find('input[type="hidden"]').val('');
+                    editAttrValueId = null;
                     if (currentModal) {
                         currentModal.modal('hide');
                         currentModal = null;

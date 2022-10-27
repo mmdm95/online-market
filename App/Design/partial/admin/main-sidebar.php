@@ -152,13 +152,13 @@ $authAdmin = auth_admin();
                     <!--                    <ul class="nav nav-group-sub">-->
                     <!--                        <li class="nav-item">-->
                     <!--                            <a href="" class="nav-link">-->
-                    <?= '';//url('admin.send_method.add');                                              ?>
+                    <?= '';//url('admin.send_method.add');                                                ?>
                     <!--                                افزودن روش ارسال جدید-->
                     <!--                            </a>-->
                     <!--                        </li>-->
                     <!--                        <li class="nav-item">-->
                     <!--                            <a href="" class="nav-link">-->
-                    <?= '';//url('admin.send_method.view', '');                                              ?>
+                    <?= '';//url('admin.send_method.view', '');                                                ?>
                     <!--                                لیست روش‌های ارسال-->
                     <!--                            </a>-->
                     <!--                        </li>-->
@@ -285,6 +285,25 @@ $authAdmin = auth_admin();
 
                     <?php if ($allowProduct): ?>
                         <li class="nav-item nav-item-submenu">
+                            <a href="#" class="nav-link"><i class="icon-list2"></i> <span>ویژگی‌های جستجوی محصول</span></a>
+
+                            <ul class="nav nav-group-sub">
+                                <li class="nav-item">
+                                    <a href="<?= url('admin.product.attr.view', ''); ?>"
+                                       class="nav-link <?= url()->contains(url('admin.product.attr.view', '')->getRelativeUrlTrimmed()) ? 'active' : ''; ?>">
+                                        مدیریت ویژگی‌ها
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="<?= url('admin.product.attr.category.view', ''); ?>"
+                                       class="nav-link <?= url()->contains(url('admin.product.attr.category.view', '')->getRelativeUrlTrimmed()) ? 'active' : ''; ?>">
+                                        ویژگی‌ها و دسته‌بندی‌ها
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+
+                        <li class="nav-item nav-item-submenu">
                             <a href="#" class="nav-link"><i class="icon-box"></i> <span>محصولات</span></a>
 
                             <ul class="nav nav-group-sub">
@@ -361,7 +380,7 @@ $authAdmin = auth_admin();
 
                     <!--                <li class="nav-item">-->
                     <!--                    <a href="" class="nav-link"-->
-                    <?= '';//url('admin.return.order.view');                                          ?>
+                    <?= '';//url('admin.return.order.view');                                            ?>
                     <!--                       data-popup="tooltip"-->
                     <!--                       data-original-title="سفارشات مرجوعی"-->
                     <!--                       data-boundary="window"-->
@@ -432,7 +451,7 @@ $authAdmin = auth_admin();
                     <!--                        <li class="nav-item">-->
                     <!--                            <a href="--><? //= url('admin.report.wallet'); ?><!--"-->
                     <!--                               class="nav-link "-->
-                    <?= '';//url()->contains(url('admin.report.wallet')->getRelativeUrlTrimmed()) ? 'active' : '';   ?>
+                    <?= '';//url()->contains(url('admin.report.wallet')->getRelativeUrlTrimmed()) ? 'active' : '';     ?>
                     <!--                               data-popup="tooltip"-->
                     <!--                               data-original-title="گزارش‌گیری از کیف پول"-->
                     <!--                               data-boundary="window"-->

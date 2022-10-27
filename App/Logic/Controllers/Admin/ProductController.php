@@ -4,6 +4,7 @@ namespace App\Logic\Controllers\Admin;
 
 use App\Logic\Abstracts\AbstractAdminController;
 use App\Logic\Forms\Admin\Product\AddProductForm;
+use App\Logic\Forms\Admin\Product\Attribute\Value\AssignProductAttrValueForm;
 use App\Logic\Forms\Admin\Product\BatchEditProductForm;
 use App\Logic\Forms\Admin\Product\BatchEditProductPriceForm;
 use App\Logic\Forms\Admin\Product\EditProductForm;
@@ -20,10 +21,12 @@ use App\Logic\Models\BrandModel;
 use App\Logic\Models\CategoryModel;
 use App\Logic\Models\ColorModel;
 use App\Logic\Models\OrderModel;
+use App\Logic\Models\ProductAttributeModel;
 use App\Logic\Models\ProductModel;
 use App\Logic\Models\UnitModel;
 use App\Logic\Utils\Jdf;
 use App\Logic\Utils\LogUtil;
+use App\Logic\Utils\ProductAttributeUtil;
 use Jenssegers\Agent\Agent;
 use Sim\Auth\DBAuth;
 use Sim\Auth\Interfaces\IAuth;
@@ -34,6 +37,7 @@ use Sim\Exceptions\Mvc\Controller\ControllerException;
 use Sim\Exceptions\PathManager\PathNotRegisteredException;
 use Sim\Interfaces\IFileNotExistsException;
 use Sim\Interfaces\IInvalidVariableNameException;
+use Sim\Utils\ArrayUtil;
 
 class ProductController extends AbstractAdminController implements IDatatableController, ISelect2Controller
 {
@@ -218,13 +222,14 @@ class ProductController extends AbstractAdminController implements IDatatableCon
          */
         $productModel = container()->get(ProductModel::class);
 
-        $product = $productModel->get(['title'], 'id=:id', ['id' => $id]);
+        $product = $productModel->get(['title', 'category_id'], 'id=:id', ['id' => $id]);
 
         if (0 == count($product)) {
             return $this->show404();
         }
 
         // store previous hex to check for duplicate
+        session()->setFlash('product-prev-category', $product[0]['category_id']);
         session()->setFlash('product-prev-title', $product[0]['title']);
         session()->setFlash('product-curr-id', $id);
 
@@ -238,7 +243,7 @@ class ProductController extends AbstractAdminController implements IDatatableCon
 
         $productProperties = $productModel->getProductProperty($id);
         $related = $productModel->getRelatedProductsWithInfo($id);
-        $related = array_map(function($r) {
+        $related = array_map(function ($r) {
             return $r['product_id'];
         }, $related);
         $gallery = $productModel->getImageGallery($id);
@@ -271,6 +276,80 @@ class ProductController extends AbstractAdminController implements IDatatableCon
             'units' => $unitModel->get(['id', 'title', 'sign']),
             'brands' => $brandModel->get(['id', 'name'], 'publish=:pub', ['pub' => DB_YES]),
             'categories' => $categoryModel->get(['id', 'name'], 'publish=:pub', ['pub' => DB_YES]),
+        ]));
+    }
+
+    /**
+     * @param $id
+     * @return string
+     * @throws ConfigNotRegisteredException
+     * @throws ControllerException
+     * @throws IDBException
+     * @throws IFileNotExistsException
+     * @throws IInvalidVariableNameException
+     * @throws PathNotRegisteredException
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
+     * @throws \ReflectionException
+     */
+    public function editValue($id)
+    {
+        /**
+         * @var DBAuth $auth
+         */
+        $auth = container()->get('auth_admin');
+        if (!$auth->isAllow(RESOURCE_PRODUCT, IAuth::PERMISSION_UPDATE)) {
+            show_403();
+        }
+
+        /**
+         * @var ProductModel $productModel
+         */
+        $productModel = container()->get(ProductModel::class);
+
+        $product = $productModel->get(['title', 'category_id'], 'id=:id', ['id' => $id]);
+
+        if (0 == count($product)) {
+            return $this->show404();
+        }
+
+        // store previous hex to check for duplicate
+        session()->setFlash('product-prev-category', $product[0]['category_id']);
+        session()->setFlash('product-curr-id', $id);
+
+        $data = [];
+        if (is_post()) {
+            $formHandler = new GeneralFormHandler();
+            $data = $formHandler->handle(AssignProductAttrValueForm::class, 'product_value_edit');
+        }
+
+        /**
+         * @var ProductAttributeModel $attrModel
+         */
+        $attrModel = container()->get(ProductAttributeModel::class);
+
+        //
+        $refinedAttrs = ProductAttributeUtil::getRefinedProductAttributes($product[0]['category_id']);
+        //-----
+        $refinedProductAttrs = [];
+        $productAttrs = ArrayUtil::arrayGroupBy(
+            'p_attr_id',
+            $attrModel->getProductAttrValues($id, ['pav.id AS val_id', 'pav.p_attr_id', 'pav.attr_val'])
+        );
+        foreach ($productAttrs as $attr => $values) {
+            $vals = [];
+            foreach ($values as $v) {
+                $vals[$v['val_id']] = $v['attr_val'];
+            }
+            $refinedProductAttrs[$attr] = $vals;
+        }
+        //
+
+        $this->setLayout($this->main_layout)->setTemplate('view/product/attribute/value/product-value');
+        return $this->render(array_merge($data, [
+            'sub_title' => 'ویژگی‌های جستجوی محصول' . '-' . $product[0]['title'],
+            'attr_values' => $refinedAttrs,
+            'product_attr_values' => $refinedProductAttrs,
         ]));
     }
 

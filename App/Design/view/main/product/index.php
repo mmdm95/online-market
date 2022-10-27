@@ -18,9 +18,14 @@ use Sim\Utils\StringUtil;
                             <div class="product_header">
                                 <div class="product_header_left">
                                     <div class="custom_select">
+                                        <?php
+                                        $sort = ArrayUtil::get($_GET, 'sort', PRODUCT_ORDERING_NEWEST);
+                                        ?>
                                         <select class="form-control form-control-sm" id="__product_sort">
                                             <?php foreach (PRODUCT_ORDERINGS as $k => $ordering): ?>
-                                                <option value="<?= $k; ?>"><?= $ordering ?></option>
+                                                <option value="<?= $k; ?>" <?= $sort == $k ? 'selected="selected"' : ''; ?>>
+                                                    <?= $ordering ?>
+                                                </option>
                                             <?php endforeach; ?>
                                         </select>
                                     </div>
@@ -37,9 +42,9 @@ use Sim\Utils\StringUtil;
                         <?php if (count($side_categories ?? [])): ?>
                             <div class="widget">
                                 <h5 class="widget_title">دسته بندی ها</h5>
-                                <ul class="widget_categories max-widget-height">
+                                <ul class="widget_categories max-widget-height list-unstyled">
                                     <?php foreach ($side_categories as $cat): ?>
-                                        <li>
+                                        <li class="mb-1">
                                             <a href="<?= url('home.search', [
                                                 'category' => $cat['id'],
                                                 'category_slug' => StringUtil::slugify($cat['name']),
@@ -64,6 +69,12 @@ use Sim\Utils\StringUtil;
                                     </button>
                                 </form>
                             </div>
+                        </div>
+                        <div class="widget d-none">
+                            <button class="btn btn-danger btn-block" id="__remove-all-filters">
+                                <i class="linearicons-trash2" aria-hidden="true"></i>
+                                حذف تمامی فیلترها
+                            </button>
                         </div>
                         <?php if (0 !== ($max_price ?? 0)): ?>
                             <?php
@@ -91,17 +102,61 @@ use Sim\Utils\StringUtil;
                                 </div>
                             </div>
                         <?php endif; ?>
+                        <?php if (count($dynamicAttrs ?? [])): ?>
+                            <?php foreach ($dynamicAttrs as $id => $attr): ?>
+                                <div class="widget">
+                                    <h5 class="widget_title"><?= $attr['title']; ?></h5>
+                                    <ul class="list_attrs max-widget-height list-unstyled">
+                                        <?php
+                                        $previousAttrs = ArrayUtil::get($_GET, 'attrs_' . $id, []);
+                                        $previousAttrs = !is_array($previousAttrs) ? [] : $previousAttrs;
+                                        $previousAttrs = array_map('urldecode', $previousAttrs);
+                                        ?>
+                                        <?php foreach ($attr['values'] as $id2 => $value): ?>
+                                            <li class="mb-1">
+                                                <?php if ($attr['type'] == PRODUCT_SIDE_SEARCH_ATTR_TYPE_MULTI_SELECT): ?>
+                                                    <div class="custome-checkbox">
+                                                        <input class="form-check-input product_attr_switch-<?= $id2; ?>"
+                                                               type="checkbox" id="attr_num_<?= $id2; ?>"
+                                                               value="<?= $id2; ?>"
+                                                               data-attr-id="<?= $id; ?>"
+                                                            <?= in_array($id2, $previousAttrs) ? 'checked="checked"' : ''; ?>>
+                                                        <label class="form-check-label"
+                                                               for="attr_num_<?= $id2; ?>">
+                                                            <span><?= $value; ?></span>
+                                                        </label>
+                                                    </div>
+                                                <?php elseif ($attr['type'] == PRODUCT_SIDE_SEARCH_ATTR_TYPE_SINGLE_SELECT): ?>
+                                                    <div class="custome-radio">
+                                                        <input class="form-check-input product_attr_switch-<?= $id2; ?>"
+                                                               name="attr_radio_<?= $id; ?>"
+                                                               type="radio" id="attr_radio_num_<?= $id2; ?>"
+                                                               value="<?= $id2; ?>"
+                                                               data-attr-id="<?= $id; ?>"
+                                                            <?= in_array($id2, $previousAttrs) ? 'checked="checked"' : ''; ?>>
+                                                        <label class="form-check-label"
+                                                               for="attr_radio_num_<?= $id2; ?>">
+                                                            <span><?= $value; ?></span>
+                                                        </label>
+                                                    </div>
+                                                <?php endif; ?>
+                                            </li>
+                                        <?php endforeach; ?>
+                                    </ul>
+                                </div>
+                            <?php endforeach; ?>
+                        <?php endif; ?>
                         <?php if (count($brands ?? [])): ?>
                             <div class="widget">
                                 <h5 class="widget_title">برندها</h5>
-                                <ul class="list_brand max-widget-height">
+                                <ul class="list_brand max-widget-height list-unstyled">
                                     <?php
                                     $previousBrands = ArrayUtil::get($_GET, 'brands', []);
                                     $previousBrands = !is_array($previousBrands) ? [] : $previousBrands;
                                     $previousBrands = array_map('urldecode', $previousBrands);
                                     ?>
                                     <?php foreach ($brands as $id => $brand): ?>
-                                        <li>
+                                        <li class="mb-1">
                                             <div class="custome-checkbox">
                                                 <input class="form-check-input product_brand_switch"
                                                        type="checkbox" id="<?= 'brand_num_' . $id; ?>"

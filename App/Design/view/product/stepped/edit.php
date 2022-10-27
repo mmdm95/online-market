@@ -7,10 +7,10 @@ $validator = form_validator();
 <!-- Content area -->
 <div class="content">
     <div class="card col-lg-10">
-        <?php load_partial('admin/card-header', ['header_title' => 'افزودن قیمت پلکانی جدید']); ?>
+        <?php load_partial('admin/card-header', ['header_title' => 'تغییر قیمت پلکانی']); ?>
 
         <div class="card-body">
-            <form action="<?= url('admin.stepped-price.add', ['code' => $product_code, 'id' => $product_id])->getRelativeUrlTrimmed(); ?>"
+            <form action="<?= url('admin.stepped-price.edit', ['code' => $product_code, 'id' => $product_id])->getRelativeUrlTrimmed(); ?>"
                   method="post" id="__form_edit_stepped">
                 <?php load_partial('admin/message/message-form', [
                     'errors' => $stepped_edit_errors ?? [],
@@ -64,9 +64,9 @@ $validator = form_validator();
                     </div>
                 </div>
                 <div class="text-right">
-                    <button type="submit" class="btn btn-primary">
-                        ذخیره اطلاعات
-                        <i class="icon-floppy-disks ml-2"></i>
+                    <button type="submit" class="btn btn-success">
+                        ویرایش اطلاعات
+                        <i class="icon-checkmark3 ml-2"></i>
                     </button>
                 </div>
             </form>

@@ -3,7 +3,6 @@
 namespace App\Logic\Models;
 
 use Aura\SqlQuery\Exception as AuraException;
-use Dotenv\Util\Str;
 use Pecee\Http\Input\InputItem;
 use Sim\Utils\StringUtil;
 
@@ -24,8 +23,8 @@ class ProductModel extends BaseModel
      */
     public function getSingleProduct(
         ?string $where = null,
-        array $bind_values = [],
-        array $columns = [
+        array   $bind_values = [],
+        array   $columns = [
             'p.id',
             'p.slug',
             'p.title',
@@ -89,12 +88,12 @@ class ProductModel extends BaseModel
      */
     public function getLimitedProduct(
         ?string $where = null,
-        array $bind_values = [],
-        array $order_by = ['pa.product_id DESC'],
-        ?int $limit = null,
-        int $offset = 0,
-        array $group_by = ['pa.product_id'],
-        array $columns = [
+        array   $bind_values = [],
+        array   $order_by = ['pa.product_id DESC'],
+        ?int    $limit = null,
+        int     $offset = 0,
+        array   $group_by = ['pa.product_id'],
+        array   $columns = [
             'pa.product_id',
             'pa.slug',
             'pa.title',
@@ -136,7 +135,7 @@ class ProductModel extends BaseModel
      */
     public function getLimitedProductCount(
         ?string $where = null,
-        array $bind_values = []
+        array   $bind_values = []
     ): int
     {
         $res = $this->getLimitedProduct($where, $bind_values, [], null, 0, [], ['COUNT(DISTINCT(pa.product_id)) AS count']);
@@ -160,7 +159,7 @@ class ProductModel extends BaseModel
             ->bindValue('pId', $product_id);
 
         $ids = $this->db->fetchAll($select->getStatement(), $select->getBindValues());
-        return array_map(function($id) {
+        return array_map(function ($id) {
             return $id['related_id'];
         }, $ids);
     }
@@ -227,11 +226,11 @@ class ProductModel extends BaseModel
      */
     public function getUserFavoriteProducts(
         ?string $where = null,
-        array $bind_values = [],
-        array $order_by = ['fp.product_id DESC'],
-        ?int $limit = null,
-        int $offset = 0,
-        array $columns = [
+        array   $bind_values = [],
+        array   $order_by = ['fp.product_id DESC'],
+        ?int    $limit = null,
+        int     $offset = 0,
+        array   $columns = [
             'fp.id AS favorite_id',
             'fp.product_id',
             'pa.slug',
@@ -541,7 +540,7 @@ class ProductModel extends BaseModel
 
         $res7 = false;
         foreach ($products as $k => $product) {
-            if(!($product['color_hex'] ?? false) && (!$prevProduct[$k]['color_hex'] ?? false)) continue;
+            if (!($product['color_hex'] ?? false) && (!$prevProduct[$k]['color_hex'] ?? false)) continue;
 
             $insert = $this->connector->insert();
             $insert
@@ -934,5 +933,102 @@ class ProductModel extends BaseModel
             ['pa.product_id'],
             $columns
         );
+    }
+
+    /**
+     * Use [pa] instead of [product_advanced], [pac] instead of [product_attr_category],
+     * [pat] instead of [product_attrs], [pav] instead of [product_attr_values],
+     * [pap] instead of [product_attr_product]
+     *
+     * @param string|null $where
+     * @param array $bind_values
+     * @param array $order_by
+     * @param int|null $limit
+     * @param int $offset
+     * @param array $group_by
+     * @param array $columns
+     * @return array
+     */
+    public function getProductsWithAttrs(
+        ?string $where = null,
+        array   $bind_values = [],
+        array   $order_by = ['pa.product_id DESC'],
+        ?int    $limit = null,
+        int     $offset = 0,
+        array   $group_by = ['pa.product_id'],
+        array   $columns = [
+            'pa.product_id',
+            'pa.slug',
+            'pa.title',
+            'pa.image',
+            'pa.price',
+            'pa.discounted_price',
+            'pa.stock_count',
+            'pa.max_cart_count',
+        ]
+    ): array
+    {
+        $select = $this->connector->select();
+        $select
+            ->from(self::TBL_PRODUCT_ADVANCED . ' AS pa')
+            ->cols($columns)
+            ->offset($offset)
+            ->orderBy($order_by)
+            ->groupBy($group_by);
+
+        try {
+            $select
+                ->leftJoin(
+                    self::TBL_PRODUCT_ATTR_CATEGORY . ' AS pac',
+                    'pa.category_id=pac.c_id'
+                )
+                ->leftJoin(
+                    self::TBL_PRODUCT_ATTRS . ' AS pat',
+                    'pat.id=pac.p_attr_id'
+                )
+                ->leftJoin(
+                    self::TBL_PRODUCT_ATTR_VALUES . ' AS pav',
+                    'pat.id=pav.p_attr_id'
+                )
+                ->leftJoin(
+                    self::TBL_PRODUCT_ATTR_PRODUCT . ' AS pap',
+                    'pap.p_id=pa.product_id'
+                );
+        } catch (AuraException $e) {
+            return [];
+        }
+
+        if (!empty($where)) {
+            $select
+                ->where($where)
+                ->bindValues($bind_values);
+        }
+
+        if (!empty($limit) && $limit > 0) {
+            $select->limit($limit);
+        }
+
+        return $this->db->fetchAll($select->getStatement(), $select->getBindValues());
+    }
+
+    /**
+     * Use [pa] instead of [product_advanced], [pac] instead of [product_attr_category],
+     * [pat] instead of [product_attrs], [pav] instead of [product_attr_values],
+     * [pap] instead of [product_attr_product]
+     *
+     * @param string|null $where
+     * @param array $bind_values
+     * @return int
+     */
+    public function getProductsWithAttrsCount(
+        ?string $where = null,
+        array   $bind_values = []
+    ): int
+    {
+        $res = $this->getProductsWithAttrs($where, $bind_values, [], null, 0, [], ['COUNT(DISTINCT(pa.product_id)) AS count']);
+        if (count($res)) {
+            return (int)$res[0]['count'];
+        }
+        return 0;
     }
 }

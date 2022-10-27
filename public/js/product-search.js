@@ -28,6 +28,8 @@
             constraints,
             uriParser,
             //-----
+            removeFiltersBtn,
+            //-----
             mainProductContainer,
             sidebarMain,
             category,
@@ -36,6 +38,7 @@
             priceHandleMin,
             priceHandleMax,
             priceFilterBtn,
+            attrChk,
             brandChk,
             sizeChk,
             colorChk,
@@ -60,6 +63,7 @@
         };
         //-----
 
+        removeFiltersBtn = $('#__remove-all-filters');
         mainProductContainer = $('#__main_product_container');
         sidebarMain = $('#__the_sticky_sidebar');
         category = mainProductContainer.attr('data-category');
@@ -68,6 +72,7 @@
         priceFilter = $('#price_filter');
         priceHandleMin = $('#price_first');
         priceHandleMax = $('#price_second');
+        attrChk = $('[class*=product_attr_switch-]');
         brandChk = $('.product_brand_switch');
         sizeChk = $('.product_size_switch_multi');
         colorChk = $('.product_color_switch_multi');
@@ -113,6 +118,14 @@
             }, function (errors) {
                 shop.forms.showFormErrors(errors);
                 return false;
+            });
+        }
+
+        function removeFiltersBtnClick() {
+            removeFiltersBtn.on('click' + variables.namespace, function () {
+                uriParser.clear();
+                uriParser.push('category', category, true);
+                loadProduct();
             });
         }
 
@@ -166,6 +179,48 @@
                     if (typeof attr === typeof undefined || attr === false) {
                         loadProduct();
                     }
+                });
+        }
+
+        function attrCheckChange() {
+            attrChk
+                .off('change' + variables.namespace)
+                .on('change' + variables.namespace, function () {
+                    var
+                        checked = [],
+                        attrId = $('.list_attrs input[type="checkbox"]').first().attr('data-attr-id');
+                    attrId = parseInt(attrId, 10);
+                    attrId = !isNaN(attrId) ? attrId : -1;
+                    $('.list_attrs input[type="checkbox"]:checked').each(function () {
+                        checked.push($(this).val());
+                        attrId = $(this).attr('data-attr-id');
+                        attrId = parseInt(attrId, 10);
+                        attrId = !isNaN(attrId) ? attrId : -1;
+                    });
+                    if (checked.length) {
+                        uriParser.push('attrs_' + attrId, checked, true);
+                    } else {
+                        uriParser.clear('attrs_' + attrId);
+                    }
+                    //
+                    attrId = $('.list_attrs input[type="radio"]').first().attr('data-attr-id');
+                    attrId = parseInt(attrId, 10);
+                    attrId = !isNaN(attrId) ? attrId : -1;
+                    var v;
+                    $('.list_attrs input[type="radio"]:checked').each(function () {
+                        v = $(this).val();
+                        attrId = $(this).attr('data-attr-id');
+                        attrId = parseInt(attrId, 10);
+                        attrId = !isNaN(attrId) ? attrId : -1;
+
+                        if (v) {
+                            uriParser.push('attrs_' + attrId, v, true);
+                        } else {
+                            uriParser.clear('attrs_' + attrId);
+                        }
+                    });
+                    //
+                    loadProduct();
                 });
         }
 
@@ -252,6 +307,17 @@
             });
         }
 
+        function toggleRemoveFilterBtn(obj) {
+            var x;
+            x = $.extend(true, x, obj);
+            delete x['category'];
+            if (core.objSize(x) > 0) {
+                removeFiltersBtn.closest('.widget').removeClass('d-none');
+            } else {
+                removeFiltersBtn.closest('.widget').addClass('d-none');
+            }
+        }
+
         function makeAdjustmentsAccordingToObj(obj) {
             var el, o;
 
@@ -267,6 +333,38 @@
             if (obj['price'] && obj['price']['min'] && obj['price']['max']) {
                 priceFilter.slider('values', 0, obj['price']['min']);
                 priceFilter.slider('values', 1, obj['price']['max']);
+            }
+            // attrs checkboxes/radios
+            for (var o in obj) {
+                if (obj.hasOwnProperty(o)) {
+                    if (/^attrs_.*]/.test(o)) {
+                        if (core.isArray(obj[o])) {
+                            $('.list_attrs input[type="checkbox"]').each(function () {
+                                if (-1 !== $.inArray($(this).val(), obj[o])) {
+                                    $(this).attr('checked', 'checked').prop('checked', true);
+                                } else {
+                                    $(this).removeAttr('checked', 'checked').prop('checked', false);
+                                }
+                            });
+                        } else {
+                            $('.list_attrs input[type="checkbox"]').each(function () {
+                                if (core.isString(obj[o]) && $(this).val() == obj[o]) {
+                                    $(this).attr('checked', 'checked').prop('checked', true);
+                                } else {
+                                    $(this).removeAttr('checked', 'checked').prop('checked', false);
+                                }
+                            });
+                        }
+                        //-----
+                        $('.list_attrs input[type="radio"]').each(function () {
+                            if (core.isString(obj[o]) && $(this).val() == obj[o]) {
+                                $(this).attr('checked', 'checked').prop('checked', true);
+                            } else {
+                                $(this).removeAttr('checked', 'checked').prop('checked', false);
+                            }
+                        });
+                    }
+                }
             }
             // brands checkboxes
             if (obj['brands'] && core.isArray(obj['brands'])) {
@@ -364,6 +462,7 @@
         // load product functionality
         function loadProduct() {
             var obj = uriParser.get(null, {}, true);
+            toggleRemoveFilterBtn(obj);
             makeAdjustmentsAccordingToObj(obj);
             if (!isInProgress) {
                 // push query to window state
@@ -402,12 +501,14 @@
             }
         }
 
+        removeFiltersBtnClick();
         stickySidebar();
         paginationClick();
         setCategoryToSearchParams();
         querySubmitting();
         sortSelectChange();
         priceFilterChange();
+        attrCheckChange();
         brandsCheckChange();
         sizeCheckChange();
         colorCheckChange();

@@ -3,6 +3,7 @@
 namespace App\Logic\Utils;
 
 use App\Logic\Models\ColorModel;
+use App\Logic\Models\ProductAttributeModel;
 use App\Logic\Models\ProductModel;
 use Pecee\Http\Input\IInputItem;
 use Pecee\Http\Input\InputItem;
@@ -95,6 +96,43 @@ class ProductUtil
                 $bindValues['p_category_id'] = $category;
                 $bindValues['p_category_parent_id'] = $category;
                 $bindValues['p_category_all_parents_id'] = getDBCommaRegexString($category);
+
+                // if there is category, we'll have attribute values too!
+                /**
+                 * @var ProductAttributeModel $attrModel
+                 */
+                $attrModel = container()->get(ProductAttributeModel::class);
+
+                $attrIds = $attrModel->getProductAttrValuesOfCategory($category, ['pa.id', 'pa.type'], ['pav.id ASC'], ['pa.id']);
+                $inClause = '';
+                foreach ($attrIds as $k2 => $attrId) {
+                    $attrs = input()->get('attrs_' . $attrId['id'], null);
+                    if ($attrId['type'] == PRODUCT_SIDE_SEARCH_ATTR_TYPE_MULTI_SELECT) {
+                        if (is_array($attrs)) {
+                            /**
+                             * @var IInputItem $attr
+                             */
+                            foreach ($attrs as $k => $attr) {
+                                if (!is_array($attr) && !empty($attr->getValue())) {
+                                    $inClause .= ":p_attr$k$k2,";
+                                    $bindValues["p_attr$k$k2"] = urldecode($attr->getValue());
+                                }
+                            }
+                        } elseif (!empty($attrs->getValue())) {
+                            $inClause .= ":p_attr$k2,";
+                            $bindValues["p_attr$k2"] = urldecode($attrs->getValue());
+                        }
+                    } elseif ($attrId['type'] == PRODUCT_SIDE_SEARCH_ATTR_TYPE_SINGLE_SELECT && !is_array($attrs)) {
+                        if (!empty($attrs->getValue())) {
+                            $inClause .= ":p_attr$k2,";
+                            $bindValues["p_attr$k2"] = urldecode($attrs->getValue());
+                        }
+                    }
+                }
+                $inClause = trim($inClause, ',');
+                if (!empty($inClause)) {
+                    $where .= " AND pap.p_attr_val_id IN ({$inClause})";
+                }
             }
         }
         // price parameter
@@ -122,8 +160,8 @@ class ProductUtil
              */
             foreach ($colors as $k => $color) {
                 if (!is_array($color) && !empty($color->getValue())) {
-                    $inClause .= ":p_color{$k},";
-                    $bindValues["p_color{$k}"] = urldecode($color->getValue());
+                    $inClause .= ":p_color$k,";
+                    $bindValues["p_color$k"] = urldecode($color->getValue());
                 }
             }
             $inClause = trim($inClause, ',');
@@ -140,8 +178,8 @@ class ProductUtil
              */
             foreach ($sizes as $k => $size) {
                 if (!is_array($size) && !empty($size->getValue())) {
-                    $inClause .= ":p_size{$k},";
-                    $bindValues["p_size{$k}"] = urldecode($size->getValue());
+                    $inClause .= ":p_size$k,";
+                    $bindValues["p_size$k"] = urldecode($size->getValue());
                 }
             }
             $inClause = trim($inClause, ',');
@@ -161,8 +199,8 @@ class ProductUtil
              */
             foreach ($brands as $k => $brand) {
                 if (!is_array($brand) && !empty($brand->getValue())) {
-                    $inClause .= ":p_brand{$k},";
-                    $bindValues["p_brand{$k}"] = $brand->getValue();
+                    $inClause .= ":p_brand$k,";
+                    $bindValues["p_brand$k"] = $brand->getValue();
                 }
             }
             $inClause = trim($inClause, ',');
@@ -216,26 +254,23 @@ class ProductUtil
                     case PRODUCT_ORDERING_MOST_DISCOUNT: // most discount
                         $orderBy = ['CASE WHEN (pa.discount_until IS NULL OR pa.discount_until >= UNIX_TIMESTAMP()) AND pa.stock_count > 0 THEN 0 ELSE 1 END', '((pa.price - pa.discounted_price) / pa.price * 100) DESC', 'pa.discounted_price ASC', 'pa.product_id DESC'];
                         break;
-                    default: // newest [PRODUCT_ORDERING_NEWEST]
-                        $orderBy = ['pa.product_id DESC'];
-                        break;
                 }
             }
         }
 
         // other info
-        $total = $productModel->getLimitedProductCount($where, $bindValues);
+        $total = $productModel->getProductsWithAttrsCount($where, $bindValues);
         $lastPage = ceil($total / $limit);
 
         return [
-            'items' => $productModel->getLimitedProduct(
+            'items' => $productModel->getProductsWithAttrs(
                 $where,
                 $bindValues,
                 $orderBy,
                 $limit,
                 $offset,
                 ['pa.product_id'],
-                ['*']
+                ['pa.*']
             ),
             'pagination' => [
                 'base_url' => url('home.search')->getRelativeUrlTrimmed(),
