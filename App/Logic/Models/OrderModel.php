@@ -579,7 +579,7 @@ class OrderModel extends BaseModel
             ]);
         $res = $model->get($select);
 
-        if (count($res)) return $res[0]['price_sum'];
+        if (count($res)) return $res[0]['price_sum'] ?? 0;
         return 0;
     }
 }
