@@ -520,6 +520,9 @@
                     // Lazy loader (pictures, videos, etc.)
                     shop.lazyFn();
                     cart.assignEventsToAddOrUpdateBtn();
+
+                    // scroll to top of main product container
+                    core.scrollTo('#__main_product_container', 85, 300);
                 }, {
                     params: obj,
                 }, true, function () {
