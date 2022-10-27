@@ -49,7 +49,7 @@ $validator = form_validator();
                                     <?php if ($type == PRODUCT_SIDE_SEARCH_ATTR_TYPE_MULTI_SELECT): ?>
                                         چند انتخابی
                                     <?php elseif ($type == PRODUCT_SIDE_SEARCH_ATTR_TYPE_SINGLE_SELECT): ?>
-                                        سوئیچ
+                                        تک انتخابی
                                     <?php endif; ?>
                                 </option>
                             <?php endforeach; ?>
