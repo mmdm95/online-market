@@ -56,7 +56,7 @@ use Sim\Utils\StringUtil;
                                 </a>
 
                                 <div class="dropdown-menu dropdown-menu-left">
-                                    <a href="<?= url('admin.stepped-price.edit', ['code' => '', 'id' => '']); ?>"
+                                    <a href="<?= url('admin.stepped-price.edit', ['code' => $product_code, 'id' => $item['id']]); ?>"
                                        class="dropdown-item">
                                         <i class="icon-pencil"></i>
                                         ویرایش
