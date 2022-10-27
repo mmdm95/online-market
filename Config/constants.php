@@ -21,7 +21,7 @@ use Sim\I18n\ISOLanguageCodes;
  *     1.2.5.0 instead of 1.2.5-a
  *     1.2.5.0.1 instead of 1.2.5-a.1 (I'm not sure)
  */
-defined("APP_VERSION") or define("APP_VERSION", "0.9.0");
+defined("APP_VERSION") or define("APP_VERSION", "0.9.1");
 
 /***************************************
  * You can add your constants here
