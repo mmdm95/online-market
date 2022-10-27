@@ -440,7 +440,8 @@ $validator = form_validator();
                                      * @var ProductModel $productsModel
                                      */
                                     $productsModel = container()->get(ProductModel::class);
-                                    $items = input()->post('inp-add-product-related')->getValue();
+                                    $items = input()->post('inp-add-product-related');
+                                    $items = is_array($items) ? $items : $items->getValue();
                                     $items = array_map(function ($v) {
                                         if ($v instanceof \Pecee\Http\Input\IInputItem) {
                                             return $v->getValue();

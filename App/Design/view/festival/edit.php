@@ -1,10 +1,17 @@
+<?php
+
+$validator = form_validator();
+
+?>
+
 <!-- Content area -->
 <div class="content">
     <div class="card col-lg-8">
         <?php load_partial('admin/card-header', ['header_title' => 'ویرایش جشنواره']); ?>
 
         <div class="card-body">
-            <form action="<?= url('admin.festival.edit', ['id' => $festival['id']])->getRelativeUrlTrimmed(); ?>" method="post"
+            <form action="<?= url('admin.festival.edit', ['id' => $festival['id']])->getRelativeUrlTrimmed(); ?>"
+                  method="post"
                   id="__form_edit_festival">
                 <?php load_partial('admin/message/message-form', [
                     'errors' => $festival_edit_errors ?? [],
@@ -52,7 +59,7 @@
                         </label>
                         <?php
                         $sd = $validator->setInput('inp-edit-festival-start-date', '') ?: ($festival['start_at'] ?: '');
-                        if(!empty($sd)) {
+                        if (!empty($sd)) {
                             $sd = date('Y/m/d H:i', (int)$sd);
                         }
                         ?>

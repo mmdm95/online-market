@@ -35,15 +35,15 @@ class EditSteppedForm implements IPageForm
         // aliases
         $validator
             ->setFieldsAlias([
-                'inp-add-stepped-min-count' => 'حداقل تعداد در سبد خرید',
-                'inp-add-stepped-max-count' => 'حداثر تعداد در سبد خرید',
-                'inp-add-stepped-price' => 'قیمت',
-                'inp-add-stepped-discounted-price' => 'قیمت با تخفیف',
+                'inp-edit-stepped-min-count' => 'حداقل تعداد در سبد خرید',
+                'inp-edit-stepped-max-count' => 'حداثر تعداد در سبد خرید',
+                'inp-edit-stepped-price' => 'قیمت',
+                'inp-edit-stepped-discounted-price' => 'قیمت با تخفیف',
             ])
             ->toEnglishValue(true, true)
             ->setOptionalFields([
-                'inp-add-stepped-min-count',
-                'inp-add-stepped-max-count',
+                'inp-edit-stepped-min-count',
+                'inp-edit-stepped-max-count',
             ]);
 
         /**
@@ -54,64 +54,66 @@ class EditSteppedForm implements IPageForm
         // price & discount
         $validator
             ->setFields([
-                'inp-add-stepped-price',
-                'inp-add-stepped-discounted-price'
+                'inp-edit-stepped-price',
+                'inp-edit-stepped-discounted-price'
             ])
             ->stopValidationAfterFirstError(false)
             ->required()
             ->stopValidationAfterFirstError(true)
             ->isInteger();
 
-        $min = $validator->getFieldValue('inp-add-stepped-min-count');
-        $max = $validator->getFieldValue('inp-add-stepped-max-count');
+        $min = $validator->getFieldValue('inp-edit-stepped-min-count');
+        $max = $validator->getFieldValue('inp-edit-stepped-max-count');
+
+        $prevInfo = session()->getFlash('stepped-edit-prev-info', []);
 
         if (!is_null($min)) {
-            if ($productModel->getSteppedPricesCount('min_count=:min', ['min' => $min]) > 0) {
+            if ((($prevInfo['min_count'] ?? null) != $min) && $productModel->getSteppedPricesCount('min_count=:min', ['min' => $min]) > 0) {
                 $validator
                     ->setStatus(false)
-                    ->setError('inp-add-stepped-min-count', 'مقدار برابر با مقدار وارد شده ' . $validator->getFieldAlias('inp-add-stepped-min-count') . ' وجود دارد.');
+                    ->setError('inp-edit-stepped-min-count', 'مقدار برابر با مقدار وارد شده ' . $validator->getFieldAlias('inp-edit-stepped-min-count') . ' وجود دارد.');
             }
         }
         if (!is_null($max)) {
-            if ($productModel->getSteppedPricesCount('max_count=:max', ['max' => $max]) > 0) {
+            if ((($prevInfo['max_count'] ?? null) != $max) && $productModel->getSteppedPricesCount('max_count=:max', ['max' => $max]) > 0) {
                 $validator
                     ->setStatus(false)
-                    ->setError('inp-add-stepped-max-count', 'مقدار برابر با مقدار وارد شده ' . $validator->getFieldAlias('inp-add-stepped-max-count') . ' وجود دارد.');
+                    ->setError('inp-edit-stepped-max-count', 'مقدار برابر با مقدار وارد شده ' . $validator->getFieldAlias('inp-edit-stepped-max-count') . ' وجود دارد.');
             }
         }
         if (is_null($min) && is_null($max)) {
             $validator
                 ->setStatus(false)
-                ->setError('inp-add-stepped-min-count', 'وارد کردن یکی از ' . $validator->getFieldAlias('inp-add-stepped-min-count') . ' یا ' . $validator->getFieldAlias('inp-add-stepped-max-count') . ' الزامی است.');
+                ->setError('inp-edit-stepped-min-count', 'وارد کردن یکی از ' . $validator->getFieldAlias('inp-edit-stepped-min-count') . ' یا ' . $validator->getFieldAlias('inp-edit-stepped-max-count') . ' الزامی است.');
         }
         if (!is_null($min) && !is_null($max) && $min > $max) {
             $validator
                 ->setStatus(false)
-                ->setError('inp-add-stepped-min-count', $validator->getFieldAlias('inp-add-stepped-min-count') . ' باید از ' . $validator->getFieldAlias('inp-add-stepped-max-count') . ' بیشتر باشد.');
+                ->setError('inp-edit-stepped-min-count', $validator->getFieldAlias('inp-edit-stepped-min-count') . ' باید از ' . $validator->getFieldAlias('inp-edit-stepped-max-count') . ' بیشتر باشد.');
         }
 
-        $code = session()->getFlash('stepped-add-curr-code', null, false);
+        $code = session()->getFlash('stepped-edit-curr-code', null, false);
         if (!empty($code)) {
-            $count = $productModel->getProductPropertyWithInfo(['COUNT(*) AS count'], 'code=:code', ['code' => $code]);
-            if (empty($count) || 0 === (int)$count['count']) {
-                $validator->setError('inp-add-stepped-price', 'شناسه قیمت پلکانی نامعتبر است.');
+            $count = $productModel->getProductPropertyWithInfoCount('code=:code', ['code' => $code]);
+            if (0 === $count) {
+                $validator->setError('inp-edit-stepped-price', 'شناسه کالای قیمت پلکانی نامعتبر است.');
             }
         } else {
             $validator
                 ->setStatus(false)
-                ->setError('inp-add-stepped-price', 'شناسه قیمت پلکانی نامعتبر است.');
+                ->setError('inp-edit-stepped-price', 'شناسه قیمت پلکانی نامعتبر است.');
         }
 
-        $id = session()->getFlash('product-stepped-curr-id', null);
+        $id = session()->getFlash('product-stepped-curr-id', null, false);
         if (!empty($id)) {
-            $count = $productModel->getSteppedPricesWithInfo(['COUNT(*) AS count'], 'id=:id', ['id' => $id]);
-            if (empty($count) || 0 === (int)$count['count']) {
-                $validator->setError('inp-add-stepped-price', 'شناسه قیمت پلکانی نامعتبر است.');
+            $count = $productModel->getSteppedPricesCount('id=:id', ['id' => $id]);
+            if (0 === $count) {
+                $validator->setError('inp-edit-stepped-price', 'شناسه قیمت پلکانی نامعتبر است.');
             }
         } else {
             $validator
                 ->setStatus(false)
-                ->setError('inp-add-stepped-price', 'شناسه قیمت پلکانی نامعتبر است.');
+                ->setError('inp-edit-stepped-price', 'شناسه قیمت پلکانی نامعتبر است.');
         }
 
         // to reset form values and not set them again
@@ -151,12 +153,12 @@ class EditSteppedForm implements IPageForm
         $auth = container()->get('auth_admin');
 
         try {
-            $code = session()->getFlash('stepped-add-curr-code', null);
+            $code = session()->getFlash('stepped-edit-curr-code', null);
             $id = session()->getFlash('product-stepped-curr-id', null);
-            $min = input()->post('inp-add-stepped-min-count', '')->getValue();
-            $max = input()->post('inp-add-stepped-max-count', '')->getValue();
-            $price = input()->post('inp-add-stepped-price', '')->getValue();
-            $discount = input()->post('inp-add-stepped-discounted-price', '')->getValue();
+            $min = input()->post('inp-edit-stepped-min-count', '')->getValue();
+            $max = input()->post('inp-edit-stepped-max-count', '')->getValue();
+            $price = input()->post('inp-edit-stepped-price', '')->getValue();
+            $discount = input()->post('inp-edit-stepped-discounted-price', '')->getValue();
             if (is_null($code) || is_null($id)) return false;
 
             return $productModel->updateSteppedPrice([

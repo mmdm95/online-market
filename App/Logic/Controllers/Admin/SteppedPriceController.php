@@ -251,6 +251,7 @@ class SteppedPriceController extends AbstractAdminController
         // store previous info to check for duplicate
         session()->setFlash('product-stepped-curr-id', $id);
         session()->setFlash('stepped-edit-curr-code', $code);
+        session()->setFlash('stepped-edit-prev-info', $productModel->getSteppedPrices($code)[0]);
 
         $data = [];
         if (is_post()) {
@@ -258,13 +259,14 @@ class SteppedPriceController extends AbstractAdminController
             $data = $formHandler->handle(EditSteppedForm::class, 'stepped_edit');
         }
 
-        $product = $productModel->getSteppedPrices($code);
+        $steppedProduct = $productModel->getSteppedPrices($code);
+        $steppedProduct = $steppedProduct[0];
 
         $this->setLayout($this->main_layout)->setTemplate('view/product/stepped/edit');
         return $this->render(array_merge($data, [
             'product_code' => $code,
             'product_id' => $id,
-            'product' => $product,
+            'product' => $steppedProduct,
             'sub_title' => 'ویرایش قیمت پلکانی' . '-' . $title,
             'breadcrumb' => [
                 [

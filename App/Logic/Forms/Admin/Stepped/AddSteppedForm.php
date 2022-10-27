@@ -92,9 +92,9 @@ class AddSteppedForm implements IPageForm
 
         $code = session()->getFlash('stepped-add-curr-code', null, false);
         if (!empty($code)) {
-            $count = $productModel->getProductPropertyWithInfo(['COUNT(*) AS count'], 'code=:code', ['code' => $code]);
-            if (empty($count) || 0 === (int)$count['count']) {
-                $validator->setError('inp-add-stepped-price', 'شناسه قیمت پلکانی نامعتبر است.');
+            $count = $productModel->getProductPropertyWithInfoCount('code=:code', ['code' => $code]);
+            if (0 === $count) {
+                $validator->setError('inp-add-stepped-price', 'شناسه کالای قیمت پلکانی نامعتبر است.');
             }
         } else {
             $validator
