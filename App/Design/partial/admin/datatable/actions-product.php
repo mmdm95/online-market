@@ -11,10 +11,15 @@
                     <i class="icon-pencil"></i>
                     ویرایش
                 </a>
+                <a href="<?= url('admin.product.value.edit', ['id' => $row['id']]); ?>"
+                   class="dropdown-item text-purple">
+                    <i class="icon-pencil-ruler"></i>
+                    ویژگی‌های جستجو
+                </a>
                 <a href="<?= url('admin.product.detail', ['id' => $row['id']]); ?>"
                    class="dropdown-item text-info">
                     <i class="icon-eye"></i>
-                     مشاهده
+                    مشاهده
                 </a>
                 <a href="<?= url('admin.comment.view', ['p_id' => $row['id']]); ?>"
                    class="dropdown-item">

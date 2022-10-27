@@ -9,7 +9,9 @@ use App\Logic\Models\BaseModel;
 use App\Logic\Models\CategoryModel;
 use App\Logic\Models\CommentModel;
 use App\Logic\Models\Model;
+use App\Logic\Models\ProductAttributeModel;
 use App\Logic\Models\ProductModel;
+use App\Logic\Utils\ProductAttributeUtil;
 use App\Logic\Utils\ProductUtil;
 use App\Logic\Utils\TorobUtil;
 use Jenssegers\Agent\Agent;
@@ -19,6 +21,7 @@ use Sim\Exceptions\Mvc\Controller\ControllerException;
 use Sim\Exceptions\PathManager\PathNotRegisteredException;
 use Sim\Interfaces\IFileNotExistsException;
 use Sim\Interfaces\IInvalidVariableNameException;
+use Sim\Utils\ArrayUtil;
 
 class ProductController extends AbstractHomeController
 {
@@ -49,6 +52,10 @@ class ProductController extends AbstractHomeController
          * @var CategoryModel $categoryModel
          */
         $categoryModel = container()->get(CategoryModel::class);
+        /**
+         * @var ProductAttributeModel $attrModel
+         */
+        $attrModel = container()->get(ProductAttributeModel::class);
 
         $hasCategory = false;
         if (is_numeric($category)) {
@@ -146,7 +153,7 @@ class ProductController extends AbstractHomeController
         $maxPrice = $productModel->getLimitedProduct(
             $where,
             $bindValues,
-            ['pa.product_id DESC'],
+            ['max_price DESC'],
             1,
             0,
             ['pa.product_id'],
@@ -156,6 +163,12 @@ class ProductController extends AbstractHomeController
             $maxPrice = $maxPrice[0]['max_price'];
         } else {
             $maxPrice = 0;
+        }
+
+        // get dynamic attributes
+        $attrs = [];
+        if (is_numeric($category) && $hasCategory) {
+            $attrs = ProductAttributeUtil::getRefinedProductAttributes($category);
         }
 
         $this->setLayout($this->main_layout)->setTemplate('view/main/product/index');
@@ -169,6 +182,7 @@ class ProductController extends AbstractHomeController
             'brands' => $brands,
             'sizes' => $sizes,
             'colors' => $colors,
+            'dynamicAttrs' => $attrs,
         ]);
     }
 

@@ -95,6 +95,7 @@ $validator = form_validator();
                                 </label>
                                 <select data-placeholder="برند را انتخاب کنید..."
                                         class="form-control form-control-select2-searchable"
+                                        multiple="multiple"
                                         name="inp-edit-product-brand" data-fouc>
                                     <option value="<?= DEFAULT_OPTION_VALUE; ?>"
                                             disabled="disabled"

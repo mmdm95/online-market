@@ -24,6 +24,9 @@ use App\Logic\Controllers\Admin\{BlogController as AdminBlogController,
     OrderBadgeController as AdminOrderBadgeController,
     OrderController as AdminOrderController,
     PaymentMethodController as AdminPaymentMethodController,
+    ProductAttributeCategoryController as AdminProductAttributeCategoryController,
+    ProductAttributeController as AdminProductAttributeController,
+    ProductAttributeValueController as AdminProductAttributeValueController,
     ProductFestivalController as AdminProductFestivalController,
     Report\ReportOrderController as AdminReportOrderController,
     Report\ReportProductController as AdminReportProductController,
@@ -312,6 +315,42 @@ class Route implements IInitialize
                     ->name('admin.brand.dt.view');
 
                 /**
+                 * Product Attributes Route
+                 */
+                Router::form('/product/attr/add', [AdminProductAttributeController::class, 'add'])
+                    ->name('admin.product.attr.add');
+                Router::form('/product/attr/edit/{id}', [AdminProductAttributeController::class, 'edit'])->where([
+                    'id' => '[0-9]+',
+                ])->name('admin.product.attr.edit');
+                Router::get('/product/attr/view', [AdminProductAttributeController::class, 'view'])
+                    ->name('admin.product.attr.view');
+                Router::post('/product/attr/view/dt', [AdminProductAttributeController::class, 'getPaginatedDatatable'])
+                    ->name('admin.product.attr.dt.view');
+
+                /**
+                 * Product Attributes Category Route
+                 */
+                Router::form('/product/attr/category/add', [AdminProductAttributeCategoryController::class, 'add'])
+                    ->name('admin.product.attr.category.add');
+                Router::form('/product/attr/category/edit/{id}', [AdminProductAttributeCategoryController::class, 'edit'])->where([
+                    'id' => '[0-9]+',
+                ])->name('admin.product.attr.category.edit');
+                Router::get('/product/attr/category/view', [AdminProductAttributeCategoryController::class, 'view'])
+                    ->name('admin.product.attr.category.view');
+                Router::post('/product/attr/category/view/dt', [AdminProductAttributeCategoryController::class, 'getPaginatedDatatable'])
+                    ->name('admin.product.attr.category.dt.view');
+
+                /**
+                 * Product Attributes Values Route
+                 */
+                Router::get('/product/attr/value/view/{a_id}', [AdminProductAttributeValueController::class, 'view'])->where([
+                    'a_id' => '[0-9]+',
+                ])->name('admin.product.attr.value.view');
+                Router::post('/product/attr/value/view/dt/{a_id}', [AdminProductAttributeValueController::class, 'getPaginatedDatatable'])->where([
+                    'a_id' => '[0-9]+',
+                ])->name('admin.product.attr.value.dt.view');
+
+                /**
                  * Product Route
                  */
                 Router::form('/product/add', [AdminProductController::class, 'add'])->name('admin.product.add');
@@ -343,6 +382,9 @@ class Route implements IInitialize
                 Router::post('/product/buyer/orders/dt/{id}', [AdminProductController::class, 'getBuyerOrdersPaginatedDatatable'])->where([
                     'id' => '[0-9]+',
                 ])->name('admin.product.dt.buyer.orders');
+                Router::form('/product/value/edit/{id}', [AdminProductController::class, 'editValue'])->where([
+                    'id' => '[0-9]+',
+                ])->name('admin.product.value.edit');
 
                 /**
                  * Stepped Price Route
@@ -1032,6 +1074,32 @@ class Route implements IInitialize
                 Router::post('/product/av-status/{id}', [AdminProductController::class, 'availabilityStatusChange'])->where([
                     'id' => '[0-9]+',
                 ])->name('ajax.product.availability.status');
+
+                /**
+                 * product attribute route
+                 */
+                Router::delete('/product/attr/remove/{id}', [AdminProductAttributeController::class, 'remove'])->where([
+                    'id' => '[0-9]+',
+                ])->name('ajax.product.attr.remove');
+                Router::delete('/product/attr/category/remove/{id}', [AdminProductAttributeCategoryController::class, 'remove'])->where([
+                    'id' => '[0-9]+',
+                ])->name('ajax.product.attr.category.remove');
+
+                /**
+                 * product attribute values route
+                 */
+                Router::get('/product/attr/value/get/{id}', [AdminProductAttributeValueController::class, 'get'])->where([
+                    'id' => '[0-9]+',
+                ])->name('ajax.product.attr.value.get');
+                Router::post('/product/attr/value/add/{a_id}', [AdminProductAttributeValueController::class, 'add'])->where([
+                    'a_id' => '[0-9]+',
+                ])->name('ajax.product.attr.value.add');
+                Router::post('/product/attr/value/edit/{id}', [AdminProductAttributeValueController::class, 'edit'])->where([
+                    'id' => '[0-9]+',
+                ])->name('ajax.product.attr.value.edit');
+                Router::delete('/product/attr/value/remove/{id}', [AdminProductAttributeValueController::class, 'remove'])->where([
+                    'id' => '[0-9]+',
+                ])->name('ajax.product.attr.value.remove');
 
                 /**
                  * stepped price route

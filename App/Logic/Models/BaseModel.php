@@ -40,6 +40,10 @@ abstract class BaseModel
     const TBL_OUR_TEAM = 'our_team';
     const TBL_PAYMENT_METHODS = 'payment_methods';
     const TBL_PRODUCTS = 'products';
+    const TBL_PRODUCT_ATTRS = 'product_attrs';
+    const TBL_PRODUCT_ATTR_CATEGORY = 'product_attr_category';
+    const TBL_PRODUCT_ATTR_PRODUCT = 'product_attr_product';
+    const TBL_PRODUCT_ATTR_VALUES = 'product_attr_values';
     const TBL_PRODUCT_PROPERTY = 'product_property';
     const TBL_PRODUCT_ADVANCED = 'product_advanced';
     const TBL_PRODUCT_FESTIVAL = 'product_festival';
@@ -99,12 +103,12 @@ abstract class BaseModel
      * @return array
      */
     public function get(
-        array $columns = ['*'],
+        array   $columns = ['*'],
         ?string $where = null,
-        array $bind_values = [],
-        array $order_by = ['id DESC'],
-        ?int $limit = null,
-        int $offset = 0
+        array   $bind_values = [],
+        array   $order_by = ['id DESC'],
+        ?int    $limit = null,
+        int     $offset = 0
     ): array
     {
         $select = $this->connector->select();
@@ -135,13 +139,13 @@ abstract class BaseModel
      * @return array
      */
     public function getFirst(
-        array $columns = ['*'],
+        array   $columns = ['*'],
         ?string $where = null,
-        array $bind_values = [],
-        array $order_by = []
+        array   $bind_values = [],
+        array   $order_by = []
     ): array
     {
-        $res = $this->get($columns, $where, $bind_values, $order_by);
+        $res = $this->get($columns, $where, $bind_values, $order_by, 1);
         if (count($res)) return $res[0];
         return [];
     }

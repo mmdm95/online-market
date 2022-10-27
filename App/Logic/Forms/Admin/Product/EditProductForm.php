@@ -6,6 +6,7 @@ use App\Logic\Interfaces\IPageForm;
 use App\Logic\Models\BrandModel;
 use App\Logic\Models\CategoryModel;
 use App\Logic\Models\ColorModel;
+use App\Logic\Models\ProductAttributeModel;
 use App\Logic\Models\ProductModel;
 use App\Logic\Models\UnitModel;
 use App\Logic\Utils\ProductUtil;
@@ -410,13 +411,27 @@ class EditProductForm implements IPageForm
             }
 
             // insert all products and main product information
-            return $productModel->updateProduct(
+            $res = $productModel->updateProduct(
                 $id,
                 $updateArr,
                 $gallery,
                 $products,
                 is_array($relatedProducts) ? $relatedProducts : []
             );
+
+            // remove all product's attribute values if category has been changed
+            $prevCategory = session()->getFlash('product-prev-category', null);
+            if ($res && !empty($prevCategory)) {
+                if ($prevCategory != $category) {
+                    /**
+                     * @var ProductAttributeModel $attrModel
+                     */
+                    $attrModel = container()->get(ProductAttributeModel::class);
+                    $attrModel->removeAllProductAttrValues($id);
+                }
+            }
+
+            return $res;
         } catch (\Exception $e) {
             return false;
         }
