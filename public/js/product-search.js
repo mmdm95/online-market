@@ -107,6 +107,11 @@
             if (-1 != category) {
                 uriParser.push('category', category, true);
             }
+
+            var c = uriParser.get('category', -1);
+            if (-1 != c) {
+                category = c;
+            }
         }
 
         // search string changed
