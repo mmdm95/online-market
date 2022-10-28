@@ -4,6 +4,8 @@ $col_1 = 'col-xl-3';
 $col_2 = 'col-xl-9';
 $hasSideImage = true;
 
+$slider_loop = ($slider_loop ?? 'true') == 'false' ? '' : 'true';
+
 if (!isset($info['image']) || empty($info['image'])) {
     $col_1 = '';
     $col_2 = 'col-xl-12';
@@ -53,7 +55,7 @@ if (!isset($info['image']) || empty($info['image'])) {
                     <div class="row">
                         <div class="col-12">
                             <div class="product_slider carousel_slider owl-carousel owl-theme dot_style1"
-                                 data-loop="true" data-margin="20"
+                                 data-loop="<?= $slider_loop ?? 'true'; ?>" data-margin="20"
                                  data-responsive='{"0":{"items": "1"}, "481":{"items": "2"}, "768":{"items": "3"}, "991":{"items": "4"}}'>
                                 <?php foreach ($slider as $item): ?>
                                     <?php load_partial('main/product-card', ['item' => $item]); ?>
