@@ -219,38 +219,86 @@
                 .off('change' + variables.namespace)
                 .on('change' + variables.namespace, function () {
                     var
-                        checked = [],
-                        attrId = $(this).closest('.list_attrs').find('input[type="checkbox"]').first().attr('data-attr-id');
-                    attrId = parseInt(attrId, 10);
-                    attrId = !isNaN(attrId) ? attrId : -1;
+                        checkedObj = {}, uncheckedArr = [],
+                        attrId, v, o, i;
+
                     $('.list_attrs input[type="checkbox"]:checked').each(function () {
-                        checked.push($(this).val());
-                        attrId = $(this).attr('data-attr-id');
-                        attrId = parseInt(attrId, 10);
-                        attrId = !isNaN(attrId) ? attrId : -1;
-                    });
-                    if (checked.length) {
-                        uriParser.push('attrs_' + attrId, checked, true);
-                    } else {
-                        uriParser.clear('attrs_' + attrId);
-                    }
-                    //
-                    attrId = $('.list_attrs input[type="radio"]').first().attr('data-attr-id');
-                    attrId = parseInt(attrId, 10);
-                    attrId = !isNaN(attrId) ? attrId : -1;
-                    var v;
-                    $('.list_attrs input[type="radio"]:checked').each(function () {
-                        v = $(this).val();
+                        v = $(this).val()
                         attrId = $(this).attr('data-attr-id');
                         attrId = parseInt(attrId, 10);
                         attrId = !isNaN(attrId) ? attrId : -1;
 
-                        if (v) {
-                            uriParser.push('attrs_' + attrId, v, true);
-                        } else {
-                            uriParser.clear('attrs_' + attrId);
+                        if (v && attrId !== -1) {
+                            if (!core.isArray(checkedObj[attrId])) {
+                                checkedObj[attrId] = [];
+                            }
+                            checkedObj[attrId].push(v);
                         }
                     });
+                    $('.list_attrs input[type="checkbox"]:not(:checked)').each(function () {
+                        v = $(this).val()
+                        attrId = $(this).attr('data-attr-id');
+                        attrId = parseInt(attrId, 10);
+                        attrId = !isNaN(attrId) ? attrId : -1;
+
+                        if (v && attrId !== -1) {
+                            if (uncheckedArr.indexOf(attrId) === -1) {
+                                uncheckedArr.push(attrId);
+                            }
+                        }
+                    });
+                    // apply unchecked array first
+                    for (i of uncheckedArr) {
+                        uriParser.clear('attrs_' + uncheckedArr[i]);
+                    }
+                    // apply checked object after that
+                    for (o in checkedObj) {
+                        if (checkedObj.hasOwnProperty(o)) {
+                            if (core.isArray(checkedObj[o]) && checkedObj[o].length) {
+                                uriParser.push('attrs_' + o, checkedObj[o], true);
+                            }
+                        }
+                    }
+                    //
+                    checkedObj = {};
+                    uncheckedArr = [];
+                    $('.list_attrs input[type="radio"]:checked').each(function () {
+                        v = $(this).val()
+                        attrId = $(this).attr('data-attr-id');
+                        attrId = parseInt(attrId, 10);
+                        attrId = !isNaN(attrId) ? attrId : -1;
+
+                        if (v && attrId !== -1) {
+                            if (!core.isArray(checkedObj[attrId])) {
+                                checkedObj[attrId] = [];
+                            }
+                            checkedObj[attrId].push(v);
+                        }
+                    });
+                    $('.list_attrs input[type="radio"]:not(:checked)').each(function () {
+                        v = $(this).val()
+                        attrId = $(this).attr('data-attr-id');
+                        attrId = parseInt(attrId, 10);
+                        attrId = !isNaN(attrId) ? attrId : -1;
+
+                        if (v && attrId !== -1) {
+                            if (uncheckedArr.indexOf(attrId) === -1) {
+                                uncheckedArr.push(attrId);
+                            }
+                        }
+                    });
+                    // apply unchecked array first
+                    for (i of uncheckedArr) {
+                        uriParser.clear('attrs_' + uncheckedArr[i]);
+                    }
+                    // apply checked object after that
+                    for (o in checkedObj) {
+                        if (checkedObj.hasOwnProperty(o)) {
+                            if (core.isArray(checkedObj[o]) && checkedObj[o].length) {
+                                uriParser.push('attrs_' + o, checkedObj[o], true);
+                            }
+                        }
+                    }
                     //
                     loadProduct();
                 });
