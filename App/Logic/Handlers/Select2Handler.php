@@ -52,7 +52,7 @@ class Select2Handler
                 // english
                 $binding = 'binding' . $bindCounter++;
                 $bindValues[$binding] = '%' . StringUtil::toEnglish($str) . '%';
-                $phrase = '(' . $column['db'] . " LIKE :" . $binding . ' OR ';
+                $phrase = $column['db'] . " LIKE :" . $binding . ' OR ';
 
                 // persian
                 $binding = 'binding' . $bindCounter++;
@@ -62,7 +62,7 @@ class Select2Handler
                 // arabic
                 $binding = 'binding' . $bindCounter++;
                 $bindValues[$binding] = '%' . StringUtil::toArabic($str) . '%';
-                $phrase .= $column['db'] . " LIKE :" . $binding . ')';
+                $phrase .= $column['db'] . " LIKE :" . $binding;
 
                 $globalSearch[] = $phrase;
             }
@@ -87,7 +87,7 @@ class Select2Handler
         $limit = [null, 0];
 
         if (isset($request['page'])) {
-            $limit = [intval($request['length']), intval($request['length']) * intval($request['page'])];
+            $limit = [intval($request['length']), intval($request['length']) * (intval($request['page']) - 1)];
         }
 
         return $limit;
