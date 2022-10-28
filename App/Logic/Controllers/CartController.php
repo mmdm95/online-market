@@ -175,7 +175,6 @@ class CartController extends AbstractHomeController
                             $extraInfo['stepped_price'] = $stepped['price'];
                             $extraInfo['stepped_discounted_price'] = $stepped['discounted_price'];
                         }
-                        logger()->info($stepped);
                         //
                         cart()->update($product_code, array_merge($extraInfo, [
                             'qnt' => $qnt,
