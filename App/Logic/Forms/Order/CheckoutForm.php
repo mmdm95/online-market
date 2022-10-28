@@ -207,7 +207,7 @@ class CheckoutForm implements IPageForm
                 cart()->restore(true);
                 $items = cart()->getItems();
                 foreach ($items as $item) {
-                    $x = (float)$item['price'];
+                    $x = isset($item['stepped_price']) ? (float)$item['stepped_price'] : (float)$item['price'];
                     $y = (float)get_discount_price($item)[0];
 
                     $discountPrice += $item['qnt'] * abs($x - $y);

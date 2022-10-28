@@ -103,7 +103,15 @@ class CartController extends AbstractHomeController
             );
 
             if (count($extraInfo)) {
-                cart()->add($product_code, $extraInfo[0])->store();
+                $extraInfo = $extraInfo[0];
+                // apply stepped price
+                $stepped = get_stepped_price(1, $product_code);
+                if (!is_null($stepped)) {
+                    $extraInfo['stepped_price'] = $stepped['price'];
+                    $extraInfo['stepped_discounted_price'] = $stepped['discounted_price'];
+                }
+                //
+                cart()->add($product_code, $extraInfo)->store();
                 $resourceHandler
                     ->type(RESPONSE_TYPE_SUCCESS)
                     ->data('محصول به سبد اضافه شد.');
@@ -160,7 +168,15 @@ class CartController extends AbstractHomeController
                 );
                 if (count($extraInfo)) {
                     if ($qnt > 0) {
-                        cart()->update($product_code, array_merge($extraInfo[0], [
+                        $extraInfo = $extraInfo[0];
+                        // apply stepped price
+                        $stepped = get_stepped_price($qnt, $product_code);
+                        if (!is_null($stepped)) {
+                            $extraInfo['stepped_price'] = $stepped['price'];
+                            $extraInfo['stepped_discounted_price'] = $stepped['discounted_price'];
+                        }
+                        //
+                        cart()->update($product_code, array_merge($extraInfo, [
                             'qnt' => $qnt,
                         ]))->store();
                         $resourceHandler
@@ -213,7 +229,7 @@ class CartController extends AbstractHomeController
                     ->data('محصول از سبد خرید حذف شد.');
                 CouponUtil::checkCoupon(CouponUtil::getStoredCouponCode());
 
-                if(!count(cart()->getItems())) {
+                if (!count(cart()->getItems())) {
                     $resourceHandler->statusCode(301);
                 }
             } else {
