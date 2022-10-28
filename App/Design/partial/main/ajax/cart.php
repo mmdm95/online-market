@@ -43,10 +43,24 @@ use Sim\Utils\StringUtil;
                             <div class="cart_quantity">
                                 <?= local_number(number_format($item['qnt'])); ?>
                                 <?= $item['unit_title']; ?>
-                                <?= local_number(number_format($item['qnt'] * (int)$item['price'])); ?>
-                                <span class="cart_amount">
-                                    <span class="price_symbole">تومان</span>
-                                </span>
+
+                                <?php [$discountPrice, $hasDiscount] = get_discount_price($item); ?>
+                                <?php if ($hasDiscount): ?>
+                                    <del>
+                                        <?= local_number(number_format($item['qnt'] * (int)$item['price'])); ?>
+                                        <span class="cart_amount">
+                                            <span class="price_symbole">تومان</span>
+                                        </span>
+                                    </del>
+                                <?php endif; ?>
+                                <div>
+                                    <span class="text-success ml-1">
+                                        <?= local_number(number_format($item['qnt'] * (int)$discountPrice)); ?>
+                                        <span class="cart_amount">
+                                            <span class="price_symbole">تومان</span>
+                                        </span>
+                                    </span>
+                                </div>
 
                                 <?php if (!empty($item['color_hex'])): ?>
                                     <div class="mt-2">
