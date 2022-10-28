@@ -1,6 +1,7 @@
 <?php
 
 use App\Logic\Handlers\ResourceHandler;
+use App\Logic\Models\SteppedPriceModel;
 use App\Logic\Models\UserModel;
 use App\Logic\Validations\ExtendedValidator;
 use Sim\Auth\DBAuth;
@@ -178,6 +179,14 @@ function get_discount_price(array $item): array
     $hasDiscount = false;
     $discountPrice = (float)$item['price'];
 
+    // apply stepped prices
+    if (isset($item['stepped_discounted_price']) && isset($item['stepped_price'])) {
+        $item['price'] = $item['stepped_price'];
+        $item['discounted_price'] = $item['stepped_discounted_price'];
+        $discountPrice = $item['price'];
+    }
+    //
+
     if (isset($item['festival_expire']) && !empty($item['festival_expire']) && $item['festival_expire'] > time() && isset($item['festival_discount']) && 0 != $item['festival_discount']) {
         $hasDiscount = true;
         $discountPrice = (float)$item['price'] * (float)$item['festival_discount'];
@@ -187,6 +196,37 @@ function get_discount_price(array $item): array
     }
 
     return [$discountPrice, $hasDiscount];
+}
+
+/**
+ * @param int $qnt
+ * @param string $productCode
+ * @return array|null
+ * @throws \DI\DependencyException
+ * @throws \DI\NotFoundException
+ */
+function get_stepped_price(int $qnt, string $productCode): ?array
+{
+    if ($qnt > 0) {
+        /**
+         * @var SteppedPriceModel $steppedModel
+         */
+        $steppedModel = container()->get(SteppedPriceModel::class);
+        $steppedPrices = $steppedModel->getFirst(
+            ['discounted_price', 'price'],
+            'product_code=:code AND min_count<=:min AND max_count>=:max',
+            ['code' => $productCode, 'min' => $qnt, 'max' => $qnt]
+        );
+
+        if (count($steppedPrices)) {
+            return [
+                'price' => (float)$steppedPrices['price'],
+                'discounted_price' => (float)$steppedPrices['discounted_price'],
+            ];
+        }
+    }
+
+    return null;
 }
 
 /**
@@ -372,6 +412,7 @@ function get_color_from_bg(string $bgColor, string $lightColor = '#ffffff', stri
  * @param $needle
  * @return string
  */
-function getDBCommaRegexString($needle): string {
+function getDBCommaRegexString($needle): string
+{
     return '([^0-9]|^)' . preg_quote($needle) . '([^0-9]|$)';
 }
