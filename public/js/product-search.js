@@ -153,6 +153,7 @@
                 });
                 availabilitySwitch.mSwitch('turnOff', availabilitySwitch);
                 offerSwitch.mSwitch('turnOff', offerSwitch);
+                $("[name='" + variables.elements.product.inputs.search + "']").val('');
                 //-----
                 uriParser.clear();
                 uriParser.push('category', category, true);
