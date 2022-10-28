@@ -139,7 +139,7 @@
                                 </button>
                                 <!--                                <a class="add_compare" href=""-->
                                 <!--                                   data-toggle="tooltip" data-placement="top" title="لیست مقایسه">-->
-                                <?= '';//url('home.compare');                       ?>
+                                <?= '';//url('home.compare');                        ?>
                                 <!--                                    <i class="linearicons-shuffle"></i>-->
                                 <!--                                </a>-->
                                 <a class="add_wishlist <?= $is_in_wishlist ? 'active' : ''; ?>"
@@ -250,8 +250,11 @@
 
             <!-- START RELATED PRODUCTS -->
             <?php load_partial('main/slider-general', [
-                'slider_title' => 'محصولات مرتبط',
-                'related_products' => $related_products ?? [],
+                'info' => [
+                    'title' => 'محصولات مرتبط',
+                ],
+                'slider' => $related_products ?? [],
+                'slider_loop' => 'false',
             ]) ?>
             <!-- END RELATED PRODUCTS -->
 

@@ -314,7 +314,12 @@ class ProductUtil
             array_merge($bind_values, [
                 'pub' => DB_YES,
                 'del' => DB_NO,
-            ])
+            ]),
+            ['pa.product_id DESC'],
+            null,
+            0,
+            ['pa.product_id'],
+            ['pa.*',]
         );
     }
 
