@@ -219,7 +219,7 @@
                 .on('change' + variables.namespace, function () {
                     var
                         checked = [],
-                        attrId = $('.list_attrs input[type="checkbox"]').first().attr('data-attr-id');
+                        attrId = $(this).closest('.list_attrs').find('input[type="checkbox"]').first().attr('data-attr-id');
                     attrId = parseInt(attrId, 10);
                     attrId = !isNaN(attrId) ? attrId : -1;
                     $('.list_attrs input[type="checkbox"]:checked').each(function () {
