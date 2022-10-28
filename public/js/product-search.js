@@ -249,7 +249,7 @@
                     });
                     // apply unchecked array first
                     for (i of uncheckedArr) {
-                        uriParser.clear('attrs_' + uncheckedArr[i]);
+                        uriParser.clear('attrs_' + i);
                     }
                     // apply checked object after that
                     for (o in checkedObj) {
@@ -289,7 +289,7 @@
                     });
                     // apply unchecked array first
                     for (i of uncheckedArr) {
-                        uriParser.clear('attrs_' + uncheckedArr[i]);
+                        uriParser.clear('attrs_' + i);
                     }
                     // apply checked object after that
                     for (o in checkedObj) {
