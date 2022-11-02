@@ -501,7 +501,7 @@ class Route implements IInitialize
                 Router::post('/wallet/view/dt', [AdminWalletController::class, 'getPaginatedDatatable'])->name('admin.wallet.dt.view');
                 Router::get('/wallet/detail/{id}', [AdminWalletController::class, 'detail'])->where([
                     'id' => '[0-9]+',
-                ])->name('admin.wallet.detail');;
+                ])->name('admin.wallet.detail');
                 Router::post('/wallet/detail/dt/{username}', [AdminWalletController::class, 'getDetailPaginatedDatatable'])
                     ->name('admin.wallet.detail.dt');
 
