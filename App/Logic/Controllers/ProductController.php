@@ -8,6 +8,7 @@ use App\Logic\Middlewares\Logic\NeedLoginResponseMiddleware;
 use App\Logic\Models\BaseModel;
 use App\Logic\Models\CategoryModel;
 use App\Logic\Models\CommentModel;
+use App\Logic\Models\FestivalModel;
 use App\Logic\Models\Model;
 use App\Logic\Models\ProductAttributeModel;
 use App\Logic\Models\ProductModel;
@@ -53,35 +54,59 @@ class ProductController extends AbstractHomeController
          */
         $categoryModel = container()->get(CategoryModel::class);
         /**
-         * @var ProductAttributeModel $attrModel
+         * @var FestivalModel $festivalModel
          */
-        $attrModel = container()->get(ProductAttributeModel::class);
+        $festivalModel = container()->get(FestivalModel::class);
 
         // get it from GET if parameter is not sent in url
         if (empty($category)) {
             $category = input()->get('category')->getValue();
         }
 
-        $hasCategory = false;
-        if (is_numeric($category)) {
-            $hasCategory = (bool)$categoryModel->count(
+        $festivalWhere = '';
+        $festivalBindValues = [];
+        // festival checks
+        $festivalInfo = [];
+        $festival = input()->get('festival', -1)->getValue();
+        if (is_numeric($festival) && $festival != -1) {
+            $festivalInfo = $festivalModel->getFirst(
+                ['title'],
                 'id=:id AND publish=:pub',
-                ['id' => $category, 'pub' => DB_YES]
+                ['id' => $festival, 'pub' => DB_YES]
             );
+            if (count($festivalInfo)) {
+                $festivalWhere = 'pa.festival_id=:fid AND pa.festival_publish=:fpub AND pa.festival_start<=:fstr AND pa.festival_expire>=:fexp';
+                $festivalBindValues = [
+                    'fid' => $festival,
+                    'fpub' => DB_YES,
+                    'fstr' => time(),
+                    'fexp' => time(),
+                ];
+            }
         }
 
+        $categoryWhere = '';
+        $categoryBindValues = [];
+        // category checks
         $categoryInfo = [];
-        if (is_numeric($category) && $hasCategory) {
+        if (is_numeric($category)) {
             $categoryInfo = $categoryModel->getFirst(
                 ['name'],
                 'id=:id AND publish=:pub',
                 ['id' => $category, 'pub' => DB_YES]
             );
+            if (count($categoryInfo)) {
+                $categoryWhere = '(pa.category_id=:cid OR pa.category_all_parents_id REGEXP :capi)';
+                $categoryBindValues = [
+                    'cid' => $category,
+                    'capi' => getDBCommaRegexString($category),
+                ];
+            }
         }
 
         // load side categories
-        $select = $model->select();
-        $select
+        $categorySelect = $model->select();
+        $categorySelect
             ->from(BaseModel::TBL_CATEGORIES)
             ->cols(['id', 'name'])
             ->where('publish=:pub')
@@ -89,75 +114,86 @@ class ProductController extends AbstractHomeController
                 'priority DESC',
                 'name DESC'
             ]);
-        if (is_numeric($category) && $hasCategory) {
-            $select->where('all_parents_id REGEXP :apid')
-                ->bindValue('apid', getDBCommaRegexString($category));
+
+        //-----
+        $attrs = [];
+        $globalWhere = '';
+        $globalBindValues = [];
+        $priceWhere = '';
+        $priceBindValues = [];
+        if (count($categoryInfo)) {
+            // set global where
+            $globalWhere .= $categoryWhere;
+            $globalBindValues = array_merge($globalBindValues, $categoryBindValues);
+
+            // get max price
+            $priceWhere .= 'pa.category_id=:cId';
+            $priceBindValues['cId'] = $category;
+
+            // get dynamic attributes
+            $attrs = ProductAttributeUtil::getRefinedProductAttributes($category);
         } else {
-            $select
+            // load side categories (cont.)
+            $categorySelect
                 ->where('level=:lvl')
                 ->bindValue('lvl', 1);
         }
-        $categories = $model->get($select);
+        if (count($festivalInfo)) {
+            if (empty(trim($priceWhere))) {
+                $priceWhere .= $festivalWhere;
+                $globalWhere .= $festivalWhere;
+            } else {
+                $priceWhere = $priceWhere . ' AND ' . $festivalWhere;
+                $globalWhere = $globalWhere . ' AND (' . $festivalWhere . ')';
+            }
+            $priceBindValues = array_merge($priceBindValues, $festivalBindValues);
+            $globalBindValues = array_merge($globalBindValues, $festivalBindValues);
+        }
+
+        $categories = $model->get($categorySelect);
+        //-----
 
         // load brands
-        if (is_numeric($category) && $hasCategory) {
-            $brands = $productModel->getBrandsFromProductCategory($category, ['id', 'name']);
-        } else {
-            $select = $model->select();
-            $select
-                ->from(BaseModel::TBL_BRANDS)
-                ->cols(['id', 'name'])
-                ->where('publish=:pub')
-                ->bindValues([
-                    'pub' => DB_YES,
-                ]);
-            $brands = $model->get($select);
-        }
+        $brands = $productModel->getLimitedProduct(
+            $globalWhere,
+            $globalBindValues,
+            ['pa.product_id DESC'],
+            null,
+            0,
+            ['pa.product_id'],
+            ['DISTINCT(pa.brand_id) AS id', 'pa.brand_name AS name']
+        );
 
         // load colors
-        if (is_numeric($category) && $hasCategory) {
-            $colors = $productModel->getSmthFromProductCategory(
-                $category,
-                ['DISTINCT(pa.color_name) AS name', 'pa.color_hex AS hex']
-            );
-        } else {
-            $select = $model->select();
-            $select
-                ->from(BaseModel::TBL_COLORS)
-                ->cols(['DISTINCT(name)', 'hex'])
-                ->where('publish=:pub')
-                ->bindValues([
-                    'pub' => DB_YES,
-                ]);
-            $colors = $model->get($select);
-        }
+        $colors = $productModel->getLimitedProduct(
+            $globalWhere,
+            $globalBindValues,
+            ['pa.product_id DESC'],
+            null,
+            0,
+            ['pa.product_id'],
+            ['DISTINCT(pa.color_name) AS name', 'pa.color_hex AS hex']
+        );
 
         // load sizes and models
+        $sizesNModels = $productModel->getLimitedProduct(
+            $globalWhere,
+            $globalBindValues,
+            ['pa.product_id DESC'],
+            null,
+            0,
+            ['pa.product_id'],
+            ['DISTINCT(pa.size)']
+        );
         $sizes = [];
-        if (is_numeric($category) && $hasCategory) {
-            $sizesNModels = $productModel->getSmthFromProductCategory($category, ['DISTINCT(pa.size)']);
-        } else {
-            $select = $model->select();
-            $select
-                ->from(BaseModel::TBL_PRODUCT_PROPERTY)
-                ->cols(['DISTINCT(size)']);
-            $sizesNModels = $model->get($select);
-        }
-
         foreach ($sizesNModels as $item) {
             if (trim($item['size']) != '') $sizes[] = $item['size'];
         }
 
-        // get max price
-        $where = '';
-        $bindValues = [];
-        if (is_numeric($category) && $hasCategory) {
-            $where .= 'pa.category_id=:cId';
-            $bindValues['cId'] = $category;
-        }
+        // get max price (cont.)
         $maxPrice = $productModel->getLimitedProduct(
-            $where,
-            $bindValues,
+            $priceWhere,
+            $priceBindValues,
             ['max_price DESC'],
             1,
             0,
@@ -170,18 +206,28 @@ class ProductController extends AbstractHomeController
             $maxPrice = 0;
         }
 
-        // get dynamic attributes
-        $attrs = [];
-        if (is_numeric($category) && $hasCategory) {
-            $attrs = ProductAttributeUtil::getRefinedProductAttributes($category);
-        }
-
         $this->setLayout($this->main_layout)->setTemplate('view/main/product/index');
         return $this->render([
             'sub_title' => 'محصولات'
-                . (!empty($categoryInfo) ? ('<small>' . ' «در دسته - ' . $categoryInfo['name'] . '»') . '</small>' : ''),
+                . (
+                !empty($festivalInfo)
+                    ? '<small>'
+                    . (' «جشنواره - ' . $festivalInfo['title'] . '»')
+                    . (
+                    !empty($categoryInfo)
+                        ? '<small>' . (' «در دسته - ' . $categoryInfo['name'] . '»') . '</small>'
+                        : ''
+                    )
+                    . '</small>'
+                    : (
+                !empty($categoryInfo)
+                    ? '<small>' . (' «در دسته - ' . $categoryInfo['name'] . '»') . '</small>'
+                    : ''
+                )
+                ),
             //
             'category' => $category,
+            'festival' => $festival,
             'side_categories' => $categories,
             'max_price' => $maxPrice,
             'brands' => $brands,
@@ -385,10 +431,22 @@ class ProductController extends AbstractHomeController
                     'pa.discounted_price',
                     'pa.max_cart_count',
                     'pa.stock_count',
+                    'pa.festival_publish',
+                    'pa.festival_expire',
+                    'pa.festival_start',
+                    'pa.festival_discount',
                 ]
             );
 
-            if (count($product)) $product = $product[0];
+            if (count($product)) {
+                $product = $product[0];
+                //
+                $stepped = get_stepped_price(1, $product_code);
+                if (!is_null($stepped)) {
+                    $product['stepped_price'] = $stepped['price'];
+                    $product['stepped_discounted_price'] = $stepped['discounted_price'];
+                }
+            }
 
             $isAvailable = get_product_availability($product);
 

@@ -2,16 +2,8 @@
     <?php if (get_product_availability($product)): ?>
         <div class="product_price">
             <?php
-            $hasDiscount = false;
-            $discountPrice = number_format($product['price']);
-
-            if (isset($product['festival_discount']) && 0 != $product['festival_discount']) {
-                $hasDiscount = true;
-                $discountPrice = number_format($product['price'] * (int)$product['festival_discount']);
-            } elseif (isset($product['discount_until']) && $product['discount_until'] >= time()) {
-                $hasDiscount = true;
-                $discountPrice = number_format($product['discounted_price']);
-            }
+            [$discountPrice, $hasDiscount] = get_discount_price($product);
+            $discountPrice = number_format($discountPrice);
             ?>
 
             <span class="price">
