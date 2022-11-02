@@ -4,6 +4,7 @@ namespace App\Logic\Forms\Admin\Festival;
 
 use App\Logic\Interfaces\IPageForm;
 use App\Logic\Models\FestivalModel;
+use App\Logic\Utils\Jdf;
 use App\Logic\Validations\ExtendedValidator;
 use Sim\Auth\DBAuth;
 use Sim\Exceptions\ConfigManager\ConfigNotRegisteredException;
@@ -66,7 +67,7 @@ class AddFestivalForm implements IPageForm
         if ($validator->getFieldValue('inp-add-festival-end-date', 0) > 0) {
             $validator
                 ->setFields('inp-add-festival-start-date')
-                ->lessThan(
+                ->lessThanEqual(
                     $validator->getFieldValue('inp-add-festival-end-date'),
                     '{alias} ' . 'باید از ' . $validator->getFieldAlias('inp-add-festival-end-date') . ' کمتر باشد.'
                 );
@@ -113,6 +114,9 @@ class AddFestivalForm implements IPageForm
             $title = input()->post('inp-add-festival-title', '')->getValue();
             $startAt = input()->post('inp-add-festival-start-date', '')->getValue();
             $endAt = input()->post('inp-add-festival-end-date', '')->getValue();
+
+            $startAt = strtotime('today', $startAt);
+            $endAt = strtotime('tomorrow ,-1 second', $endAt);
 
             return $festivalModel->insert([
                 'title' => $xss->xss_clean(trim($title)),

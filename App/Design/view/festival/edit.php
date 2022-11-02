@@ -34,7 +34,7 @@ $validator = form_validator();
                                             فعال
                                             <input type="checkbox" class="form-check-input-switchery"
                                                    name="inp-edit-festival-status"
-                                                <?= $validator->setCheckbox('inp-edit-festival-status', 'on') ?: (is_value_checked($festival['title']) ? 'checked="checked"' : ''); ?>
+                                                <?= $validator->setCheckbox('inp-edit-festival-status', 'on') ?: (is_value_checked($festival['publish']) ? 'checked="checked"' : ''); ?>
                                                    data-fouc>
                                             غیرفعال
                                         </label>

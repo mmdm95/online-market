@@ -135,6 +135,21 @@ class ProductUtil
                 }
             }
         }
+        // festival parameter
+        $festival = input()->get('festival', null);
+        if (!is_array($festival)) {
+            $festival = $festival->getValue();
+            if (is_numeric($festival) && $festival != DEFAULT_OPTION_VALUE) {
+                $where .= ' AND pa.festival_id=:p_festival_id';
+                $where .= ' AND pa.festival_start<=:p_festival_start';
+                $where .= ' AND pa.festival_expire>=:p_festival_expire';
+                $where .= ' AND pa.festival_publish>=:p_festival_publish';
+                $bindValues['p_festival_id'] = $festival;
+                $bindValues['p_festival_start'] = time();
+                $bindValues['p_festival_expire'] = time();
+                $bindValues['p_festival_publish'] = DB_YES;
+            }
+        }
         // price parameter
         $price = input()->get('price', null);
         if (!is_array($price) && !empty($price)) {

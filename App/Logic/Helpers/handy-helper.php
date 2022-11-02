@@ -187,9 +187,15 @@ function get_discount_price(array $item): array
     }
     //
 
-    if (isset($item['festival_expire']) && !empty($item['festival_expire']) && $item['festival_expire'] > time() && isset($item['festival_discount']) && 0 != $item['festival_discount']) {
+    if (
+        isset($item['festival_publish']) && $item['festival_publish'] == DB_YES &&
+        isset($item['festival_expire']) && !empty($item['festival_expire']) &&
+        $item['festival_expire'] >= time() && isset($item['festival_start']) &&
+        !empty($item['festival_start']) && $item['festival_start'] <= time() &&
+        isset($item['festival_discount']) && 0 != $item['festival_discount']
+    ) {
         $hasDiscount = true;
-        $discountPrice = (float)$item['price'] * (float)$item['festival_discount'];
+        $discountPrice = ((float)$item['price'] * (100 - (float)$item['festival_discount'])) / 100;
     } elseif (isset($item['discount_until']) && $item['discount_until'] >= time()) {
         $hasDiscount = true;
         $discountPrice = (float)$item['discounted_price'];

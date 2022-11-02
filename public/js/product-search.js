@@ -33,6 +33,7 @@
             mainProductContainer,
             sidebarMain,
             category,
+            festival,
             sortSelect,
             priceFilter,
             priceHandleMin,
@@ -103,7 +104,7 @@
                 });
         }
 
-        function setCategoryToSearchParams() {
+        function setStaticParamsToSearchParams() {
             if (-1 != category) {
                 uriParser.push('category', category, true);
             }
@@ -111,6 +112,11 @@
             var c = uriParser.get('category', -1);
             if (-1 != c) {
                 category = c;
+            }
+
+            var f = uriParser.get('festival', -1);
+            if (-1 != f) {
+                festival = f;
             }
         }
 
@@ -156,7 +162,12 @@
                 $("[name='" + variables.elements.product.inputs.search + "']").val('');
                 //-----
                 uriParser.clear();
-                uriParser.push('category', category, true);
+                if (-1 != category) {
+                    uriParser.push('category', category, true);
+                }
+                if (-1 != festival) {
+                    uriParser.push('festival', festival, true);
+                }
                 loadProduct();
             });
         }
@@ -388,9 +399,10 @@
         }
 
         function toggleRemoveFilterBtn(obj) {
-            var x;
-            x = $.extend(true, x, obj);
+            var x = {};
+            $.extend(x, obj);
             delete x['category'];
+            delete x['festival'];
             if (core.objSize(x) > 0) {
                 removeFiltersBtn.closest('.widget').removeClass('d-none');
             } else {
@@ -401,13 +413,13 @@
         function makeAdjustmentsAccordingToObj(obj) {
             var el, o;
 
-            setCategoryToSearchParams();
+            setStaticParamsToSearchParams();
 
             // search query
             if (obj['q'] && core.isString(obj['q'])) {
                 $(variables.elements.product.form).val(obj['q']);
             } else {
-                $(variables.elements.product.form).val('+');
+                $(variables.elements.product.form).val('');
             }
             // price filter
             if (obj['price'] && obj['price']['min'] && obj['price']['max']) {
@@ -587,7 +599,7 @@
         removeFiltersBtnClick();
         stickySidebar();
         paginationClick();
-        setCategoryToSearchParams();
+        setStaticParamsToSearchParams();
         querySubmitting();
         sortSelectChange();
         priceFilterChange();
