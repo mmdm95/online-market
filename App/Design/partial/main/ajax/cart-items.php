@@ -23,7 +23,7 @@ $items = $cart->getItems();
         <?php foreach ($items as $item): ?>
             <?php $price = (float)get_discount_price($item)[0]; ?>
             <tr>
-                <td class="product-thumbnail" width="100">
+                <td class="product-thumbnail">
                     <a href="<?= url('home.product.show', [
                         'id' => $item['product_id'],
                         'slug' => $item['slug'] ?? '',

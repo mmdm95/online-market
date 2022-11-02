@@ -325,6 +325,11 @@
                                         شناسه دسته‌بندی مورد نظر
                                     </li>
                                     <li>
+                                        <strong dir="ltr">festival</strong>
+                                        -
+                                        شناسه جشنواره مورد نظر
+                                    </li>
+                                    <li>
                                         <strong dir="ltr">q</strong>
                                         -
                                         رشته مورد نظر برای جستجو

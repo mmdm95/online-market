@@ -81,7 +81,7 @@ class EditFestivalForm implements IPageForm
         if ($validator->getFieldValue('inp-edit-festival-end-date', 0) > 0) {
             $validator
                 ->setFields('inp-edit-festival-start-date')
-                ->lessThan(
+                ->lessThanEqual(
                     $validator->getFieldValue('inp-edit-festival-end-date'),
                     '{alias} ' . 'باید از ' . $validator->getFieldAlias('inp-edit-festival-end-date') . ' کمتر باشد.'
                 );
@@ -141,6 +141,9 @@ class EditFestivalForm implements IPageForm
             $endAt = input()->post('inp-edit-festival-end-date', '')->getValue();
             $id = session()->getFlash('festival-curr-id', null);
             if (is_null($id)) return false;
+
+            $startAt = strtotime('today', $startAt);
+            $endAt = strtotime('tomorrow ,-1 second', $endAt);
 
             return $festivalModel->update([
                 'title' => $xss->xss_clean(trim($title)),

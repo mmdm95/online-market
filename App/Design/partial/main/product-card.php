@@ -53,20 +53,11 @@
             <?php if (get_product_availability($item)): ?>
                 <div class="product_price">
                     <?php
-                    $hasDiscount = false;
-                    $discountPrice = number_format($item['price']);
-
-                    if (isset($item['festival_discount']) && 0 != $item['festival_discount']) {
-                        $hasDiscount = true;
-                        $discountPrice = number_format($item['price'] * (int)$item['festival_discount']);
-                    } elseif (isset($item['discount_until']) && $item['discount_until'] >= time()) {
-                        $hasDiscount = true;
-                        $discountPrice = number_format($item['discounted_price']);
-                    }
+                    [$discountPrice, $hasDiscount] = get_discount_price($item);
                     ?>
 
                     <span class="price">
-                        <?= local_number($discountPrice); ?>
+                        <?= local_number(number_format($discountPrice)); ?>
                         <span class="price_symbole">تومان</span>
                     </span>
                     <?php if ($hasDiscount): ?>
