@@ -43,12 +43,20 @@ use Sim\Utils\StringUtil;
                             <div class="widget">
                                 <h5 class="widget_title">دسته بندی ها</h5>
                                 <ul class="widget_categories max-widget-height list-unstyled">
+                                    <?php
+                                    $extraParams = [];
+                                    if (isset($festival)) {
+                                        $extraParams = [
+                                            'festival' => $festival,
+                                        ];
+                                    }
+                                    ?>
                                     <?php foreach ($side_categories as $cat): ?>
                                         <li class="mb-1">
                                             <a href="<?= url('home.search', [
                                                 'category' => $cat['id'],
                                                 'category_slug' => StringUtil::slugify($cat['name']),
-                                            ])->getRelativeUrlTrimmed(); ?>">
+                                            ], $extraParams)->getRelativeUrlTrimmed(); ?>">
                                                 <span class="categories_name"><?= $cat['name']; ?></span>
                                             </a>
                                         </li>
