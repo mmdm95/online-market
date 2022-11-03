@@ -45,7 +45,6 @@ class AddUserForm implements IPageForm
                 'inp-user-active-status' => 'وضعیت',
                 'inp-user-mobile' => 'موبایل',
                 'inp-user-email' => 'ایمیل',
-                'inp-user-role' => 'نقش',
                 'inp-user-role.*' => 'نقش',
                 'inp-user-password' => 'کلمه عبور',
                 'inp-user-first-name' => 'نام',
