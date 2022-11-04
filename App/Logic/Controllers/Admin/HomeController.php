@@ -23,6 +23,7 @@ use App\Logic\Models\OrderBadgeModel;
 use App\Logic\Models\OrderModel;
 use App\Logic\Models\PaymentMethodModel;
 use App\Logic\Models\ProductModel;
+use App\Logic\Models\ReturnOrderModel;
 use App\Logic\Models\SecurityQuestionModel;
 use App\Logic\Models\SliderModel;
 use App\Logic\Models\StaticPageModel;
@@ -146,6 +147,10 @@ class HomeController extends AbstractAdminController
          */
         $orderBadgeModel = container()->get(OrderBadgeModel::class);
         /**
+         * @var ReturnOrderModel $returnOrderModel
+         */
+        $returnOrderModel = container()->get(ReturnOrderModel::class);
+        /**
          * @var DBAuth $auth
          */
         $auth = container()->get('auth_admin');
@@ -183,6 +188,7 @@ class HomeController extends AbstractAdminController
             ->setTemplate('view/index');
         return $this->render([
             'today_date' => Jdf::jdate('l d F Y') . ' - ' . date('d F'),
+            'return_order_count' => $returnOrderModel->count('status=:s', ['s' => RETURN_ORDER_STATUS_CHECKING]),
             'unread_contact_count' => $contactModel->count(
                 'status=:status',
                 [
