@@ -456,11 +456,11 @@ class Route implements IInitialize
                 /**
                  * Return Order Route
                  */
-//                Router::get('/return-order/detail/{id}', [AdminReturnOrderController::class, 'detail'])->where([
-//                    'id' => '[0-9]+',
-//                ])->name('admin.return.order.detail');
-//                Router::get('/return-order/view', [AdminReturnOrderController::class, 'view'])->name('admin.return.order.view');
-//                Router::post('/return-order/view/dt', [AdminReturnOrderController::class, 'getPaginatedDatatable'])->name('admin.return.order.dt.view');
+                Router::get('/return-order/detail/{id}', [AdminReturnOrderController::class, 'detail'])->where([
+                    'id' => '[0-9]+',
+                ])->name('admin.return.order.detail');
+                Router::get('/return-order/view', [AdminReturnOrderController::class, 'view'])->name('admin.return.order.view');
+                Router::post('/return-order/view/dt', [AdminReturnOrderController::class, 'getPaginatedDatatable'])->name('admin.return.order.dt.view');
 
                 /**
                  * Report User Route
@@ -657,11 +657,15 @@ class Route implements IInitialize
                 /**
                  * return order routes
                  */
-//                Router::form('/return-order', [UserReturnOrderController::class, 'index'])->name('user.return-order');
-//                Router::get('/return-order/detail/{id}', [UserReturnOrderController::class, 'detail'])->where([
-//                    'id' => '[0-9]+',
-//                ])->name('user.return-order.detail');
-//                Router::get('/return-order/add', [UserReturnOrderController::class, 'add'])->name('user.return-order.add');
+                Router::form('/return-order', [UserReturnOrderController::class, 'index'])->name('user.return-order');
+                Router::get('/return-order/detail/{id}', [UserReturnOrderController::class, 'detail'])->where([
+                    'id' => '[0-9]+',
+                ])->name('user.return-order.detail');
+                Router::post('/return-order/addTmp', [UserReturnOrderController::class, 'addTmp'])
+                    ->name('user.return-order.addTmp');
+                Router::form('/return-order/add/{code}', [UserReturnOrderController::class, 'add'])->where([
+                    'code' => '[0-9]+',
+                ])->name('user.return-order.add');
 
                 /**
                  * wallet routes
@@ -909,6 +913,13 @@ class Route implements IInitialize
                 Router::delete('/user/address/remove/{id}', [UserAddressController::class, 'remove'])->where([
                     'id' => '[0-9]+',
                 ])->name('ajax.user.address.remove');
+
+                /**
+                 * return order routes
+                 */
+                Router::delete('/user/return-order/remove/{id}', [UserReturnOrderController::class, 'remove'])->where([
+                    'id' => '[0-9]+',
+                ])->name('ajax.user.return-order.remove');
             });
 
             // other pages that need authentication

@@ -21,7 +21,7 @@ use Sim\I18n\ISOLanguageCodes;
  *     1.2.5.0 instead of 1.2.5-a
  *     1.2.5.0.1 instead of 1.2.5-a.1 (I'm not sure)
  */
-defined("APP_VERSION") or define("APP_VERSION", "0.9.8");
+defined("APP_VERSION") or define("APP_VERSION", "0.10.0");
 
 /***************************************
  * You can add your constants here
@@ -113,6 +113,7 @@ defined("SETTING_SMS_RECOVER_PASS") or define("SETTING_SMS_RECOVER_PASS", 'sms_r
 defined("SETTING_SMS_BUY") or define("SETTING_SMS_BUY", 'sms_buy');
 defined("SETTING_SMS_ORDER_STATUS") or define("SETTING_SMS_ORDER_STATUS", 'sms_order_status');
 defined("SETTING_SMS_WALLET_CHARGE") or define("SETTING_SMS_WALLET_CHARGE", 'sms_wallet_charge');
+defined("SETTING_SMS_RETURN_ORDER_STATUS") or define("SETTING_SMS_RETURN_ORDER_STATUS", 'sms_return_order');
 defined("SETTING_FEATURES") or define("SETTING_FEATURES", 'features');
 defined("SETTING_ADDRESS") or define("SETTING_ADDRESS", 'address');
 defined("SETTING_PHONES") or define("SETTING_PHONES", 'phones');
@@ -163,6 +164,7 @@ defined("SMS_TYPE_RECOVER_PASS") or define("SMS_TYPE_RECOVER_PASS", 'sms_recover
 defined("SMS_TYPE_BUY") or define("SMS_TYPE_BUY", 'sms_buy');
 defined("SMS_TYPE_ORDER_STATUS") or define("SMS_TYPE_ORDER_STATUS", 'sms_order_status');
 defined("SMS_TYPE_WALLET_CHARGE") or define("SMS_TYPE_WALLET_CHARGE", 'sms_wallet_charge');
+defined("SMS_TYPE_RETURN_ORDER_STATUS") or define("SMS_TYPE_RETURN_ORDER_STATUS", 'sms_return_order');
 
 // sms log types
 defined("SMS_LOG_TYPE_REGISTER") or define("SMS_LOG_TYPE_REGISTER", 1);
@@ -172,6 +174,7 @@ defined("SMS_LOG_TYPE_ORDER_STATUS") or define("SMS_LOG_TYPE_ORDER_STATUS", 4);
 defined("SMS_LOG_TYPE_WALLET_CHARGE") or define("SMS_LOG_TYPE_WALLET_CHARGE", 5);
 defined("SMS_LOG_TYPE_ORDER_SUCCESS") or define("SMS_LOG_TYPE_ORDER_SUCCESS", 6);
 defined("SMS_LOG_TYPE_ORDER_NOTIFY") or define("SMS_LOG_TYPE_ORDER_NOTIFY", 7);
+defined("SMS_LOG_TYPE_RETURN_ORDER_STATUS") or define("SMS_LOG_TYPE_RETURN_ORDER_STATUS", 8);
 defined("SMS_LOG_TYPE_OTHERS") or define("SMS_LOG_TYPE_OTHERS", 100);
 
 // sms log sender
@@ -251,6 +254,13 @@ defined("RETURN_ORDER_STATUS_DENIED") or define("RETURN_ORDER_STATUS_DENIED", 4)
 defined("RETURN_ORDER_STATUS_SENDING") or define("RETURN_ORDER_STATUS_SENDING", 5);
 defined("RETURN_ORDER_STATUS_RECEIVED") or define("RETURN_ORDER_STATUS_RECEIVED", 6);
 defined("RETURN_ORDER_STATUS_MONEY_RETURNED") or define("RETURN_ORDER_STATUS_MONEY_RETURNED", 7);
+defined("RETURN_ORDER_STATUSES") or define("RETURN_ORDER_STATUSES", [
+    RETURN_ORDER_STATUS_CHECKING => 'در حال بررسی',
+    RETURN_ORDER_STATUS_ACCEPT => 'تایید شده',
+    RETURN_ORDER_STATUS_DENIED => 'تایید نشده',
+    RETURN_ORDER_STATUS_RECEIVED => 'دریافت کالای مرجوعی',
+    RETURN_ORDER_STATUS_MONEY_RETURNED => 'بازگشت مبلغ کالاها',
+]);
 
 // comment statuses
 defined("COMMENT_STATUS_NOT_READ") or define("COMMENT_STATUS_NOT_READ", 0);

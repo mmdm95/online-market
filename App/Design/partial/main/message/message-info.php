@@ -8,8 +8,8 @@
                 <span aria-hidden="true">&times;</span>
             </button>
         <?php endif; ?>
-        <p class="m-0">
+        <span class="m-0 d-block">
             <?= $info; ?>
-        </p>
+        </span>
     </div>
 <?php endif; ?>

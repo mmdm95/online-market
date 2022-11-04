@@ -39,6 +39,7 @@ class SettingSMSForm implements IPageForm
                 'inp-setting-sms-buy' => 'پیامک خرید کالا',
                 'inp-setting-sms-order-status' => 'پیامک تغییر وضعیت سفارش',
                 'inp-setting-sms-wallet-charge' => 'پیامک شارژ حساب کاربری',
+                'inp-setting-sms-return-order-change' => 'پیامک تغییر وضعیت سفارش مرجوعی',
             ]);
 
         // sms
@@ -49,6 +50,7 @@ class SettingSMSForm implements IPageForm
                 'inp-setting-sms-buy',
                 'inp-setting-sms-order-status',
                 'inp-setting-sms-wallet-charge',
+                'inp-setting-sms-return-order-change',
             ])
             ->required();
 
@@ -90,6 +92,7 @@ class SettingSMSForm implements IPageForm
             $buy = input()->post('inp-setting-sms-buy', '')->getValue();
             $orderStatus = input()->post('inp-setting-sms-order-status', '')->getValue();
             $walletCharge = input()->post('inp-setting-sms-wallet-charge', '')->getValue();
+            $returnOrderStatus = input()->post('inp-setting-sms-return-order-change', '')->getValue();
 
             return $settingModel->updateSMSSetting([
                 SETTING_SMS_ACTIVATION => $xss->xss_clean(trim($activation)),
@@ -97,6 +100,7 @@ class SettingSMSForm implements IPageForm
                 SETTING_SMS_BUY => $xss->xss_clean(trim($buy)),
                 SETTING_SMS_ORDER_STATUS => $xss->xss_clean(trim($orderStatus)),
                 SETTING_SMS_WALLET_CHARGE => $xss->xss_clean(trim($walletCharge)),
+                SETTING_SMS_RETURN_ORDER_STATUS => $xss->xss_clean(trim($returnOrderStatus)),
             ]);
         } catch (\Exception $e) {
             return false;

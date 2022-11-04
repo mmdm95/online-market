@@ -86,8 +86,11 @@ class SettingModel extends BaseModel
         $res5 = $this->update([
             'setting_value' => $info[SETTING_SMS_WALLET_CHARGE],
         ], 'setting_name=:name', ['name' => SETTING_SMS_WALLET_CHARGE]);
+        $res6 = $this->update([
+            'setting_value' => $info[SETTING_SMS_RETURN_ORDER_STATUS],
+        ], 'setting_name=:name', ['name' => SETTING_SMS_RETURN_ORDER_STATUS]);
 
-        return $res1 && $res2 && $res3 && $res4 && $res5;
+        return $res1 && $res2 && $res3 && $res4 && $res5 && $res6;
     }
 
     /**

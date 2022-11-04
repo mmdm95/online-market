@@ -3,11 +3,16 @@
 namespace App\Logic\Controllers\Admin;
 
 use App\Logic\Abstracts\AbstractAdminController;
+use App\Logic\Forms\Admin\ReturnOrder\ReturnOrderRespondForm as AdminReturnOrderRespondForm;
+use App\Logic\Forms\Admin\ReturnOrder\ReturnOrderStatusForm as AdminReturnOrderStatusForm;
 use App\Logic\Handlers\DatatableHandler;
+use App\Logic\Handlers\GeneralFormHandler;
 use App\Logic\Interfaces\IDatatableController;
+use App\Logic\Models\OrderModel;
 use App\Logic\Models\ReturnOrderModel;
 use App\Logic\Utils\Jdf;
 use App\Logic\Utils\LogUtil;
+use App\Logic\Utils\SMSUtil;
 use Jenssegers\Agent\Agent;
 use Sim\Event\Interfaces\IEvent;
 use Sim\Exceptions\ConfigManager\ConfigNotRegisteredException;
@@ -52,30 +57,78 @@ class ReturnOrderController extends AbstractAdminController implements IDatatabl
          */
         $returnModel = container()->get(ReturnOrderModel::class);
 
-//        if (0 === $returnModel->count('id=:id', ['id' => $id])) {
-//            return $this->show404();
-//        }
+        $returnOrder = $returnModel->getReturnOrders(
+            'ro.id=:id',
+            ['id' => $id],
+            ['ro.id DESC'],
+            1,
+            0,
+            [
+                'ro.*',
+                'u.id AS user_id',
+                'u.username',
+                'u.first_name AS user_first_name',
+                'u.last_name AS user_last_name',
+            ]
+        );
+
+        if (!count($returnOrder)) {
+            return $this->show404();
+        }
+        $returnOrder = $returnOrder[0];
 
         $data = [];
-//        if (is_post()) {
-//            session()->setFlash('curr_return_order_detail_id', $id);
+        if (is_post()) {
+            session()->setFlash('curr_return_order_detail_id', $id);
+            session()->setFlash('curr_return_order_detail_code', $returnOrder['code']);
+            session()->setFlash('curr_return_order_detail_order_code', $returnOrder['order_code']);
 
-//            if (!is_null(input()->post('')->getValue())) {
-//                $formHandler = new GeneralFormHandler();
-//                $data = $formHandler->handle(::class, '');
-//            }
-//        }
+            $formHandler = new GeneralFormHandler();
+            if (!is_null(input()->post('inp-return-order-status')->getValue())) {
+                $data = $formHandler->handle(AdminReturnOrderStatusForm::class, 'return_order_status_handling');
 
-        $return = [];
+                emitter()->addListener('form.general:success', function (IEvent $event, $data) use ($returnOrder) {
+                    $event->stopPropagation();
 
-        $returnItems = [];
+                    $username = $returnOrder['username'];
+                    $status = input()->post('inp-return-order-status', '')->getValue();
+
+                    // send success order sms
+                    $body = replaced_sms_body(SMS_TYPE_RETURN_ORDER_STATUS, [
+                        SMS_REPLACEMENTS['code'] => $returnOrder['code'] ?? 'نامشخص',
+                        SMS_REPLACEMENTS['status'] => RETURN_ORDER_STATUSES[$status] ?? 'نامشخص',
+                    ]);
+                    $smsRes = SMSUtil::send([$username], $body);
+                    SMSUtil::logSMS([$username], $body, $smsRes, SMS_LOG_TYPE_RETURN_ORDER_STATUS, SMS_LOG_SENDER_SYSTEM);
+                });
+            } elseif (!is_null(input()->post('inp-return-order-respond')->getValue())) {
+                $data = $formHandler->handle(AdminReturnOrderRespondForm::class, 'return_order_respond_handling');
+            }
+        }
+
+        $returnOrderItems = $returnModel->getReturnOrderItems(
+            [
+                'oi.*', 'roi.id AS return_id', 'roi.order_item_id', 'roi.is_accepted', 'roi.product_count AS return_count',
+                'pa.image AS product_image', 'pa.code AS main_product_code',
+            ],
+            'ro.id=:id',
+            ['id' => $id]
+        );
+
+        /**
+         * @var OrderModel $orderModel
+         */
+        $orderModel = container()->get(OrderModel::class);
+
+        $orderId = $orderModel->getFirst(['id'], 'code=:code', ['code' => $returnOrder['order_code']])['id'];
 
         $this->setLayout($this->main_layout)->setTemplate('view/order/return-order/detail');
         return $this->render(array_merge($data, [
-            'return_order' => $return,
-            'return_order_items' => $returnItems,
-            'return_order_id' => $id,
-            'sub_title' => 'جزيیات سفارش مرجوعی',// . '-' . $return['code'],
+            'sub_title' => 'جزيیات سفارش مرجوعی' . '-' . $returnOrder['code'],
+            //
+            'order_id' => $orderId,
+            'return_order' => $returnOrder,
+            'return_order_items' => $returnOrderItems,
         ]));
     }
 
@@ -118,7 +171,7 @@ class ReturnOrderController extends AbstractAdminController implements IDatatabl
                         'formatter' => function ($d, $row) {
                             if (!empty($row['main_user_id'])) {
                                 return '<a href="' .
-                                    url('admin.user.view', ['id' => $row['user_id']])->getRelativeUrl() .
+                                    url('admin.user.view', ['id' => $row['main_user_id']])->getRelativeUrl() .
                                     '">' .
                                     $d .
                                     '</a>';
@@ -142,42 +195,7 @@ class ReturnOrderController extends AbstractAdminController implements IDatatabl
                         'db_alias' => 'status',
                         'dt' => 'status',
                         'formatter' => function ($d) {
-                            $this->setTemplate('partial/admin/parser/status-creation');
-                            return $this->render([
-                                'status' => $d,
-                                'switch' => [
-                                    [
-                                        'status' => RETURN_ORDER_STATUS_CHECKING,
-                                        'text' => 'در حال بررسی',
-                                        'badge' => 'badge-primary',
-                                    ],
-                                    [
-                                        'status' => RETURN_ORDER_STATUS_ACCEPT,
-                                        'text' => 'تایید شده',
-                                        'badge' => 'badge-success',
-                                    ],
-                                    [
-                                        'status' => RETURN_ORDER_STATUS_DENIED,
-                                        'text' => 'تایید نشده',
-                                        'badge' => 'badge-danger',
-                                    ],
-                                    [
-                                        'status' => RETURN_ORDER_STATUS_SENDING,
-                                        'text' => 'در حال ارسال مرسوله',
-                                        'badge' => 'bg-indigo-400',
-                                    ],
-                                    [
-                                        'status' => RETURN_ORDER_STATUS_RECEIVED,
-                                        'text' => 'مرسوله دریافت شد',
-                                        'badge' => 'bg-info',
-                                    ],
-                                    [
-                                        'status' => RETURN_ORDER_STATUS_MONEY_RETURNED,
-                                        'text' => 'مبلغ برگشت داده شد',
-                                        'badge' => 'bg-success',
-                                    ],
-                                ],
-                            ]);
+                            return $this->setTemplate('partial/admin/parser/return-order-status')->render(['type' => $d]);
                         }
                     ],
                     [
@@ -201,17 +219,16 @@ class ReturnOrderController extends AbstractAdminController implements IDatatabl
                         'db_alias' => 'status_changer',
                         'dt' => 'status_changed_by',
                         'formatter' => function ($d) {
-                            return $d ?: $this->setTemplate('admin/parser/dash-icon')->render();
+                            return $d ?: $this->setTemplate('partial/admin/parser/dash-icon')->render();
                         }
                     ],
                     [
                         'dt' => 'operations',
                         'formatter' => function ($row) {
-                            $operations = $this->setTemplate('partial/admin/datatable/actions-return-order')
+                            return $this->setTemplate('partial/admin/datatable/actions-return-order')
                                 ->render([
                                     'row' => $row,
                                 ]);
-                            return $operations;
                         }
                     ],
                 ];

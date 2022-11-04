@@ -24,11 +24,11 @@ class ReturnOrderModel extends BaseModel
      */
     public function getReturnOrders(
         ?string $where = null,
-        array $bind_values = [],
-        array $order_by = ['ro.id DESC'],
-        ?int $limit = null,
-        int $offset = 0,
-        array $columns = [
+        array   $bind_values = [],
+        array   $order_by = ['ro.id DESC'],
+        ?int    $limit = null,
+        int     $offset = 0,
+        array   $columns = [
             'ro.*',
             'u.username',
             'u.first_name AS user_first_name',
@@ -89,7 +89,7 @@ class ReturnOrderModel extends BaseModel
     }
 
     /**
-     * Use [roi for return_order_items], [ro for return_orders], [oi for order_items], [p for products]
+     * Use [roi for return_order_items], [ro for return_orders], [oi for order_items], [pa for product_advanced]
      *
      * @param $columns
      * @param string|null $where
@@ -101,7 +101,8 @@ class ReturnOrderModel extends BaseModel
         $select = $this->connector->select();
         $select
             ->from(self::TBL_RETURN_ORDER_ITEMS . ' AS roi')
-            ->cols($columns);
+            ->cols($columns)
+            ->groupBy(['pa.product_id']);
 
         try {
             $select
@@ -114,8 +115,8 @@ class ReturnOrderModel extends BaseModel
                     'ro.code=roi.return_code'
                 )
                 ->leftJoin(
-                    self::TBL_PRODUCTS . ' AS p',
-                    'p.id=oi.product_id'
+                    self::TBL_PRODUCT_ADVANCED . ' AS pa',
+                    'pa.product_id=oi.product_id'
                 );
         } catch (AuraException $e) {
             return [];
@@ -152,5 +153,114 @@ class ReturnOrderModel extends BaseModel
 
         if (count($res)) return (int)$res[0]['count'];
         return 0;
+    }
+
+    /**
+     * @param array $returnOrderInfo
+     * @param array $returnOrderItems
+     * @return bool
+     */
+    public function modifyReturnOrderItems(array $returnOrderInfo, array $returnOrderItems): bool
+    {
+        $this->db->beginTransaction();
+
+        $code = $returnOrderInfo['code'];
+
+        if ($this->count('order_code=:code', ['code' => $returnOrderInfo['order_code']])) {
+            $res = $this->update(
+                $returnOrderInfo,
+                'code=:c AND order_code=:oc',
+                ['c' => $code, 'co' => $returnOrderInfo['order_code']]
+            );
+        } else {
+            $res = $this->insert($returnOrderInfo);
+        }
+
+        if (!$res) {
+            $this->db->rollBack();
+            return false;
+        }
+
+        $res2 = false;
+        foreach ($returnOrderItems as $item) {
+            $insert = $this->connector->insert();
+            $insert
+                ->into(self::TBL_RETURN_ORDER_ITEMS)
+                ->cols([
+                    'return_code' => $code,
+                    'order_item_id' => $item['order_item_id'],
+                    'product_count' => $item['product_count'],
+                    'is_accepted' => DB_NO,
+                ]);
+            $stmt = $this->db->prepare($insert->getStatement());
+            $res2 = $stmt->execute($insert->getBindValues());
+
+            if (!$res2) break;
+        }
+
+        if ($res2) {
+            $this->db->commit();
+            return true;
+        }
+
+        $this->db->rollBack();
+        return false;
+    }
+
+    /**
+     * @param array $returnOrderInfo
+     * @param string|null $where
+     * @param array $bind_values
+     * @return bool
+     */
+    public function modifyReturnOrderStatus(array $returnOrderInfo, string $where, array $bind_values): bool
+    {
+        $this->db->beginTransaction();
+
+        $code = $returnOrderInfo['code'];
+        $orderCode = $returnOrderInfo['order_code'];
+        unset($returnOrderInfo['code']);
+        unset($returnOrderInfo['order_code']);
+
+        $res = $this->update($returnOrderInfo, $where, $bind_values);
+
+        if (!$res) {
+            $this->db->rollBack();
+            return false;
+        }
+
+        if ($returnOrderInfo['status'] == RETURN_ORDER_STATUS_ACCEPT) {
+            $update = $this->connector->update();
+            $update
+                ->table(self::TBL_RETURN_ORDER_ITEMS)
+                ->cols([
+                    'is_accepted' => DB_YES,
+                    'accepted_at' => time(),
+                ]);
+            $stmt = $this->db->prepare($update->getStatement());
+            $res2 = $stmt->execute($update->getBindValues());
+
+            if (!$res2) {
+                $this->db->rollBack();
+                return false;
+            }
+            //
+            $update = $this->connector->update();
+            $update
+                ->table(self::TBL_ORDER_ITEMS)
+                ->cols([
+                    'is_returned' => DB_YES,
+                ]);
+            $stmt = $this->db->prepare($update->getStatement());
+            $res3 = $stmt->execute($update->getBindValues());
+
+            if (!$res3) {
+                $this->db->rollBack();
+                return false;
+            }
+        }
+
+        $this->db->commit();
+        return true;
     }
 }
