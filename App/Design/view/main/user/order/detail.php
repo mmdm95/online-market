@@ -420,9 +420,13 @@ use Sim\Utils\StringUtil;
                                         </h6>
                                     <?php endif; ?>
 
-                                    <?php if (!empty($item['order_item_id'])): ?>
+                                    <?php if ($item['is_returned'] == DB_YES): ?>
                                         <div>
                                             <span class="badge badge-danger px-2 py-1">مرجوع شده</span>
+                                        </div>
+                                    <?php elseif (!empty($item['order_item_id'])): ?>
+                                        <div>
+                                            <span class="badge badge-warning px-2 py-1">درخواست مرجوع</span>
                                         </div>
                                     <?php endif; ?>
                                 </div>

@@ -28,12 +28,22 @@ $allowSetting = $authAdmin->isAllow(RESOURCE_SETTING, OWN_PERMISSION_READ);
                       id="simpleClock">0:00:00 AM</span>
             </div>
         </div>
-        <?php if ($allowContact || $allowComplaint): ?>
+        <?php if ($allowContact || $allowComplaint || $allowProduct): ?>
             <div class="text-right d-flex d-lg-block flex-column flex-sm-row justify-content-center justify-content-lg-end">
-                <?php if ($allowContact): ?>
+                <?php if ($allowProduct): ?>
+                    <a href="<?= url('admin.return.order.view', '')->getRelativeUrl(); ?>"
+                       class="btn bg-violet py-2 px-3 d-block d-lg-inline-block mb-2 border-0 flex-fill">
+                        <?php if ($return_order_count > 0): ?>
+                            <span style="position: absolute; top: 5px; left: 8px; background: #e44444; width: 10px; height: 10px; border-radius: 50rem;"></span>
+                        <?php endif; ?>
+                        درخواست‌های مرجوع:
+                        <?= StringUtil::toPersian($return_order_count); ?>
+                    </a>
+                <?php endif; ?>
 
+                <?php if ($allowContact): ?>
                     <a href="<?= url('admin.contact-us.view', '')->getRelativeUrl(); ?>"
-                       class="btn bg-blue py-2 px-3 d-block d-lg-inline-block mb-2 border-0 flex-fill">
+                       class="btn bg-blue py-2 px-3 d-block d-lg-inline-block ml-0 ml-sm-2 mb-2 border-0 flex-fill">
                         <?php if ($unread_contact_count > 0): ?>
                             <span style="position: absolute; top: 5px; left: 8px; background: #e44444; width: 10px; height: 10px; border-radius: 50rem;"></span>
                         <?php endif; ?>
