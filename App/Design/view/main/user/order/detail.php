@@ -462,7 +462,7 @@ use Sim\Utils\StringUtil;
                                 <li class="list-inline-item my-1">
                                     <small>تعداد:</small>
                                     <label class="m-0">
-                                        <?= $item['product_count']; ?>
+                                        <?= local_number($item['product_count']); ?>
                                         <?= $item['unit_title']; ?>
                                     </label>
                                 </li>

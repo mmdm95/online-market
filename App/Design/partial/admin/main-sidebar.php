@@ -152,13 +152,13 @@ $authAdmin = auth_admin();
                     <!--                    <ul class="nav nav-group-sub">-->
                     <!--                        <li class="nav-item">-->
                     <!--                            <a href="" class="nav-link">-->
-                    <?= '';//url('admin.send_method.add');                                                ?>
+                    <?= '';//url('admin.send_method.add');                                                 ?>
                     <!--                                افزودن روش ارسال جدید-->
                     <!--                            </a>-->
                     <!--                        </li>-->
                     <!--                        <li class="nav-item">-->
                     <!--                            <a href="" class="nav-link">-->
-                    <?= '';//url('admin.send_method.view', '');                                                ?>
+                    <?= '';//url('admin.send_method.view', '');                                                 ?>
                     <!--                                لیست روش‌های ارسال-->
                     <!--                            </a>-->
                     <!--                        </li>-->
@@ -379,18 +379,16 @@ $authAdmin = auth_admin();
                         </li>
                     <?php endif; ?>
 
-                    <!--                <li class="nav-item">-->
-                    <!--                    <a href="" class="nav-link"-->
-                    <?= '';//url('admin.return.order.view');                                            ?>
-                    <!--                       data-popup="tooltip"-->
-                    <!--                       data-original-title="سفارشات مرجوعی"-->
-                    <!--                       data-boundary="window"-->
-                    <!--                       data-placement="left">-->
-                    <!--                        <i class="icon-backspace2"></i>-->
-                    <!--                        <span>سفارشات مرجوعی</span>-->
-                    <!--                    </a>-->
-                    <!--                </li>-->
-                    <!-- /financial and orders -->
+                    <li class="nav-item">
+                        <a href="<?= url('admin.return.order.view'); ?>" class="nav-link"
+                           data-popup="tooltip"
+                           data-original-title="سفارشات مرجوعی"
+                           data-boundary="window"
+                           data-placement="left">
+                            <i class="icon-backspace2"></i>
+                            <span>سفارشات مرجوعی</span>
+                        </a>
+                    </li>
                 <?php endif; ?>
 
                 <?php
@@ -452,7 +450,7 @@ $authAdmin = auth_admin();
                     <!--                        <li class="nav-item">-->
                     <!--                            <a href="--><? //= url('admin.report.wallet'); ?><!--"-->
                     <!--                               class="nav-link "-->
-                    <?= '';//url()->contains(url('admin.report.wallet')->getRelativeUrlTrimmed()) ? 'active' : '';     ?>
+                    <?= '';//url()->contains(url('admin.report.wallet')->getRelativeUrlTrimmed()) ? 'active' : '';      ?>
                     <!--                               data-popup="tooltip"-->
                     <!--                               data-original-title="گزارش‌گیری از کیف پول"-->
                     <!--                               data-boundary="window"-->

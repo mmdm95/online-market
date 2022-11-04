@@ -250,8 +250,27 @@ class OrderModel extends BaseModel
     }
 
     /**
+     * Use [oi for order_items], [p for products]
+     *
+     * @param string|null $where
+     * @param array $bind_values
+     * @return int
+     */
+    public function getOrderItemsCount(
+        ?string $where = null,
+        array   $bind_values = []
+    ): int
+    {
+        $res = $this->getOrderItems(['COUNT(DISTINCT(oi.id)) AS count'], $where, $bind_values);
+        if (count($res)) {
+            return (int)$res[0]['count'];
+        }
+        return 0;
+    }
+
+    /**
      * Use [oi for order_items], [roi for return_order_items],
-     * [ro for return_orders], [p for products], [pp for product_property]
+     * [ro for return_orders], [pa for product_advanced]
      *
      * @param array $columns
      * @param string|null $where
@@ -267,17 +286,14 @@ class OrderModel extends BaseModel
         $select = $this->connector->select();
         $select
             ->from(self::TBL_ORDER_ITEMS . ' AS oi')
-            ->cols($columns);
+            ->cols($columns)
+            ->groupBy(['pa.product_id']);
 
         try {
             $select
                 ->leftJoin(
-                    self::TBL_PRODUCTS . ' AS p',
-                    'p.id=oi.product_id'
-                )
-                ->leftJoin(
-                    self::TBL_PRODUCT_PROPERTY . ' AS pp',
-                    'pp.code=oi.product_code'
+                    self::TBL_PRODUCT_ADVANCED . ' AS pa',
+                    'pa.product_id=oi.product_id'
                 )
                 ->leftJoin(
                     self::TBL_RETURN_ORDERS . ' AS ro',
@@ -285,7 +301,7 @@ class OrderModel extends BaseModel
                 )
                 ->leftJoin(
                     self::TBL_RETURN_ORDER_ITEMS . ' AS roi',
-                    'roi.return_code=ro.code'
+                    'oi.id=roi.order_item_id AND roi.return_code=ro.code'
                 );
         } catch (AuraException $e) {
             return [];

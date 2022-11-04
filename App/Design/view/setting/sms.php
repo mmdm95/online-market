@@ -131,6 +131,26 @@ $validator = form_validator();
                             </label>
                         </div>
                         <!-- /wallet charge -->
+
+                        <?php load_partial('admin/section-header', ['header_title' => 'پیامک تغییر وضعیت سفارش مرجوعی']); ?>
+                        <!-- Return order status changed -->
+                        <div class="form-group">
+                            <textarea
+                                    class="form-control form-control-min-height"
+                                    name="inp-setting-sms-return-order-change"
+                                    cols="30"
+                                    rows="10"
+                                    placeholder="متن پیامک را وارد کنید..."
+                            ><?= !$validator->getStatus() ? ($validator->setInput('inp-setting-sms-return-order-change') ?: config()->get('settings.sms_return_order.value')) : config()->get('settings.sms_return_order.value'); ?></textarea>
+                            <label class="form-text">
+                                می‌توانید از
+                                <code>@code@</code>
+                                برای قرار دادن کد سفارش مرجوعی و از
+                                <code>@status@</code>
+                                برای قرار دادن وضعیت سفارش مرجوعی استفاده کنید.
+                            </label>
+                        </div>
+                        <!-- /return order status changed -->
                     </div>
 
                     <div class="card-body">

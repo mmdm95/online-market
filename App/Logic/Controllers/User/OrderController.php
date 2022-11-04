@@ -90,8 +90,8 @@ class OrderController extends AbstractUserController
 
         $order = $orderModel->getOrders('o.id=:id', ['id' => $id])[0];
         $orderItems = $orderModel->getOrderItemsWithReturnOrderItems([
-            'oi.*', 'roi.order_item_id', 'p.slug AS product_slug', 'p.allow_commenting',
-            'p.image AS product_image', 'pp.code AS main_product_code',
+            'oi.*', 'roi.order_item_id', 'pa.slug AS product_slug', 'pa.allow_commenting',
+            'pa.image AS product_image', 'pa.code AS main_product_code',
         ], 'oi.order_code=:code', ['code' => $order['code']]);
 
         $paymentSuccess = $gatewayModel->getFirst([

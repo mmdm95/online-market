@@ -10,6 +10,9 @@
             remove: '/ajax/user/address/remove',
             all: '/ajax/user/address/all',
         },
+        returnOrder: {
+            items: '/ajax/user/return-order/add',
+        },
     });
     window.MyGlobalVariables.elements = $.extend(true, window.MyGlobalVariables.elements, {
         cart: {

@@ -2,10 +2,10 @@
 
 namespace App\Logic\Utils;
 
-use App\Logic\Models\OrderModel;
+use App\Logic\Models\ReturnOrderModel;
 use Sim\Utils\StringUtil;
 
-class OrderUtil
+class ReturnOrderUtil
 {
     /**
      * @param int $length
@@ -13,16 +13,16 @@ class OrderUtil
      * @throws \DI\DependencyException
      * @throws \DI\NotFoundException
      */
-    public static function getUniqueOrderCode(int $length = 15): string
+    public static function getUniqueReturnOrderCode(int $length = 15): string
     {
         /**
-         * @var OrderModel $orderModel
+         * @var ReturnOrderModel $returnOrderModel
          */
-        $orderModel = container()->get(OrderModel::class);
+        $returnOrderModel = container()->get(ReturnOrderModel::class);
         do {
             $uniqueStr = StringUtil::randomString($length, StringUtil::RS_NUMBER, ['0']);
 
-        } while ($orderModel->count('code=:code', ['code' => $uniqueStr]));
+        } while ($returnOrderModel->count('code=:code', ['code' => $uniqueStr]));
         return $uniqueStr;
     }
 }
