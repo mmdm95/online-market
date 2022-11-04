@@ -39,7 +39,7 @@ return [
                 'is_active' => false,
             ],
             [
-                'url' => url('admin.order.return', '')->getRelativeUrl(),
+                'url' => url('admin.return.order.view', '')->getRelativeUrl(),
                 'text' => 'مدیریت سفارشات مرجوعی',
                 'is_active' => false,
             ],
