@@ -32,6 +32,7 @@ use App\Logic\Controllers\Admin\{BlogController as AdminBlogController,
     Report\ReportProductController as AdminReportProductController,
     Report\ReportUserController as AdminReportUserController,
     Report\ReportWalletController as AdminReportWalletController,
+    Report\ReportWalletDepositController as AdminReportWalletDepositController,
     ReturnOrderController as AdminReturnOrderController,
     SecurityQuestionController as AdminSecurityQuestionController,
     SendMethodController as AdminSendMethodController,
@@ -490,6 +491,10 @@ class Route implements IInitialize
                     ->name('admin.report.wallet');
                 Router::post('/report/wallet/dt', [AdminReportWalletController::class, 'getPaginatedDatatable'])
                     ->name('admin.report.wallet.dt');
+                Router::get('/report/wallet/deposit', [AdminReportWalletDepositController::class, 'report'])
+                    ->name('admin.report.wallet.deposit');
+                Router::post('/report/wallet/deposit/dt', [AdminReportWalletDepositController::class, 'getPaginatedDatatable'])
+                    ->name('admin.report.wallet.deposit.dt');
 
                 /**
                  * Wallet Route
@@ -1146,6 +1151,9 @@ class Route implements IInitialize
                 Router::delete('/wallet/remove/{id}', [AdminWalletController::class, 'remove'])->where([
                     'id' => '[0-9]+',
                 ])->name('ajax.wallet.remove');
+                Router::post('/wallet/av-status/{id}', [AdminWalletController::class, 'availabilityStatusChange'])->where([
+                    'id' => '[0-9]+',
+                ])->name('ajax.wallet.availability.status');
 
                 /**
                  * deposit type route
@@ -1309,12 +1317,21 @@ class Route implements IInitialize
                 /**
                  * Report Wallet Route
                  */
-//                Router::post('/report/wallet/filter', [AdminReportWalletController::class, 'filterReport'])
-//                    ->name('ajax.admin.report.wallet.filter');
-//                Router::get('/report/wallet/filter/clear', [AdminReportWalletController::class, 'filterClear'])
-//                    ->name('ajax.admin.report.wallet.filter.clear');
-//                Router::get('/report/wallet/export/excel', [AdminReportWalletController::class, 'exportExcel'])
-//                    ->name('ajax.admin.report.wallet.export.excel');
+                Router::post('/report/wallet/filter', [AdminReportWalletController::class, 'filterReport'])
+                    ->name('ajax.admin.report.wallet.filter');
+                Router::get('/report/wallet/filter/clear', [AdminReportWalletController::class, 'filterClear'])
+                    ->name('ajax.admin.report.wallet.filter.clear');
+                Router::get('/report/wallet/export/excel', [AdminReportWalletController::class, 'exportExcel'])
+                    ->name('ajax.admin.report.wallet.export.excel');
+                /**
+                 * Report Wallet Deposit Route
+                 */
+                Router::post('/report/wallet/deposit/filter', [AdminReportWalletDepositController::class, 'filterReport'])
+                    ->name('ajax.admin.report.wallet.deposit.filter');
+                Router::get('/report/wallet/deposit/filter/clear', [AdminReportWalletDepositController::class, 'filterClear'])
+                    ->name('ajax.admin.report.wallet.deposit.filter.clear');
+                Router::get('/report/wallet/deposit/export/excel', [AdminReportWalletDepositController::class, 'exportExcel'])
+                    ->name('ajax.admin.report.wallet.deposit.export.excel');
 
                 /**
                  * Chart Route

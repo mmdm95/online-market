@@ -345,12 +345,14 @@ defined("SESSION_QUERY_BUILDER_USER") or define("SESSION_QUERY_BUILDER_USER", 's
 defined("SESSION_QUERY_BUILDER_PRODUCT") or define("SESSION_QUERY_BUILDER_PRODUCT", 'session_query_builder_product');
 defined("SESSION_QUERY_BUILDER_ORDER") or define("SESSION_QUERY_BUILDER_ORDER", 'session_query_builder_order');
 defined("SESSION_QUERY_BUILDER_WALLET") or define("SESSION_QUERY_BUILDER_WALLET", 'session_query_builder_wallet');
+defined("SESSION_QUERY_BUILDER_WALLET_DEPOSIT") or define("SESSION_QUERY_BUILDER_WALLET_DEPOSIT", 'session_query_builder_wallet_deposit');
 
 // report after datatable filter sessions
 defined("SESSION_REPORT_FILTERED_USER") or define("SESSION_REPORT_FILTERED_USER", 'session_report_filtered_user');
 defined("SESSION_REPORT_FILTERED_PRODUCT") or define("SESSION_REPORT_FILTERED_PRODUCT", 'session_report_filtered_product');
 defined("SESSION_REPORT_FILTERED_ORDER") or define("SESSION_REPORT_FILTERED_ORDER", 'session_report_filtered_order');
 defined("SESSION_REPORT_FILTERED_WALLET") or define("SESSION_REPORT_FILTERED_WALLET", 'session_report_filtered_wallet');
+defined("SESSION_REPORT_FILTERED_WALLET_DEPOSIT") or define("SESSION_REPORT_FILTERED_WALLET_DEPOSIT", 'session_report_filtered_wallet_deposit');
 
 // order array info session key constant
 defined("SESSION_ORDER_ARR_INFO") or define("SESSION_ORDER_ARR_INFO", 'session_order_arr_info_custom');

@@ -6,6 +6,7 @@ use App\Logic\Abstracts\AbstractAdminController;
 use App\Logic\Forms\Admin\Wallet\WalletCharge;
 use App\Logic\Handlers\DatatableHandler;
 use App\Logic\Handlers\GeneralAjaxRemoveHandler;
+use App\Logic\Handlers\GeneralAjaxStatusHandler;
 use App\Logic\Handlers\GeneralFormHandler;
 use App\Logic\Handlers\ResourceHandler;
 use App\Logic\Interfaces\IDatatableController;
@@ -236,6 +237,56 @@ class WalletController extends AbstractAdminController implements IDatatableCont
     }
 
     /**
+     * @param $id
+     * @throws IDBException
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
+     */
+    public function availabilityStatusChange($id)
+    {
+        /**
+         * @var DBAuth $auth
+         */
+        $auth = container()->get('auth_admin');
+        if (!$auth->isAllow(RESOURCE_PRODUCT, IAuth::PERMISSION_READ)) {
+            show_403();
+        }
+
+        $resourceHandler = new ResourceHandler();
+
+        try {
+            /**
+             * @var Agent $agent
+             */
+            $agent = container()->get(Agent::class);
+            if (!$agent->isRobot()) {
+                $handler = new GeneralAjaxStatusHandler();
+                $resourceHandler = $handler
+                    ->setStatusCheckedMessage('کیف پول فعال شد.')
+                    ->setStatusUncheckedMessage('کیف پول غیر فعال شد.')
+                    ->handle(
+                        BaseModel::TBL_PRODUCTS,
+                        $id,
+                        'is_available',
+                        input()->post('status')->getValue()
+                    );
+            } else {
+                response()->httpCode(403);
+                $resourceHandler
+                    ->type(RESPONSE_TYPE_ERROR)
+                    ->errorMessage('خطا در ارتباط با سرور، لطفا دوباره تلاش کنید.');
+            }
+        } catch (\Exception $e) {
+            LogUtil::logException($e, __LINE__, self::class);
+            $resourceHandler
+                ->type(RESPONSE_TYPE_ERROR)
+                ->errorMessage('خطا در ارتباط با سرور، لطفا دوباره تلاش کنید.');
+        }
+
+        response()->json($resourceHandler->getReturnData());
+    }
+
+    /**
      * @param array $_
      * @return void
      * @throws IDBException
@@ -305,10 +356,13 @@ class WalletController extends AbstractAdminController implements IDatatableCont
                         'db' => 'is_available',
                         'db_alias' => 'is_available',
                         'dt' => 'is_available',
-                        'formatter' => function ($d) {
-                            return $this->setTemplate('partial/admin/parser/active-status')->render([
-                                'status' => $d,
-                            ]);
+                        'formatter' => function ($d, $row) {
+                            return $this->setTemplate('partial/admin/parser/status-changer')
+                                ->render([
+                                    'status' => $d,
+                                    'row' => $row,
+                                    'url' => url('ajax.wallet.availability.status')->getRelativeUrl(),
+                                ]);
                         }
                     ],
                     [
