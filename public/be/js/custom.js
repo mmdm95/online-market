@@ -117,6 +117,12 @@
                 filter: '/ajax/report/wallet/filter',
                 filterClear: '/ajax/report/wallet/filter/clear',
                 excelExport: '/ajax/report/wallet/export/excel',
+
+                deposit: {
+                    filter: '/ajax/report/wallet/deposit/filter',
+                    filterClear: '/ajax/report/wallet/deposit/filter/clear',
+                    excelExport: '/ajax/report/wallet/deposit/export/excel',
+                }
             },
         },
         chart: {
@@ -4305,7 +4311,7 @@
         createDatatable();
 
         //---------------------------------------------------------------
-        // REPORT USER SECTION
+        // REPORT SECTION
         //---------------------------------------------------------------
         var
             the_query_builder = null,
@@ -4362,6 +4368,18 @@
             filterUrl = variables.url.report.wallet.filter;
             filterClearUrl = variables.url.report.wallet.filterClear;
             excelExportUrl = variables.url.report.wallet.excelExport;
+        }
+
+        //***************************
+        //** Wallet Deposit Report **
+        //***************************
+        if ($('#builder-basic-wallet-deposit').length) {
+            the_query_builder = $('#builder-basic-wallet-deposit');
+            query_builder_reset_btn = $('#btn-reset-wallet-deposit');
+            query_builder_filter_btn = $('#btn-filter-wallet-deposit');
+            filterUrl = variables.url.report.wallet.deposit.filter;
+            filterClearUrl = variables.url.report.wallet.deposit.filterClear;
+            excelExportUrl = variables.url.report.wallet.deposit.excelExport;
         }
 
         if (

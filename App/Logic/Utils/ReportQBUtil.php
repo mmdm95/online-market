@@ -96,6 +96,88 @@ class ReportQBUtil
     ];
 
     /**
+     * @var array
+     */
+    private static $datePickerConfig = [
+        "inline" => false,
+        "format" => "L",
+        "viewMode" => "day",
+        "initialValue" => true,
+        "minDate" => 0,
+        "maxDate" => 0,
+        "autoClose" => false,
+        "position" => "auto",
+        "onlyTimePicker" => false,
+        "onlySelectOnDate" => false,
+        "calendarType" => "persian",
+        "altFormat" => "X",
+        "altField" => "",
+        "inputDelay" => 800,
+        "observer" => true,
+        "calendar" => [
+            "persian" => [
+                "locale" => "fa",
+                "showHint" => true,
+                "leapYearMode" => "algorithmic"
+            ],
+            "gregorian" => [
+                "locale" => "en",
+                "showHint" => true
+            ]
+        ],
+        "navigator" => [
+            "enabled" => true,
+            "scroll" => [
+                "enabled" => true
+            ],
+            "text" => [
+                "btnNextText" => "<",
+                "btnPrevText" => ">"
+            ]
+        ],
+        "toolbox" => [
+            "enabled" => true,
+            "calendarSwitch" => [
+                "enabled" => true,
+                "format" => "MMMM"
+            ],
+            "todayButton" => [
+                "enabled" => true,
+                "text" => [
+                    "fa" => "امروز",
+                    "en" => "Today"
+                ]
+            ],
+            "submitButton" => [
+                "enabled" => true,
+                "text" => [
+                    "fa" => "تایید",
+                    "en" => "Submit"
+                ]
+            ],
+            "text" => [
+                "btnToday" => "امروز"
+            ]
+        ],
+        "timePicker" => [
+            "enabled" => false,
+        ],
+        "dayPicker" => [
+            "enabled" => true,
+            "titleFormat" => "YYYY MMMM"
+        ],
+        "monthPicker" => [
+            "enabled" => true,
+            "titleFormat" => "YYYY"
+        ],
+        "yearPicker" => [
+            "enabled" => true,
+            "titleFormat" => "YYYY"
+        ],
+        "responsive" => true
+    ];
+
+    /**
      * [u] and [r] are aliases that used in [ReportUserController]
      * in fetching datatable data
      *
@@ -349,6 +431,17 @@ class ReportQBUtil
                 'type' => 'string',
                 'operators' => self::$stringOperation,
             ],
+            [
+                'id' => 'pa.created_at',
+                'label' => 'تاریخ افزودن',
+                'type' => 'date',
+                'operators' => self::$dateOperation,
+                'validation' => [
+                    'format' => 'X'
+                ],
+                'plugin' => 'persianDatepicker',
+                'plugin_config' => self::$datePickerConfig,
+            ],
         ];
     }
 
@@ -376,85 +469,6 @@ class ReportQBUtil
         //-----
         $brands = $brandModel->get(['id', 'name']);
         $newBrands = array_column($brands, 'name', 'id');
-
-        $datePickerConfig = [
-            "inline" => false,
-            "format" => "L",
-            "viewMode" => "day",
-            "initialValue" => true,
-            "minDate" => 0,
-            "maxDate" => 0,
-            "autoClose" => false,
-            "position" => "auto",
-            "onlyTimePicker" => false,
-            "onlySelectOnDate" => false,
-            "calendarType" => "persian",
-            "altFormat" => "X",
-            "altField" => "",
-            "inputDelay" => 800,
-            "observer" => true,
-            "calendar" => [
-                "persian" => [
-                    "locale" => "fa",
-                    "showHint" => true,
-                    "leapYearMode" => "algorithmic"
-                ],
-                "gregorian" => [
-                    "locale" => "en",
-                    "showHint" => true
-                ]
-            ],
-            "navigator" => [
-                "enabled" => true,
-                "scroll" => [
-                    "enabled" => true
-                ],
-                "text" => [
-                    "btnNextText" => "<",
-                    "btnPrevText" => ">"
-                ]
-            ],
-            "toolbox" => [
-                "enabled" => true,
-                "calendarSwitch" => [
-                    "enabled" => true,
-                    "format" => "MMMM"
-                ],
-                "todayButton" => [
-                    "enabled" => true,
-                    "text" => [
-                        "fa" => "امروز",
-                        "en" => "Today"
-                    ]
-                ],
-                "submitButton" => [
-                    "enabled" => true,
-                    "text" => [
-                        "fa" => "تایید",
-                        "en" => "Submit"
-                    ]
-                ],
-                "text" => [
-                    "btnToday" => "امروز"
-                ]
-            ],
-            "timePicker" => [
-                "enabled" => false,
-            ],
-            "dayPicker" => [
-                "enabled" => true,
-                "titleFormat" => "YYYY MMMM"
-            ],
-            "monthPicker" => [
-                "enabled" => true,
-                "titleFormat" => "YYYY"
-            ],
-            "yearPicker" => [
-                "enabled" => true,
-                "titleFormat" => "YYYY"
-            ],
-            "responsive" => true
-        ];
 
         return [
             [
@@ -698,7 +712,7 @@ class ReportQBUtil
                     'format' => 'X'
                 ],
                 'plugin' => 'persianDatepicker',
-                'plugin_config' => $datePickerConfig,
+                'plugin_config' => self::$datePickerConfig,
             ],
             [
                 'id' => 'oa.ordered_at',
@@ -709,7 +723,7 @@ class ReportQBUtil
                     'format' => 'X'
                 ],
                 'plugin' => 'persianDatepicker',
-                'plugin_config' => $datePickerConfig,
+                'plugin_config' => self::$datePickerConfig,
             ],
             [
                 'id' => 'oa.order_item_product_title',
@@ -776,7 +790,108 @@ class ReportQBUtil
      */
     public static function getWalletQB(): array
     {
-        return [];
+        return [
+            [
+                'id' => 'w.username',
+                'label' => 'نام کاربری',
+                'type' => 'string',
+                'operators' => self::$stringOperation,
+            ],
+            [
+                'id' => 'u.first_name',
+                'label' => 'نام',
+                'type' => 'string',
+                'operators' => self::$stringOperation,
+            ],
+            [
+                'id' => 'u.last_name',
+                'label' => 'نام خانوادگی',
+                'type' => 'string',
+                'operators' => self::$stringOperation,
+            ],
+            [
+                'id' => 'w.balance',
+                'label' => 'مبلغ کیف پول',
+                'type' => 'string',
+                'operators' => self::$stringOperation,
+            ],
+            [
+                'id' => 'w.is_available',
+                'label' => 'وضعیت دسترسی',
+                'type' => 'integer',
+                'input' => 'select',
+                'values' => [
+                    0 => 'غیر فعال',
+                    1 => 'فعال',
+                ],
+                'operators' => self::$boolOperation,
+            ],
+        ];
+    }
+
+    /**
+     * [] are aliases that used in [ReportWalletDepositController]
+     * in fetching datatable data
+     *
+     * @return array
+     */
+    public static function getWalletDepositQB(): array
+    {
+        return [
+            [
+                'id' => 'wf.username',
+                'label' => 'نام کاربری',
+                'type' => 'string',
+                'operators' => self::$stringOperation,
+            ],
+            [
+                'id' => 'mu.first_name',
+                'label' => 'نام',
+                'type' => 'string',
+                'operators' => self::$stringOperation,
+            ],
+            [
+                'id' => 'mu.last_name',
+                'label' => 'نام خانوادگی',
+                'type' => 'string',
+                'operators' => self::$stringOperation,
+            ],
+            [
+                'id' => 'u.first_name',
+                'label' => 'نام تراکنش کننده',
+                'type' => 'string',
+                'operators' => self::$stringOperation,
+            ],
+            [
+                'id' => 'u.last_name',
+                'label' => 'نام خانوادگی تراکنش کننده',
+                'type' => 'string',
+                'operators' => self::$stringOperation,
+            ],
+            [
+                'id' => 'wf.deposit_type_title',
+                'label' => 'علت تراکنش',
+                'type' => 'string',
+                'operators' => self::$stringOperation,
+            ],
+            [
+                'id' => 'wf.deposit_price',
+                'label' => 'مبلغ تراکنش',
+                'type' => 'string',
+                'operators' => self::$stringOperation,
+            ],
+            [
+                'id' => 'wf.deposit_at',
+                'label' => 'تاریخ تراکنش',
+                'type' => 'date',
+                'operators' => self::$dateOperation,
+                'validation' => [
+                    'format' => 'X'
+                ],
+                'plugin' => 'persianDatepicker',
+                'plugin_config' => self::$datePickerConfig,
+            ],
+        ];
     }
 
     /**

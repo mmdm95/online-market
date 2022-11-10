@@ -10,7 +10,7 @@ use App\Logic\Interfaces\Report\IReporter;
 use App\Logic\Interfaces\Report\IReportExcel;
 use App\Logic\Interfaces\Report\IReportFilter;
 use App\Logic\Interfaces\Report\IReportPdf;
-use App\Logic\Models\WalletModel;
+use App\Logic\Models\WalletFlowModel;
 use App\Logic\Utils\Jdf;
 use App\Logic\Utils\LogUtil;
 use App\Logic\Utils\ReportQBUtil;
@@ -27,7 +27,7 @@ use Sim\Interfaces\IFileNotExistsException;
 use Sim\Interfaces\IInvalidVariableNameException;
 use Sim\Utils\StringUtil;
 
-class ReportWalletController extends AbstractAdminController implements
+class ReportWalletDepositController extends AbstractAdminController implements
     IDatatableController,
     IReporter,
     IReportFilter,
@@ -57,9 +57,9 @@ class ReportWalletController extends AbstractAdminController implements
             show_403();
         }
 
-        $this->setLayout($this->main_layout)->setTemplate('view/report/wallet');
+        $this->setLayout($this->main_layout)->setTemplate('view/report/wallet-deposit');
         return $this->render([
-            'query_builder' => ReportQBUtil::getWalletQB(),
+            'query_builder' => ReportQBUtil::getWalletDepositQB(),
         ]);
     }
 
@@ -82,9 +82,9 @@ class ReportWalletController extends AbstractAdminController implements
         $qb = input()->post('filtered_qb')->getValue();
         $qb = json_decode($qb, true);
         if (!empty($qb)) {
-            session()->set(SESSION_QUERY_BUILDER_WALLET, $qb);
+            session()->set(SESSION_QUERY_BUILDER_WALLET_DEPOSIT, $qb);
         } else {
-            session()->remove(SESSION_QUERY_BUILDER_WALLET);
+            session()->remove(SESSION_QUERY_BUILDER_WALLET_DEPOSIT);
         }
 
         $resourceHandler->type(RESPONSE_TYPE_SUCCESS);
@@ -106,7 +106,7 @@ class ReportWalletController extends AbstractAdminController implements
         }
 
         $resourceHandler = new ResourceHandler();
-        session()->remove(SESSION_QUERY_BUILDER_WALLET);
+        session()->remove(SESSION_QUERY_BUILDER_WALLET_DEPOSIT);
         $resourceHandler->type(RESPONSE_TYPE_SUCCESS);
         response()->json($resourceHandler->getReturnData());
     }
@@ -130,7 +130,7 @@ class ReportWalletController extends AbstractAdminController implements
         }
 
         [$where, $bindValues] = $this->getQBFiltered();
-        ReportUtil::exportWalletExcel($where, $bindValues);
+        ReportUtil::exportWalletDepositExcel($where, $bindValues);
     }
 
     public function exportPdfOne($id)
@@ -165,28 +165,31 @@ class ReportWalletController extends AbstractAdminController implements
                     $event->stopPropagation();
 
                     /**
-                     * @var WalletModel $walletModel
+                     * @var WalletFlowModel $walletFlowModel
                      */
-                    $walletModel = container()->get(WalletModel::class);
+                    $walletFlowModel = container()->get(WalletFlowModel::class);
 
                     [$newWhere, $newBindValues] = $this->getQBFiltered();
                     $where .= $newWhere;
                     $bindValues = array_merge($bindValues, $newBindValues);
 
+                    $cols[] = 'mu.id AS user_id';
+                    $cols[] = 'u.id AS payer_id';
+
                     $where = rtrim(trim($where), 'AND');
 
-                    $data = $walletModel->getWalletInfo($where, $bindValues, $order, $limit, $offset, $cols);
+                    $data = $walletFlowModel->getWalletFlowInfo($where, $bindValues, $order, $limit, $offset, $cols);
                     //-----
-                    $recordsFiltered = $walletModel->getWalletInfoCount($where, $bindValues);
-                    $recordsTotal = $walletModel->getWalletInfoCount();
+                    $recordsFiltered = $walletFlowModel->getWalletFlowInfoCount($where, $bindValues);
+                    $recordsTotal = $walletFlowModel->getWalletFlowInfoCount();
 
                     return [$data, $recordsFiltered, $recordsTotal];
                 });
 
                 $columns = [
-                    ['db' => 'w.id', 'db_alias' => 'id', 'dt' => 'id'],
+                    ['db' => 'wf.id', 'db_alias' => 'id', 'dt' => 'id'],
                     [
-                        'db' => '(CASE WHEN (u.id IS NOT NULL) THEN CONCAT(u.first_name, " ", u.last_name) ELSE w.username END)',
+                        'db' => '(CASE WHEN (mu.id IS NOT NULL) THEN CONCAT(mu.first_name, " ", mu.last_name) ELSE wf.username END)',
                         'db_alias' => 'full_name',
                         'dt' => 'user',
                         'formatter' => function ($d, $row) {
@@ -201,21 +204,35 @@ class ReportWalletController extends AbstractAdminController implements
                         }
                     ],
                     [
-                        'db' => 'balance',
-                        'db_alias' => 'balance',
-                        'dt' => 'balance',
+                        'db' => 'wf.deposit_price',
+                        'db_alias' => 'deposit_price',
+                        'dt' => 'deposit_price',
                         'formatter' => function ($d) {
-                            return number_format((int)StringUtil::toEnglish($d));
+                            return number_format(StringUtil::toEnglish($d)) . ' تومان';
+                        }
+                    ],
+                    ['db' => 'wf.deposit_type_title', 'db_alias' => 'deposit_type_title', 'dt' => 'deposit_title'],
+                    [
+                        'db' => '(CASE WHEN (u.id IS NOT NULL) THEN CONCAT(u.first_name, " ", u.last_name) ELSE wf.username END)',
+                        'db_alias' => 'payer_full_name',
+                        'dt' => 'deposit_by',
+                        'formatter' => function ($d, $row) {
+                            if (!empty($row['payer_id'])) {
+                                return '<a href="' .
+                                    url('admin.user.view', ['id' => $row['payer_id']])->getRelativeUrl() .
+                                    '">' .
+                                    $d .
+                                    '</a>';
+                            }
+                            return $this->setTemplate('partial/admin/parser/dash-icon')->render();
                         }
                     ],
                     [
-                        'db' => 'is_available',
-                        'db_alias' => 'is_available',
-                        'dt' => 'is_available',
+                        'db' => 'wf.deposit_at',
+                        'db_alias' => 'deposit_at',
+                        'dt' => 'deposit_date',
                         'formatter' => function ($d) {
-                            return $this->setTemplate('partial/admin/parser/active-status')->render([
-                                'status' => $d,
-                            ]);
+                            return Jdf::jdate(DEFAULT_TIME_FORMAT, $d);
                         }
                     ],
                 ];

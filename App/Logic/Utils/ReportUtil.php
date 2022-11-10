@@ -5,6 +5,7 @@ namespace App\Logic\Utils;
 use App\Logic\Models\OrderModel;
 use App\Logic\Models\ProductModel;
 use App\Logic\Models\UserModel;
+use App\Logic\Models\WalletFlowModel;
 use App\Logic\Models\WalletModel;
 use Mpdf\Config\ConfigVariables;
 use Mpdf\Config\FontVariables;
@@ -13,6 +14,7 @@ use Mpdf\Output\Destination;
 use Sim\File\Download;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx as WriterXlsx;
 use Sim\Utils\StringUtil;
+use function Symfony\Component\String\b;
 
 class ReportUtil
 {
@@ -210,11 +212,11 @@ class ReportUtil
                     $disPriceStr .= "$c) " . local_number(number_format(StringUtil::toEnglish($product['discounted_price'])));
                     $disDateStr .= "$c) " . !empty($product['discount_until']) ? Jdf::jdate(DEFAULT_TIME_FORMAT) : '-';
                     $colorStr .= "$c) {$product['color_name']}";
-                    if(trim($product['size']) != '') {
+                    if (trim($product['size']) != '') {
                         $sizeStr .= "$c) {$product['size']}";
                         $sizeStr .= "\n";
                     }
-                    if(trim($product['guarantee']) != '') {
+                    if (trim($product['guarantee']) != '') {
                         $guaranteeStr .= "$c) {$product['guarantee']}";
                         $guaranteeStr .= "\n";
                     }
@@ -463,9 +465,6 @@ class ReportUtil
      */
     public static function exportWalletExcel($where, $bindValues)
     {
-        // it should not be implement for now!
-        return;
-
         /**
          * @var WalletModel $walletModel
          */
@@ -473,7 +472,10 @@ class ReportUtil
         $spreadsheetArray = [
             0 => [
                 '#',
-                '',
+                'نام گاربری',
+                'نام و نام خانوادگی',
+                'مبلغ کیف پول',
+                'وضعیت دسترسی',
             ]
         ];
         //-----
@@ -483,25 +485,123 @@ class ReportUtil
         $offset = 0;
         // make memory management better in this way by fetching chunk of users each time
         do {
-            $items = $walletModel->get(
-                ['*'],
+            $items = $walletModel->getWalletInfo(
                 $where,
                 $bindValues,
-                ['id DESC'],
+                ['w.id DESC'],
                 $limit,
-                $offset * $limit
+                $offset * $limit,
+                [
+                    'w.*',
+                    'u.first_name AS user_first_name',
+                    'u.last_name AS user_last_name'
+                ]
             );
             $total += count($items);
             foreach ($items as $item) {
+                $spreadsheetArray[($k + 1)][] = $k + 1;
+                $spreadsheetArray[($k + 1)][] = $item['username'];
+                $spreadsheetArray[($k + 1)][] = trim(($item['user_first_name'] ?? '') . ' ' . ($item['user_last_name'] ?? '')) ?? '-';
+                $spreadsheetArray[($k + 1)][] = number_format(StringUtil::toEnglish($item['balance']));
+                $spreadsheetArray[($k + 1)][] = is_value_checked($item['is_available']) ? 'فعال' : 'غیر فعال';
+
                 $k++;
             }
             $offset++;
         } while (count($items));
 
+        $spreadsheetArray[$total + 1][] = '';
+        $spreadsheetArray[$total + 1][] = 'تعداد کل اطلاعات کیف پول';
+        $spreadsheetArray[$total + 1][] = local_number(number_format(StringUtil::toEnglish($total)));
+        $spreadsheetArray[$total + 1][] = '';
+        $spreadsheetArray[$total + 1][] = '';
+        $spreadsheetArray[$total + 1][] = '';
+
         self::exportExcel(
             $spreadsheetArray,
             'report-wallet',
             'گزارش کیف پول ' . Jdf::jdate(REPORT_TIME_FORMAT, time())
+        );
+    }
+
+    /**
+     * @param $where
+     * @param $bindValues
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
+     * @throws \PhpOffice\PhpSpreadsheet\Writer\Exception
+     * @throws \Sim\Exceptions\FileNotExistsException
+     * @throws \Sim\Exceptions\PathManager\PathNotRegisteredException
+     * @throws \Sim\File\Interfaces\IFileException
+     * @throws \Sim\Interfaces\IInvalidVariableNameException
+     */
+    public static function exportWalletDepositExcel($where, $bindValues)
+    {
+        /**
+         * @var WalletFlowModel $walletFlowModel
+         */
+        $walletFlowModel = container()->get(WalletFlowModel::class);
+        $spreadsheetArray = [
+            0 => [
+                '#',
+                'نام کاربری',
+                'نام و نام خانوادگی',
+                'مبلغ تراکنش',
+                'علت تراکنش',
+                'تراکنش توسط',
+                'تاریخ تراکنش',
+            ]
+        ];
+        //-----
+        $total = 0;
+        $k = 0;
+        $limit = 100;
+        $offset = 0;
+        // make memory management better in this way by fetching chunk of users each time
+        do {
+            $items = $walletFlowModel->getWalletFlowInfo(
+                $where,
+                $bindValues,
+                ['wf.id DESC'],
+                $limit,
+                $offset * $limit,
+                [
+                    'wf.username',
+                    'mu.first_name',
+                    'mu.last_name',
+                    'u.first_name AS payer_first_name',
+                    'u.last_name AS payer_last_name',
+                    'wf.deposit_type_title',
+                    'wf.deposit_price',
+                    'wf.deposit_at',
+                ]
+            );
+            $total += count($items);
+            foreach ($items as $item) {
+                $spreadsheetArray[($k + 1)][] = $k + 1;
+                $spreadsheetArray[($k + 1)][] = $item['username'];
+                $spreadsheetArray[($k + 1)][] = trim(($item['first_name'] ?? '') . ' ' . ($item['last_name'] ?? '')) ?? '-';
+                $spreadsheetArray[($k + 1)][] = number_format(StringUtil::toEnglish($item['deposit_price']));
+                $spreadsheetArray[($k + 1)][] = trim($item['deposit_type_title'] ?? '-');
+                $spreadsheetArray[($k + 1)][] = trim(($item['payer_first_name'] ?? '') . ' ' . ($item['payer_last_name'] ?? '')) ?? '-';
+                $spreadsheetArray[($k + 1)][] = Jdf::jdate(REPORT_TIME_FORMAT, $item['deposit_at']);
+
+                $k++;
+            }
+            $offset++;
+        } while (count($items));
+
+        $spreadsheetArray[$total + 1][] = '';
+        $spreadsheetArray[$total + 1][] = 'تعداد کل تراکنش‌های کیف پول';
+        $spreadsheetArray[$total + 1][] = local_number(number_format(StringUtil::toEnglish($total)));
+        $spreadsheetArray[$total + 1][] = '';
+        $spreadsheetArray[$total + 1][] = '';
+        $spreadsheetArray[$total + 1][] = '';
+
+        self::exportExcel(
+            $spreadsheetArray,
+            'report-wallet-deposit',
+            'گزارش تراکنش‌های کیف پول ' . Jdf::jdate(REPORT_TIME_FORMAT, time())
         );
     }
 

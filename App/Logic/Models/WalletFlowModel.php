@@ -12,7 +12,7 @@ class WalletFlowModel extends BaseModel
     protected $table = self::TBL_WALLET_FLOW;
 
     /**
-     * Use [wf for wallet_flow], [u for users - for payer id]
+     * Use [wf for wallet_flow], [mu for users], [u for users - for payer id]
      *
      * @param string|null $where
      * @param array $bind_values
@@ -45,6 +45,10 @@ class WalletFlowModel extends BaseModel
 
         try {
             $select
+                ->leftJoin(
+                    self::TBL_USERS . ' AS mu',
+                    'mu.username=wf.username'
+                )
                 ->leftJoin(
                     self::TBL_USERS . ' AS u',
                     'u.id=wf.payer_id'

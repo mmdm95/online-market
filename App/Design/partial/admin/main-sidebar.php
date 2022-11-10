@@ -152,13 +152,13 @@ $authAdmin = auth_admin();
                     <!--                    <ul class="nav nav-group-sub">-->
                     <!--                        <li class="nav-item">-->
                     <!--                            <a href="" class="nav-link">-->
-                    <?= '';//url('admin.send_method.add');                                                 ?>
+                    <?= '';//url('admin.send_method.add');                                                  ?>
                     <!--                                افزودن روش ارسال جدید-->
                     <!--                            </a>-->
                     <!--                        </li>-->
                     <!--                        <li class="nav-item">-->
                     <!--                            <a href="" class="nav-link">-->
-                    <?= '';//url('admin.send_method.view', '');                                                 ?>
+                    <?= '';//url('admin.send_method.view', '');                                                  ?>
                     <!--                                لیست روش‌های ارسال-->
                     <!--                            </a>-->
                     <!--                        </li>-->
@@ -446,20 +446,31 @@ $authAdmin = auth_admin();
                         </li>
                     <?php endif; ?>
 
-                    <!--                    --><?php //if ($allowReportWallet): ?>
-                    <!--                        <li class="nav-item">-->
-                    <!--                            <a href="--><? //= url('admin.report.wallet'); ?><!--"-->
-                    <!--                               class="nav-link "-->
-                    <?= '';//url()->contains(url('admin.report.wallet')->getRelativeUrlTrimmed()) ? 'active' : '';      ?>
-                    <!--                               data-popup="tooltip"-->
-                    <!--                               data-original-title="گزارش‌گیری از کیف پول"-->
-                    <!--                               data-boundary="window"-->
-                    <!--                               data-placement="left">-->
-                    <!--                                <i class="icon-archive"></i>-->
-                    <!--                                <span>گزارش‌گیری از کیف پول</span>-->
-                    <!--                            </a>-->
-                    <!--                        </li>-->
-                    <!--                    --><?php //endif; ?>
+                    <?php if ($allowReportWallet): ?>
+                        <li class="nav-item">
+                            <a href="<?= url('admin.report.wallet'); ?>"
+                               class="nav-link <?= url()->contains(url('admin.report.wallet')->getRelativeUrlTrimmed()) ? 'active' : ''; ?>"
+                               data-popup="tooltip"
+                               data-original-title="گزارش‌گیری از کیف پول"
+                               data-boundary="window"
+                               data-placement="left">
+                                <i class="icon-archive"></i>
+                                <span>گزارش‌گیری از کیف پول</span>
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a href="<?= url('admin.report.wallet.deposit'); ?>"
+                               class="nav-link <?= url()->contains(url('admin.report.wallet.deposit')->getRelativeUrlTrimmed()) ? 'active' : ''; ?>"
+                               data-popup="tooltip"
+                               data-original-title="گزارش‌گیری از تراکنش‌های کیف پول"
+                               data-boundary="window"
+                               data-placement="left">
+                                <i class="icon-archive"></i>
+                                <span>گزارش‌گیری از تراکنش‌های کیف پول</span>
+                            </a>
+                        </li>
+                    <?php endif; ?>
                     <!-- /report -->
                 <?php endif; ?>
 
