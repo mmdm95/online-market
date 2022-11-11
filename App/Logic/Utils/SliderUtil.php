@@ -29,6 +29,7 @@ class SliderUtil
                 'pa.title', 'pa.slug', 'pa.image', 'pa.category_id', 'pa.is_special', 'pa.product_availability',
                 'pa.code', 'pa.product_id', 'pa.price', 'pa.discounted_price', 'pa.discount_until', 'pa.is_available',
                 'pa.festival_id', 'pa.festival_discount', 'pa.created_at', 'pa.stock_count', 'pa.max_cart_count',
+                'pa.show_coming_soon', 'pa.call_for_more',
             ])
             ->where('pa.publish=:pub')
             ->bindValue('pub', DB_YES);
@@ -110,7 +111,7 @@ class SliderUtil
                 'pa.title', 'pa.slug', 'pa.image', 'pa.category_id', 'pa.product_availability',
                 'pa.code', 'pa.product_id', 'pa.price', 'pa.discounted_price', 'pa.discount_until',
                 'pa.is_available', 'pa.festival_id', 'pa.festival_discount', 'pa.festival_expire',
-                'pa.stock_count', 'pa.max_cart_count',
+                'pa.stock_count', 'pa.max_cart_count', 'pa.show_coming_soon', 'pa.call_for_more',
             ])
             ->join(
                 'INNER',
