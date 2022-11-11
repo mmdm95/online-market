@@ -110,8 +110,7 @@ $validator = form_validator();
                                         data-current-province="<?= $validator->setInput('inp-addr-province'); ?>"
                                         data-city-select-target="#addAddressCitySelect">
                                     <option value="<?= DEFAULT_OPTION_VALUE ?>"
-                                            selected="selected"
-                                            disabled="disabled">
+                                            selected="selected">
                                         انتخاب کنید
                                     </option>
                                 </select>
@@ -126,8 +125,7 @@ $validator = form_validator();
                                         data-current-city="<?= $validator->setInput('inp-addr-city'); ?>"
                                         id="addAddressCitySelect">
                                     <option value="<?= DEFAULT_OPTION_VALUE ?>"
-                                            selected="selected"
-                                            disabled="disabled">
+                                            selected="selected">
                                         انتخاب کنید
                                     </option>
                                 </select>

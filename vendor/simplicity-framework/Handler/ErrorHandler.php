@@ -3,6 +3,7 @@
 namespace Sim\Handler;
 
 use Sim\Interfaces\ConfigManager\IConfig;
+use Sim\Interfaces\IFileNotExistsException;
 use Sim\Interfaces\IInitialize;
 use Sim\Interfaces\Loader\ILoader;
 use Sim\Logger\ILogger;
@@ -61,7 +62,6 @@ class ErrorHandler implements IInitialize
 
     /**
      * Pass error handler methods insteadof current error handler
-     *
      */
     public function init()
     {
@@ -94,13 +94,13 @@ class ErrorHandler implements IInitialize
 
         //Custom error handling constants
         if (MODE_DEVELOPMENT == $this->mode) {
-            defined('DISPLAY_ERRORS') OR define('DISPLAY_ERRORS', TRUE);
-            defined('ERROR_REPORTING') OR define('ERROR_REPORTING', E_ALL | E_STRICT);
-            defined('LOG_ERRORS') OR define('LOG_ERRORS', TRUE);
+            defined('DISPLAY_ERRORS') or define('DISPLAY_ERRORS', TRUE);
+            defined('ERROR_REPORTING') or define('ERROR_REPORTING', E_ALL | E_STRICT);
+            defined('LOG_ERRORS') or define('LOG_ERRORS', TRUE);
         } else { //if (MODE_PRODUCTION == $this->mode) {
-            defined('DISPLAY_ERRORS') OR define('DISPLAY_ERRORS', FALSE);
-            defined('ERROR_REPORTING') OR define('ERROR_REPORTING', ~E_ALL);
-            defined('LOG_ERRORS') OR define('LOG_ERRORS', FALSE);
+            defined('DISPLAY_ERRORS') or define('DISPLAY_ERRORS', FALSE);
+            defined('ERROR_REPORTING') or define('ERROR_REPORTING', ~E_ALL);
+            defined('LOG_ERRORS') or define('LOG_ERRORS', FALSE);
         }
     }
 
@@ -218,25 +218,26 @@ class ErrorHandler implements IInitialize
      *
      * @see https://www.php.net/manual/en/function.set-error-handler.php#112291
      * @param \Throwable $e
+     * @throws IFileNotExistsException
      */
     public function logException(\Throwable $e)
     {
         if (DISPLAY_ERRORS) {
-            print "<div style='text-align: center;'>";
-            print "<h2 style='color: rgb(190, 50, 50); direction: ltr;'>Error occurred:</h2>";
-            print "<table style='max-width: 800px; display: inline-block;'><tbody>";
-            print "<tr style='background-color:rgb(230,230,230);'><th style='width: 80px;'>Type</th><td style='padding: 7px;'>" . get_class($e) . "</td></tr>";
-            print "<tr style='background-color:rgb(240,240,240);'><th>Message</th><td style='padding: 7px;'>{$e->getMessage()}</td></tr>";
-            print "<tr style='background-color:rgb(230,230,230);'><th>File</th><td style='padding: 7px;'>{$e->getFile()}</td></tr>";
-            print "<tr style='background-color:rgb(240,240,240);'><th>Line</th><td style='padding: 7px;'>{$e->getLine()}</td></tr>";
-            print "<tr style='background-color:rgb(230,230,230);'><th>Trace</th><td style='padding: 7px;'>{$e->getTraceAsString()}</td></tr>";
-            print "</table></tbody></div>";
+            if (request()->isAjax() || is_json_type_or_accept()) {
+                $message = "Message: {$e->getMessage()}; File: {$e->getFile()}; Line: {$e->getLine()}; Trace: {$e->getTraceAsString()};";
+                if (!headers_sent()) {
+                    header('HTTP/1.1 500 Internal Server Error');
+                }
+                response()->json([$message]);
+            } else {
+                loader()
+                    ->setData(['e' => $e])
+                    ->load_include(__DIR__ . '/CustomException/exception-detailed', 'php');
+            }
         } else {
             $message = "Message: {$e->getMessage()}; File: {$e->getFile()}; Line: {$e->getLine()}; Trace: {$e->getTraceAsString()};";
             // Log the error
-//            file_put_contents(log_path("exceptions.log"), $message . PHP_EOL, FILE_APPEND);
             $this->logger->log($message, get_class($e));
-
             // Load 500 error file
             $Exceptions_detail = $this->messageFormat(
                 get_class($e),
@@ -259,8 +260,15 @@ class ErrorHandler implements IInitialize
      */
     protected function loadInternalServerErrorFile($message, $Exceptions_detail, $page)
     {
-        if (!headers_sent()) {
-            header('HTTP/1.1 500 Internal Server Error');
+        if (request()->isAjax() || is_json_type_or_accept()) {
+            if (!headers_sent()) {
+                header('HTTP/1.1 500 Internal Server Error');
+            }
+            response()->json([$message]);
+        } else {
+            if (!headers_sent()) {
+                header('HTTP/1.1 500 Internal Server Error');
+            }
             $content = $this->loader->setData([
                 'Exceptions_message' => $message,
                 'Exceptions_detail' => $Exceptions_detail
@@ -278,7 +286,7 @@ class ErrorHandler implements IInitialize
      * @param $trace
      * @return array
      */
-    protected function messageFormat($type, $typeStr, $msg, $file, $line, $trace = null)
+    private function messageFormat($type, $typeStr, $msg, $file, $line, $trace = null): array
     {
         return [
             'type' => $type,

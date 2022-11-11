@@ -10,7 +10,7 @@ $validator = form_validator();
         <?php load_partial('admin/card-header', ['header_title' => 'ویرایش مطلب']); ?>
 
         <div class="card-body">
-            <form action="<?= url('admin.blog.edit') . $blog['id']; ?>" method="post" id="__form_edit_blog">
+            <form action="<?= url('admin.blog.edit')->getRelativeUrlTrimmed(); ?>" method="post" id="__form_edit_blog">
                 <?php load_partial('admin/message/message-form', [
                     'errors' => $blog_edit_errors ?? [],
                     'success' => $blog_edit_success ?? '',

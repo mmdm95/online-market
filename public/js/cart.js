@@ -220,7 +220,7 @@
                                 shop.hideLoader(loaderId);
 
                                 shop.toasts.toast(this.data, {
-                                    type: variables.toasts.types.success,
+                                    type: variables.toasts.types[this.type ?? 'success'],
                                 });
                                 cart.getNPlaceCart();
                             });
@@ -230,7 +230,7 @@
                                 shop.hideLoader(loaderId);
 
                                 shop.toasts.toast(this.data, {
-                                    type: variables.toasts.types.success,
+                                    type: variables.toasts.types[this.type ?? 'success'],
                                 });
                                 cart.getNPlaceCart();
                             });

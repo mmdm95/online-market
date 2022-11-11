@@ -245,7 +245,7 @@ class ReportOrderController extends AbstractAdminController implements
 
                     $where = trim(trim($where), 'AND');
 
-                    $data = $orderModel->getLimitedOrder($where, $bindValues, $order, $limit, $offset, ['oa.product_id'], $cols);
+                    $data = $orderModel->getLimitedOrder($where, $bindValues, $order, $limit, $offset, ['oa.code'], $cols);
                     //-----
                     $recordsFiltered = $orderModel->getLimitedOrderCount($where, $bindValues);
                     $recordsTotal = $orderModel->getLimitedOrderCount();

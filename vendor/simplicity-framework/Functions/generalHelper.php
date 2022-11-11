@@ -11,7 +11,7 @@ if (!function_exists('is_php')) {
     /**
      * Determines if the current version of PHP is equal to or greater than the supplied value
      *
-     * @param    string
+     * @param string
      * @return    bool    TRUE if the current version is $version or higher
      */
     function is_php($version)
@@ -163,10 +163,10 @@ if (!function_exists('encode_html')) {
 
 if (!function_exists('hexentities')) {
     /**
-     * To convert a string to hex value like convert 
-     * email address to hex to prevent spam bots to 
+     * To convert a string to hex value like convert
+     * email address to hex to prevent spam bots to
      * index them and etc.
-     * 
+     *
      * @see https://www.php.net/manual/en/function.bin2hex.php#48861
      * @param $str
      * @return string
@@ -178,5 +178,17 @@ if (!function_exists('hexentities')) {
             $return .= '&#x' . bin2hex(substr($str, $i, 1)) . ';';
         }
         return $return;
+    }
+}
+
+if (!function_exists('is_json_type_or_accept')) {
+    /**
+     * @return bool
+     */
+    function is_json_type_or_accept(): bool
+    {
+        $acceptHeader = request()->getHeader('Accept', '');
+        return false !== strpos($acceptHeader, 'application/json') ||
+            0 === strpos(request()->getHeader('Content-Type', ''), 'application/json');
     }
 }

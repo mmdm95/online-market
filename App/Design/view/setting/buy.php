@@ -32,7 +32,7 @@ $validator = form_validator();
                     <div class="card-body">
                         <?php load_partial('admin/section-header', ['header_title' => 'محل فروشگاه']); ?>
                         <div class="row">
-                            <div class="col-lg-4 form-group">
+                            <div class="col-lg-3 form-group">
                                 <label>
                                     <span class="text-danger">*</span>
                                     انتخاب استان:
@@ -49,7 +49,7 @@ $validator = form_validator();
                                     </option>
                                 </select>
                             </div>
-                            <div class="col-lg-4 form-group">
+                            <div class="col-lg-3 form-group">
                                 <label>
                                     <span class="text-danger" aria-hidden="true">*</span>
                                     انتخاب شهر:
@@ -65,14 +65,57 @@ $validator = form_validator();
                                     </option>
                                 </select>
                             </div>
-                            <div class="col-lg-4 form-group">
+                            <div class="col-lg-6 form-group">
                                 <label>
-                                    قیمت در مناطق داخل شهر انتخاب شده(به تومان):
+                                    هزینه ارسال در مناطق داخل شهر انتخاب شده(به تومان):
                                 </label>
                                 <input type="text" class="form-control"
                                        placeholder="از نوع عددی"
                                        name="inp-setting-current-city-post-price"
                                        value="<?= !$validator->getStatus() ? ($validator->setInput('inp-setting-current-city-post-price') ?: config()->get('settings.current_city_post_price.value')) : config()->get('settings.current_city_post_price.value'); ?>">
+                            </div>
+                        </div>
+
+                        <?php load_partial('admin/section-header', ['header_title' => 'نوع هزینه ارسال']); ?>
+                        <div class="row">
+                            <?php
+                            $postPriceAutoRadioChecked = config()->get('settings.post_price_calculation_mode.value') == SEND_PRICE_CALCULATION_AUTO ? 'checked="checked"' : '';
+                            $postPriceStaticRadioChecked = config()->get('settings.post_price_calculation_mode.value') == SEND_PRICE_CALCULATION_STATIC ? 'checked="checked"' : '';
+                            if (empty(trim($postPriceAutoRadioChecked)) && empty(trim($postPriceStaticRadioChecked))) {
+                                $postPriceAutoRadioChecked = 'checked="checked"';
+                            }
+                            ?>
+                            <div class="form-group col-lg-12">
+                                <div class="form-check form-check-inline form-check-right">
+                                    <label class="form-check-label">
+                                        محاسبه قیمت خودکار
+                                        <input type="radio" class="form-check-input-styled"
+                                               name="inp-setting-post-price-calc" data-fouc
+                                               value="<?= SEND_PRICE_CALCULATION_AUTO; ?>"
+                                            <?= $postPriceAutoRadioChecked; ?>>
+                                    </label>
+                                </div>
+
+                                <div class="form-check form-check-inline form-check-right">
+                                    <label class="form-check-label">
+                                        قیمت به صورت ثابت
+                                        <input type="radio" class="form-check-input-styled"
+                                               name="inp-setting-post-price-calc" data-fouc
+                                               value="<?= SEND_PRICE_CALCULATION_STATIC; ?>"
+                                            <?= $postPriceStaticRadioChecked; ?>>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="form-group col-lg-6">
+                                <label>هزینه ارسال ثابت:</label>
+                                <input type="text" class="form-control" placeholder="از نوع عددی"
+                                       name="inp-setting-post-price-calc-static"
+                                       value="<?= !$validator->getStatus() ? ($validator->setInput('inp-setting-post-price-calc-static') ?: config()->get('settings.static_post_price.value')) : config()->get('settings.static_post_price.value'); ?>">
+                                <small class="d-block text-primary form-text text-left">
+                                    فقط در صورتی که
+                                    <code>قیمت به صورت ثابت</code>
+                                    انتخاب شده باشد، محاسبه هزینه ارسال به صورت ثابت خواهد بود.
+                                </small>
                             </div>
                         </div>
 

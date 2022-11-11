@@ -83,13 +83,14 @@ class OrderModel extends BaseModel
     }
 
     /**
-     * Use [o for orders], [u for users]
+     * Use [o for orders], [u for users], [iu for users (invoice_status_changer)], [su for users (send_status_changer)]
      *
      * @param string|null $where
      * @param array $bind_values
      * @param array $order_by
      * @param int|null $limit
      * @param int $offset
+     * @param array $group_by
      * @param array $columns
      * @return array
      */
@@ -99,6 +100,7 @@ class OrderModel extends BaseModel
         array   $order_by = ['o.id DESC'],
         ?int    $limit = null,
         int     $offset = 0,
+        array   $group_by = ['o.code'],
         array   $columns = [
             'o.*',
             'u.username',
@@ -118,7 +120,8 @@ class OrderModel extends BaseModel
             ->from($this->table . ' AS o')
             ->cols($columns)
             ->offset($offset)
-            ->orderBy($order_by);
+            ->orderBy($order_by)
+            ->groupBy($group_by);
 
         try {
             $select

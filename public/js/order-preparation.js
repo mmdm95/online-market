@@ -279,20 +279,13 @@
             }
         });
 
-        $('select[name="inp-addr-province"]').on('change' + variables.namespace, function () {
-            var target = $(this).attr('data-city-select-target');
-            if ($(target).length) {
-                $(target).trigger('change');
-            }
-        });
-
         // when city changed, calculate send price and update side info table
         $('select[name="inp-addr-city"]').on('change' + variables.namespace, function () {
             var checked, checkedProvince;
             checked = $(this).find('option:selected').val();
             checkedProvince = $('select[name="inp-addr-province"]').find('option:selected').val();
 
-            if (checked) {
+            if (checked && checked != -1 && checkedProvince && checkedProvince != -1) {
                 if (createLoader) {
                     createLoader = false;
                     loaderId = shop.showLoader();

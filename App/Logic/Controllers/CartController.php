@@ -99,24 +99,35 @@ class CartController extends AbstractHomeController
                     'pa.festival_publish', 'pa.festival_start', 'pa.category_name', 'pa.title',
                     'pa.slug', 'pa.category_id', 'pa.unit_title', 'pa.unit_sign', 'pa.is_returnable',
                     'pa.stock_count', 'pa.max_cart_count', 'pa.color_hex', 'pa.color_name', 'pa.size',
-                    'pa.guarantee', 'pa.weight',
+                    'pa.guarantee', 'pa.weight', 'pa.show_coming_soon', 'pa.call_for_more',
                 ]
             );
 
             if (count($extraInfo)) {
                 $extraInfo = $extraInfo[0];
-                // apply stepped price
-                $stepped = get_stepped_price(1, $product_code);
-                if (!is_null($stepped)) {
-                    $extraInfo['stepped_price'] = $stepped['price'];
-                    $extraInfo['stepped_discounted_price'] = $stepped['discounted_price'];
+
+                if (DB_YES == $extraInfo['show_coming_soon']) {
+                    $resourceHandler
+                        ->type(RESPONSE_TYPE_INFO)
+                        ->data('محصول بزودی به سایت اضافه خواهد شد.');
+                } elseif (DB_YES == $extraInfo['call_for_more']) {
+                    $resourceHandler
+                        ->type(RESPONSE_TYPE_WARNING)
+                        ->data('برای اطلاعات بیشتر با ما تماس بگیرید.');
+                } else {
+                    // apply stepped price
+                    $stepped = get_stepped_price(1, $product_code);
+                    if (!is_null($stepped)) {
+                        $extraInfo['stepped_price'] = $stepped['price'];
+                        $extraInfo['stepped_discounted_price'] = $stepped['discounted_price'];
+                    }
+                    //
+                    cart()->add($product_code, $extraInfo)->store();
+                    $resourceHandler
+                        ->type(RESPONSE_TYPE_SUCCESS)
+                        ->data('محصول به سبد اضافه شد.');
+                    CouponUtil::checkCoupon(CouponUtil::getStoredCouponCode());
                 }
-                //
-                cart()->add($product_code, $extraInfo)->store();
-                $resourceHandler
-                    ->type(RESPONSE_TYPE_SUCCESS)
-                    ->data('محصول به سبد اضافه شد.');
-                CouponUtil::checkCoupon(CouponUtil::getStoredCouponCode());
             } else {
                 $resourceHandler
                     ->type(RESPONSE_TYPE_ERROR)
@@ -165,30 +176,40 @@ class CartController extends AbstractHomeController
                         'pa.festival_publish', 'pa.festival_start', 'pa.category_name', 'pa.title',
                         'pa.slug', 'pa.category_id', 'pa.unit_title', 'pa.unit_sign', 'pa.is_returnable',
                         'pa.stock_count', 'pa.max_cart_count', 'pa.color_hex', 'pa.color_name', 'pa.size',
-                        'pa.guarantee', 'pa.weight',
+                        'pa.guarantee', 'pa.weight', 'pa.show_coming_soon', 'pa.call_for_more',
                     ]
                 );
                 if (count($extraInfo)) {
-                    if ($qnt > 0) {
-                        $extraInfo = $extraInfo[0];
-                        // apply stepped price
-                        $stepped = get_stepped_price($qnt, $product_code);
-                        if (!is_null($stepped)) {
-                            $extraInfo['stepped_price'] = $stepped['price'];
-                            $extraInfo['stepped_discounted_price'] = $stepped['discounted_price'];
-                        }
-                        //
-                        cart()->update($product_code, array_merge($extraInfo, [
-                            'qnt' => $qnt,
-                        ]))->store();
+                    if (DB_YES == $extraInfo['show_coming_soon']) {
                         $resourceHandler
-                            ->type(RESPONSE_TYPE_SUCCESS)
-                            ->data('تعداد محصول در سبد، بروزرسانی شد.');
-                        CouponUtil::checkCoupon(CouponUtil::getStoredCouponCode());
+                            ->type(RESPONSE_TYPE_INFO)
+                            ->data('محصول بزودی به سایت اضافه خواهد شد.');
+                    } elseif (DB_YES == $extraInfo['call_for_more']) {
+                        $resourceHandler
+                            ->type(RESPONSE_TYPE_WARNING)
+                            ->data('برای اطلاعات بیشتر با ما تماس بگیرید.');
                     } else {
-                        $resourceHandler
-                            ->type(RESPONSE_TYPE_ERROR)
-                            ->errorMessage('تعداد وارد شده نامعتبر است.');
+                        if ($qnt > 0) {
+                            $extraInfo = $extraInfo[0];
+                            // apply stepped price
+                            $stepped = get_stepped_price($qnt, $product_code);
+                            if (!is_null($stepped)) {
+                                $extraInfo['stepped_price'] = $stepped['price'];
+                                $extraInfo['stepped_discounted_price'] = $stepped['discounted_price'];
+                            }
+                            //
+                            cart()->update($product_code, array_merge($extraInfo, [
+                                'qnt' => $qnt,
+                            ]))->store();
+                            $resourceHandler
+                                ->type(RESPONSE_TYPE_SUCCESS)
+                                ->data('تعداد محصول در سبد، بروزرسانی شد.');
+                            CouponUtil::checkCoupon(CouponUtil::getStoredCouponCode());
+                        } else {
+                            $resourceHandler
+                                ->type(RESPONSE_TYPE_ERROR)
+                                ->errorMessage('تعداد وارد شده نامعتبر است.');
+                        }
                     }
                 } else {
                     $resourceHandler

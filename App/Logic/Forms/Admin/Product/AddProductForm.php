@@ -342,6 +342,8 @@ class AddProductForm implements IPageForm
             $special = input()->post('inp-add-product-special', '')->getValue();
             $returnable = input()->post('inp-add-product-returnable', '')->getValue();
             $commenting = input()->post('inp-add-product-commenting', '')->getValue();
+            $comingSoon = input()->post('inp-add-product-coming-soon', '')->getValue();
+            $callForMore = input()->post('inp-add-product-call-for-more', '')->getValue();
             $image = input()->post('inp-add-product-img', '')->getValue();
             $title = input()->post('inp-add-product-title', '')->getValue();
             $simpleProp = input()->post('inp-add-product-simple-properties', '')->getValue();
@@ -381,6 +383,8 @@ class AddProductForm implements IPageForm
                 'is_available' => is_value_checked($availability) ? DB_YES : DB_NO,
                 'is_returnable' => is_value_checked($returnable) ? DB_YES : DB_NO,
                 'allow_commenting' => is_value_checked($commenting) ? DB_YES : DB_NO,
+                'show_coming_soon' => is_value_checked($comingSoon) ? DB_YES : DB_NO,
+                'call_for_more' => is_value_checked($callForMore) ? DB_YES : DB_NO,
                 'created_by' => $auth->getCurrentUser()['id'] ?? null,
                 'created_at' => time(),
             ], $gallery, $products, is_array($relatedProducts) ? $relatedProducts : []);
