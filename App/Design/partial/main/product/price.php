@@ -7,7 +7,7 @@
         <div class="product_price">
             <span class="badge badge-success d-block py-3">برای اطلاعات بیشتر تماس بگیرید</span>
         </div>
-    <?php elseif ($is_really_available ?? false): ?>
+    <?php elseif (get_product_availability($product)): ?>
         <div class="product_price">
             <?php
             [$discountPrice, $hasDiscount] = get_discount_price($product);
