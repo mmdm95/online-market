@@ -1,5 +1,13 @@
 <?php if (count($product ?? [])): ?>
-    <?php if (get_product_availability($product)): ?>
+    <?php if (DB_YES == $product['show_coming_soon']): ?>
+        <div class="product_price">
+            <span class="badge badge-info d-block py-3">بزودی</span>
+        </div>
+    <?php elseif (DB_YES == $product['call_for_more']): ?>
+        <div class="product_price">
+            <span class="badge badge-success d-block py-3">برای اطلاعات بیشتر تماس بگیرید</span>
+        </div>
+    <?php elseif ($is_really_available ?? false): ?>
         <div class="product_price">
             <?php
             [$discountPrice, $hasDiscount] = get_discount_price($product);

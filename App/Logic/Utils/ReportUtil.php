@@ -346,7 +346,7 @@ class ReportUtil
             $items = $orderModel->getOrdersWithAllInfo(
                 $where,
                 $bindValues,
-                ['ordered_at DESC'],
+                ['o.ordered_at DESC'],
                 $limit,
                 $offset * $limit
             );
@@ -401,6 +401,17 @@ class ReportUtil
                     $c++;
                 }
                 //-----
+
+                // order items info
+                $spreadsheetArray[($k + 1)][] = $unitPriceStr;
+                $spreadsheetArray[($k + 1)][] = $priceStr;
+                $spreadsheetArray[($k + 1)][] = $disPriceStr;
+                $spreadsheetArray[($k + 1)][] = $colorStr;
+                $spreadsheetArray[($k + 1)][] = $sizeStr;
+                $spreadsheetArray[($k + 1)][] = $guaranteeStr;
+                $spreadsheetArray[($k + 1)][] = $weightStr;
+                $spreadsheetArray[($k + 1)][] = $productCountStr;
+                //-----
                 $spreadsheetArray[($k + 1)][] = $item['city'];
                 $spreadsheetArray[($k + 1)][] = $item['province'];
                 $spreadsheetArray[($k + 1)][] = $item['address'];
@@ -408,27 +419,27 @@ class ReportUtil
                 $spreadsheetArray[($k + 1)][] = PAYMENT_STATUSES[$item['payment_status']] ?? 'نامشخص';
                 $spreadsheetArray[($k + 1)][] = METHOD_TYPES[$item['method_type']] ?? 'نامشخص';
                 $spreadsheetArray[($k + 1)][] = $item['method_title'];
-                $spreadsheetArray[($k + 1)][] = $item['coupon_code'];
-                $spreadsheetArray[($k + 1)][] = $item['coupon_title'];
+                $spreadsheetArray[($k + 1)][] = $item['coupon_code'] ?? '-';
+                $spreadsheetArray[($k + 1)][] = $item['coupon_title'] ?? '-';
                 $spreadsheetArray[($k + 1)][] = number_format(StringUtil::toEnglish($item['coupon_price']));
                 $spreadsheetArray[($k + 1)][] = number_format(StringUtil::toEnglish($item['total_price']));
                 $spreadsheetArray[($k + 1)][] = number_format(StringUtil::toEnglish($item['discount_price']));
                 $spreadsheetArray[($k + 1)][] = number_format(StringUtil::toEnglish($item['shipping_price']));
                 $spreadsheetArray[($k + 1)][] = number_format(StringUtil::toEnglish($item['final_price']));
-                $spreadsheetArray[($k + 1)][] = number_format(StringUtil::toEnglish($item['send_status_title']));
+                $spreadsheetArray[($k + 1)][] = StringUtil::toEnglish($item['send_status_title']);
                 $spreadsheetArray[($k + 1)][] = Jdf::jdate(REPORT_TIME_FORMAT, $item['payed_at']);
                 $spreadsheetArray[($k + 1)][] = Jdf::jdate(REPORT_TIME_FORMAT, $item['ordered_at']);
                 $spreadsheetArray[($k + 1)][] = !empty($item['invoice_status_changed_at'])
                     ? Jdf::jdate(REPORT_TIME_FORMAT, $item['invoice_status_changed_at'])
                     : '-';
                 $spreadsheetArray[($k + 1)][] = !empty($item['invoice_status_changed_by'])
-                    ? (trim($item['invoice_user_first_name'] . ' ' . $item['invoice_user_last_name']) ?: $item['invoice_username'])
+                    ? ((trim($item['invoice_user_first_name'] . ' ' . $item['invoice_user_last_name']) ?: $item['invoice_username']) ?? '-')
                     : 'سیستمی';
                 $spreadsheetArray[($k + 1)][] = !empty($item['send_status_changed_at'])
                     ? Jdf::jdate(REPORT_TIME_FORMAT, $item['send_status_changed_at'])
                     : '-';
                 $spreadsheetArray[($k + 1)][] = !empty($item['send_status_changed_by'])
-                    ? (trim($item['sender_user_first_name'] . ' ' . $item['sender_user_last_name']) ?: $item['sender_username'])
+                    ? ((trim($item['sender_user_first_name'] . ' ' . $item['sender_user_last_name']) ?: $item['sender_username']) ?? '-')
                     : 'سیستمی';
                 $spreadsheetArray[($k + 1)][] = trim($item['user_first_name'] . ' ' . $item['user_last_name']);
                 $spreadsheetArray[($k + 1)][] = $item['username'];

@@ -59,10 +59,16 @@ class SettingModel extends BaseModel
             'setting_value' => $info[SETTING_CURRENT_CITY_POST_PRICE],
         ], 'setting_name=:name', ['name' => SETTING_CURRENT_CITY_POST_PRICE]);
         $res4 = $this->update([
+            'setting_value' => $info[SETTING_POST_PRICE_CALCULATION_MODE],
+        ], 'setting_name=:name', ['name' => SETTING_POST_PRICE_CALCULATION_MODE]);
+        $res5 = $this->update([
+            'setting_value' => $info[SETTING_STATIC_POST_PRICE],
+        ], 'setting_name=:name', ['name' => SETTING_STATIC_POST_PRICE]);
+        $res6 = $this->update([
             'setting_value' => $info[SETTING_MIN_FREE_PRICE],
         ], 'setting_name=:name', ['name' => SETTING_MIN_FREE_PRICE]);
 
-        return $res1 && $res2 && $res3 && $res4;
+        return $res1 && $res2 && $res3 && $res4 && $res5 && $res6;
     }
 
     /**

@@ -40,10 +40,13 @@ class SettingBuyForm implements IPageForm
                 'inp-setting-store-province' => 'استان محل فروشگاه',
                 'inp-setting-store-city' => 'شهر محل فروشگاه',
                 'inp-setting-current-city-post-price' => 'قیمت در مناظق داخل شهر انتخاب شده',
+                'inp-setting-post-price-calc' => 'محاسبه هزینه ارسال',
+                'inp-setting-post-price-calc-static' => 'هزینه ارسال ثابت',
                 'inp-setting-min-free-price' => 'حداقل قیمت رایگان شدن هزینه ارسال',
             ])
             ->setOptionalFields([
                 'inp-setting-current-city-post-price',
+                'inp-setting-post-price-calc-static',
                 'inp-setting-min-free-price',
             ]);
 
@@ -80,6 +83,19 @@ class SettingBuyForm implements IPageForm
                 return false;
             }, '{alias} ' . 'انتخاب شده نامعتبر است.');
         // current city price
+        $validator
+            ->setFields('inp-setting-current-city-post-price')
+            ->isInteger()
+            ->greaterThanEqual(0);
+        // post price calculation
+        $validator
+            ->setFields('inp-setting-post-price-calc')
+            ->isIn([SEND_PRICE_CALCULATION_AUTO, SEND_PRICE_CALCULATION_STATIC]);
+        // static post price
+        $validator
+            ->setFields('inp-setting-post-price-calc-static')
+            ->isInteger()
+            ->greaterThanEqual(0);
         // min free price
         $validator
             ->setFields([
@@ -124,12 +140,16 @@ class SettingBuyForm implements IPageForm
             $ownProvince = input()->post('inp-setting-store-province', '')->getValue();
             $ownCity = input()->post('inp-setting-store-city', '')->getValue();
             $cityPostPrice = input()->post('inp-setting-current-city-post-price', '')->getValue();
+            $postPriceCalc = input()->post('inp-setting-post-price-calc', '')->getValue();
+            $staticPostPrice = input()->post('inp-setting-post-price-calc-static', '')->getValue();
             $minFreePrice = input()->post('inp-setting-min-free-price', '')->getValue();
 
             return $settingModel->updateBuySetting([
                 SETTING_STORE_PROVINCE => $xss->xss_clean(trim($ownProvince)),
                 SETTING_STORE_CITY => $xss->xss_clean(trim($ownCity)),
                 SETTING_CURRENT_CITY_POST_PRICE => $xss->xss_clean(trim($cityPostPrice)),
+                SETTING_POST_PRICE_CALCULATION_MODE => $xss->xss_clean(trim($postPriceCalc)),
+                SETTING_STATIC_POST_PRICE => $xss->xss_clean(trim($staticPostPrice)),
                 SETTING_MIN_FREE_PRICE => $xss->xss_clean(trim($minFreePrice)),
             ]);
         } catch (\Exception $e) {

@@ -602,6 +602,56 @@ $validator = form_validator();
             </div>
             <!-- /product commenting -->
 
+            <!-- Product coming soon -->
+            <div class="col-lg-6">
+                <div class="card card-collapsed">
+                    <div class="card-header header-elements-inline">
+                        <h5 class="card-title">
+                            <label class="m-0 cursor-pointer" for="__csStatus">
+                                نمایش بزودی
+                            </label>
+                        </h5>
+                        <div class="header-elements">
+                            <div class="list-icons">
+                                <div class="list-icons-item form-check form-check-switchery form-check-switchery-double">
+                                    <label class="form-check-label">
+                                        <input id="__csStatus" type="checkbox" class="form-check-input-switchery"
+                                               name="inp-add-product-coming-soon"
+                                            <?= $validator->setCheckbox('inp-add-product-coming-soon', 'on', true); ?>>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- /product coming soon -->
+
+            <!-- Product call for more -->
+            <div class="col-lg-6">
+                <div class="card card-collapsed">
+                    <div class="card-header header-elements-inline">
+                        <h5 class="card-title">
+                            <label class="m-0 cursor-pointer" for="__cfmStatus">
+                                تماس برای اطلاعات بیشتر
+                            </label>
+                        </h5>
+                        <div class="header-elements">
+                            <div class="list-icons">
+                                <div class="list-icons-item form-check form-check-switchery form-check-switchery-double">
+                                    <label class="form-check-label">
+                                        <input id="__cfmStatus" type="checkbox" class="form-check-input-switchery"
+                                               name="inp-add-product-call-for-more"
+                                            <?= $validator->setCheckbox('inp-add-product-call-for-more', 'on', true); ?>>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- /product call for more -->
+
             <!-- Product images -->
             <div class="col-lg-12">
                 <div class="card card-collapsed">

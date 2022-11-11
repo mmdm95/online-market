@@ -857,7 +857,7 @@ window.MyGlobalVariables = {
                     for (var attrName in errors) {
                         if (errors.hasOwnProperty(attrName)) {
                             for (var constraint in errors[attrName]) {
-                                if(errors[attrName].hasOwnProperty(constraint)) {
+                                if (errors[attrName].hasOwnProperty(constraint)) {
                                     for (var alias in mapping) {
                                         if (mapping.hasOwnProperty(alias)) {
                                             errors[attrName][constraint] = errors[attrName][constraint].replace(
@@ -1087,7 +1087,7 @@ window.MyGlobalVariables = {
              */
             getCities: function (province_id, successCallback) {
                 var _ = this;
-                if(province_id) {
+                if (province_id) {
                     _.request(window.MyGlobalVariables.url.pages.get.city + '/' + province_id, 'get', successCallback, null, false);
                 }
             },
@@ -1121,6 +1121,11 @@ window.MyGlobalVariables = {
                             // trigger on change if there is a current province id
                             if (currProvince) {
                                 provincesSelect.trigger('change');
+                            }
+
+                            var target = $this.attr('data-city-select-target');
+                            if ($(target).length) {
+                                $(target).trigger('change');
                             }
                         });
                     });

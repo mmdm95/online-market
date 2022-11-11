@@ -539,8 +539,9 @@ class ProductModel extends BaseModel
         }
 
         $res7 = false;
+
         foreach ($products as $k => $product) {
-            if (!($product['color_hex'] ?? false) && (!$prevProduct[$k]['color_hex'] ?? false)) continue;
+            if (!($product['color_hex'] ?? false) && (!isset($prevProduct[$k]) || (!$prevProduct[$k]['color_hex'] ?? false))) continue;
 
             $insert = $this->connector->insert();
             $insert

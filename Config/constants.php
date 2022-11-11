@@ -21,7 +21,7 @@ use Sim\I18n\ISOLanguageCodes;
  *     1.2.5.0 instead of 1.2.5-a
  *     1.2.5.0.1 instead of 1.2.5-a.1 (I'm not sure)
  */
-defined("APP_VERSION") or define("APP_VERSION", "0.10.0");
+defined("APP_VERSION") or define("APP_VERSION", "0.11.0");
 
 /***************************************
  * You can add your constants here
@@ -133,6 +133,8 @@ defined("SETTING_BLOG_EACH_PAGE") or define("SETTING_BLOG_EACH_PAGE", 'blog_each
 defined("SETTING_STORE_PROVINCE") or define("SETTING_STORE_PROVINCE", 'store_province');
 defined("SETTING_STORE_CITY") or define("SETTING_STORE_CITY", 'store_city');
 defined("SETTING_CURRENT_CITY_POST_PRICE") or define("SETTING_CURRENT_CITY_POST_PRICE", 'current_city_post_price');
+defined("SETTING_POST_PRICE_CALCULATION_MODE") or define("SETTING_POST_PRICE_CALCULATION_MODE", 'post_price_calculation_mode');
+defined("SETTING_STATIC_POST_PRICE") or define("SETTING_STATIC_POST_PRICE", 'static_post_price');
 defined("SETTING_MIN_FREE_PRICE") or define("SETTING_MIN_FREE_PRICE", 'min_free_price');
 defined("SETTING_PRODUCT_EACH_PAGE") or define("SETTING_PRODUCT_EACH_PAGE", 'product_each_page');
 defined("SETTING_INDEX_MAIN_SLIDER_SIDE_IMAGES") or define("SETTING_INDEX_MAIN_SLIDER_SIDE_IMAGES", 'index_main_slider_side_images');
@@ -143,6 +145,10 @@ defined("SETTING_INDEX_GENERAL_SLIDERS") or define("SETTING_INDEX_GENERAL_SLIDER
 defined("SETTING_ABOUT_SECTION") or define("SETTING_ABOUT_SECTION", 'about_section');
 defined("SETTING_TOP_MENU") or define("SETTING_TOP_MENU", 'top_menu');
 defined("SETTING_DEFAULT_IMAGE_PLACEHOLDER") or define("SETTING_DEFAULT_IMAGE_PLACEHOLDER", 'default_image_placeholder');
+
+// send price calculations
+defined("SEND_PRICE_CALCULATION_AUTO") or define("SEND_PRICE_CALCULATION_AUTO", 'auto');
+defined("SEND_PRICE_CALCULATION_STATIC") or define("SEND_PRICE_CALCULATION_STATIC", 'static');
 
 // define all roles
 defined("ROLE_DEVELOPER") or define("ROLE_DEVELOPER", 'developer');

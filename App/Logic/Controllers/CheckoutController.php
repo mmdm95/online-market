@@ -284,8 +284,18 @@ class CheckoutController extends AbstractHomeController
                     ) {
                         $price = config()->get('settings.current_city_post_price.value');
                     } else {
-                        $postUtil = new PostPriceUtil($ownProvince['post_price_order'], $province['post_price_order'], $weight);
-                        $price = $postUtil->post();
+                        $postPriceCalcMode = config()->get('settings.post_price_calculation_mode.value');
+                        if ($postPriceCalcMode == SEND_PRICE_CALCULATION_STATIC) {
+                            $price = config()->get('settings.static_post_price.value') ?: 0;
+                            //
+                            if (0 == $price) {
+                                $postUtil = new PostPriceUtil($ownProvince['post_price_order'], $province['post_price_order'], $weight);
+                                $price = $postUtil->post();
+                            }
+                        } else {
+                            $postUtil = new PostPriceUtil($ownProvince['post_price_order'], $province['post_price_order'], $weight);
+                            $price = $postUtil->post();
+                        }
                     }
                     session()->set(SESSION_APPLIED_POST_PRICE, $price);
                     $resourceHandler

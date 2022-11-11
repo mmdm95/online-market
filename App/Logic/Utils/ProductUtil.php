@@ -390,7 +390,7 @@ class ProductUtil
             /**
              * @var InputItem $productPrice
              */
-            foreach ($price as $productPrice) {
+            foreach ($price as $k => $productPrice) {
                 /**
                  * @var InputItem $s
                  */
@@ -428,6 +428,7 @@ class ProductUtil
                  * @var InputItem $eachCDD
                  */
                 $eachCDD = is_array($considerDisDate) ? array_shift($considerDisDate) : new InputItem('', null);
+                $eachCDD = null === $eachCDD ? new InputItem('', null) : $eachCDD;
                 /**
                  * @var InputItem $eachPAvailability
                  */
@@ -437,7 +438,7 @@ class ProductUtil
                     !empty($s->getValue()) && !empty($mc->getValue()) && !empty($dp->getValue()) &&
                     (!empty($c->getValue()) || $isUpdate)
                 ) {
-                    $colorName = $c->getValue()
+                    $colorName = !empty($c->getValue()) && DEFAULT_OPTION_VALUE != $c->getValue()
                         ? $colorModel->getFirst(['name'], 'hex=:hex', ['hex' => strtolower($c->getValue())])['name']
                         : null;
 
@@ -445,12 +446,14 @@ class ProductUtil
                     $productObj[$i]['stock_count'] = $xss->xss_clean($s->getValue());
                     $productObj[$i]['max_cart'] = $xss->xss_clean($mc->getValue());
                     $productObj[$i]['discount_price'] = $xss->xss_clean($dp->getValue());
-                    $productObj[$i]['color_hex'] = $xss->xss_clean($c->getValue()) ?: null;
+                    $productObj[$i]['color_hex'] = $c->getValue() != DEFAULT_OPTION_VALUE ? ($xss->xss_clean($c->getValue()) ?: null) : null;
                     $productObj[$i]['color_name'] = $xss->xss_clean($colorName);
                     $productObj[$i]['size'] = $xss->xss_clean($eachSize->getValue()) ?: null;
                     $productObj[$i]['guarantee'] = $xss->xss_clean($eachGuarantee->getValue()) ?: null;
                     $productObj[$i]['weight'] = $xss->xss_clean($eachWeight->getValue()) ?: null;
-                    $productObj[$i]['discount_until'] = is_null($eachCDD->getValue()) ? ($xss->xss_clean($eachDisDate->getValue()) ?: null) : null;
+                    $productObj[$i]['discount_until'] = (is_null($eachCDD->getValue()) || $eachCDD->getValue() != $k)
+                        ? ($xss->xss_clean($eachDisDate->getValue()) ?: null)
+                        : null;
                     $productObj[$i]['available'] = is_value_checked($eachPAvailability->getValue()) ? DB_YES : DB_NO;
                     $i++;
                 }
@@ -459,6 +462,7 @@ class ProductUtil
             echo $e;
             return [];
         }
+
         return $productObj;
     }
 

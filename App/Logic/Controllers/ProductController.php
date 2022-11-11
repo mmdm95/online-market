@@ -265,7 +265,7 @@ class ProductController extends AbstractHomeController
                 'del' => DB_YES,
             ],
             ['pa.product_id DESC'],
-            null,
+            1,
             0,
             [],
             ['*']
@@ -435,6 +435,8 @@ class ProductController extends AbstractHomeController
                     'pa.festival_expire',
                     'pa.festival_start',
                     'pa.festival_discount',
+                    'pa.show_coming_soon',
+                    'pa.call_for_more',
                 ]
             );
 

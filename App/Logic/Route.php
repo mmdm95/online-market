@@ -754,7 +754,12 @@ class Route implements IInitialize
                 'id' => '[0-9]+',
                 'slug' => '.*',
             ])->name('home.product.show');
-//            Router::get('/compare', [CompareController::class, 'compare'])->name('home.compare');
+//            Router::get('/compare/{p1?}/{p2?}/{p3?}', [CompareController::class, 'compare'])->where([
+//                'p1' => '[0-9]+',
+//                'p2' => '[0-9]+',
+//                'p3' => '[0-9]+',
+//            ])->name('home.compare');
+//            Router::get('/compare/products', [CompareController::class, 'products'])->name('home.compare.products');
 
             /**
              * brand routes

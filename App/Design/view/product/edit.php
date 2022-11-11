@@ -181,7 +181,8 @@ $validator = form_validator();
                                     data-sample-element="#__sample_all_product"
                                     data-clearable-elements='["inp-edit-product-stock-count[]","inp-edit-product-max-count[]","inp-edit-product-color[]","inp-edit-product-size[]","inp-edit-product-weight[]","inp-edit-product-guarantee[]","inp-edit-product-price[]","inp-edit-product-discount-price[]","inp-edit-product-discount-date[]","inp-edit-product-product-availability[]","inp-edit-product-consider-discount-date[]"]'
                                     data-alt-field='["inp-edit-product-discount-date-tmp[]"]'
-                                    data-add-remove="true">
+                                    data-add-remove="true"
+                                    data-removable-elements='[".product-color-badge"]'>
                                 افزودن محصول جدید
                                 <i class="icon-plus2 ml-2" aria-hidden="true"></i>
                             </button>
@@ -224,7 +225,6 @@ $validator = form_validator();
                                                     class="form-control form-control-select2-colors"
                                                     name="inp-edit-product-color[]" data-fouc>
                                                 <option value="<?= DEFAULT_OPTION_VALUE; ?>"
-                                                        disabled="disabled"
                                                         selected="selected">
                                                     انتخاب کنید
                                                 </option>
@@ -236,7 +236,7 @@ $validator = form_validator();
                                                     </option>
                                                 <?php endforeach; ?>
                                             </select>
-                                            <div class="form-text text-muted d-flex align-items-center">
+                                            <div class="form-text text-muted d-flex align-items-center product-color-badge">
                                                 <?php load_partial('admin/parser/color-shape', ['hex' => $product_properties[$counter]['color_hex'] ?? 'transparent']); ?>
                                                 <span class="mx-1"><?= $product_properties[$counter]['color_name'] ?? 'نامشخص'; ?></span>
                                             </div>
@@ -300,7 +300,8 @@ $validator = form_validator();
                                                 <label class="form-check-label">
                                                     <input type="checkbox"
                                                            name="inp-edit-product-consider-discount-date[]"
-                                                           value="<?= $validator->setCheckbox('inp-edit-product-consider-discount-date.' . $counter, '') ?>"
+                                                        <?= $validator->setCheckbox('inp-edit-product-consider-discount-date.' . $counter, '') ?>
+                                                           value="<?= $counter; ?>"
                                                            class="styled form-input-styled">
                                                     عدم درنظرگیری تاریخ تخفیف
                                                 </label>
@@ -356,7 +357,6 @@ $validator = form_validator();
                                                     class="form-control form-control-select2-colors"
                                                     name="inp-edit-product-color[]" data-fouc>
                                                 <option value="<?= DEFAULT_OPTION_VALUE; ?>"
-                                                        disabled="disabled"
                                                         selected="selected">
                                                     انتخاب کنید
                                                 </option>
@@ -368,7 +368,7 @@ $validator = form_validator();
                                                     </option>
                                                 <?php endforeach; ?>
                                             </select>
-                                            <div class="form-text text-muted d-flex align-items-center">
+                                            <div class="form-text text-muted d-flex align-items-center product-color-badge">
                                                 <?php load_partial('admin/parser/color-shape', ['hex' => $property['color_hex']]); ?>
                                                 <span class="mx-1"><?= $property['color_name']; ?></span>
                                             </div>
@@ -432,7 +432,8 @@ $validator = form_validator();
                                                 <label class="form-check-label">
                                                     <input type="checkbox"
                                                            name="inp-edit-product-consider-discount-date[]"
-                                                           value="<?= empty($property['discount_until']) ? 'checked="checked"' : ''; ?>"
+                                                        <?= empty($property['discount_until']) ? 'checked="checked"' : ''; ?>
+                                                           value="<?= $counter; ?>"
                                                            class="styled form-input-styled">
                                                     عدم درنظرگیری تاریخ تخفیف
                                                 </label>
@@ -483,7 +484,6 @@ $validator = form_validator();
                                                 class="form-control form-control-select2-colors"
                                                 name="inp-edit-product-color[]" data-fouc>
                                             <option value="<?= DEFAULT_OPTION_VALUE; ?>"
-                                                    disabled="disabled"
                                                     selected="selected">
                                                 انتخاب کنید
                                             </option>
@@ -546,6 +546,7 @@ $validator = form_validator();
                                             <label class="form-check-label">
                                                 <input type="checkbox"
                                                        name="inp-edit-product-consider-discount-date[]"
+                                                       value="0"
                                                        class="styled form-input-styled">
                                                 عدم درنظرگیری تاریخ تخفیف
                                             </label>
@@ -742,6 +743,56 @@ $validator = form_validator();
                 </div>
             </div>
             <!-- /product commenting -->
+
+            <!-- Product coming soon -->
+            <div class="col-lg-6">
+                <div class="card card-collapsed">
+                    <div class="card-header header-elements-inline">
+                        <h5 class="card-title">
+                            <label class="m-0 cursor-pointer" for="__csStatus">
+                                نمایش بزودی
+                            </label>
+                        </h5>
+                        <div class="header-elements">
+                            <div class="list-icons">
+                                <div class="list-icons-item form-check form-check-switchery form-check-switchery-double">
+                                    <label class="form-check-label">
+                                        <input id="__csStatus" type="checkbox" class="form-check-input-switchery"
+                                               name="inp-edit-product-coming-soon"
+                                            <?= $validator->setCheckbox('inp-edit-product-coming-soon', 'on') ?: (is_value_checked($product['show_coming_soon']) ? 'checked="checked"' : ''); ?>>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- /product coming soon -->
+
+            <!-- Product call for more -->
+            <div class="col-lg-6">
+                <div class="card card-collapsed">
+                    <div class="card-header header-elements-inline">
+                        <h5 class="card-title">
+                            <label class="m-0 cursor-pointer" for="__cfmStatus">
+                                تماس برای اطلاعات بیشتر
+                            </label>
+                        </h5>
+                        <div class="header-elements">
+                            <div class="list-icons">
+                                <div class="list-icons-item form-check form-check-switchery form-check-switchery-double">
+                                    <label class="form-check-label">
+                                        <input id="__cfmStatus" type="checkbox" class="form-check-input-switchery"
+                                               name="inp-edit-product-call-for-more"
+                                            <?= $validator->setCheckbox('inp-edit-product-call-for-more', 'on') ?: (is_value_checked($product['call_for_more']) ? 'checked="checked"' : ''); ?>>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- /product call for more -->
 
             <!-- Product images -->
             <div class="col-lg-12">
