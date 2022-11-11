@@ -20,7 +20,7 @@
         </div>
 
         <table class="table table-bordered table-hover datatable-highlight"
-               data-columns='[{"data":"id"},{"data":"code"},{"data":"title"},{"data":"price"},{"data":"min_price"},{"data":"max_price"},{"data":"start_date"},{"data":"end_date"},{"data":"used_from_whole"},{"data":"reusable_after"},{"data":"status"},{"data":"operations"}]'
+               data-columns='[{"data":"id"},{"data":"title"},{"data":"code"},{"data":"price"},{"data":"min_price"},{"data":"max_price"},{"data":"start_date"},{"data":"end_date"},{"data":"used_from_whole"},{"data":"reusable_after"},{"data":"status"},{"data":"operations"}]'
                data-ajax-url="<?= url('admin.coupon.dt.view')->getRelativeUrlTrimmed(); ?>">
             <thead>
             <tr>
