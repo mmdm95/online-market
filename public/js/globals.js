@@ -561,9 +561,10 @@ window.MyGlobalVariables = {
             },
 
             // Lazy loader (pictures, videos, etc.)
-            lazyFn: function () {
+            lazyFn: function (container) {
                 if ($.fn.lazy) {
                     $('.lazy').lazy({
+                        appendScroll: container && $(container).length ? $(container) : window,
                         effect: "fadeIn",
                         effectTime: 800,
                         threshold: 50,

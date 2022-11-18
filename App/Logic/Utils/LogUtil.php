@@ -16,4 +16,19 @@ class LogUtil
             ])
             ->error($e->getMessage());
     }
+
+    /**
+     * @param $v
+     * @return void
+     */
+    public static function dump($v)
+    {
+        if (is_array($v)) {
+            echo "<pre style='direction: ltr; text-align: left'>";
+            var_dump($v);
+            echo "</pre>";
+        } else {
+            var_dump($v);
+        }
+    }
 }
