@@ -29,6 +29,16 @@
                         </a>
                     </li>
                     <li>
+                        <a href="<?= url('home.compare', [
+                            'p1' => $item['product_id'],
+                            'p2' => false,
+                            'p3' => false,
+                        ]); ?>">
+                            <i class="icon-shuffle"></i>
+                            مقایسه
+                        </a>
+                    </li>
+                    <li>
                         <a href="<?= url('home.product.show', [
                             'id' => $item['product_id'],
                             'slug' => $item['slug'],
