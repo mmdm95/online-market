@@ -6159,7 +6159,7 @@ footer .widget_title {
     min-height: 200px;
 }
 
-.product_img::before {
+.product_img:not(.product_img_no_before)::before {
     content: "";
     position: absolute;
     left: 0;
@@ -9594,4 +9594,14 @@ body.switch-open {
 
 #Additional-info table table {
     background-color: #fff;
+}
+
+/* COMPARE PRODUCTS STYLE */
+
+.compare-box-items {
+    border: 1px solid #dee2e6;
+    border-radius: 1rem;
+    padding: 2rem;
+    max-height: 400px;
+    overflow-y: auto;
 }

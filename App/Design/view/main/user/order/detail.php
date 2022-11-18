@@ -108,7 +108,7 @@ use Sim\Utils\StringUtil;
                     <?php if (!empty($order['coupon_title'])): ?>
                         <?= $order['coupon_title']; ?>
                     <?php else: ?>
-                        <i class="linearicons-minus" aria-hidden="true"></i>
+                        <?php load_partial('main/parser/dash-icon'); ?>
                     <?php endif; ?>
                 </label>
             </div>
@@ -121,7 +121,7 @@ use Sim\Utils\StringUtil;
                         <?= StringUtil::toPersian(number_format(StringUtil::toEnglish($order['coupon_price']))); ?>
                         <small>تومان</small>
                     <?php else: ?>
-                        <i class="linearicons-minus" aria-hidden="true"></i>
+                        <?php load_partial('main/parser/dash-icon'); ?>
                     <?php endif; ?>
                 </label>
             </div>
@@ -192,7 +192,7 @@ use Sim\Utils\StringUtil;
                         <?php if (!empty($order['payment_code'])): ?>
                             <?= $order['payment_code']; ?>
                         <?php else: ?>
-                            <i class="linearicons-minus" aria-hidden="true"></i>
+                            <?php load_partial('main/parser/dash-icon'); ?>
                         <?php endif; ?>
                     </label>
                 </div>
@@ -204,7 +204,7 @@ use Sim\Utils\StringUtil;
                         <?php if (!empty($order['payed_at'])): ?>
                             <?= Jdf::jdate(DEFAULT_TIME_FORMAT, $order['payed_at']); ?>
                         <?php else: ?>
-                            <i class="linearicons-minus" aria-hidden="true"></i>
+                            <?php load_partial('main/parser/dash-icon'); ?>
                         <?php endif; ?>
                     </label>
                 </div>
@@ -269,7 +269,7 @@ use Sim\Utils\StringUtil;
                                         <?= StringUtil::toPersian(number_format(StringUtil::toEnglish($payment_success['price']))); ?>
                                         <small>تومان</small>
                                     <?php else: ?>
-                                        <i class="linearicons-minus" aria-hidden="true"></i>
+                                        <?php load_partial('main/parser/dash-icon'); ?>
                                     <?php endif; ?>
                                 </td>
                             </tr>
@@ -290,14 +290,14 @@ use Sim\Utils\StringUtil;
                                     <i class="linearicons-checkmark-circle text-success icon-2x" aria-hidden="true"></i>
                                 </td>
                                 <td>
-                                    <i class="linearicons-minus" aria-hidden="true"></i>
+                                    <?php load_partial('main/parser/dash-icon'); ?>
                                 </td>
                                 <td>
                                     <?php if (!empty($wallet['deposit_price'])): ?>
                                         <?= StringUtil::toPersian(number_format(StringUtil::toEnglish($wallet['deposit_price']))); ?>
                                         <small>تومان</small>
                                     <?php else: ?>
-                                        <i class="linearicons-minus" aria-hidden="true"></i>
+                                        <?php load_partial('main/parser/dash-icon'); ?>
                                     <?php endif; ?>
                                 </td>
                             </tr>
@@ -309,7 +309,7 @@ use Sim\Utils\StringUtil;
                                     <?php if (!empty($payment['payment_date'])): ?>
                                         <?= Jdf::jdate(DEFAULT_TIME_FORMAT, $payment['payment_date']); ?>
                                     <?php else: ?>
-                                        <i class="linearicons-minus" aria-hidden="true"></i>
+                                        <?php load_partial('main/parser/dash-icon'); ?>
                                     <?php endif; ?>
                                 </td>
                                 <td>
@@ -331,7 +331,7 @@ use Sim\Utils\StringUtil;
                                     <?php if (!empty($payment['payment_code'])): ?>
                                         <?= $payment['payment_code']; ?>
                                     <?php else: ?>
-                                        <i class="linearicons-minus" aria-hidden="true"></i>
+                                        <?php load_partial('main/parser/dash-icon'); ?>
                                     <?php endif; ?>
                                 </td>
                                 <td>
@@ -339,7 +339,7 @@ use Sim\Utils\StringUtil;
                                         <?= StringUtil::toPersian(number_format(StringUtil::toEnglish($payment['price']))); ?>
                                         <small>تومان</small>
                                     <?php else: ?>
-                                        <i class="linearicons-minus" aria-hidden="true"></i>
+                                        <?php load_partial('main/parser/dash-icon'); ?>
                                     <?php endif; ?>
                                 </td>
                             </tr>

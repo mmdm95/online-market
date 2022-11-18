@@ -539,7 +539,7 @@ class FileController extends AbstractAdminController
 
         try {
             Download::makeDownloadFromPath($path)->download(null);
-        } catch (IFileException | \Exception $e) {
+        } catch (IFileException|\Exception $e) {
             // do nothing
         }
     }

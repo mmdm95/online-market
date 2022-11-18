@@ -137,11 +137,11 @@
                                     <i class="icon-basket-loaded"></i>
                                     افزودن به سبد خرید
                                 </button>
-                                <!--                                <a class="add_compare" href=""-->
-                                <!--                                   data-toggle="tooltip" data-placement="top" title="لیست مقایسه">-->
-                                <?= '';//url('home.compare');                        ?>
-                                <!--                                    <i class="linearicons-shuffle"></i>-->
-                                <!--                                </a>-->
+                                <a class="add_compare"
+                                   href="<?= url('home.compare', ['p1' => $product['product_id']]); ?>"
+                                   data-toggle="tooltip" data-placement="top" title="لیست مقایسه">
+                                    <i class="linearicons-shuffle"></i>
+                                </a>
                                 <a class="add_wishlist <?= $is_in_wishlist ? 'active' : ''; ?>"
                                    href="javascript:void(0);" data-toggle="tooltip"
                                    data-placement="top" title="لیست علاقه مندی ها"
@@ -158,7 +158,7 @@
                         <ul class="product-meta">
                             <!-- START BRAND NAME -->
                             <li>
-                                دسته بندی:
+                                برند:
                                 <a href="<?= url('home.search', [], [
                                     'brands[]' => $product['brand_id'],
                                 ]); ?>">
@@ -334,14 +334,12 @@
                                                                     <?php endforeach; ?>
                                                                 <?php else: ?>
                                                                     <div class="px-2 py-3">
-                                                                        <i class="linearicons-minus"
-                                                                           aria-hidden="true"></i>
+                                                                        <?php load_partial('main/parser/dash-icon'); ?>
                                                                     </div>
                                                                 <?php endif; ?>
                                                             <?php else: ?>
                                                                 <div class="px-2 py-3">
-                                                                    <i class="linearicons-minus"
-                                                                       aria-hidden="true"></i>
+                                                                    <?php load_partial('main/parser/dash-icon'); ?>
                                                                 </div>
                                                             <?php endif; ?>
                                                         </td>

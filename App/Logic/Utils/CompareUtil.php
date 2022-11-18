@@ -18,7 +18,7 @@ class CompareUtil
      * @throws \DI\DependencyException
      * @throws \DI\NotFoundException
      */
-    public function paginatedCompare(): array
+    public function paginatedCompareProducts(): array
     {
         /**
          * @var ProductModel $productModel
@@ -116,10 +116,56 @@ class CompareUtil
     public static function assembleCompareProperties(int $product_id, array $properties)
     {
         self::setAssembleCompareArray();
+        $arr = self::getAssembleCompareProperties();
 
         if (!empty($properties)) {
+            foreach ($properties as $property) {
+                $mainTitle = self::hasSameMainTitle($property['title']);
+                if ($mainTitle['has']) {
+                    foreach ($property['children'] as $child) {
+                        $subTitle = self::hasSameSubTitle($child['title'], $mainTitle['arr']);
+                        if ($subTitle['has']) {
+                            if (!is_array($arr[$mainTitle['idx']]['children'][$subTitle['idx']]['properties'])) {
+                                $arr[$mainTitle['idx']]['children'][$subTitle['idx']]['properties'] = [];
+                            }
+                            $arr[$mainTitle['idx']]['children'][$subTitle['idx']]['properties'][$product_id] = $child['properties'];
+                        } else {
+                            $arr[$mainTitle['idx']]['children'][] = [
+                                'title' => $child['title'],
+                                'properties' => [
+                                    $product_id => $child['properties'],
+                                ],
+                            ];
+                        }
+                    }
+                } else {
+                    $children = [];
+                    foreach ($property['children'] as $child) {
+                        $children[] = [
+                            'title' => $child['title'],
+                            'properties' => [
+                                $product_id => $child['properties'],
+                            ],
+                        ];
+                    }
 
+                    $arr[] = [
+                        'title' => $property['title'],
+                        'children' => $children,
+                    ];
+                }
+            }
+
+            session()->set('compare_assemble_properties_sess', $arr);
         }
+    }
+
+    /**
+     * @return void
+     */
+    public static function resetAssembleCompareProperties()
+    {
+        session()->set('compare_assemble_properties_sess', []);
     }
 
     /**
@@ -136,33 +182,54 @@ class CompareUtil
      */
     private static function setAssembleCompareArray()
     {
-        $p = session()->get('compare_assemble_properties_sess', null);
+        $p = session()->get('compare_assemble_properties_sess');
         if (is_null($p)) {
             session()->set('compare_assemble_properties_sess', []);
         }
     }
 
-    private static function assembleRecursive()
-    {
-
-    }
-
     /**
      * @param string $title
-     * @return bool
+     * @return array
      */
-    private static function hasSameMainTitle(string $title): bool
+    private static function hasSameMainTitle(string $title): array
     {
-        return false;
+        return self::hasTitleInArr($title, self::getAssembleCompareProperties(), 'children');
     }
 
     /**
      * @param string $title
      * @param array $searchingArray
-     * @return bool
+     * @return array
      */
-    private static function hasSameSubTitle(string $title, array $searchingArray): bool
+    private static function hasSameSubTitle(string $title, array $searchingArray): array
     {
-        return false;
+        return self::hasTitleInArr($title, $searchingArray);
+    }
+
+    /**
+     * @param $title
+     * @param $arr
+     * @param string|null $extraKey
+     * @return array
+     */
+    private static function hasTitleInArr($title, $arr, ?string $extraKey = null): array
+    {
+        $has = false;
+        $key = -1;
+
+        foreach ($arr as $k => $value) {
+            if (trim($value['title']) == trim($title)) {
+                $has = true;
+                $key = $k;
+                break;
+            }
+        }
+
+        return [
+            'has' => $has,
+            'arr' => $has ? (!empty($extraKey) ? $arr[$key][$extraKey] : $arr[$key] ?? []) : [],
+            'idx' => $key,
+        ];
     }
 }

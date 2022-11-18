@@ -162,10 +162,10 @@
                 $("[name='" + variables.elements.product.inputs.search + "']").val('');
                 //-----
                 uriParser.clear();
-                if (-1 != category) {
+                if (category && -1 != category) {
                     uriParser.push('category', category, true);
                 }
-                if (-1 != festival) {
+                if (festival && -1 != festival) {
                     uriParser.push('festival', festival, true);
                 }
                 loadProduct();

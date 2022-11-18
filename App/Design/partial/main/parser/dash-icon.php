@@ -1,0 +1,1 @@
+<i class="linearicons-minus" aria-hidden="true"></i>

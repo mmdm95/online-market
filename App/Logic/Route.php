@@ -754,12 +754,11 @@ class Route implements IInitialize
                 'id' => '[0-9]+',
                 'slug' => '.*',
             ])->name('home.product.show');
-//            Router::get('/compare/{p1?}/{p2?}/{p3?}', [CompareController::class, 'compare'])->where([
-//                'p1' => '[0-9]+',
-//                'p2' => '[0-9]+',
-//                'p3' => '[0-9]+',
-//            ])->name('home.compare');
-//            Router::get('/compare/products', [CompareController::class, 'products'])->name('home.compare.products');
+            Router::get('/compare/{p1?}/{p2?}/{p3?}', [CompareController::class, 'compare'])->where([
+                'p1' => '[0-9]+',
+                'p2' => '[0-9]+',
+                'p3' => '[0-9]+',
+            ])->name('home.compare');
 
             /**
              * brand routes
@@ -875,6 +874,7 @@ class Route implements IInitialize
             Router::post('/product/wishlist/remove/{product_id}', [ProductController::class, 'wishlistRemove'])->where([
                 'product_id' => '[0-9]+',
             ])->name('ajax.product.wishlist.remove');
+            Router::get('/compare/product/search', [CompareController::class, 'products'])->name('ajax.compare.product.search');
 
             /**
              * get provinces
