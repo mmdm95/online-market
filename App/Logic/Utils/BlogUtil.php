@@ -82,6 +82,7 @@ class BlogUtil
         if (!is_array($archive)) {
             $archive = $archive->getValue();
             if (is_string($archive) && !empty($archive)) {
+                $archive = urldecode($archive);
                 $where .= ' AND b.archive_tag=:be_archive';
                 $bindValues['be_archive'] = $archive;
             }
