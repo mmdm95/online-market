@@ -37,7 +37,7 @@ class CompareController extends AbstractHomeController
      * @throws PathNotRegisteredException
      * @throws \ReflectionException
      */
-    public function compare(?int $p1 = null, ?int $p2 = null, ?int $p3 = null)
+    public function compare(int $p1 = 0, int $p2 = 0, int $p3 = 0)
     {
         if (empty($p1) && empty($p2) && empty($p3)) {
             $this->show404();
@@ -46,6 +46,10 @@ class CompareController extends AbstractHomeController
             $p2 = null;
         }
         if ($p1 == $p3 || $p2 == $p3) {
+            $p3 = null;
+        }
+        if (empty($p2) && !empty($p3)) {
+            $p2 = $p3;
             $p3 = null;
         }
 
