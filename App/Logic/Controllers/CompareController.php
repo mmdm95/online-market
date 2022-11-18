@@ -103,7 +103,7 @@ class CompareController extends AbstractHomeController
         // store products ids to use in compare filter products
         session()->set($this->compareIdsSess, [
             'p1' => $p1,
-            'p2' => $p2 ?? flase,
+            'p2' => $p2 ?? false,
             'p3' => $p3 ?? false,
         ]);
 

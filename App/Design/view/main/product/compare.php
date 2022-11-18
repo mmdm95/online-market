@@ -100,7 +100,7 @@ $p3 = $products[2] ?? [];
                                 <tr class="pr_stock">
                                     <td class="row_title"></td>
 
-                                    <td class="row_stock">
+                                    <td class="row_stock text-left">
                                         <?php if (count($products_property[$p1['id']])): ?>
                                             <?php foreach ($products_property[$p1['id']] as $k => $item): ?>
                                                 <div class="product_color_switch">
@@ -126,9 +126,9 @@ $p3 = $products[2] ?? [];
                                                 </div>
                                                 <div>
                                                     <?php if (DB_YES == $p1['show_coming_soon']): ?>
-                                                        <span class="in-stock text-info">بزودی</span>
+                                                        <span class="in-stock text-info mx-1">بزودی</span>
                                                     <?php elseif (DB_YES == $p1['call_for_more']): ?>
-                                                        <span class="in-stock">برای اطلاعات بیشتر تماس بگیرید</span>
+                                                        <span class="in-stock mx-1">برای اطلاعات بیشتر تماس بگیرید</span>
                                                     <?php elseif (get_product_availability([
                                                         'product_availability' => $p1['is_available'],
                                                         'is_available' => $item['is_available'],
@@ -145,19 +145,19 @@ $p3 = $products[2] ?? [];
                                                             </del>
                                                         <?php endif; ?>
 
-                                                        <span class="price">
+                                                        <span class="price mx-1">
                                                             <?= local_number(number_format(StringUtil::toEnglish($price))); ?>
                                                             <small>تومان</small>
                                                         </span>
                                                     <?php else: ?>
-                                                        <span class="out-stock">تمام شده</span>
+                                                        <span class="out-stock mx-1">تمام شده</span>
                                                     <?php endif; ?>
                                                 </div>
                                             <?php endforeach; ?>
                                         <?php endif; ?>
                                     </td>
 
-                                    <td class="row_stock">
+                                    <td class="row_stock text-left">
                                         <?php if (!empty($p2) && count($products_property[$p2['id']])): ?>
                                             <?php foreach ($products_property[$p2['id']] as $k => $item): ?>
                                                 <div class="product_color_switch">
@@ -183,9 +183,9 @@ $p3 = $products[2] ?? [];
                                                 </div>
                                                 <div>
                                                     <?php if (DB_YES == $p2['show_coming_soon']): ?>
-                                                        <span class="in-stock text-info">بزودی</span>
+                                                        <span class="in-stock text-info mx-1">بزودی</span>
                                                     <?php elseif (DB_YES == $p2['call_for_more']): ?>
-                                                        <span class="in-stock">برای اطلاعات بیشتر تماس بگیرید</span>
+                                                        <span class="in-stock mx-1">برای اطلاعات بیشتر تماس بگیرید</span>
                                                     <?php elseif (get_product_availability([
                                                         'product_availability' => $p2['is_available'],
                                                         'is_available' => $item['is_available'],
@@ -202,19 +202,19 @@ $p3 = $products[2] ?? [];
                                                             </del>
                                                         <?php endif; ?>
 
-                                                        <span class="price">
+                                                        <span class="price mx-1">
                                                             <?= local_number(number_format(StringUtil::toEnglish($price))); ?>
                                                             <small>تومان</small>
                                                         </span>
                                                     <?php else: ?>
-                                                        <span class="out-stock">تمام شده</span>
+                                                        <span class="out-stock mx-1">تمام شده</span>
                                                     <?php endif; ?>
                                                 </div>
                                             <?php endforeach; ?>
                                         <?php endif; ?>
                                     </td>
 
-                                    <td class="row_stock">
+                                    <td class="row_stock text-left">
                                         <?php if (!empty($p3) && count($products_property[$p3['id']])): ?>
                                             <?php foreach ($products_property[$p3['id']] as $k => $item): ?>
                                                 <div class="product_color_switch">
@@ -240,9 +240,9 @@ $p3 = $products[2] ?? [];
                                                 </div>
                                                 <div>
                                                     <?php if (DB_YES == $p3['show_coming_soon']): ?>
-                                                        <span class="in-stock text-info">بزودی</span>
+                                                        <span class="in-stock text-info mx-1">بزودی</span>
                                                     <?php elseif (DB_YES == $p3['call_for_more']): ?>
-                                                        <span class="in-stock">برای اطلاعات بیشتر تماس بگیرید</span>
+                                                        <span class="in-stock mx-1">برای اطلاعات بیشتر تماس بگیرید</span>
                                                     <?php elseif (get_product_availability([
                                                         'product_availability' => $p3['is_available'],
                                                         'is_available' => $item['is_available'],
@@ -259,12 +259,12 @@ $p3 = $products[2] ?? [];
                                                             </del>
                                                         <?php endif; ?>
 
-                                                        <span class="price">
+                                                        <span class="price mx-1">
                                                             <?= local_number(number_format(StringUtil::toEnglish($price))); ?>
                                                             <small>تومان</small>
                                                         </span>
                                                     <?php else: ?>
-                                                        <span class="out-stock">تمام شده</span>
+                                                        <span class="out-stock mx-1">تمام شده</span>
                                                     <?php endif; ?>
                                                 </div>
                                             <?php endforeach; ?>
@@ -380,7 +380,7 @@ $p3 = $products[2] ?? [];
                                     <td class="row_title"></td>
                                     <td class="row_remove">
                                         <a href="<?= url('home.compare', [
-                                                'p1' => $p2['id'] ?? false, 'p2' => $p3['id'] ?? false, 'p3' => false
+                                            'p1' => $p2['id'] ?? false, 'p2' => $p3['id'] ?? false, 'p3' => false
                                         ])->getRelativeUrlTrimmed(); ?>">
                                             <span>حذف</span>
                                             <i class="fa fa-times"></i>
@@ -389,7 +389,7 @@ $p3 = $products[2] ?? [];
                                     <td class="row_remove">
                                         <?php if (count($p2)): ?>
                                             <a href="<?= url('home.compare', [
-                                                    'p1' => $p1['id'] ?? false, 'p2' => $p3['id'] ?? false, 'p3' => false
+                                                'p1' => $p1['id'] ?? false, 'p2' => $p3['id'] ?? false, 'p3' => false
                                             ])->getRelativeUrlTrimmed(); ?>">
                                                 <span>حذف</span>
                                                 <i class="fa fa-times"></i>
@@ -401,7 +401,7 @@ $p3 = $products[2] ?? [];
                                     <td class="row_remove">
                                         <?php if (count($p3)): ?>
                                             <a href="<?= url('home.compare', [
-                                                    'p1' => $p1['id'] ?? false, 'p2' => $p2['id'] ?? false, 'p3' => false
+                                                'p1' => $p1['id'] ?? false, 'p2' => $p2['id'] ?? false, 'p3' => false
                                             ])->getRelativeUrlTrimmed(); ?>">
                                                 <span>حذف</span>
                                                 <i class="fa fa-times"></i>
