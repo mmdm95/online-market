@@ -70,6 +70,25 @@ class ProductAttributeModel extends BaseModel
     /**
      * Use [pac for product_attr_category], [pa for product_attrs], [c for categories]
      *
+     * @param string|null $where
+     * @param array $bind_values
+     * @return int
+     */
+    public function getAttrCategoriesCount(
+        ?string $where = null,
+        array $bind_values = []
+    ): int
+    {
+        $res = $this->getAttrCategories(['COUNT(pac.id) AS count'], $where, $bind_values);
+        if (count($res)) {
+            return (int)$res[0]['count'];
+        }
+        return 0;
+    }
+
+    /**
+     * Use [pac for product_attr_category], [pa for product_attrs], [c for categories]
+     *
      * @param array $columns
      * @param string|null $where
      * @param array $bind_values
@@ -231,6 +250,25 @@ class ProductAttributeModel extends BaseModel
         }
 
         return $this->db->fetchAll($select->getStatement(), $select->getBindValues());
+    }
+
+    /**
+     * Use [pav for product_attr_values], [pa for product_attrs]
+     *
+     * @param string|null $where
+     * @param array $bind_values
+     * @return int
+     */
+    public function getAttrValuesCount(
+        ?string $where = null,
+        array $bind_values = []
+    ): int
+    {
+        $res = $this->getAttrValues(['COUNT(pav.id) AS count'], $where, $bind_values);
+        if (count($res)) {
+            return (int)$res[0]['count'];
+        }
+        return 0;
     }
 
     /**
