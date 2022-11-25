@@ -199,8 +199,8 @@ class ProductAttributeController extends AbstractAdminController implements IDat
 
                     $data = $pAttrModel->get($cols, $where, $bindValues, $order, $limit, $offset);
                     //-----
-                    $recordsFiltered = $pAttrModel->get($cols, $where, $bindValues);
-                    $recordsTotal = $pAttrModel->count($where, $bindValues);
+                    $recordsFiltered = $pAttrModel->count($where, $bindValues);
+                    $recordsTotal = $pAttrModel->count();
 
                     return [$data, $recordsFiltered, $recordsTotal];
                 });

@@ -280,8 +280,8 @@ class ProductAttributeValueController extends AbstractAdminController implements
 
                     $data = $pAttrModel->getAttrValues($cols, $where, $bindValues, $order, $limit, $offset);
                     //-----
-                    $recordsFiltered = $pAttrModel->getAttrValues($cols, $where, $bindValues);
-                    $recordsTotal = $pAttrModel->count($where, $bindValues, $this->tbl);
+                    $recordsFiltered = $pAttrModel->getAttrValuesCount($where, $bindValues);
+                    $recordsTotal = $pAttrModel->getAttrValuesCount();
 
                     return [$data, $recordsFiltered, $recordsTotal];
                 });

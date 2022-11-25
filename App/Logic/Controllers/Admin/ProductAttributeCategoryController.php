@@ -224,8 +224,8 @@ class ProductAttributeCategoryController extends AbstractAdminController impleme
 
                     $data = $pAttrModel->getAttrCategories($cols, $where, $bindValues, $order, $limit, $offset);
                     //-----
-                    $recordsFiltered = $pAttrModel->getAttrCategories($cols, $where, $bindValues);
-                    $recordsTotal = $pAttrModel->count($where, $bindValues, $this->tbl);
+                    $recordsFiltered = $pAttrModel->getAttrCategoriesCount($where, $bindValues);
+                    $recordsTotal = $pAttrModel->getAttrCategoriesCount();
 
                     return [$data, $recordsFiltered, $recordsTotal];
                 });
