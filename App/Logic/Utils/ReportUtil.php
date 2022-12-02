@@ -635,17 +635,19 @@ class ReportUtil
 
         $mpdf = new Mpdf([
             'mode' => 'utf-8',
-            'format' => 'A4',
+            'format' => [292.1, 215.9], // 11.5x8.5 - inches
             'fontDir' => array_merge($fontDirs, [
                 path()->get('fonts'),
             ]),
             'fontdata' => $fontData + [
-                    'IRS' => [
+                    'irs' => [
                         'R' => 'IRANSansWeb.ttf',
                         'B' => 'IRANSansWeb_Bold.ttf',
+                        'useOTL' => 0xFF,
+                        'useKashida' => 75,
                     ]
                 ],
-            'default_font' => 'IRS'
+            'default_font' => 'irs',
         ]);
         $mpdf->SetFont('IRS');
         $mpdf->SetDirectionality('rtl');
