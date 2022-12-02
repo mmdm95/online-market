@@ -145,7 +145,7 @@ class HomeController extends AbstractUserController
                 $data = $formHandler->handle(ChangeUserPasswordForm::class, 'password_change');
 
                 // logout to check new password
-                if ($data['password_change_success']) {
+                if (isset($data['password_change_success']) && (bool)$data['password_change_success']) {
                     response()->redirect(url('home.logout')->getRelativeUrl());
                 }
             } elseif (!is_null(input()->post('otherSubmit')->getValue())) {

@@ -171,7 +171,7 @@
                 },
                 confirmPassword: {
                     rules: {
-                        equalTo: '[name="password"]',
+                        equalTo: '[name="inp-forget-new-password"]',
                     },
                     messages: {
                         equalTo: 'تکرار کلمه عبور با کلمه عبور یکسان نمی‌باشد.',
@@ -304,21 +304,21 @@
                 prevPassword: {
                     rules: {
                         requiredNotEmpty: true,
-                        maxlength: 8,
+                        minlength: 8,
                     },
                     messages: {
                         requiredNotEmpty: 'فیلد کلمه عبور قبلی اجباری می‌باشد.',
-                        maxlength: 'فیلد کلمه عبور باید حداقل دارای ۸ کاراکتر باشد.',
+                        minlength: 'فیلد کلمه عبور باید حداقل دارای ۸ کاراکتر باشد.',
                     },
                 },
                 password: {
                     rules: {
                         requiredNotEmpty: true,
-                        maxlength: 8,
+                        minlength: 8,
                     },
                     messages: {
                         requiredNotEmpty: 'فیلد کلمه عبور جدید اجباری می‌باشد.',
-                        maxlength: 'فیلد کلمه عبور باید حداقل دارای ۸ کاراکتر باشد.',
+                        minlength: 'فیلد کلمه عبور باید حداقل دارای ۸ کاراکتر باشد.',
                     },
                 },
                 rePassword: {
