@@ -1,5 +1,6 @@
 <?php
 
+use App\Logic\Utils\Jdf;
 use Sim\Utils\StringUtil;
 
 ?>
@@ -9,12 +10,12 @@ if (count($order ?? []) && count($items ?? [])): ?>
     <div class='section'>
         <div class='section-header'>
             <strong>
-                وضعیت سفارش
+                تاریخ ثبت سفارش
             </strong>
         </div>
         <div class='section-body section-important'>
             <strong>
-                <?= $order['send_status_title'] ?: 'نامشخص'; ?>
+                <?= Jdf::jdate(DEFAULT_TIME_FORMAT, $order['ordered_at']); ?>
             </strong>
         </div>
     </div>
