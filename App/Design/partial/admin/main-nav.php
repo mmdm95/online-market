@@ -1,5 +1,7 @@
 <?php
 
+use App\Logic\Utils\Jdf;
+
 $authAdmin = auth_admin();
 
 ?>
@@ -35,9 +37,72 @@ $authAdmin = auth_admin();
 			</span>
 
         <ul class="navbar-nav">
+            <?php if ($unread_product_comments['count'] > 0): ?>
+                <li class="nav-item dropdown">
+                    <a href="#" class="navbar-nav-link dropdown-toggle" data-toggle="dropdown">
+                        <i class="icon-comment-discussion mr-2"></i>
+                        نظرات محصول
+                    </a>
+
+                    <div class="dropdown-menu dropdown-menu-right dropdown-content wmin-md-350">
+                        <div class="dropdown-content-header bg-blue">
+                            <span class="font-size-sm line-height-sm text-uppercase font-weight-semibold">نظرات مشاهده نشده</span>
+                            <span>
+                                (
+                                <?= local_number($unread_product_comments['count']); ?>
+                                عدد
+                                )
+                            </span>
+                        </div>
+
+                        <div class="dropdown-content-body dropdown-scrollable">
+                            <ul class="media-list">
+                                <?php foreach ($unread_product_comments['comments'] as $comment): ?>
+                                    <li class="media">
+                                        <div class="mr-3">
+                                            <a href="<?= url('admin.product.detail', ['id' => $comment['product_id']])->getRelativeUrl(); ?>">
+                                                <img src=""
+                                                     data-src="<?= url('image.show', ['filename' => $comment['image']]); ?>"
+                                                     class="rounded-circle lazy border" alt="" width="70px">
+                                            </a>
+                                        </div>
+
+                                        <div class="media-body">
+                                            <div>
+                                                <?= $comment['body']; ?>
+                                            </div>
+                                            <a href="<?= url('admin.user.view', ['id' => $comment['user_id']])->getRelativeUrl(); ?>">
+                                                <?php if (!empty($comment['first_name']) || !empty($comment['last_name'])): ?>
+                                                    <?= trim(($comment['first_name'] ?? '') . ' ' . ($comment['last_name'] ?? '')) ?: $comment['username']; ?>
+                                                <?php else: ?>
+                                                    <?= local_number($comment['username']); ?>
+                                                <?php endif; ?>
+                                            </a>
+                                            <div class="font-size-sm text-muted mt-1">
+                                                <?= Jdf::jdate(DEFAULT_TIME_FORMAT, $comment['sent_at']); ?>
+                                            </div>
+                                            <div class="text-right">
+                                                <a href="<?= url('admin.comment.detail', [
+                                                    'p_id' => $comment['product_id'],
+                                                    'id' => $comment['id'],
+                                                ])->getRelativeUrl(); ?>"
+                                                   class="btn btn-light btn-block mt-1">
+                                                    مشاهده
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </li>
+                                <?php endforeach; ?>
+                            </ul>
+                        </div>
+                    </div>
+                </li>
+            <?php endif; ?>
+
             <li class="nav-item dropdown dropdown-user">
                 <a href="javascript:void(0);" class="navbar-nav-link dropdown-toggle" data-toggle="dropdown">
-                    <img src="" data-src="<?= asset_path('image/avatars/' . $main_user_info['info']['image'], false); ?>"
+                    <img src=""
+                         data-src="<?= asset_path('image/avatars/' . $main_user_info['info']['image'], false); ?>"
                          class="rounded-circle lazy" alt="">
                     <span>
                         <?php if (!empty($main_user_info['info']['first_name'])): ?>
