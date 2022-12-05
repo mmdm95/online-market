@@ -227,9 +227,15 @@ use Sim\Utils\StringUtil;
                         <?= StringUtil::toPersian(number_format(StringUtil::toEnglish($item['discounted_price']))); ?>
                         تومان
                     </td>
-                    <td data-order="<?= (int)$item['discount_until']; ?>">
-                        <?= Jdf::jdate(DEFAULT_TIME_FORMAT, $item['discount_until']); ?>
-                    </td>
+                    <?php if (!is_null($item['discount_until'])): ?>
+                        <td data-order="<?= (int)$item['discount_until']; ?>">
+                            <?= Jdf::jdate(DEFAULT_TIME_FORMAT, $item['discount_until']); ?>
+                        </td>
+                    <?php else: ?>
+                        <td>
+                            <?php load_partial('admin/parser/dash-icon'); ?>
+                        </td>
+                    <?php endif; ?>
 
                     <?php
                     $isChecked = is_value_checked($item['is_available']);
