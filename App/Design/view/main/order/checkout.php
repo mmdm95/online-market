@@ -57,7 +57,7 @@ $validator = form_validator();
                                 <input type="text" required class="form-control" name="fname"
                                        placeholder="حروف فارسی"
                                     <?= $ufn ? 'disabled="disabled"' : '' ?>
-                                       value="<?= $ufn ? $ufn : $validator->setInput('fname'); ?>">
+                                       value="<?= $ufn ?: $validator->setInput('fname'); ?>">
                             </div>
                             <div class="form-group">
                                 <label>
@@ -70,8 +70,20 @@ $validator = form_validator();
                                 <input type="text" required class="form-control" name="lname"
                                        placeholder="حروف فارسی"
                                     <?= $uln ? 'disabled="disabled"' : '' ?>
-                                       value="<?= $uln ? $uln : $validator->setInput('lname'); ?>">
+                                       value="<?= $uln ?: $validator->setInput('lname'); ?>">
                             </div>
+
+                            <?php if (empty($user['national_number'])): ?>
+                                <div class="form-group">
+                                    <label>
+                                        <span class="text-danger" aria-hidden="true">*</span>
+                                        شماره شناسنامه:
+                                    </label>
+                                    <input type="text" required class="form-control" name="natnum"
+                                           placeholder="از نوع عددی"
+                                           value="<?= $user['national_number'] ?: $validator->setInput('natnum'); ?>">
+                                </div>
+                            <?php endif; ?>
 
                             <div class="medium_divider"></div>
 
@@ -219,8 +231,8 @@ $validator = form_validator();
                                 </div>
 
                                 <?php load_partial('main/message/message-info', [
-                                        'info' => 'تنها آدرس هایی که در پنل کاربری خود وارد کرده‌اید، آورده شده است',
-                                        'dismissible' => false,
+                                    'info' => 'تنها آدرس هایی که در پنل کاربری خود وارد کرده‌اید، آورده شده است',
+                                    'dismissible' => false,
                                 ]); ?>
 
                                 <div id="__address_choise_container">

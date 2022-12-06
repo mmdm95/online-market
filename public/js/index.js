@@ -104,6 +104,7 @@
                 firstName: 'inp-info-first-name',
                 lastName: 'inp-info-last-name',
                 email: 'inp-info-email',
+                nationalNum: 'inp-info-national-num',
                 shabaNum: 'inp-info-shaba-num',
             },
         },
@@ -291,6 +292,14 @@
                 },
             },
             changeUserInfo: {
+                nationalNum: {
+                    rules: {
+                        format: /^[0-9]*$/,
+                    },
+                    messages: {
+                        format: 'شماره شناسنامه باید از نوع عددی باشد.',
+                    },
+                },
                 shabaNum: {
                     rules: {
                         format: /^[0-9]*$/,
@@ -502,6 +511,7 @@
                 firstName: variables.validation.common.name,
                 lastName: variables.validation.common.lastName,
                 email: variables.validation.common.email,
+                nationalNum: variables.validation.constraints.changeUserInfo.nationalNum,
                 shabaNum: variables.validation.constraints.changeUserInfo.shabaNum,
             },
             changeUserPassword: {

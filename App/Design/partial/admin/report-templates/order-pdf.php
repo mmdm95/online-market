@@ -160,7 +160,7 @@ if (count($order ?? []) && count($items ?? [])): ?>
     <table class="table table-bordered">
         <thead>
         <tr>
-            <th colspan="2">
+            <th colspan="3">
                 مشخصات ثبت کننده سفارش
             </th>
         </tr>
@@ -184,6 +184,18 @@ if (count($order ?? []) && count($items ?? [])): ?>
                 </small>
                 <strong>
                     <?= local_number(StringUtil::toEnglish($order['mobile'])); ?>
+                </strong>
+            </td>
+            <td>
+                <small>
+                    شماره شناسنامه:
+                </small>
+                <strong>
+                    <?php if (!empty($order['user_national_number'])): ?>
+                        <?= local_number(StringUtil::toEnglish($order['user_national_number'])); ?>
+                    <?php else: ?>
+                        -
+                    <?php endif; ?>
                 </strong>
             </td>
         </tr>

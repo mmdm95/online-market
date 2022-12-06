@@ -49,6 +49,10 @@ class AddUserForm implements IPageForm
                 'inp-user-password' => 'کلمه عبور',
                 'inp-user-first-name' => 'نام',
                 'inp-user-last-name' => 'نام خانوادگی',
+                'inp-user-national-num' => 'شماره شناسنامه',
+            ])
+            ->toEnglishValueFields([
+                'inp-user-national-num',
             ])
             ->setOptionalFields([
                 'inp-user-email',
@@ -111,6 +115,13 @@ class AddUserForm implements IPageForm
             ->stopValidationAfterFirstError(true)
             ->persianAlpha('{alias} ' . 'باید از حروف فارسی باشد.')
             ->lessThanEqualLength(30, '{alias} ' . 'باید کمتر از' . ' {max} ' . 'کاراکتر باشد.');
+        // national number
+        $validator
+            ->setFields('inp-user-national-num')
+            ->stopValidationAfterFirstError(false)
+            ->required()
+            ->stopValidationAfterFirstError(true)
+            ->persianNationalCode();
 
         // to reset form values and not set them again
         if ($validator->getStatus()) {
@@ -153,6 +164,7 @@ class AddUserForm implements IPageForm
             $roles = input()->post('inp-user-role', '');
             $firsName = input()->post('inp-user-first-name', '')->getValue();
             $lastName = input()->post('inp-user-last-name', '')->getValue();
+            $nationalNum = input()->post('inp-user-national-num', '')->getValue();
 
             if (!is_array($roles)) return false;
             $roles = array_filter($roles, function (InputItem $val) {
@@ -162,12 +174,13 @@ class AddUserForm implements IPageForm
             if (!count($roles)) return false;
 
             return $userModel->registerUser([
-                'username' => $xss->xss_clean($mobile),
+                'username' => $xss->xss_clean(trim($mobile)),
                 'password' => password_hash($password, PASSWORD_BCRYPT),
-                'first_name' => $xss->xss_clean($firsName ?: null),
-                'last_name' => $xss->xss_clean($lastName ?: null),
-                'email' => $xss->xss_clean($email ?: null),
+                'first_name' => $xss->xss_clean(trim($firsName) ?: null),
+                'last_name' => $xss->xss_clean(trim($lastName) ?: null),
+                'email' => $xss->xss_clean(trim($email) ?: null),
                 'image' => PLACEHOLDER_USER_IMAGE,
+                'national_number' => $xss->xss_clean(trim($nationalNum)),
                 'is_activated' => is_value_checked($status) ? DB_YES : DB_NO,
                 'activated_at' => $activatedAt,
                 'created_at' => time(),
