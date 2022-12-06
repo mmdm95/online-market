@@ -49,7 +49,6 @@
                             </div>
                             <div class="form-group col-md-6">
                                 <label>
-                                    <span class="required">*</span>
                                     نام:
                                 </label>
                                 <input required="required"
@@ -61,7 +60,9 @@
                             </div>
                             <div class="form-group col-md-6">
                                 <label>
-                                    نام خانوادگی:
+                                    نام خانوادگی
+                                    <small class="text-muted">(اختیاری)</small>
+                                    :
                                 </label>
                                 <input type="text"
                                        class="form-control"
@@ -69,19 +70,20 @@
                                        name="inp-info-last-name"
                                        value="<?= $user['last_name']; ?>">
                             </div>
-                            <div class="form-group col-md-12">
+                            <div class="form-group col-md-6">
                                 <label>
-                                    آدرس ایمیل:
+                                    شماره شناسنامه:
                                 </label>
-                                <input class="form-control ltr"
-                                       type="text"
-                                       placeholder="مثال: example@gmail.com"
-                                       name="inp-info-email"
-                                       value="<?= $user['email']; ?>">
+                                <input class="form-control ltr" type="text"
+                                       placeholder="از نوع عددی"
+                                       name="inp-info-national-num"
+                                       value="<?= $user['national_number']; ?>">
                             </div>
-                            <div class="form-group col-md-12">
+                            <div class="form-group col-md-6">
                                 <label>
-                                    شماره شبا:
+                                    شماره شبا
+                                    <small class="text-muted">(اختیاری)</small>
+                                    :
                                 </label>
                                 <div class="input-group">
                                     <input class="form-control ltr" type="text"
@@ -92,6 +94,18 @@
                                         <span class="input-group-text">IR</span>
                                     </div>
                                 </div>
+                            </div>
+                            <div class="form-group col-md-12">
+                                <label>
+                                    آدرس ایمیل
+                                    <small class="text-muted">(اختیاری)</small>
+                                    :
+                                </label>
+                                <input class="form-control ltr"
+                                       type="text"
+                                       placeholder="مثال: example@gmail.com"
+                                       name="inp-info-email"
+                                       value="<?= $user['email']; ?>">
                             </div>
                             <div class="col-md-12">
                                 <button type="submit" class="btn btn-fill-out"
@@ -273,7 +287,7 @@
                 $(function () {
                     var secCollapseContainer = $('#secQuestionCollapse');
                     $('[name="inp-recover-type"]').on('change', function () {
-                        if($(this).val() == '<?= RECOVER_PASS_TYPE_SECURITY_QUESTION; ?>') {
+                        if ($(this).val() == '<?= RECOVER_PASS_TYPE_SECURITY_QUESTION; ?>') {
                             secCollapseContainer.collapse('show');
                         } else {
                             secCollapseContainer.collapse('hide');

@@ -37,7 +37,11 @@ class ChangeUserInfoForm implements IPageForm
                 'inp-info-first-name' => 'نام',
                 'inp-info-last-name' => 'نام خانوادگی',
                 'inp-info-email' => 'ایمیل',
+                'inp-info-national-num' => 'شماره شناسنامه',
                 'inp-info-shaba-num' => 'شماره شبا',
+            ])
+            ->toEnglishValueFields([
+                'inp-info-national-num',
             ])
             ->setOptionalFields([
                 'inp-info-last-name',
@@ -62,6 +66,13 @@ class ChangeUserInfoForm implements IPageForm
         $validator
             ->setFields('inp-info-email')
             ->email();
+        // national number
+        $validator
+            ->setFields('inp-info-national-num')
+            ->stopValidationAfterFirstError(false)
+            ->required()
+            ->stopValidationAfterFirstError(true)
+            ->persianNationalCode();
         // shaba number
         $validator
             ->setFields('inp-info-shaba-num')
@@ -103,6 +114,7 @@ class ChangeUserInfoForm implements IPageForm
             $name = input()->post('inp-info-first-name', '')->getValue();
             $family = input()->post('inp-info-last-name', '')->getValue();
             $email = input()->post('inp-info-email', '')->getValue();
+            $nationalNum = input()->post('inp-info-national-num', '')->getValue();
             $shabaNum = input()->post('inp-info-shaba-num', '')->getValue();
             $id = session()->getFlash('the-current-user-id');
 
@@ -112,6 +124,7 @@ class ChangeUserInfoForm implements IPageForm
                 'first_name' => $xss->xss_clean(trim($name)),
                 'last_name' => $xss->xss_clean(trim($family)),
                 'email' => $xss->xss_clean(trim($email)),
+                'national_number' => $xss->xss_clean(trim($nationalNum)),
                 'shaba_number' => $xss->xss_clean(trim($shabaNum)),
                 'updated_at' => time(),
             ], 'id=:id', ['id' => $id]);

@@ -194,7 +194,6 @@ $validator = form_validator();
                                            name="inp-user-first-name"
                                            value="<?= $validator->setInput('inp-user-first-name') ?: $user['first_name']; ?>">
                                 </div>
-
                                 <div class="form-group col-lg-6">
                                     <label>
                                         <i class="text-danger">*</i>
@@ -203,6 +202,15 @@ $validator = form_validator();
                                     <input type="text" class="form-control" placeholder="فقط حروف فارسی"
                                            name="inp-user-last-name"
                                            value="<?= $validator->setInput('inp-user-last-name') ?: $user['last_name']; ?>">
+                                </div>
+                                <div class="form-group col-lg-6">
+                                    <label>
+                                        <i class="text-danger">*</i>
+                                        شماره شناسنامه:
+                                    </label>
+                                    <input type="text" class="form-control" placeholder="از نوع عددی"
+                                           name="inp-user-national-num"
+                                           value="<?= $validator->setInput('inp-user-national-num') ?: $user['national_number']; ?>">
                                 </div>
                                 <div class="col-lg-6">
                                     <div class="form-group">

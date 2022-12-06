@@ -45,6 +45,7 @@ class CheckoutForm implements IPageForm
         $validator->setFieldsAlias([
             'fname' => 'نام',
             'lname' => 'نام خانوادگی',
+            'natnum' => 'شماره شناسنامه',
             'inp-addr-full-name' => 'نام خریدار',
             'inp-addr-mobile' => 'شماره موبایل خریدار',
             'inp-addr-province' => 'شهر',
@@ -123,6 +124,16 @@ class CheckoutForm implements IPageForm
             ->required()
             ->stopValidationAfterFirstError(true);
 
+        // national number
+        if (!empty(input()->post('natnum')->getValue())) {
+            $validator
+                ->setFields('natnum')
+                ->stopValidationAfterFirstError(false)
+                ->required()
+                ->stopValidationAfterFirstError(true)
+                ->persianNationalCode();
+        }
+
         // to reset form values and not set them again
         if ($validator->getStatus()) {
             $validator->resetBagValues();
@@ -198,6 +209,16 @@ class CheckoutForm implements IPageForm
 
                 $userId = $auth->getCurrentUser()['id'] ?? 0;
                 $user = $userModel->getFirst(['*'], 'id=:id', ['id' => $userId]);
+
+                // update user's national code field
+                $natnum = input()->post('natnum')->getValue();
+                $uRes = true;
+                if (!empty($natnum)) {
+                    $uRes = $userModel->update([
+                        'national_number' => $xss->xss_clean(trim($natnum)),
+                    ], 'id=:id', ['id' => $userId]);
+                }
+                if (!$uRes) return false;
                 //-----
                 if (!count($badge)) return false;
                 //-----
@@ -226,6 +247,7 @@ class CheckoutForm implements IPageForm
                 $orderArr = [
                     'code' => $code,
                     'user_id' => $user['id'],
+                    'user_national_number' => $user['national_number'],
                     'receiver_name' => $xss->xss_clean($receiver),
                     'receiver_mobile' => $xss->xss_clean($mobile),
                     'first_name' => $xss->xss_clean($firstName),
