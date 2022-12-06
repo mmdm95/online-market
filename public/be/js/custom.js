@@ -3734,12 +3734,12 @@
                     var provincesSelect = $('select[name="' + variables.elements.editAddress.inputs.province + '"]'),
                         citiesSelect = $(provincesSelect.attr('data-city-select-target'));
                     if (core.objSize(_.data) && provincesSelect.length && citiesSelect.length) {
-                        currentTable = table;
+                        currentTable = $('#__datatable_addr_view');
                         editAddrId = id;
                         //-----
                         admin.loadProvinces(provincesSelect.attr('data-current-province', _.data['province_id']));
                         admin.loadCities(citiesSelect.attr('data-current-city', _.data['city_id']), _.data['province_id']);
-                        currentModal.find('[name="' + variables.elements.editAddress.inputs.province + '"]').val(_.data['full_name']);
+                        currentModal.find('[name="' + variables.elements.editAddress.inputs.name + '"]').val(_.data['full_name']);
                         currentModal.find('[name="' + variables.elements.editAddress.inputs.mobile + '"]').val(_.data['mobile']);
                         currentModal.find('[name="' + variables.elements.editAddress.inputs.postalCode + '"]').val(_.data['postal_code']);
                         currentModal.find('[name="' + variables.elements.editAddress.inputs.address + '"]').val(_.data['address']);

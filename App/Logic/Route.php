@@ -912,10 +912,10 @@ class Route implements IInitialize
                 /**
                  * address route
                  */
-                Router::get('/user/address/all', [UserAddressController::class, 'all'])->name('ajax..user.address.all');
+                Router::get('/user/address/all', [UserAddressController::class, 'all'])->name('ajax.user.address.all');
                 Router::get('/user/address/get/{id}', [UserAddressController::class, 'get'])->where([
                     'id' => '[0-9]+',
-                ])->name('ajax..user.address.get');
+                ])->name('ajax.user.address.get');
                 Router::post('/user/address/add', [UserAddressController::class, 'add'])->name('ajax.user.address.add');
                 Router::post('/user/address/edit/{id}', [UserAddressController::class, 'edit'])->where([
                     'id' => '[0-9]+',
@@ -949,18 +949,18 @@ class Route implements IInitialize
                 /**
                  * address route
                  */
-                Router::get('/address/get/{user_id}/{id}', [UserAddressController::class, 'get'])->where([
+                Router::get('/address/get/{user_id}/{id}', [AdminAddressController::class, 'get'])->where([
                     'user_id' => '[0-9]+',
                     'id' => '[0-9]+',
                 ])->name('ajax.admin.addr.get');
-                Router::post('/address/add/{user_id}', [UserAddressController::class, 'add'])->where([
+                Router::post('/address/add/{user_id}', [AdminAddressController::class, 'add'])->where([
                     'user_id' => '[0-9]+',
                 ])->name('ajax.admin.addr.add');
-                Router::post('/address/edit/{user_id}/{id}', [UserAddressController::class, 'edit'])->where([
+                Router::post('/address/edit/{user_id}/{id}', [AdminAddressController::class, 'edit'])->where([
                     'user_id' => '[0-9]+',
                     'id' => '[0-9]+',
                 ])->name('ajax.admin.addr.edit');
-                Router::delete('/address/remove/{id}', [UserAddressController::class, 'remove'])->where([
+                Router::delete('/address/remove/{id}', [AdminAddressController::class, 'remove'])->where([
                     'id' => '[0-9]+',
                 ])->name('ajax.admin.addr.remove');
 
