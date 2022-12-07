@@ -95,7 +95,7 @@ class CartController extends AbstractHomeController
                 'sc' => 0,
                 'mcc' => 0
             ], [], 1, 0, [], [
-                    'pa.image', 'pa.brand_fa_name', 'pa.festival_discount', 'pa.festival_expire',
+                    'pa.image', 'pa.brand_fa_name', 'pa.brand_id', 'pa.festival_discount', 'pa.festival_expire',
                     'pa.festival_publish', 'pa.festival_start', 'pa.category_name', 'pa.title',
                     'pa.slug', 'pa.category_id', 'pa.unit_title', 'pa.unit_sign', 'pa.is_returnable',
                     'pa.stock_count', 'pa.max_cart_count', 'pa.color_hex', 'pa.color_name', 'pa.size',
@@ -172,7 +172,7 @@ class CartController extends AbstractHomeController
                     'sc' => 0,
                     'mcc' => 0
                 ], [], 1, 0, [], [
-                        'pa.image', 'pa.brand_fa_name', 'pa.festival_discount', 'pa.festival_expire',
+                        'pa.image', 'pa.brand_fa_name', 'pa.brand_id', 'pa.festival_discount', 'pa.festival_expire',
                         'pa.festival_publish', 'pa.festival_start', 'pa.category_name', 'pa.title',
                         'pa.slug', 'pa.category_id', 'pa.unit_title', 'pa.unit_sign', 'pa.is_returnable',
                         'pa.stock_count', 'pa.max_cart_count', 'pa.color_hex', 'pa.color_name', 'pa.size',
