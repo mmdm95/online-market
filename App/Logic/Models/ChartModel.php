@@ -70,7 +70,10 @@ class ChartModel extends BaseModel
                 'ps' => PAYMENT_STATUS_SUCCESS,
             ])
             ->limit($topN)
-            ->groupBy(['oa.product_id']);
+            ->groupBy([
+                'oa.code',
+                'oa.product_id',
+            ]);
         //
         $select = $this->connector->select();
         $select
