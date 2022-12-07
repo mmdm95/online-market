@@ -72,7 +72,7 @@
                             </div>
                             <div class="form-group col-md-6">
                                 <label>
-                                    شماره شناسنامه:
+                                    کد ملی:
                                 </label>
                                 <input class="form-control ltr" type="text"
                                        placeholder="از نوع عددی"

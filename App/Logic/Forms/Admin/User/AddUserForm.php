@@ -49,7 +49,7 @@ class AddUserForm implements IPageForm
                 'inp-user-password' => 'کلمه عبور',
                 'inp-user-first-name' => 'نام',
                 'inp-user-last-name' => 'نام خانوادگی',
-                'inp-user-national-num' => 'شماره شناسنامه',
+                'inp-user-national-num' => 'کد ملی',
             ])
             ->toEnglishValueFields([
                 'inp-user-national-num',

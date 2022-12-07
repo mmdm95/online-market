@@ -139,7 +139,7 @@ $validator = form_validator();
                                 <div class="form-group col-lg-6">
                                     <label>
                                         <i class="text-danger">*</i>
-                                        شماره شناسنامه:
+                                        کد ملی:
                                     </label>
                                     <input type="text" class="form-control" placeholder="از نوع عددی"
                                            name="inp-user-national-num"

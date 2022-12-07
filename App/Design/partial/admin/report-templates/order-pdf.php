@@ -188,7 +188,7 @@ if (count($order ?? []) && count($items ?? [])): ?>
             </td>
             <td>
                 <small>
-                    شماره شناسنامه:
+                    کد ملی:
                 </small>
                 <strong>
                     <?php if (!empty($order['user_national_number'])): ?>
