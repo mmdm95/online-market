@@ -18,8 +18,12 @@
                         <?php foreach ($brands as $brand): ?>
                             <div class="item">
                                 <div class="cl_logo">
-                                    <img src="" data-src="<?= url('image.show') . $brand['image']; ?>"
-                                         alt="<?= $brand['name']; ?>" class="lazy">
+                                    <a href="<?= url('home.search', null, [
+                                        'brands[]' => $brand['id'],
+                                    ])->getRelativeUrl(); ?>">
+                                        <img src="" data-src="<?= url('image.show') . $brand['image']; ?>"
+                                             alt="<?= $brand['name']; ?>" class="lazy">
+                                    </a>
                                 </div>
                             </div>
                         <?php endforeach; ?>

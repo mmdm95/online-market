@@ -58,7 +58,11 @@ $items = $cart->getItems();
                         <div class="m-2">
                             <small class="mx-1">برند:</small>
                             <small>
-                                <span><?= $item['brand_fa_name']; ?></span>
+                                <a href="<?= url('home.search', null, [
+                                    'brands[]' => $item['brand_id'],
+                                ])->getRelativeUrl(); ?>" class="mr-4 text-info">
+                                    <?= $item['brand_fa_name']; ?>
+                                </a>
                             </small>
                         </div>
                     </div>

@@ -115,7 +115,7 @@ class HomeController extends AbstractHomeController
                 3
             ),
             'brands' => $brandModel->get(
-                ['name', 'image'],
+                ['id', 'name', 'image'],
                 'publish=:pub AND show_in_sliders=:sis',
                 ['pub' => DB_YES, 'sis' => DB_YES]
             )
