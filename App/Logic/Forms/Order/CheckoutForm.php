@@ -45,7 +45,7 @@ class CheckoutForm implements IPageForm
         $validator->setFieldsAlias([
             'fname' => 'نام',
             'lname' => 'نام خانوادگی',
-            'natnum' => 'شماره شناسنامه',
+            'natnum' => 'کد ملی',
             'inp-addr-full-name' => 'نام خریدار',
             'inp-addr-mobile' => 'شماره موبایل خریدار',
             'inp-addr-province' => 'شهر',

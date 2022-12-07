@@ -77,7 +77,7 @@ $validator = form_validator();
                                 <div class="form-group">
                                     <label>
                                         <span class="text-danger" aria-hidden="true">*</span>
-                                        شماره شناسنامه:
+                                        کد ملی:
                                     </label>
                                     <input type="text" required class="form-control" name="natnum"
                                            placeholder="از نوع عددی"

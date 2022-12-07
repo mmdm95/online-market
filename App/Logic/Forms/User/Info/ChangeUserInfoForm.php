@@ -37,7 +37,7 @@ class ChangeUserInfoForm implements IPageForm
                 'inp-info-first-name' => 'نام',
                 'inp-info-last-name' => 'نام خانوادگی',
                 'inp-info-email' => 'ایمیل',
-                'inp-info-national-num' => 'شماره شناسنامه',
+                'inp-info-national-num' => 'کد ملی',
                 'inp-info-shaba-num' => 'شماره شبا',
             ])
             ->toEnglishValueFields([
