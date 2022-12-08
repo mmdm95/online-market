@@ -12,9 +12,17 @@ use Sim\Utils\StringUtil;
             <h3>اطلاعات گیرنده</h3>
         </div>
         <div class="row m-0">
-            <div class="col-lg-12 border border-light px-3 py-2 text-center">
+            <div class="col-lg-7 border border-light px-3 py-2 text-center">
                 <label class="m-0">
                     <?= $order['receiver_name']; ?>
+                </label>
+            </div>
+            <div class="col-lg-5 border border-light px-3 py-2">
+                <small class="mb-1">
+                    کد ملی:
+                </small>
+                <label class="mb-1">
+                    <?= StringUtil::toPersian(trim($order['user_national_number'])) ?? '-'; ?>
                 </label>
             </div>
             <div class="col-lg-6 border border-light px-3 py-2">
