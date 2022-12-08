@@ -125,7 +125,13 @@ class CheckoutForm implements IPageForm
             ->stopValidationAfterFirstError(true);
 
         // national number
-        if (!empty(input()->post('natnum')->getValue())) {
+        $auth = auth_home();
+        /**
+         * @var UserModel $userModel
+         */
+        $userModel = container()->get(UserModel::class);
+        $user = $userModel->getFirst(['*'], 'id=:id', ['id' => $auth->getCurrentUser()['id'] ?? 0]);
+        if (empty(trim($user['national_number']))) {
             $validator
                 ->setFields('natnum')
                 ->stopValidationAfterFirstError(false)
@@ -211,13 +217,14 @@ class CheckoutForm implements IPageForm
                 $user = $userModel->getFirst(['*'], 'id=:id', ['id' => $userId]);
 
                 // update user's national code field
-                $natnum = input()->post('natnum')->getValue();
+                $natnum = input()->post('natnum', '')->getValue();
                 $uRes = true;
-                if (!empty($natnum)) {
+                if (empty(trim($user['national_number'])) && !empty($natnum)) {
                     $uRes = $userModel->update([
                         'national_number' => $xss->xss_clean(trim($natnum)),
                     ], 'id=:id', ['id' => $userId]);
                 }
+                if (empty(trim($user['national_number'])) && empty($natnum)) $uRes = false;
                 if (!$uRes) return false;
                 //-----
                 if (!count($badge)) return false;
