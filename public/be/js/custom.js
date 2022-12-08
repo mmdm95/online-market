@@ -4020,19 +4020,19 @@
                     var _ = this;
                     if (core.objSize(_.data)) {
                         currentModal.find('#__receiver_info_full_name')
-                            .text(_.data['receiver_name'] ? _.data['receiver_name'] : '<i class="icon-minus2" aria-hidden="true"></i>');
+                            .html(_.data['receiver_name'] ? _.data['receiver_name'] : '<i class="icon-minus2" aria-hidden="true"></i>');
                         currentModal.find('#__receiver_info_phone')
-                            .text(_.data['receiver_mobile'] ? _.data['receiver_mobile'] : '<i class="icon-minus2" aria-hidden="true"></i>');
+                            .html(_.data['receiver_mobile'] ? _.data['receiver_mobile'] : '<i class="icon-minus2" aria-hidden="true"></i>');
                         currentModal.find('#__receiver_info_natnum')
-                            .text(_.data['user_national_number'] ? _.data['user_national_number'] : '<i class="icon-minus2" aria-hidden="true"></i>');
+                            .html(_.data['user_national_number'] ? _.data['user_national_number'] : '<i class="icon-minus2" aria-hidden="true"></i>');
                         currentModal.find('#__receiver_info_province')
-                            .text(_.data['province'] ? _.data['province'] : '<i class="icon-minus2" aria-hidden="true"></i>');
+                            .html(_.data['province'] ? _.data['province'] : '<i class="icon-minus2" aria-hidden="true"></i>');
                         currentModal.find('#__receiver_info_city')
-                            .text(_.data['city'] ? _.data['city'] : '<i class="icon-minus2" aria-hidden="true"></i>');
+                            .html(_.data['city'] ? _.data['city'] : '<i class="icon-minus2" aria-hidden="true"></i>');
                         currentModal.find('#__receiver_info_postal_code')
-                            .text(_.data['postal_code'] ? _.data['postal_code'] : '<i class="icon-minus2" aria-hidden="true"></i>');
+                            .html(_.data['postal_code'] ? _.data['postal_code'] : '<i class="icon-minus2" aria-hidden="true"></i>');
                         currentModal.find('#__receiver_info_address')
-                            .text(_.data['address'] ? _.data['address'] : '<i class="icon-minus2" aria-hidden="true"></i>');
+                            .html(_.data['address'] ? _.data['address'] : '<i class="icon-minus2" aria-hidden="true"></i>');
                     }
                 });
             }
