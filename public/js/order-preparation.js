@@ -12,6 +12,7 @@
             inputs: {
                 firstName: 'fname',
                 lastName: 'lname',
+                nationalNum: 'natnum',
                 receiverName: 'inp-addr-full-name',
                 mobile: 'inp-addr-mobile',
                 province: 'inp-addr-province',
@@ -33,6 +34,14 @@
                     format: {
                         pattern: /^[پچجحخهعغفقثصضشسیبلاتنمکگوئدذرزطظژؤإأآءًٌٍَُِّ\s]+$/u,
                         message: '^' + ' نام گیرنده باید دارای حروف فارسی باشد.',
+                    },
+                },
+                nationalNum: {
+                    rules: {
+                        format: /^[0-9]*$/,
+                    },
+                    messages: {
+                        format: 'کد ملی باید از نوع عددی باشد.',
                     },
                 },
                 province: {
@@ -100,6 +109,7 @@
                 firstName: variables.validation.common.name,
                 lastName: variables.validation.common.lastName,
                 mobile: variables.validation.common.mobile,
+                nationalNum: variables.validation.constraints.checkoutCheck.nationalNum,
                 province: variables.validation.constraints.checkoutCheck.province,
                 city: variables.validation.constraints.checkoutCheck.city,
                 postalCode: variables.validation.constraints.checkoutCheck.postalCode,
