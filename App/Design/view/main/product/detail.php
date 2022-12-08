@@ -394,7 +394,7 @@
                                                     'back_url' => url('home.product.show', [
                                                         'id' => $product['product_id'],
                                                         'slug' => $product['slug'],
-                                                    ]),
+                                                    ])->getRelativeUrl(),
                                                 ]); ?>">
                                                     وارد شوید
                                                 </a>

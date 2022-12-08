@@ -4013,7 +4013,7 @@
             currentModal = $('#modal_form_receiver_detail');
             // make all data to error loading
             if (id && currentModal.length) {
-                $('#__receiver_info_full_name,#__receiver_info_phone,#__receiver_info_province,#__receiver_info_city,#__receiver_info_postal_code,#__receiver_info_address')
+                $('#__receiver_info_full_name,#__receiver_info_phone,#__receiver_info_natnum,#__receiver_info_province,#__receiver_info_city,#__receiver_info_postal_code,#__receiver_info_address')
                     .html('در حال بارگذاری');
 
                 admin.request(variables.url.orders.info + '/' + id, 'get', function () {
@@ -4023,6 +4023,8 @@
                             .text(_.data['receiver_name'] ? _.data['receiver_name'] : '<i class="icon-minus2" aria-hidden="true"></i>');
                         currentModal.find('#__receiver_info_phone')
                             .text(_.data['receiver_mobile'] ? _.data['receiver_mobile'] : '<i class="icon-minus2" aria-hidden="true"></i>');
+                        currentModal.find('#__receiver_info_natnum')
+                            .text(_.data['user_national_number'] ? _.data['user_national_number'] : '<i class="icon-minus2" aria-hidden="true"></i>');
                         currentModal.find('#__receiver_info_province')
                             .text(_.data['province'] ? _.data['province'] : '<i class="icon-minus2" aria-hidden="true"></i>');
                         currentModal.find('#__receiver_info_city')

@@ -115,6 +115,14 @@ use Sim\Utils\StringUtil;
                     </div>
                     <div class="col-lg-6 border py-2 px-3">
                         <div class="mb-2">
+                            کد ملی
+                        </div>
+                        <div class="text-info-800">
+                            <?= StringUtil::toPersian(trim($order['user_national_number'])) ?? '-'; ?>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 border py-2 px-3">
+                        <div class="mb-2">
                             شماره تماس
                         </div>
                         <div class="text-info-800">
@@ -145,7 +153,7 @@ use Sim\Utils\StringUtil;
                             <?= StringUtil::toPersian($order['postal_code']); ?>
                         </div>
                     </div>
-                    <div class="col-lg-6 border py-2 px-3">
+                    <div class="col-lg-12 border py-2 px-3">
                         <div class="mb-2">
                             آدرس پستی
                         </div>

@@ -67,6 +67,12 @@
                             </div>
                         </li>
                         <li class="list-group-item border-bottom">
+                            <div class="font-weight-semibold">کد ملی:</div>
+                            <div class="ml-auto text-info-800" id="__receiver_info_natnum">
+                                خطا در بارگذاری
+                            </div>
+                        </li>
+                        <li class="list-group-item border-bottom">
                             <div class="font-weight-semibold">استان:</div>
                             <div class="ml-auto text-info-800" id="__receiver_info_province">
                                 خطا در بارگذاری

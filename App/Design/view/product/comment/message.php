@@ -75,7 +75,7 @@ $validator = form_validator();
                                 rows="10"
                                 placeholder="پاسخ به نظر"
                                 class="form-control cntEditor"
-                        ><?= $validator->setInput('inp-ans-comment-desc', $comment['reply']); ?></textarea>
+                        ><?= $validator->setInput('inp-ans-comment-desc', $comment['reply'] ?? ''); ?></textarea>
                     </div>
                     <div class="text-right">
                         <button class="btn btn-success">
