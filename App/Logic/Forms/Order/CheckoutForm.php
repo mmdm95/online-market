@@ -130,14 +130,14 @@ class CheckoutForm implements IPageForm
          * @var UserModel $userModel
          */
         $userModel = container()->get(UserModel::class);
-        $user = $userModel->getFirst(['*'], 'id=:id', ['id' => $auth->getCurrentUser()['id'] ?? 0]);
+        $user = $userModel->getFirst(['national_number'], 'id=:id', ['id' => $auth->getCurrentUser()['id'] ?? 0]);
         if (empty(trim($user['national_number']))) {
             $validator
                 ->setFields('natnum')
                 ->stopValidationAfterFirstError(false)
                 ->required()
                 ->stopValidationAfterFirstError(true)
-                ->persianNationalCode();
+                ->persianNationalCode('{alias} ' . 'نامعتبر است.');
         }
 
         // to reset form values and not set them again

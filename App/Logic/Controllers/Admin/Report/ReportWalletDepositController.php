@@ -267,13 +267,6 @@ class ReportWalletDepositController extends AbstractAdminController implements
         $where = '';
         $bindValues = [];
 
-        if (!$auth->userHasRole(ROLE_DEVELOPER)) {
-            $where .= ' pa.is_deleted<>:del';
-            $bindValues = array_merge($bindValues, [
-                'del' => DB_YES,
-            ]);
-        }
-
         // use query builder sql and params
         $qb = session()->get(SESSION_QUERY_BUILDER_WALLET);
         [$newWhere, $newBind] = ReportQBUtil::getNormalizedQBStatement($qb);
