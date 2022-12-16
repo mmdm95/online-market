@@ -1,6 +1,8 @@
 <!-- Content area -->
 <div class="content">
 
+    <?php load_partial('admin/order-badges-minimal', ['order_badges_count' => $order_badges_count]); ?>
+
     <!-- Highlighting rows and columns -->
     <div class="card">
         <?php load_partial('admin/card-header', ['header_title' => 'مشاهده سفارشات']); ?>

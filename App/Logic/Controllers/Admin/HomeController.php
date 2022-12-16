@@ -31,6 +31,7 @@ use App\Logic\Models\UnitModel;
 use App\Logic\Models\UserModel;
 use App\Logic\Utils\ChartUtil;
 use App\Logic\Utils\Jdf;
+use App\Logic\Utils\OrderUtil;
 use App\Logic\Validations\ExtendedValidator;
 use Jenssegers\Agent\Agent;
 use Sim\Auth\DBAuth;
@@ -143,10 +144,6 @@ class HomeController extends AbstractAdminController
          */
         $secQuestionModel = container()->get(SecurityQuestionModel::class);
         /**
-         * @var OrderBadgeModel $orderBadgeModel
-         */
-        $orderBadgeModel = container()->get(OrderBadgeModel::class);
-        /**
          * @var ReturnOrderModel $returnOrderModel
          */
         $returnOrderModel = container()->get(ReturnOrderModel::class);
@@ -162,19 +159,6 @@ class HomeController extends AbstractAdminController
             $productBindValues = [];
         }
         $productCount = $productModel->getLimitedProductCount($productWhere, $productBindValues);
-
-        // get badges
-        $badgeIds = $orderBadgeModel->get(['code', 'title', 'color'], 'is_deleted=:del', ['del' => DB_NO], ['id ASC']);
-        $orderBadges = [];
-        foreach ($badgeIds as $k => $badge) {
-            $orderBadges[$k] = $badge;
-            $orderBadges[$k]['count'] = $orderModel->count(
-                'send_status_code=:ssc',
-                [
-                    'ssc' => $badge['code'],
-                ]
-            );
-        }
 
         //sum of orders
         $sumOfOrders = $orderModel->getSumOfBoughtOrders();
@@ -205,7 +189,7 @@ class HomeController extends AbstractAdminController
             'sum_orders' => $sumOfOrders,
             'sum_orders_monthly' => $sumOfOrdersMonthly,
             //-----
-            'order_badges_count' => $orderBadges,
+            'order_badges_count' => OrderUtil::getOrderBadgesWithCount(),
             //-----
             'users_count' => $userModel->getUsersCount(
                 'r.show_to_user=:stu',
