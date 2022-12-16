@@ -192,7 +192,6 @@ class CartController extends AbstractHomeController
                             ->data('برای اطلاعات بیشتر با ما تماس بگیرید.');
                     } else {
                         if ($qnt > 0) {
-                            $extraInfo = $extraInfo[0];
                             // apply stepped price
                             $stepped = get_stepped_price($qnt, $product_code);
                             if (!is_null($stepped)) {
