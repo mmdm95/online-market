@@ -180,6 +180,8 @@ class CartController extends AbstractHomeController
                     ]
                 );
                 if (count($extraInfo)) {
+                    $extraInfo = $extraInfo[0];
+
                     if (DB_YES == $extraInfo['show_coming_soon']) {
                         $resourceHandler
                             ->type(RESPONSE_TYPE_INFO)
