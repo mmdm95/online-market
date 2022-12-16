@@ -1,5 +1,6 @@
 <?php
 
+use App\Logic\Utils\Jdf;
 use Sim\Utils\StringUtil;
 
 $authAdmin = auth_admin();
@@ -66,23 +67,7 @@ $allowSetting = $authAdmin->isAllow(RESOURCE_SETTING, OWN_PERMISSION_READ);
         <?php endif; ?>
     </div>
 
-    <?php if ($allowOrder && count($order_badges_count)): ?>
-        <div class="d-flex flex-wrap justify-content-center">
-            <?php foreach ($order_badges_count as $value): ?>
-                <div class="card mx-2" style="background-color: <?= $value['color']; ?>;">
-                    <a href="<?= url('admin.order.view', ['status' => $value['code']])->getRelativeUrlTrimmed(); ?>"
-                       style="color: <?= get_color_from_bg($value['color']); ?>; !important;"
-                       class="card-body py-1" data-popup="tooltip" data-title="<?= $value['title']; ?>">
-                        <div class="d-flex align-items-center">
-                            <h3 class="font-weight-semibold mb-0">
-                                <?= StringUtil::toPersian($value['count']); ?>
-                            </h3>
-                        </div>
-                    </a>
-                </div>
-            <?php endforeach; ?>
-        </div>
-    <?php endif; ?>
+    <?php load_partial('admin/order-badges-minimal', ['order_badges_count' => $order_badges_count]); ?>
 
     <div class="row">
         <div class="col-12">
@@ -258,9 +243,9 @@ $allowSetting = $authAdmin->isAllow(RESOURCE_SETTING, OWN_PERMISSION_READ);
                                 <span class="opacity-75">
                                     مجموع خریدهای انجام شده
                                     (
-                                    <?= \App\Logic\Utils\Jdf::jdate(CHART_BOUGHT_STATUS_TIME_FORMAT, strtotime('today, -1 month', time())); ?>
+                                    <?= Jdf::jdate(CHART_BOUGHT_STATUS_TIME_FORMAT, strtotime('today, -1 month', time())); ?>
                                     ←
-                                    <?= \App\Logic\Utils\Jdf::jdate(CHART_BOUGHT_STATUS_TIME_FORMAT, strtotime('today, -1 second', time())); ?>
+                                    <?= Jdf::jdate(CHART_BOUGHT_STATUS_TIME_FORMAT, strtotime('today, -1 second', time())); ?>
                                     )
                                 </span>
                             </div>

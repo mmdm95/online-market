@@ -14,6 +14,7 @@ use App\Logic\Models\OrderBadgeModel;
 use App\Logic\Models\OrderModel;
 use App\Logic\Utils\Jdf;
 use App\Logic\Utils\LogUtil;
+use App\Logic\Utils\OrderUtil;
 use App\Logic\Utils\SMSUtil;
 use Jenssegers\Agent\Agent;
 use ReflectionException;
@@ -63,6 +64,7 @@ class OrderController extends AbstractAdminController implements IDatatableContr
         $this->setLayout($this->main_layout)->setTemplate('view/order/view');
         return $this->render([
             'status' => $badge['title'] ?? '',
+            'order_badges_count' => OrderUtil::getOrderBadgesWithCount(),
         ]);
     }
 
