@@ -16,6 +16,11 @@ return [
             'bottom' => [
                 e(
                     '<script type="text/javascript" src="' .
+                    asset_path('plugins/countdown.min.js') .
+                    '"></script>'
+                ),
+                e(
+                    '<script type="text/javascript" src="' .
                     asset_path('plugins/jquery-validation/jquery.validate.min.js') .
                     '"></script>'
                 ),

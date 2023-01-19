@@ -8,6 +8,11 @@
             <span class="pr_flash bg-success">جدید</span>
         <?php endif; ?>
 
+        <?php
+        $isComingSoon = DB_YES == $item['show_coming_soon'];
+        $callForMore = DB_YES == $item['call_for_more'];
+        ?>
+
         <div class="product_img">
             <a href="<?= url('home.product.show', [
                 'id' => $item['product_id'],
@@ -49,6 +54,33 @@
                     </li>
                 </ul>
             </div>
+
+            <?php if (!$isComingSoon && !$callForMore): ?>
+                <?php
+                $discountExpire = getDiscountExpireTime($item);
+                ?>
+                <?php if (!empty($discountExpire)): ?>
+                    <div countdown
+                         data-date="<?= date('Y-m-d H:i:s', $discountExpire); ?>">
+                        <div class="col">
+                            <span data-days>0</span>
+                            <small class="text-danger">روز</small>
+                        </div>
+                        <div class="col">
+                            <span data-hours>0</span>
+                            <small class="text-danger">ساعت</small>
+                        </div>
+                        <div class="col">
+                            <span data-minutes>0</span>
+                            <small class="text-danger">دقیقه</small>
+                        </div>
+                        <div class="col">
+                            <span data-seconds>0</span>
+                            <small class="text-danger">ثانیه</small>
+                        </div>
+                    </div>
+                <?php endif; ?>
+            <?php endif; ?>
         </div>
         <div class="product_info">
             <h6 class="product_title">
@@ -60,11 +92,11 @@
                 </a>
             </h6>
 
-            <?php if (DB_YES == $item['show_coming_soon']): ?>
+            <?php if ($isComingSoon): ?>
                 <div class="product_price">
                     <span class="badge badge-info d-block py-3">بزودی</span>
                 </div>
-            <?php elseif (DB_YES == $item['call_for_more']): ?>
+            <?php elseif ($callForMore): ?>
                 <div class="product_price">
                     <span class="badge badge-success d-block py-3">برای اطلاعات بیشتر تماس بگیرید</span>
                 </div>

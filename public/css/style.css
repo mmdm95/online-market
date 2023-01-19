@@ -6177,6 +6177,40 @@ footer .widget_title {
     opacity: 1;
 }
 
+.product_img [countdown] {
+    width: 100%;
+    position: absolute;
+    bottom: 0;
+    z-index: 1;
+    display: -webkit-box;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: -moz-flex;
+    display: -webkit-flex;
+    display: flex;
+    -ms-flex-pack: center;
+    justify-content: center;
+    -ms-flex-align: center;
+    align-items: center;
+    -ms-flex-direction: row-reverse;
+    flex-direction: row-reverse;
+    -moz-box-shadow: -2px -2px 7px rgba(0, 0, 0, 0.12);
+    -o-box-shadow: -2px -2px 7px rgba(0, 0, 0, 0.12);
+    -webkit-box-shadow: -2px -2px 7px rgba(0, 0, 0, 0.12);
+    box-shadow: -2px -2px 7px rgba(0, 0, 0, 0.12);
+    background-color: rgba(255, 255, 255, .82);
+}
+
+.product_img [data-days],
+.product_img [data-hours],
+.product_img [data-minutes],
+.product_img [data-seconds] {
+    display: block;
+    text-align: center;
+    color: var(--danger);
+    font-size: 20px;
+}
+
 .pr_action_btn li {
     position: relative;
     margin: 0px 5px;
