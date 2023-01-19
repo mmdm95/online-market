@@ -177,7 +177,8 @@ function get_percentage($num, $total, bool $low = true): int
 function get_discount_price(array $item): array
 {
     $hasDiscount = false;
-    $discountPrice = (float)$item['price'];
+    $item['price'] = (float)$item['price'];
+    $discountPrice = $item['price'];
 
     // apply stepped prices
     if (isset($item['stepped_discounted_price']) && isset($item['stepped_price'])) {
@@ -201,7 +202,26 @@ function get_discount_price(array $item): array
         $discountPrice = (float)$item['discounted_price'];
     }
 
+    if ($discountPrice == $item['price']) {
+        $hasDiscount = false;
+    }
+
     return [$discountPrice, $hasDiscount];
+}
+
+/**
+ * @param array $item
+ * @return int|null
+ */
+function getDiscountExpireTime(array $item): ?int
+{
+    if (isset($item['festival_expire']) && !empty($item['festival_expire']) && $item['festival_expire'] >= time()) {
+        return $item['festival_expire'];
+    }
+    if (isset($item['discount_until']) && $item['discount_until'] >= time()) {
+        return $item['discount_until'];
+    }
+    return null;
 }
 
 /**
