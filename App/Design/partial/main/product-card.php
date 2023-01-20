@@ -60,7 +60,7 @@
                 $discountExpire = getDiscountExpireTime($item);
                 ?>
                 <?php if (!empty($discountExpire)): ?>
-                    <div countdown
+                    <div class="flex-row text-center" countdown
                          data-date="<?= date('Y-m-d H:i:s', $discountExpire); ?>">
                         <div class="col">
                             <span data-days>0</span>

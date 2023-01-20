@@ -70,6 +70,9 @@ class ChartModel extends BaseModel
                 'ps' => PAYMENT_STATUS_SUCCESS,
             ])
             ->limit($topN)
+            ->orderBy([
+                'oa.ordered_at',
+            ])
             ->groupBy([
                 'oa.code',
                 'oa.product_id',
