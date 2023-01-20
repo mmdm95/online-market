@@ -11,6 +11,7 @@
         <?php
         $isComingSoon = DB_YES == $item['show_coming_soon'];
         $callForMore = DB_YES == $item['call_for_more'];
+        $isAvailable = get_product_availability($item);
         ?>
 
         <div class="product_img">
@@ -55,7 +56,7 @@
                 </ul>
             </div>
 
-            <?php if (!$isComingSoon && !$callForMore): ?>
+            <?php if (!$isComingSoon && !$callForMore && $isAvailable): ?>
                 <?php
                 $discountExpire = getDiscountExpireTime($item);
                 ?>
@@ -100,7 +101,7 @@
                 <div class="product_price">
                     <span class="badge badge-success d-block py-3">برای اطلاعات بیشتر تماس بگیرید</span>
                 </div>
-            <?php elseif (get_product_availability($item)): ?>
+            <?php elseif ($isAvailable): ?>
                 <div class="product_price">
                     <?php
                     [$discountPrice, $hasDiscount] = get_discount_price($item);
