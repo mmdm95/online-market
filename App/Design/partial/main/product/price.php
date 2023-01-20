@@ -37,6 +37,40 @@
                 </div>
             <?php endif; ?>
         </div>
+
+        <?php
+        $discountExpire = getDiscountExpireTime($product);
+        ?>
+        <?php if (!empty($discountExpire)): ?>
+            <h5 class="countdown_time d-flex text-info alert alert-info" countdown
+                 data-date="<?= date('Y-m-d H:i:s', $discountExpire); ?>">
+                <div class="col">
+                    <span data-days>0</span>
+                    <small class="text-info">روز</small>
+                </div>
+                <div class="col">
+                    <span data-hours>0</span>
+                    <small class="text-info">ساعت</small>
+                </div>
+                <div class="col">
+                    <span data-minutes>0</span>
+                    <small class="text-info">دقیقه</small>
+                </div>
+                <div class="col">
+                    <span data-seconds>0</span>
+                    <small class="text-info">ثانیه</small>
+                </div>
+            </h5>
+
+            <script type="text/javascript">
+                $(function () {
+                    $('.countdown_time').each(function () {
+                        var endTime = $(this).data('time');
+                        $(this).countdown(endTime);
+                    });
+                });
+            </script>
+        <?php endif; ?>
     <?php else: ?>
         <div class="product_price">
             <span class="badge badge-danger d-block py-3">ناموجود</span>

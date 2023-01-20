@@ -38,10 +38,10 @@ class UserModel extends BaseModel
         try {
             $auth = \container()->get($authContainer);
         } catch (
-        \ReflectionException |
-        MethodNotFoundException |
-        ParameterHasNoDefaultValueException |
-        ServiceNotFoundException |
+        \ReflectionException|
+        MethodNotFoundException|
+        ParameterHasNoDefaultValueException|
+        ServiceNotFoundException|
         ServiceNotInstantiableException $e
         ) {
             return false;
@@ -51,8 +51,8 @@ class UserModel extends BaseModel
         try {
             $auth->login($credentials);
         } catch (
-        IncorrectPasswordException |
-        InvalidUserException |
+        IncorrectPasswordException|
+        InvalidUserException|
         IDBException $e
         ) {
             $res = false;
@@ -286,13 +286,13 @@ class UserModel extends BaseModel
      * @return array
      */
     public function getUsers(
-        array $columns = ['u.*', 'r.id AS role_id', 'r.name AS role_name', 'r.is_admin'],
+        array   $columns = ['u.*', 'r.id AS role_id', 'r.name AS role_name', 'r.is_admin'],
         ?string $where = null,
-        array $bind_values = [],
-        ?int $limit = null,
-        int $offset = 0,
-        array $order_by = ['u.id DESC'],
-        array $group_by = ['u.id']
+        array   $bind_values = [],
+        ?int    $limit = null,
+        int     $offset = 0,
+        array   $order_by = ['u.id DESC'],
+        array   $group_by = ['u.id']
     ): array
     {
         $select = $this->connector->select();
@@ -339,8 +339,8 @@ class UserModel extends BaseModel
      */
     public function getSingleUser(
         ?string $where = null,
-        array $bind_values = [],
-        array $columns = ['u.*', 'r.id AS role_id', 'r.name AS role_name', 'r.is_admin']
+        array   $bind_values = [],
+        array   $columns = ['u.*', 'r.id AS role_id', 'r.name AS role_name', 'r.is_admin']
     ): array
     {
         $res = $this->getUsers($columns, $where, $bind_values, 1);
@@ -374,10 +374,10 @@ class UserModel extends BaseModel
      * @return array
      */
     public function getUserRoles(
-        int $user_id,
+        int     $user_id,
         ?string $where = null,
-        array $bind_values = [],
-        array $columns = ['r.*', 'ur.user_id']
+        array   $bind_values = [],
+        array   $columns = ['r.*', 'ur.user_id']
     ): array
     {
         $select = $this->connector->select();

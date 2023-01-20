@@ -278,8 +278,6 @@ class ReportUserController extends AbstractAdminController implements
             $where .= ' AND u.is_hidden<>:hidden';
             $bindValues = array_merge($bindValues, [
                 'del' => DB_YES,
-            ]);
-            $bindValues = array_merge($bindValues, [
                 'hidden' => DB_YES,
             ]);
         }

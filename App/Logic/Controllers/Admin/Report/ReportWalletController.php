@@ -245,17 +245,8 @@ class ReportWalletController extends AbstractAdminController implements
      */
     private function getQBFiltered(): array
     {
-        $auth = auth_admin();
-
         $where = '';
         $bindValues = [];
-
-        if (!$auth->userHasRole(ROLE_DEVELOPER)) {
-            $where .= ' pa.is_deleted<>:del';
-            $bindValues = array_merge($bindValues, [
-                'del' => DB_YES,
-            ]);
-        }
 
         // use query builder sql and params
         $qb = session()->get(SESSION_QUERY_BUILDER_WALLET);

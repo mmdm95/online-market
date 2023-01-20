@@ -427,7 +427,9 @@ class ReportUtil
                 $spreadsheetArray[($k + 1)][] = number_format(StringUtil::toEnglish($item['shipping_price']));
                 $spreadsheetArray[($k + 1)][] = number_format(StringUtil::toEnglish($item['final_price']));
                 $spreadsheetArray[($k + 1)][] = StringUtil::toEnglish($item['send_status_title']);
-                $spreadsheetArray[($k + 1)][] = Jdf::jdate(REPORT_TIME_FORMAT, $item['payed_at']);
+                $spreadsheetArray[($k + 1)][] = !empty($item['payed_at'])
+                    ? Jdf::jdate(REPORT_TIME_FORMAT, $item['payed_at'])
+                    : '-';
                 $spreadsheetArray[($k + 1)][] = Jdf::jdate(REPORT_TIME_FORMAT, $item['ordered_at']);
                 $spreadsheetArray[($k + 1)][] = !empty($item['invoice_status_changed_at'])
                     ? Jdf::jdate(REPORT_TIME_FORMAT, $item['invoice_status_changed_at'])
