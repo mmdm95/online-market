@@ -581,6 +581,10 @@
                     // Lazy loader (pictures, videos, etc.)
                     shop.lazyFn();
                     cart.assignEventsToAddOrUpdateBtn();
+                    $('[countdown]').each(function () {
+                        var endTime = $(this).data('time');
+                        $(this).countdown(endTime);
+                    });
 
                     // scroll to top of main product container
                     core.scrollTo('#__main_product_container', 85, 300);
