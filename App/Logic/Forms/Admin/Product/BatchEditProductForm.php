@@ -52,6 +52,8 @@ class BatchEditProductForm implements IPageForm
                 'inp-edit-product-special-chk',
                 'inp-edit-product-returnable-chk',
                 'inp-edit-product-commenting-chk',
+                'inp-edit-product-coming-soon-chk',
+                'inp-edit-product-call-for-more-chk',
             ]);
 
         /**
@@ -183,6 +185,8 @@ class BatchEditProductForm implements IPageForm
             $special = input()->post('inp-edit-product-special', '')->getValue();
             $returnable = input()->post('inp-edit-product-returnable', '')->getValue();
             $commenting = input()->post('inp-edit-product-commenting', '')->getValue();
+            $comingSoon = input()->post('inp-edit-product-coming-soon', '')->getValue();
+            $callForMore = input()->post('inp-edit-product-call-for-more', '')->getValue();
             $brand = input()->post('inp-edit-product-brand', '')->getValue();
             $category = input()->post('inp-edit-product-category', '')->getValue();
             $alertProduct = input()->post('inp-edit-product-alert-product', '')->getValue();
@@ -217,6 +221,12 @@ class BatchEditProductForm implements IPageForm
             }
             if (!is_value_checked(input()->post('inp-edit-product-commenting-chk', '')->getValue())) {
                 $updateArr['allow_commenting'] = is_value_checked($commenting) ? DB_YES : DB_NO;
+            }
+            if (!is_value_checked(input()->post('inp-edit-product-coming-soon-chk', '')->getValue())) {
+                $updateArr['show_coming_soon'] = is_value_checked($comingSoon) ? DB_YES : DB_NO;
+            }
+            if (!is_value_checked(input()->post('inp-edit-product-call-for-more-chk', '')->getValue())) {
+                $updateArr['call_for_more'] = is_value_checked($callForMore) ? DB_YES : DB_NO;
             }
 
             // get unit title and sign
