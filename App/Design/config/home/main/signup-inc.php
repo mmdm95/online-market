@@ -15,6 +15,13 @@ return [
             'default-changeable',
         ],
     ],
+    'view/main/signup/step2-and-half' => [
+        'title' => title_concat(\config()->get('settings.title.value'), 'صفحه ثبت نام', 'وارد کردن اطلاعات مورد نیاز'),
+        'common' => [
+            'default',
+            'default-changeable',
+        ],
+    ],
     'view/main/signup/step3' => [
         'title' => title_concat(\config()->get('settings.title.value'), 'صفحه ثبت نام', 'وارد کردن کلمه عبور'),
         'common' => [
