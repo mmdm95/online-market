@@ -180,6 +180,38 @@ use Sim\Utils\StringUtil;
                     <?php endif; ?>
                 </strong>
             </div>
+
+            <?php
+            $isChecked = is_value_checked($product['show_coming_soon']);
+            ?>
+            <div class="col-lg-6 border py-2 px-3 <?= $isChecked ? 'alert-success' : 'alert-danger' ?>">
+                <div class="mb-2">
+                    نمایش بزودی
+                </div>
+                <strong>
+                    <?php if ($isChecked): ?>
+                        بله
+                    <?php else: ?>
+                        خیر
+                    <?php endif; ?>
+                </strong>
+            </div>
+
+            <?php
+            $isChecked = is_value_checked($product['call_for_more']);
+            ?>
+            <div class="col-lg-6 border py-2 px-3 <?= $isChecked ? 'alert-success' : 'alert-danger' ?>">
+                <div class="mb-2">
+                    تماس برای اطلاعات بیشتر
+                </div>
+                <strong>
+                    <?php if ($isChecked): ?>
+                        بله
+                    <?php else: ?>
+                        خیر
+                    <?php endif; ?>
+                </strong>
+            </div>
         </div>
     </div>
     <!-- /highlighting rows and columns -->

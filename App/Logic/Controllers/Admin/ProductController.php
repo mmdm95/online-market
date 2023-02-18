@@ -117,6 +117,8 @@ class ProductController extends AbstractAdminController implements IDatatableCon
             'p.baby_property',
             'p.brand_id',
             'p.allow_commenting',
+            'p.show_coming_soon',
+            'p.call_for_more',
             'p.min_product_alert',
             'p.publish',
             'p.is_returnable',
