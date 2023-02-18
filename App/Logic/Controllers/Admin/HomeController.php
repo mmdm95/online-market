@@ -17,7 +17,6 @@ use App\Logic\Models\CouponModel;
 use App\Logic\Models\FAQModel;
 use App\Logic\Models\FestivalModel;
 use App\Logic\Models\InstagramImagesModel;
-use App\Logic\Models\Model;
 use App\Logic\Models\NewsletterModel;
 use App\Logic\Models\OrderBadgeModel;
 use App\Logic\Models\OrderModel;
@@ -32,6 +31,7 @@ use App\Logic\Models\UserModel;
 use App\Logic\Utils\ChartUtil;
 use App\Logic\Utils\Jdf;
 use App\Logic\Utils\OrderUtil;
+use App\Logic\Utils\SMSUtil;
 use App\Logic\Validations\ExtendedValidator;
 use Jenssegers\Agent\Agent;
 use Sim\Auth\DBAuth;
@@ -185,6 +185,8 @@ class HomeController extends AbstractAdminController
                     'status' => COMPLAINT_STATUS_UNREAD,
                 ]
             ),
+            //-----
+            'sms_balance' => SMSUtil::getCredit(),
             //-----
             'sum_orders' => $sumOfOrders,
             'sum_orders_monthly' => $sumOfOrdersMonthly,

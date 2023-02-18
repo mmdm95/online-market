@@ -5,11 +5,14 @@ namespace App\Logic\Controllers;
 use App\Logic\Abstracts\AbstractHomeController;
 use App\Logic\Forms\Register\RegisterFormStep1;
 use App\Logic\Forms\Register\RegisterFormStep2;
+use App\Logic\Forms\Register\RegisterFormStep2AndHalf;
 use App\Logic\Forms\Register\RegisterFormStep3;
 use App\Logic\Middlewares\Logic\RegisterCodeCheckMiddleware;
 use App\Logic\Middlewares\Logic\RegisterMobileCheckMiddleware;
 use App\Logic\Models\BaseModel;
 use App\Logic\Utils\SMSUtil;
+use DI\DependencyException;
+use DI\NotFoundException;
 use Sim\Auth\DBAuth;
 use Sim\Auth\Exceptions\InvalidUserException;
 use Sim\Auth\Interfaces\IDBException;
@@ -106,6 +109,51 @@ class RegisterController extends AbstractHomeController
                 $res = $registerForm->store();
                 // success or warning message
                 if ($res) {
+                    response()->redirect(url('home.signup.info')->getRelativeUrlTrimmed());
+                } else {
+                    $data['register_warning'] = 'خطا در ارتباط با سرور، لطفا دوباره تلاش کنید.';
+                }
+            } else {
+                $data['register_errors'] = $errors;
+            }
+        }
+
+        $this->setLayout($this->main_layout)->setTemplate('view/main/signup/step2');
+        return $this->render($data);
+    }
+
+    /**
+     * @return string
+     * @throws ConfigNotRegisteredException
+     * @throws ControllerException
+     * @throws FormException
+     * @throws IFileNotExistsException
+     * @throws IInvalidVariableNameException
+     * @throws PathNotRegisteredException
+     * @throws DependencyException
+     * @throws NotFoundException
+     * @throws \ReflectionException
+     */
+    public function enterInformation(): string
+    {
+        $this->setMiddleWare(RegisterMobileCheckMiddleware::class);
+        if (!$this->middlewareResult()) {
+            response()->redirect(url('home.signup')->getRelativeUrlTrimmed());
+        } else {
+            $this->removeAllMiddlewares();
+        }
+
+        $data = [];
+        if (is_post()) {
+            /**
+             * @var RegisterFormStep2AndHalf $registerForm
+             */
+            $registerForm = container()->get(RegisterFormStep2AndHalf::class);
+            [$status, $errors] = $registerForm->validate();
+            if ($status) {
+                $res = $registerForm->store();
+                // success or warning message
+                if ($res) {
                     session()->setFlash('register.code-step', 'I am ready to set password');
                     response()->redirect(url('home.signup.password')->getRelativeUrlTrimmed());
                 } else {
@@ -116,7 +164,7 @@ class RegisterController extends AbstractHomeController
             }
         }
 
-        $this->setLayout($this->main_layout)->setTemplate('view/main/signup/step2');
+        $this->setLayout($this->main_layout)->setTemplate('view/main/signup/step2-and-half');
         return $this->render($data);
     }
 

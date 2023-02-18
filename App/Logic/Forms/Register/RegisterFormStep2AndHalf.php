@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Logic\Forms\User\Info;
+namespace App\Logic\Forms\Register;
 
 use App\Logic\Interfaces\IPageForm;
 use App\Logic\Models\UserModel;
@@ -11,7 +11,7 @@ use Sim\Interfaces\IFileNotExistsException;
 use Sim\Interfaces\IInvalidVariableNameException;
 use voku\helper\AntiXSS;
 
-class ChangeUserInfoForm implements IPageForm
+class RegisterFormStep2AndHalf implements IPageForm
 {
     /**
      * {@inheritdoc}
@@ -32,26 +32,16 @@ class ChangeUserInfoForm implements IPageForm
         $validator->reset();
 
         // aliases
-        $validator
-            ->setFieldsAlias([
-                'inp-info-first-name' => 'نام',
-                'inp-info-last-name' => 'نام خانوادگی',
-                'inp-info-email' => 'ایمیل',
-                'inp-info-national-num' => 'کد ملی',
-                'inp-info-shaba-num' => 'شماره شبا',
-            ])
-            ->toEnglishValueFields([
-                'inp-info-national-num',
-            ])
-            ->setOptionalFields([
-                'inp-info-last-name',
-                'inp-info-email',
-                'inp-info-shaba-num',
-            ]);
+        $validator->setFieldsAlias([
+            'inp-register-first-name' => 'نام',
+            'inp-register-last-name' => 'نام خانوادگی',
+            'inp-register-n-code' => 'کد ملی',
+        ]);
+
 
         // name
         $validator
-            ->setFields('inp-info-first-name')
+            ->setFields('inp-register-first-name')
             ->stopValidationAfterFirstError(false)
             ->required()
             ->stopValidationAfterFirstError(true)
@@ -59,27 +49,19 @@ class ChangeUserInfoForm implements IPageForm
             ->lessThanEqualLength(30, '{alias} ' . 'باید کمتر از' . ' {max} ' . 'کاراکتر باشد.');
         // family
         $validator
-            ->setFields('inp-info-last-name')
+            ->setFields('inp-register-last-name')
             ->stopValidationAfterFirstError(false)
             ->required()
             ->stopValidationAfterFirstError(true)
             ->persianAlpha()
             ->lessThanEqualLength(30, '{alias} ' . 'باید کمتر از' . ' {max} ' . 'کاراکتر باشد.');
-        // email
+        // national code
         $validator
-            ->setFields('inp-info-email')
-            ->email();
-        // national number
-        $validator
-            ->setFields('inp-info-national-num')
+            ->setFields('inp-register-n-code')
             ->stopValidationAfterFirstError(false)
             ->required()
             ->stopValidationAfterFirstError(true)
             ->persianNationalCode();
-        // shaba number
-        $validator
-            ->setFields('inp-info-shaba-num')
-            ->isInteger();
 
         // to reset form values and not set them again
         if ($validator->getStatus()) {
@@ -88,8 +70,8 @@ class ChangeUserInfoForm implements IPageForm
 
         return [
             $validator->getStatus(),
-            $validator->getUniqueErrors(),
             $validator->getError(),
+            $validator->getUniqueErrors(),
             $validator->getFormattedError('<p class="m-0">'),
             $validator->getFormattedUniqueErrors('<p class="m-0">'),
             $validator->getRawErrors(),
@@ -114,23 +96,18 @@ class ChangeUserInfoForm implements IPageForm
         $xss = container()->get(AntiXSS::class);
 
         try {
-            $name = input()->post('inp-info-first-name', '')->getValue();
-            $family = input()->post('inp-info-last-name', '')->getValue();
-            $email = input()->post('inp-info-email', '')->getValue();
-            $nationalNum = input()->post('inp-info-national-num', '')->getValue();
-            $shabaNum = input()->post('inp-info-shaba-num', '')->getValue();
-            $id = session()->getFlash('the-current-user-id');
+            $name = input()->post('inp-register-first-name', '')->getValue();
+            $family = input()->post('inp-register-last-name', '')->getValue();
+            $nationalCode = input()->post('inp-register-n-code', '')->getValue();
 
-            if (empty($id)) return false;
+            $username = session()->getFlash('register.username', '', false);
 
+            // insert to database
             return $userModel->update([
                 'first_name' => $xss->xss_clean(trim($name)),
                 'last_name' => $xss->xss_clean(trim($family)),
-                'email' => $xss->xss_clean(trim($email)),
-                'national_number' => $xss->xss_clean(trim($nationalNum)),
-                'shaba_number' => $xss->xss_clean(trim($shabaNum)),
-                'updated_at' => time(),
-            ], 'id=:id', ['id' => $id]);
+                'national_number' => $xss->xss_clean(trim($nationalCode)),
+            ], 'username=:u_name', ['u_name' => $username]);
         } catch (\Exception $e) {
             return false;
         }

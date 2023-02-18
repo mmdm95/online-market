@@ -3,6 +3,9 @@
 use App\Logic\Utils\Jdf;
 use Sim\Utils\StringUtil;
 
+$authAdmin = auth_admin();
+$isSuperUser = $authAdmin->userHasRole(ROLE_DEVELOPER) || $authAdmin->userHasRole(ROLE_SUPER_USER);
+
 ?>
 
 <!-- Content area -->
@@ -10,45 +13,47 @@ use Sim\Utils\StringUtil;
 
     <div class="row">
         <div class="col-lg-6">
-            <form action="<?= url('admin.order.detail', ['id' => $order_id])->getRelativeUrlTrimmed(); ?>"
-                  method="post">
-                <div class="card">
-                    <?php load_partial('admin/card-header', [
-                        'header_title' => 'تغییر وضعیت پرداخت',
-                        'collapse' => false,
-                    ]); ?>
-
-                    <div class="card-body">
-                        <?php load_partial('admin/message/message-form', [
-                            'errors' => $invoice_change_errors ?? [],
-                            'success' => $invoice_change_success ?? '',
-                            'warning' => $invoice_change_warning ?? '',
+            <?php if ($isSuperUser): ?>
+                <form action="<?= url('admin.order.detail', ['id' => $order_id])->getRelativeUrlTrimmed(); ?>"
+                      method="post">
+                    <div class="card">
+                        <?php load_partial('admin/card-header', [
+                            'header_title' => 'تغییر وضعیت پرداخت',
+                            'collapse' => false,
                         ]); ?>
 
-                        <input type="hidden" name="csrf_token" value="<?= csrf_token(); ?>" data-ignored>
-                        <div class="form-group">
-                            <select data-placeholder="انتخاب وضعیت پرداخت..."
-                                    class="form-control form-control-select2-searchable"
-                                    name="inp-change-order-invoice-status" data-fouc>
-                                <option value="<?= DEFAULT_OPTION_VALUE ?>" disabled selected="selected">انتخاب کنید
-                                </option>
-                                <?php foreach (PAYMENT_STATUSES as $status => $text): ?>
-                                    <option value="<?= $status; ?>"
-                                        <?= $status == $order['payment_status'] ? 'selected="selected"' : ''; ?>>
-                                        <?= $text; ?>
+                        <div class="card-body">
+                            <?php load_partial('admin/message/message-form', [
+                                'errors' => $invoice_change_errors ?? [],
+                                'success' => $invoice_change_success ?? '',
+                                'warning' => $invoice_change_warning ?? '',
+                            ]); ?>
+
+                            <input type="hidden" name="csrf_token" value="<?= csrf_token(); ?>" data-ignored>
+                            <div class="form-group">
+                                <select data-placeholder="انتخاب وضعیت پرداخت..."
+                                        class="form-control form-control-select2-searchable"
+                                        name="inp-change-order-invoice-status" data-fouc>
+                                    <option value="<?= DEFAULT_OPTION_VALUE ?>" disabled selected="selected">انتخاب کنید
                                     </option>
-                                <?php endforeach; ?>
-                            </select>
-                        </div>
-                        <div class="text-right">
-                            <button type="submit" name="changeInvoiceStatusBtn"
-                                    class="btn bg-indigo-400 btn-show-loading">
-                                تغییر وضعیت پرداخت
-                            </button>
+                                    <?php foreach (PAYMENT_STATUSES as $status => $text): ?>
+                                        <option value="<?= $status; ?>"
+                                            <?= $status == $order['payment_status'] ? 'selected="selected"' : ''; ?>>
+                                            <?= $text; ?>
+                                        </option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </div>
+                            <div class="text-right">
+                                <button type="submit" name="changeInvoiceStatusBtn"
+                                        class="btn bg-indigo-400 btn-show-loading">
+                                    تغییر وضعیت پرداخت
+                                </button>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </form>
+                </form>
+            <?php endif; ?>
         </div>
 
         <div class="col-lg-6">
@@ -193,7 +198,7 @@ use Sim\Utils\StringUtil;
                             تاریخ ثبت سفارش
                         </div>
                         <div class="text-green-800">
-                            <?= Jdf::jdate(DEFAULT_TIME_FORMAT, $order['ordered_at']); ?>
+                            <?= Jdf::jdate(DEFAULT_TIME_FORMAT_WITH_TIME, $order['ordered_at']); ?>
                         </div>
                     </div>
                     <div class="col-lg-6 border py-2 px-3">
@@ -322,8 +327,9 @@ use Sim\Utils\StringUtil;
                     <th>فی(به تومان)</th>
                     <th>تعداد</th>
                     <th>مرجوع شده</th>
-                    <th>قیمت کل(به تومان)</th>
-                    <th>قیمت نهایی(به تومان)</th>
+                    <th>مبلغ بدون تخفیف(به تومان)</th>
+                    <th>مبلغ تخفیف(به تومان)</th>
+                    <th>مبلغ نهایی(به تومان)</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -386,6 +392,17 @@ use Sim\Utils\StringUtil;
                         <td data-order="<?= (int)StringUtil::toEnglish($item['price']); ?>">
                             <?= StringUtil::toPersian(number_format(StringUtil::toEnglish($item['price']))); ?>
                         </td>
+
+                        <?php
+                        $discount = (int)StringUtil::toEnglish($item['price']) - (int)StringUtil::toEnglish($item['discounted_price']);
+                        ?>
+                        <td data-order="<?= $discount; ?>">
+                            <?php if (0 == $discount): ?>
+                                <?php load_partial('admin/parser/dash-icon'); ?>
+                            <?php else: ?>
+                                <?= StringUtil::toPersian(number_format($discount)); ?>
+                            <?php endif; ?>
+                        </td>
                         <td class="table-success"
                             data-order="<?= (int)StringUtil::toEnglish($item['discounted_price']); ?>">
                             <?= StringUtil::toPersian(number_format(StringUtil::toEnglish($item['discounted_price']))); ?>
@@ -436,6 +453,15 @@ use Sim\Utils\StringUtil;
                                 </td>
                             </tr>
                             <tr>
+                                <th>
+                                    هزینه ارسال:
+                                </th>
+                                <td class="text-right">
+                                    <?= StringUtil::toPersian(number_format(StringUtil::toEnglish($order['shipping_price']))); ?>
+                                    تومان
+                                </td>
+                            </tr>
+                            <tr>
                                 <th>مبلغ قابل پرداخت:</th>
                                 <td class="text-right text-primary">
                                     <h5 class="font-weight-semibold">
@@ -453,5 +479,6 @@ use Sim\Utils\StringUtil;
     </div>
     <!-- /invoice template -->
 
+    <?php load_partial('admin/table/user-orders', ['user_id' => $order['user_id']]); ?>
 </div>
 <!-- /content area -->

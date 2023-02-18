@@ -20,7 +20,7 @@ $allowSetting = $authAdmin->isAllow(RESOURCE_SETTING, OWN_PERMISSION_READ);
 
 <!-- Content area -->
 <div class="content">
-    <div class="d-block d-xl-flex justify-content-between">
+    <div class="d-block d-lg-flex justify-content-between">
         <div class="d-block d-lg-inline-block">
             <div class="d-block d-sm-flex mb-2">
                 <span class="py-2 px-3 text-center bg-dark d-block d-lg-inline-block rounded-left col"><?= $today_date; ?></span>
@@ -29,43 +29,52 @@ $allowSetting = $authAdmin->isAllow(RESOURCE_SETTING, OWN_PERMISSION_READ);
                       id="simpleClock">0:00:00 AM</span>
             </div>
         </div>
-        <?php if ($allowContact || $allowComplaint || $allowProduct): ?>
-            <div class="text-right d-flex d-lg-block flex-column flex-sm-row justify-content-center justify-content-lg-end">
-                <?php if ($allowProduct): ?>
-                    <a href="<?= url('admin.return.order.view', '')->getRelativeUrl(); ?>"
-                       class="btn bg-violet py-2 px-3 d-block d-lg-inline-block mb-2 border-0 flex-fill">
-                        <?php if ($return_order_count > 0): ?>
-                            <span style="position: absolute; top: 5px; left: 8px; background: #e44444; width: 10px; height: 10px; border-radius: 50rem;"></span>
-                        <?php endif; ?>
-                        درخواست‌های مرجوع:
-                        <?= StringUtil::toPersian($return_order_count); ?>
-                    </a>
-                <?php endif; ?>
 
-                <?php if ($allowContact): ?>
-                    <a href="<?= url('admin.contact-us.view', '')->getRelativeUrl(); ?>"
-                       class="btn bg-blue py-2 px-3 d-block d-lg-inline-block ml-0 ml-sm-2 mb-2 border-0 flex-fill">
-                        <?php if ($unread_contact_count > 0): ?>
-                            <span style="position: absolute; top: 5px; left: 8px; background: #e44444; width: 10px; height: 10px; border-radius: 50rem;"></span>
-                        <?php endif; ?>
-                        پیام‌های خوانده نشده:
-                        <?= StringUtil::toPersian($unread_contact_count); ?>
-                    </a>
-                <?php endif; ?>
-
-                <?php if ($allowComplaint): ?>
-                    <a href="<?= url('admin.complaints.view', '')->getRelativeUrl(); ?>"
-                       class="btn bg-warning py-2 px-3 d-block d-lg-inline-block ml-0 ml-sm-2 mb-2 border-0 flex-fill">
-                        <?php if ($unread_complaint_count > 0): ?>
-                            <span style="position: absolute; top: 5px; left: 8px; background: #e44444; width: 10px; height: 10px; border-radius: 50rem;"></span>
-                        <?php endif; ?>
-                        شکایات خوانده نشده:
-                        <?= StringUtil::toPersian($unread_complaint_count); ?>
-                    </a>
-                <?php endif; ?>
-            </div>
-        <?php endif; ?>
+        <div class="text-right d-flex d-lg-block flex-column flex-sm-row justify-content-center justify-content-lg-end">
+            <a class="btn bg-white py-2 px-3 d-block d-lg-inline-block mb-2 border-1 flex-fill">
+                موجودی پنل پیامکی:
+                <?= local_number(number_format($sms_balance)); ?>
+                <small>تومان</small>
+            </a>
+        </div>
     </div>
+
+    <?php if ($allowContact || $allowComplaint || $allowProduct): ?>
+        <div class="text-right d-flex d-lg-block flex-column flex-sm-row justify-content-center justify-content-lg-end">
+            <?php if ($allowProduct): ?>
+                <a href="<?= url('admin.return.order.view', '')->getRelativeUrl(); ?>"
+                   class="btn bg-violet py-2 px-3 d-block d-lg-inline-block mb-2 border-0 flex-fill">
+                    <?php if ($return_order_count > 0): ?>
+                        <span style="position: absolute; top: 5px; left: 8px; background: #e44444; width: 10px; height: 10px; border-radius: 50rem;"></span>
+                    <?php endif; ?>
+                    درخواست‌های مرجوع:
+                    <?= StringUtil::toPersian($return_order_count); ?>
+                </a>
+            <?php endif; ?>
+
+            <?php if ($allowContact): ?>
+                <a href="<?= url('admin.contact-us.view', '')->getRelativeUrl(); ?>"
+                   class="btn bg-blue py-2 px-3 d-block d-lg-inline-block ml-0 ml-sm-2 mb-2 border-0 flex-fill">
+                    <?php if ($unread_contact_count > 0): ?>
+                        <span style="position: absolute; top: 5px; left: 8px; background: #e44444; width: 10px; height: 10px; border-radius: 50rem;"></span>
+                    <?php endif; ?>
+                    پیام‌های خوانده نشده:
+                    <?= StringUtil::toPersian($unread_contact_count); ?>
+                </a>
+            <?php endif; ?>
+
+            <?php if ($allowComplaint): ?>
+                <a href="<?= url('admin.complaints.view', '')->getRelativeUrl(); ?>"
+                   class="btn bg-warning py-2 px-3 d-block d-lg-inline-block ml-0 ml-sm-2 mb-2 border-0 flex-fill">
+                    <?php if ($unread_complaint_count > 0): ?>
+                        <span style="position: absolute; top: 5px; left: 8px; background: #e44444; width: 10px; height: 10px; border-radius: 50rem;"></span>
+                    <?php endif; ?>
+                    شکایات خوانده نشده:
+                    <?= StringUtil::toPersian($unread_complaint_count); ?>
+                </a>
+            <?php endif; ?>
+        </div>
+    <?php endif; ?>
 
     <?php load_partial('admin/order-badges-minimal', ['order_badges_count' => $order_badges_count]); ?>
 

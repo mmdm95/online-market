@@ -4,7 +4,7 @@ namespace App\Logic\Abstracts;
 
 use App\Logic\Models\CommentModel;
 use App\Logic\Models\UserModel;
-use PhpOffice\PhpSpreadsheet\Comment;
+use App\Logic\Utils\OrderUtil;
 use Sim\Abstracts\Mvc\Controller\AbstractController;
 use Sim\Auth\DBAuth;
 use Sim\Auth\Interfaces\IDBException;
@@ -94,6 +94,7 @@ abstract class AbstractAdminController extends AbstractController
             ],
             'main_user_info' => $info,
             'unread_product_comments' => $productComments,
+            'order_badges_count' => OrderUtil::getOrderBadgesWithCount(),
         ]));
     }
 

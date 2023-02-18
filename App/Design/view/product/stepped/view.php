@@ -51,7 +51,11 @@ use Sim\Utils\StringUtil;
                         <?= StringUtil::toPersian(number_format(StringUtil::toEnglish($item['discounted_price']))); ?>
                     </td>
                     <td data-order="<?= (int)$item['discount_until']; ?>">
-                        <?= Jdf::jdate(DEFAULT_TIME_FORMAT, $item['discount_until']); ?>
+                        <?php if (isset($item['discount_until'])): ?>
+                            <?= Jdf::jdate(DEFAULT_TIME_FORMAT, $item['discount_until']); ?>
+                        <?php else: ?>
+                            <?php load_partial('admin/parser/dash-icon'); ?>
+                        <?php endif; ?>
                     </td>
                     <td>
                         <?php load_partial('admin/parser/active-status', [

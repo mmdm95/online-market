@@ -35,6 +35,21 @@ class SMSUtil implements ISMS
     }
 
     /**
+     * @return float
+     * @throws SMSException
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
+     */
+    public static function getCredit(): float
+    {
+        /**
+         * @var NiazPardaz $sms
+         */
+        $sms = container()->get('sms_panel');
+        return $sms->getCredit();
+    }
+
+    /**
      * @param array $numbers
      * @param string $body
      * @param AbstractSMS $smsFactory
@@ -47,11 +62,11 @@ class SMSUtil implements ISMS
      * @throws \Sim\Interfaces\IInvalidVariableNameException
      */
     public static function logSMS(
-        array $numbers,
-        string $body,
+        array       $numbers,
+        string      $body,
         AbstractSMS $smsFactory,
-        $type,
-        $senderType
+                    $type,
+                    $senderType
     )
     {
         $auth = auth_admin()->isLoggedIn() ? auth_admin() : (auth_home()->isLoggedIn() ? auth_home() : null);

@@ -24,6 +24,7 @@ use Sim\Exceptions\Mvc\Controller\ControllerException;
 use Sim\Exceptions\PathManager\PathNotRegisteredException;
 use Sim\Interfaces\IFileNotExistsException;
 use Sim\Interfaces\IInvalidVariableNameException;
+use Sim\Utils\ArrayUtil;
 
 class HomeController extends AbstractUserController
 {
@@ -47,7 +48,7 @@ class HomeController extends AbstractUserController
         /**
          * @var ReturnOrderModel $returnModel
          */
-//        $returnModel = container()->get(ReturnOrderModel::class);
+        $returnModel = container()->get(ReturnOrderModel::class);
         /**
          * @var WalletModel $walletModel
          */
@@ -63,9 +64,9 @@ class HomeController extends AbstractUserController
 
         $user = $this->getDefaultArguments()['user'];
 
-        $walletBalance = $walletModel->getFirst(['balance'], 'username=:username', ['username' => $user['username']])['balance'];
+        $walletBalance = $walletModel->getFirst(['balance'], 'username=:username', ['username' => $user['username']])['balance'] ?? 0;
         $orderCount = $orderModel->count('user_id=:id', ['id' => $user['id']]);
-//        $returnCount = $returnModel->count('user_id=:id', ['id' => $user['id']]);
+        $returnCount = $returnModel->count('user_id=:id', ['id' => $user['id']]);
         $accCommentCount = $commentModel->count('user_id=:id AND the_condition=:condition', ['id' => $user['id'], 'condition' => COMMENT_CONDITION_ACCEPT]);
         $naccCommentCount = $commentModel->count('user_id=:id AND the_condition=:condition', ['id' => $user['id'], 'condition' => COMMENT_CONDITION_REJECT]);
         //
@@ -102,7 +103,7 @@ class HomeController extends AbstractUserController
         $this->setLayout($this->main_layout)->setTemplate('view/main/user/index');
         return $this->render([
             'order_count' => $orderCount,
-//            'return_order_count' => $returnCount,
+            'return_order_count' => $returnCount,
             'wallet_balance' => $walletBalance,
             'accept_comment_count' => $accCommentCount,
             'not_accept_comment_count' => $naccCommentCount,
@@ -140,6 +141,13 @@ class HomeController extends AbstractUserController
             if (!is_null(input()->post('infoSubmit')->getValue())) {
                 $formHandler = new GeneralFormHandler();
                 $data = $formHandler->handle(ChangeUserInfoForm::class, 'info_change');
+
+                // handle back url for better user experience
+                $backUrl = ArrayUtil::get($_GET, 'back_url', null);
+                $backUrl = urldecode($backUrl);
+                if (isset($data['info_change_success']) && !empty($backUrl)) {
+                    response()->redirect($backUrl);
+                }
             } elseif (!is_null(input()->post('passwordSubmit')->getValue())) {
                 $formHandler = new GeneralFormHandler();
                 $data = $formHandler->handle(ChangeUserPasswordForm::class, 'password_change');

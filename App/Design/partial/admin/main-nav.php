@@ -1,8 +1,10 @@
 <?php
 
 use App\Logic\Utils\Jdf;
+use Sim\Utils\StringUtil;
 
 $authAdmin = auth_admin();
+$allowOrder = $authAdmin->isAllow(RESOURCE_ORDER, OWN_PERMISSION_READ);
 
 ?>
 
@@ -34,9 +36,52 @@ $authAdmin = auth_admin();
 
         <span class="navbar-text ml-md-3 mr-md-auto">
 				<span class="badge bg-success">آنلاین</span>
-			</span>
+        </span>
 
-        <ul class="navbar-nav">
+        <ul class="navbar-nav ml-md-auto">
+            <?php if ($allowOrder): ?>
+                <li class="nav-item dropdown">
+                    <a href="#" class="navbar-nav-link dropdown-toggle" data-toggle="dropdown">
+                        <i class="icon-basket mr-2"></i>
+                        سفارشات
+                    </a>
+
+                    <div class="dropdown-menu dropdown-menu-right dropdown-content wmin-md-400 overflow-auto"
+                         style="max-height: 240px;">
+                        <div class="dropdown-content-body p-2">
+                            <div class="row no-gutters">
+                                <?php $k = 0; ?>
+                                <?php foreach ($order_badges_count as $value): ?>
+                                    <?php if ($k == 0 || $k % 3 == 0): ?>
+                                        <div class="col-12">
+                                        <div class="row p-1">
+                                    <?php endif; ?>
+
+                                    <div class="col">
+                                        <a href="<?= url('admin.order.view', ['status' => $value['code']])->getRelativeUrlTrimmed(); ?>"
+                                           class="d-block text-default text-center rounded p-1 text-truncate"
+                                           style="background-color: <?= $value['color']; ?>; color: <?= get_color_from_bg($value['color']); ?>; !important;">
+                                            <div class="font-size-sm font-weight-semibold text-uppercase mt-2">
+                                                <?= StringUtil::toPersian($value['count']); ?>
+                                                <br>
+                                                <?= $value['title']; ?>
+                                            </div>
+                                        </a>
+                                    </div>
+
+                                    <?php if ($k != 0 && (($k + 1) % 3) == 0): ?>
+                                        </div>
+                                        </div>
+                                    <?php endif; ?>
+
+                                    <?php $k++; ?>
+                                <?php endforeach; ?>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+            <?php endif; ?>
+
             <?php if ($unread_product_comments['count'] > 0): ?>
                 <li class="nav-item dropdown">
                     <a href="#" class="navbar-nav-link dropdown-toggle" data-toggle="dropdown">

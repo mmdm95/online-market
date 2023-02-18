@@ -7,7 +7,7 @@ use Sim\Utils\StringUtil;
 
 <!-- Summary of things -->
 <div class="row mt-3 mt-md-0">
-    <div class="col-md-6 col-lg-12">
+    <div class="col-lg-12">
         <div class="dashboard_content">
             <div class="card">
                 <div class="card-body border border-dark-alpha">
@@ -25,42 +25,47 @@ use Sim\Utils\StringUtil;
         </div>
     </div>
 
-    <!--    <div class="col-md-6 col-lg-6">-->
-    <!--        <div class="dashboard_content">-->
-    <!--            <div class="card">-->
-    <!--                <div class="card-body border border-dark-alpha">-->
-    <!--                    <div class="text-center">-->
-    <!--                        <div class="d-flex justify-content-center align-items-center">-->
-    <!--                            <i class="linearicons-cart-remove icon-2x mr-3" aria-hidden="true"></i>-->
-    <!--                            <div>مرجوعی</div>-->
-    <!--                        </div>-->
-    <!--                        <h4 class="mt-3 mb-0">-->
-    <?= '';//$return_order_count;        ?>
-    <!--                        </h4>-->
-    <!--                    </div>-->
-    <!--                </div>-->
-    <!--            </div>-->
-    <!--        </div>-->
-    <!--    </div>-->
+    <div class="col-md-6 col-lg-6">
+        <div class="dashboard_content">
+            <div class="card">
+                <div class="card-body border border-dark-alpha">
+                    <div class="text-center">
+                        <div class="d-flex justify-content-center align-items-center">
+                            <i class="linearicons-cart-remove icon-2x mr-3" aria-hidden="true"></i>
+                            <div>مرجوعی</div>
+                        </div>
+                        <h4 class="mt-3 mb-0">
+                            <?= local_number(number_format(StringUtil::toEnglish($return_order_count))); ?>
+                            <small>عدد</small>
+                        </h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-    <!--    <div class="col-lg-6">-->
-    <!--        <div class="dashboard_content">-->
-    <!--            <div class="card">-->
-    <!--                <div class="card-body border border-dark-alpha">-->
-    <!--                    <div class="text-center">-->
-    <!--                        <div class="d-flex justify-content-center align-items-center">-->
-    <!--                            <i class="linearicons-wallet icon-2x mr-3" aria-hidden="true"></i>-->
-    <!--                            <div>کیف پول</div>-->
-    <!--                        </div>-->
-    <!--                        <h4 class="mt-3 mb-0">-->
-    <?= '';//local_number(number_format(StringUtil::toEnglish($wallet_balance)));     ?>
-    <!--                            <small>تومان</small>-->
-    <!--                        </h4>-->
-    <!--                    </div>-->
-    <!--                </div>-->
-    <!--            </div>-->
-    <!--        </div>-->
-    <!--    </div>-->
+    <div class="col-md-6 col-lg-6">
+        <div class="dashboard_content">
+            <div class="card">
+                <div class="card-body border border-dark-alpha">
+                    <div class="text-center">
+                        <div class="d-flex justify-content-center align-items-center">
+                            <i class="linearicons-wallet icon-2x mr-3" aria-hidden="true"></i>
+                            <div>کیف پول</div>
+                        </div>
+                        <h4 class="mt-3 mb-0">
+                            <?php if (0 == $wallet_balance): ?>
+                                فاقد موجودی
+                            <?php else: ?>
+                                <?= local_number(number_format(StringUtil::toEnglish($wallet_balance))); ?>
+                                <small>تومان</small>
+                            <?php endif; ?>
+                        </h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="col-md-6 col-lg-4">
         <div class="dashboard_content">
             <div class="card">
@@ -194,16 +199,16 @@ use Sim\Utils\StringUtil;
 <?php //foreach ($last_wallet_flow as $flow): ?>
 <!--                        <tr>-->
 <!--                            <td class="en-font">-->
-<?= '';//$flow['order_code'];  ?>
+<?= '';//$flow['order_code'];    ?>
 <!--                            </td>-->
 <!--                            <td>-->
-<?= '';//Jdf::jdate(DEFAULT_TIME_FORMAT, $flow['deposit_at']);  ?>
+<?= '';//Jdf::jdate(DEFAULT_TIME_FORMAT, $flow['deposit_at']);    ?>
 <!--                            </td>-->
 <!--                            <td>-->
-<?= '';//$flow['deposit_type_title'];  ?>
+<?= '';//$flow['deposit_type_title'];    ?>
 <!--                            </td>-->
 <!--                            <td>-->
-<?= '';//number_format(StringUtil::toEnglish($flow['deposit_price']));  ?>
+<?= '';//number_format(StringUtil::toEnglish($flow['deposit_price']));    ?>
 <!--                                <small>تومان</small>-->
 <!--                            </td>-->
 <!--                        </tr>-->

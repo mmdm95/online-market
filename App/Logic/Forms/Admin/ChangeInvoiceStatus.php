@@ -38,6 +38,16 @@ class ChangeInvoiceStatus implements IPageForm
                 'inp-change-order-invoice-status' => 'وضعیت پرداخت',
             ]);
 
+        $auth = auth_admin();
+        if (!$auth->userHasRole(ROLE_DEVELOPER) && !$auth->userHasRole(ROLE_SUPER_USER)) {
+            $validator
+                ->setStatus(false)
+                ->setError(
+                    'inp-change-order-invoice-status',
+                    'شما اجازه تغییر وضعیت پرداخت را ندارید'
+                );
+        }
+
         // status
         $validator
             ->setFields('inp-change-order-invoice-status')
@@ -80,10 +90,7 @@ class ChangeInvoiceStatus implements IPageForm
          * @var AntiXSS $xss
          */
         $xss = container()->get(AntiXSS::class);
-        /**
-         * @var DBAuth $auth
-         */
-        $auth = container()->get('auth_admin');
+        $auth = auth_admin();
 
         try {
             $id = session()->getFlash('curr_order_detail_id', null);
