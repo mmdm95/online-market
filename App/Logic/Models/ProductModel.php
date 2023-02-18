@@ -89,7 +89,7 @@ class ProductModel extends BaseModel
     public function getLimitedProduct(
         ?string $where = null,
         array   $bind_values = [],
-        array   $order_by = ['pa.product_availability DESC', 'pa.is_available DESC', 'pa.product_id DESC'],
+        array   $order_by = ['pa.stock_count DESC', 'pa.product_availability DESC', 'pa.is_available DESC', 'pa.product_id DESC'],
         ?int    $limit = null,
         int     $offset = 0,
         array   $group_by = ['pa.product_id'],

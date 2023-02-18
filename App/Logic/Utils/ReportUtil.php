@@ -150,7 +150,7 @@ class ReportUtil
             $items = $productModel->getLimitedProduct(
                 $where,
                 $bindValues,
-                ['pa.product_availability DESC', 'pa.is_available DESC', 'pa.product_id DESC'],
+                ['pa.stock_count DESC', 'pa.product_availability DESC', 'pa.is_available DESC', 'pa.product_id DESC'],
                 $limit,
                 $offset * $limit,
                 ['pa.product_id'],
