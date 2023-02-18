@@ -22,7 +22,7 @@ if (count($order ?? []) && count($items ?? [])): ?>
                     تاریخ ثبت سفارش
                 </small>
                 <strong>
-                    <?= Jdf::jdate(DEFAULT_TIME_FORMAT, $order['ordered_at']); ?>
+                    <?= Jdf::jdate(DEFAULT_TIME_FORMAT_WITH_TIME, $order['ordered_at']); ?>
                 </strong>
             </td>
             <td>

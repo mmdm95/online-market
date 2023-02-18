@@ -330,7 +330,7 @@ class ProductUtil
                 'pub' => DB_YES,
                 'del' => DB_NO,
             ]),
-            ['pa.product_id DESC'],
+            ['pa.product_availability DESC', 'pa.is_available DESC', 'pa.product_id DESC'],
             null,
             0,
             ['pa.product_id'],

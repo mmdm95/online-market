@@ -28,6 +28,14 @@
                 ruleCheckbox: 'inp-register-terms-chk',
             },
         },
+        registerStep2AndHalf: {
+            form: '#__form_register_step2_and_half',
+            inputs: {
+                fName: 'inp-register-first-name',
+                lName: 'inp-register-last-name',
+                nCode: 'inp-register-n-code',
+            },
+        },
         registerStep3: {
             form: '#__form_register_step3',
             inputs: {
@@ -156,6 +164,42 @@
                     },
                     messages: {
                         equalTo: 'تکرار کلمه عبور با کلمه عبور یکسان نمی‌باشد.',
+                    },
+                },
+            },
+            registerStep2AndHalf: {
+                fName: {
+                    rules: {
+                        requiredNotEmpty: true,
+                        maxlength: 30,
+                        format: /^[پچجحخهعغفقثصضشسیبلاتنمکگوئدذرزطظژؤإأآءًٌٍَُِّ\s]+$/u,
+                    },
+                    messages: {
+                        requiredNotEmpty: 'وارد کردن نام اجباری است.',
+                        maxlength: 'نام باید دارای حداکثر ۳۰ کاراکتر باشد.',
+                        format: 'نام باید دارای حروف فارسی باشد.',
+                    },
+                },
+                lName: {
+                    rules: {
+                        requiredNotEmpty: true,
+                        maxlength: 30,
+                        format: /^[پچجحخهعغفقثصضشسیبلاتنمکگوئدذرزطظژؤإأآءًٌٍَُِّ\s]+$/u,
+                    },
+                    messages: {
+                        requiredNotEmpty: 'وارد کردن نام خانوادگی اجباری است.',
+                        maxlength: 'نام خانوادگی باید دارای حداکثر ۳۰ کاراکتر باشد.',
+                        format: 'نام خانوادگی باید دارای حروف فارسی باشد.',
+                    },
+                },
+                nCode: {
+                    rules: {
+                        requiredNotEmpty: true,
+                        format: /^\d{1,10}$/,
+                    },
+                    messages: {
+                        requiredNotEmpty: 'وارد کردن کد ملی اجباری است.',
+                        format: 'کد ملی باید از نوع عددی و دارای حداکثر ۱۰ رقم باشد.',
                     },
                 },
             },
@@ -464,6 +508,11 @@
                 captcha: variables.validation.common.captcha,
                 ruleCheckbox: variables.validation.constraints.register.ruleCheckbox,
             },
+            registerStep2AndHalf: {
+                fName: variables.validation.constraints.registerStep2AndHalf.fName,
+                lName: variables.validation.constraints.registerStep2AndHalf.lName,
+                nCode: variables.validation.constraints.registerStep2AndHalf.nCode,
+            },
             registerStep3: {
                 password: variables.validation.constraints.register.password,
                 confirmPassword: variables.validation.constraints.register.confirmPassword,
@@ -721,6 +770,17 @@
         // REGISTER FORM - STEP 1
         //---------------------------------------------------------------
         shop.forms.submitForm('register', constraints.register, function () {
+            loaderId = shop.showLoader();
+            return true;
+        }, function (errors) {
+            shop.forms.showFormErrors(errors);
+            return false;
+        });
+
+        //---------------------------------------------------------------
+        // REGISTER FORM - STEP 2 and a half
+        //---------------------------------------------------------------
+        shop.forms.submitForm('registerStep2AndHalf', constraints.registerStep2AndHalf, function () {
             loaderId = shop.showLoader();
             return true;
         }, function (errors) {

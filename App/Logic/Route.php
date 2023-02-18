@@ -3,6 +3,7 @@
 namespace App\Logic;
 
 use App\Logic\Controllers\SitemapController;
+use App\Logic\Middlewares\UserHasInfoMiddleware;
 use App\Logic\Controllers\Admin\{BlogController as AdminBlogController,
     BlogCategoryController as AdminBlogCategoryController,
     BrandController as AdminBrandController,
@@ -721,6 +722,7 @@ class Route implements IInitialize
             ])->name('home.forget-password');
             Router::form('/signup', [RegisterController::class, 'index'])->name('home.signup');
             Router::form('/signup/code', [RegisterController::class, 'enterCode'])->name('home.signup.code');
+            Router::form('/signup/information', [RegisterController::class, 'enterInformation'])->name('home.signup.info');
             Router::form('/signup/password', [RegisterController::class, 'enterPassword'])->name('home.signup.password');
 
             /**
@@ -734,7 +736,9 @@ class Route implements IInitialize
             Router::get('/cart', [CartController::class, 'index'])->name('home.cart');
             Router::group(['middleware' => AuthMiddleware::class], function () {
                 Router::group(['middleware' => CartMiddleware::class], function () {
-                    Router::get('/checkout', [CheckoutController::class, 'checkout'])->name('home.checkout');
+                    Router::group(['middleware' => UserHasInfoMiddleware::class], function () {
+                        Router::get('/checkout', [CheckoutController::class, 'checkout'])->name('home.checkout');
+                    });
                 });
             });
             Router::form('/finish/{type}/{method}/{code}', [OrderResultController::class, 'index'])->where([

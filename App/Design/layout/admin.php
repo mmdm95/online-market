@@ -19,8 +19,9 @@
 
 <!-- Main navbar -->
 <?php load_partial('admin/main-nav', [
-        'unread_product_comments' => $unread_product_comments,
-        'main_user_info' => $main_user_info,
+    'unread_product_comments' => $unread_product_comments,
+    'main_user_info' => $main_user_info,
+    'order_badges_count' => $order_badges_count,
 ]); ?>
 <!-- /main navbar -->
 
