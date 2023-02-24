@@ -268,7 +268,7 @@ if (count($order ?? []) && count($items ?? [])): ?>
     <table class='table table-bordered'>
         <thead>
         <tr>
-            <th colspan="8">
+            <th colspan="9">
                 محصولات خریداری شده
             </th>
         </tr>
@@ -366,7 +366,7 @@ if (count($order ?? []) && count($items ?? [])): ?>
                 </td>
                 <td>
                     <?php if (0 != $item['discounted_price']): ?>
-                        <?php $totalPrice = $item['discounted_price']; ?>
+                        <?php $totalPrice += $item['discounted_price']; ?>
                         <?= local_number(number_format(StringUtil::toEnglish($item['discounted_price']))); ?>
                         تومان
                     <?php else: ?>
@@ -385,13 +385,13 @@ if (count($order ?? []) && count($items ?? [])): ?>
         </tbody>
         <tfoot>
         <tr>
-            <td colspan="5">
-                <strong style="text-align: left;">
+            <td colspan="6">
+                <strong class="text-left">
                     هزینه ارسال:
                 </strong>
             </td>
             <td></td>
-            <td colspan="3">
+            <td colspan="2">
                 <?php if (0 != $order['shipping_price']): ?>
                     <?= local_number(number_format(StringUtil::toEnglish($order['shipping_price']))); ?>
                     تومان
@@ -401,8 +401,8 @@ if (count($order ?? []) && count($items ?? [])): ?>
             </td>
         </tr>
         <tr>
-            <td colspan="5">
-                <strong style="text-align: left;">
+            <td colspan="6">
+                <strong class="text-left">
                     تخفیف ویژه (کوپن):
                 </strong>
             </td>
@@ -414,11 +414,11 @@ if (count($order ?? []) && count($items ?? [])): ?>
                     -
                 <?php endif; ?>
             </td>
-            <td colspan="3"></td>
+            <td colspan="2"></td>
         </tr>
         <tr>
-            <td colspan="5">
-                <strong style="text-align: left;">
+            <td colspan="6">
+                <strong class="text-left">
                     مجموع مبالغ:
                 </strong>
             </td>
@@ -432,8 +432,8 @@ if (count($order ?? []) && count($items ?? [])): ?>
                     <?php endif; ?>
                 </strong>
             </td>
-            <td colspan="3">
-                <strong style="text-align: right">
+            <td colspan="2">
+                <strong>
                     <?php if (0 != $totalPrice): ?>
                         <?= local_number(number_format(StringUtil::toEnglish($totalPrice))); ?>
                         تومان
