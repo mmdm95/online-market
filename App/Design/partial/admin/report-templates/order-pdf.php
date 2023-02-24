@@ -291,7 +291,7 @@ if (count($order ?? []) && count($items ?? [])): ?>
                 مبلغ واحد (به تومان)
             </th>
             <th>
-                مبلغ کل (بدون تومان)
+                مبلغ کل (به تومان)
             </th>
             <th>
                 تخفیف (به تومان)
@@ -346,7 +346,7 @@ if (count($order ?? []) && count($items ?? [])): ?>
                 </td>
                 <td>
                     <?php if (0 != $item['price']): ?>
-                        <?= local_number(number_format(StringUtil::toEnglish($item['discounted_price']))); ?>
+                        <?= local_number(number_format(StringUtil::toEnglish($item['price']))); ?>
                         تومان
                     <?php else: ?>
                         رایگان
@@ -386,13 +386,14 @@ if (count($order ?? []) && count($items ?? [])): ?>
         <tfoot>
         <tr>
             <td colspan="6">
-                <strong class="text-left">
+                <strong class="text-right">
                     هزینه ارسال:
                 </strong>
             </td>
             <td></td>
             <td colspan="2">
                 <?php if (0 != $order['shipping_price']): ?>
+                    <?php $totalPrice += (int)$order['shipping_price']; ?>
                     <?= local_number(number_format(StringUtil::toEnglish($order['shipping_price']))); ?>
                     تومان
                 <?php else: ?>
@@ -402,7 +403,7 @@ if (count($order ?? []) && count($items ?? [])): ?>
         </tr>
         <tr>
             <td colspan="6">
-                <strong class="text-left">
+                <strong class="text-right">
                     تخفیف ویژه (کوپن):
                 </strong>
             </td>
@@ -418,7 +419,7 @@ if (count($order ?? []) && count($items ?? [])): ?>
         </tr>
         <tr>
             <td colspan="6">
-                <strong class="text-left">
+                <strong class="text-right">
                     مجموع مبالغ:
                 </strong>
             </td>
