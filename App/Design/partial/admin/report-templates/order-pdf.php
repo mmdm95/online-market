@@ -288,13 +288,16 @@ if (count($order ?? []) && count($items ?? [])): ?>
                 تعداد
             </th>
             <th>
-                فی
+                مبلغ واحد (به تومان)
             </th>
             <th>
-                تخفیف
+                مبلغ کل (بدون تومان)
             </th>
             <th>
-                قیمت نهایی
+                تخفیف (به تومان)
+            </th>
+            <th>
+                مبلغ کل پس از تخفیف (به تومان)
             </th>
             <th>
                 مرجوع شده
@@ -304,6 +307,8 @@ if (count($order ?? []) && count($items ?? [])): ?>
         <tbody>
         <?php
         $i = 0;
+        $allDiscounts = 0;
+        $totalPrice = 0;
         ?>
         <?php foreach ($items as $item): ?>
             <tr>
@@ -340,16 +345,29 @@ if (count($order ?? []) && count($items ?? [])): ?>
                     <?php endif; ?>
                 </td>
                 <td>
+                    <?php if (0 != $item['price']): ?>
+                        <?= local_number(number_format(StringUtil::toEnglish($item['discounted_price']))); ?>
+                        تومان
+                    <?php else: ?>
+                        رایگان
+                    <?php endif; ?>
+                </td>
+                <td>
                     <?php if ($item['price'] != $item['discounted_price']): ?>
-                        <?= local_number(number_format(StringUtil::toEnglish((int)$item['price'] - (int)$item['discounted_price']))); ?>
+                        <?php
+                        $dis = (int)$item['price'] - (int)$item['discounted_price'];
+                        $allDiscounts += $dis;
+                        ?>
+                        <?= local_number(number_format(StringUtil::toEnglish($dis))); ?>
                         تومان
                     <?php else: ?>
                         -
                     <?php endif; ?>
                 </td>
                 <td>
-                    <?php if (0 != $item['price']): ?>
-                        <?= local_number(number_format(StringUtil::toEnglish($item['price']))); ?>
+                    <?php if (0 != $item['discounted_price']): ?>
+                        <?php $totalPrice = $item['discounted_price']; ?>
+                        <?= local_number(number_format(StringUtil::toEnglish($item['discounted_price']))); ?>
                         تومان
                     <?php else: ?>
                         رایگان
@@ -365,5 +383,66 @@ if (count($order ?? []) && count($items ?? [])): ?>
             </tr>
         <?php endforeach; ?>
         </tbody>
+        <tfoot>
+        <tr>
+            <td colspan="5">
+                <strong style="text-align: left;">
+                    هزینه ارسال:
+                </strong>
+            </td>
+            <td></td>
+            <td colspan="3">
+                <?php if (0 != $order['shipping_price']): ?>
+                    <?= local_number(number_format(StringUtil::toEnglish($order['shipping_price']))); ?>
+                    تومان
+                <?php else: ?>
+                    رایگان
+                <?php endif; ?>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="5">
+                <strong style="text-align: left;">
+                    تخفیف ویژه (کوپن):
+                </strong>
+            </td>
+            <td>
+                <?php if (0 != $order['coupon_price']): ?>
+                    <?= local_number(number_format(StringUtil::toEnglish($order['coupon_price']))); ?>
+                    تومان
+                <?php else: ?>
+                    -
+                <?php endif; ?>
+            </td>
+            <td colspan="3"></td>
+        </tr>
+        <tr>
+            <td colspan="5">
+                <strong style="text-align: left;">
+                    مجموع مبالغ:
+                </strong>
+            </td>
+            <td>
+                <strong>
+                    <?php if (0 != $allDiscounts): ?>
+                        <?= local_number(number_format(StringUtil::toEnglish($allDiscounts))); ?>
+                        تومان
+                    <?php else: ?>
+                        -
+                    <?php endif; ?>
+                </strong>
+            </td>
+            <td colspan="3">
+                <strong style="text-align: right">
+                    <?php if (0 != $totalPrice): ?>
+                        <?= local_number(number_format(StringUtil::toEnglish())); ?>
+                        تومان
+                    <?php else: ?>
+                        رایگان
+                    <?php endif; ?>
+                </strong>
+            </td>
+        </tr>
+        </tfoot>
     </table>
 <?php endif; ?>

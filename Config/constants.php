@@ -21,7 +21,7 @@ use Sim\I18n\ISOLanguageCodes;
  *     1.2.5.0 instead of 1.2.5-a
  *     1.2.5.0.1 instead of 1.2.5-a.1 (I'm not sure)
  */
-defined("APP_VERSION") or define("APP_VERSION", "0.15.1");
+defined("APP_VERSION") or define("APP_VERSION", "0.16.1");
 
 /***************************************
  * You can add your constants here
@@ -198,7 +198,7 @@ defined('SMS_REPLACEMENTS') or define('SMS_REPLACEMENTS', [
 
 // gateway error message
 defined("GATEWAY_SUCCESS_MESSAGE") or define("GATEWAY_SUCCESS_MESSAGE", 'تراکنش با موفقیت انجام شد.');
-defined("GATEWAY_ERROR_MESSAGE") or define("GATEWAY_ERROR_MESSAGE", 'تراکنش نا موفق بود در صورت کسر مبلغ از حساب شما حداکثر پس از 72 ساعت مبلغ به حسابتان برمی گردد.');
+defined("GATEWAY_ERROR_MESSAGE") or define("GATEWAY_ERROR_MESSAGE", 'تراکنش نا موفق بود، در صورت کسر مبلغ از حساب شما حداکثر پس از 72 ساعت مبلغ به حسابتان برگشت داده می‌شود.');
 defined("GATEWAY_INVALID_PARAMETERS_MESSAGE") or define("GATEWAY_INVALID_PARAMETERS_MESSAGE", 'پارامترهای ارسالی از درگاه نامعتبر است.');
 
 // gateway flow status codes
@@ -231,6 +231,7 @@ defined("METHOD_TYPE_GATEWAY_MABNA") or define("METHOD_TYPE_GATEWAY_MABNA", 3);
 defined("METHOD_TYPE_GATEWAY_ZARINPAL") or define("METHOD_TYPE_GATEWAY_ZARINPAL", 4);
 defined("METHOD_TYPE_GATEWAY_SADAD") or define("METHOD_TYPE_GATEWAY_SADAD", 5);
 defined("METHOD_TYPE_GATEWAY_TAP") or define("METHOD_TYPE_GATEWAY_TAP", 6);
+defined("METHOD_TYPE_GATEWAY_IRAN_KISH") or define("METHOD_TYPE_GATEWAY_IRAN_KISH", 7);
 defined("METHOD_TYPES") or define("METHOD_TYPES", [
     METHOD_TYPE_GATEWAY_BEH_PARDAKHT => 'درگاه بانک - به پرداخت',
     METHOD_TYPE_GATEWAY_IDPAY => 'درگاه بانک - آیدی پی',
@@ -238,6 +239,7 @@ defined("METHOD_TYPES") or define("METHOD_TYPES", [
     METHOD_TYPE_GATEWAY_ZARINPAL => 'درگاه بانک - زرین پال',
     METHOD_TYPE_GATEWAY_SADAD => 'درگاه بانک - سداد',
     METHOD_TYPE_GATEWAY_TAP => 'درگاه بانک - تجارت الکترونیک پارسیان (تاپ)',
+    METHOD_TYPE_GATEWAY_IRAN_KISH => 'درگاه بانک - ایران کیش',
 ]);
 
 // needed payment method type for payment result
@@ -247,6 +249,7 @@ defined("METHOD_RESULT_TYPE_MABNA") or define("METHOD_RESULT_TYPE_MABNA", 'mabna
 defined("METHOD_RESULT_TYPE_ZARINPAL") or define("METHOD_RESULT_TYPE_ZARINPAL", 'zarinpal');
 defined("METHOD_RESULT_TYPE_SADAD") or define("METHOD_RESULT_TYPE_SADAD", 'sadad');
 defined("METHOD_RESULT_TYPE_TAP") or define("METHOD_RESULT_TYPE_TAP", 'tap');
+defined("METHOD_RESULT_TYPE_IRAN_KISH") or define("METHOD_RESULT_TYPE_IRAN_KISH", 'irankish');
 
 // deposit type codes
 defined("DEPOSIT_TYPE_PAYED") or define("DEPOSIT_TYPE_PAYED", "a1b2c3d4e5f6");

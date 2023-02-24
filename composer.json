@@ -38,7 +38,7 @@
     "mmdm/sim-event-dispatcher": "^2.0",
     "mmdm/sim-fa-sms": "^0.1",
     "mmdm/sim-form": "^0.1",
-    "mmdm/sim-fa-payment": "^0.2.10",
+    "mmdm/sim-fa-payment": "^0.3.0",
     "mmdm/sim-file": "^0.2.0",
     "mmdm/sim-auth": "^0.2",
     "mmdm/sim-hit-counter": "^0.1.0",

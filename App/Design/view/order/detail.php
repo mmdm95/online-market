@@ -437,7 +437,7 @@ $isSuperUser = $authAdmin->userHasRole(ROLE_DEVELOPER) || $authAdmin->userHasRol
                         <table class="table">
                             <tbody>
                             <tr>
-                                <th>مجموع مبالغ:</th>
+                                <th>مجموع مبالغ به همراه کوپن تخفیف و هزینه ارسال:</th>
                                 <td class="text-right">
                                     <?= StringUtil::toPersian(number_format(StringUtil::toEnglish($order['total_price']))); ?>
                                     تومان

@@ -135,6 +135,75 @@ $validator = form_validator();
                             </div>
 
                             <div class="card">
+                                <div class="card-header" id="irankishHeading">
+                                    <div class="form-check form-check-inline">
+                                        <label class="form-check-label align-items-center">
+                                            <input type="radio"
+                                                   data-toggle="collapse"
+                                                   aria-expanded="false"
+                                                   class="form-check-input-styled"
+                                                   data-target="#collapseIrankish"
+                                                   aria-controls="collapseIrankish"
+                                                   value="<?= METHOD_TYPE_GATEWAY_IRAN_KISH; ?>"
+                                                   name="inp-add-pay-method-method"
+                                                   data-fouc>
+                                            <img src="" data-src="<?= asset_path('image/gateways/irankish.jpg', false); ?>"
+                                                 alt="ایران کیش" class="rounded mr-2 lazy"
+                                                 width="auto" height="40">
+                                            <?= METHOD_TYPES[METHOD_TYPE_GATEWAY_IRAN_KISH]; ?>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="form-group collapse" id="collapseIrankish"
+                                     aria-labelledby="irankishHeading" data-parent="#radioAccordion">
+                                    <div class="row m-0">
+                                        <div class="col-lg-4 mb-3">
+                                            <label>
+                                                <span class="text-danger">*</span>
+                                                شماره ترمینال:
+                                            </label>
+                                            <input type="text"
+                                                   class="form-control"
+                                                   placeholder=""
+                                                   name="inp-add-pay-method-irankish-terminal">
+                                        </div>
+                                        <div class="col-lg-4 mb-3">
+                                            <label>
+                                                <span class="text-danger">*</span>
+                                                کلمه عبور:
+                                            </label>
+                                            <input type="text"
+                                                   class="form-control"
+                                                   placeholder=""
+                                                   name="inp-add-pay-method-irankish-password">
+                                        </div>
+                                        <div class="col-lg-4 mb-3">
+                                            <label>
+                                                <span class="text-danger">*</span>
+                                                شناسه پذیرنده:
+                                            </label>
+                                            <input type="text"
+                                                   class="form-control"
+                                                   placeholder=""
+                                                   name="inp-add-pay-method-irankish-acceptor-id">
+                                        </div>
+                                        <div class="col-lg-12 mb-3">
+                                            <label>
+                                                <span class="text-danger">*</span>
+                                                کلید عمومی:
+                                            </label>
+                                            <textarea name="inp-add-pay-method-irankish-pub-key"
+                                                      class="form-control form-control-min-height"
+                                                      cols="30"
+                                                      rows="10"
+                                            ></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card">
                                 <div class="card-header" id="tapHeading">
                                     <div class="form-check form-check-inline">
                                         <label class="form-check-label align-items-center">

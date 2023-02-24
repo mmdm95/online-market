@@ -10,6 +10,7 @@ use Sim\Auth\DBAuth;
 use Sim\Event\Interfaces\IEvent;
 use Sim\Payment\Factories\BehPardakht;
 use Sim\Payment\Factories\IDPay;
+use Sim\Payment\Factories\IranKish;
 use Sim\Payment\Factories\Mabna;
 use Sim\Payment\Factories\Sadad;
 use Sim\Payment\Factories\TAP\TapPayment;
@@ -24,6 +25,10 @@ use Sim\Payment\Providers\IDPay\IDPayAdviceResultProvider;
 use Sim\Payment\Providers\IDPay\IDPayHandlerProvider;
 use Sim\Payment\Providers\IDPay\IDPayRequestProvider;
 use Sim\Payment\Providers\IDPay\IDPayRequestResultProvider;
+use Sim\Payment\Providers\IranKish\IranKishAdviceResultProvider;
+use Sim\Payment\Providers\IranKish\IranKishHandlerProvider;
+use Sim\Payment\Providers\IranKish\IranKishRequestProvider;
+use Sim\Payment\Providers\IranKish\IranKishRequestResultProvider;
 use Sim\Payment\Providers\Mabna\MabnaAdviceResultProvider;
 use Sim\Payment\Providers\Mabna\MabnaHandlerProvider;
 use Sim\Payment\Providers\Mabna\MabnaRequestProvider;
@@ -46,6 +51,8 @@ use Sim\Utils\StringUtil;
 class PaymentUtil
 {
     /**
+     * @todo Need refactor because it's not optimised
+     *
      * @param $gatewayType
      * @param $gatewayCode
      * @param $gatewayInfo
@@ -101,7 +108,7 @@ class PaymentUtil
                 // events
                 $gateway->createRequestOkClosure(
                     function (
-                        IEvent $event,
+                        IEvent                           $event,
                         BehPardakhtRequestResultProvider $result
                     ) use ($auth, $gatewayModel, $orderArr, $newCode, &$gatewayRes) {
                         // store gateway info to store all order things at once
@@ -151,7 +158,7 @@ class PaymentUtil
                 // events
                 $gateway->createRequestOkClosure(
                     function (
-                        IEvent $event,
+                        IEvent                     $event,
                         IDPayRequestResultProvider $result
                     ) use ($auth, $gatewayModel, $orderArr, $newCode, &$gatewayRes) {
                         // store gateway info to store all order things at once
@@ -201,7 +208,7 @@ class PaymentUtil
                 // events
                 $gateway->createRequestOkClosure(
                     function (
-                        IEvent $event,
+                        IEvent                     $event,
                         MabnaRequestResultProvider $result
                     ) use ($auth, $gatewayModel, $orderArr, $newCode, &$gatewayRes) {
                         // store gateway info to store all order things at once
@@ -250,7 +257,7 @@ class PaymentUtil
                 // events
                 $gateway->createRequestOkClosure(
                     function (
-                        IEvent $event,
+                        IEvent                        $event,
                         ZarinpalRequestResultProvider $result
                     ) use ($auth, $gatewayModel, $orderArr, $newCode, &$gatewayRes) {
                         // store gateway info to store all order things at once
@@ -302,7 +309,7 @@ class PaymentUtil
                 // events
                 $gateway->createRequestOkClosure(
                     function (
-                        IEvent $event,
+                        IEvent                     $event,
                         SadadRequestResultProvider $result
                     ) use ($auth, $gatewayModel, $orderArr, $newCode, &$gatewayRes) {
                         // store gateway info to store all order things at once
@@ -352,7 +359,7 @@ class PaymentUtil
                 // events
                 $gateway->createRequestOkClosure(
                     function (
-                        IEvent $event,
+                        IEvent                   $event,
                         TapRequestResultProvider $result
                     ) use ($auth, $gatewayModel, $orderArr, $newCode, &$gatewayRes) {
                         // store gateway info to store all order things at once
@@ -380,6 +387,59 @@ class PaymentUtil
                 //
                 $gateway->createRequest($provider);
                 break;
+            case METHOD_TYPE_GATEWAY_IRAN_KISH:
+                /**
+                 * @var IranKish $gateway
+                 */
+                // $terminal, $password, $acceptorId, $publicKey
+                $gateway = PaymentFactory::instance(
+                    PaymentFactory::GATEWAY_IRAN_KISH,
+                    $gatewayInfo['terminal'],
+                    $gatewayInfo['password'],
+                    $gatewayInfo['acceptor_id'],
+                    $gatewayInfo['public_key']
+                );
+                // provider
+                $provider = new IranKishRequestProvider();
+                $provider
+                    ->setRevertUrl(rtrim(get_base_url(), '/') . url('home.finish', [
+                            'type' => METHOD_RESULT_TYPE_IRAN_KISH,
+                            'method' => $gatewayCode,
+                            'code' => $newCode,
+                        ])->getRelativeUrlTrimmed())
+                    ->setAmount(($orderArr['final_price'] * 10))
+                    ->setRequestId((int)$orderArr['code']);
+                // events
+                $gateway->createRequestOkClosure(
+                    function (
+                        IEvent                        $event,
+                        IranKishRequestResultProvider $result
+                    ) use ($auth, $gatewayModel, $orderArr, $newCode, &$gatewayRes) {
+                        // store gateway info to store all order things at once
+                        $gatewayRes = $result;
+                        $gatewayModel->insert([
+                            'code' => $newCode,
+                            'order_code' => $orderArr['code'],
+                            'user_id' => $auth->getCurrentUser()['id'] ?? 0,
+                            'price' => $orderArr['final_price'],
+                            'is_success' => DB_NO,
+                            'method_type' => METHOD_TYPE_GATEWAY_IRAN_KISH,
+                            'in_step' => PAYMENT_GATEWAY_FLOW_STATUS_CREATE_REQUEST,
+                            'issue_date' => time(),
+                            'extra_info' => json_encode([
+                                'result' => $result->getParameters(),
+                            ]),
+                        ]);
+                    }
+                )->createRequestNotOkClosure(
+                    function (IEvent $event, $code, $msg) use (&$res) {
+                        $res = false;
+                        self::logConnectionError(METHOD_TYPE_GATEWAY_IRAN_KISH, $code, $msg);
+                    }
+                );
+                //
+                $gateway->createRequest($provider);
+                break;
             default:
                 $res = false;
                 break;
@@ -390,6 +450,8 @@ class PaymentUtil
 
     /**
      * Check result of gateway and take action
+     *
+     * @todo Need refactor because it's not optimised
      *
      * @param $type
      * @param $methodCode
@@ -471,11 +533,11 @@ class PaymentUtil
                         $res = [true, GATEWAY_SUCCESS_MESSAGE, null];
                     })->sendAdviceNotOkClosure(
                         function (
-                            IEvent $event,
-                            $code,
-                            $msg,
+                            IEvent                          $event,
+                                                            $code,
+                                                            $msg,
                             BehPardakhtAdviceResultProvider $adviceProvider,
-                            BehPardakhtHandlerProvider $resultProvider
+                            BehPardakhtHandlerProvider      $resultProvider
                         ) use ($gatewayModel, $gatewayCode, &$res) {
                             $gatewayModel->update([
                                 'payment_code' => $resultProvider->getSaleReferenceId(''),
@@ -493,10 +555,10 @@ class PaymentUtil
                         }
                     )->sendSettleOKClosure(
                         function (
-                            IEvent $event,
+                            IEvent                          $event,
                             BehPardakhtSettleResultProvider $settleProvider,
                             BehPardakhtAdviceResultProvider $adviceProvider,
-                            BehPardakhtHandlerProvider $resultProvider
+                            BehPardakhtHandlerProvider      $resultProvider
                         ) use ($gatewayModel, $orderModel, $orderReserveModel, $gatewayCode, $flow, &$res) {
                             $gatewayModel->update([
                                 'payment_code' => $resultProvider->getSaleReferenceId(''),
@@ -521,12 +583,12 @@ class PaymentUtil
                         }
                     )->sendSettleNotOkClosure(
                         function (
-                            IEvent $event,
-                            $code,
-                            $msg,
+                            IEvent                          $event,
+                                                            $code,
+                                                            $msg,
                             BehPardakhtSettleResultProvider $settleProvider,
                             BehPardakhtAdviceResultProvider $adviceProvider,
-                            BehPardakhtHandlerProvider $resultProvider
+                            BehPardakhtHandlerProvider      $resultProvider
                         ) use ($gatewayModel, $gatewayCode, &$res) {
                             $gatewayModel->update([
                                 'payment_code' => $resultProvider->getSaleReferenceId(''),
@@ -559,9 +621,9 @@ class PaymentUtil
                         $res = [false, GATEWAY_INVALID_PARAMETERS_MESSAGE, null];
                     })->sendAdviceOkClosure(
                         function (
-                            IEvent $event,
+                            IEvent                    $event,
                             IDPayAdviceResultProvider $adviceProvider,
-                            IDPayHandlerProvider $resultProvider
+                            IDPayHandlerProvider      $resultProvider
                         ) use ($gatewayModel, $orderModel, $orderReserveModel, $gatewayCode, $flow, &$res) {
                             $gatewayModel->update([
                                 'payment_code' => $adviceProvider->getTrackId(''),
@@ -585,11 +647,11 @@ class PaymentUtil
                         }
                     )->sendAdviceNotOkClosure(
                         function (
-                            IEvent $event,
-                            $code,
-                            $msg,
+                            IEvent                    $event,
+                                                      $code,
+                                                      $msg,
                             IDPayAdviceResultProvider $adviceProvider,
-                            IDPayHandlerProvider $resultProvider
+                            IDPayHandlerProvider      $resultProvider
                         ) use ($gatewayModel, $gatewayCode, &$res) {
                             $gatewayModel->update([
                                 'payment_code' => $adviceProvider->getTrackId(''),
@@ -621,9 +683,9 @@ class PaymentUtil
                         $res = [false, GATEWAY_INVALID_PARAMETERS_MESSAGE, null];
                     })->sendAdviceOkClosure(
                         function (
-                            IEvent $event,
+                            IEvent                    $event,
                             MabnaAdviceResultProvider $adviceProvider,
-                            MabnaHandlerProvider $resultProvider
+                            MabnaHandlerProvider      $resultProvider
                         ) use ($gatewayModel, $orderModel, $orderReserveModel, $gatewayCode, $flow, &$res) {
                             // most of information are in $resultProvider
                             $gatewayModel->update([
@@ -650,11 +712,11 @@ class PaymentUtil
                         $res = [true, GATEWAY_SUCCESS_MESSAGE, null];
                     })->sendAdviceNotOkClosure(
                         function (
-                            IEvent $event,
-                            $code,
-                            $msg,
+                            IEvent                    $event,
+                                                      $code,
+                                                      $msg,
                             MabnaAdviceResultProvider $adviceProvider,
-                            MabnaHandlerProvider $resultProvider
+                            MabnaHandlerProvider      $resultProvider
                         ) use ($gatewayModel, $gatewayCode, &$res) {
                             $gatewayModel->update([
                                 'payment_code' => $resultProvider->getTraceNumber(''),
@@ -686,9 +748,9 @@ class PaymentUtil
                         $res = [false, GATEWAY_INVALID_PARAMETERS_MESSAGE, null];
                     })->sendAdviceOkClosure(
                         function (
-                            IEvent $event,
+                            IEvent                       $event,
                             ZarinpalAdviceResultProvider $adviceProvider,
-                            ZarinpalHandlerProvider $resultProvider
+                            ZarinpalHandlerProvider      $resultProvider
                         ) use ($gatewayModel, $orderModel, $orderReserveModel, $gatewayCode, $flow, &$res) {
                             $gatewayModel->update([
                                 'payment_code' => $adviceProvider->getRefID(''),
@@ -712,11 +774,11 @@ class PaymentUtil
                         }
                     )->sendAdviceNotOkClosure(
                         function (
-                            IEvent $event,
-                            $code,
-                            $msg,
+                            IEvent                       $event,
+                                                         $code,
+                                                         $msg,
                             ZarinpalAdviceResultProvider $adviceProvider,
-                            ZarinpalHandlerProvider $resultProvider
+                            ZarinpalHandlerProvider      $resultProvider
                         ) use ($gatewayModel, $gatewayCode, &$res) {
                             $gatewayModel->update([
                                 'payment_code' => $adviceProvider->getRefID(''),
@@ -734,9 +796,9 @@ class PaymentUtil
                         }
                     )->failedSendAdviceClosure(
                         function (
-                            IEvent $event,
-                            $code,
-                            $msg,
+                            IEvent                  $event,
+                                                    $code,
+                                                    $msg,
                             ZarinpalHandlerProvider $resultProvider
                         ) use ($gatewayModel, $gatewayCode, &$res) {
                             $gatewayModel->update([
@@ -769,9 +831,9 @@ class PaymentUtil
                         $res = [false, GATEWAY_INVALID_PARAMETERS_MESSAGE, null];
                     })->sendAdviceOkClosure(
                         function (
-                            IEvent $event,
+                            IEvent                    $event,
                             SadadAdviceResultProvider $adviceProvider,
-                            SadadHandlerProvider $resultProvider
+                            SadadHandlerProvider      $resultProvider
                         ) use ($gatewayModel, $orderModel, $orderReserveModel, $gatewayCode, $flow, &$res) {
                             $gatewayModel->update([
                                 'payment_code' => $adviceProvider->getSystemTraceNo(''),
@@ -795,11 +857,11 @@ class PaymentUtil
                         }
                     )->sendAdviceNotOkClosure(
                         function (
-                            IEvent $event,
-                            $code,
-                            $msg,
+                            IEvent                    $event,
+                                                      $code,
+                                                      $msg,
                             SadadAdviceResultProvider $adviceProvider,
-                            SadadHandlerProvider $resultProvider
+                            SadadHandlerProvider      $resultProvider
                         ) use ($gatewayModel, $gatewayCode, &$res) {
                             $gatewayModel->update([
                                 'payment_code' => $adviceProvider->getSystemTraceNo(''),
@@ -831,9 +893,9 @@ class PaymentUtil
                         $res = [false, GATEWAY_INVALID_PARAMETERS_MESSAGE, null];
                     })->sendAdviceOkClosure(
                         function (
-                            IEvent $event,
+                            IEvent                  $event,
                             TapAdviceResultProvider $adviceProvider,
-                            TapHandlerProvider $resultProvider
+                            TapHandlerProvider      $resultProvider
                         ) use ($gatewayModel, $orderModel, $orderReserveModel, $gatewayCode, $flow, &$res) {
                             $gatewayModel->update([
                                 'payment_code' => $adviceProvider->getRRN(''),
@@ -857,11 +919,11 @@ class PaymentUtil
                         }
                     )->sendAdviceNotOkClosure(
                         function (
-                            IEvent $event,
-                            $code,
-                            $msg,
+                            IEvent                  $event,
+                                                    $code,
+                                                    $msg,
                             TapAdviceResultProvider $adviceProvider,
-                            TapHandlerProvider $resultProvider
+                            TapHandlerProvider      $resultProvider
                         ) use ($gatewayModel, $gatewayCode, &$res) {
                             $gatewayModel->update([
                                 'payment_code' => $adviceProvider->getRRN(''),
@@ -876,6 +938,71 @@ class PaymentUtil
                             ], 'code=:code AND is_success=:suc', ['code' => $gatewayCode, 'suc' => DB_NO]);
 
                             $res = [false, GATEWAY_ERROR_MESSAGE, $adviceProvider->getRRN('')];
+                        }
+                    )->sendAdvice();
+                break;
+            case METHOD_RESULT_TYPE_IRAN_KISH:
+                /**
+                 * @var IranKish $gateway
+                 */
+                // $terminal, $password, $acceptorId, $publicKey
+                $gateway = PaymentFactory::instance(
+                    PaymentFactory::GATEWAY_IRAN_KISH,
+                    $gatewayInfo['terminal'],
+                    $gatewayInfo['password'],
+                    $gatewayInfo['acceptor_id'],
+                    $gatewayInfo['public_key']
+                );
+                $gateway
+                    ->handleResultNotOkClosure(function () use (&$res) {
+                        $res = [false, GATEWAY_INVALID_PARAMETERS_MESSAGE, null];
+                    })->sendAdviceOkClosure(
+                        function (
+                            IEvent                       $event,
+                            IranKishAdviceResultProvider $adviceProvider,
+                            IranKishHandlerProvider      $resultProvider
+                        ) use ($gatewayModel, $orderModel, $orderReserveModel, $gatewayCode, $flow, &$res) {
+                            $gatewayModel->update([
+                                'payment_code' => $adviceProvider->getResultSystemTraceAuditNumber(''),
+                                'status' => $adviceProvider->getResponseCode(),
+                                'msg' => $adviceProvider->getDescription(),
+                                'is_success' => DB_YES,
+                                'in_step' => PAYMENT_GATEWAY_FLOW_STATUS_ADVICE,
+                                'payment_date' => time(),
+                                'extra_info' => json_encode([
+                                    'result' => $resultProvider->getParameters(),
+                                    'advice' => $adviceProvider->getParameters(),
+                                ]),
+                            ], 'code=:code', ['code' => $gatewayCode]);
+                            $orderModel->update([
+                                'payment_status' => PAYMENT_STATUS_SUCCESS,
+                                'payed_at' => time(),
+                            ], 'code=:code', ['code' => $flow['order_code']]);
+                            $orderReserveModel->delete('order_code=:code', ['code' => $flow['order_code']]);
+
+                            $res = [true, GATEWAY_SUCCESS_MESSAGE, $adviceProvider->getResultSystemTraceAuditNumber('')];
+                        }
+                    )->sendAdviceNotOkClosure(
+                        function (
+                            IEvent                       $event,
+                                                         $code,
+                                                         $msg,
+                            IranKishAdviceResultProvider $adviceProvider,
+                            IranKishHandlerProvider      $resultProvider
+                        ) use ($gatewayModel, $gatewayCode, &$res) {
+                            $gatewayModel->update([
+                                'payment_code' => $adviceProvider->getResultSystemTraceAuditNumber(''),
+                                'status' => $code,
+                                'msg' => $msg,
+                                'in_step' => PAYMENT_GATEWAY_FLOW_STATUS_HANDLE_RESULT,
+                                'payment_date' => time(),
+                                'extra_info' => json_encode([
+                                    'result' => $resultProvider->getParameters(),
+                                    'advice' => $adviceProvider->getParameters(),
+                                ]),
+                            ], 'code=:code AND is_success=:suc', ['code' => $gatewayCode, 'suc' => DB_NO]);
+
+                            $res = [false, GATEWAY_ERROR_MESSAGE, $adviceProvider->getResultSystemTraceAuditNumber('')];
                         }
                     )->sendAdvice();
                 break;

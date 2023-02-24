@@ -39,6 +39,10 @@ class AddPaymentMethodForm implements IPageForm
                 'inp-add-pay-method-img' => 'تصویر',
                 'inp-add-pay-method-title' => 'عنوان',
                 'inp-add-pay-method-method' => 'نوع روش پرداخت',
+                'inp-add-pay-method-irankish-terminal' => 'شماره ترمینال ایران کیش',
+                'inp-add-pay-method-irankish-password' => 'کلمه عبور ایران کیش',
+                'inp-add-pay-method-irankish-acceptor-id' => 'شناسه پذیرنده ایران کیش',
+                'inp-add-pay-method-irankish-pub-key' => 'کلید عمومی ایران کیش',
                 'inp-add-pay-method-sadad-key' => 'کلید سداد',
                 'inp-add-pay-method-sadad-terminal' => 'شماره ترمینال سداد',
                 'inp-add-pay-method-sadad-merchant' => 'شماره مرچنت سداد',
@@ -74,7 +78,18 @@ class AddPaymentMethodForm implements IPageForm
             ->isIn(array_keys(METHOD_TYPES), '{alias} ' . 'وارد شده نامعتبر است.');
 
         $method = $validator->getFieldValue('inp-add-pay-method-method');
-        if ($method == METHOD_TYPE_GATEWAY_SADAD) {
+        if ($method == METHOD_TYPE_GATEWAY_IRAN_KISH) {
+            $validator
+                ->setFields([
+                    'inp-add-pay-method-irankish-terminal',
+                    'inp-add-pay-method-irankish-password',
+                    'inp-add-pay-method-irankish-acceptor-id',
+                    'inp-add-pay-method-irankish-pub-key',
+                ])
+                ->stopValidationAfterFirstError(false)
+                ->required()
+                ->stopValidationAfterFirstError(true);
+        } elseif ($method == METHOD_TYPE_GATEWAY_SADAD) {
             $validator
                 ->setFields([
                     'inp-add-pay-method-sadad-key',
@@ -101,7 +116,6 @@ class AddPaymentMethodForm implements IPageForm
                 ->required()
                 ->stopValidationAfterFirstError(true);
         } elseif ($method == METHOD_TYPE_GATEWAY_IDPAY) {
-
             $validator
                 ->setFields('inp-add-pay-method-idpay-api-key')
                 ->stopValidationAfterFirstError(false)
@@ -164,7 +178,19 @@ class AddPaymentMethodForm implements IPageForm
             $pub = input()->post('inp-add-pay-method-status', '')->getValue();
 
             $meta = '';
-            if ($method == METHOD_TYPE_GATEWAY_SADAD) {
+            if ($method == METHOD_TYPE_GATEWAY_IRAN_KISH) {
+                $irankishTerminal = input()->post('inp-add-pay-method-irankish-terminal', '')->getValue();
+                $irankishPassword = input()->post('inp-add-pay-method-irankish-password', '')->getValue();
+                $irankishAcceptorId = input()->post('inp-add-pay-method-irankish-acceptor-id', '')->getValue();
+                $irankishPublicKey = input()->post('inp-add-pay-method-irankish-pub-key', '')->getValue();
+                //
+                $meta = json_encode([
+                    'terminal' => $irankishTerminal,
+                    'password' => $irankishPassword,
+                    'acceptor_id' => $irankishAcceptorId,
+                    'public_key' => $irankishPublicKey,
+                ]);
+            } elseif ($method == METHOD_TYPE_GATEWAY_SADAD) {
                 $sadadKey = input()->post('inp-add-pay-method-sadad-key', '')->getValue();
                 $sadadTerminal = input()->post('inp-add-pay-method-sadad-terminal', '')->getValue();
                 $sadadMerchant = input()->post('inp-add-pay-method-sadad-merchant', '')->getValue();

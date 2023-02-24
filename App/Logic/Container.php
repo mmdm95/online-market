@@ -96,9 +96,6 @@ class Container implements IInitialize
         \container()->set('sms_panel', function () {
             $config = config()->get('sms.niaz');
 
-            /**
-             * @var NiazPardaz $panel
-             */
             $panel = new NiazPardaz($config['username'], $config['password']);
             $panel->fromNumber($config['from']);
 

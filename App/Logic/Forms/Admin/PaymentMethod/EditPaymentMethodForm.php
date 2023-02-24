@@ -38,6 +38,10 @@ class EditPaymentMethodForm implements IPageForm
                 'inp-edit-pay-method-img' => 'تصویر',
                 'inp-edit-pay-method-title' => 'عنوان',
                 'inp-edit-pay-method-method' => 'نوع روش پرداخت',
+                'inp-edit-pay-method-irankish-terminal' => 'شماره ترمینال ایران کیش',
+                'inp-edit-pay-method-irankish-password' => 'کلمه عبور ایران کیش',
+                'inp-edit-pay-method-irankish-acceptor-id' => 'شناسه پذیرنده ایران کیش',
+                'inp-edit-pay-method-irankish-pub-key' => 'کلید عمومی ایران کیش',
                 'inp-edit-pay-method-sadad-key' => 'کلید سداد',
                 'inp-edit-pay-method-sadad-terminal' => 'شماره ترمینال سداد',
                 'inp-edit-pay-method-sadad-merchant' => 'شماره مرچنت سداد',
@@ -73,7 +77,18 @@ class EditPaymentMethodForm implements IPageForm
             ->isIn(array_keys(METHOD_TYPES), '{alias} ' . 'وارد شده نامعتبر است.');
 
         $method = (int)$validator->getFieldValue('inp-edit-pay-method-method');
-        if ($method == METHOD_TYPE_GATEWAY_SADAD) {
+        if ($method == METHOD_TYPE_GATEWAY_IRAN_KISH) {
+            $validator
+                ->setFields([
+                    'inp-edit-pay-method-irankish-terminal',
+                    'inp-edit-pay-method-irankish-password',
+                    'inp-edit-pay-method-irankish-acceptor-id',
+                    'inp-edit-pay-method-irankish-pub-key',
+                ])
+                ->stopValidationAfterFirstError(false)
+                ->required()
+                ->stopValidationAfterFirstError(true);
+        } elseif ($method == METHOD_TYPE_GATEWAY_SADAD) {
             $validator
                 ->setFields([
                     'inp-edit-pay-method-sadad-key',
@@ -180,7 +195,19 @@ class EditPaymentMethodForm implements IPageForm
             if (is_null($id)) return false;
 
             $meta = '';
-            if ($method == METHOD_TYPE_GATEWAY_SADAD) {
+            if ($method == METHOD_TYPE_GATEWAY_IRAN_KISH) {
+                $irankishTerminal = input()->post('inp-edit-pay-method-irankish-terminal', '')->getValue();
+                $irankishPassword = input()->post('inp-edit-pay-method-irankish-password', '')->getValue();
+                $irankishAcceptorId = input()->post('inp-edit-pay-method-irankish-acceptor-id', '')->getValue();
+                $irankishPublicKey = input()->post('inp-edit-pay-method-irankish-pub-key', '')->getValue();
+                //
+                $meta = json_encode([
+                    'terminal' => $irankishTerminal,
+                    'password' => $irankishPassword,
+                    'acceptor_id' => $irankishAcceptorId,
+                    'public_key' => $irankishPublicKey,
+                ]);
+            } elseif ($method == METHOD_TYPE_GATEWAY_SADAD) {
                 $sadadKey = input()->post('inp-edit-pay-method-sadad-key', '')->getValue();
                 $sadadTerminal = input()->post('inp-edit-pay-method-sadad-terminal', '')->getValue();
                 $sadadMerchant = input()->post('inp-edit-pay-method-sadad-merchant', '')->getValue();

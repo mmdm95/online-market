@@ -10,7 +10,8 @@ $validator = form_validator();
         <?php load_partial('admin/card-header', ['header_title' => 'ویرایش روش پرداخت']); ?>
 
         <div class="card-body">
-            <form action="<?= url('admin.pay_method.edit', ['id' => $payment['id']])->getRelativeUrlTrimmed(); ?>" method="post"
+            <form action="<?= url('admin.pay_method.edit', ['id' => $payment['id']])->getRelativeUrlTrimmed(); ?>"
+                  method="post"
                   id="__form_edit_pay_method">
                 <?php load_partial('admin/message/message-form', [
                     'errors' => $pay_method_edit_errors ?? [],
@@ -148,6 +149,91 @@ $validator = form_validator();
                                                    placeholder=""
                                                    value="<?= $sadadInpMerchant; ?>"
                                                    name="inp-edit-pay-method-sadad-merchant">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card">
+                                <div class="card-header" id="irankishHeading">
+                                    <div class="form-check form-check-inline">
+                                        <label class="form-check-label align-items-center">
+                                            <input type="radio"
+                                                <?= METHOD_TYPE_GATEWAY_IRAN_KISH == $method ? 'checked="checked"' : ''; ?>
+                                                   data-toggle="collapse"
+                                                   aria-expanded="false"
+                                                   class="form-check-input-styled"
+                                                   data-target="#collapseIrankish"
+                                                   aria-controls="collapseIrankish"
+                                                   value="<?= METHOD_TYPE_GATEWAY_IRAN_KISH; ?>"
+                                                   name="inp-add-pay-method-method"
+                                                   data-fouc>
+                                            <img src=""
+                                                 data-src="<?= asset_path('image/gateways/irankish.jpg', false); ?>"
+                                                 alt="ایران کیش" class="rounded mr-2 lazy"
+                                                 width="auto" height="40">
+                                            <?= METHOD_TYPES[METHOD_TYPE_GATEWAY_IRAN_KISH]; ?>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="form-group collapse" id="collapseIrankish"
+                                     aria-labelledby="irankishHeading" data-parent="#radioAccordion">
+                                    <div class="row m-0">
+                                        <?php
+                                        $irankishTerminal = $validator->setInput('inp-edit-pay-method-irankish-terminal');
+                                        $irankishAcceptorId = $validator->setInput('inp-edit-pay-method-irankish-acceptor-id');
+                                        $irankishPublisKey = $validator->setInput('inp-edit-pay-method-irankish-pub-key');
+                                        ?>
+                                        <?php if (METHOD_TYPE_GATEWAY_IRAN_KISH == $method): ?>
+                                            <?php
+                                            $irankishTerminal = $irankishTerminal ?: ($payment['meta_parameters']['terminal'] ?: '');
+                                            $irankishAcceptorId = $irankishAcceptorId ?: ($payment['meta_parameters']['acceptor_id'] ?: '');
+                                            $irankishPublisKey = $irankishPublisKey ?: ($payment['meta_parameters']['public_key'] ?: '');
+                                            ?>
+                                        <?php endif; ?>
+                                        <div class="col-lg-4 mb-3">
+                                            <label>
+                                                <span class="text-danger">*</span>
+                                                شماره ترمینال:
+                                            </label>
+                                            <input type="text"
+                                                   class="form-control"
+                                                   placeholder=""
+                                                   value="<?= $irankishTerminal; ?>"
+                                                   name="inp-edit-pay-method-irankish-terminal">
+                                        </div>
+                                        <div class="col-lg-4 mb-3">
+                                            <label>
+                                                <span class="text-danger">*</span>
+                                                کلمه عبور:
+                                            </label>
+                                            <input type="text"
+                                                   class="form-control"
+                                                   placeholder=""
+                                                   name="inp-edit-pay-method-irankish-password">
+                                        </div>
+                                        <div class="col-lg-4 mb-3">
+                                            <label>
+                                                <span class="text-danger">*</span>
+                                                شناسه پذیرنده:
+                                            </label>
+                                            <input type="text"
+                                                   class="form-control"
+                                                   placeholder=""
+                                                   value="<?= $irankishAcceptorId; ?>"
+                                                   name="inp-edit-pay-method-irankish-acceptor-id">
+                                        </div>
+                                        <div class="col-lg-12 mb-3">
+                                            <label>
+                                                <span class="text-danger">*</span>
+                                                کلید عمومی:
+                                            </label>
+                                            <textarea name="inp-edit-pay-method-irankish-pub-key"
+                                                      class="form-control form-control-min-height"
+                                                      cols="30"
+                                                      rows="10"
+                                            ><?= $irankishPublisKey; ?></textarea>
                                         </div>
                                     </div>
                                 </div>
