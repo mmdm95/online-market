@@ -435,7 +435,7 @@ if (count($order ?? []) && count($items ?? [])): ?>
             <td colspan="3">
                 <strong style="text-align: right">
                     <?php if (0 != $totalPrice): ?>
-                        <?= local_number(number_format(StringUtil::toEnglish())); ?>
+                        <?= local_number(number_format(StringUtil::toEnglish($totalPrice))); ?>
                         تومان
                     <?php else: ?>
                         رایگان
