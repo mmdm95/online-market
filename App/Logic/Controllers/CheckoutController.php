@@ -22,6 +22,7 @@ use Sim\Exceptions\Mvc\Controller\ControllerException;
 use Sim\Exceptions\PathManager\PathNotRegisteredException;
 use Sim\Interfaces\IFileNotExistsException;
 use Sim\Interfaces\IInvalidVariableNameException;
+use Sim\Payment\Providers\IranKish\IranKishRequestResultProvider;
 use Sim\Payment\Providers\Sadad\SadadRequestResultProvider;
 use Sim\Payment\Providers\TAP\Payment\TapRequestResultProvider;
 
@@ -164,6 +165,7 @@ class CheckoutController extends AbstractHomeController
                                 METHOD_TYPE_GATEWAY_ZARINPAL,
                                 METHOD_TYPE_GATEWAY_SADAD,
                                 METHOD_TYPE_GATEWAY_TAP,
+                                METHOD_TYPE_GATEWAY_IRAN_KISH,
                             ]
                         )
                     ) {
@@ -172,6 +174,7 @@ class CheckoutController extends AbstractHomeController
                         $url = '#';
                         $inputs = [];
                         $redirect = false;
+                        $isMultipart = false;
 
                         // TODO: add other gateway cases and create inputs according to them
                         // ...
@@ -184,6 +187,19 @@ class CheckoutController extends AbstractHomeController
                                  */
                                 $url = $gatewayInfo->getUrl();
                                 $redirect = true;
+                                break;
+                            case METHOD_TYPE_GATEWAY_IRAN_KISH:
+                                /**
+                                 * @var IranKishRequestResultProvider $gatewayInfo
+                                 */
+                                $inputs = [
+                                    [
+                                        'name' => 'tokenIdentity',
+                                        'value' => $gatewayInfo->getToken(),
+                                    ],
+                                ];
+                                $url = $gatewayInfo->getUrl();
+                                $isMultipart = true;
                                 break;
                             default:
                                 $resourceHandler
@@ -208,6 +224,7 @@ class CheckoutController extends AbstractHomeController
                                     'redirect' => $redirect,
                                     'url' => $url,
                                     'inputs' => $inputs,
+                                    'multipart_form' => $isMultipart,
                                 ]);
                         } else {
                             $this->removeIssuedFactor();

@@ -33,6 +33,8 @@ use App\Logic\Utils\Jdf;
 use App\Logic\Utils\OrderUtil;
 use App\Logic\Utils\SMSUtil;
 use App\Logic\Validations\ExtendedValidator;
+use DI\DependencyException;
+use DI\NotFoundException;
 use Jenssegers\Agent\Agent;
 use Sim\Auth\DBAuth;
 use Sim\Auth\Exceptions\IncorrectPasswordException;
@@ -45,6 +47,7 @@ use Sim\Exceptions\PathManager\PathNotRegisteredException;
 use Sim\Form\Exceptions\FormException;
 use Sim\Interfaces\IFileNotExistsException;
 use Sim\Interfaces\IInvalidVariableNameException;
+use Sim\SMS\Exceptions\SMSException;
 use Sim\Utils\ArrayUtil;
 
 class HomeController extends AbstractAdminController
@@ -167,6 +170,15 @@ class HomeController extends AbstractAdminController
             strtotime('today, -1 second', time())
         );
 
+        try {
+            $smsBalanceCount = SMSUtil::getCredit();
+        } catch (DependencyException|NotFoundException|SMSException $e) {
+            $smsBalanceCount = [
+                'count' => 0,
+                'error' => 'خظا در ارتباط با پنل پیامکی'
+            ];
+        }
+
         $this
             ->setLayout($this->main_layout)
             ->setTemplate('view/index');
@@ -186,7 +198,7 @@ class HomeController extends AbstractAdminController
                 ]
             ),
             //-----
-            'sms_balance' => SMSUtil::getCredit(),
+            'sms_balance' => $smsBalanceCount,
             //-----
             'sum_orders' => $sumOfOrders,
             'sum_orders_monthly' => $sumOfOrdersMonthly,

@@ -32,9 +32,13 @@ $allowSetting = $authAdmin->isAllow(RESOURCE_SETTING, OWN_PERMISSION_READ);
 
         <div class="text-right d-flex d-lg-block flex-column flex-sm-row justify-content-center justify-content-lg-end">
             <a class="btn bg-white py-2 px-3 d-block d-lg-inline-block mb-2 border-1 flex-fill">
-                موجودی پنل پیامکی:
-                <?= local_number(number_format($sms_balance)); ?>
-                <small>تومان</small>
+                <?php if (!is_array($sms_balance)): ?>
+                    تعداد پیامک قابل ارسال:
+                    <?= local_number(number_format($sms_balance)); ?>
+                    <small>پیامک</small>
+                <?php else: ?>
+                    <?= $sms_balance['error']; ?>
+                <?php endif; ?>
             </a>
         </div>
     </div>
