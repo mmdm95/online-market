@@ -116,6 +116,10 @@ class FileController extends AbstractAdminController
         if (is_dir($file)) {
             $directory = $file;
             $files = array_diff(scandir($directory), ['.', '..']);
+
+            // cancel error showing
+            $this->doNotShowAnyError();
+
             foreach ($files as $entry) {
 //                if(
 //                    $filename === '' &&
@@ -128,11 +132,11 @@ class FileController extends AbstractAdminController
                 $fileExt = get_extension($entry);
                 if ($entry !== basename(__FILE__) && !in_array($fileExt, $hidden_extensions)) {
                     $i = $directory . '/' . urldecode($entry);
-                    $stat = stat($i);
+                    $stat = filemtime($i);
                     $isUTF8 = preg_match('//u', basename($i));
                     if ($isUTF8) {
                         $result[] = [
-                            'mtime' => $stat['mtime'],
+                            'mtime' => is_int($stat) ? $stat : '',
                             'size' => FileSystem::getFileSize($i),
                             'ext' => $fileExt,
                             'name' => basename($i),
@@ -151,6 +155,8 @@ class FileController extends AbstractAdminController
             $this->data->resetData()->statusCode(412)->errorMessage('پوشه‌ای انتخاب نشده');
             \response()->json($this->data->getReturnData());
         }
+        // make error showing to normal if it's in development mode
+        $this->showAllErrorAgain();
 
         $this->data
             ->resetData()
@@ -803,6 +809,33 @@ class FileController extends AbstractAdminController
                     exit(0);
                 }
             }
+        }
+    }
+
+    /**
+     * @return void
+     */
+    private function doNotShowAnyError()
+    {
+        error_reporting(0);
+        @ini_set("display_errors", 0);
+    }
+
+    /**
+     * @return void
+     * @throws ConfigNotRegisteredException
+     * @throws IFileNotExistsException
+     * @throws IInvalidVariableNameException
+     */
+    private function showAllErrorAgain()
+    {
+        $mode = $this->config->get('main.mode') ?? MODE_PRODUCTION;
+        if (MODE_DEVELOPMENT == $mode) {
+            error_reporting(E_ALL);
+            @ini_set("display_errors", 1);
+        } else {
+            error_reporting(0);
+            @ini_set("display_errors", 0);
         }
     }
 }

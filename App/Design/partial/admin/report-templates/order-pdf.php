@@ -11,13 +11,13 @@ if (count($order ?? []) && count($items ?? [])): ?>
     <table class="table table-bordered">
         <thead>
         <tr>
-            <th colspan="3">
+            <th colspan="4">
                 مشخصات پرداخت
             </th>
         </tr>
         </thead>
         <tr>
-            <td style="width: 50%;">
+            <td colspan="2" style="width: 50%;">
                 <small>
                     تاریخ ثبت سفارش
                 </small>
@@ -58,7 +58,7 @@ if (count($order ?? []) && count($items ?? [])): ?>
                     <?php endif; ?>
                 </strong>
             </td>
-            <td colspan="2">
+            <td>
                 <div class="bg-gray">
                     <small>
                         وضعیت پرداخت:
@@ -74,9 +74,6 @@ if (count($order ?? []) && count($items ?? [])): ?>
                     </strong>
                 </div>
             </td>
-        </tr>
-
-        <tr>
             <td>
                 <small>
                     مبلغ کل:
@@ -114,7 +111,7 @@ if (count($order ?? []) && count($items ?? [])): ?>
                     <?php endif; ?>
                 </strong>
             </td>
-            <td colspan="2">
+            <td>
                 <small>
                     مبلغ کوپن تخفیف:
                 </small>
@@ -127,9 +124,6 @@ if (count($order ?? []) && count($items ?? [])): ?>
                     <?php endif; ?>
                 </strong>
             </td>
-        </tr>
-
-        <tr>
             <td>
                 <small>
                     هزینه ارسال:
@@ -143,7 +137,7 @@ if (count($order ?? []) && count($items ?? [])): ?>
                     <?php endif; ?>
                 </strong>
             </td>
-            <td colspan="2">
+            <td>
                 <div class="bg-gray">
                     <small>
                         مبلغ قابل پرداخت:
@@ -204,7 +198,7 @@ if (count($order ?? []) && count($items ?? [])): ?>
     <table class="table table-bordered">
         <thead>
         <tr>
-            <th colspan="3">
+            <th colspan="5">
                 مشخصات گیرنده سفارش
             </th>
         </tr>
@@ -234,8 +228,6 @@ if (count($order ?? []) && count($items ?? [])): ?>
                     <?= $order['province']; ?>
                 </strong>
             </td>
-        </tr>
-        <tr>
             <td>
                 <small>
                     شهر:
@@ -244,7 +236,7 @@ if (count($order ?? []) && count($items ?? [])): ?>
                     <?= $order['city']; ?>
                 </strong>
             </td>
-            <td colspan="2">
+            <td>
                 <small>
                     کد پستی:
                 </small>
@@ -254,7 +246,7 @@ if (count($order ?? []) && count($items ?? [])): ?>
             </td>
         </tr>
         <tr>
-            <td colspan="3">
+            <td colspan="5">
                 <small>
                     آدرس:
                 </small>

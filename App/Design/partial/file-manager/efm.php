@@ -478,6 +478,8 @@
         }
 
         function formatTimestamp(unix_timestamp) {
+            if(unix_timestamp == "") return 'نامشخص';
+
             var m = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
             var d = new Date(unix_timestamp * 1000);
             return [m[d.getMonth()], ' ', d.getDate(), ', ', d.getFullYear(), " ",
