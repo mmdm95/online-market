@@ -186,6 +186,11 @@ p {
     border-bottom-width: 2px;
 }
 
+.table-bordered tfoot th,
+.table-bordered tfoot td {
+    border-top-width: 2px;
+}
+
 .text-left {
     text-align: right !important;
 }
