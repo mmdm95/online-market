@@ -5,7 +5,7 @@ return [
     //
     // Allowed parameters in array: [mysql, sqlite, pgsql, sqlsrv]
     //
-    // This parameters are NOT --case sensitive--
+    // These parameters are NOT --case sensitive--
     //
     // Support multiple database.
     // For multiple database, append followed codes after default array.
