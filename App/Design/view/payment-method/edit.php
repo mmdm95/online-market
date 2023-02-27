@@ -166,7 +166,7 @@ $validator = form_validator();
                                                    data-target="#collapseIrankish"
                                                    aria-controls="collapseIrankish"
                                                    value="<?= METHOD_TYPE_GATEWAY_IRAN_KISH; ?>"
-                                                   name="inp-add-pay-method-method"
+                                                   name="inp-edit-pay-method-method"
                                                    data-fouc>
                                             <img src=""
                                                  data-src="<?= asset_path('image/gateways/irankish.jpg', false); ?>"
