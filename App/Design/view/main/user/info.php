@@ -29,7 +29,7 @@
                     <h3>جزئیات حساب</h3>
                 </div>
                 <div class="card-body">
-                    <form action="<?= url('user.info')->getRelativeUrlTrimmed(); ?>#changeInfo"
+                    <form action="<?= url('user.info', null, (isset($_GET['back_url']) && !empty($_GET['back_url'])) ? ['back_url' => $_GET['back_url']] : null)->getRelativeUrlTrimmed(); ?>#changeInfo"
                           method="post" id="__form_change_info">
                         <?php load_partial('main/message/message-form', [
                             'errors' => $info_change_errors ?? [],
