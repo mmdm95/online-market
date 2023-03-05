@@ -123,7 +123,9 @@ class SliderUtil
             ->bindValue('start', time())
             ->where('pa.festival_expire>=:expire')
             ->bindValue('expire', time())
-            ->limit(15);
+            ->limit(15)
+            ->orderBy(['pa.stock_count DESC', 'pa.product_availability DESC', 'pa.is_available DESC', 'pa.product_id DESC'])
+            ->groupBy(['pa.product_id']);
 
         return $model->get($select);
     }
