@@ -6,6 +6,10 @@ $p1 = $products[0] ?? [];
 $p2 = $products[1] ?? [];
 $p3 = $products[2] ?? [];
 
+if (empty($p1) && empty($p2) && empty($p3)) {
+    redirect(url('home.search'));
+}
+
 ?>
 
 <!-- START MAIN CONTENT -->
