@@ -11,7 +11,11 @@ use App\Logic\Models\WalletFlowModel;
 use App\Logic\Utils\LogUtil;
 use App\Logic\Utils\SMSUtil;
 use App\Logic\Utils\WalletChargeUtil;
+use DI\DependencyException;
+use DI\NotFoundException;
+use Exception;
 use Jenssegers\Agent\Agent;
+use ReflectionException;
 use Sim\Exceptions\ConfigManager\ConfigNotRegisteredException;
 use Sim\Exceptions\Mvc\Controller\ControllerException;
 use Sim\Exceptions\PathManager\PathNotRegisteredException;
@@ -19,6 +23,7 @@ use Sim\Interfaces\IFileNotExistsException;
 use Sim\Interfaces\IInvalidVariableNameException;
 use Sim\Payment\Providers\Sadad\SadadRequestResultProvider;
 use Sim\Payment\Providers\TAP\Payment\TapRequestResultProvider;
+use Sim\SMS\Exceptions\SMSException;
 
 class WalletController extends AbstractUserController
 {
@@ -29,9 +34,9 @@ class WalletController extends AbstractUserController
      * @throws IFileNotExistsException
      * @throws IInvalidVariableNameException
      * @throws PathNotRegisteredException
-     * @throws \DI\DependencyException
-     * @throws \DI\NotFoundException
-     * @throws \ReflectionException
+     * @throws DependencyException
+     * @throws NotFoundException
+     * @throws ReflectionException
      */
     public function index()
     {
@@ -56,7 +61,7 @@ class WalletController extends AbstractUserController
             'username=:username',
             ['username' => $user['username']],
             ['id DESC']
-        );;
+        );
 
         $paymentMethods = $methodModel->get(
             ['code', 'title', 'image'],
@@ -86,10 +91,9 @@ class WalletController extends AbstractUserController
      * @throws IFileNotExistsException
      * @throws IInvalidVariableNameException
      * @throws PathNotRegisteredException
-     * @throws \DI\DependencyException
-     * @throws \DI\NotFoundException
-     * @throws \ReflectionException
-     * @throws \Sim\SMS\Exceptions\SMSException
+     * @throws DependencyException
+     * @throws NotFoundException
+     * @throws ReflectionException
      */
     public function chargeResult($type, $method, $code)
     {
@@ -113,8 +117,12 @@ class WalletController extends AbstractUserController
                     SMS_REPLACEMENTS['mobile'] => $username,
                     SMS_REPLACEMENTS['balance'] => local_number(number_format($balance)) . ' تومان',
                 ]);
-                $smsRes = SMSUtil::send([$username], $body);
-                SMSUtil::logSMS([$username], $body, $smsRes, SMS_LOG_TYPE_WALLET_CHARGE, SMS_LOG_SENDER_SYSTEM);
+                try {
+                    $smsRes = SMSUtil::send([$username], $body);
+                    SMSUtil::logSMS([$username], $body, $smsRes, SMS_LOG_TYPE_WALLET_CHARGE, SMS_LOG_SENDER_SYSTEM);
+                } catch (DependencyException|NotFoundException|SMSException $e) {
+                    // do nothing
+                }
             }
         }
 
@@ -251,7 +259,7 @@ class WalletController extends AbstractUserController
                     ->type(RESPONSE_TYPE_ERROR)
                     ->errorMessage('خطا در ارتباط با سرور، لطفا دوباره تلاش کنید.');
             }
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             LogUtil::logException($e, __LINE__, self::class);
             $resourceHandler
                 ->type(RESPONSE_TYPE_ERROR)
@@ -262,8 +270,8 @@ class WalletController extends AbstractUserController
     }
 
     /**
-     * @throws \DI\DependencyException
-     * @throws \DI\NotFoundException
+     * @throws DependencyException
+     * @throws NotFoundException
      */
     private function removeWalletChargeFlow()
     {

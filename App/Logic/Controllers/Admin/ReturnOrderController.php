@@ -13,13 +13,18 @@ use App\Logic\Models\ReturnOrderModel;
 use App\Logic\Utils\Jdf;
 use App\Logic\Utils\LogUtil;
 use App\Logic\Utils\SMSUtil;
+use DI\DependencyException;
+use DI\NotFoundException;
+use Exception;
 use Jenssegers\Agent\Agent;
+use ReflectionException;
 use Sim\Event\Interfaces\IEvent;
 use Sim\Exceptions\ConfigManager\ConfigNotRegisteredException;
 use Sim\Exceptions\Mvc\Controller\ControllerException;
 use Sim\Exceptions\PathManager\PathNotRegisteredException;
 use Sim\Interfaces\IFileNotExistsException;
 use Sim\Interfaces\IInvalidVariableNameException;
+use Sim\SMS\Exceptions\SMSException;
 
 class ReturnOrderController extends AbstractAdminController implements IDatatableController
 {
@@ -27,10 +32,12 @@ class ReturnOrderController extends AbstractAdminController implements IDatatabl
      * @return string
      * @throws ConfigNotRegisteredException
      * @throws ControllerException
+     * @throws DependencyException
      * @throws IFileNotExistsException
      * @throws IInvalidVariableNameException
+     * @throws NotFoundException
      * @throws PathNotRegisteredException
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     public function view()
     {
@@ -46,9 +53,9 @@ class ReturnOrderController extends AbstractAdminController implements IDatatabl
      * @throws IFileNotExistsException
      * @throws IInvalidVariableNameException
      * @throws PathNotRegisteredException
-     * @throws \DI\DependencyException
-     * @throws \DI\NotFoundException
-     * @throws \ReflectionException
+     * @throws DependencyException
+     * @throws NotFoundException
+     * @throws ReflectionException
      */
     public function detail($id)
     {
@@ -98,8 +105,13 @@ class ReturnOrderController extends AbstractAdminController implements IDatatabl
                         SMS_REPLACEMENTS['code'] => $returnOrder['code'] ?? 'نامشخص',
                         SMS_REPLACEMENTS['status'] => RETURN_ORDER_STATUSES[$status] ?? 'نامشخص',
                     ]);
-                    $smsRes = SMSUtil::send([$username], $body);
-                    SMSUtil::logSMS([$username], $body, $smsRes, SMS_LOG_TYPE_RETURN_ORDER_STATUS, SMS_LOG_SENDER_SYSTEM);
+
+                    try {
+                        $smsRes = SMSUtil::send([$username], $body);
+                        SMSUtil::logSMS([$username], $body, $smsRes, SMS_LOG_TYPE_RETURN_ORDER_STATUS, SMS_LOG_SENDER_SYSTEM);
+                    } catch (DependencyException|NotFoundException|SMSException $e) {
+                        // do nothing
+                    }
                 });
             } elseif (!is_null(input()->post('inp-return-order-respond')->getValue())) {
                 $data = $formHandler->handle(AdminReturnOrderRespondForm::class, 'return_order_respond_handling');
@@ -240,7 +252,7 @@ class ReturnOrderController extends AbstractAdminController implements IDatatabl
                     'error' => 'خطا در ارتباط با سرور، لطفا دوباره تلاش کنید.',
                 ];
             }
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             LogUtil::logException($e, __LINE__, self::class);
             $response = [
                 'error' => 'خطا در ارتباط با سرور، لطفا دوباره تلاش کنید.',

@@ -9,11 +9,15 @@ use App\Logic\Models\OrderReserveModel;
 use App\Logic\Models\WalletFlowModel;
 use App\Logic\Utils\PaymentUtil;
 use App\Logic\Utils\SMSUtil;
+use DI\DependencyException;
+use DI\NotFoundException;
+use ReflectionException;
 use Sim\Exceptions\ConfigManager\ConfigNotRegisteredException;
 use Sim\Exceptions\Mvc\Controller\ControllerException;
 use Sim\Exceptions\PathManager\PathNotRegisteredException;
 use Sim\Interfaces\IFileNotExistsException;
 use Sim\Interfaces\IInvalidVariableNameException;
+use Sim\SMS\Exceptions\SMSException;
 use Sim\Utils\StringUtil;
 
 class OrderResultController extends AbstractHomeController
@@ -25,13 +29,12 @@ class OrderResultController extends AbstractHomeController
      * @return string
      * @throws ConfigNotRegisteredException
      * @throws ControllerException
+     * @throws DependencyException
      * @throws IFileNotExistsException
      * @throws IInvalidVariableNameException
+     * @throws NotFoundException
      * @throws PathNotRegisteredException
-     * @throws \DI\DependencyException
-     * @throws \DI\NotFoundException
-     * @throws \ReflectionException
-     * @throws \Sim\SMS\Exceptions\SMSException
+     * @throws ReflectionException
      */
     public function index($type, $method, $code)
     {
@@ -62,13 +65,12 @@ class OrderResultController extends AbstractHomeController
      * @return string
      * @throws ConfigNotRegisteredException
      * @throws ControllerException
+     * @throws DependencyException
      * @throws IFileNotExistsException
      * @throws IInvalidVariableNameException
+     * @throws NotFoundException
      * @throws PathNotRegisteredException
-     * @throws \DI\DependencyException
-     * @throws \DI\NotFoundException
-     * @throws \ReflectionException
-     * @throws \Sim\SMS\Exceptions\SMSException
+     * @throws ReflectionException
      */
     public function walletPayment($code)
     {
@@ -117,9 +119,6 @@ class OrderResultController extends AbstractHomeController
      * @throws ConfigNotRegisteredException
      * @throws IFileNotExistsException
      * @throws IInvalidVariableNameException
-     * @throws \DI\DependencyException
-     * @throws \DI\NotFoundException
-     * @throws \Sim\SMS\Exceptions\SMSException
      */
     private function sendSmsForOrderVerification(array $info)
     {
@@ -131,8 +130,12 @@ class OrderResultController extends AbstractHomeController
                 SMS_REPLACEMENTS['mobile'] => $username,
                 SMS_REPLACEMENTS['orderCode'] => $orderCode,
             ]);
-            $smsRes = SMSUtil::send([$username], $body);
-            SMSUtil::logSMS([$username], $body, $smsRes, SMS_LOG_TYPE_BUY, SMS_LOG_SENDER_SYSTEM);
+            try {
+                $smsRes = SMSUtil::send([$username], $body);
+                SMSUtil::logSMS([$username], $body, $smsRes, SMS_LOG_TYPE_BUY, SMS_LOG_SENDER_SYSTEM);
+            } catch (DependencyException|NotFoundException|SMSException $e) {
+                // do nothing
+            }
 
             // alert user(s) that an order is in queue
             $body = 'سلام مدیر' .
@@ -147,8 +150,12 @@ class OrderResultController extends AbstractHomeController
                 return is_string($value) && trim($value) != '';
             });
             if (count($users)) {
-                $smsRes = SMSUtil::send($users, $body);
-                SMSUtil::logSMS($users, $body, $smsRes, SMS_LOG_TYPE_ORDER_NOTIFY, SMS_LOG_SENDER_SYSTEM);
+                try {
+                    $smsRes = SMSUtil::send($users, $body);
+                    SMSUtil::logSMS($users, $body, $smsRes, SMS_LOG_TYPE_ORDER_NOTIFY, SMS_LOG_SENDER_SYSTEM);
+                } catch (DependencyException|NotFoundException|SMSException $e) {
+                    // do nothing
+                }
             }
         }
     }
