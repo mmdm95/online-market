@@ -50,7 +50,7 @@ class BatchEditProductForm implements IPageForm
                 'inp-edit-product-status-chk',
                 'inp-edit-product-availability-chk',
                 'inp-edit-product-special-chk',
-                'inp-edit-product-returnable-chk',
+//                'inp-edit-product-returnable-chk',
                 'inp-edit-product-commenting-chk',
                 'inp-edit-product-coming-soon-chk',
                 'inp-edit-product-call-for-more-chk',
@@ -216,9 +216,9 @@ class BatchEditProductForm implements IPageForm
             if (!is_value_checked(input()->post('inp-edit-product-special-chk', '')->getValue())) {
                 $updateArr['is_special'] = is_value_checked($special) ? DB_YES : DB_NO;
             }
-            if (!is_value_checked(input()->post('inp-edit-product-returnable-chk', '')->getValue())) {
-                $updateArr['is_returnable'] = is_value_checked($returnable) ? DB_YES : DB_NO;
-            }
+//            if (!is_value_checked(input()->post('inp-edit-product-returnable-chk', '')->getValue())) {
+//                $updateArr['is_returnable'] = is_value_checked($returnable) ? DB_YES : DB_NO;
+//            }
             if (!is_value_checked(input()->post('inp-edit-product-commenting-chk', '')->getValue())) {
                 $updateArr['allow_commenting'] = is_value_checked($commenting) ? DB_YES : DB_NO;
             }

@@ -350,6 +350,11 @@ class CartController extends AbstractHomeController
         $resourceHandler = new ResourceHandler();
 
         /**
+         * @var CouponUtil $couponUtil
+         */
+        $couponUtil = container()->get(CouponUtil::class);
+
+        /**
          * @var Agent $agent
          */
         $agent = container()->get(Agent::class);
@@ -359,6 +364,7 @@ class CartController extends AbstractHomeController
                 ->type(RESPONSE_TYPE_SUCCESS)
                 ->data($this->setTemplate('partial/main/ajax/cart-items-total-info')->render([
                     'couponCode' => $couponCode,
+                    'couponUtil' => $couponUtil,
                 ]));
         } else {
             response()->httpCode(403);
@@ -387,7 +393,7 @@ class CartController extends AbstractHomeController
             if ($res[0]) {
                 $resourceHandler
                     ->type(RESPONSE_TYPE_SUCCESS)
-                    ->errorMessage($res[1]);
+                    ->data($res[1]);
             } else {
                 $resourceHandler
                     ->type(RESPONSE_TYPE_ERROR)

@@ -69,10 +69,11 @@ class ReturnOrderController extends AbstractUserController
         }
 
         $orders = $orderModel->getOrders(
-            'u.id=:id AND o.payment_status=:status',
+            'u.id=:id AND o.payment_status=:status AND ordered_at>=:date',
             [
                 'id' => $user['id'],
                 'status' => PAYMENT_STATUS_SUCCESS,
+                'date' => time() - RETURN_ORDER_DURATION,
             ],
             ['o.id DESC'],
             null,

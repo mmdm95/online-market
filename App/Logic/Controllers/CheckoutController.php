@@ -79,7 +79,7 @@ class CheckoutController extends AbstractHomeController
 
         $user = $this->getDefaultArguments()['user'];
 
-        $paymentMethods = $methodModel->get(['code', 'title', 'image'], 'publish=:pub', ['pub' => DB_YES]);
+        $paymentMethods = $methodModel->get(['code', 'title', 'image', 'method_type'], 'publish=:pub', ['pub' => DB_YES]);
         $addresses = $addressModel->getUserAddresses(
             ['u_addr.*', 'c.name AS city_name', 'p.name AS province_name']
             , 'u_addr.user_id=:uId', ['uId' => $user['id']]
@@ -147,18 +147,24 @@ class CheckoutController extends AbstractHomeController
 
                 // return needed response for gateway redirection if everything is ok
                 if ($resourceHandler->getReturnData()['type'] == RESPONSE_TYPE_SUCCESS) {
-                    // connect to gateway and get needed info
-                    [$gatewayInfo, $infoRes] = PaymentUtil::getGatewayInfo(
-                        $gatewayMethod['method_type'],
-                        $gatewayMethod['code'],
-                        json_decode(cryptographer()->decrypt($gatewayMethod['meta_parameters']), true)
-                    );
+                    if ($gatewayMethod['method_type'] == METHOD_TYPE_WALLET) {
+                        [$gatewayInfo, $infoRes] = PaymentUtil::walletCheck($gatewayMethod['code']);
+                    } else {
+                        // connect to gateway and get needed info
+                        [$gatewayInfo, $infoRes] = PaymentUtil::getGatewayInfo(
+                            $gatewayMethod['method_type'],
+                            $gatewayMethod['code'],
+                            json_decode(cryptographer()->decrypt($gatewayMethod['meta_parameters']), true)
+                        );
+                    }
 
                     if (
                         $infoRes &&
                         !empty($gatewayInfo) &&
                         in_array(
                             (int)$gatewayMethod['method_type'], [
+                                METHOD_TYPE_WALLET,
+                                //
                                 METHOD_TYPE_GATEWAY_BEH_PARDAKHT,
                                 METHOD_TYPE_GATEWAY_IDPAY,
                                 METHOD_TYPE_GATEWAY_MABNA,
@@ -176,10 +182,11 @@ class CheckoutController extends AbstractHomeController
                         $redirect = false;
                         $isMultipart = false;
 
-                        // TODO: add other gateway cases and create inputs according to them
-                        // ...
-
                         switch ((int)$gatewayMethod['method_type']) {
+                            case METHOD_TYPE_WALLET:
+                                $url = $gatewayInfo['url'];
+                                $redirect = true;
+                                break;
                             case METHOD_TYPE_GATEWAY_SADAD:
                             case METHOD_TYPE_GATEWAY_TAP:
                                 /**
@@ -230,10 +237,15 @@ class CheckoutController extends AbstractHomeController
                             $this->removeIssuedFactor();
                         }
                     } else {
+                        $msg = 'خطا در ارتباط با درگاه بانک، لطفا دوباره تلاش کنید.';
+                        if ($gatewayMethod['method_type'] == METHOD_TYPE_WALLET) {
+                            $msg = $gatewayInfo['error']['message'];
+                        }
+
                         $this->removeIssuedFactor();
                         $resourceHandler
                             ->type(RESPONSE_TYPE_ERROR)
-                            ->errorMessage('خطا در ارتباط با درگاه بانک، لطفا دوباره تلاش کنید.');
+                            ->errorMessage($msg);
                     }
                 }
             } else {

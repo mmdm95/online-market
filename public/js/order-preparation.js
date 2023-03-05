@@ -255,8 +255,8 @@
                         shop.toasts.toast(_.data, {
                             type: variables.toasts.types.success,
                         });
-                        loadNPlaceCartItemsInfo();
                     }
+                    loadNPlaceCartItemsInfo();
                 });
             }
         });
@@ -266,22 +266,25 @@
             var checked, info, provincesSelect;
             checked = addressChoosingContainer.find('input[type="radio"]:checked');
             if (checked.length) {
-                info = checked.val();
+                info = checked.attr('data-address-obj');
                 try {
                     info = JSON.parse(info);
                     if (info) {
-                        provincesSelect = $('input[name="inp-addr-province"]');
+
+                        provincesSelect = $('select[name="inp-addr-province"]');
                         // assign values to inputs
                         $('input[name="inp-addr-full-name"]').val(info.full_name);
                         $('input[name="inp-addr-mobile"]').val(info.mobile);
-                        $('input[name="inp-addr-address"]').val(info.address);
+                        $('textarea[name="inp-addr-address"]').val(info.address);
                         $('input[name="inp-addr-postal-code"]').val(info.postal_code);
 
                         // load province and city
-                        provincesSelect.attr('data-current-province', info.province);
-                        $('input[name="inp-addr-city"]').attr('data-current-city', info.city);
+                        provincesSelect.attr('data-current-province', info.province_id);
+                        $('select[name="inp-addr-city"]').attr('data-current-city', info.city_id);
 
                         shop.loadProvinces(provincesSelect);
+
+                        $('#__user_addr_choose_modal').modal('toggle');
                     }
                 } catch (e) {
                     // do nothing

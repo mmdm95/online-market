@@ -265,7 +265,7 @@ class WalletController extends AbstractAdminController implements IDatatableCont
                     ->setStatusCheckedMessage('کیف پول فعال شد.')
                     ->setStatusUncheckedMessage('کیف پول غیر فعال شد.')
                     ->handle(
-                        BaseModel::TBL_PRODUCTS,
+                        BaseModel::TBL_WALLET,
                         $id,
                         'is_available',
                         input()->post('status')->getValue()
@@ -357,6 +357,7 @@ class WalletController extends AbstractAdminController implements IDatatableCont
                         'db_alias' => 'is_available',
                         'dt' => 'is_available',
                         'formatter' => function ($d, $row) {
+                            logger()->info(url('ajax.wallet.availability.status')->getRelativeUrl());
                             return $this->setTemplate('partial/admin/parser/status-changer')
                                 ->render([
                                     'status' => $d,
@@ -449,7 +450,10 @@ class WalletController extends AbstractAdminController implements IDatatableCont
                         'db_alias' => 'deposit_price',
                         'dt' => 'price',
                         'formatter' => function ($d) {
-                            return number_format((int)StringUtil::toEnglish($d));
+                            return $this->setTemplate('partial/admin/parser/price-showing')
+                                ->render([
+                                    'price' => $d,
+                                ]);
                         }
                     ],
                     ['db' => 'wf.deposit_type_title', 'db_alias' => 'deposit_type_title', 'dt' => 'description'],

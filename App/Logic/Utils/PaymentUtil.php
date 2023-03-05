@@ -2,10 +2,15 @@
 
 namespace App\Logic\Utils;
 
+use App\Logic\Models\DepositTypeModel;
 use App\Logic\Models\GatewayModel;
 use App\Logic\Models\OrderModel;
 use App\Logic\Models\OrderReserveModel;
 use App\Logic\Models\PaymentMethodModel;
+use App\Logic\Models\WalletFlowModel;
+use App\Logic\Models\WalletModel;
+use DI\DependencyException;
+use DI\NotFoundException;
 use Sim\Auth\DBAuth;
 use Sim\Event\Interfaces\IEvent;
 use Sim\Payment\Factories\BehPardakht;
@@ -687,7 +692,7 @@ class PaymentUtil
                             MabnaAdviceResultProvider $adviceProvider,
                             MabnaHandlerProvider      $resultProvider
                         ) use ($gatewayModel, $orderModel, $orderReserveModel, $gatewayCode, $flow, &$res) {
-                            // most of information are in $resultProvider
+                            // most information are in $resultProvider
                             $gatewayModel->update([
                                 'payment_code' => $resultProvider->getTraceNumber(''),
                                 'status' => $adviceProvider->getStatus(),
@@ -1009,6 +1014,127 @@ class PaymentUtil
         }
 
         return $res;
+    }
+
+    /**
+     * @param string $methodCode
+     * @return array
+     * @throws DependencyException
+     * @throws NotFoundException
+     */
+    public static function walletCheck(string $methodCode): array
+    {
+        /**
+         * @var WalletModel $walletModel
+         */
+        $walletModel = container()->get(WalletModel::class);
+        /**
+         * @var WalletFlowModel $walletFlowModel
+         */
+        $walletFlowModel = container()->get(WalletFlowModel::class);
+        /**
+         * @var DepositTypeModel $depositModel
+         */
+        $depositModel = container()->get(DepositTypeModel::class);
+
+        $orderArr = session()->get(SESSION_ORDER_ARR_INFO);
+        if (is_null($orderArr) || !count($orderArr)) {
+            return [[
+                'error' => [
+                    'code' => 101,
+                    'message' => 'سفارش نامعتبر می‌باشد.',
+                ],
+            ], false];
+        }
+
+        $currentUser = get_current_authenticated_user(auth_home());
+        if (!count($currentUser)) {
+            return [[
+                'error' => [
+                    'code' => 102,
+                    'message' => 'کاربر نامعتبر می‌باشد.',
+                ],
+            ], false];
+        }
+
+        // get wallet balance and check if order can pay by wallet
+        $wallet = $walletModel->getWalletInfo(
+            'u.username=:un', ['un' => $currentUser['username']],
+            ['w.id DESC'], 1, 0, ['w.balance', 'w.is_available']
+        )[0] ?? [];
+
+        if (!count($wallet) || $wallet['is_available'] != DB_YES) {
+            return [[
+                'error' => [
+                    'code' => 103,
+                    'message' => 'کیف پول شما در دسترس نمی‌باشد، برای اطلاعات بیشتر با ما در تماس باشد.',
+                ],
+            ], false];
+        }
+
+        if ($wallet['balance'] < $orderArr['final_price']) {
+            return [[
+                'error' => [
+                    'code' => 104,
+                    'message' => 'مبلغ کیف پول شما کافی نمی‌باشد، لطفا ابتدا کیف پول خود را در پنل کاربری شارژ نمایید.',
+                ],
+            ], false];
+        }
+
+        // put a wallet flow in database and decrease the balance
+        $depositTitle = $depositModel->getFirst(['title'], 'code=:code', ['code' => WALLET_PAYMENT_CODE])['title'] ?? 'نامشخص';
+        $res = $walletFlowModel->payOrderWithWallet([
+            'order_code' => $orderArr['code'],
+            'username' => $currentUser['username'],
+            'payer_id' => $currentUser['id'],
+            'deposit_price' => -(int)$orderArr['final_price'],
+            'deposit_type_code' => WALLET_PAYMENT_CODE,
+            'deposit_type_title' => $depositTitle,
+            'deposit_at' => time(),
+        ]);
+
+        if (!$res) {
+            return [[
+                'error' => [
+                    'code' => 105,
+                    'message' => 'عملیات پرداخت با خطا روبرو شد لطفا دوباره تلاش نمایید.',
+                ],
+            ], false];
+        }
+
+        return [[
+            'error' => [
+                'code' => null,
+                'message' => null,
+            ],
+            'url' => url('home.wallet.payment', ['code' => $orderArr['code']])->getRelativeUrl(),
+        ], true];
+    }
+
+    /**
+     * @param $orderCode
+     * @return bool
+     * @throws DependencyException
+     * @throws NotFoundException
+     */
+    public static function walletPayConfirmation($orderCode): bool
+    {
+        /**
+         * @var OrderModel $orderModel
+         */
+        $orderModel = container()->get(OrderModel::class);
+        /**
+         * @var OrderReserveModel $orderReserveModel
+         */
+        $orderReserveModel = container()->get(OrderReserveModel::class);
+
+        $res = $orderModel->update([
+            'payment_status' => PAYMENT_STATUS_SUCCESS,
+            'payed_at' => time(),
+        ], 'code=:code', ['code' => $orderCode]);
+        $res2 = $orderReserveModel->delete('order_code=:code', ['code' => $orderCode]);
+
+        return $res && $res2;
     }
 
     /**

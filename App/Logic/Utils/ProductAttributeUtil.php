@@ -34,7 +34,8 @@ class ProductAttributeUtil
             'id',
             $attrModel->getProductAttrValuesOfCategory(
                 $categoryId,
-                ['pav.attr_val', 'pav.id AS val_id', 'pa.id', 'pa.type', 'pa.title']
+                ['pav.attr_val', 'pav.id AS val_id', 'pa.id', 'pa.type', 'pa.title'],
+                ['pac.priority DESC', 'pav.id ASC']
             )
         );
         foreach ($attrs as $attr => $values) {

@@ -251,43 +251,43 @@ $validator = form_validator();
             <!-- /product special -->
 
             <!-- Product returnable -->
-            <div class="col-lg-6">
-                <div class="card">
-                    <div class="card-header header-elements-inline bg-light">
-                        <label class="m-0 cursor-pointer" for="__rtStatusChk">
-                            عدم در نظر گرفتن امکان مرجوع کردن
-                        </label>
-                        <div class="form-check form-check-inline">
-                            <label class="form-check-label">
-                                <input type="checkbox"
-                                       id="__rtStatusChk"
-                                       class="form-check-input-styled"
-                                       checked="checked"
-                                       name="inp-edit-product-returnable-chk"
-                                       data-fouc>
-                            </label>
-                        </div>
-                    </div>
-                    <div class="card-header header-elements-inline">
-                        <h5 class="card-title">
-                            <label class="m-0 cursor-pointer" for="__rtStatus">
-                                امکان مرجوع کردن
-                            </label>
-                        </h5>
-                        <div class="header-elements">
-                            <div class="list-icons">
-                                <div class="list-icons-item form-check form-check-switchery form-check-switchery-double">
-                                    <label class="form-check-label">
-                                        <input id="__rtStatus" type="checkbox" class="form-check-input-switchery"
-                                               name="inp-edit-product-returnable"
-                                            <?= $validator->setCheckbox('inp-edit-product-returnable', 'on'); ?>>
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <!--            <div class="col-lg-6">-->
+            <!--                <div class="card">-->
+            <!--                    <div class="card-header header-elements-inline bg-light">-->
+            <!--                        <label class="m-0 cursor-pointer" for="__rtStatusChk">-->
+            <!--                            عدم در نظر گرفتن امکان مرجوع کردن-->
+            <!--                        </label>-->
+            <!--                        <div class="form-check form-check-inline">-->
+            <!--                            <label class="form-check-label">-->
+            <!--                                <input type="checkbox"-->
+            <!--                                       id="__rtStatusChk"-->
+            <!--                                       class="form-check-input-styled"-->
+            <!--                                       checked="checked"-->
+            <!--                                       name="inp-edit-product-returnable-chk"-->
+            <!--                                       data-fouc>-->
+            <!--                            </label>-->
+            <!--                        </div>-->
+            <!--                    </div>-->
+            <!--                    <div class="card-header header-elements-inline">-->
+            <!--                        <h5 class="card-title">-->
+            <!--                            <label class="m-0 cursor-pointer" for="__rtStatus">-->
+            <!--                                امکان مرجوع کردن-->
+            <!--                            </label>-->
+            <!--                        </h5>-->
+            <!--                        <div class="header-elements">-->
+            <!--                            <div class="list-icons">-->
+            <!--                                <div class="list-icons-item form-check form-check-switchery form-check-switchery-double">-->
+            <!--                                    <label class="form-check-label">-->
+            <!--                                        <input id="__rtStatus" type="checkbox" class="form-check-input-switchery"-->
+            <!--                                               name="inp-edit-product-returnable"-->
+            <?= '';//$validator->setCheckbox('inp-edit-product-returnable', 'on');  ?>>
+            <!--                                    </label>-->
+            <!--                                </div>-->
+            <!--                            </div>-->
+            <!--                        </div>-->
+            <!--                    </div>-->
+            <!--                </div>-->
+            <!--            </div>-->
             <!-- /product returnable -->
 
             <!-- Product commenting -->

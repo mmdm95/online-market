@@ -36,7 +36,6 @@ use Sim\Utils\StringUtil;
                         </div>
                         <h4 class="mt-3 mb-0">
                             <?= local_number(number_format(StringUtil::toEnglish($return_order_count))); ?>
-                            <small>عدد</small>
                         </h4>
                     </div>
                 </div>
@@ -157,7 +156,7 @@ use Sim\Utils\StringUtil;
                             </td>
                             <td><?= $order['method_title']; ?></td>
                             <td>
-                                <?= number_format(StringUtil::toEnglish($order['final_price'])); ?>
+                                <?= local_number(number_format(StringUtil::toEnglish($order['final_price']))); ?>
                                 <small>تومان</small>
                             </td>
                             <td>
@@ -178,47 +177,115 @@ use Sim\Utils\StringUtil;
 </div>
 <!-- /last n orders -->
 
+<!-- Last n returned orders -->
+<div class="dashboard_content">
+    <div class="card">
+        <div class="card-header">
+            <h3>آخرین سفارشات مرجوع شده</h3>
+        </div>
+        <?php if (count($last_return_orders)): ?>
+            <div class="table-responsive pt-3">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>کد مرجوعی</th>
+                        <th>کد سفارش</th>
+                        <th>تاریخ</th>
+                        <th>وضعیت</th>
+                        <th>جمع</th>
+                        <th>اقدامات</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <?php foreach ($last_return_orders as $order): ?>
+                        <tr>
+                            <td class="en-font"><?= $order['code']; ?></td>
+                            <td class="en-font">
+                                <a href="<?= url('user.order.detail', ['id' => $order['order_id']])->getRelativeUrlTrimmed(); ?>"
+                                   class="btn btn-link">
+                                    <?= $order['order_code']; ?>
+                                </a>
+                            </td>
+                            <td><?= Jdf::jdate(DEFAULT_TIME_FORMAT, $order['requested_at']); ?></td>
+                            <td>
+                                <?php load_partial('admin/parser/return-order-status', ['type' => $order['status']]); ?>
+                            </td>
+                            <td>
+                                <?= local_number(number_format(StringUtil::toEnglish($order['final_price']))); ?>
+                                تومان
+                            </td>
+                            <td>
+                                <a href="<?= url('user.return-order.detail', ['id' => $order['id']])->getRelativeUrl(); ?>"
+                                   class="btn btn-fill-out btn-sm">
+                                    نمایش
+                                </a>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
+        <?php else: ?>
+            <?php load_partial('main/not-found-rows', ['show_border' => false]); ?>
+        <?php endif; ?>
+    </div>
+</div>
+<!-- /last n returned orders -->
+
 <!-- Last n wallet transaction -->
-<!--<div class="dashboard_content">-->
-<!--    <div class="card">-->
-<!--        <div class="card-header">-->
-<!--            <h3>آخرین تراکنش‌های کیف پول</h3>-->
-<!--        </div>-->
-<?php //if (count($last_wallet_flow)): ?>
-<!--            <div class="table-responsive pt-3">-->
-<!--                <table class="table">-->
-<!--                    <thead>-->
-<!--                    <tr>-->
-<!--                        <th>کد</th>-->
-<!--                        <th>تاریخ</th>-->
-<!--                        <th>عنوان</th>-->
-<!--                        <th>مبلغ</th>-->
-<!--                    </tr>-->
-<!--                    </thead>-->
-<!--                    <tbody>-->
-<?php //foreach ($last_wallet_flow as $flow): ?>
-<!--                        <tr>-->
-<!--                            <td class="en-font">-->
-<?= '';//$flow['order_code'];    ?>
-<!--                            </td>-->
-<!--                            <td>-->
-<?= '';//Jdf::jdate(DEFAULT_TIME_FORMAT, $flow['deposit_at']);    ?>
-<!--                            </td>-->
-<!--                            <td>-->
-<?= '';//$flow['deposit_type_title'];    ?>
-<!--                            </td>-->
-<!--                            <td>-->
-<?= '';//number_format(StringUtil::toEnglish($flow['deposit_price']));    ?>
-<!--                                <small>تومان</small>-->
-<!--                            </td>-->
-<!--                        </tr>-->
-<?php //endforeach; ?>
-<!--                    </tbody>-->
-<!--                </table>-->
-<!--            </div>-->
-<?php //else: ?>
-<?php //load_partial('main/not-found-rows', ['show_border' => false]); ?>
-<?php //endif; ?>
-<!--    </div>-->
-<!--</div>-->
+<div class="dashboard_content">
+    <div class="card">
+        <div class="card-header">
+            <h3>آخرین تراکنش‌های کیف پول</h3>
+        </div>
+        <?php if (count($last_wallet_flow)): ?>
+            <div class="table-responsive pt-3">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>کد</th>
+                        <th>تاریخ</th>
+                        <th>عنوان</th>
+                        <th>مبلغ</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <?php foreach ($last_wallet_flow as $flow): ?>
+                        <tr>
+                            <td class="en-font">
+                                <?= $flow['order_code']; ?>
+                            </td>
+                            <td>
+                                <?= Jdf::jdate(DEFAULT_TIME_FORMAT, $flow['deposit_at']); ?>
+                            </td>
+                            <td>
+                                <?= $flow['deposit_type_title']; ?>
+                            </td>
+                            <?php
+                            $formattedDepositPrice = local_number(number_format(StringUtil::toEnglish(abs($flow['deposit_price']))));
+                            ?>
+                            <?php if ($flow['deposit_price'] > 0): ?>
+                                <td class="text-success">
+                                    <?= $formattedDepositPrice ?>
+                                    <small>تومان</small>
+                                    <span class="linearicons-arrow-up" aria-hidden="true"></span>
+                                </td>
+                            <?php else: ?>
+                                <td class="text-danger">
+                                    <?= $formattedDepositPrice; ?>
+                                    -
+                                    <small>تومان</small>
+                                    <span class="linearicons-arrow-down" aria-hidden="true"></span>
+                                </td>
+                            <?php endif; ?>
+                        </tr>
+                    <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
+        <?php else: ?>
+            <?php load_partial('main/not-found-rows', ['show_border' => false]); ?>
+        <?php endif; ?>
+    </div>
+</div>
 <!-- /last n wallet transaction -->

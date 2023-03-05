@@ -91,10 +91,23 @@ use Sim\Utils\StringUtil;
                             <td class="en-font"><?= $flow['order_code']; ?></td>
                             <td><?= Jdf::jdate(DEFAULT_TIME_FORMAT, $flow['deposit_at']); ?></td>
                             <td><?= $flow['deposit_type_title']; ?></td>
-                            <td>
-                                <?= number_format(StringUtil::toEnglish($flow['deposit_price'])); ?>
-                                تومان
-                            </td>
+                            <?php
+                            $formattedDepositPrice = local_number(number_format(StringUtil::toEnglish(abs($flow['deposit_price']))));
+                            ?>
+                            <?php if ($flow['deposit_price'] > 0): ?>
+                                <td class="text-success">
+                                    <?= $formattedDepositPrice ?>
+                                    <small>تومان</small>
+                                    <span class="linearicons-arrow-up" aria-hidden="true"></span>
+                                </td>
+                            <?php else: ?>
+                                <td class="text-danger">
+                                    <?= $formattedDepositPrice; ?>
+                                    -
+                                    <small>تومان</small>
+                                    <span class="linearicons-arrow-down" aria-hidden="true"></span>
+                                </td>
+                            <?php endif; ?>
                         </tr>
                     <?php endforeach; ?>
                     </tbody>

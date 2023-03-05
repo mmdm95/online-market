@@ -82,7 +82,7 @@ use Sim\Utils\StringUtil;
                                        data-remove-id="<?= $item['code']; ?>"
                                        class="dropdown-item text-danger __item_remover_btn">
                                         <i class="icon-trash"></i>
-                                        حذف
+                                        حذف تمام قیمت‌های پلکانی این محصول
                                     </a>
                                 </div>
                             </div>

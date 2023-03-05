@@ -40,6 +40,7 @@ class AddProductAttrCategoryForm implements IPageForm
             ->setFieldsAlias([
                 'inp-add-product-attr-id' => 'ویژگی',
                 'inp-add-product-cat-id' => 'دسته‌بندی',
+                'inp-add-product-priority' => 'اولویت',
             ]);
 
         /**
@@ -72,6 +73,14 @@ class AddProductAttrCategoryForm implements IPageForm
                 }
                 return false;
             }, '{alias} ' . 'انتخاب شده نامعتبر است.');
+
+        // priority
+        $validator
+            ->setFields('inp-add-product-priority')
+            ->stopValidationAfterFirstError(false)
+            ->required()
+            ->stopValidationAfterFirstError(true)
+            ->regex('/\-?[0-9]+/', '{alias} ' . 'باید از نوع عددی باشد.');
 
         // to reset form values and not set them again
         if ($validator->getStatus()) {
@@ -108,8 +117,9 @@ class AddProductAttrCategoryForm implements IPageForm
         try {
             $attrId = input()->post('inp-add-product-attr-id', '')->getValue();
             $catId = input()->post('inp-add-product-cat-id', '')->getValue();
+            $priority = input()->post('inp-add-product-priority', 0)->getValue();
 
-            return $attrModel->assignAttrToCategory($xss->xss_clean($attrId), $xss->xss_clean($catId));
+            return $attrModel->assignAttrToCategory($xss->xss_clean($attrId), $xss->xss_clean($catId), $xss->xss_clean($priority));
         } catch (\Exception $e) {
             return false;
         }

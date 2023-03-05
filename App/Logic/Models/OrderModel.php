@@ -5,6 +5,8 @@ namespace App\Logic\Models;
 use Aura\SqlQuery\Common\Insert;
 use Aura\SqlQuery\Common\Update;
 use Aura\SqlQuery\Exception as AuraException;
+use DI\DependencyException;
+use DI\NotFoundException;
 
 class OrderModel extends BaseModel
 {
@@ -554,6 +556,75 @@ class OrderModel extends BaseModel
             return;
         }
         $this->db->commit();
+    }
+
+    /**
+     * @param array $updateArr
+     * @param $orderId
+     * @param bool $isReturnOrderItemsBadge
+     * @return bool
+     * @throws DependencyException
+     * @throws NotFoundException
+     */
+    public function updateSendStatusForOrder(array $updateArr, $orderId, bool $isReturnOrderItemsBadge): bool
+    {
+        /**
+         * @var Model $model
+         */
+        $model = container()->get(Model::class);
+
+        $this->db->beginTransaction();
+
+        $order = $this->getFirst(['code', 'coupon_id', 'coupon_code', 'is_product_returned_to_stock'], 'id=:id', ['id' => $orderId]);
+
+        $res = true;
+        $couponRes = true;
+
+        if ($isReturnOrderItemsBadge && $order['is_product_returned_to_stock'] == DB_NO) {
+            $items = $this->getOrderItems(['product_code', 'product_count'], 'order_code=:code', ['code' => $order['code']]);
+            foreach ($items as $item) {
+                /**
+                 * @var Update $update
+                 */
+                $update = $this->connector->update();
+                $update
+                    ->table(self::TBL_PRODUCT_PROPERTY)
+                    ->set('stock_count', 'stock_count+' . $item['product_count'])
+                    ->where('code=:code')
+                    ->bindValue('code', $item['product_code']);
+                $res = $model->execute($update);
+                if (!$res) break;
+            }
+
+            if (count($order) && !empty($order['coupon_id']) && !empty($order['coupon_code'])) {
+                $couponUpdate = $model->update();
+                $couponUpdate
+                    ->table(BaseModel::TBL_COUPONS)
+                    ->set('use_count', 'use_count+1')
+                    ->where('id=:id AND code=:code')
+                    ->bindValues([
+                        'id' => $order['coupon_id'],
+                        'code' => $order['coupon_code'],
+                    ]);
+                $couponRes = $model->execute($couponUpdate);
+            }
+        }
+
+        if (!$res || !$couponRes) {
+            $this->db->rollBack();
+            return false;
+        }
+
+        $updateArr['is_product_returned_to_stock'] = DB_YES;
+        $res2 = $this->update($updateArr, 'id=:id', ['id' => $orderId]);
+
+        if (!$res2) {
+            $this->db->rollBack();
+            return false;
+        }
+
+        $this->db->commit();
+        return true;
     }
 
     /**
