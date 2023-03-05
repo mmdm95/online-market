@@ -16,6 +16,8 @@ use App\Logic\Utils\Jdf;
 use App\Logic\Utils\LogUtil;
 use App\Logic\Utils\OrderUtil;
 use App\Logic\Utils\SMSUtil;
+use DI\DependencyException;
+use DI\NotFoundException;
 use Jenssegers\Agent\Agent;
 use ReflectionException;
 use Sim\Auth\DBAuth;
@@ -27,6 +29,7 @@ use Sim\Exceptions\Mvc\Controller\ControllerException;
 use Sim\Exceptions\PathManager\PathNotRegisteredException;
 use Sim\Interfaces\IFileNotExistsException;
 use Sim\Interfaces\IInvalidVariableNameException;
+use Sim\SMS\Exceptions\SMSException;
 
 class OrderController extends AbstractAdminController implements IDatatableController
 {
@@ -73,14 +76,13 @@ class OrderController extends AbstractAdminController implements IDatatableContr
      * @return string
      * @throws ConfigNotRegisteredException
      * @throws ControllerException
+     * @throws DependencyException
      * @throws IDBException
      * @throws IFileNotExistsException
      * @throws IInvalidVariableNameException
+     * @throws NotFoundException
      * @throws PathNotRegisteredException
      * @throws ReflectionException
-     * @throws \DI\DependencyException
-     * @throws \DI\NotFoundException
-     * @throws \Sim\SMS\Exceptions\SMSException
      */
     public function detail($id)
     {
@@ -123,8 +125,13 @@ class OrderController extends AbstractAdminController implements IDatatableContr
                         SMS_REPLACEMENTS['status'] => session()->getFlash('send.status.title', ''),
                         SMS_REPLACEMENTS['orderCode'] => session()->getFlash('send.status.order_code', ''),
                     ]);
-                    $smsRes = SMSUtil::send([$username], $body);
-                    SMSUtil::logSMS([$username], $body, $smsRes, SMS_LOG_TYPE_ORDER_STATUS, SMS_LOG_SENDER_USER);
+
+                    try {
+                        $smsRes = SMSUtil::send([$username], $body);
+                        SMSUtil::logSMS([$username], $body, $smsRes, SMS_LOG_TYPE_ORDER_STATUS, SMS_LOG_SENDER_USER);
+                    } catch (DependencyException|NotFoundException|SMSException $e) {
+                        // do nothing
+                    }
                 }
             }
         }

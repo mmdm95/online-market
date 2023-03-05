@@ -13,6 +13,7 @@ use App\Logic\Models\BaseModel;
 use App\Logic\Utils\SMSUtil;
 use DI\DependencyException;
 use DI\NotFoundException;
+use ReflectionException;
 use Sim\Auth\DBAuth;
 use Sim\Auth\Exceptions\InvalidUserException;
 use Sim\Auth\Interfaces\IDBException;
@@ -30,14 +31,13 @@ class RegisterController extends AbstractHomeController
      * @return string
      * @throws ConfigNotRegisteredException
      * @throws ControllerException
+     * @throws DependencyException
      * @throws FormException
      * @throws IFileNotExistsException
      * @throws IInvalidVariableNameException
+     * @throws NotFoundException
      * @throws PathNotRegisteredException
-     * @throws SMSException
-     * @throws \DI\DependencyException
-     * @throws \DI\NotFoundException
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     public function index()
     {
@@ -61,8 +61,12 @@ class RegisterController extends AbstractHomeController
                         SMS_REPLACEMENTS['mobile'] => $username,
                         SMS_REPLACEMENTS['code'] => session()->getFlash('register.code', ''),
                     ]);
-                    $smsRes = SMSUtil::send([$username], $body);
-                    SMSUtil::logSMS([$username], $body, $smsRes, SMS_LOG_TYPE_REGISTER, SMS_LOG_SENDER_SYSTEM);
+                    try {
+                        $smsRes = SMSUtil::send([$username], $body);
+                        SMSUtil::logSMS([$username], $body, $smsRes, SMS_LOG_TYPE_REGISTER, SMS_LOG_SENDER_SYSTEM);
+                    } catch (DependencyException|NotFoundException|SMSException $e) {
+                        // do nothing
+                    }
 
                     response()->redirect(url('home.signup.code')->getRelativeUrlTrimmed());
                 } else {
@@ -85,9 +89,9 @@ class RegisterController extends AbstractHomeController
      * @throws IFileNotExistsException
      * @throws IInvalidVariableNameException
      * @throws PathNotRegisteredException
-     * @throws \DI\DependencyException
-     * @throws \DI\NotFoundException
-     * @throws \ReflectionException
+     * @throws DependencyException
+     * @throws NotFoundException
+     * @throws ReflectionException
      */
     public function enterCode()
     {
@@ -132,7 +136,7 @@ class RegisterController extends AbstractHomeController
      * @throws PathNotRegisteredException
      * @throws DependencyException
      * @throws NotFoundException
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     public function enterInformation(): string
     {
@@ -176,9 +180,9 @@ class RegisterController extends AbstractHomeController
      * @throws IFileNotExistsException
      * @throws IInvalidVariableNameException
      * @throws PathNotRegisteredException
-     * @throws \DI\DependencyException
-     * @throws \DI\NotFoundException
-     * @throws \ReflectionException
+     * @throws DependencyException
+     * @throws NotFoundException
+     * @throws ReflectionException
      */
     public function enterPassword()
     {

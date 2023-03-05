@@ -12,6 +12,9 @@ use App\Logic\Middlewares\Logic\ForgetCompletionCheckMiddleware;
 use App\Logic\Middlewares\Logic\ForgetMobileCheckMiddleware;
 use App\Logic\Models\UserModel;
 use App\Logic\Utils\SMSUtil;
+use DI\DependencyException;
+use DI\NotFoundException;
+use ReflectionException;
 use Sim\Exceptions\ConfigManager\ConfigNotRegisteredException;
 use Sim\Exceptions\Mvc\Controller\ControllerException;
 use Sim\Exceptions\PathManager\PathNotRegisteredException;
@@ -27,14 +30,13 @@ class RecoverPassController extends AbstractHomeController
      * @return string
      * @throws ConfigNotRegisteredException
      * @throws ControllerException
+     * @throws DependencyException
      * @throws FormException
      * @throws IFileNotExistsException
      * @throws IInvalidVariableNameException
+     * @throws NotFoundException
      * @throws PathNotRegisteredException
-     * @throws \DI\DependencyException
-     * @throws \DI\NotFoundException
-     * @throws \ReflectionException
-     * @throws SMSException
+     * @throws ReflectionException
      */
     public function forgetPassword($step = 'step1')
     {
@@ -69,8 +71,12 @@ class RecoverPassController extends AbstractHomeController
                                     SMS_REPLACEMENTS['mobile'] => $username,
                                     SMS_REPLACEMENTS['code'] => session()->getFlash('forget.code', ''),
                                 ]);
-                                $smsRes = SMSUtil::send([$username], $body);
-                                SMSUtil::logSMS([$username], $body, $smsRes, SMS_LOG_TYPE_RECOVER_PASS, SMS_LOG_SENDER_SYSTEM);
+                                try {
+                                    $smsRes = SMSUtil::send([$username], $body);
+                                    SMSUtil::logSMS([$username], $body, $smsRes, SMS_LOG_TYPE_RECOVER_PASS, SMS_LOG_SENDER_SYSTEM);
+                                } catch (DependencyException|NotFoundException|SMSException $e) {
+                                    // do nothing
+                                }
                             }
 
                             response()->redirect(url('home.forget-password', ['step' => 'step2'])->getRelativeUrlTrimmed());
@@ -183,8 +189,8 @@ class RecoverPassController extends AbstractHomeController
      * @throws IFileNotExistsException
      * @throws IInvalidVariableNameException
      * @throws SMSException
-     * @throws \DI\DependencyException
-     * @throws \DI\NotFoundException
+     * @throws DependencyException
+     * @throws NotFoundException
      */
     public function resendRecoverCode()
     {
@@ -220,8 +226,12 @@ class RecoverPassController extends AbstractHomeController
                     SMS_REPLACEMENTS['mobile'] => $username,
                     SMS_REPLACEMENTS['code'] => $user['forget_password_code'],
                 ]);
-                $smsRes = SMSUtil::send([$username], $body);
-                SMSUtil::logSMS([$username], $body, $smsRes, SMS_LOG_TYPE_RECOVER_PASS, SMS_LOG_SENDER_SYSTEM);
+                try {
+                    $smsRes = SMSUtil::send([$username], $body);
+                    SMSUtil::logSMS([$username], $body, $smsRes, SMS_LOG_TYPE_RECOVER_PASS, SMS_LOG_SENDER_SYSTEM);
+                } catch (DependencyException|NotFoundException|SMSException $e) {
+                    // do nothing
+                }
             }
         } else {
             $resourceHandler
