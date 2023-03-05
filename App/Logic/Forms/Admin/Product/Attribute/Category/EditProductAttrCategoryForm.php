@@ -39,6 +39,7 @@ class EditProductAttrCategoryForm implements IPageForm
             ->setFieldsAlias([
                 'inp-edit-product-attr-id' => 'ویژگی',
                 'inp-edit-product-cat-id' => 'دسته‌بندی',
+                'inp-edit-product-priority' => 'اولویت',
             ]);
 
         /**
@@ -50,18 +51,6 @@ class EditProductAttrCategoryForm implements IPageForm
         if (!empty($id)) {
             if (0 === $attrModel->count('id=:id', ['id' => $id], BaseModel::TBL_PRODUCT_ATTR_CATEGORY)) {
                 $validator->setError('inp-edit-product-attr-id', 'شناسه تخصیص ویژگی به دسته‌بندی نامعتبر است.');
-            } else {
-                $attrId = input()->post('inp-edit-product-attr-id', '')->getValue();
-                $catId = input()->post('inp-edit-product-cat-id', '')->getValue();
-                if (
-                    $attrModel->count(
-                        'p_attr_id=:aId AND c_id=:cId', ['aId' => $attrId, 'cId' => $catId], BaseModel::TBL_PRODUCT_ATTR_CATEGORY
-                    )
-                ) {
-                    $validator
-                        ->setStatus(false)
-                        ->setError('inp-edit-product-attr-id', 'این دسته‌بندی دارای این ویژگی می‌باشد، مجددا تلاش نمایید.');
-                }
             }
         } else {
             $validator
@@ -100,6 +89,14 @@ class EditProductAttrCategoryForm implements IPageForm
                     }
                     return false;
                 }, '{alias} ' . 'انتخاب شده نامعتبر است.');
+
+            // priority
+            $validator
+                ->setFields('inp-edit-product-priority')
+                ->stopValidationAfterFirstError(false)
+                ->required()
+                ->stopValidationAfterFirstError(true)
+                ->regex('/\-?[0-9]+/', '{alias} ' . 'باید از نوع عددی باشد.');
         }
 
         // to reset form values and not set them again
@@ -137,11 +134,12 @@ class EditProductAttrCategoryForm implements IPageForm
         try {
             $attrId = input()->post('inp-edit-product-attr-id', '')->getValue();
             $catId = input()->post('inp-edit-product-cat-id', '')->getValue();
+            $priority = input()->post('inp-edit-product-priority', 0)->getValue();
             $id = session()->getFlash('product-attr-cat-curr-id', null);
 
             if (is_null($id)) return false;
 
-            return $attrModel->updateAssignedAttrCategory($id, $xss->xss_clean($attrId), $xss->xss_clean($catId));
+            return $attrModel->updateAssignedAttrCategory($id, $xss->xss_clean($attrId), $xss->xss_clean($catId), $xss->xss_clean($priority));
         } catch (\Exception $e) {
             return false;
         }

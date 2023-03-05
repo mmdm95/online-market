@@ -150,7 +150,7 @@ class ProductAttributeCategoryController extends AbstractAdminController impleme
 
         $this->setLayout($this->main_layout)->setTemplate('view/product/attribute/category/edit');
         return $this->render(array_merge($data, [
-            'attrCategory' => $attrModel->getFirstAttrCategory(['pac.id', 'pac.p_attr_id', 'pac.c_id'], 'pac.id=:id', ['id' => $id]),
+            'attrCategory' => $attrModel->getFirstAttrCategory(['pac.id', 'pac.p_attr_id', 'pac.c_id', 'pac.priority'], 'pac.id=:id', ['id' => $id]),
             'attrs' => $attrModel->get(['id', 'title']),
             'categories' => $categoryModel->get(['id', 'name'], 'publish=:pub', ['pub' => DB_YES]),
         ]));

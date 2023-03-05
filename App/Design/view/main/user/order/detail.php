@@ -302,7 +302,7 @@ use Sim\Utils\StringUtil;
                                 </td>
                                 <td>
                                     <?php if (!empty($wallet['deposit_price'])): ?>
-                                        <?= StringUtil::toPersian(number_format(StringUtil::toEnglish($wallet['deposit_price']))); ?>
+                                        <?= StringUtil::toPersian(number_format(StringUtil::toEnglish(abs($wallet['deposit_price'])))); ?>
                                         <small>تومان</small>
                                     <?php else: ?>
                                         <?php load_partial('main/parser/dash-icon'); ?>

@@ -110,6 +110,48 @@ use Sim\Utils\StringUtil;
                                 </div>
                             </div>
                         <?php endif; ?>
+                        <div class="widget">
+                            <div class="d-flex align-items-center">
+                                <input class="mswitch" type="checkbox"
+                                       name="availableProducts" id="available_product"
+                                    <?= is_value_checked(ArrayUtil::get($_GET, 'is_available', '')) ? 'checked="checked"' : ''; ?>>
+                                <label for="available_product" class="ml-3 my-0 user-select-none">کالاهای موجود</label>
+                            </div>
+                        </div>
+                        <div class="widget">
+                            <div class="d-flex align-items-center">
+                                <input class="mswitch" type="checkbox"
+                                       name="offerProducts" id="offer_product"
+                                    <?= is_value_checked(ArrayUtil::get($_GET, 'is_special', '')) ? 'checked="checked"' : ''; ?>>
+                                <label for="offer_product" class="ml-3 my-0 user-select-none">پیشنهادهای ویژه</label>
+                            </div>
+                        </div>
+                        <?php if (count($brands ?? [])): ?>
+                            <div class="widget">
+                                <h5 class="widget_title">برندها</h5>
+                                <ul class="list_brand max-widget-height list-unstyled">
+                                    <?php
+                                    $previousBrands = ArrayUtil::get($_GET, 'brands', []);
+                                    $previousBrands = !is_array($previousBrands) ? [] : $previousBrands;
+                                    $previousBrands = array_map('urldecode', $previousBrands);
+                                    ?>
+                                    <?php foreach ($brands as $id => $brand): ?>
+                                        <li class="mb-1">
+                                            <div class="custome-checkbox">
+                                                <input class="form-check-input product_brand_switch"
+                                                       type="checkbox" id="<?= 'brand_num_' . $id; ?>"
+                                                       value="<?= $brand['id']; ?>"
+                                                    <?= in_array($brand['id'], $previousBrands) ? 'checked="checked"' : ''; ?>>
+                                                <label class="form-check-label" for="<?= 'brand_num_' . $id; ?>">
+                                                    <span><?= $brand['name']; ?></span>
+                                                </label>
+                                            </div>
+                                        </li>
+                                    <?php endforeach; ?>
+                                </ul>
+                            </div>
+                        <?php endif; ?>
+
                         <?php if (count($dynamicAttrs ?? [])): ?>
                             <?php foreach ($dynamicAttrs as $id => $attr): ?>
                                 <div class="widget">
@@ -154,31 +196,7 @@ use Sim\Utils\StringUtil;
                                 </div>
                             <?php endforeach; ?>
                         <?php endif; ?>
-                        <?php if (count($brands ?? [])): ?>
-                            <div class="widget">
-                                <h5 class="widget_title">برندها</h5>
-                                <ul class="list_brand max-widget-height list-unstyled">
-                                    <?php
-                                    $previousBrands = ArrayUtil::get($_GET, 'brands', []);
-                                    $previousBrands = !is_array($previousBrands) ? [] : $previousBrands;
-                                    $previousBrands = array_map('urldecode', $previousBrands);
-                                    ?>
-                                    <?php foreach ($brands as $id => $brand): ?>
-                                        <li class="mb-1">
-                                            <div class="custome-checkbox">
-                                                <input class="form-check-input product_brand_switch"
-                                                       type="checkbox" id="<?= 'brand_num_' . $id; ?>"
-                                                       value="<?= $brand['id']; ?>"
-                                                    <?= in_array($brand['id'], $previousBrands) ? 'checked="checked"' : ''; ?>>
-                                                <label class="form-check-label" for="<?= 'brand_num_' . $id; ?>">
-                                                    <span><?= $brand['name']; ?></span>
-                                                </label>
-                                            </div>
-                                        </li>
-                                    <?php endforeach; ?>
-                                </ul>
-                            </div>
-                        <?php endif; ?>
+
                         <?php if (count($sizes ?? [])): ?>
                             <div class="widget">
                                 <h5 class="widget_title">سایزها</h5>
@@ -219,22 +237,6 @@ use Sim\Utils\StringUtil;
                                 </div>
                             </div>
                         <?php endif; ?>
-                        <div class="widget">
-                            <div class="d-flex align-items-center">
-                                <input class="mswitch" type="checkbox"
-                                       name="availableProducts" id="available_product"
-                                    <?= is_value_checked(ArrayUtil::get($_GET, 'is_available', '')) ? 'checked="checked"' : ''; ?>>
-                                <label for="available_product" class="ml-3 my-0 user-select-none">کالاهای موجود</label>
-                            </div>
-                        </div>
-                        <div class="widget">
-                            <div class="d-flex align-items-center">
-                                <input class="mswitch" type="checkbox"
-                                       name="offerProducts" id="offer_product"
-                                    <?= is_value_checked(ArrayUtil::get($_GET, 'is_special', '')) ? 'checked="checked"' : ''; ?>>
-                                <label for="offer_product" class="ml-3 my-0 user-select-none">پیشنهادهای ویژه</label>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>

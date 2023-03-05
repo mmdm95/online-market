@@ -50,8 +50,16 @@ class OrderBadgeController extends AbstractAdminController implements IAjaxContr
             show_403();
         }
 
+        /**
+         * @var OrderBadgeModel $badgeModel
+         */
+        $badgeModel = container()->get(OrderBadgeModel::class);
+        $cantChangeableTitleBadges = $badgeModel->get(['title', 'color'], 'can_edit_title=:cet', ['cet' => DB_NO]);
+
         $this->setLayout($this->main_layout)->setTemplate('view/order/badges');
-        return $this->render();
+        return $this->render([
+            'cant_changeable_title_badges' => $cantChangeableTitleBadges,
+        ]);
     }
 
     /**

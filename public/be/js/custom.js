@@ -2391,6 +2391,7 @@
             if ($().DataTable) {
                 // Setting datatable defaults
                 $.extend($.fn.dataTable.defaults, {
+                    order: [[0, 'desc']],
                     destroy: true,
                     autoWidth: false,
                     dom: '<"datatable-header"fl><"datatable-scroll-lg"t><"datatable-footer"ip>',
@@ -2414,7 +2415,7 @@
                         infoEmpty: 'نمایش' + '<span class="text-primary ml-1 mr-1">0</span>' + 'تا' +
                             '<span class="text-primary ml-1 mr-1">0</span>' + 'از' + 'مجموع' + '<span class="text-primary ml-1 mr-1">0</span>' + 'رکورد',
                         infoFiltered: '(' + 'فیلتر شده از مجموع' + ' _MAX_ ' + 'رکورد' + ')',
-                    }
+                    },
                 });
 
                 /**
@@ -3637,8 +3638,16 @@
             if (url && id) {
                 admin.deleteItem(url + id, function () {
                     if (table) {
-                        $(table).DataTable().ajax.reload();
-                        createDatatable(table);
+                        url = $(table).attr('data-ajax-url');
+                        if (url) {
+                            $(table).DataTable().ajax.reload();
+                            createDatatable(table);
+                        } else {
+                            $(table).DataTable()
+                                .row($(btn).parents('tr'))
+                                .remove()
+                                .draw();
+                        }
                     }
                 }, {}, true);
             }

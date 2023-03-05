@@ -33,7 +33,7 @@ $validator = form_validator();
                         rows="10"
                         placeholder="توضیحات خود را وارد کنید"
                         required="required"
-                ><?= $validator->setInput('inp-return-order-desc', $returnOrder['desc']); ?></textarea>
+                ><?= $validator->setInput('inp-return-order-desc', $returnOrder['desc'] ?? ''); ?></textarea>
             </div>
         </div>
     </div>
@@ -51,7 +51,7 @@ $validator = form_validator();
                 <?php foreach ($orderItems as $item): ?>
                     <div class="position-relative <?= 0 != $k++ ? 'border-top' : ''; ?> p-3">
                         <div class="order-detail-order-items-more">
-                            <?php if ($item['is_returnable'] == DB_YES): ?>
+                            <?php //if ($item['is_returnable'] == DB_YES): ?>
                                 <?php $returnItemsCount++; ?>
 
                                 <div class="custome-checkbox">
@@ -78,9 +78,9 @@ $validator = form_validator();
                                         </div>
                                     </div>
                                 </div>
-                            <?php else: ?>
-                                <span class="badge badge-warning p-2">این محصول قابل مرجوع نمی‌باشد</span>
-                            <?php endif; ?>
+                            <?php //else: ?>
+<!--                                <span class="badge badge-warning p-2">این محصول قابل مرجوع نمی‌باشد</span>-->
+                            <?php //endif; ?>
                         </div>
                         <div class="d-block d-lg-flex m-0 align-items-start">
                             <?php if (!empty($item['product_image'])): ?>

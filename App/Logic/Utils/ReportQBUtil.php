@@ -662,7 +662,7 @@ class ReportQBUtil
                 'label' => 'نوع پرداخت',
                 'type' => 'integer',
                 'input' => 'select',
-                'values' => METHOD_TYPES,
+                'values' => METHOD_TYPES + [METHOD_TYPE_WALLET => 'کیف پول'],
                 'operators' => self::$boolOperation,
             ],
             [

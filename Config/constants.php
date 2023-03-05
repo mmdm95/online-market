@@ -21,7 +21,7 @@ use Sim\I18n\ISOLanguageCodes;
  *     1.2.5.0 instead of 1.2.5-a
  *     1.2.5.0.1 instead of 1.2.5-a.1 (I'm not sure)
  */
-defined("APP_VERSION") or define("APP_VERSION", "0.16.2");
+defined("APP_VERSION") or define("APP_VERSION", "0.17.0");
 
 /***************************************
  * You can add your constants here
@@ -201,6 +201,10 @@ defined("GATEWAY_SUCCESS_MESSAGE") or define("GATEWAY_SUCCESS_MESSAGE", 'ترا�
 defined("GATEWAY_ERROR_MESSAGE") or define("GATEWAY_ERROR_MESSAGE", 'تراکنش نا موفق بود، در صورت کسر مبلغ از حساب شما حداکثر پس از 72 ساعت مبلغ به حسابتان برگشت داده می‌شود.');
 defined("GATEWAY_INVALID_PARAMETERS_MESSAGE") or define("GATEWAY_INVALID_PARAMETERS_MESSAGE", 'پارامترهای ارسالی از درگاه نامعتبر است.');
 
+// wallet static deposit type codes
+defined("WALLET_PAYMENT_CODE") or define("WALLET_PAYMENT_CODE", 'a1b2c3d4e5f6');
+defined("WALLET_CHARGE_CODE") or define("WALLET_CHARGE_CODE", 'g7h8i9j1k2l3');
+
 // gateway flow status codes
 defined("PAYMENT_GATEWAY_FLOW_STATUS_CREATE_REQUEST") or define("PAYMENT_GATEWAY_FLOW_STATUS_CREATE_REQUEST", 1);
 defined("PAYMENT_GATEWAY_FLOW_STATUS_HANDLE_RESULT") or define("PAYMENT_GATEWAY_FLOW_STATUS_HANDLE_RESULT", 2);
@@ -222,9 +226,9 @@ defined('PAYMENT_STATUSES') or define('PAYMENT_STATUSES', [
 ]);
 
 // needed payment method constants
-defined("METHOD_TYPE_WALLET") or define("METHOD_TYPE_WALLET", 5);
-defined("METHOD_TYPE_IN_PLACE") or define("METHOD_TYPE_IN_PLACE", 6);
-defined("METHOD_TYPE_RECEIPT") or define("METHOD_TYPE_RECEIPT", 7);
+defined("METHOD_TYPE_WALLET") or define("METHOD_TYPE_WALLET", 100);
+defined("METHOD_TYPE_IN_PLACE") or define("METHOD_TYPE_IN_PLACE", 101);
+defined("METHOD_TYPE_RECEIPT") or define("METHOD_TYPE_RECEIPT", 102);
 defined("METHOD_TYPE_GATEWAY_BEH_PARDAKHT") or define("METHOD_TYPE_GATEWAY_BEH_PARDAKHT", 1);
 defined("METHOD_TYPE_GATEWAY_IDPAY") or define("METHOD_TYPE_GATEWAY_IDPAY", 2);
 defined("METHOD_TYPE_GATEWAY_MABNA") or define("METHOD_TYPE_GATEWAY_MABNA", 3);
@@ -233,6 +237,18 @@ defined("METHOD_TYPE_GATEWAY_SADAD") or define("METHOD_TYPE_GATEWAY_SADAD", 5);
 defined("METHOD_TYPE_GATEWAY_TAP") or define("METHOD_TYPE_GATEWAY_TAP", 6);
 defined("METHOD_TYPE_GATEWAY_IRAN_KISH") or define("METHOD_TYPE_GATEWAY_IRAN_KISH", 7);
 defined("METHOD_TYPES") or define("METHOD_TYPES", [
+    METHOD_TYPE_GATEWAY_BEH_PARDAKHT => 'درگاه بانک - به پرداخت',
+    METHOD_TYPE_GATEWAY_IDPAY => 'درگاه بانک - آیدی پی',
+    METHOD_TYPE_GATEWAY_MABNA => 'درگاه بانک - پرداخت الکترونیک سپهر (مبنا)',
+    METHOD_TYPE_GATEWAY_ZARINPAL => 'درگاه بانک - زرین پال',
+    METHOD_TYPE_GATEWAY_SADAD => 'درگاه بانک - سداد',
+    METHOD_TYPE_GATEWAY_TAP => 'درگاه بانک - تجارت الکترونیک پارسیان (تاپ)',
+    METHOD_TYPE_GATEWAY_IRAN_KISH => 'درگاه بانک - ایران کیش',
+]);
+defined("METHOD_TYPES_ALL") or define("METHOD_TYPES_ALL", [
+    METHOD_TYPE_WALLET => 'کیف پول',
+    METHOD_TYPE_IN_PLACE => 'درب منزل',
+    METHOD_TYPE_RECEIPT => 'رسید پرداخت',
     METHOD_TYPE_GATEWAY_BEH_PARDAKHT => 'درگاه بانک - به پرداخت',
     METHOD_TYPE_GATEWAY_IDPAY => 'درگاه بانک - آیدی پی',
     METHOD_TYPE_GATEWAY_MABNA => 'درگاه بانک - پرداخت الکترونیک سپهر (مبنا)',
@@ -270,6 +286,9 @@ defined("RETURN_ORDER_STATUSES") or define("RETURN_ORDER_STATUSES", [
     RETURN_ORDER_STATUS_RECEIVED => 'دریافت کالای مرجوعی',
     RETURN_ORDER_STATUS_MONEY_RETURNED => 'بازگشت مبلغ کالاها',
 ]);
+
+// return order maximum time
+defined("RETURN_ORDER_DURATION") or define("RETURN_ORDER_DURATION", 604800);// 7days
 
 // comment statuses
 defined("COMMENT_STATUS_NOT_READ") or define("COMMENT_STATUS_NOT_READ", 0);
@@ -322,7 +341,7 @@ defined("PRODUCT_ORDERINGS") or define("PRODUCT_ORDERINGS", [
 ]);
 
 // maximum order reserve time
-defined("RESERVE_MAX_TIME") or define("RESERVE_MAX_TIME", 1200 /* 20min */);
+defined("RESERVE_MAX_TIME") or define("RESERVE_MAX_TIME", 600 /* 10min */);
 
 // maximum store for addresses
 defined("ADDRESS_MAX_COUNT") or define("ADDRESS_MAX_COUNT", 10);

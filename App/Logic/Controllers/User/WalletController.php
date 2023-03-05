@@ -58,7 +58,16 @@ class WalletController extends AbstractUserController
             ['id DESC']
         );;
 
-        $paymentMethods = $methodModel->get(['code', 'title', 'image'], 'publish=:pub', ['pub' => DB_YES]);
+        $paymentMethods = $methodModel->get(
+            ['code', 'title', 'image'],
+            'publish=:pub AND method_type NOT IN (:t1, :t2, :t3)',
+            [
+                'pub' => DB_YES,
+                't1' => METHOD_TYPE_WALLET,
+                't2' => METHOD_TYPE_IN_PLACE,
+                't3' => METHOD_TYPE_RECEIPT,
+            ]
+        );
 
         $this->setLayout($this->main_layout)->setTemplate('view/main/user/wallet/index');
         return $this->render([

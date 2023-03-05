@@ -104,7 +104,7 @@ class ChangeSendStatus implements IPageForm
         try {
             $id = session()->getFlash('curr_order_detail_id', null);
             $code = input()->post('inp-change-order-send-status', '')->getValue();
-            $badge = $badgeModel->getFirst(['title', 'color'], 'code=:code', ['code' => $code]);
+            $badge = $badgeModel->getFirst(['title', 'color', 'should_return_order_product'], 'code=:code', ['code' => $code]);
             $order = $orderModel->getFirst(['code', 'mobile'], 'id=:id', ['id' => $id]) ?? null;
 
             if (is_null($order)) return false;
@@ -113,13 +113,13 @@ class ChangeSendStatus implements IPageForm
             session()->setFlash('send.status.username', $order['mobile']);
             session()->setFlash('send.status.order_code', $order['code']);
 
-            return $orderModel->update([
+            return $orderModel->updateSendStatusForOrder([
                 'send_status_code' => $xss->xss_clean(trim($code)),
                 'send_status_title' => $xss->xss_clean(trim($badge['title'])),
                 'send_status_color' => $xss->xss_clean(trim($badge['color'])),
                 'send_status_changed_by' => $auth->getCurrentUser()['id'] ?? null,
                 'send_status_changed_at' => time(),
-            ], 'id=:id', ['id' => $id]);
+            ], $id, $badge['should_return_order_product'] == DB_YES);
         } catch (\Exception $e) {
             return false;
         }

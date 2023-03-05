@@ -16,6 +16,23 @@
             </div>
         </div>
 
+        <?php if (count($cant_changeable_title_badges ?? [])): ?>
+            <div class="card-body bg-light">
+                امکان تغییر
+                <strong style="text-decoration-line: underline; text-decoration-style: wavy; text-decoration-color: #0aa7ef; text-underline-offset: 5px;">
+                    عنوان
+                </strong>
+                در وضعیت‌های
+
+                <?php foreach ($cant_changeable_title_badges as $badge): ?>
+                    <span style="background-color: <?= $badge['color'] ?>; color: <?= get_color_from_bg($badge['color']); ?>;"
+                          class="shadow-1 badge"><?= $badge['title']; ?></span>
+                <?php endforeach; ?>
+
+                وجود ندارد.
+            </div>
+        <?php endif; ?>
+
         <table class="table table-bordered table-hover datatable-highlight"
                data-columns='[{"data":"id"},{"data":"title"},{"data":"color"},{"data":"can_return"},{"data":"operations"}]'
                data-ajax-url="<?= url('admin.badge.dt.view')->getRelativeUrlTrimmed(); ?>">

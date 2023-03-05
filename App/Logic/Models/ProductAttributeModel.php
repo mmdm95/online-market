@@ -76,7 +76,7 @@ class ProductAttributeModel extends BaseModel
      */
     public function getAttrCategoriesCount(
         ?string $where = null,
-        array $bind_values = []
+        array   $bind_values = []
     ): int
     {
         $res = $this->getAttrCategories(['COUNT(pac.id) AS count'], $where, $bind_values);
@@ -110,11 +110,12 @@ class ProductAttributeModel extends BaseModel
     /**
      * @param int $attr_id
      * @param int $category_id
+     * @param $priority
      * @return bool
      * @throws DependencyException
      * @throws NotFoundException
      */
-    public function assignAttrToCategory(int $attr_id, int $category_id): bool
+    public function assignAttrToCategory(int $attr_id, int $category_id, $priority): bool
     {
         $insert = $this->connector->insert();
         $insert
@@ -122,6 +123,7 @@ class ProductAttributeModel extends BaseModel
             ->cols([
                 'p_attr_id' => $attr_id,
                 'c_id' => $category_id,
+                'priority' => $priority,
                 'created_at' => time(),
                 'created_by' => auth_admin()->getCurrentUser()['id'] ?? null
             ]);
@@ -133,11 +135,12 @@ class ProductAttributeModel extends BaseModel
      * @param int $id
      * @param int $attr_id
      * @param int $category_id
+     * @param $priority
      * @return bool
      * @throws DependencyException
      * @throws NotFoundException
      */
-    public function updateAssignedAttrCategory(int $id, int $attr_id, int $category_id): bool
+    public function updateAssignedAttrCategory(int $id, int $attr_id, int $category_id, $priority): bool
     {
         $update = $this->connector->update();
         $update
@@ -145,6 +148,7 @@ class ProductAttributeModel extends BaseModel
             ->cols([
                 'p_attr_id' => $attr_id,
                 'c_id' => $category_id,
+                'priority' => $priority,
                 'updated_at' => time(),
                 'updated_by' => auth_admin()->getCurrentUser()['id'] ?? null
             ])
@@ -261,7 +265,7 @@ class ProductAttributeModel extends BaseModel
      */
     public function getAttrValuesCount(
         ?string $where = null,
-        array $bind_values = []
+        array   $bind_values = []
     ): int
     {
         $res = $this->getAttrValues(['COUNT(pav.id) AS count'], $where, $bind_values);

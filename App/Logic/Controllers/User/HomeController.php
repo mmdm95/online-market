@@ -62,6 +62,11 @@ class HomeController extends AbstractUserController
          */
         $commentModel = container()->get(CommentModel::class);
 
+        /**
+         * @var ReturnOrderModel $returnModel
+         */
+        $returnModel = container()->get(ReturnOrderModel::class);
+
         $user = $this->getDefaultArguments()['user'];
 
         $walletBalance = $walletModel->getFirst(['balance'], 'username=:username', ['username' => $user['username']])['balance'] ?? 0;
@@ -87,6 +92,25 @@ class HomeController extends AbstractUserController
                 'o.ordered_at',
             ]
         );
+        $lastReturnOrders = $returnModel->getReturnOrders(
+            'ro.user_id=:id',
+            ['id' => $user['id']],
+            ['ro.id DESC'],
+            3,
+            0,
+            [
+                'ro.id',
+                'ro.code',
+                'ro.order_code',
+                'ro.status',
+                'ro.requested_at',
+                'o.final_price',
+                'o.id AS order_id',
+            ]
+        );
+        foreach ($lastReturnOrders as &$order) {
+            $order['items_count'] = $returnModel->getReturnOrderItemsCount('return_code=:code', ['code' => $order['code']]);
+        }
         $lastWalletFlow = $walletFlowModel->get(
             [
                 'order_code',
@@ -109,6 +133,7 @@ class HomeController extends AbstractUserController
             'not_accept_comment_count' => $naccCommentCount,
             //
             'last_orders' => $lastOrders,
+            'last_return_orders' => $lastReturnOrders,
             'last_wallet_flow' => $lastWalletFlow,
         ]);
     }

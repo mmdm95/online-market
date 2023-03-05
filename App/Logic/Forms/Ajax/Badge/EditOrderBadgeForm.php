@@ -61,8 +61,22 @@ class EditOrderBadgeForm implements IPageForm
                     ->required()
                     ->stopValidationAfterFirstError(true)
                     ->lessThanEqualLength(250)
-                    ->custom(function (FormValue $value) use ($badgeModel, $id) {
-                        $title = $badgeModel->getFirst(['title'], 'id=:id', ['id' => $id])['title'];
+                    ->custom(function (FormValue $value) use ($validator, $badgeModel, $id) {
+                        $badge = $badgeModel->getFirst(['title', 'can_edit_title'], 'id=:id', ['id' => $id]);
+                        $title = $badge['title'];
+                        $canEditTitle = $badge['can_edit_title'];
+
+                        if (
+                            $title !== trim($value->getValue()) &&
+                            $canEditTitle != DB_YES
+                        ) {
+                            $validator->setError(
+                                'inp-edit-badge-title',
+                                'امکان تغییر ' . $validator->getFieldAlias('inp-edit-badge-title') . ' وجود ندارد.'
+                            );
+                            return false;
+                        }
+
                         if (
                             $title !== trim($value->getValue()) &&
                             0 !== $badgeModel->count('title=:title', ['title' => trim($value->getValue())])
@@ -119,13 +133,12 @@ class EditOrderBadgeForm implements IPageForm
             $color = input()->post('inp-edit-badge-color', '')->getValue();
             $canReturnOrder = input()->post('inp-edit-badge-allow-return', '')->getValue();
 
-            $res = $badgeModel->update([
+            return $badgeModel->update([
                 'title' => $xss->xss_clean(trim($title)),
                 'color' => $xss->xss_clean($color),
                 'can_return_order' => is_value_checked($canReturnOrder) ? DB_YES : DB_NO,
                 'updated_at' => time(),
             ], 'id=:id', ['id' => $id]);
-            return $res;
         } catch (\Exception $e) {
             return false;
         }

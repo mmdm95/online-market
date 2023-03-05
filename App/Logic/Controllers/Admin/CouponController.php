@@ -257,7 +257,7 @@ class CouponController extends AbstractAdminController implements IDatatableCont
                         'dt' => 'max_price',
                         'formatter' => function ($d) {
                             if (!empty($d)) {
-                                return number_format(StringUtil::toEnglish($d));
+                                return number_format(StringUtil::toEnglish($d)) . ' تومان';
                             } else {
                                 return $this->setTemplate('partial/admin/parser/dash-icon')->render();
                             }

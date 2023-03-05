@@ -417,7 +417,7 @@ class ReportUtil
                 $spreadsheetArray[($k + 1)][] = $item['address'];
                 $spreadsheetArray[($k + 1)][] = $item['postal_code'];
                 $spreadsheetArray[($k + 1)][] = PAYMENT_STATUSES[$item['payment_status']] ?? 'نامشخص';
-                $spreadsheetArray[($k + 1)][] = METHOD_TYPES[$item['method_type']] ?? 'نامشخص';
+                $spreadsheetArray[($k + 1)][] = METHOD_TYPES_ALL[$item['method_type']] ?? 'نامشخص';
                 $spreadsheetArray[($k + 1)][] = $item['method_title'];
                 $spreadsheetArray[($k + 1)][] = $item['coupon_code'] ?? '-';
                 $spreadsheetArray[($k + 1)][] = $item['coupon_title'] ?? '-';

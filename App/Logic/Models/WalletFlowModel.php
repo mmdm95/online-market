@@ -167,4 +167,71 @@ class WalletFlowModel extends BaseModel
         }
         $this->delete('order_code IN (' . implode(',', $inClause) . ')', $bindValues);
     }
+
+    /**
+     * @param array $flowArr
+     * @return bool
+     */
+    public function payOrderWithWallet(array $flowArr): bool
+    {
+        /**
+         * @var OrderModel $orderModel
+         */
+        $orderModel = container()->get(OrderModel::class);
+        /**
+         * @var OrderReserveModel $orderReserveModel
+         */
+        $orderReserveModel = container()->get(OrderReserveModel::class);
+
+        $this->db->beginTransaction();
+
+        $res = $this->insert($flowArr);
+
+        $update = $this->connector->update();
+        $update
+            ->table(self::TBL_WALLET)
+            ->set('balance', 'balance+(' . $flowArr['deposit_price'] . ')')
+            ->where('username=:username')
+            ->bindValues(['username' => $flowArr['username']]);
+        $stmt = $this->db->prepare($update->getStatement());
+        $res2 = $stmt->execute($update->getBindValues());
+
+        if ($res && $res2) {
+            $this->db->commit();
+            return true;
+        }
+
+        $this->db->rollBack();
+        return false;
+    }
+
+    /**
+     * @param $username
+     * @param $orderCode
+     * @param $orderPrice
+     * @return bool
+     */
+    public function removeWalletPayment($username, $orderCode, $orderPrice): bool
+    {
+        $this->db->beginTransaction();
+
+        $update = $this->connector->update();
+        $update
+            ->table(self::TBL_WALLET)
+            ->set('balance', 'balance+(' . $orderPrice . ')')
+            ->where('username=:username')
+            ->bindValues(['username' => $username]);
+        $stmt = $this->db->prepare($update->getStatement());
+        $res = $stmt->execute($update->getBindValues());
+
+        $res2 = $this->delete('order_code=:code', ['code' => $orderCode]);
+
+        if ($res && $res2) {
+            $this->db->commit();
+            return true;
+        }
+
+        $this->db->rollBack();
+        return false;
+    }
 }

@@ -741,6 +741,9 @@ class Route implements IInitialize
                     });
                 });
             });
+            Router::get('/finish/wallet/{code}', [OrderResultController::class, 'walletPayment'])->where([
+                'code' => '[a-zA-Z0-9]+',
+            ])->name('home.wallet.payment');
             Router::form('/finish/{type}/{method}/{code}', [OrderResultController::class, 'index'])->where([
                 'type' => '[a-zA-Z0-9]+',
                 'method' => '[a-zA-Z0-9]+',
@@ -1033,6 +1036,9 @@ class Route implements IInitialize
                 Router::delete('/pay-method/remove/{id}', [AdminPaymentMethodController::class, 'remove'])->where([
                     'id' => '[0-9]+',
                 ])->name('ajax.pay_method.remove');
+                Router::post('/pay-method/status/{id}', [AdminPaymentMethodController::class, 'pubStatusChange'])->where([
+                    'id' => '[0-9]+',
+                ])->name('ajax.pay_method.status');
 
                 /**
                  * send method route

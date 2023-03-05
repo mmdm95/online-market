@@ -356,6 +356,11 @@ class SteppedPriceController extends AbstractAdminController
 
                 $resourceHandler->data('تمام آیتم‌های قیمت پلکانی با موفقیت حذف شدند.');
             });
+            emitter()->addListener('remove.general.ajax:not_exists', function (IEvent $event, ResourceHandler $resourceHandler) {
+                $event->stopPropagation();
+
+                $resourceHandler->errorMessage('هیچ آیتمی برای حذف وجود ندارد');
+            });
 
             $handler = new GeneralAjaxRemoveHandler();
             $resourceHandler = $handler->handle(BaseModel::TBL_STEPPED_PRICES, null, 'product_code=:code', ['code' => $code], true);

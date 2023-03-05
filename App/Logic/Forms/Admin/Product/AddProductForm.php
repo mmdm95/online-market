@@ -249,9 +249,9 @@ class AddProductForm implements IPageForm
                         $validator
                             ->setStatus(false)
                             ->setError(
-                            'inp-add-product-discount-date.*',
-                            $validator->getFieldAlias('inp-add-product-discount-date.*') . ' ' . 'یک زمان وارد شده نامعتبر است.'
-                        );
+                                'inp-add-product-discount-date.*',
+                                $validator->getFieldAlias('inp-add-product-discount-date.*') . ' ' . 'یک زمان وارد شده نامعتبر است.'
+                            );
                     }
                 }
                 ++$counter;
@@ -340,7 +340,7 @@ class AddProductForm implements IPageForm
             $pub = input()->post('inp-add-product-status', '')->getValue();
             $availability = input()->post('inp-add-product-availability', '')->getValue();
             $special = input()->post('inp-add-product-special', '')->getValue();
-            $returnable = input()->post('inp-add-product-returnable', '')->getValue();
+//            $returnable = input()->post('inp-add-product-returnable', '')->getValue();
             $commenting = input()->post('inp-add-product-commenting', '')->getValue();
             $comingSoon = input()->post('inp-add-product-coming-soon', '')->getValue();
             $callForMore = input()->post('inp-add-product-call-for-more', '')->getValue();
@@ -381,7 +381,8 @@ class AddProductForm implements IPageForm
                 'publish' => is_value_checked($pub) ? DB_YES : DB_NO,
                 'is_special' => is_value_checked($special) ? DB_YES : DB_NO,
                 'is_available' => is_value_checked($availability) ? DB_YES : DB_NO,
-                'is_returnable' => is_value_checked($returnable) ? DB_YES : DB_NO,
+//                'is_returnable' => is_value_checked($returnable) ? DB_YES : DB_NO,
+                'is_returnable' => isDB_YES,
                 'allow_commenting' => is_value_checked($commenting) ? DB_YES : DB_NO,
                 'show_coming_soon' => is_value_checked($comingSoon) ? DB_YES : DB_NO,
                 'call_for_more' => is_value_checked($callForMore) ? DB_YES : DB_NO,

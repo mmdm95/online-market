@@ -20,7 +20,7 @@ $validator = form_validator();
 
                 <input type="hidden" name="csrf_token" value="<?= csrf_token(); ?>" data-ignored>
                 <div class="row">
-                    <div class="form-group col-lg-6">
+                    <div class="form-group col-lg-5">
                         <label>
                             <span class="text-danger">*</span>
                             ویژگی:
@@ -41,7 +41,7 @@ $validator = form_validator();
                             <?php endforeach; ?>
                         </select>
                     </div>
-                    <div class="form-group col-lg-6">
+                    <div class="form-group col-lg-5">
                         <label>
                             <span class="text-danger">*</span>
                             دسته‌بندی:
@@ -61,6 +61,16 @@ $validator = form_validator();
                                 </option>
                             <?php endforeach; ?>
                         </select>
+                    </div>
+                    <div class="form-group col-lg-2">
+                        <label>
+                            <span class="text-danger">*</span>
+                            اولویت:
+                        </label>
+                        <input type="text" class="form-control"
+                               placeholder="از نوع عددی"
+                               name="inp-add-product-priority"
+                               value="<?= $validator->setInput('inp-add-product-priority'); ?>">
                     </div>
                 </div>
                 <div class="text-right">
