@@ -709,8 +709,8 @@ $validator = form_validator();
             <!--                                    <label class="form-check-label">-->
             <!--                                        <input id="__rtStatus" type="checkbox" class="form-check-input-switchery"-->
             <!--                                               name="inp-edit-product-returnable"-->
-            <?= '';//$validator->setCheckbox('inp-edit-product-returnable', 'on') ?: (is_value_checked($product['is_returnable']) ? 'checked="checked"' : '');  ?>
-            >
+            <?= '';//$validator->setCheckbox('inp-edit-product-returnable', 'on') ?: (is_value_checked($product['is_returnable']) ? 'checked="checked"' : '');   ?>
+            <!--            >-->
             <!--                                    </label>-->
             <!--                                </div>-->
             <!--                            </div>-->
