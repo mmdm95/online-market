@@ -101,6 +101,11 @@
             shopCartItemsInfoTable,
             shopCartInfoTable,
             //-----
+            userCity,
+            //-----
+            inPersonDeliveryChk,
+            shouldCalcSendPrice = true,
+            //-----
             canSubmit = true;
 
         //-----
@@ -126,6 +131,10 @@
         shopCartTable = $('.shop_cart_table');
         shopCartItemsInfoTable = $('.shop-cart-items-info-table');
         shopCartInfoTable = $('.shop-cart-info-table');
+
+        userCity = $('select[name="inp-addr-city"]');
+
+        inPersonDeliveryChk = $('#inPersonDeliveryChk');
 
         function initializeItemQuantityChanger() {
             $('.plus').off('click').on('click', function () {
@@ -293,12 +302,12 @@
         });
 
         // when city changed, calculate send price and update side info table
-        $('select[name="inp-addr-city"]').on('change' + variables.namespace, function () {
+        userCity.on('change' + variables.namespace, function () {
             var checked, checkedProvince;
             checked = $(this).find('option:selected').val();
             checkedProvince = $('select[name="inp-addr-province"]').find('option:selected').val();
 
-            if (checked && checked != -1 && checkedProvince && checkedProvince != -1) {
+            if (shouldCalcSendPrice && checked && checked != -1 && checkedProvince && checkedProvince != -1) {
                 if (createLoader) {
                     createLoader = false;
                     loaderId = shop.showLoader();
@@ -319,6 +328,32 @@
                     createLoader = true;
                     shop.hideLoader(loaderId);
                 });
+            }
+        });
+
+        inPersonDeliveryChk.mSwitch({
+            onTurnOn: function (btn) {
+                btn.closest('.alert').addClass('alert-primary').removeClass('bg-light');
+                shouldCalcSendPrice = false;
+
+                if (createLoader) {
+                    createLoader = false;
+                    loaderId = shop.showLoader();
+                }
+                shop.request(variables.url.cart.removePostPrice, 'post', function () {
+                    loadNPlaceCartInfo();
+                    canSubmit = true;
+                    createLoader = true;
+                    shop.hideLoader(loaderId);
+                }, {}, false, function () {
+                    createLoader = true;
+                    shop.hideLoader(loaderId);
+                });
+            },
+            onTurnOff: function (btn) {
+                btn.closest('.alert').addClass('bg-light').removeClass('alert-primary');
+                shouldCalcSendPrice = true;
+                userCity.trigger('change' + variables.namespace);
             }
         });
 
