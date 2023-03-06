@@ -251,6 +251,8 @@ class CheckoutForm implements IPageForm
                     $totalDiscountedPrice += (float)$shipping;
                 }
 
+                $isInPlaceDelivery = session()->get(SESSION_APPLIED_IN_PlACE_DELIVERY);
+
                 $orderArr = [
                     'code' => $code,
                     'user_id' => $user['id'],
@@ -316,6 +318,7 @@ class CheckoutForm implements IPageForm
                     'send_status_title' => $badge['title'],
                     'send_status_color' => $badge['color'],
                     'ordered_at' => time(),
+                    'is_in_place_delivery' => is_value_checked($isInPlaceDelivery) ? DB_YES : DB_NO,
                     'invoice_status_changed_at' => time(),
                     'send_status_changed_at' => time(),
                 ]);

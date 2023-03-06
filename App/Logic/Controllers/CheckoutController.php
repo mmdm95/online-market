@@ -15,7 +15,11 @@ use App\Logic\Models\UserModel;
 use App\Logic\Utils\LogUtil;
 use App\Logic\Utils\PaymentUtil;
 use App\Logic\Utils\PostPriceUtil;
+use DI\DependencyException;
+use DI\NotFoundException;
+use Exception;
 use Jenssegers\Agent\Agent;
+use ReflectionException;
 use Sim\Auth\DBAuth;
 use Sim\Exceptions\ConfigManager\ConfigNotRegisteredException;
 use Sim\Exceptions\Mvc\Controller\ControllerException;
@@ -61,9 +65,9 @@ class CheckoutController extends AbstractHomeController
      * @throws IFileNotExistsException
      * @throws IInvalidVariableNameException
      * @throws PathNotRegisteredException
-     * @throws \DI\DependencyException
-     * @throws \DI\NotFoundException
-     * @throws \ReflectionException
+     * @throws DependencyException
+     * @throws NotFoundException
+     * @throws ReflectionException
      */
     public function checkout()
     {
@@ -87,17 +91,20 @@ class CheckoutController extends AbstractHomeController
             , 'u_addr.user_id=:uId', ['uId' => $user['id']]
         );
 
+        $inPersonDelivery = session()->get(SESSION_APPLIED_IN_PlACE_DELIVERY, 'no');
+
         $this->setLayout($this->main_layout)->setTemplate('view/main/order/checkout');
         return $this->render([
             'payment_methods' => $paymentMethods,
             'addresses' => $addresses,
+            'in_person_delivery' => $inPersonDelivery,
         ]);
     }
 
     /**
      * Issue a factor, reserve products and make connection to gateway
-     * @throws \DI\DependencyException
-     * @throws \DI\NotFoundException
+     * @throws DependencyException
+     * @throws NotFoundException
      */
     public function issuingFactorNConnectToGateway()
     {
@@ -226,6 +233,7 @@ class CheckoutController extends AbstractHomeController
                             // remove other traces
                             session()->remove(SESSION_APPLIED_COUPON_CODE);
                             session()->remove(SESSION_APPLIED_POST_PRICE);
+                            session()->remove(SESSION_APPLIED_IN_PlACE_DELIVERY);
 
                             $resourceHandler
                                 ->type(RESPONSE_TYPE_SUCCESS)
@@ -256,7 +264,7 @@ class CheckoutController extends AbstractHomeController
                     ->type(RESPONSE_TYPE_ERROR)
                     ->errorMessage('خطا در ارتباط با سرور، لطفا دوباره تلاش کنید.');
             }
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             LogUtil::logException($e, __LINE__, self::class);
             $resourceHandler
                 ->type(RESPONSE_TYPE_ERROR)
@@ -271,8 +279,8 @@ class CheckoutController extends AbstractHomeController
      *
      * @throws IFileNotExistsException
      * @throws IInvalidVariableNameException
-     * @throws \DI\DependencyException
-     * @throws \DI\NotFoundException
+     * @throws DependencyException
+     * @throws NotFoundException
      */
     public function calculateSendPrice()
     {
@@ -329,6 +337,7 @@ class CheckoutController extends AbstractHomeController
                         }
                     }
                     session()->set(SESSION_APPLIED_POST_PRICE, $price);
+                    session()->remove(SESSION_APPLIED_IN_PlACE_DELIVERY);
                     $resourceHandler
                         ->type(RESPONSE_TYPE_SUCCESS)
                         ->data('هزینه ارسال اعمال شد.');
@@ -343,7 +352,7 @@ class CheckoutController extends AbstractHomeController
                     ->type(RESPONSE_TYPE_ERROR)
                     ->errorMessage('خطا در ارتباط با سرور، لطفا دوباره تلاش کنید.');
             }
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             LogUtil::logException($e, __LINE__, self::class);
             $resourceHandler
                 ->type(RESPONSE_TYPE_ERROR)
@@ -354,8 +363,47 @@ class CheckoutController extends AbstractHomeController
     }
 
     /**
-     * @throws \DI\DependencyException
-     * @throws \DI\NotFoundException
+     * @return void
+     * @throws DependencyException
+     * @throws NotFoundException
+     */
+    public function removeSendPrice()
+    {
+        $resourceHandler = new ResourceHandler();
+
+        $this->setMiddleWare(AllowCheckoutMiddleware::class, [false]);
+        $this->middlewareResult();
+
+        try {
+            /**
+             * @var Agent $agent
+             */
+            $agent = container()->get(Agent::class);
+            if (!$agent->isRobot()) {
+                session()->remove(SESSION_APPLIED_POST_PRICE);
+                session()->set(SESSION_APPLIED_IN_PlACE_DELIVERY, 'yes');
+                $resourceHandler
+                    ->type(RESPONSE_TYPE_SUCCESS)
+                    ->data('هزینه ارسال حذف شد.');
+            } else {
+                response()->httpCode(403);
+                $resourceHandler
+                    ->type(RESPONSE_TYPE_ERROR)
+                    ->errorMessage('خطا در ارتباط با سرور، لطفا دوباره تلاش کنید.');
+            }
+        } catch (Exception $e) {
+            LogUtil::logException($e, __LINE__, self::class);
+            $resourceHandler
+                ->type(RESPONSE_TYPE_ERROR)
+                ->errorMessage('خطا در ارتباط با سرور، لطفا دوباره تلاش کنید.');
+        }
+
+        response()->json($resourceHandler->getReturnData());
+    }
+
+    /**
+     * @throws DependencyException
+     * @throws NotFoundException
      */
     private function removeIssuedFactor()
     {
