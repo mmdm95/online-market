@@ -567,7 +567,8 @@ $validator = form_validator();
             <!--                                    <label class="form-check-label">-->
             <!--                                        <input id="__rtStatus" type="checkbox" class="form-check-input-switchery"-->
             <!--                                               name="inp-add-product-returnable"-->
-            <?= '';//$validator->setCheckbox('inp-add-product-returnable', 'on', true);  ?>>
+            <?= '';//$validator->setCheckbox('inp-add-product-returnable', 'on', true);   ?>
+            <!--            >-->
             <!--                                    </label>-->
             <!--                                </div>-->
             <!--                            </div>-->
