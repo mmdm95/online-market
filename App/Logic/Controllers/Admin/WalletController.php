@@ -357,7 +357,6 @@ class WalletController extends AbstractAdminController implements IDatatableCont
                         'db_alias' => 'is_available',
                         'dt' => 'is_available',
                         'formatter' => function ($d, $row) {
-                            logger()->info(url('ajax.wallet.availability.status')->getRelativeUrl());
                             return $this->setTemplate('partial/admin/parser/status-changer')
                                 ->render([
                                     'status' => $d,

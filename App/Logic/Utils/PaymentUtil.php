@@ -413,7 +413,7 @@ class PaymentUtil
                             'code' => $newCode,
                         ])->getRelativeUrlTrimmed())
                     ->setAmount(($orderArr['final_price'] * 10))
-                    ->setRequestId((int)$orderArr['code']);
+                    ->setRequestId($orderArr['code']);
                 // events
                 $gateway->createRequestOkClosure(
                     function (
@@ -959,8 +959,13 @@ class PaymentUtil
                     $gatewayInfo['public_key']
                 );
                 $gateway
-                    ->handleResultNotOkClosure(function () use (&$res) {
-                        $res = [false, GATEWAY_INVALID_PARAMETERS_MESSAGE, null];
+                    ->handleResultNotOkClosure(function (IranKishHandlerProvider $resultProvider) use (&$res) {
+                        if ($resultProvider->getResponseCode() == 17) {
+                            $msg = 'تراکنش توسط کاربر لغو شد.';
+                        } else {
+                            $msg = GATEWAY_INVALID_PARAMETERS_MESSAGE;
+                        }
+                        $res = [false, $msg, null];
                     })->sendAdviceOkClosure(
                         function (
                             IEvent                       $event,

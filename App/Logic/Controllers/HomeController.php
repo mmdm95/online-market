@@ -9,6 +9,7 @@ use App\Logic\Models\CategoryModel;
 use App\Logic\Models\IndexPageModel;
 use App\Logic\Models\InstagramImagesModel;
 use App\Logic\Models\MenuModel;
+use App\Logic\Utils\LogUtil;
 use App\Logic\Utils\MenuUtil;
 use App\Logic\Utils\SliderUtil;
 use Aura\SqlQuery\Exception as AuraException;
