@@ -382,7 +382,7 @@ class AddProductForm implements IPageForm
                 'is_special' => is_value_checked($special) ? DB_YES : DB_NO,
                 'is_available' => is_value_checked($availability) ? DB_YES : DB_NO,
 //                'is_returnable' => is_value_checked($returnable) ? DB_YES : DB_NO,
-                'is_returnable' => isDB_YES,
+                'is_returnable' => DB_YES,
                 'allow_commenting' => is_value_checked($commenting) ? DB_YES : DB_NO,
                 'show_coming_soon' => is_value_checked($comingSoon) ? DB_YES : DB_NO,
                 'call_for_more' => is_value_checked($callForMore) ? DB_YES : DB_NO,
