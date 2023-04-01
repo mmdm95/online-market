@@ -249,7 +249,7 @@ class StaticPageController extends AbstractAdminController implements IDatatable
                         'formatter' => function ($d) {
                             return '<a style="direction: ltr;" target="__blank" href="' .
                                 url('home.pages', ['url' => $d]) .
-                                '">' .
+                                '" target="__blank">' .
                                 get_base_url() . ltrim(url('home.pages', ['url' => $d])->getRelativeUrlTrimmed(), '/') .
                                 '</a>';
                         }

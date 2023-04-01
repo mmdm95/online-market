@@ -44,7 +44,7 @@ class ReturnOrderRespondForm implements IPageForm
         $returnModel = container()->get(ReturnOrderModel::class);
 
         $id = session()->getFlash('curr_return_order_detail_id', null, false);
-        if (!empty($id) && $returnModel->getReturnOrdersCount('id=:id', ['id' => $id]) > 0) {
+        if (!empty($id) && $returnModel->getReturnOrdersCount('ro.id=:id', ['id' => $id]) > 0) {
             // description
             $validator
                 ->setFields('inp-return-order-respond')

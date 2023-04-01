@@ -137,9 +137,12 @@ class WalletCharge implements IPageForm
             $descId = input()->post('inp-charge-wallet-desc', 0)->getValue();
             $desc = $depositTypes->getFirst(['code', 'title'], 'id=:id', ['id' => $descId]);
 
-            if (0 >= $price || count($desc) == 0) {
+            if (count($desc) == 0) {
                 return false;
             }
+
+            $price = (int)$xss->xss_clean(trim($price));
+            $balancePhrase = $price > 0 ? 'balance+' . $price : 'balance-' . $price;
 
             return $walletModel->chargeWalletWithWalletId($id, [
                 'username' => $xss->xss_clean(trim($username)),
@@ -152,7 +155,7 @@ class WalletCharge implements IPageForm
                 'payer_id' => $auth->getCurrentUser()['id'] ?? null,
                 'deposit_at' => time(),
             ], [
-                'balance' => 'balance+' . (int)$xss->xss_clean(trim($price)),
+                'balance' => $balancePhrase,
             ]);
         } catch (\Exception $e) {
             return false;

@@ -21,7 +21,7 @@ use Sim\I18n\ISOLanguageCodes;
  *     1.2.5.0 instead of 1.2.5-a
  *     1.2.5.0.1 instead of 1.2.5-a.1 (I'm not sure)
  */
-defined("APP_VERSION") or define("APP_VERSION", "0.18.0");
+defined("APP_VERSION") or define("APP_VERSION", "0.18.1");
 
 /***************************************
  * You can add your constants here
@@ -281,8 +281,10 @@ defined("RETURN_ORDER_STATUS_RECEIVED") or define("RETURN_ORDER_STATUS_RECEIVED"
 defined("RETURN_ORDER_STATUS_MONEY_RETURNED") or define("RETURN_ORDER_STATUS_MONEY_RETURNED", 7);
 defined("RETURN_ORDER_STATUSES") or define("RETURN_ORDER_STATUSES", [
     RETURN_ORDER_STATUS_CHECKING => 'در حال بررسی',
+    RETURN_ORDER_STATUS_DENIED_BY_USER => 'لغو توسط کاربر',
     RETURN_ORDER_STATUS_ACCEPT => 'تایید شده',
     RETURN_ORDER_STATUS_DENIED => 'تایید نشده',
+    RETURN_ORDER_STATUS_SENDING => 'ارسال کالای مرجوعی',
     RETURN_ORDER_STATUS_RECEIVED => 'دریافت کالای مرجوعی',
     RETURN_ORDER_STATUS_MONEY_RETURNED => 'بازگشت مبلغ کالاها',
 ]);

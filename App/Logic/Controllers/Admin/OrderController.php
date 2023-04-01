@@ -18,6 +18,7 @@ use App\Logic\Utils\OrderUtil;
 use App\Logic\Utils\SMSUtil;
 use DI\DependencyException;
 use DI\NotFoundException;
+use Exception;
 use Jenssegers\Agent\Agent;
 use ReflectionException;
 use Sim\Auth\DBAuth;
@@ -43,8 +44,8 @@ class OrderController extends AbstractAdminController implements IDatatableContr
      * @throws IInvalidVariableNameException
      * @throws PathNotRegisteredException
      * @throws ReflectionException
-     * @throws \DI\DependencyException
-     * @throws \DI\NotFoundException
+     * @throws DependencyException
+     * @throws NotFoundException
      */
     public function view($status = null)
     {
@@ -169,8 +170,8 @@ class OrderController extends AbstractAdminController implements IDatatableContr
     /**
      * @param $id
      * @throws IDBException
-     * @throws \DI\DependencyException
-     * @throws \DI\NotFoundException
+     * @throws DependencyException
+     * @throws NotFoundException
      */
     public function getInfo($id)
     {
@@ -218,8 +219,8 @@ class OrderController extends AbstractAdminController implements IDatatableContr
      * @param array $_
      * @return void
      * @throws IDBException
-     * @throws \DI\DependencyException
-     * @throws \DI\NotFoundException
+     * @throws DependencyException
+     * @throws NotFoundException
      */
     public function getPaginatedDatatable(...$_): void
     {
@@ -268,7 +269,7 @@ class OrderController extends AbstractAdminController implements IDatatableContr
                             if (!empty($row['main_user_id'])) {
                                 return '<a href="' .
                                     url('admin.user.view', ['id' => $row['main_user_id']])->getRelativeUrl() .
-                                    '">' .
+                                    '" target="__blank">' .
                                     $d .
                                     '</a>';
                             }
@@ -283,7 +284,7 @@ class OrderController extends AbstractAdminController implements IDatatableContr
                             if (!empty($row['main_user_id'])) {
                                 return '<a href="' .
                                     url('admin.user.view', ['id' => $row['main_user_id']])->getRelativeUrl() .
-                                    '">' .
+                                    '" target="__blank">' .
                                     $d .
                                     '</a>';
                             }
@@ -379,11 +380,10 @@ class OrderController extends AbstractAdminController implements IDatatableContr
                     [
                         'dt' => 'operations',
                         'formatter' => function ($row) {
-                            $operations = $this->setTemplate('partial/admin/datatable/actions-order')
+                            return $this->setTemplate('partial/admin/datatable/actions-order')
                                 ->render([
                                     'row' => $row,
                                 ]);
-                            return $operations;
                         }
                     ],
                 ];
@@ -395,7 +395,7 @@ class OrderController extends AbstractAdminController implements IDatatableContr
                     'error' => 'خطا در ارتباط با سرور، لطفا دوباره تلاش کنید.',
                 ];
             }
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             LogUtil::logException($e, __LINE__, self::class);
             $response = [
                 'error' => 'خطا در ارتباط با سرور، لطفا دوباره تلاش کنید.',

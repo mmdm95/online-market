@@ -184,7 +184,7 @@ class SMSController extends AbstractAdminController
                             if (!empty($row['sent_by']) && !empty($row['user_id'])) {
                                 return '<a href="' .
                                     url('admin.user.view', ['id' => $row['user_id']])->getRelativeUrl() .
-                                    '">' .
+                                    '" target="__blank">' .
                                     $d .
                                     '</a>';
                             } elseif ($row['sender'] == SMS_LOG_SENDER_SYSTEM) {

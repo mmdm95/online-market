@@ -377,18 +377,19 @@ $authAdmin = auth_admin();
                                 </li>
                             </ul>
                         </li>
-                    <?php endif; ?>
 
-                    <li class="nav-item">
-                        <a href="<?= url('admin.return.order.view'); ?>" class="nav-link"
-                           data-popup="tooltip"
-                           data-original-title="سفارشات مرجوعی"
-                           data-boundary="window"
-                           data-placement="left">
-                            <i class="icon-backspace2"></i>
-                            <span>سفارشات مرجوعی</span>
-                        </a>
-                    </li>
+                        <li class="nav-item">
+                            <a href="<?= url('admin.return.order.view'); ?>"
+                               class="nav-link <?= url()->contains(url('admin.return.order.view', '')->getRelativeUrlTrimmed()) ? 'active' : ''; ?>"
+                               data-popup="tooltip"
+                               data-original-title="سفارشات مرجوعی"
+                               data-boundary="window"
+                               data-placement="left">
+                                <i class="icon-backspace2"></i>
+                                <span>سفارشات مرجوعی</span>
+                            </a>
+                        </li>
+                    <?php endif; ?>
                 <?php endif; ?>
 
                 <?php

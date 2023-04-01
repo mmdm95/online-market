@@ -91,7 +91,7 @@ class ReturnOrderController extends AbstractAdminController implements IDatatabl
             session()->setFlash('curr_return_order_detail_order_code', $returnOrder['order_code']);
 
             $formHandler = new GeneralFormHandler();
-            if (!is_null(input()->post('inp-return-order-status')->getValue())) {
+            if (!is_null(input()->post('return-order-status-btn')->getValue())) {
                 $data = $formHandler->handle(AdminReturnOrderStatusForm::class, 'return_order_status_handling');
 
                 emitter()->addListener('form.general:success', function (IEvent $event, $data) use ($returnOrder) {
@@ -113,9 +113,24 @@ class ReturnOrderController extends AbstractAdminController implements IDatatabl
                         // do nothing
                     }
                 });
-            } elseif (!is_null(input()->post('inp-return-order-respond')->getValue())) {
+            } elseif (!is_null(input()->post('return-order-respond-btn')->getValue())) {
                 $data = $formHandler->handle(AdminReturnOrderRespondForm::class, 'return_order_respond_handling');
             }
+
+            $returnOrder = $returnModel->getReturnOrders(
+                'ro.id=:id',
+                ['id' => $id],
+                ['ro.id DESC'],
+                1,
+                0,
+                [
+                    'ro.*',
+                    'u.id AS user_id',
+                    'u.username',
+                    'u.first_name AS user_first_name',
+                    'u.last_name AS user_last_name',
+                ]
+            )[0];
         }
 
         $returnOrderItems = $returnModel->getReturnOrderItems(
@@ -165,6 +180,7 @@ class ReturnOrderController extends AbstractAdminController implements IDatatabl
                     $returnModel = container()->get(ReturnOrderModel::class);
 
                     $cols[] = 'u.id AS main_user_id';
+                    $cols[] = 'o.id AS order_id';
 
                     $data = $returnModel->getReturnOrders($where, $bindValues, $order, $limit, $offset, $cols);
                     //-----
@@ -184,14 +200,28 @@ class ReturnOrderController extends AbstractAdminController implements IDatatabl
                             if (!empty($row['main_user_id'])) {
                                 return '<a href="' .
                                     url('admin.user.view', ['id' => $row['main_user_id']])->getRelativeUrl() .
-                                    '">' .
+                                    '" target="__blank">' .
                                     $d .
                                     '</a>';
                             }
                             return $d;
                         }
                     ],
-                    ['db' => 'ro.code', 'db_alias' => 'code', 'dt' => 'code'],
+                    [
+                        'db' => 'ro.code',
+                        'db_alias' => 'code',
+                        'dt' => 'code',
+                        'formatter' => function ($d, $row) {
+                            if (!empty($row['order_id'])) {
+                                return '<a href="' .
+                                    url('admin.order.detail', ['id' => $row['order_id']])->getRelativeUrl() .
+                                    '" target="__blank">' .
+                                    $d .
+                                    '</a>';
+                            }
+                            return $d;
+                        }
+                    ],
                     [
                         'dt' => 'count',
                         'formatter' => function ($row) {

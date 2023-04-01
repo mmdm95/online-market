@@ -44,11 +44,17 @@ class ReturnOrderStatusForm implements IPageForm
         $returnModel = container()->get(ReturnOrderModel::class);
 
         $id = session()->getFlash('curr_return_order_detail_id', null, false);
-        if (!empty($id) && $returnModel->getReturnOrdersCount('id=:id', ['id' => $id]) > 0) {
+        if (!empty($id) && $returnModel->getReturnOrdersCount('ro.id=:id', ['id' => $id]) > 0) {
             // status
             $validator
                 ->setFields('inp-return-order-status')
-                ->isIn(RETURN_ORDER_STATUSES, 'وضعیت انتخاب شده نامعتبر است.');
+                ->isIn(
+                    array_diff(
+                        array_keys(RETURN_ORDER_STATUSES),
+                        [RETURN_ORDER_STATUS_DENIED_BY_USER, RETURN_ORDER_STATUS_SENDING]
+                    ),
+                    'وضعیت انتخاب شده نامعتبر است.'
+                );
         } else {
             $validator
                 ->setStatus(false)

@@ -266,7 +266,7 @@ class ReportOrderController extends AbstractAdminController implements
                             if (!empty($row['main_user_id'])) {
                                 return '<a href="' .
                                     url('admin.user.view', ['id' => $row['main_user_id']])->getRelativeUrl() .
-                                    '">' .
+                                    '" target="__blank">' .
                                     $d .
                                     '</a>';
                             }
@@ -281,7 +281,7 @@ class ReportOrderController extends AbstractAdminController implements
                             if (!empty($row['main_user_id'])) {
                                 return '<a href="' .
                                     url('admin.user.view', ['id' => $row['main_user_id']])->getRelativeUrl() .
-                                    '">' .
+                                    '" target="__blank">' .
                                     $d .
                                     '</a>';
                             }
