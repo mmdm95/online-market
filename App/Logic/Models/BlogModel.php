@@ -20,6 +20,7 @@ class BlogModel extends BaseModel
      * @param array $order_by
      * @param int|null $limit
      * @param int $offset
+     * @param array $group_by
      * @return array
      */
     public function getBlog(
@@ -36,7 +37,8 @@ class BlogModel extends BaseModel
         array $bind_values = [],
         array $order_by = ['b.id DESC'],
         ?int $limit = null,
-        int $offset = 0
+        int $offset = 0,
+        array $group_by = ['b.id']
     ): array
     {
         $select = $this->connector->select();
@@ -45,7 +47,7 @@ class BlogModel extends BaseModel
             ->cols($columns)
             ->offset($offset)
             ->orderBy($order_by)
-            ->groupBy(['b.id']);
+            ->groupBy($group_by);
 
         try {
             $select
@@ -258,7 +260,7 @@ class BlogModel extends BaseModel
      */
     public function getBlogCount(?string $where = null, array $bindParams = []): int
     {
-        $res = $this->getBlog(['COUNT(DISTINCT(b.id)) AS count'], $where, $bindParams);
+        $res = $this->getBlog(['COUNT(DISTINCT(b.id)) AS count'], $where, $bindParams, [], null, 0, []);
         if (count($res)) {
             return (int)$res[0]['count'];
         }

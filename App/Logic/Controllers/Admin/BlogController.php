@@ -268,11 +268,10 @@ class BlogController extends AbstractAdminController implements IDatatableContro
                     [
                         'dt' => 'operations',
                         'formatter' => function ($row) {
-                            $operations = $this->setTemplate('partial/admin/datatable/actions-blog')
+                            return $this->setTemplate('partial/admin/datatable/actions-blog')
                                 ->render([
                                     'row' => $row,
                                 ]);
-                            return $operations;
                         }
                     ],
                 ];
