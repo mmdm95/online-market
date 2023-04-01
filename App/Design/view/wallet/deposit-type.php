@@ -5,7 +5,7 @@
         <?php load_partial('admin/card-header', ['header_title' => 'انواع تراکنش‌های کیف پول']); ?>
 
         <div class="card-body">
-            <div class="d-flex justify-content-between">
+            <div class="d-flex justify-content-between flex-lg-row flex-column">
                 <span>با استفاده از ستون عملیات می‌توانید اقدام به حذف و ویرایش انواع تراکنش‌ها کنید.</span>
 
                 <button type="button"

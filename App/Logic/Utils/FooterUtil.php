@@ -3,7 +3,6 @@
 namespace App\Logic\Utils;
 
 use Pecee\Http\Input\InputItem;
-use voku\helper\AntiXSS;
 
 class FooterUtil
 {
@@ -24,8 +23,8 @@ class FooterUtil
              * @var InputItem $name
              */
             foreach ($names as $k => $name) {
-                $title = $name->getValue();
-                if ('' != trim($title)) {
+                $t = $name->getValue();
+                if ('' != trim($t)) {
                     $link = $links[$k] ? $links[$k]->getValue() : '';
                     $priority = $priorities[$k] ? $priorities[$k]->getValue() : '';
 
@@ -33,7 +32,7 @@ class FooterUtil
                         $counter = (int)$priority;
                     }
                     $assembledLinks[$counter] = [
-                        'name' => $title,
+                        'name' => $t,
                         'link' => $link,
                     ];
                     $counter++;

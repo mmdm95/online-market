@@ -196,7 +196,7 @@ class ReportWalletDepositController extends AbstractAdminController implements
                             if (!empty($row['user_id'])) {
                                 return '<a href="' .
                                     url('admin.user.view', ['id' => $row['user_id']])->getRelativeUrl() .
-                                    '">' .
+                                    '" target="__blank">' .
                                     $d .
                                     '</a>';
                             }
@@ -220,7 +220,7 @@ class ReportWalletDepositController extends AbstractAdminController implements
                             if (!empty($row['payer_id'])) {
                                 return '<a href="' .
                                     url('admin.user.view', ['id' => $row['payer_id']])->getRelativeUrl() .
-                                    '">' .
+                                    '" target="__blank">' .
                                     $d .
                                     '</a>';
                             }

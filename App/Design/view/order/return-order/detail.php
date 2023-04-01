@@ -5,6 +5,7 @@ use Sim\Utils\StringUtil;
 
 $validator = form_validator();
 
+
 ?>
 
 <!-- Content area -->
@@ -33,7 +34,7 @@ $validator = form_validator();
                     </a>
                 </div>
                 <div class="col-md-8 mb-2">
-                    <form action="<?= url('admin.return.order.detail')->getRelativeUrlTrimmed(); ?>">
+                    <form action="<?= url('admin.return.order.detail')->getRelativeUrlTrimmed(); ?>" method="post">
                         <div class="form-group">
                             <label>وضعیت مرجوعی:</label>
                             <select data-placeholder="انتخاب وضعیت مرجوعی..."
@@ -43,6 +44,7 @@ $validator = form_validator();
                                 </option>
                                 <?php foreach (RETURN_ORDER_STATUSES as $status => $label): ?>
                                     <option value="<?= $status; ?>"
+                                        <?= ($status == RETURN_ORDER_STATUS_DENIED_BY_USER || $status == RETURN_ORDER_STATUS_SENDING) ? 'disabled' : ''; ?>
                                         <?= $status == $return_order['status'] ? 'selected="selected"' : ''; ?>>
                                         <?= $label; ?>
                                     </option>
@@ -59,7 +61,7 @@ $validator = form_validator();
                 </div>
 
                 <div class="col-12">
-                    <form action="<?= url('admin.return.order.detail')->getRelativeUrlTrimmed(); ?>">
+                    <form action="<?= url('admin.return.order.detail')->getRelativeUrlTrimmed(); ?>" method="post">
                         <div class="form-group">
                             <label>پاسخ به کاربر:</label>
                             <textarea class="form-control form-control-min-height maxlength-placeholder"
@@ -152,7 +154,7 @@ $validator = form_validator();
 
     <!-- Invoice template -->
     <div class="card">
-        <?php load_partial('admin/card-header', ['header_title' => 'آیتم‌های مورد درخواست جهت مرجوعی']); ?>
+        <?php load_partial('admin/card-header', ['header_title' => 'آیتم‌های مرجوعی']); ?>
 
         <div class="table-responsive">
             <table class="table">

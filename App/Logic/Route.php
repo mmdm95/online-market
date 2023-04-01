@@ -458,7 +458,7 @@ class Route implements IInitialize
                 /**
                  * Return Order Route
                  */
-                Router::get('/return-order/detail/{id}', [AdminReturnOrderController::class, 'detail'])->where([
+                Router::form('/return-order/detail/{id}', [AdminReturnOrderController::class, 'detail'])->where([
                     'id' => '[0-9]+',
                 ])->name('admin.return.order.detail');
                 Router::get('/return-order/view', [AdminReturnOrderController::class, 'view'])->name('admin.return.order.view');

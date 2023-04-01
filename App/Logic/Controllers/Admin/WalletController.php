@@ -105,10 +105,10 @@ class WalletController extends AbstractAdminController implements IDatatableCont
                 '-' .
                 ((!empty($currUser['first_name']) || !empty($currUser['last_name']))
                     ? (isset($currUser['id'])
-                        ? '<a href="' . url('admin.user.view', ['id' => $currUser['id']])->getRelativeUrl() . '">' . trim($currUser['first_name'] . ' ' . $currUser['last_name']) . '</a>'
+                        ? '<a href="' . url('admin.user.view', ['id' => $currUser['id']])->getRelativeUrl() . '" target="__blank">' . trim($currUser['first_name'] . ' ' . $currUser['last_name']) . '</a>'
                         : trim($currUser['first_name'] . ' ' . $currUser['last_name']))
                     : (isset($currUser['id'])
-                        ? '<a href="' . url('admin.user.view', ['id' => $currUser['id']])->getRelativeUrl() . '">' . $currUser['username'] . '</a>'
+                        ? '<a href="' . url('admin.user.view', ['id' => $currUser['id']])->getRelativeUrl() . '" target="__blank">' . $currUser['username'] . '</a>'
                         : $wallet['username'])),
         ]);
     }
@@ -175,10 +175,10 @@ class WalletController extends AbstractAdminController implements IDatatableCont
                 '-' .
                 ((!empty($currUser['first_name']) || !empty($currUser['last_name']))
                     ? (isset($currUser['id'])
-                        ? '<a href="' . url('admin.user.view', ['id' => $currUser['id']])->getRelativeUrl() . '">' . trim($currUser['first_name'] . ' ' . $currUser['last_name']) . '</a>'
+                        ? '<a href="' . url('admin.user.view', ['id' => $currUser['id']])->getRelativeUrl() . '" target="__blank">' . trim($currUser['first_name'] . ' ' . $currUser['last_name']) . '</a>'
                         : trim($currUser['first_name'] . ' ' . $currUser['last_name']))
                     : (isset($currUser['id'])
-                        ? '<a href="' . url('admin.user.view', ['id' => $currUser['id']])->getRelativeUrl() . '">' . $currUser['username'] . '</a>'
+                        ? '<a href="' . url('admin.user.view', ['id' => $currUser['id']])->getRelativeUrl() . '" target="__blank">' . $currUser['username'] . '</a>'
                         : $wallet['username'])),
         ]));
     }
@@ -337,7 +337,7 @@ class WalletController extends AbstractAdminController implements IDatatableCont
                             if (!empty($row['user_id'])) {
                                 return '<a href="' .
                                     url('admin.user.view', ['id' => $row['user_id']])->getRelativeUrl() .
-                                    '">' .
+                                    '" target="__blank">' .
                                     $d .
                                     '</a>';
                             }
@@ -472,7 +472,7 @@ class WalletController extends AbstractAdminController implements IDatatableCont
                             if (!empty($row['user_id'])) {
                                 return '<a href="' .
                                     url('admin.user.view', ['id' => $row['user_id']])->getRelativeUrl() .
-                                    '">' .
+                                    '" target="__blank">' .
                                     $d .
                                     '</a>';
                             }

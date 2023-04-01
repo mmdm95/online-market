@@ -22,13 +22,13 @@ class SettingFooterForm implements IPageForm
          */
         $footerUtil = container()->get(FooterUtil::class);
         // assemble footer section 1
-        $footerSection1Title = input()->post('inp-setting-sec1-title') ?: '';
+        $footerSection1Title = input()->post('inp-setting-sec1-title')->getValue() ?: '';
         $footerSection1Names = input()->post('inp-setting-sec1-name') ?: [];
         $footerSection1Links = input()->post('inp-setting-sec1-link') ?: [];
         $footerSection1Priorities = input()->post('inp-setting-sec1-priority') ?: [];
         $section1 = $footerUtil->assembleFooterLinks($footerSection1Title, $footerSection1Names, $footerSection1Links, $footerSection1Priorities);
         // assemble footer section 2
-        $footerSection2Title = input()->post('inp-setting-sec2-title') ?: '';
+        $footerSection2Title = input()->post('inp-setting-sec2-title')->getValue() ?: '';
         $footerSection2Names = input()->post('inp-setting-sec2-name') ?: [];
         $footerSection2Links = input()->post('inp-setting-sec2-link') ?: [];
         $footerSection2Priorities = input()->post('inp-setting-sec2-priority') ?: [];
