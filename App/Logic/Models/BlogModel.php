@@ -24,7 +24,7 @@ class BlogModel extends BaseModel
      * @return array
      */
     public function getBlog(
-        array $columns = [
+        array   $columns = [
             'b.*',
             'bc.name AS category_name',
             'bc.slug AS category_slug',
@@ -34,11 +34,11 @@ class BlogModel extends BaseModel
             'u.id AS creator_id'
         ],
         ?string $where = null,
-        array $bind_values = [],
-        array $order_by = ['b.id DESC'],
-        ?int $limit = null,
-        int $offset = 0,
-        array $group_by = ['b.id']
+        array   $bind_values = [],
+        array   $order_by = ['b.id DESC'],
+        ?int    $limit = null,
+        int     $offset = 0,
+        array   $group_by = ['b.id']
     ): array
     {
         $select = $this->connector->select();
@@ -87,8 +87,8 @@ class BlogModel extends BaseModel
      */
     public function getFirstBlog(
         ?string $where = null,
-        array $bind_values = [],
-        array $columns = [
+        array   $bind_values = [],
+        array   $columns = [
             'b.*',
             'bc.id AS category_id',
             'bc.name AS category_name',
@@ -119,12 +119,12 @@ class BlogModel extends BaseModel
      */
     public function getLimitedBlog(
         ?string $where = null,
-        array $bind_values = [],
-        ?int $limit = null,
-        int $offset = 0,
-        bool $with_category = false,
-        bool $with_users = false,
-        array $columns = [
+        array   $bind_values = [],
+        ?int    $limit = null,
+        int     $offset = 0,
+        bool    $with_category = false,
+        bool    $with_users = false,
+        array   $columns = [
             'b.id',
             'b.title',
             'b.slug',
@@ -137,7 +137,8 @@ class BlogModel extends BaseModel
         $select = $this->connector->select();
         $select
             ->from($this->table . ' AS b')
-            ->cols($columns);
+            ->cols($columns)
+            ->orderBy(['id DESC']);
         if (!empty($where)) {
             $select->where($where)->bindValues($bind_values);
         }
@@ -179,9 +180,9 @@ class BlogModel extends BaseModel
      */
     public function getLimitedBlogCount(
         ?string $where = null,
-        array $bind_values = [],
-        bool $with_category = false,
-        bool $with_users = false): int
+        array   $bind_values = [],
+        bool    $with_category = false,
+        bool    $with_users = false): int
     {
         $res = $this->getLimitedBlog($where, $bind_values, null, 0, $with_category, $with_users, ['COUNT(*) AS count']);
         if (count($res)) {
@@ -200,10 +201,10 @@ class BlogModel extends BaseModel
      */
     public function getSiblings(
         ?string $where = null,
-        array $bind_values = [],
-        ?int $limit = null,
-        array $order_by = ['id DESC'],
-        array $columns = ['id', 'slug', 'title']
+        array   $bind_values = [],
+        ?int    $limit = null,
+        array   $order_by = ['id DESC'],
+        array   $columns = ['id', 'slug', 'title']
     ): array
     {
         return $this->get($columns, $where, $bind_values, $order_by, $limit);
@@ -221,14 +222,14 @@ class BlogModel extends BaseModel
         $bindValues = [];
         $keywords = $info['keywords'] ?? [];
         foreach ($keywords as $k => $keyword) {
-            $where .= " OR b.title LIKE :title{$k}";
-            $where .= " OR b.fa_title LIKE :fa_title{$k}";
-            $where .= " OR b.keywords LIKE :keywords{$k}";
-            $where .= " OR b.abstract LIKE :abs{$k}";
-            $bindValues["title{$k}"] = '%' . $keyword . '%';
-            $bindValues["fa_title{$k}"] = '%' . $keyword . '%';
-            $bindValues["keywords{$k}"] = '%' . $keyword . '%';
-            $bindValues["abs{$k}"] = '%' . $keyword . '%';
+            $where .= " OR b.title LIKE :title" . $k;
+            $where .= " OR b.fa_title LIKE :fa_title" . $k;
+            $where .= " OR b.keywords LIKE :keywords" . $k;
+            $where .= " OR b.abstract LIKE :abs" . $k;
+            $bindValues["title" . $k] = '%' . $keyword . '%';
+            $bindValues["fa_title" . $k] = '%' . $keyword . '%';
+            $bindValues["keywords" . $k] = '%' . $keyword . '%';
+            $bindValues["abs" . $k] = '%' . $keyword . '%';
         }
         $where = trim($where, ' OR');
 
