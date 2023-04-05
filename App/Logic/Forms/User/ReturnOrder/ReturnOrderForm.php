@@ -124,10 +124,7 @@ class ReturnOrderForm implements IPageForm
          * @var AntiXSS $xss
          */
         $xss = container()->get(AntiXSS::class);
-        /**
-         * @var DBAuth $auth
-         */
-        $auth = container()->get('auth_admin');
+        $auth = auth_home();
 
         try {
             $orderCode = session()->getFlash('return-order-submit-code', null);
