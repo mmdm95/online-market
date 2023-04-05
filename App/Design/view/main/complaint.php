@@ -34,8 +34,8 @@ $userInfo = get_current_authenticated_user(auth_home());
                                            value="<?= $validator->setInput('inp-complaint-name', $userInfo['first_name'] ?? ''); ?>">
                                 </div>
                                 <div class="form-group col-md-6 ltr">
-                                    <input placeholder="ایمیل را وارد کنید" class="form-control text-left"
-                                           name="inp-complaint-email" type="text"
+                                    <input placeholder="ایمیل را وارد کنید *" class="form-control text-left"
+                                           name="inp-complaint-email" type="text" required
                                            value="<?= $validator->setInput('inp-complaint-email', $userInfo['email'] ?? ''); ?>">
                                 </div>
                                 <div class="form-group col-md-6">

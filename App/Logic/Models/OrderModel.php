@@ -575,12 +575,18 @@ class OrderModel extends BaseModel
 
         $this->db->beginTransaction();
 
-        $order = $this->getFirst(['code', 'coupon_id', 'coupon_code', 'is_product_returned_to_stock'], 'id=:id', ['id' => $orderId]);
+        $order = $this->getFirst([
+            'code', 'coupon_id', 'coupon_code', 'is_product_returned_to_stock', 'payment_status',
+        ], 'id=:id', ['id' => $orderId]);
 
         $res = true;
         $couponRes = true;
 
-        if ($isReturnOrderItemsBadge && $order['is_product_returned_to_stock'] == DB_NO) {
+        if (
+            $isReturnOrderItemsBadge &&
+            $order['is_product_returned_to_stock'] == DB_NO &&
+            $order['payment_status'] == PAYMENT_STATUS_FAILED
+        ) {
             $items = $this->getOrderItems(['product_code', 'product_count'], 'order_code=:code', ['code' => $order['code']]);
             foreach ($items as $item) {
                 /**
