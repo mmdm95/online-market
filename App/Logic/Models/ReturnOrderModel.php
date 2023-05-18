@@ -236,6 +236,10 @@ class ReturnOrderModel extends BaseModel
                 ->cols([
                     'is_accepted' => DB_YES,
                     'accepted_at' => time(),
+                ])
+                ->where('return_code=:code')
+                ->bindValues([
+                    'code' => $code,
                 ]);
             $stmt = $this->db->prepare($update->getStatement());
             $res2 = $stmt->execute($update->getBindValues());
@@ -250,6 +254,10 @@ class ReturnOrderModel extends BaseModel
                 ->table(self::TBL_ORDER_ITEMS)
                 ->cols([
                     'is_returned' => DB_YES,
+                ])
+                ->where('order_code=:code')
+                ->bindValues([
+                    'code' => $orderCode,
                 ]);
             $stmt = $this->db->prepare($update->getStatement());
             $res3 = $stmt->execute($update->getBindValues());
