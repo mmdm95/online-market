@@ -32,7 +32,8 @@ class SliderUtil
                 'pa.show_coming_soon', 'pa.call_for_more',
             ])
             ->where('pa.publish=:pub')
-            ->bindValue('pub', DB_YES);
+            ->bindValue('pub', DB_YES)
+            ->orderBy(['pa.stock_count DESC', 'pa.product_availability DESC', 'pa.is_available DESC', 'pa.product_id DESC']);
 
         $info['limit'] = isset($info['limit']) && (int)$info['limit'] > 0 ? (int)$info['limit'] : 4;
         switch ($info['type']) {

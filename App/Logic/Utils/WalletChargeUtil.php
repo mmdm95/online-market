@@ -13,6 +13,7 @@ use Sim\Auth\DBAuth;
 use Sim\Event\Interfaces\IEvent;
 use Sim\Payment\Factories\BehPardakht;
 use Sim\Payment\Factories\IDPay;
+use Sim\Payment\Factories\IranKish;
 use Sim\Payment\Factories\Mabna;
 use Sim\Payment\Factories\Sadad;
 use Sim\Payment\Factories\TAP\TapPayment;
@@ -27,6 +28,10 @@ use Sim\Payment\Providers\IDPay\IDPayAdviceResultProvider;
 use Sim\Payment\Providers\IDPay\IDPayHandlerProvider;
 use Sim\Payment\Providers\IDPay\IDPayRequestProvider;
 use Sim\Payment\Providers\IDPay\IDPayRequestResultProvider;
+use Sim\Payment\Providers\IranKish\IranKishAdviceResultProvider;
+use Sim\Payment\Providers\IranKish\IranKishHandlerProvider;
+use Sim\Payment\Providers\IranKish\IranKishRequestProvider;
+use Sim\Payment\Providers\IranKish\IranKishRequestResultProvider;
 use Sim\Payment\Providers\Mabna\MabnaAdviceResultProvider;
 use Sim\Payment\Providers\Mabna\MabnaHandlerProvider;
 use Sim\Payment\Providers\Mabna\MabnaRequestProvider;
@@ -378,6 +383,59 @@ class WalletChargeUtil
                     function (IEvent $event, $code, $msg) use (&$res) {
                         $res = false;
                         self::logConnectionError(METHOD_TYPE_GATEWAY_TAP, $code, $msg);
+                    }
+                );
+                //
+                $gateway->createRequest($provider);
+                break;
+            case METHOD_TYPE_GATEWAY_IRAN_KISH:
+                /**
+                 * @var IranKish $gateway
+                 */
+                // $terminal, $password, $acceptorId, $publicKey
+                $gateway = PaymentFactory::instance(
+                    PaymentFactory::GATEWAY_IRAN_KISH,
+                    $gatewayInfo['terminal'],
+                    $gatewayInfo['password'],
+                    $gatewayInfo['acceptor_id'],
+                    $gatewayInfo['public_key']
+                );
+                // provider
+                $provider = new IranKishRequestProvider();
+                $provider
+                    ->setRevertUrl(rtrim(get_base_url(), '/') . url('user.wallet.finish', [
+                            'type' => METHOD_RESULT_TYPE_IRAN_KISH,
+                            'method' => $gatewayCode,
+                            'code' => $newCode,
+                        ])->getRelativeUrlTrimmed())
+                    ->setAmount(($walletArr['deposit_price'] * 10))
+                    ->setRequestId((int)$walletArr['order_code']);
+                // events
+                $gateway->createRequestOkClosure(
+                    function (
+                        IEvent                        $event,
+                        IranKishRequestResultProvider $result
+                    ) use ($auth, $gatewayModel, $walletArr, $newCode, &$gatewayRes) {
+                        // store gateway info to store all order things at once
+                        $gatewayRes = $result;
+                        $gatewayModel->insert([
+                            'code' => $newCode,
+                            'order_code' => $walletArr['order_code'],
+                            'user_id' => $auth->getCurrentUser()['id'] ?? 0,
+                            'price' => $walletArr['deposit_price'],
+                            'is_success' => DB_NO,
+                            'method_type' => METHOD_TYPE_GATEWAY_IRAN_KISH,
+                            'in_step' => PAYMENT_GATEWAY_FLOW_STATUS_CREATE_REQUEST,
+                            'issue_date' => time(),
+                            'extra_info' => json_encode([
+                                'result' => $result->getParameters(),
+                            ]),
+                        ]);
+                    }
+                )->createRequestNotOkClosure(
+                    function (IEvent $event, $code, $msg) use (&$res) {
+                        $res = false;
+                        self::logConnectionError(METHOD_TYPE_GATEWAY_IRAN_KISH, $code, $msg);
                     }
                 );
                 //
@@ -855,6 +913,72 @@ class WalletChargeUtil
                             ], 'code=:code AND is_success=:suc', ['code' => $gatewayCode, 'suc' => DB_NO]);
 
                             $res = [false, GATEWAY_ERROR_MESSAGE, $adviceProvider->getRRN('')];
+                        }
+                    )->sendAdvice();
+                break;
+            case METHOD_RESULT_TYPE_IRAN_KISH:
+                /**
+                 * @var IranKish $gateway
+                 */
+                // $terminal, $password, $acceptorId, $publicKey
+                $gateway = PaymentFactory::instance(
+                    PaymentFactory::GATEWAY_IRAN_KISH,
+                    $gatewayInfo['terminal'],
+                    $gatewayInfo['password'],
+                    $gatewayInfo['acceptor_id'],
+                    $gatewayInfo['public_key']
+                );
+                $gateway
+                    ->handleResultNotOkClosure(function (IranKishHandlerProvider $resultProvider) use (&$res) {
+                        if ($resultProvider->getResponseCode() == 17) {
+                            $msg = 'تراکنش توسط کاربر لغو شد.';
+                        } else {
+                            $msg = GATEWAY_INVALID_PARAMETERS_MESSAGE;
+                        }
+                        $res = [false, $msg, null];
+                    })->sendAdviceOkClosure(
+                        function (
+                            IEvent                       $event,
+                            IranKishAdviceResultProvider $adviceProvider,
+                            IranKishHandlerProvider      $resultProvider
+                        ) use ($gatewayModel, $walletModel, $walletOrder, $gatewayCode, $flow, &$res) {
+                            $gatewayModel->update([
+                                'payment_code' => $adviceProvider->getResultSystemTraceAuditNumber(''),
+                                'status' => $adviceProvider->getResponseCode(),
+                                'msg' => $adviceProvider->getDescription(),
+                                'is_success' => DB_YES,
+                                'in_step' => PAYMENT_GATEWAY_FLOW_STATUS_ADVICE,
+                                'payment_date' => time(),
+                                'extra_info' => json_encode([
+                                    'result' => $resultProvider->getParameters(),
+                                    'advice' => $adviceProvider->getParameters(),
+                                ]),
+                            ], 'code=:code', ['code' => $gatewayCode]);
+                            $walletModel->increaseBalance($walletOrder['username'], $walletOrder['deposit_price']);
+
+                            $res = [true, GATEWAY_SUCCESS_MESSAGE, $adviceProvider->getResultSystemTraceAuditNumber('')];
+                        }
+                    )->sendAdviceNotOkClosure(
+                        function (
+                            IEvent                       $event,
+                                                         $code,
+                                                         $msg,
+                            IranKishAdviceResultProvider $adviceProvider,
+                            IranKishHandlerProvider      $resultProvider
+                        ) use ($gatewayModel, $gatewayCode, &$res) {
+                            $gatewayModel->update([
+                                'payment_code' => $adviceProvider->getResultSystemTraceAuditNumber(''),
+                                'status' => $code,
+                                'msg' => $msg,
+                                'in_step' => PAYMENT_GATEWAY_FLOW_STATUS_HANDLE_RESULT,
+                                'payment_date' => time(),
+                                'extra_info' => json_encode([
+                                    'result' => $resultProvider->getParameters(),
+                                    'advice' => $adviceProvider->getParameters(),
+                                ]),
+                            ], 'code=:code AND is_success=:suc', ['code' => $gatewayCode, 'suc' => DB_NO]);
+
+                            $res = [false, GATEWAY_ERROR_MESSAGE, $adviceProvider->getResultSystemTraceAuditNumber('')];
                         }
                     )->sendAdvice();
                 break;

@@ -24,13 +24,20 @@
                     <span class="price_symbole">تومان</span>
                 </del>
                 <div class="on_sale">
-                    <?= $product['festival_discount']; ?>
                     <span>
-                        ٪
                         <?php if (isset($product['festival_discount'])): ?>
+                            ٪
                             <?= local_number($product['festival_discount']); ?>
                         <?php else: ?>
-                            <?= local_number(get_percentage($product['discounted_price'], $product['price'])); ?>
+                            <?php
+                            $percentage = get_percentage($product['discounted_price'], $product['price']);
+                            ?>
+                            <?php if ($percentage < 1): ?>
+                                کمتر از ۱ درصد
+                            <?php else: ?>
+                                ٪
+                                <?= local_number($percentage); ?>
+                            <?php endif; ?>
                         <?php endif; ?>
                          تخفیف
                     </span>
@@ -43,7 +50,7 @@
         ?>
         <?php if (!empty($discountExpire)): ?>
             <h5 class="countdown_time d-flex text-info alert alert-info" countdown
-                 data-date="<?= date('Y-m-d H:i:s', $discountExpire); ?>">
+                data-date="<?= date('Y-m-d H:i:s', $discountExpire); ?>">
                 <div class="col">
                     <span data-days>0</span>
                     <small class="text-info">روز</small>

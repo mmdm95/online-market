@@ -111,6 +111,7 @@ class ProductModel extends BaseModel
             ->cols($columns)
             ->offset($offset)
             ->orderBy($order_by)
+            ->orderBy(['pa.stock_count DESC', 'pa.product_availability DESC', 'pa.is_available DESC', 'pa.product_id DESC'])
             ->groupBy($group_by);
 
         if (!empty($where)) {
@@ -921,6 +922,7 @@ class ProductModel extends BaseModel
             ->from(self::TBL_PRODUCT_ADVANCED . ' AS pa')
             ->cols($columns)
             ->offset($offset)
+            ->orderBy(['pa.stock_count DESC', 'pa.product_availability DESC', 'pa.is_available DESC', 'pa.product_id DESC'])
             ->orderBy($order_by)
             ->groupBy($group_by);
 

@@ -292,6 +292,7 @@ class OrderModel extends BaseModel
         $select
             ->from(self::TBL_ORDER_ITEMS . ' AS oi')
             ->cols($columns)
+            ->orderBy(['pa.stock_count DESC', 'pa.product_availability DESC', 'pa.is_available DESC', 'pa.product_id DESC'])
             ->groupBy(['pa.product_id']);
 
         try {
