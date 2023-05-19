@@ -77,4 +77,23 @@ return [
             ],
         ],
     ],
+    'view/main/user/wallet/charge' => [
+        'title' => title_concat(\config()->get('settings.title.value'), 'نتیجه شارژ کیف پول'),
+        'common' => [
+            'default',
+            'default-changeable',
+        ],
+        'sub_title' => 'نتیجه شارژ کیف پول',
+        'breadcrumb' => [
+            [
+                'url' => url('home.index')->getRelativeUrl(),
+                'text' => 'خانه',
+                'is_active' => false,
+            ],
+            [
+                'text' => 'نتیجه شارژ کیف پول',
+                'is_active' => true,
+            ],
+        ],
+    ],
 ];
