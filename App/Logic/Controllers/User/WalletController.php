@@ -21,6 +21,7 @@ use Sim\Exceptions\Mvc\Controller\ControllerException;
 use Sim\Exceptions\PathManager\PathNotRegisteredException;
 use Sim\Interfaces\IFileNotExistsException;
 use Sim\Interfaces\IInvalidVariableNameException;
+use Sim\Payment\Providers\IranKish\IranKishRequestResultProvider;
 use Sim\Payment\Providers\Sadad\SadadRequestResultProvider;
 use Sim\Payment\Providers\TAP\Payment\TapRequestResultProvider;
 use Sim\SMS\Exceptions\SMSException;
@@ -82,60 +83,6 @@ class WalletController extends AbstractUserController
     }
 
     /**
-     * @param $type
-     * @param $method
-     * @param $code
-     * @return string
-     * @throws ConfigNotRegisteredException
-     * @throws ControllerException
-     * @throws IFileNotExistsException
-     * @throws IInvalidVariableNameException
-     * @throws PathNotRegisteredException
-     * @throws DependencyException
-     * @throws NotFoundException
-     * @throws ReflectionException
-     */
-    public function chargeResult($type, $method, $code)
-    {
-        $this->setLayout($this->main_layout)->setTemplate('view/main/user/wallet/charge');
-
-        [$res, $msg, $paymentCode] = WalletChargeUtil::getResultProvider($type, $method, $code);
-
-        if ($res) {
-            /**
-             * @var WalletFlowModel $walletFlowModel
-             */
-            $walletFlowModel = container()->get(WalletFlowModel::class);
-            $info = $walletFlowModel->getFirstUserAndWalletInfoByCode($code);
-            $username = $info['username'] ?? null;
-            $walletCode = $info['order_code'] ?? null;
-            $balance = $info['balance'] ?? null;
-            $depositPrice = $info['deposit_price'] ?? 0;
-            if (!is_null($username) && !is_null($balance)) {
-                // send success wallet charge sms
-                $body = replaced_sms_body(SMS_TYPE_WALLET_CHARGE, [
-                    SMS_REPLACEMENTS['mobile'] => $username,
-                    SMS_REPLACEMENTS['balance'] => local_number(number_format($balance)) . ' تومان',
-                ]);
-                try {
-                    $smsRes = SMSUtil::send([$username], $body);
-                    SMSUtil::logSMS([$username], $body, $smsRes, SMS_LOG_TYPE_WALLET_CHARGE, SMS_LOG_SENDER_SYSTEM);
-                } catch (DependencyException|NotFoundException|SMSException $e) {
-                    // do nothing
-                }
-            }
-        }
-
-        return $this->render([
-            'result' => $res,
-            'message' => $msg,
-            'wallet_code' => $walletCode ?? null,
-            'payment_code' => $paymentCode,
-            'price' => $depositPrice ?? 0,
-        ]);
-    }
-
-    /**
      * @return void
      */
     public function chargeCheck()
@@ -178,7 +125,7 @@ class WalletController extends AbstractUserController
                 // store to flash session to retrieve in form store
                 session()->setFlash(SESSION_GATEWAY_CHARGE_RECORD, $gatewayMethod);
 
-                // issue a factor for order
+                // issue a factor for wallet interaction
                 $formHandler = new GeneralAjaxFormHandler();
                 $resourceHandler = $formHandler
                     ->handle(WalletCharge::class);
@@ -203,6 +150,7 @@ class WalletController extends AbstractUserController
                                 METHOD_TYPE_GATEWAY_ZARINPAL,
                                 METHOD_TYPE_GATEWAY_SADAD,
                                 METHOD_TYPE_GATEWAY_TAP,
+                                METHOD_TYPE_GATEWAY_IRAN_KISH,
                             ]
                         )
                     ) {
@@ -211,11 +159,13 @@ class WalletController extends AbstractUserController
                         $url = '#';
                         $inputs = [];
                         $redirect = false;
-
-                        // TODO: add other gateway cases and create inputs according to them
-                        // ...
+                        $isMultipart = false;
 
                         switch ((int)$gatewayMethod['method_type']) {
+                            case METHOD_TYPE_WALLET:
+                                $url = $gatewayInfo['url'];
+                                $redirect = true;
+                                break;
                             case METHOD_TYPE_GATEWAY_SADAD:
                             case METHOD_TYPE_GATEWAY_TAP:
                                 /**
@@ -223,6 +173,19 @@ class WalletController extends AbstractUserController
                                  */
                                 $url = $gatewayInfo->getUrl();
                                 $redirect = true;
+                                break;
+                            case METHOD_TYPE_GATEWAY_IRAN_KISH:
+                                /**
+                                 * @var IranKishRequestResultProvider $gatewayInfo
+                                 */
+                                $inputs = [
+                                    [
+                                        'name' => 'tokenIdentity',
+                                        'value' => $gatewayInfo->getToken(),
+                                    ],
+                                ];
+                                $url = $gatewayInfo->getUrl();
+                                $isMultipart = true;
                                 break;
                             default:
                                 $resourceHandler
@@ -242,6 +205,7 @@ class WalletController extends AbstractUserController
                                     'redirect' => $redirect,
                                     'url' => $url,
                                     'inputs' => $inputs,
+                                    'multipart_form' => $isMultipart,
                                 ]);
                         } else {
                             $this->removeWalletChargeFlow();

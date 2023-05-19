@@ -38,16 +38,16 @@ return [
         ],
         'css' => [
             'top' => [
-                e(
-                    '<link href="' .
-                    'https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900&display=swap' .
-                    '" rel="stylesheet" type="text/css">'
-                ),
-                e(
-                    '<link href="' .
-                    'https://fonts.googleapis.com/css?family=Poppins:200,300,400,500,600,700,800,900&display=swap' .
-                    '" rel="stylesheet" type="text/css">'
-                ),
+//                e(
+//                    '<link href="' .
+//                    'https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900&display=swap' .
+//                    '" rel="stylesheet" type="text/css">'
+//                ),
+//                e(
+//                    '<link href="' .
+//                    'https://fonts.googleapis.com/css?family=Poppins:200,300,400,500,600,700,800,900&display=swap' .
+//                    '" rel="stylesheet" type="text/css">'
+//                ),
                 e(
                     '<link href="' .
                     asset_path('css/main.css') .

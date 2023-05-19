@@ -50,7 +50,7 @@
 
         //-----
         constraints = {
-            checkoutCheck: {
+            chargeCheck: {
                 price: variables.validation.constraints.chargeCheck.price,
             },
         };
@@ -66,7 +66,7 @@
             }
 
             if (canSubmit) {
-                shop.request(variables.url.wallet.charge.check, 'post', function () {
+                shop.request(variables.url.walletCharge.check, 'post', function () {
                     if (this.type !== variables.toasts.types.success) {
                         shop.toasts.toast(this.data, {
                             type: variables.toasts.types.warning,
@@ -85,8 +85,9 @@
                         } else {
                             // create a new form and submit it with hidden inputs
                             var frm = $('<form method="post" action="' +
-                                data.url +
-                                '" style="display: none; position: absolute; top: -9999px; left: -9999px; visibility: hidden; opacity: 0; border: 0; background: transparent;" />');
+                                data.url + '" ' +
+                                ((data.multipart_form || false) ? 'enctype="multipart/form-data"' : '') +
+                                ' style="display: none; position: absolute; top: -9999px; left: -9999px; visibility: hidden; opacity: 0; border: 0; background: transparent;" />');
                             for (var i = 0; i < data.inputs.length; ++i) {
                                 frm.append($('<input type="hidden" value="' + data.inputs[i].value + '" name="' + data.inputs[i].name + '">'));
                             }

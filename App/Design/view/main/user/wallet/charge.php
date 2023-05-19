@@ -1,12 +1,13 @@
-<div class="dashboard_content">
-    <div class="card">
-        <div class="card-header">
-            <h3>نتیجه شارژ کیف پول</h3>
-        </div>
-        <div class="card-body">
+<!-- START MAIN CONTENT -->
+<div class="main_content">
+
+    <!-- START SECTION SHOP -->
+    <div class="section">
+        <div class="custom-container container">
             <div class="row justify-content-center">
                 <div class="col-md-8">
-                    <div class="text-center">
+                    <div class="text-center order_complete">
+
                         <?php if ($result): ?>
                             <i class="fas fa-check-circle text-success"></i>
                             <div class="heading_s1">
@@ -26,6 +27,7 @@
                                 <small>تومان</small>
                             </p>
                         <?php endif; ?>
+
                         <?php if ($wallet_code): ?>
                             <p>
                                 کد شارژ کیف پول:
@@ -40,9 +42,20 @@
                         <?php endif; ?>
 
                         <p><?= $message; ?></p>
+
+                        <a href="<?= url('home.index')->getRelativeUrl(); ?>" class="btn btn-dark">
+                            بازگشت به خانه
+                        </a>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+    <!-- END SECTION SHOP -->
+
+    <!-- START SECTION SUBSCRIBE NEWSLETTER -->
+    <?php load_partial('main/newsletter'); ?>
+    <!-- START SECTION SUBSCRIBE NEWSLETTER -->
+
 </div>
+<!-- END MAIN CONTENT -->

@@ -118,11 +118,19 @@
                         </del>
                         <div class="on_sale">
                             <span>
-                                ٪
                                 <?php if (isset($item['festival_discount'])): ?>
+                                    ٪
                                     <?= local_number($item['festival_discount']); ?>
                                 <?php else: ?>
-                                    <?= local_number(get_percentage($item['discounted_price'], $item['price'])); ?>
+                                    <?php
+                                    $percentage = get_percentage($item['discounted_price'], $item['price']);
+                                    ?>
+                                    <?php if ($percentage < 1): ?>
+                                        کمتر از ۱ درصد
+                                    <?php else: ?>
+                                        ٪
+                                        <?= local_number($percentage); ?>
+                                    <?php endif; ?>
                                 <?php endif; ?>
                                  تخفیف
                             </span>

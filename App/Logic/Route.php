@@ -677,12 +677,12 @@ class Route implements IInitialize
                  * wallet routes
                  */
                 Router::form('/wallet', [UserWalletController::class, 'index'])->name('user.wallet');
-                Router::form('/wallet/finish/{type}/{method}/{code}', [UserWalletController::class, 'chargeResult'])->where([
-                    'type' => '[a-zA-Z0-9]+',
-                    'method' => '[a-zA-Z0-9]+',
-                    'code' => '[a-zA-Z0-9]+',
-                ])->name('user.wallet.finish');
             });
+            Router::form('/wallet/finish/{type}/{method}/{code}', [OrderResultController::class, 'chargeResult'])->where([
+                'type' => '[a-zA-Z0-9]+',
+                'method' => '[a-zA-Z0-9]+',
+                'code' => '[a-zA-Z0-9]+',
+            ])->name('user.wallet.finish');
 
             //==========================
             // colleague routes
