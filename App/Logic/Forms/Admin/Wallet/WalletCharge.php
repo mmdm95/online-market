@@ -142,7 +142,7 @@ class WalletCharge implements IPageForm
             }
 
             $price = (int)$xss->xss_clean(trim($price));
-            $balancePhrase = $price > 0 ? 'balance+' . $price : 'balance-' . $price;
+            $balancePhrase = $price > 0 ? 'balance+' . $price : 'balance-' . abs($price);
 
             return $walletModel->chargeWalletWithWalletId($id, [
                 'username' => $xss->xss_clean(trim($username)),
