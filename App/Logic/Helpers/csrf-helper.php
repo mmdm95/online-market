@@ -1,6 +1,7 @@
 <?php
 
 use App\Logic\Adapters\SessionTokenProvider;
+use Sim\Cookie\Exceptions\CookieException;
 
 function csrf_token_generate()
 {
@@ -10,9 +11,14 @@ function csrf_token_generate()
      * @var SessionTokenProvider $provider
      */
     $provider = container()->get(SessionTokenProvider::class);
-    if (empty($csrfCookie)) {
-        $provider->refresh();
-    } else {
-        $provider->getToken();
+    try {
+        if (empty($csrfCookie)) {
+            $provider->refresh();
+        } else {
+            $provider->getToken();
+        }
+    } catch (CookieException $e) {
+        // do nothing
+        // ...
     }
 }

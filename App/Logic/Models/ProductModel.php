@@ -89,7 +89,7 @@ class ProductModel extends BaseModel
     public function getLimitedProduct(
         ?string $where = null,
         array   $bind_values = [],
-        array   $order_by = ['pa.stock_count DESC', 'pa.product_availability DESC', 'pa.is_available DESC', 'pa.product_id DESC'],
+        array   $order_by = ['pa.product_availability DESC', 'pa.is_available DESC', 'pa.stock_count DESC', 'pa.product_id DESC'],
         ?int    $limit = null,
         int     $offset = 0,
         array   $group_by = ['pa.product_id'],
@@ -105,13 +105,22 @@ class ProductModel extends BaseModel
         ]
     ): array
     {
+        $order_by = array_unique(
+            $order_by +
+            [
+                'pa.product_availability DESC',
+                'pa.is_available DESC',
+                'pa.stock_count DESC',
+                'pa.product_id DESC'
+            ]
+        );
+
         $select = $this->connector->select();
         $select
             ->from(self::TBL_PRODUCT_ADVANCED . ' AS pa')
             ->cols($columns)
             ->offset($offset)
             ->orderBy($order_by)
-            ->orderBy(['pa.stock_count DESC', 'pa.product_availability DESC', 'pa.is_available DESC', 'pa.product_id DESC'])
             ->groupBy($group_by);
 
         if (!empty($where)) {
@@ -917,14 +926,20 @@ class ProductModel extends BaseModel
         ]
     ): array
     {
+        $order_by = array_unique(
+            $order_by +
+            [
+                'pa.product_availability DESC',
+                'pa.is_available DESC',
+                'pa.stock_count DESC'
+            ]
+        );
         $select = $this->connector->select();
         $select
             ->from(self::TBL_PRODUCT_ADVANCED . ' AS pa')
             ->cols($columns)
             ->offset($offset)
-            ->orderBy(['pa.stock_count DESC', 'pa.product_availability DESC', 'pa.is_available DESC', 'pa.product_id DESC'])
-            ->orderBy($order_by)
-            ->groupBy($group_by);
+            ->orderBy($order_by);
 
         try {
             $select
@@ -958,7 +973,13 @@ class ProductModel extends BaseModel
             $select->limit($limit);
         }
 
-        return $this->db->fetchAll($select->getStatement(), $select->getBindValues());
+        $selectGroup = $this->connector->select();
+        $selectGroup
+            ->fromSubSelect($select, 'pa')
+            ->cols(['pa.*'])
+            ->groupBy($group_by);
+
+        return $this->db->fetchAll($selectGroup->getStatement(), $selectGroup->getBindValues());
     }
 
     /**

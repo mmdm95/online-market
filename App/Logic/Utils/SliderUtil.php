@@ -32,8 +32,7 @@ class SliderUtil
                 'pa.show_coming_soon', 'pa.call_for_more',
             ])
             ->where('pa.publish=:pub')
-            ->bindValue('pub', DB_YES)
-            ->orderBy(['pa.stock_count DESC', 'pa.product_availability DESC', 'pa.is_available DESC', 'pa.product_id DESC']);
+            ->bindValue('pub', DB_YES);
 
         $info['limit'] = isset($info['limit']) && (int)$info['limit'] > 0 ? (int)$info['limit'] : 4;
         switch ($info['type']) {
@@ -76,6 +75,7 @@ class SliderUtil
         }
 
         $select
+            ->orderBy(['pa.product_availability DESC', 'pa.is_available DESC', 'pa.stock_count DESC'])
             ->limit($info['limit'])
             ->orderBy(['pa.title DESC'])
             ->groupBy(['pa.product_id']);
@@ -125,7 +125,7 @@ class SliderUtil
             ->where('pa.festival_expire>=:expire')
             ->bindValue('expire', time())
             ->limit(15)
-            ->orderBy(['pa.stock_count DESC', 'pa.product_availability DESC', 'pa.is_available DESC', 'pa.product_id DESC'])
+            ->orderBy(['pa.product_availability DESC', 'pa.is_available DESC', 'pa.stock_count DESC', 'pa.product_id DESC'])
             ->groupBy(['pa.product_id']);
 
         return $model->get($select);

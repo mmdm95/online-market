@@ -7,13 +7,13 @@ use App\Logic\Models\DepositTypeModel;
 use App\Logic\Models\UserModel;
 use App\Logic\Models\WalletFlowModel;
 use App\Logic\Models\WalletModel;
+use App\Logic\Utils\WalletChargeUtil;
 use App\Logic\Validations\ExtendedValidator;
 use Sim\Auth\DBAuth;
 use Sim\Exceptions\ConfigManager\ConfigNotRegisteredException;
 use Sim\Form\Exceptions\FormException;
 use Sim\Interfaces\IFileNotExistsException;
 use Sim\Interfaces\IInvalidVariableNameException;
-use Sim\Utils\StringUtil;
 use voku\helper\AntiXSS;
 
 class WalletCharge implements IPageForm
@@ -116,8 +116,10 @@ class WalletCharge implements IPageForm
                 return false;
             }
 
+            $code = WalletChargeUtil::getUniqueWalletOrderCode();
+
             $arr = [
-                'order_code' => StringUtil::uniqidReal(12),
+                'order_code' => $code,
                 'username' => $username,
                 'deposit_price' => $xss->xss_clean(trim($price)),
                 'deposit_type_code' => DEPOSIT_TYPE_CHARGE,

@@ -251,23 +251,23 @@ class ProductUtil
             }
         }
         // order by parameter
-        $orderBy = ['pa.product_id DESC'];
+        $orderBy = [];
         $order = input()->get('sort', null);
         if (!is_array($order)) {
             $order = $order->getValue();
             if (is_numeric($order)) {
                 switch ($order) {
                     case PRODUCT_ORDERING_CHEAPEST: // cheapest
-                        $orderBy = ['pa.price ASC', 'pa.product_id DESC'];
+                        $orderBy = ['pa.price ASC'];
                         break;
                     case PRODUCT_ORDERING_MOST_EXPENSIVE: // most expensive
-                        $orderBy = ['pa.price DESC', 'pa.product_id DESC'];
+                        $orderBy = ['pa.price DESC'];
                         break;
                     case PRODUCT_ORDERING_MOST_VIEWED: // most view
-                        $orderBy = ['pa.view_count DESC', 'pa.product_id DESC'];
+                        $orderBy = ['pa.view_count DESC'];
                         break;
                     case PRODUCT_ORDERING_MOST_DISCOUNT: // most discount
-                        $orderBy = ['CASE WHEN (pa.discount_until IS NULL OR pa.discount_until >= UNIX_TIMESTAMP()) AND pa.stock_count > 0 THEN 0 ELSE 1 END', '((pa.price - pa.discounted_price) / pa.price * 100) DESC', 'pa.discounted_price ASC', 'pa.product_id DESC'];
+                        $orderBy = ['CASE WHEN (pa.discount_until IS NULL OR pa.discount_until >= UNIX_TIMESTAMP()) AND pa.stock_count > 0 THEN 0 ELSE 1 END', '((pa.price - pa.discounted_price) / pa.price * 100) DESC', 'pa.discounted_price ASC'];
                         break;
                 }
             }
@@ -330,7 +330,7 @@ class ProductUtil
                 'pub' => DB_YES,
                 'del' => DB_NO,
             ]),
-            ['pa.product_availability DESC', 'pa.is_available DESC', 'pa.product_id DESC'],
+            ['pa.product_availability DESC', 'pa.is_available DESC', 'pa.stock_count DESC', 'pa.product_id DESC'],
             null,
             0,
             ['pa.product_id'],
