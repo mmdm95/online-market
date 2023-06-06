@@ -3,10 +3,7 @@
 namespace App\Logic\Utils;
 
 use App\Logic\Models\GatewayModel;
-use App\Logic\Models\OrderModel;
-use App\Logic\Models\OrderReserveModel;
 use App\Logic\Models\PaymentMethodModel;
-use App\Logic\Models\UserModel;
 use App\Logic\Models\WalletFlowModel;
 use App\Logic\Models\WalletModel;
 use Sim\Auth\DBAuth;
@@ -985,6 +982,25 @@ class WalletChargeUtil
         }
 
         return $res;
+    }
+
+    /**
+     * @param int $length
+     * @return string
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
+     */
+    public static function getUniqueWalletOrderCode(int $length = 18): string
+    {
+        /**
+         * @var WalletFlowModel $flowModel
+         */
+        $flowModel = container()->get(WalletFlowModel::class);
+        do {
+            $uniqueStr = StringUtil::randomString($length, StringUtil::RS_NUMBER, ['0']);
+
+        } while ($flowModel->count('order_code=:code', ['code' => $uniqueStr]));
+        return $uniqueStr;
     }
 
     /**

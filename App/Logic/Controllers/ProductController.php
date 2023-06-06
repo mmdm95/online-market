@@ -7,10 +7,8 @@ use App\Logic\Handlers\ResourceHandler;
 use App\Logic\Middlewares\Logic\NeedLoginResponseMiddleware;
 use App\Logic\Models\BaseModel;
 use App\Logic\Models\CategoryModel;
-use App\Logic\Models\CommentModel;
 use App\Logic\Models\FestivalModel;
 use App\Logic\Models\Model;
-use App\Logic\Models\ProductAttributeModel;
 use App\Logic\Models\ProductModel;
 use App\Logic\Utils\ProductAttributeUtil;
 use App\Logic\Utils\ProductUtil;
@@ -22,7 +20,6 @@ use Sim\Exceptions\Mvc\Controller\ControllerException;
 use Sim\Exceptions\PathManager\PathNotRegisteredException;
 use Sim\Interfaces\IFileNotExistsException;
 use Sim\Interfaces\IInvalidVariableNameException;
-use Sim\Utils\ArrayUtil;
 
 class ProductController extends AbstractHomeController
 {
@@ -157,7 +154,7 @@ class ProductController extends AbstractHomeController
         $brands = $productModel->getLimitedProduct(
             $globalWhere,
             $globalBindValues,
-            ['pa.stock_count DESC', 'pa.product_availability DESC', 'pa.is_available DESC', 'pa.product_id DESC'],
+            ['pa.product_availability DESC', 'pa.is_available DESC', 'pa.stock_count DESC', 'pa.product_id DESC'],
             null,
             0,
             ['pa.product_id'],
@@ -168,7 +165,7 @@ class ProductController extends AbstractHomeController
         $colors = $productModel->getLimitedProduct(
             $globalWhere,
             $globalBindValues,
-            ['pa.stock_count DESC', 'pa.product_availability DESC', 'pa.is_available DESC', 'pa.product_id DESC'],
+            ['pa.product_availability DESC', 'pa.is_available DESC', 'pa.stock_count DESC', 'pa.product_id DESC'],
             null,
             0,
             ['pa.product_id'],
@@ -179,7 +176,7 @@ class ProductController extends AbstractHomeController
         $sizesNModels = $productModel->getLimitedProduct(
             $globalWhere,
             $globalBindValues,
-            ['pa.stock_count DESC', 'pa.product_availability DESC', 'pa.is_available DESC', 'pa.product_id DESC'],
+            ['pa.product_availability DESC', 'pa.is_available DESC', 'pa.stock_count DESC', 'pa.product_id DESC'],
             null,
             0,
             ['pa.product_id'],
@@ -264,7 +261,7 @@ class ProductController extends AbstractHomeController
                 'pub' => DB_YES,
                 'del' => DB_YES,
             ],
-            ['pa.stock_count DESC', 'pa.product_availability DESC', 'pa.is_available DESC', 'pa.product_id DESC'],
+            [],
             1,
             0,
             [],
@@ -297,7 +294,8 @@ class ProductController extends AbstractHomeController
             ->from(BaseModel::TBL_PRODUCT_PROPERTY)
             ->cols(['code', 'color_hex', 'color_name', 'size', 'guarantee'])
             ->where('product_id=:p_id')
-            ->bindValue('p_id', $product['product_id']);
+            ->bindValue('p_id', $product['product_id'])
+            ->orderBy(['is_available DESC', 'stock_count DESC']);
         $colorsNSizes = $model->get($select);
 
         if (!count($colorsNSizes)) {

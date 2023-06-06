@@ -138,7 +138,7 @@ class BlogModel extends BaseModel
         $select
             ->from($this->table . ' AS b')
             ->cols($columns)
-            ->orderBy(['id DESC']);
+            ->orderBy(['b.id DESC']);
         if (!empty($where)) {
             $select->where($where)->bindValues($bind_values);
         }

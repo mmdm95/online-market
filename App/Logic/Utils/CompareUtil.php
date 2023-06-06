@@ -92,7 +92,7 @@ class CompareUtil
             'items' => $productModel->getLimitedProduct(
                 $where,
                 $bindValues,
-                ['pa.stock_count DESC', 'pa.product_availability DESC', 'pa.is_available DESC', 'pa.product_id DESC'],
+                ['pa.product_availability DESC', 'pa.is_available DESC', 'pa.stock_count DESC', 'pa.product_id DESC'],
                 $limit,
                 $offset,
                 ['pa.product_id'],
