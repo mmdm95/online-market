@@ -935,11 +935,23 @@ class ProductModel extends BaseModel
             ]
         );
         $select = $this->connector->select();
+
+
         $select
-            ->from(self::TBL_PRODUCT_ADVANCED . ' AS pa')
+            ->fromRaw(
+                '(' .
+                'WITH pa AS ( ' .
+                'SELECT *, ROW_NUMBER() OVER (PARTITION BY product_id ORDER BY product_availability DESC, is_available DESC, stock_count DESC) AS rn ' .
+                'FROM ' . self::TBL_PRODUCT_ADVANCED . ')' . "\n" .
+                'SELECT * ' .
+                'FROM pa ' .
+                'WHERE rn=1' .
+                ') AS pa'
+            )
             ->cols($columns)
             ->offset($offset)
-            ->orderBy($order_by);
+            ->orderBy($order_by)
+            ->groupBy($group_by);
 
         try {
             $select
@@ -973,13 +985,7 @@ class ProductModel extends BaseModel
             $select->limit($limit);
         }
 
-        $selectGroup = $this->connector->select();
-        $selectGroup
-            ->fromSubSelect($select, 'pa')
-            ->cols(['pa.*'])
-            ->groupBy($group_by);
-
-        return $this->db->fetchAll($selectGroup->getStatement(), $selectGroup->getBindValues());
+        return $this->db->fetchAll($select->getStatement(), $select->getBindValues());
     }
 
     /**
