@@ -1244,8 +1244,22 @@
         padding-top: 15px;
     }
 
+    #Additional-info table tr {
+        display: -ms-flexbox;
+        display: flex;
+        flex-flow: column;
+        margin-bottom: 1.675rem;
+        background: transparent !important;
+    }
+
     #Additional-info table td:first-child {
-        width: 35%;
+        min-width: 45%;
+        margin-bottom: 0.3rem;
+    }
+
+    #Additional-info table td, #Additional-info table th {
+        margin: 0;
+        border-radius: 0;
     }
 
     .product_heaader_right {
