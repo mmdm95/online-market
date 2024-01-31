@@ -422,6 +422,11 @@ class OrderModel extends BaseModel
          */
         $model = container()->get(Model::class);
 
+        // unset unwanted order properties
+        unset($order['method_code']);
+        unset($order['method_title']);
+        unset($order['method_type']);
+
         // issue a factor by inserting to orders table
         $res = $this->insert($order);
         //-----
@@ -448,8 +453,11 @@ class OrderModel extends BaseModel
                     'unit_title' => $item['unit_title'],
                     'color' => $item['color_hex'],
                     'color_name' => $item['color_name'],
+                    'show_color' => $item['show_color'],
+                    'is_patterned_color' => $item['is_patterned_color'],
                     'size' => $item['size'],
                     'guarantee' => $item['guarantee'],
+                    'separate_consignment' => is_value_checked($item['separate_consignment']) ? DB_YES : DB_NO,
                     'is_returnable' => is_value_checked($item['is_returnable']) ? DB_YES : DB_NO,
                 ]);
 
@@ -471,11 +479,6 @@ class OrderModel extends BaseModel
         }
         //-----
 
-        if (!$res || !$res2 || !$res4) {
-            $this->db->rollBack();
-            return false;
-        }
-
         /**
          * @var OrderReserveModel $reserveModel
          */
@@ -487,7 +490,7 @@ class OrderModel extends BaseModel
             'expire_at' => time() + RESERVE_MAX_TIME,
         ]);
 
-        if (!$res3) {
+        if (!$res || !$res2 || !$res3 || !$res4) {
             $this->db->rollBack();
             return false;
         }

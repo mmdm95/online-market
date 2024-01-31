@@ -216,4 +216,25 @@ class CommentModel extends BaseModel
 
         return $this->db->fetchAll($select->getStatement(), $select->getBindValues());
     }
+
+    /**
+     * Use [c for comments], [p for products], [u for users]
+     *
+     * @param string|null $where
+     * @param array $bind_values
+     * @param array|null $groupBy
+     * @return int
+     */
+    public function getCommentsSummaryAllInfoCount(
+        ?string $where = null,
+        array   $bind_values = [],
+        ?array  $groupBy = null
+    ): int
+    {
+        $res = $this->getCommentsSummaryAllInfo($where, $bind_values, null, 0, [], $groupBy, ['COUNT(*) AS count']);
+        if (count($res)) {
+            return (int)$res[0]['count'];
+        }
+        return 0;
+    }
 }

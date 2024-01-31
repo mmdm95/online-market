@@ -650,6 +650,7 @@ class FakeData
             ROLE_DEVELOPER => [
                 'user',
                 'pay_method',
+                'send_method',
                 'color',
                 'brand',
                 'category',
@@ -679,6 +680,7 @@ class FakeData
             ROLE_SUPER_USER => [
                 'user',
                 'pay_method',
+                'send_method',
                 'color',
                 'brand',
                 'category',
@@ -707,6 +709,7 @@ class FakeData
             ],
             ROLE_ADMIN => [
                 'pay_method',
+                'send_method',
                 'color',
                 'brand',
                 'category',
@@ -793,6 +796,47 @@ class FakeData
                 }
             }
         }
+
+        //--------------------------------------------------------
+        // To create a resource and add its morph table records,
+        // use below code :)
+        //--------------------------------------------------------
+//        $auth->addResources([
+//            [
+//                'name' => 'send_method',
+//                'description' => 'روش ارسال',
+//            ],
+//        ]);
+//        $roles = $auth->getRoles();
+//        $roles = ArrayUtil::arrayGroupBy('name', $roles);
+//        $resources = $auth->getResources();
+//        $resources = ArrayUtil::arrayGroupBy('name', $resources);
+//        $permissions = [
+//            IAuth::PERMISSION_CREATE,
+//            IAuth::PERMISSION_READ,
+//            IAuth::PERMISSION_UPDATE,
+//            IAuth::PERMISSION_DELETE
+//        ];
+//        $model = container()->get(Model::class);
+//        foreach ([ROLE_DEVELOPER, ROLE_SUPER_USER, ROLE_ADMIN] as $role) {
+//            $roleId = (int)$roles[$role][0]['id'];
+//            $resId = (int)$resources['send_method'][0]['id'];
+//            /**
+//             * @var Insert $insert
+//             */
+//            foreach ($permissions as $permission) {
+//                $insert = $model->insert();
+//                $insert
+//                    ->into('role_res_perm')
+//                    ->cols([
+//                        'role_id' => $roleId,
+//                        'resource_id' => $resId,
+//                        'perm_id' => $permission,
+//                    ]);
+//                $model->execute($insert);
+//            }
+//        }
+        //--------------------------------------------------------
     }
 
     /**

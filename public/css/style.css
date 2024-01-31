@@ -39,14 +39,14 @@ Version      : 1.0
 *===================================*/
 
 :root {
-    --custom-primary-color--: #ff0a54;
-    --custom-primary-color-r--: 255;
-    --custom-primary-color-g--: 10;
-    --custom-primary-color-b--: 84;
-    /*--custom-primary-color--: #52b9cc;*/
-    /*--custom-primary-color-r--: 82;*/
-    /*--custom-primary-color-g--: 185;*/
-    /*--custom-primary-color-b--: 204;*/
+    /*--custom-primary-color--: #ff0a54;*/
+    /*--custom-primary-color-r--: 255;*/
+    /*--custom-primary-color-g--: 10;*/
+    /*--custom-primary-color-b--: 84;*/
+    --custom-primary-color--: #52b9cc;
+    --custom-primary-color-r--: 82;
+    --custom-primary-color-g--: 185;
+    --custom-primary-color-b--: 204;
 }
 
 html, body {
@@ -9034,6 +9034,10 @@ body.switch-open {
   MY CUSTOM ELEMENT(S)
 *===================================*/
 
+.icon-half-x {
+    font-size: 1.5rem !important;
+}
+
 #Description {
     line-height: 2.5;
 }
@@ -9114,6 +9118,17 @@ body.switch-open {
     left: 15px;
     top: 15px;
     z-index: 1;
+}
+
+/* CUSTOM RADIO CHECK STYLE */
+
+.active-real-or-legal-radio {
+    border: 2px solid var(--primary);
+    border-radius: .5rem;
+    padding: .25rem .5rem;
+    color: var(--primary);
+    background-color: rgba(33, 150, 243, 0.1);
+    cursor: default !important;
 }
 
 /* DROPDOWN STYLE */

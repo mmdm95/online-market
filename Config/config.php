@@ -6,6 +6,7 @@ return [
      * Acceptable values are [MODE_DEVELOPMENT],[MODE_PRODUCTION]
      */
     'mode' => MODE_DEVELOPMENT,
+//    'mode' => MODE_PRODUCTION,
 
     /**
      * In general, the errors are show in framework's formatting

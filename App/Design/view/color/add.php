@@ -48,6 +48,27 @@ $validator = form_validator();
                             </label>
                         </div>
                     </div>
+
+                    <div class="form-group col-md-6">
+                        <div class="form-check form-check-switchery form-check-switchery-double mt-2">
+                            <label class="form-check-label">
+                                نمایش در صفحه جزئیات
+                                <input type="checkbox" class="form-check-input-switchery"
+                                       name="inp-add-color-show-color"
+                                    <?= $validator->setCheckbox('inp-add-color-show-color', 'on', true); ?>>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <div class="form-check form-check-switchery form-check-switchery-double mt-2">
+                            <label class="form-check-label">
+                                رنگ طرحدار می‌باشد
+                                <input type="checkbox" class="form-check-input-switchery"
+                                       name="inp-add-color-is-patterned-color"
+                                    <?= $validator->setCheckbox('inp-add-color-is-patterned-color', 'on', false); ?>>
+                            </label>
+                        </div>
+                    </div>
                 </div>
                 <div class="text-right">
                     <button type="submit" class="btn btn-primary">

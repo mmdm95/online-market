@@ -592,6 +592,17 @@ class ReportQBUtil
                 'operators' => self::$boolOperation,
             ],
             [
+                'id' => 'oa.separate_consignment',
+                'label' => 'مرسوله مجزا',
+                'type' => 'integer',
+                'input' => 'select',
+                'values' => [
+                    0 => 'بله',
+                    1 => 'خیر',
+                ],
+                'operators' => self::$boolOperation,
+            ],
+            [
                 'id' => 'oa.keywords',
                 'label' => 'کلمات کلیدی',
                 'type' => 'string',

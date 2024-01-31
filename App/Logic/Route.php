@@ -4,12 +4,14 @@ namespace App\Logic;
 
 use App\Logic\Controllers\SitemapController;
 use App\Logic\Middlewares\UserHasInfoMiddleware;
-use App\Logic\Controllers\Admin\{BlogController as AdminBlogController,
+use App\Logic\Controllers\Admin\{AddressCompanyController as AdminAddressCompanyController,
+    BlogController as AdminBlogController,
     BlogCategoryController as AdminBlogCategoryController,
     BrandController as AdminBrandController,
     CategoryController as AdminCategoryController,
     CategoryImageController as AdminCategoryImageController,
     ColorController as AdminColorController,
+    CommentAllController as AdminCommentAllController,
     CommentController as AdminCommentController,
     ComplaintsController as AdminComplaintsController,
     ContactUsController as AdminContactUsController,
@@ -53,12 +55,14 @@ use App\Logic\Controllers\CheckoutController;
 use App\Logic\Controllers\OrderResultController;
 use App\Logic\Controllers\RecoverPassController;
 use App\Logic\Controllers\User\{AddressController as UserAddressController,
+    MyAddressCompanyController as UserMyAddressCompanyController,
+    MyAddressController as UserMyAddressController,
     CommentController as UserCommentController,
     HomeController as UserHomeController,
     OrderController as UserOrderController,
+    RePayController as UserRePayController,
     ReturnOrderController as UserReturnOrderController,
-    WalletController as UserWalletController
-};
+    WalletController as UserWalletController};
 use App\Logic\Controllers\Colleague\{HomeController as ColleagueHomeController};
 use App\Logic\Controllers\BlogController;
 use App\Logic\Controllers\BrandController;
@@ -222,6 +226,13 @@ class Route implements IInitialize
                 ])->name('admin.addr.dt.view');
 
                 /**
+                 * Address Company Route
+                 */
+                Router::post('/address/company/view/dt/{user_id}', [AdminAddressCompanyController::class, 'getPaginatedDatatable'])->where([
+                    'user_id' => '[0-9]+',
+                ])->name('admin.addr.company.dt.view');
+
+                /**
                  * User Order Route
                  */
                 Router::post('/user/order/view/dt/{user_id}', [AdminUserController::class, 'getOrderPaginatedDatatable'])->where([
@@ -268,12 +279,12 @@ class Route implements IInitialize
                 /**
                  * Send Methods Route
                  */
-//                Router::form('/send-method/add', [AdminSendMethodController::class, 'add'])->name('admin.send_method.add');
-//                Router::form('/send-method/edit/{id}', [AdminSendMethodController::class, 'edit'])->where([
-//                    'id' => '[0-9]+',
-//                ])->name('admin.send_method.edit');
-//                Router::get('/send-method/view', [AdminSendMethodController::class, 'view'])->name('admin.send_method.view');
-//                Router::post('/send-method/view/dt', [AdminSendMethodController::class, 'getPaginatedDatatable'])->name('admin.send_method.dt.view');
+                Router::form('/send-method/add', [AdminSendMethodController::class, 'add'])->name('admin.send_method.add');
+                Router::form('/send-method/edit/{id}', [AdminSendMethodController::class, 'edit'])->where([
+                    'id' => '[0-9]+',
+                ])->name('admin.send_method.edit');
+                Router::get('/send-method/view', [AdminSendMethodController::class, 'view'])->name('admin.send_method.view');
+                Router::post('/send-method/view/dt', [AdminSendMethodController::class, 'getPaginatedDatatable'])->name('admin.send_method.dt.view');
 
                 /**
                  * Color Route
@@ -387,6 +398,9 @@ class Route implements IInitialize
                 Router::form('/product/value/edit/{id}', [AdminProductController::class, 'editValue'])->where([
                     'id' => '[0-9]+',
                 ])->name('admin.product.value.edit');
+
+                Router::get('/product/comments/all', [AdminCommentAllController::class, 'view'])->name('admin.product.comments.all');
+                Router::post('/product/comments/all/dt', [AdminCommentAllController::class, 'getPaginatedDatatable'])->name('admin.product.comments.dt.all');
 
                 /**
                  * Stepped Price Route
@@ -647,10 +661,6 @@ class Route implements IInitialize
                  * address routes
                  */
                 Router::get('/addresses', [UserAddressController::class, 'index'])->name('user.addresses');
-                Router::form('/address/add', [UserAddressController::class, 'add'])->name('user.address.add');
-                Router::form('/address/edit/{id}', [UserAddressController::class, 'edit'])->where([
-                    'id' => '[0-9]+',
-                ])->name('user.address.edit');
 
                 /**
                  * order routes
@@ -659,6 +669,8 @@ class Route implements IInitialize
                 Router::form('/order/detail/{id}', [UserOrderController::class, 'detail'])->where([
                     'id' => '[0-9]+',
                 ])->name('user.order.detail');
+                Router::get('/order/re-pay/{id}', [UserRePayController::class, 'index'])
+                    ->where(['id' => '[0-9]+'])->name('user.order.re-pay');
 
                 /**
                  * return order routes
@@ -679,9 +691,9 @@ class Route implements IInitialize
                 Router::form('/wallet', [UserWalletController::class, 'index'])->name('user.wallet');
             });
             Router::form('/wallet/finish/{type}/{method}/{code}', [OrderResultController::class, 'chargeResult'])->where([
-                'type' => '[a-zA-Z0-9]+',
-                'method' => '[a-zA-Z0-9]+',
-                'code' => '[a-zA-Z0-9]+',
+                'type' => '[a-zA-Z0-9_]+',
+                'method' => '[a-zA-Z0-9_]+',
+                'code' => '[a-zA-Z0-9_]+',
             ])->name('user.wallet.finish');
 
             //==========================
@@ -742,12 +754,12 @@ class Route implements IInitialize
                 });
             });
             Router::get('/finish/wallet/{code}', [OrderResultController::class, 'walletPayment'])->where([
-                'code' => '[a-zA-Z0-9]+',
+                'code' => '[a-zA-Z0-9_]+',
             ])->name('home.wallet.payment');
             Router::form('/finish/{type}/{method}/{code}', [OrderResultController::class, 'index'])->where([
-                'type' => '[a-zA-Z0-9]+',
-                'method' => '[a-zA-Z0-9]+',
-                'code' => '[a-zA-Z0-9]+',
+                'type' => '[a-zA-Z0-9_]+',
+                'method' => '[a-zA-Z0-9_]+',
+                'code' => '[a-zA-Z0-9_]+',
             ])->name('home.finish');
 
             /**
@@ -920,17 +932,40 @@ class Route implements IInitialize
                 /**
                  * address route
                  */
-                Router::get('/user/address/all', [UserAddressController::class, 'all'])->name('ajax.user.address.all');
-                Router::get('/user/address/get/{id}', [UserAddressController::class, 'get'])->where([
+                Router::get('/user/address/all', [UserMyAddressController::class, 'all'])->name('ajax.user.address.all');
+                Router::get('/user/address/get/{id}', [UserMyAddressController::class, 'get'])->where([
                     'id' => '[0-9]+',
                 ])->name('ajax.user.address.get');
-                Router::post('/user/address/add', [UserAddressController::class, 'add'])->name('ajax.user.address.add');
-                Router::post('/user/address/edit/{id}', [UserAddressController::class, 'edit'])->where([
+                Router::post('/user/address/add', [UserMyAddressController::class, 'add'])->name('ajax.user.address.add');
+                Router::post('/user/address/edit/{id}', [UserMyAddressController::class, 'edit'])->where([
                     'id' => '[0-9]+',
                 ])->name('ajax.user.address.edit');
-                Router::delete('/user/address/remove/{id}', [UserAddressController::class, 'remove'])->where([
+                Router::delete('/user/address/remove/{id}', [UserMyAddressController::class, 'remove'])->where([
                     'id' => '[0-9]+',
                 ])->name('ajax.user.address.remove');
+
+                /**
+                 * address company route
+                 */
+                Router::get('/user/address/company/all', [UserMyAddressCompanyController::class, 'all'])->name('ajax.user.address.company.all');
+                Router::get('/user/address/company/get/{id}', [UserMyAddressCompanyController::class, 'get'])->where([
+                    'id' => '[0-9]+',
+                ])->name('ajax.user.address.company.get');
+                Router::post('/user/address/company/add', [UserMyAddressCompanyController::class, 'add'])->name('ajax.user.address.company.add');
+                Router::post('/user/address/company/edit/{id}', [UserMyAddressCompanyController::class, 'edit'])->where([
+                    'id' => '[0-9]+',
+                ])->name('ajax.user.address.company.edit');
+                Router::delete('/user/address/company/remove/{id}', [UserMyAddressCompanyController::class, 'remove'])->where([
+                    'id' => '[0-9]+',
+                ])->name('ajax.user.address.company.remove');
+
+                /**
+                 * order routes
+                 */
+                Router::get('/user/order/export/pdf/{code}', [UserOrderController::class, 'exportPdfOne'])
+                    ->name('ajax.user.order.export.pdf');
+                Router::post('/user/order/re-pay/{id}', [UserRePayController::class, 'makeRepayConnection'])
+                    ->name('ajax.user.order.re-pay');
 
                 /**
                  * return order routes
@@ -971,6 +1006,24 @@ class Route implements IInitialize
                 Router::delete('/address/remove/{id}', [AdminAddressController::class, 'remove'])->where([
                     'id' => '[0-9]+',
                 ])->name('ajax.admin.addr.remove');
+
+                /**
+                 * address company route
+                 */
+                Router::get('/address/company/get/{user_id}/{id}', [AdminAddressCompanyController::class, 'get'])->where([
+                    'user_id' => '[0-9]+',
+                    'id' => '[0-9]+',
+                ])->name('ajax.admin.addr.company.get');
+                Router::post('/address/company/add/{user_id}', [AdminAddressCompanyController::class, 'add'])->where([
+                    'user_id' => '[0-9]+',
+                ])->name('ajax.admin.addr.company.add');
+                Router::post('/address/company/edit/{user_id}/{id}', [AdminAddressCompanyController::class, 'edit'])->where([
+                    'user_id' => '[0-9]+',
+                    'id' => '[0-9]+',
+                ])->name('ajax.admin.addr.company.edit');
+                Router::delete('/address/company/remove/{id}', [AdminAddressCompanyController::class, 'remove'])->where([
+                    'id' => '[0-9]+',
+                ])->name('ajax.admin.addr.company.remove');
 
                 /**
                  * user order route
@@ -1044,9 +1097,9 @@ class Route implements IInitialize
                 /**
                  * send method route
                  */
-//                Router::delete('/send-method/remove/{id}', [AdminSendMethodController::class, 'remove'])->where([
-//                    'id' => '[0-9]+',
-//                ])->name('ajax.send_method.remove');
+                Router::delete('/send-method/remove/{id}', [AdminSendMethodController::class, 'remove'])->where([
+                    'id' => '[0-9]+',
+                ])->name('ajax.send_method.remove');
 
                 /**
                  * color route
@@ -1106,6 +1159,10 @@ class Route implements IInitialize
                 Router::post('/product/av-status/{id}', [AdminProductController::class, 'availabilityStatusChange'])->where([
                     'id' => '[0-9]+',
                 ])->name('ajax.product.availability.status');
+                Router::get('/product/quick-edit-variants/{id}', [AdminProductController::class, 'getEditProductVariants'])
+                    ->where(['id' => '[0-9]+'])->name('ajax.product.quick-edit-variants.get');
+                Router::post('/product/quick-edit-variants/{id}', [AdminProductController::class, 'editProductVariants'])
+                    ->where(['id' => '[0-9]+'])->name('ajax.product.quick-edit-variants.edit');
 
                 /**
                  * product attribute route

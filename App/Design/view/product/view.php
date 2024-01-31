@@ -22,7 +22,7 @@
         <table class="table table-bordered table-hover datatable-highlight"
                data-column-defs='[{"searchable": false, "orderable": false, "targets": 0}]'
                data-order='[[1, "desc"]]'
-               data-columns='[{"data":"chkId"},{"data":"id"},{"data":"title"},{"data":"image"},{"data":"brand_name"},{"data":"category_name"},{"data":"in_stock"},{"data":"status"},{"data":"is_available"},{"data":"created_at"},{"data":"operations"}]'
+               data-columns='[{"data":"chkId"},{"data":"id"},{"data":"title"},{"data":"image"},{"data":"brand_name"},{"data":"category_name"},{"data":"in_stock"},{"data":"status"},{"data":"is_available"},{"data":"created_at"},{"data":"quick_edit"},{"data":"operations"}]'
                data-ajax-url="<?= url('admin.product.dt.view')->getRelativeUrlTrimmed(); ?>">
             <thead>
             <tr>
@@ -44,7 +44,7 @@
                 <th>وضعیت نمایش</th>
                 <th>وضعیت موجودی</th>
                 <th>اضافه شده در تاریخ</th>
-                <th class="text-center">عملیات</th>
+                <th class="text-center" colspan="2">عملیات</th>
             </tr>
             </thead>
             <tfoot>
@@ -59,12 +59,48 @@
                 <th>وضعیت نمایش</th>
                 <th>وضعیت موجودی</th>
                 <th>اضافه شده در تاریخ</th>
-                <th class="text-center">عملیات</th>
+                <th class="text-center" colspan="2">عملیات</th>
             </tr>
             </tfoot>
         </table>
     </div>
     <!-- /highlighting rows and columns -->
+
+    <!-- Quick edit modal -->
+    <div id="modal_form_quick_edit" class="modal fade" tabindex="-1">
+        <div class="modal-dialog modal-full">
+            <div class="modal-content">
+                <div class="modal-header bg-light">
+                    <h5 class="modal-title">ویرایش سریع</h5>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <div class="modal-body">
+                    <form id="__form_quick_edit_product">
+                        <div id="quickEditBody"></div>
+
+                        <div class="row d-none" data-quick-edit-button-save>
+                            <div class="col-lg-12">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <button type="submit" class="btn btn-primary btn-lg btn-block">
+                                            ذخیره اطلاعات
+                                            <i class="icon-floppy-disks ml-2"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="modal-footer mt-5">
+                    <button type="button" class="btn btn-primary px-4" data-dismiss="modal">بستن</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /quick edit modal -->
 
     <!-- Clickable menu -->
     <ul class="fab-menu fab-menu-fixed fab-menu-bottom-right" data-fab-toggle="click" id="tableFabMenu">

@@ -178,6 +178,7 @@ class ReportUtil
                     'weight',
                     'price',
                     'discounted_price',
+                    'discount_from',
                     'discount_until',
                     'is_available',
                 ]);
@@ -210,6 +211,7 @@ class ReportUtil
                     $avlStr .= "$c) " . is_value_checked($product['is_available']) ? 'موجود' : 'ناموجود';
                     $priceStr .= "$c) " . local_number(number_format(StringUtil::toEnglish($product['price'])));
                     $disPriceStr .= "$c) " . local_number(number_format(StringUtil::toEnglish($product['discounted_price'])));
+                    $disDateFromStr .= "$c) " . !empty($product['discount_from']) ? Jdf::jdate(DEFAULT_TIME_FORMAT) : '-';
                     $disDateStr .= "$c) " . !empty($product['discount_until']) ? Jdf::jdate(DEFAULT_TIME_FORMAT) : '-';
                     $colorStr .= "$c) {$product['color_name']}";
                     if (trim($product['size']) != '') {
@@ -226,6 +228,7 @@ class ReportUtil
                     $avlStr .= "\n";
                     $priceStr .= "\n";
                     $disPriceStr .= "\n";
+                    $disDateFromStr .= "\n";
                     $disDateStr .= "\n";
                     $colorStr .= "\n";
                     $weightStr .= "\n";
@@ -247,6 +250,7 @@ class ReportUtil
                 $spreadsheetArray[($k + 1)][] = $avlStr;
                 $spreadsheetArray[($k + 1)][] = $priceStr;
                 $spreadsheetArray[($k + 1)][] = $disPriceStr;
+                $spreadsheetArray[($k + 1)][] = $disDateFromStr;
                 $spreadsheetArray[($k + 1)][] = $disDateStr;
                 $spreadsheetArray[($k + 1)][] = $colorStr;
                 $spreadsheetArray[($k + 1)][] = $sizeStr;
@@ -370,6 +374,7 @@ class ReportUtil
                 $guaranteeStr = '';
                 $weightStr = '';
                 $productCountStr = '';
+                $isSeparateCStr = '';
                 if (!count($orderItems)) {
                     $unitPriceStr = '-';
                     $priceStr = '-';
@@ -379,6 +384,7 @@ class ReportUtil
                     $guaranteeStr = '-';
                     $weightStr = '-';
                     $productCountStr = '-';
+                    $isSeparateCStr = '-';
                 }
                 foreach ($orderItems as $product) {
                     $unitPriceStr .= "$c) " . local_number(number_format(StringUtil::toEnglish($product['unit_price'])));
@@ -389,6 +395,7 @@ class ReportUtil
                     $guaranteeStr .= "$c) {$product['guarantee']}";
                     $weightStr .= "$c) " . local_number(number_format(StringUtil::toEnglish($product['weight']))) . ' گرم';
                     $productCountStr .= "$c) " . local_number(number_format(StringUtil::toEnglish($product['product_count'])));
+                    $isSeparateCStr .= "$c) " . (is_value_checked($product['separate_consignment']) ? 'مرسوله مجزا' : '-');
                     //
                     $priceStr .= "\n";
                     $disPriceStr .= "\n";
@@ -397,6 +404,7 @@ class ReportUtil
                     $guaranteeStr .= "\n";
                     $weightStr .= "\n";
                     $productCountStr .= "\n";
+                    $isSeparateCStr .= "\n";
                     //
                     $c++;
                 }
@@ -411,6 +419,7 @@ class ReportUtil
                 $spreadsheetArray[($k + 1)][] = $guaranteeStr;
                 $spreadsheetArray[($k + 1)][] = $weightStr;
                 $spreadsheetArray[($k + 1)][] = $productCountStr;
+                $spreadsheetArray[($k + 1)][] = $isSeparateCStr;
                 //-----
                 $spreadsheetArray[($k + 1)][] = $item['city'];
                 $spreadsheetArray[($k + 1)][] = $item['province'];

@@ -24,6 +24,7 @@
                     <span class="d-flex align-items-center mb-3">
                         <i class="linearicons-map-marker-user address-icon-size mr-2"
                            aria-hidden="true"></i>
+                        <span class="mr-2 text-muted font-size-sm">استان و شهر:</span>
                         <span>
                             <?= $address['province_name']; ?>
                             ،
@@ -35,6 +36,7 @@
                     <span class="d-flex align-items-center mb-3">
                         <i class="linearicons-envelope address-icon-size mr-2"
                            aria-hidden="true"></i>
+                        <span class="mr-2 text-muted font-size-sm">کد پستی:</span>
                         <span>
                             <?= $address['postal_code']; ?>
                         </span>
@@ -44,6 +46,7 @@
                     <span class="d-flex align-items-center mb-3">
                         <i class="linearicons-phone-bubble address-icon-size mr-2"
                            aria-hidden="true"></i>
+                        <span class="mr-2 text-muted font-size-sm">موبایل:</span>
                         <span>
                             <?= $address['mobile']; ?>
                         </span>
@@ -53,6 +56,7 @@
                     <span class="d-flex align-items-center mb-3">
                         <i class="linearicons-user address-icon-size mr-2"
                            aria-hidden="true"></i>
+                        <span class="mr-2 text-muted font-size-sm">نام گیرنده:</span>
                         <span>
                             <?= $address['full_name']; ?>
                         </span>

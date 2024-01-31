@@ -52,34 +52,34 @@ $validator = form_validator();
                     <div class="position-relative <?= 0 != $k++ ? 'border-top' : ''; ?> p-3">
                         <div class="order-detail-order-items-more">
                             <?php //if ($item['is_returnable'] == DB_YES): ?>
-                                <?php $returnItemsCount++; ?>
+                            <?php $returnItemsCount++; ?>
 
-                                <div class="custome-checkbox">
-                                    <input type="hidden" name="inp-order-item-id[<?= $item['id']; ?>]"
-                                           value="<?= $item['id']; ?>">
-                                    <input class="form-check-input"
-                                           type="checkbox" id="chk_num_<?= $k; ?>"
-                                           name="inp-order-item-check[<?= $item['id']; ?>]" value="<?= $item['id']; ?>">
-                                    <label class="form-check-label"
-                                           for="chk_num_<?= $k; ?>">
-                                        <span>انتخاب جهت مرجوع</span>
-                                    </label>
-                                </div>
-                                <div>
-                                    <div class="cart-product-quantity">
-                                        <div class="quantity">
-                                            <input type="button" value="-" class="minus">
-                                            <input type="text" name="inp-return-item-quantity[<?= $item['id']; ?>]"
-                                                   value="<?= $item['product_count']; ?>"
-                                                   title="Qty"
-                                                   class="qty" size="4"
-                                                   data-max-cart-count="<?= $item['product_count']; ?>">
-                                            <input type="button" value="+" class="plus">
-                                        </div>
+                            <div class="custome-checkbox">
+                                <input type="hidden" name="inp-order-item-id[<?= $item['id']; ?>]"
+                                       value="<?= $item['id']; ?>">
+                                <input class="form-check-input"
+                                       type="checkbox" id="chk_num_<?= $k; ?>"
+                                       name="inp-order-item-check[<?= $item['id']; ?>]" value="<?= $item['id']; ?>">
+                                <label class="form-check-label"
+                                       for="chk_num_<?= $k; ?>">
+                                    <span>انتخاب جهت مرجوع</span>
+                                </label>
+                            </div>
+                            <div>
+                                <div class="cart-product-quantity">
+                                    <div class="quantity">
+                                        <input type="button" value="-" class="minus">
+                                        <input type="text" name="inp-return-item-quantity[<?= $item['id']; ?>]"
+                                               value="<?= $item['product_count']; ?>"
+                                               title="Qty"
+                                               class="qty" size="4"
+                                               data-max-cart-count="<?= $item['product_count']; ?>">
+                                        <input type="button" value="+" class="plus">
                                     </div>
                                 </div>
+                            </div>
                             <?php //else: ?>
-<!--                                <span class="badge badge-warning p-2">این محصول قابل مرجوع نمی‌باشد</span>-->
+                            <!--                                <span class="badge badge-warning p-2">این محصول قابل مرجوع نمی‌باشد</span>-->
                             <?php //endif; ?>
                         </div>
                         <div class="d-block d-lg-flex m-0 align-items-start">
@@ -116,11 +116,13 @@ $validator = form_validator();
                                         <?php endif; ?>
                                     </div>
 
-                                    <?php if (!empty($item['color'])): ?>
+                                    <?php if (!empty($item['color']) && ($item['show_color'] === DB_YES || $item['is_patterned_color'] === DB_YES)): ?>
                                         <div class="d-flex align-items-center">
                                             <div class="product_color_badge">
-                                                <span class="mr-2"
-                                                      style="background-color: <?= $item['color']; ?>;"></span>
+                                                <?php if ($item['is_patterned_color'] === DB_NO): ?>
+                                                    <span class="mr-2"
+                                                          style="background-color: <?= $item['color']; ?>;"></span>
+                                                <?php endif; ?>
                                                 <div class="d-inline-block"><?= $item['color_name']; ?></div>
                                             </div>
                                         </div>
@@ -140,8 +142,14 @@ $validator = form_validator();
                                         </div>
                                     <?php endif; ?>
 
-                                    <?php if (!empty($item['order_item_id'])): ?>
-                                        <div>
+                                    <div>
+                                        <?php if (DB_YES == $item['separate_consignment']): ?>
+                                            <span class="badge badge-info px-2 py-1">
+                                                مرسوله مجزا
+                                            </span>
+                                        <?php endif; ?>
+
+                                        <?php if (!empty($item['order_item_id'])): ?>
                                             <?php if (DB_YES == $item['is_returned']): ?>
                                                 <span class="badge badge-danger px-2 py-1">
                                                         تعداد
@@ -156,8 +164,8 @@ $validator = form_validator();
                                                     <?= $item['unit_title']; ?>
                                                     </span>
                                             <?php endif; ?>
-                                        </div>
-                                    <?php endif; ?>
+                                        <?php endif; ?>
+                                    </div>
                                 </div>
 
                                 <ul class="list-inline list-inline-dotted my-3">

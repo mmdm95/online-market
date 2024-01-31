@@ -11,7 +11,6 @@ use App\Logic\Interfaces\Report\IReportExcel;
 use App\Logic\Interfaces\Report\IReportFilter;
 use App\Logic\Interfaces\Report\IReportPdf;
 use App\Logic\Models\WalletModel;
-use App\Logic\Utils\Jdf;
 use App\Logic\Utils\LogUtil;
 use App\Logic\Utils\ReportQBUtil;
 use App\Logic\Utils\ReportUtil;

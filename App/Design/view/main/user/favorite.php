@@ -41,10 +41,13 @@ use Sim\Utils\StringUtil;
                                         'id' => $favorite['product_id'],
                                         'slug' => $favorite['slug']
                                     ]); ?>">
-                                        <?php if (!empty($favorite['color_name'])): ?>
+
+                                        <?php if (!empty($favorite['color_name']) && ($favorite['show_color'] === DB_YES || $favorite['is_patterned_color'] === DB_YES)): ?>
                                             <div class="mx-2 my-1">
-                                                <span class="p-2 d-inline-block rounded-pill"
-                                                      style="background-color: <?= $favorite['color_hex']; ?>;"></span>
+                                                <?php if ($favorite['is_patterned_color'] === DB_NO): ?>
+                                                    <span class="p-2 d-inline-block rounded-pill"
+                                                          style="background-color: <?= $favorite['color_hex']; ?>;"></span>
+                                                <?php endif; ?>
                                                 <?= $favorite['color_name']; ?>
                                             </div>
                                         <?php endif; ?>

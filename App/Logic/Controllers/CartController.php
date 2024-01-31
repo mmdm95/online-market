@@ -97,9 +97,10 @@ class CartController extends AbstractHomeController
             ], [], 1, 0, [], [
                     'pa.image', 'pa.brand_fa_name', 'pa.brand_id', 'pa.festival_discount', 'pa.festival_expire',
                     'pa.festival_publish', 'pa.festival_start', 'pa.category_name', 'pa.title',
-                    'pa.slug', 'pa.category_id', 'pa.unit_title', 'pa.unit_sign', 'pa.is_returnable',
-                    'pa.stock_count', 'pa.max_cart_count', 'pa.color_hex', 'pa.color_name', 'pa.size',
-                    'pa.guarantee', 'pa.weight', 'pa.show_coming_soon', 'pa.call_for_more',
+                    'pa.slug', 'pa.category_id', 'pa.unit_title', 'pa.unit_sign', 'pa.separate_consignment',
+                    'pa.is_returnable', 'pa.stock_count', 'pa.max_cart_count', 'pa.color_hex', 'pa.color_name',
+                    'pa.show_color', 'pa.is_patterned_color', 'pa.size', 'pa.guarantee', 'pa.weight',
+                    'pa.show_coming_soon', 'pa.call_for_more',
                 ]
             );
 
@@ -174,9 +175,10 @@ class CartController extends AbstractHomeController
                 ], [], 1, 0, [], [
                         'pa.image', 'pa.brand_fa_name', 'pa.brand_id', 'pa.festival_discount', 'pa.festival_expire',
                         'pa.festival_publish', 'pa.festival_start', 'pa.category_name', 'pa.title',
-                        'pa.slug', 'pa.category_id', 'pa.unit_title', 'pa.unit_sign', 'pa.is_returnable',
-                        'pa.stock_count', 'pa.max_cart_count', 'pa.color_hex', 'pa.color_name', 'pa.size',
-                        'pa.guarantee', 'pa.weight', 'pa.show_coming_soon', 'pa.call_for_more',
+                        'pa.slug', 'pa.category_id', 'pa.unit_title', 'pa.unit_sign', 'pa.separate_consignment',
+                        'pa.is_returnable', 'pa.stock_count', 'pa.max_cart_count', 'pa.color_hex', 'pa.color_name',
+                        'pa.show_color', 'pa.is_patterned_color', 'pa.size', 'pa.guarantee', 'pa.weight',
+                        'pa.show_coming_soon', 'pa.call_for_more',
                     ]
                 );
                 if (count($extraInfo)) {

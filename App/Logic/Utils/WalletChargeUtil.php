@@ -558,7 +558,7 @@ class WalletChargeUtil
                         ) use ($gatewayModel, $walletModel, $walletOrder, $gatewayCode, $flow, &$res) {
                             $gatewayModel->update([
                                 'payment_code' => $resultProvider->getSaleReferenceId(''),
-                                'status' => $adviceProvider->getStatus(),
+                                'status' => $adviceProvider->getReturn(),
                                 'msg' => 'عملیات با موفقیت انجام شد.',
                                 'is_success' => DB_YES,
                                 'in_step' => PAYMENT_GATEWAY_FLOW_STATUS_SETTLE,
@@ -998,7 +998,6 @@ class WalletChargeUtil
         $flowModel = container()->get(WalletFlowModel::class);
         do {
             $uniqueStr = StringUtil::randomString($length, StringUtil::RS_NUMBER, ['0']);
-
         } while ($flowModel->count('order_code=:code', ['code' => $uniqueStr]));
         return $uniqueStr;
     }

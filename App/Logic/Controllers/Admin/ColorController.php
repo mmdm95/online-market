@@ -114,14 +114,14 @@ class ColorController extends AbstractAdminController implements IDatatableContr
          */
         $colorModel = container()->get(ColorModel::class);
 
-        $color = $colorModel->get(['hex'], 'id=:id', ['id' => $id]);
+        $color = $colorModel->get(['name'], 'id=:id', ['id' => $id]);
 
         if (0 == count($color)) {
             return $this->show404();
         }
 
         // store previous hex to check for duplicate
-        session()->setFlash('color-prev-hex', $color[0]['hex']);
+        session()->setFlash('color-prev-name', $color[0]['name']);
         session()->setFlash('color-curr-id', $id);
 
         $data = [];
@@ -230,11 +230,36 @@ class ColorController extends AbstractAdminController implements IDatatableContr
                         'db_alias' => 'publish',
                         'dt' => 'status',
                         'formatter' => function ($d) {
-                            $status = $this->setTemplate('partial/admin/parser/active-status')
+                            return $this->setTemplate('partial/admin/parser/active-status')
                                 ->render([
                                     'status' => $d,
                                 ]);
-                            return $status;
+                        }
+                    ],
+                    [
+                        'db' => 'show_color',
+                        'db_alias' => 'show_color',
+                        'dt' => 'show_color',
+                        'formatter' => function ($d) {
+                            return $this->setTemplate('partial/admin/parser/active-status')
+                                ->render([
+                                    'status' => $d,
+                                    'active' => 'بله',
+                                    'deactive' => 'خیر',
+                                ]);
+                        }
+                    ],
+                    [
+                        'db' => 'is_patterned_color',
+                        'db_alias' => 'is_patterned_color',
+                        'dt' => 'is_patterned_color',
+                        'formatter' => function ($d) {
+                            return $this->setTemplate('partial/admin/parser/active-status')
+                                ->render([
+                                    'status' => $d,
+                                    'active' => 'بله',
+                                    'deactive' => 'خیر',
+                                ]);
                         }
                     ],
                     [

@@ -20,7 +20,7 @@
         </div>
 
         <table class="table table-bordered table-hover datatable-highlight"
-               data-columns='[{"data":"id"},{"data":"name"},{"data":"hex"},{"data":"show"},{"data":"status"},{"data":"operations"}]'
+               data-columns='[{"data":"id"},{"data":"name"},{"data":"hex"},{"data":"show"},{"data":"status"},{"data":"show_color"},{"data":"is_patterned_color"},{"data":"operations"}]'
                data-ajax-url="<?= url('admin.color.dt.view')->getRelativeUrlTrimmed(); ?>">
             <thead>
             <tr>
@@ -29,6 +29,8 @@
                 <th>کد</th>
                 <th>نمایش</th>
                 <th>وضعیت نمایش</th>
+                <th>نمایش در صفحه جزئیات</th>
+                <th>رنگ طرحدار</th>
                 <th class="text-center">عملیات</th>
             </tr>
             </thead>
@@ -39,6 +41,8 @@
                 <th>کد</th>
                 <th>نمایش</th>
                 <th>وضعیت نمایش</th>
+                <th>نمایش در صفحه جزئیات</th>
+                <th>رنگ طرحدار</th>
                 <th class="text-center">عملیات</th>
             </tr>
             </tfoot>

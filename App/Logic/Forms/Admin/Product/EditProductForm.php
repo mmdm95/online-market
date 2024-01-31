@@ -60,7 +60,9 @@ class EditProductForm implements IPageForm
                 'inp-edit-product-weight.*' => 'وزن',
                 'inp-edit-product-price.*' => 'قیمت کالا',
                 'inp-edit-product-discount-price.*' => 'قیمت تخفیف کالا',
+                'inp-edit-product-discount-date-from.*' => 'تاریخ شروع تخفیف',
                 'inp-edit-product-discount-date.*' => 'تاریخ اتمام تخفیف',
+                'inp-edit-product-separate-consignment.*' => 'مرسوله مجزا',
                 'inp-edit-product-product-availability.*' => 'موجودی کالا',
                 'inp-edit-product-gallery-img.*' => 'تصویر گالری',
                 'inp-edit-product-desc' => 'توضیحات',
@@ -74,8 +76,11 @@ class EditProductForm implements IPageForm
                 'inp-edit-product-guarantee.*',
                 'inp-edit-product-price.*',
                 'inp-edit-product-discount-price.*',
+                'inp-edit-product-discount-date-from.*',
                 'inp-edit-product-discount-date.*',
+                'inp-edit-product-consider-discount-date-from.*',
                 'inp-edit-product-consider-discount-date.*',
+                'inp-edit-product-separate-consignment.*',
                 'inp-edit-product-product-availability.*',
                 'inp-edit-product-desc',
                 'inp-edit-product-alert-product',
@@ -237,6 +242,36 @@ class EditProductForm implements IPageForm
                 }
                 return true;
             }, '{alias} ' . 'وارد شده وجود ندارد.');
+
+        // discount from date
+        $allowedDatesFrom = input()->post('inp-edit-product-consider-discount-date-from');
+        $counter = 0;
+        $discountDatesFrom = input()->post('inp-edit-product-discount-date-from');
+        if (is_array($allowedDatesFrom) && is_array($discountDatesFrom)) {
+            /**
+             * @var InputItem $allow
+             */
+            foreach ($allowedDatesFrom as $allow) {
+                if (is_value_checked($allow->getValue()) && isset($discountDatesFrom[$counter])) {
+                    $timestampRule = new TimestampValidation();
+                    if (!$timestampRule->validate($discountDatesFrom[$counter]->getValue()) ||
+                        (
+                            '' !== $discountDatesFrom[$counter]->getValue() &&
+                            false === date(DEFAULT_TIME_FORMAT, $discountDatesFrom[$counter]->getValue())
+                        )
+                    ) {
+                        $validator
+                            ->setStatus(false)
+                            ->setError(
+                                'inp-edit-product-discount-date-from.*',
+                                $validator->getFieldAlias('inp-edit-product-discount-date-from.*') . ' ' . 'یک زمان وارد شده نامعتبر است.'
+                            );
+                    }
+                }
+                ++$counter;
+            }
+        }
+
         // discount until date
         $allowedDates = input()->post('inp-edit-product-consider-discount-date');
         $counter = 0;
@@ -265,6 +300,7 @@ class EditProductForm implements IPageForm
                 ++$counter;
             }
         }
+
         // properties
         $properties = input()->post('inp-item-product-properties');
         $subProperties = input()->post('inp-item-product-sub-properties');
@@ -277,11 +313,6 @@ class EditProductForm implements IPageForm
         session()->setFlash('product-properties-in-edit-assembled', $theProperties);
 
         if (!count($validator->getUniqueErrors())) {
-            /**
-             * @var ProductUtil $productUtil
-             */
-            $productUtil = container()->get(ProductUtil::class);
-
             // create gallery object
             $gallery = $productUtil->createGalleryArray(true);
             if (!count($gallery)) {

@@ -9,7 +9,6 @@ use App\Logic\Handlers\ResourceHandler;
 use App\Logic\Models\PaymentMethodModel;
 use App\Logic\Models\WalletFlowModel;
 use App\Logic\Utils\LogUtil;
-use App\Logic\Utils\SMSUtil;
 use App\Logic\Utils\WalletChargeUtil;
 use DI\DependencyException;
 use DI\NotFoundException;
@@ -21,10 +20,10 @@ use Sim\Exceptions\Mvc\Controller\ControllerException;
 use Sim\Exceptions\PathManager\PathNotRegisteredException;
 use Sim\Interfaces\IFileNotExistsException;
 use Sim\Interfaces\IInvalidVariableNameException;
+use Sim\Payment\Providers\BehPardakht\BehPardakhtRequestResultProvider;
 use Sim\Payment\Providers\IranKish\IranKishRequestResultProvider;
 use Sim\Payment\Providers\Sadad\SadadRequestResultProvider;
 use Sim\Payment\Providers\TAP\Payment\TapRequestResultProvider;
-use Sim\SMS\Exceptions\SMSException;
 
 class WalletController extends AbstractUserController
 {
@@ -165,6 +164,26 @@ class WalletController extends AbstractUserController
                             case METHOD_TYPE_WALLET:
                                 $url = $gatewayInfo['url'];
                                 $redirect = true;
+                                break;
+                            case METHOD_TYPE_GATEWAY_BEH_PARDAKHT:
+                                $user = $this->getDefaultArguments()['user'];
+                                /**
+                                 * @var BehPardakhtRequestResultProvider $gatewayInfo
+                                 */
+                                $refId = $gatewayInfo->getRefId();
+                                $url = $gatewayInfo->getUrl();
+                                $inputs = [
+                                    [
+                                        'name' => 'RefId',
+                                        'value' => $refId,
+                                    ],
+                                ];
+                                if ($user['username']) {
+                                    $inputs[] = [
+                                        'name' => 'MobileNo',
+                                        'value' => $user['username'],
+                                    ];
+                                }
                                 break;
                             case METHOD_TYPE_GATEWAY_SADAD:
                             case METHOD_TYPE_GATEWAY_TAP:

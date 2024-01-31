@@ -17,11 +17,11 @@ use Sim\I18n\ISOLanguageCodes;
  *     1 for beta (status)
  *     2 for release candidate
  *     3 for (final) release
- *   ie.
+ *   i.e.
  *     1.2.5.0 instead of 1.2.5-a
  *     1.2.5.0.1 instead of 1.2.5-a.1 (I'm not sure)
  */
-defined("APP_VERSION") or define("APP_VERSION", "0.18.3");
+defined("APP_VERSION") or define("APP_VERSION", "0.19.0");
 
 /***************************************
  * You can add your constants here
@@ -66,6 +66,7 @@ defined("PUBLIC_ACCESS_DIR") or define("PUBLIC_ACCESS_DIR", 'public-access');
 // resources constants
 defined("RESOURCE_USER") or define("RESOURCE_USER", 'user');
 defined("RESOURCE_PAY_METHOD") or define("RESOURCE_PAY_METHOD", 'pay_method');
+defined("RESOURCE_SEND_METHOD") or define("RESOURCE_SEND_METHOD", 'send_method');
 defined("RESOURCE_COLOR") or define("RESOURCE_COLOR", 'color');
 defined("RESOURCE_BRAND") or define("RESOURCE_BRAND", 'brand');
 defined("RESOURCE_CATEGORY") or define("RESOURCE_CATEGORY", 'category');
@@ -343,10 +344,10 @@ defined("PRODUCT_ORDERINGS") or define("PRODUCT_ORDERINGS", [
 ]);
 
 // maximum order reserve time
-defined("RESERVE_MAX_TIME") or define("RESERVE_MAX_TIME", 600 /* 10min */);
+defined("RESERVE_MAX_TIME") or define("RESERVE_MAX_TIME", 3600 /* 1hour */);
 
 // maximum store for addresses
-defined("ADDRESS_MAX_COUNT") or define("ADDRESS_MAX_COUNT", 10);
+defined("ADDRESS_MAX_COUNT") or define("ADDRESS_MAX_COUNT", 5);
 
 // default time format
 defined("DEFAULT_TIME_FORMAT") or define("DEFAULT_TIME_FORMAT", 'j F Y');
@@ -369,6 +370,11 @@ defined("MINIMUM_WARNING_STOCK_VALUE") or define("MINIMUM_WARNING_STOCK_VALUE", 
 
 // max category level number
 defined("MAX_CATEGORY_LEVEL") or define("MAX_CATEGORY_LEVEL", 3);
+
+// receiver/buyer type
+defined("RECEIVER_TYPE_REAL") or define("RECEIVER_TYPE_REAL", 1);
+defined("RECEIVER_TYPE_LEGAL") or define("RECEIVER_TYPE_LEGAL", 2);
+defined("RECEIVER_TYPES") or define("RECEIVER_TYPES", [RECEIVER_TYPE_REAL, RECEIVER_TYPE_LEGAL]);
 
 // query builder sessions
 defined("SESSION_QUERY_BUILDER_USER") or define("SESSION_QUERY_BUILDER_USER", 'session_query_builder_user');
@@ -393,12 +399,21 @@ defined("SESSION_APPLIED_POST_PRICE") or define("SESSION_APPLIED_POST_PRICE", 's
 defined("SESSION_APPLIED_IN_PlACE_DELIVERY") or define("SESSION_APPLIED_IN_PlACE_DELIVERY", 'session_applied_in_place_delivery');
 // the gateway session key constant
 defined("SESSION_GATEWAY_RECORD") or define("SESSION_GATEWAY_RECORD", 'session_gateway_record_custom');
+defined("SESSION_SEND_METHOD_RECORD") or define("SESSION_SEND_METHOD_RECORD", 'session_send_method_record_custom');
 // wallet charge array info session key constant
 defined("SESSION_WALLET_CHARGE_ARR_INFO") or define("SESSION_WALLET_CHARGE_ARR_INFO", 'session_wallet_charge_arr_info_custom');
 // the gateway wallet charge session key constant
 defined("SESSION_GATEWAY_CHARGE_RECORD") or define("SESSION_GATEWAY_CHARGE_RECORD", 'session_gateway_charge_record_custom');
 // the wallet charge code session key constant
 defined("SESSION_WALLET_CHARGE_CODE") or define("SESSION_WALLET_CHARGE_CODE", 'session_wallet_charge_code_custom');
+
+//
+// repay constants
+//
+
+defined("SESSION_REPAY_GATEWAY_RECORD") or define("SESSION_REPAY_GATEWAY_RECORD", 'session_repay_gateway_record_custom');
+defined("SESSION_REPAY_ORDER_RECORD") or define("SESSION_REPAY_ORDER_RECORD", 'session_repay_order_record_custom');
+defined("SESSION_REPAY_GATEWAY_UNIQUE_CODE") or define("SESSION_REPAY_GATEWAY_UNIQUE_CODE", 'session_repay_gateway_unique_code_custom');
 
 //
 // sitemap needed constants

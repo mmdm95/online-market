@@ -101,14 +101,20 @@
                                         class="form-control d-block selectric_dropdown selectric-dropdown-products selectric_dropdown_changeable_stuffs">
                                     <?php foreach ($colors_and_sizes as $k => $prd): ?>
                                         <option value='<?= $prd['code']; ?>' <?= 0 === $k ? 'selected="selected"' : ''; ?>
-                                                data-color-hex="<?= $prd['color_hex'] ?>"
-                                                data-color-name="<?= $prd['color_name']; ?>"
+                                                data-color-hex="<?= is_value_checked($prd['show_color']) ? $prd['color_hex'] : ''; ?>"
+                                                data-color-name="<?= is_value_checked($prd['show_color']) || is_value_checked($prd['is_patterned_color']) ? $prd['color_name'] : ''; ?>"
                                                 data-size="<?= $prd['size']; ?>"
                                                 data-guarantee="<?= $prd['guarantee']; ?>">
-                                            رنگ
-                                            <?= $prd['color_name']; ?>
+
+                                            <?php
+                                            $isColorShowable = !empty($item['color_hex']) && ($item['show_color'] === DB_YES || $item['is_patterned_color'] === DB_YES);
+                                            ?>
+                                            <?php if ($isColorShowable): ?>
+                                                رنگ
+                                                <?= $prd['color_name']; ?>
+                                            <?php endif; ?>
                                             <?php if (trim($prd['size']) != ''): ?>
-                                                <?= ' - ' . $prd['size']; ?>
+                                                <?= ($isColorShowable ? ' - ' : '') . $prd['size']; ?>
                                             <?php endif; ?>
                                             <?php if (trim($prd['guarantee']) != ''): ?>
                                                 <?= ' - ' . $prd['guarantee']; ?>

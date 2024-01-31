@@ -230,8 +230,10 @@ use Sim\Utils\StringUtil;
                 <th>گارانتی</th>
                 <th>قیمت</th>
                 <th>قیمت با تخفیف</th>
+                <th>تخفیف از تاریخ</th>
                 <th>تخفیف تا تاریخ</th>
                 <th>وضعیت موجودی</th>
+                <th>مرسوله مجزا</th>
             </tr>
             </thead>
             <tbody>
@@ -244,10 +246,16 @@ use Sim\Utils\StringUtil;
                         <?= StringUtil::toPersian($item['max_cart_count']); ?>
                     </td>
                     <td>
-                        <?php load_partial('admin/parser/color-shape', [
-                            'hex' => $item['color_hex'],
-                        ]); ?>
-                        <span class="d-inline-block ml-2"><?= $item['color_name']; ?></span>
+                        <?php if (!empty($item['color']) && ($item['show_color'] === DB_YES || $item['is_patterned_color'] === DB_YES)): ?>
+                            <?php if ($item['is_patterned_color'] === DB_NO): ?>
+                                <?php load_partial('admin/parser/color-shape', [
+                                    'hex' => $item['color_hex'],
+                                ]); ?>
+                            <?php endif; ?>
+                            <span class="d-inline-block ml-2"><?= $item['color_name']; ?></span>
+                        <?php else: ?>
+                            <?php load_partial('admin/parser/dash-icon'); ?>
+                        <?php endif; ?>
                     </td>
                     <td><?= $item['size']; ?></td>
                     <td><?= $item['guarantee']; ?></td>
@@ -259,6 +267,17 @@ use Sim\Utils\StringUtil;
                         <?= StringUtil::toPersian(number_format(StringUtil::toEnglish($item['discounted_price']))); ?>
                         تومان
                     </td>
+
+                    <?php if (!is_null($item['discount_from'])): ?>
+                        <td data-order="<?= (int)$item['discount_from']; ?>">
+                            <?= Jdf::jdate(DEFAULT_TIME_FORMAT, $item['discount_from']); ?>
+                        </td>
+                    <?php else: ?>
+                        <td>
+                            <?php load_partial('admin/parser/dash-icon'); ?>
+                        </td>
+                    <?php endif; ?>
+
                     <?php if (!is_null($item['discount_until'])): ?>
                         <td data-order="<?= (int)$item['discount_until']; ?>">
                             <?= Jdf::jdate(DEFAULT_TIME_FORMAT, $item['discount_until']); ?>
@@ -277,6 +296,17 @@ use Sim\Utils\StringUtil;
                             موجود
                         <?php else: ?>
                             ناموجود
+                        <?php endif; ?>
+                    </td>
+
+                    <?php
+                    $isChecked = is_value_checked($item['separate_consignment']);
+                    ?>
+                    <td class="<?= $isChecked ? 'table-info' : 'table-warning'; ?>">
+                        <?php if ($isChecked): ?>
+                            بله
+                        <?php else: ?>
+                            خیر
                         <?php endif; ?>
                     </td>
                 </tr>

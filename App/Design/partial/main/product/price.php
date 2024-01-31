@@ -70,12 +70,12 @@
             </h5>
 
             <script type="text/javascript">
-                $(function () {
-                    $('.countdown_time').each(function () {
-                        var endTime = $(this).data('time');
-                        $(this).countdown(endTime);
-                    });
+              $(function () {
+                $('.countdown_time').each(function () {
+                  var endTime = $(this).data('time');
+                  $(this).countdown(endTime);
                 });
+              });
             </script>
         <?php endif; ?>
     <?php else: ?>

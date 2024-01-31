@@ -59,7 +59,9 @@ class AddProductForm implements IPageForm
                 'inp-add-product-weight.*' => 'وزن',
                 'inp-add-product-price.*' => 'قیمت کالا',
                 'inp-add-product-discount-price.*' => 'قیمت تخفیف کالا',
+                'inp-add-product-discount-date-from.*' => 'تاریخ شروع تخفیف',
                 'inp-add-product-discount-date.*' => 'تاریخ اتمام تخفیف',
+                'inp-add-product-separate-consignment.*' => 'کالای مجزا',
                 'inp-add-product-product-availability.*' => 'موجودی کالا',
                 'inp-add-product-gallery-img.*' => 'تصویر گالری',
                 'inp-add-product-desc' => 'توضیحات',
@@ -71,8 +73,11 @@ class AddProductForm implements IPageForm
                 'inp-add-product-guarantee.*',
                 'inp-add-product-price.*',
                 'inp-add-product-discount-price.*',
+                'inp-add-product-discount-date-from.*',
                 'inp-add-product-discount-date.*',
+                'inp-add-product-consider-discount-date-from.*',
                 'inp-add-product-consider-discount-date.*',
+                'inp-add-product-separate-consignment.*',
                 'inp-add-product-product-availability.*',
                 'inp-add-product-desc',
                 'inp-add-product-alert-product',
@@ -228,6 +233,37 @@ class AddProductForm implements IPageForm
                 }
                 return true;
             }, '{alias} ' . 'وارد شده وجود ندارد.');
+
+        // discount from date
+        $allowedDatesFrom = input()->post('inp-add-product-consider-discount-date-from');
+        $counter = 0;
+        $discountDatesFrom = input()->post('inp-add-product-discount-date-from');
+
+        if (is_array($allowedDatesFrom) && is_array($discountDatesFrom)) {
+            /**
+             * @var InputItem $allow
+             */
+            foreach ($allowedDatesFrom as $allow) {
+                if (!is_value_checked($allow->getValue()) && isset($discountDatesFrom[$counter])) {
+                    $timestampRule = new TimestampValidation();
+                    if (!$timestampRule->validate($discountDatesFrom[$counter]->getValue()) ||
+                        (
+                            '' !== $discountDatesFrom[$counter]->getValue() &&
+                            false === date(DEFAULT_TIME_FORMAT, $discountDatesFrom[$counter]->getValue())
+                        )
+                    ) {
+                        $validator
+                            ->setStatus(false)
+                            ->setError(
+                                'inp-add-product-discount-date-from.*',
+                                $validator->getFieldAlias('inp-add-product-discount-date-from.*') . ' ' . 'یک زمان وارد شده نامعتبر است.'
+                            );
+                    }
+                }
+                ++$counter;
+            }
+        }
+
         // discount until date
         $allowedDates = input()->post('inp-add-product-consider-discount-date');
         $counter = 0;
@@ -269,11 +305,6 @@ class AddProductForm implements IPageForm
         session()->setFlash('product-properties-assembled', $theProperties);
 
         if (!count($validator->getUniqueErrors())) {
-            /**
-             * @var ProductUtil $productUtil
-             */
-            $productUtil = container()->get(ProductUtil::class);
-
             // create gallery object
             $gallery = $productUtil->createGalleryArray();
             if (!count($gallery)) {

@@ -3,7 +3,7 @@
 
     <!-- Highlighting rows and columns -->
     <div class="card">
-        <?php load_partial('admin/card-header', ['header_title' => 'محصولات']); ?>
+        <?php load_partial('admin/card-header', ['header_title' => 'نظرات محصول']); ?>
 
         <div class="card-body">
             با استفاده از ستون عملیات می‌توانید اقدام به حذف و مشاهده نظرات کنید.

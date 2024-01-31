@@ -2,16 +2,6 @@
 
 namespace App\Logic\Utils;
 
-use App\Logic\Models\ColorModel;
-use App\Logic\Models\ProductModel;
-use Pecee\Http\Input\IInputItem;
-use Pecee\Http\Input\InputItem;
-use Sim\Exceptions\ConfigManager\ConfigNotRegisteredException;
-use Sim\Interfaces\IFileNotExistsException;
-use Sim\Interfaces\IInvalidVariableNameException;
-use Sim\Utils\StringUtil;
-use voku\helper\AntiXSS;
-
 class TorobUtil
 {
     /**

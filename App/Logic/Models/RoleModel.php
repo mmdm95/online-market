@@ -28,6 +28,13 @@ class RoleModel extends BaseModel
         return (int)$id[0]['id'];
     }
 
+    /**
+     * @param $username
+     * @param array $roles
+     * @return bool
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
+     */
     public function addRolesToUser($username, array $roles): bool
     {
         $this->db->beginTransaction();

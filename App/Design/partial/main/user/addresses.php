@@ -14,14 +14,15 @@
                                     <i class="ti-trash icon-2x m-0" aria-hidden="true"></i>
                                 </button>
                             </div>
-                            <address>
-                                <div class="mb-3">
+                            <div class="d-flex mb-3">
+                                <address>
                                     <?= $address['address']; ?>
-                                </div>
-                            </address>
+                                </address>
+                            </div>
                             <div class="d-flex align-items-center mb-3">
                                 <i class="linearicons-map-marker-user address-icon-size mr-2"
                                    aria-hidden="true"></i>
+                                <span class="mr-2 text-muted font-size-sm">استان و شهر:</span>
                                 <label class="m-0">
                                     <?= $address['province_name']; ?>
                                     ،
@@ -31,6 +32,7 @@
                             <div class="d-flex align-items-center mb-3">
                                 <i class="linearicons-envelope address-icon-size mr-2"
                                    aria-hidden="true"></i>
+                                <span class="mr-2 text-muted font-size-sm">کد پستی:</span>
                                 <label class="m-0">
                                     <?= $address['postal_code']; ?>
                                 </label>
@@ -38,6 +40,7 @@
                             <div class="d-flex align-items-center mb-3">
                                 <i class="linearicons-phone-bubble address-icon-size mr-2"
                                    aria-hidden="true"></i>
+                                <span class="mr-2 text-muted font-size-sm">موبایل:</span>
                                 <label class="m-0">
                                     <?= $address['mobile']; ?>
                                 </label>
@@ -45,6 +48,7 @@
                             <div class="d-flex align-items-center mb-3">
                                 <i class="linearicons-user address-icon-size mr-2"
                                    aria-hidden="true"></i>
+                                <span class="mr-2 text-muted font-size-sm">نام گیرنده:</span>
                                 <label class="m-0">
                                     <?= $address['full_name']; ?>
                                 </label>

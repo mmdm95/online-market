@@ -39,8 +39,14 @@ use Sim\Utils\StringUtil;
                     <td><?= $item['stock_count']; ?></td>
                     <td><?= $item['max_cart_count']; ?></td>
                     <td>
-                        <?php load_partial('admin/parser/color-shape', ['hex' => $item['color_hex']]); ?>
-                        <span class="ml-2"><?= $item['color_name']; ?></span>
+                        <?php if (!empty($item['color']) && ($item['show_color'] === DB_YES || $item['is_patterned_color'] === DB_YES)): ?>
+                            <?php if ($item['is_patterned_color'] === DB_NO): ?>
+                                <?php load_partial('admin/parser/color-shape', ['hex' => $item['color_hex']]); ?>
+                            <?php endif; ?>
+                            <span class="ml-2"><?= $item['color_name']; ?></span>
+                        <?php else: ?>
+                            <?php load_partial('admin/parser/dash-icon'); ?>
+                        <?php endif; ?>
                     </td>
                     <td><?= $item['size']; ?></td>
                     <td><?= $item['guarantee']; ?></td>
@@ -50,6 +56,15 @@ use Sim\Utils\StringUtil;
                     <td data-order="<?= (int)StringUtil::toEnglish($item['discounted_price']); ?>">
                         <?= StringUtil::toPersian(number_format(StringUtil::toEnglish($item['discounted_price']))); ?>
                     </td>
+
+                    <td data-order="<?= (int)$item['discount_from']; ?>">
+                        <?php if (isset($item['discount_from'])): ?>
+                            <?= Jdf::jdate(DEFAULT_TIME_FORMAT, $item['discount_from']); ?>
+                        <?php else: ?>
+                            <?php load_partial('admin/parser/dash-icon'); ?>
+                        <?php endif; ?>
+                    </td>
+
                     <td data-order="<?= (int)$item['discount_until']; ?>">
                         <?php if (isset($item['discount_until'])): ?>
                             <?= Jdf::jdate(DEFAULT_TIME_FORMAT, $item['discount_until']); ?>
@@ -57,6 +72,7 @@ use Sim\Utils\StringUtil;
                             <?php load_partial('admin/parser/dash-icon'); ?>
                         <?php endif; ?>
                     </td>
+
                     <td>
                         <?php load_partial('admin/parser/active-status', [
                             'status' => $item['is_available'],

@@ -115,12 +115,18 @@ class OrderController extends AbstractAdminController implements IDatatableContr
                 $formHandler = new GeneralFormHandler();
                 $data = $formHandler->handle(ChangeInvoiceStatus::class, 'invoice_change');
             } elseif (!is_null(input()->post('changeSendStatusBtn')->getValue())) {
+                $order = $orderModel->getOrders('o.id=:id', ['id' => $id], ['o.id DESC'], 1)[0];
+
                 $formHandler = new GeneralFormHandler();
                 $data = $formHandler->handle(ChangeSendStatus::class, 'send_change');
 
                 $username = session()->getFlash('send.status.username');
 
-                if (!count($data['send_change_errors'] ?? []) && !is_null($username)) {
+                if (
+                    !count($data['send_change_errors'] ?? []) &&
+                    !is_null($username) &&
+                    !in_array($order['payment_status'], [PAYMENT_STATUS_FAILED, PAYMENT_STATUS_WAIT, PAYMENT_STATUS_NOT_PAYED])
+                ) {
                     // send sms
                     $body = replaced_sms_body(SMS_TYPE_ORDER_STATUS, [
                         SMS_REPLACEMENTS['status'] => session()->getFlash('send.status.title', ''),
@@ -195,10 +201,17 @@ class OrderController extends AbstractAdminController implements IDatatableContr
              */
             $orderModel = container()->get(OrderModel::class);
             $info = $orderModel->getFirst([
-                'user_national_number', 'receiver_name', 'receiver_mobile', 'province', 'city', 'postal_code', 'address'
+                'receiver_type',
+                'company_economic_code', 'company_economic_national_id',
+                'company_registration_number', 'company_tel',
+                'user_national_number', 'receiver_name', 'receiver_mobile',
+                'province', 'city', 'postal_code', 'address'
             ], 'id=:id', ['id' => $id]);
 
             if (count($info)) {
+                $info['show_legal'] = $info['receiver_type'] === RECEIVER_TYPE_LEGAL;
+                unset($info['receiver_type']);
+
                 $resourceHandler->data($info);
             } else {
                 $resourceHandler

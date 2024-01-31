@@ -248,6 +248,7 @@ class ProductModel extends BaseModel
             'pa.image',
             'pa.code',
             'pa.price',
+            'pa.discount_from',
             'pa.discount_until',
             'pa.discounted_price',
             'pa.festival_expire',
@@ -255,6 +256,8 @@ class ProductModel extends BaseModel
             'pa.stock_count',
             'pa.color_name',
             'pa.color_hex',
+            'pa.show_color',
+            'pa.is_patterned_color',
             'pa.size',
             'pa.guarantee',
             'pa.product_availability',
@@ -418,10 +421,13 @@ class ProductModel extends BaseModel
                     'max_cart_count' => $product['max_cart'],
                     'price' => $product['price'],
                     'discounted_price' => $product['discount_price'],
+                    'discount_from' => $product['discount_from'] ?: null,
                     'discount_until' => $product['discount_until'] ?: null,
                     'is_available' => $product['available'],
                     'color_hex' => $product['color_hex'],
                     'color_name' => $product['color_name'],
+                    'show_color' => $product['show_color'],
+                    'is_patterned_color' => $product['is_patterned_color'],
                     'size' => $product['size'] ?: null,
                     'guarantee' => $product['guarantee'] ?: null,
                     'weight' => $product['weight'],
@@ -526,61 +532,19 @@ class ProductModel extends BaseModel
         $stmt = $this->db->prepare($delete->getStatement());
         $res5 = $stmt->execute($delete->getBindValues());
 
-        // delete all products
-        $productSelect = $this->connector->select();
-        $productSelect
-            ->cols(['color_hex', 'color_name'])
-            ->from(self::TBL_PRODUCT_PROPERTY)
-            ->where('product_id=:pId')
-            ->bindValues(['pId' => $product_id]);
-        $prevProduct = $this->db->fetchAll($productSelect->getStatement(), $productSelect->getBindValues());
+        if (!$res4 || !$res5) {
+            $this->db->rollBack();
+            return false;
+        }
+
+        // insert/update product properties
+        $res6 = $this->updateProductProperty($product_id, $products, false);
+
+        if (!$res6) {
+            $this->db->rollBack();
+            return false;
+        }
         //
-        $delete = $this->connector->delete();
-        $delete
-            ->from(self::TBL_PRODUCT_PROPERTY)
-            ->where('product_id=:pId')
-            ->bindValues(['pId' => $product_id]);
-        $stmt = $this->db->prepare($delete->getStatement());
-        $res6 = $stmt->execute($delete->getBindValues());
-
-        if (!$res4 || !$res5 || !$res6) {
-            $this->db->rollBack();
-            return false;
-        }
-
-        $res7 = false;
-
-        foreach ($products as $k => $product) {
-            if (!($product['color_hex'] ?? false) && (!isset($prevProduct[$k]) || (!$prevProduct[$k]['color_hex'] ?? false))) continue;
-
-            $insert = $this->connector->insert();
-            $insert
-                ->into(self::TBL_PRODUCT_PROPERTY)
-                ->cols([
-                    'code' => StringUtil::uniqidReal(12),
-                    'product_id' => $product_id,
-                    'stock_count' => $product['stock_count'],
-                    'max_cart_count' => $product['max_cart'],
-                    'price' => $product['price'],
-                    'discounted_price' => $product['discount_price'],
-                    'discount_until' => $product['discount_until'] ?: null,
-                    'is_available' => $product['available'],
-                    'color_hex' => $product['color_hex'] ?: $prevProduct[$k]['color_hex'],
-                    'color_name' => $product['color_name'] ?: $prevProduct[$k]['color_name'],
-                    'size' => $product['size'] ?: null,
-                    'guarantee' => $product['guarantee'] ?: null,
-                    'weight' => $product['weight'],
-                ]);
-            $stmt = $this->db->prepare($insert->getStatement());
-            $res7 = $stmt->execute($insert->getBindValues());
-
-            if (!$res7) break;
-        }
-
-        if (!$res7) {
-            $this->db->rollBack();
-            return false;
-        }
 
         $res2 = false;
         foreach ($image_galley as $image) {
@@ -623,6 +587,135 @@ class ProductModel extends BaseModel
 
         $this->db->rollBack();
         return false;
+    }
+
+    /**
+     * @param $product_id
+     * @param array $products
+     * @param bool $useInternalTransaction
+     * @return bool
+     * @throws \Exception
+     */
+    public function updateProductProperty($product_id, array $products, bool $useInternalTransaction = true): bool
+    {
+        if ($useInternalTransaction) {
+            $this->db->beginTransaction();
+        }
+
+        // get previous products
+        $productSelect = $this->connector->select();
+        $productSelect
+            ->cols(['id', 'color_hex', 'color_name', 'show_color', 'is_patterned_color'])
+            ->from(self::TBL_PRODUCT_PROPERTY)
+            ->where('product_id=:pId')
+            ->bindValues(['pId' => $product_id]);
+        $prevProducts = $this->db->fetchAll($productSelect->getStatement(), $productSelect->getBindValues());
+
+        // insert new or update previous product properties
+        $visitedProductsIds = [];
+        $res = false;
+        foreach ($products as $product) {
+            if (!($product['color_hex'] ?? false)) continue;
+
+            $prevProduct = array_filter($prevProducts, function ($item) use ($product) {
+                return $item['id'] == $product['id'];
+            });
+            $prevProduct = array_pop($prevProduct);
+
+            if (empty($prevProduct)) {
+                $insertOrUpdate = $this->connector->insert();
+                $insertOrUpdate
+                    ->into(self::TBL_PRODUCT_PROPERTY)
+                    ->cols([
+                        'code' => StringUtil::uniqidReal(12),
+                        'product_id' => $product_id,
+                        'stock_count' => $product['stock_count'],
+                        'max_cart_count' => $product['max_cart'],
+                        'price' => $product['price'],
+                        'discounted_price' => $product['discount_price'],
+                        'discount_from' => $product['discount_from'] ?: null,
+                        'discount_until' => $product['discount_until'] ?: null,
+                        'is_available' => $product['available'],
+                        'color_hex' => $product['color_hex'],
+                        'color_name' => $product['color_name'],
+                        'show_color' => $product['show_color'],
+                        'is_patterned_color' => $product['is_patterned_color'],
+                        'size' => $product['size'] ?: null,
+                        'guarantee' => $product['guarantee'] ?: null,
+                        'weight' => $product['weight'],
+                    ]);
+            } else {
+                $visitedProductsIds[] = $prevProduct['id'];
+
+                $insertOrUpdate = $this->connector->update();
+                $insertOrUpdate
+                    ->table(self::TBL_PRODUCT_PROPERTY)
+                    ->cols([
+                        'stock_count' => $product['stock_count'],
+                        'max_cart_count' => $product['max_cart'],
+                        'price' => $product['price'],
+                        'discounted_price' => $product['discount_price'],
+                        'discount_from' => $product['discount_from'] ?: null,
+                        'discount_until' => $product['discount_until'] ?: null,
+                        'is_available' => $product['available'],
+                        'color_hex' => $product['color_hex'] ?: $prevProduct['color_hex'],
+                        'color_name' => $product['color_name'] ?: $prevProduct['color_name'],
+                        'show_color' => $product['show_color'] ?: $prevProduct['show_color'],
+                        'is_patterned_color' => $product['is_patterned_color'] ?: $prevProduct['is_patterned_color'],
+                        'size' => $product['size'] ?: null,
+                        'guarantee' => $product['guarantee'] ?: null,
+                        'weight' => $product['weight'],
+                    ])
+                    ->where('id=:id AND product_id=:pId')
+                    ->bindValues(['id' => $prevProduct['id'], 'pId' => $product_id]);
+            }
+
+            $stmt = $this->db->prepare($insertOrUpdate->getStatement());
+            $res = $stmt->execute($insertOrUpdate->getBindValues());
+
+            if (!$res) break;
+        }
+
+        // remove not existence previous product properties
+        $notExistenceProducts = array_filter($prevProducts, function ($item) use ($visitedProductsIds) {
+            return !in_array($item['id'], $visitedProductsIds);
+        });
+        $notExistenceProductsIds = array_map(function ($item) {
+            return $item['id'];
+        }, $notExistenceProducts);
+
+        if (count($notExistenceProductsIds)) {
+            $placeholders = array_map(function ($id) {
+                return ':id' . $id;
+            }, range(1, count($notExistenceProductsIds) - 1));
+            $bindings = array_map(function ($item, $idx) {
+                return [':id' . ($idx + 1) => $item];
+            }, $notExistenceProductsIds);
+
+            $delete = $this->connector->delete();
+            $delete
+                ->from(self::TBL_PRODUCT_PROPERTY)
+                ->where('product_id=:pId')
+                ->bindValues(['pId' => $product_id])
+                ->where('NOT IN (' . implode(',', $placeholders) . ')')
+                ->bindValues($bindings);
+            $stmt = $this->db->prepare($delete->getStatement());
+            $res2 = $stmt->execute($delete->getBindValues());
+        } else {
+            $res2 = true;
+        }
+
+        if (!$res || !$res2) {
+            if ($useInternalTransaction) {
+                $this->db->rollBack();
+            }
+            return false;
+        }
+
+        if ($useInternalTransaction) {
+            $this->db->commit();
+        }
+        return true;
     }
 
     /**

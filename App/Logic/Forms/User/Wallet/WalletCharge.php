@@ -97,10 +97,8 @@ class WalletCharge implements IPageForm
          * @var AntiXSS $xss
          */
         $xss = container()->get(AntiXSS::class);
-        /**
-         * @var DBAuth $auth
-         */
-        $auth = container()->get('auth_admin');
+
+        $auth = auth_home();
 
         try {
             $userId = $auth->getCurrentUser()['id'] ?? null;

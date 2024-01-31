@@ -79,7 +79,7 @@ class ChangeUserInfoForm implements IPageForm
         // shaba number
         $validator
             ->setFields('inp-info-shaba-num')
-            ->isInteger();
+            ->regex('/[0-9*]/');
 
         // to reset form values and not set them again
         if ($validator->getStatus()) {
