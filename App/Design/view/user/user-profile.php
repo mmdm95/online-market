@@ -200,7 +200,7 @@
         </div>
 
         <table class="table table-bordered table-hover datatable-highlight" id="__datatable_addr_company_view"
-               data-columns='[{"data":"id"}, {"data":"company_name"}, {"data":"eco_code"}, {"data":"eco_nid"}, {"data":"reg_number"}, {"data":"tel"}, {"data":"province"}, {"data":"city"}, {"data":"postal_code"}, {"data":"mobile"}, {"data":"address"}, {"data":"operations"}]'
+               data-columns='[{"data":"id"}, {"data":"company_name"}, {"data":"eco_code"}, {"data":"eco_nid"}, {"data":"reg_number"}, {"data":"tel"}, {"data":"province"}, {"data":"city"}, {"data":"postal_code"}, {"data":"address"}, {"data":"operations"}]'
                data-ajax-url="<?= url('admin.addr.company.dt.view', ['user_id' => $user['id']])->getRelativeUrlTrimmed(); ?>">
             <thead>
             <tr>
@@ -213,7 +213,6 @@
                 <th>استان</th>
                 <th>شهر</th>
                 <th>کدپستی</th>
-                <th>موبایل</th>
                 <th>آدرس</th>
                 <th class="text-center">عملیات</th>
             </tr>
@@ -229,7 +228,6 @@
                 <th>استان</th>
                 <th>شهر</th>
                 <th>کدپستی</th>
-                <th>موبایل</th>
                 <th>آدرس</th>
                 <th class="text-center">عملیات</th>
             </tr>
@@ -435,7 +433,7 @@
                                 <label>استان:</label>
                                 <select data-placeholder="استان را انتخاب کنید."
                                         class="form-control form-control-select2-searchable city-loader-select"
-                                        data-city-select-target="#addAddressCitySelect"
+                                        data-city-select-target="#addAddressCompanyCitySelect"
                                         name="inp-add-address-company-province"
                                         data-fouc>
                                     <option value="<?= DEFAULT_OPTION_VALUE; ?>" disabled selected>انتخاب کنید</option>
@@ -445,7 +443,7 @@
                             <div class="col-lg-4 form-group">
                                 <label>شهر:</label>
                                 <select data-placeholder="شهر را انتخاب کنید."
-                                        id="addAddressCitySelect"
+                                        id="addAddressCompanyCitySelect"
                                         name="inp-add-address-company-city"
                                         class="form-control form-control-select2-searchable"
                                         data-fouc>
@@ -526,7 +524,7 @@
                                 <label>استان:</label>
                                 <select data-placeholder="استان را انتخاب کنید."
                                         class="form-control form-control-select2-searchable city-loader-select"
-                                        data-city-select-target="#addAddressCitySelect"
+                                        data-city-select-target="#editAddressCompanyCitySelect"
                                         name="inp-edit-address-company-province"
                                         data-fouc>
                                     <option value="<?= DEFAULT_OPTION_VALUE; ?>" disabled selected>انتخاب کنید</option>
@@ -536,7 +534,7 @@
                             <div class="col-lg-4 form-group">
                                 <label>شهر:</label>
                                 <select data-placeholder="شهر را انتخاب کنید."
-                                        id="addAddressCitySelect"
+                                        id="editAddressCompanyCitySelect"
                                         name="inp-edit-address-company-city"
                                         class="form-control form-control-select2-searchable"
                                         data-fouc>

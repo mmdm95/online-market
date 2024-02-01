@@ -299,7 +299,7 @@ if (count($order ?? []) && count($items ?? [])): ?>
     <table class='table table-bordered'>
         <thead>
         <tr>
-            <th colspan="9">
+            <th colspan="10">
                 محصولات خریداری شده
             </th>
         </tr>

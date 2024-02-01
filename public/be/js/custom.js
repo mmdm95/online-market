@@ -4698,7 +4698,7 @@
       currentModal = $('#modal_form_receiver_detail');
       // make all data to error loading
       if (id && currentModal.length) {
-        $('#__receiver_info_full_name,#__receiver_info_phone,#__receiver_info_natnum,#__receiver_info_eco_code,#__receiver_info_eco_nid,#__receiver_info_reg_num,#__receiver_info_tel,#__receiver_info_province,#__receiver_info_city,#__receiver_info_postal_code,#__receiver_info_address, ')
+        $('#__receiver_info_full_name,#__receiver_info_phone,#__receiver_info_natnum,#__receiver_info_eco_code,#__receiver_info_eco_nid,#__receiver_info_reg_num,#__receiver_info_tel,#__receiver_info_province,#__receiver_info_city,#__receiver_info_postal_code,#__receiver_info_address')
           .html('در حال بارگذاری');
 
         $('#__receiver_info_full_name,#__receiver_info_phone,#__receiver_info_natnum,#__receiver_info_eco_code,#__receiver_info_eco_nid,#__receiver_info_reg_num,#__receiver_info_tel')
@@ -4707,7 +4707,7 @@
         admin.request(variables.url.orders.info + '/' + id, 'get', function () {
           var _ = this;
           if (core.objSize(_.data)) {
-            if(_.data['show_legal']) {
+            if (_.data['show_legal']) {
               $('#__receiver_info_full_name,#__receiver_info_phone,#__receiver_info_natnum')
                 .closest('li').removeClass('d-none');
 
@@ -5263,7 +5263,7 @@
         admin.loadProvinces(p);
         c.removeAttr('data-current-city');
         admin.loadCities(c, -1);
-        createDatatable();
+        createDatatable($('#__datatable_addr_view'));
         //-----
         admin.toasts.toast(this.data, {
           type: variables.toasts.types.success,
@@ -5356,7 +5356,7 @@
         admin.loadProvinces(p);
         c.removeAttr('data-current-city');
         admin.loadCities(c, -1);
-        createDatatable();
+        createDatatable($('#__datatable_addr_company_view'));
         //-----
         admin.toasts.toast(this.data, {
           type: variables.toasts.types.success,
@@ -5379,7 +5379,7 @@
     //---------------------------------------------------------------
     // Edit ADDRESS COMPANY FORM
     //---------------------------------------------------------------
-    admin.forms.submitForm('editAddress', constraints.editAddress, function (values) {
+    admin.forms.submitForm('editAddressCompany', constraints.editAddressCompany, function (values) {
       if (editAddrId) {
         // do ajax
         if (createLoader) {
@@ -5389,8 +5389,8 @@
         admin.request(variables.url.addressCompany.edit + '/' + userId + '/' + editAddrId, 'post', function () {
           admin.hideLoader(loaderId);
           // clear element after success
-          $(variables.elements.editAddress.form).get(0).reset();
-          $(variables.elements.editAddress.form).find('input[type="hidden"]').val('');
+          $(variables.elements.editAddressCompany.form).get(0).reset();
+          $(variables.elements.editAddressCompany.form).find('input[type="hidden"]').val('');
           // load province and city again
           var p = $('select[name="' + variables.elements.editAddressCompany.inputs.province + '"]');
           var c = $('select[name="' + variables.elements.editAddressCompany.inputs.city + '"]');

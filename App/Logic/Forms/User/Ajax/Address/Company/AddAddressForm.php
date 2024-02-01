@@ -71,7 +71,7 @@ class AddAddressForm implements IPageForm
             ->stopValidationAfterFirstError(false)
             ->required()
             ->stopValidationAfterFirstError(true)
-            ->regex('^\d{11}$', '{alias} ' . 'نامعتبر است.');
+            ->regex('/^\d{11}$/', '{alias} ' . 'نامعتبر است.');
         // province
         $validator
             ->setFields('inp-add-address-company-province')

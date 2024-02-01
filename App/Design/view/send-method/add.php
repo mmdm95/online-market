@@ -69,7 +69,6 @@ $validator = form_validator();
                     </div>
                     <div class="form-group col-lg-6">
                         <label>
-                            <span class="text-danger">*</span>
                             توضیحات مختصر روش ارسال:
                         </label>
                         <input type="text" class="form-control maxlength-placeholder"
@@ -94,7 +93,5 @@ $validator = form_validator();
         'the_options' => $the_options ?? [],
     ]); ?>
     <!-- /mini file manager modal -->
-
-    <?php load_partial('editor/browser-tiny-func'); ?>
 </div>
 <!-- /content area -->

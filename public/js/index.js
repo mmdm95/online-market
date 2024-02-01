@@ -668,14 +668,18 @@
       //-----
       createLoader = true,
       //
+      currentModal,
+      //
       editAddrId = null,
       editAddrCompanyId = null,
       //
-      addressesContainer;
+      addressesContainer,
+      addressesCompanyContainer;
 
     shop = new window.TheShop();
 
     addressesContainer = $('.address-elements-container');
+    addressesCompanyContainer = $('.address-company-elements-container');
 
     //-----
     constraints = {
@@ -788,6 +792,20 @@
         }, 100);
       }, {}, false, function () {
         shop.hideLoaderFromInsideElement(addressesContainer);
+      })
+    }
+
+    function reloadUserAddressesCompany() {
+      // append created address to address container
+      shop.showLoaderInsideElement(addressesCompanyContainer);
+      shop.request(variables.url.address.all, 'get', function () {
+        shop.hideLoaderFromInsideElement(addressesCompanyContainer);
+        addressesCompanyContainer.html(this.data);
+        setTimeout(function () {
+          reAssignThings();
+        }, 100);
+      }, {}, false, function () {
+        shop.hideLoaderFromInsideElement(addressesCompanyContainer);
       })
     }
 
@@ -921,12 +939,12 @@
      * @param btn
      */
     function editAddressBtnClick(btn) {
-      var id, editModal;
+      var id;
       id = $(btn).attr('data-edit-id');
-      editModal = $('#__user_addr_edit_modal');
+      currentModal = $('#__user_addr_edit_modal');
       // clear element after each call
       $(variables.elements.editAddress.form).get(0).reset();
-      if (id && editModal.length) {
+      if (id && currentModal.length) {
         shop.request(variables.url.address.get + '/' + id, 'get', function () {
           var _ = this;
           var provincesSelect = $('select[name="' + variables.elements.editAddress.inputs.province + '"]'),
@@ -936,10 +954,10 @@
             //-----
             shop.loadProvinces(provincesSelect.attr('data-current-province', _.data['province_id']));
             shop.loadCities(citiesSelect.attr('data-current-city', _.data['city_id']), _.data['province_id']);
-            editModal.find('[name="' + variables.elements.editAddress.inputs.fullName + '"]').val(_.data['full_name']);
-            editModal.find('[name="' + variables.elements.editAddress.inputs.mobile + '"]').val(_.data['mobile']);
-            editModal.find('[name="' + variables.elements.editAddress.inputs.postalCode + '"]').val(_.data['postal_code']);
-            editModal.find('[name="' + variables.elements.editAddress.inputs.address + '"]').val(_.data['address']);
+            currentModal.find('[name="' + variables.elements.editAddress.inputs.fullName + '"]').val(_.data['full_name']);
+            currentModal.find('[name="' + variables.elements.editAddress.inputs.mobile + '"]').val(_.data['mobile']);
+            currentModal.find('[name="' + variables.elements.editAddress.inputs.postalCode + '"]').val(_.data['postal_code']);
+            currentModal.find('[name="' + variables.elements.editAddress.inputs.address + '"]').val(_.data['address']);
           }
         });
       }
@@ -950,12 +968,12 @@
      * @param btn
      */
     function editAddressCompanyBtnClick(btn) {
-      var id, editModal;
+      var id;
       id = $(btn).attr('data-edit-id');
-      editModal = $('#__user_addr_company_edit_modal');
+      currentModal = $('#__user_addr_company_edit_modal');
       // clear element after each call
       $(variables.elements.editAddressCompany.form).get(0).reset();
-      if (id && editModal.length) {
+      if (id && currentModal.length) {
         shop.request(variables.url.addressCompany.get + '/' + id, 'get', function () {
           var _ = this;
           var provincesSelect = $('select[name="' + variables.elements.editAddressCompany.inputs.province + '"]'),
@@ -1218,6 +1236,10 @@
           c.removeAttr('data-current-city');
           shop.loadCities(c, -1);
           editAddrId = null;
+          if (currentModal) {
+            currentModal.modal('hide');
+            currentModal = null;
+          }
           //-----
           shop.toasts.toast(this.data, {
             type: variables.toasts.types.success,
@@ -1265,7 +1287,7 @@
           type: variables.toasts.types.success,
         });
         createLoader = true;
-        reloadUserAddresses();
+        reloadUserAddressesCompany();
       }, {
         data: values,
       }, true, function () {
@@ -1303,12 +1325,16 @@
           c.removeAttr('data-current-city');
           shop.loadCities(c, -1);
           editAddrCompanyId = null;
+          if (currentModal) {
+            currentModal.modal('hide');
+            currentModal = null;
+          }
           //-----
           shop.toasts.toast(this.data, {
             type: variables.toasts.types.success,
           });
           createLoader = true;
-          reloadUserAddresses();
+          reloadUserAddressesCompany();
         }, {
           data: values,
         }, true, function () {

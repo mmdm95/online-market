@@ -1252,7 +1252,7 @@ window.MyGlobalVariables = {
       $this,
       captchaReloadBtn = $(variables.elements.captcha.refreshBtn),
       provincesSelect = $('.city-loader-select'),
-      citiesSelect = $(provincesSelect.attr('data-city-select-target'));
+      citiesSelect;
 
     //---------------------------------------------------------------
     // CSRF TOKEN LOAD
@@ -1281,13 +1281,16 @@ window.MyGlobalVariables = {
     //---------------------------------------------------------------
     // LOAD CITIES ACCORDING TO PROVINCES
     //---------------------------------------------------------------
-    provincesSelect.on('change' + variables.namespace, function () {
-      var id;
-      $this = $(this);
-      id = $this.find(':selected').val();
-      if (id) {
-        shop.loadCities(citiesSelect, id);
-      }
+    provincesSelect.each(function () {
+      $(this).on('change' + variables.namespace, function () {
+        var id;
+        $this = $(this);
+        id = $this.find(':selected').val();
+        if (id) {
+          citiesSelect = $($this.attr('data-city-select-target'));
+          shop.loadCities(citiesSelect, id);
+        }
+      });
     });
 
     //---------------------------------------------------------------

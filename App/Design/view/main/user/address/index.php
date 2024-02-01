@@ -17,25 +17,23 @@
         <div class="dashboard_content">
             <div class="address-elements-container">
                 <?php load_partial('main/user/addresses', ['addresses' => $addresses ?? []]); ?>
-
-                <button type="button" class="btn btn-info btn-block"
-                        data-toggle="modal" data-target="#__user_addr_add_modal">
-                    افزودن آدرس جدید
-                </button>
             </div>
+            <button type="button" class="btn btn-info btn-block"
+                    data-toggle="modal" data-target="#__user_addr_add_modal">
+                افزودن آدرس جدید
+            </button>
         </div>
     </div>
 
     <div class="tab-pane container p-0" id="legalAddresses">
         <div class="dashboard_content">
-            <div class="address-elements-container">
+            <div class="address-company-elements-container">
                 <?php load_partial('main/user/addresses-company', ['addresses_company' => $addresses_company ?? []]); ?>
-
-                <button type="button" class="btn btn-info btn-block"
-                        data-toggle="modal" data-target="#__user_addr_company_add_modal">
-                    افزودن آدرس حقوقی جدید
-                </button>
             </div>
+            <button type="button" class="btn btn-info btn-block"
+                    data-toggle="modal" data-target="#__user_addr_company_add_modal">
+                افزودن آدرس حقوقی جدید
+            </button>
         </div>
     </div>
 </div>

@@ -74,7 +74,7 @@ class EditAddressForm implements IPageForm
             ->stopValidationAfterFirstError(false)
             ->required()
             ->stopValidationAfterFirstError(true)
-            ->regex('^\d{11}$', '{alias} ' . 'نامعتبر است.');
+            ->regex('/^\d{11}$/', '{alias} ' . 'نامعتبر است.');
         // province
         $validator
             ->setFields('inp-edit-address-company-province')
@@ -117,7 +117,7 @@ class EditAddressForm implements IPageForm
             ->required();
 
         // check if address is existed
-        $id = session()->getFlash('addr-edit-id', null, false);
+        $id = session()->getFlash('addr-company-edit-id', null, false);
         if (!empty($id)) {
             /**
              * @var AddressCompanyModel $addressCompanyModel
@@ -135,7 +135,7 @@ class EditAddressForm implements IPageForm
         }
 
         // check if user is existed
-        $userId = session()->getFlash('addr-edit-user-id', null, false);
+        $userId = session()->getFlash('addr-company-edit-user-id', null, false);
         if (!empty($userId)) {
             /**
              * @var UserModel $userModel

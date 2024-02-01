@@ -188,11 +188,11 @@ class MyAddressController extends AbstractUserController implements IAjaxControl
             ], 'u_addr.user_id=:id', ['id' => $user['id']]);
 
             $addressesCompany = $addressCompanyModel->getUserAddresses([
-                'u_addr.id', 'u_addr.company_name', 'u_addr.economic_code',
-                'u_addr.economic_national_id', 'u_addr.registration_number',
-                'u_addr.landline_tel', 'u_addr.address', 'u_addr.postal_code',
+                'uc_addr.id', 'uc_addr.company_name', 'uc_addr.economic_code',
+                'uc_addr.economic_national_id', 'uc_addr.registration_number',
+                'uc_addr.landline_tel', 'uc_addr.address', 'uc_addr.postal_code',
                 'c.name AS city_name', 'p.name AS province_name'
-            ], 'u_addr.user_id=:id', ['id' => $user['id']]);
+            ], 'uc_addr.user_id=:id', ['id' => $user['id']]);
 
             $this->setTemplate('partial/main/user/addresses');
             $resourceHandler

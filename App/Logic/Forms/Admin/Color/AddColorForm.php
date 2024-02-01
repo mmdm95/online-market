@@ -58,7 +58,7 @@ class AddColorForm implements IPageForm
                     return false;
                 }
                 return true;
-            }, 'رنگی انتخاب شده وجود دارد.');
+            }, 'رنگ انتخاب شده وجود دارد.');
         // color
         $validator
             ->setFields('inp-add-color-color')

@@ -10,7 +10,8 @@ $validator = form_validator();
         <?php load_partial('admin/card-header', ['header_title' => 'ویرایش روش ارسال']); ?>
 
         <div class="card-body">
-            <form action="<?= url('admin.send_method.edit')->getRelativeUrl() . $method['id']; ?>" method="post"
+            <form action="<?= url('admin.send_method.edit', ['id' => $method['id']])->getRelativeUrlTrimmed(); ?>"
+                  method="post"
                   id="__form_edit_send_method">
                 <?php load_partial('admin/message/message-form', [
                     'errors' => $send_method_edit_errors ?? [],
@@ -28,7 +29,7 @@ $validator = form_validator();
                                     انتخاب تصویر:
                                 </label>
                                 <?php
-                                $img = $validator->setInput('inp-edit-send-method-img') ?: (url('image.show')->getRelativeUrl() . $method['image']);
+                                $img = $validator->setInput('inp-edit-send-method-img') ?: $method['image'];
                                 ?>
                                 <div class="img-placeholder-custom __file_picker_handler __file_image mx-auto ml-lg-0 mr-lg-3 mb-0 <?= !empty($img) ? 'has-image' : ''; ?>"
                                      data-toggle="modal"
@@ -36,7 +37,8 @@ $validator = form_validator();
                                     <input type="hidden" name="inp-edit-send-method-img"
                                            value="<?= $img; ?>">
                                     <?php if (!empty($img)): ?>
-                                        <img class="img-placeholder-image" src="<?= url('image.show') . $img; ?>" alt="selected image">
+                                        <img class="img-placeholder-image" src="<?= url('image.show') . $img; ?>"
+                                             alt="selected image">
                                     <?php endif; ?>
                                     <div class="img-placeholder-icon-container">
                                         <i class="icon-image2 img-placeholder-icon text-grey-300"></i>
@@ -64,8 +66,19 @@ $validator = form_validator();
                             <span class="text-danger">*</span>
                             عنوان روش ارسال:
                         </label>
-                        <input type="text" class="form-control" placeholder="وارد کنید" name="inp-edit-send-method-title"
+                        <input type="text" class="form-control" placeholder="وارد کنید"
+                               name="inp-edit-send-method-title"
                                value="<?= $validator->setInput('inp-edit-send-method-title') ?: $method['title']; ?>">
+                    </div>
+                    <div class="form-group col-lg-6">
+                        <label>
+                            توضیحات مختصر روش ارسال:
+                        </label>
+                        <input type="text" class="form-control maxlength-placeholder"
+                               placeholder="وارد کنید"
+                               maxlength="250"
+                               name="inp-edit-send-method-desc"
+                               value="<?= $validator->setInput('inp-edit-send-method-desc') ?: $method['desc']; ?>">
                     </div>
                 </div>
                 <div class="text-right">
@@ -83,7 +96,5 @@ $validator = form_validator();
         'the_options' => $the_options ?? [],
     ]); ?>
     <!-- /mini file manager modal -->
-
-    <?php load_partial('editor/browser-tiny-func'); ?>
 </div>
 <!-- /content area -->

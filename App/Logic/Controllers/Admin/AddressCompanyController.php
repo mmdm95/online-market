@@ -10,7 +10,7 @@ use App\Logic\Handlers\GeneralAjaxFormHandler;
 use App\Logic\Handlers\GeneralAjaxRemoveHandler;
 use App\Logic\Handlers\ResourceHandler;
 use App\Logic\Interfaces\IDatatableController;
-use App\Logic\Models\AddressModel;
+use App\Logic\Models\AddressCompanyModel;
 use App\Logic\Models\BaseModel;
 use App\Logic\Utils\LogUtil;
 use Jenssegers\Agent\Agent;
@@ -47,7 +47,7 @@ class AddressCompanyController extends AbstractAdminController implements IDatat
          */
         $agent = container()->get(Agent::class);
         if (!$agent->isRobot()) {
-            session()->setFlash('addr-add-user-id', $user_id);
+            session()->setFlash('addr-company-add-user-id', $user_id);
             $formHandler = new GeneralAjaxFormHandler();
             $resourceHandler = $formHandler
                 ->setSuccessMessage('آدرس با موفقیت اضافه شد.')
@@ -88,8 +88,8 @@ class AddressCompanyController extends AbstractAdminController implements IDatat
          */
         $agent = container()->get(Agent::class);
         if (!$agent->isRobot()) {
-            session()->setFlash('addr-edit-user-id', $user_id);
-            session()->setFlash('addr-edit-id', $id);
+            session()->setFlash('addr-company-edit-user-id', $user_id);
+            session()->setFlash('addr-company-edit-id', $id);
             $formHandler = new GeneralAjaxFormHandler();
             $resourceHandler = $formHandler
                 ->setSuccessMessage('آدرس با موفقیت ویرایش شد.')
@@ -116,10 +116,10 @@ class AddressCompanyController extends AbstractAdminController implements IDatat
          */
         $auth = container()->get('auth_admin');
         /**
-         * @var AddressModel $addressModel
+         * @var AddressCompanyModel $addressCompanyModel
          */
-        $addressModel = container()->get(AddressModel::class);
-        $user_id = $addressModel->getFirst(['user_id'], 'id=:id', ['id' => $id])['user_id'] ?? null;
+        $addressCompanyModel = container()->get(AddressCompanyModel::class);
+        $user_id = $addressCompanyModel->getFirst(['user_id'], 'id=:id', ['id' => $id])['user_id'] ?? null;
         $currId = $auth->getCurrentUser()['id'] ?? null;
         if (empty($currId) || $user_id != $currId) {
             if (!$auth->isAllow(RESOURCE_USER, IAuth::PERMISSION_DELETE)) {
@@ -174,10 +174,10 @@ class AddressCompanyController extends AbstractAdminController implements IDatat
         $agent = container()->get(Agent::class);
         if (!$agent->isRobot()) {
             /**
-             * @var AddressModel $addressModel
+             * @var AddressCompanyModel $addressCompanyModel
              */
-            $addressModel = container()->get(AddressModel::class);
-            $res = $addressModel->getFirst(['*'], 'user_id=:uId AND id=:id', ['uId' => $user_id, 'id' => $id]);
+            $addressCompanyModel = container()->get(AddressCompanyModel::class);
+            $res = $addressCompanyModel->getFirst(['*'], 'user_id=:uId AND id=:id', ['uId' => $user_id, 'id' => $id]);
             if (count($res)) {
                 $resourceHandler
                     ->type(RESPONSE_TYPE_SUCCESS)
@@ -231,9 +231,9 @@ class AddressCompanyController extends AbstractAdminController implements IDatat
                     $event->stopPropagation();
 
                     /**
-                     * @var AddressModel $addressModel
+                     * @var AddressCompanyModel $addressCompanyModel
                      */
-                    $addressModel = container()->get(AddressModel::class);
+                    $addressCompanyModel = container()->get(AddressCompanyModel::class);
 
                     if (!empty($where)) {
                         $where .= ' AND (uc_addr.user_id=:uId)';
@@ -244,10 +244,10 @@ class AddressCompanyController extends AbstractAdminController implements IDatat
                         'uId' => $userId,
                     ]);
 
-                    $data = $addressModel->getUserAddresses($cols, $where, $bindValues, $limit, $offset, $order);
+                    $data = $addressCompanyModel->getUserAddresses($cols, $where, $bindValues, $limit, $offset, $order);
                     //-----
-                    $recordsFiltered = $addressModel->getUserAddressesCount($where, $bindValues);
-                    $recordsTotal = $addressModel->getUserAddressesCount();
+                    $recordsFiltered = $addressCompanyModel->getUserAddressesCount($where, $bindValues);
+                    $recordsTotal = $addressCompanyModel->getUserAddressesCount();
 
                     return [$data, $recordsFiltered, $recordsTotal];
                 });
@@ -262,7 +262,6 @@ class AddressCompanyController extends AbstractAdminController implements IDatat
                     ['db' => 'p.name', 'db_alias' => 'province_name', 'dt' => 'province'],
                     ['db' => 'c.name', 'db_alias' => 'city_name', 'dt' => 'city'],
                     ['db' => 'uc_addr.postal_code', 'db_alias' => 'postal_code', 'dt' => 'postal_code'],
-                    ['db' => 'uc_addr.mobile', 'db_alias' => 'mobile', 'dt' => 'mobile'],
                     ['db' => 'uc_addr.address', 'db_alias' => 'address', 'dt' => 'address'],
                     [
                         'dt' => 'operations',

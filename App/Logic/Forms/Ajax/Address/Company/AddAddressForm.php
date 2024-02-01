@@ -3,7 +3,7 @@
 namespace App\Logic\Forms\Ajax\Address\Company;
 
 use App\Logic\Interfaces\IPageForm;
-use App\Logic\Models\AddressModel;
+use App\Logic\Models\AddressCompanyModel;
 use App\Logic\Models\CityModel;
 use App\Logic\Models\ProvinceModel;
 use App\Logic\Models\UserModel;
@@ -74,7 +74,7 @@ class AddAddressForm implements IPageForm
             ->stopValidationAfterFirstError(false)
             ->required()
             ->stopValidationAfterFirstError(true)
-            ->regex('^\d{11}$', '{alias} ' . 'نامعتبر است.');
+            ->regex('/^\d{11}$/', '{alias} ' . 'نامعتبر است.');
         // province
         $validator
             ->setFields('inp-add-address-company-province')
@@ -117,7 +117,7 @@ class AddAddressForm implements IPageForm
             ->required();
 
         // check if user is existed
-        $userId = session()->getFlash('addr-add-user-id', null, false);
+        $userId = session()->getFlash('addr-company-add-user-id', null, false);
         if (!empty($userId)) {
             /**
              * @var UserModel $userModel
@@ -137,10 +137,10 @@ class AddAddressForm implements IPageForm
         // check if address is not exceed max number
         if (!empty($userId)) {
             /**
-             * @var AddressModel $addressModel
+             * @var AddressCompanyModel $addressCompanyModel
              */
-            $addressModel = container()->get(AddressModel::class);
-            if ($addressModel->count('user_id=:uId', ['uId' => $userId]) >= ADDRESS_MAX_COUNT) {
+            $addressCompanyModel = container()->get(AddressCompanyModel::class);
+            if ($addressCompanyModel->count('user_id=:uId', ['uId' => $userId]) >= ADDRESS_MAX_COUNT) {
                 $validator
                     ->setStatus(false)
                     ->setError('inp-add-address-company-name', 'تعداد آدرس‌ها به حداکثر خود رسیده است.');
@@ -167,15 +167,15 @@ class AddAddressForm implements IPageForm
     public function store(): bool
     {
         /**
-         * @var AddressModel $addressModel
+         * @var AddressCompanyModel $addressCompanyModel
          */
-        $addressModel = container()->get(AddressModel::class);
+        $addressCompanyModel = container()->get(AddressCompanyModel::class);
         /**
          * @var AntiXSS $xss
          */
         $xss = container()->get(AntiXSS::class);
 
-        try {
+//        try {
             $userId = session()->getFlash('addr-company-add-user-id', null);
             $name = input()->post('inp-add-address-company-name', '')->getValue();
             $ecoCode = input()->post('inp-add-address-company-economic-code', '')->getValue();
@@ -189,7 +189,7 @@ class AddAddressForm implements IPageForm
 
             if (is_null($userId)) return false;
 
-            $res = $addressModel->insert([
+            $res = $addressCompanyModel->insert([
                 'user_id' => $userId,
                 'company_name' => $xss->xss_clean($name),
                 'economic_code' => $xss->xss_clean($ecoCode),
@@ -203,8 +203,8 @@ class AddAddressForm implements IPageForm
                 'created_at' => time(),
             ]);
             return $res;
-        } catch (\Exception $e) {
-            return false;
-        }
+//        } catch (\Exception $e) {
+//            return false;
+//        }
     }
 }

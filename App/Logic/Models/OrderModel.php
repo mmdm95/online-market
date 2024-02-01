@@ -85,6 +85,64 @@ class OrderModel extends BaseModel
     }
 
     /**
+     * Use [gf for gateway_flow], [o for orders], [u for users]
+     *
+     * @param string|null $where
+     * @param array $bind_values
+     * @param array $order_by
+     * @param int|null $limit
+     * @param int $offset
+     * @param array $columns
+     * @return array
+     */
+    public function getOrdersWithGatewayFlow(
+        ?string $where = null,
+        array   $bind_values = [],
+        array   $order_by = ['o.id DESC'],
+        ?int    $limit = null,
+        int     $offset = 0,
+        array   $columns = [
+            'o.*',
+            'u.username',
+            'u.first_name AS user_first_name',
+            'u.last_name AS user_last_name',
+        ]
+    ): array
+    {
+        $select = $this->connector->select();
+        $select
+            ->from(self::TBL_GATEWAY_FLOW . ' AS gf')
+            ->cols($columns)
+            ->offset($offset)
+            ->orderBy($order_by);
+        try {
+            $select
+                ->innerJoin(
+                    self::TBL_ORDERS . ' AS o',
+                    'gf.order_code=o.code'
+                )
+                ->leftJoin(
+                    self::TBL_USERS . ' AS u',
+                    'u.id=o.user_id'
+                );
+        } catch (AuraException $e) {
+            return [];
+        }
+
+        if (!empty($where)) {
+            $select
+                ->where($where)
+                ->bindValues($bind_values);
+        }
+
+        if (!empty($limit) && $limit > 0) {
+            $select->limit($limit);
+        }
+
+        return $this->db->fetchAll($select->getStatement(), $select->getBindValues());
+    }
+
+    /**
      * Use [o for orders], [u for users], [iu for users (invoice_status_changer)], [su for users (send_status_changer)]
      *
      * @param string|null $where

@@ -88,11 +88,11 @@ $validator = form_validator();
                             <div class="medium_divider"></div>
 
                             <div class="heading_s1">
-                                <h4>خرید برای</h4>
+                                <h4>خرید به عنوان</h4>
                             </div>
 
                             <!-- Radio Buttons -->
-                            <div class="mb-4">
+                            <div class="pb-4 mb-4 border-bottom">
                                 <div class="form-check form-check-inline">
                                     <input class="form-check-input d-none" required=""
                                            type="radio" name="inp-is-real-or-legal"
@@ -336,10 +336,10 @@ $validator = form_validator();
                                        aria-hidden="true"></a>
                                 </div>
                             </div>
-                            <?php load_partial('main/message/message-info', [
-                                'info' => 'لطفا کارت احراز هویت خود را هنگام تحویل همراه خود داشته باشید.',
+                            <?php load_partial('main/message/message-common', [
+                                'message' => 'لطفا کارت احراز هویت خود را هنگام تحویل همراه داشته باشید.',
                                 'dismissible' => false,
-                                'class' => 'mt-3 mb-0',
+                                'class' => 'mt-3 mb-0 text-white bg-primary',
                             ]); ?>
                         </div>
 
@@ -362,8 +362,8 @@ $validator = form_validator();
                                                     <input class="form-check-input" required=""
                                                         <?= 0 == $counter++ ? 'checked="checked"' : ''; ?>
                                                            type="radio" name="send_method_option"
-                                                           id="method<?= $k; ?>" value="<?= $method['id']; ?>">
-                                                    <label class="form-check-label" for="method<?= $k; ?>">
+                                                           id="sendMethod<?= $k; ?>" value="<?= $method['id']; ?>">
+                                                    <label class="form-check-label" for="sendMethod<?= $k; ?>">
                                                         <img src=""
                                                              data-src="<?= url('image.show', ['filename' => $method['image']])->getRelativeUrl(); ?>"
                                                              alt="<?= $method['title']; ?>" width="100px" height="auto"
@@ -410,7 +410,7 @@ $validator = form_validator();
                                 </div>
                             </div>
                         </div>
-                        <button type="submit" class="btn btn-fill-out btn-block">پرداخت و ثبت سفارش</button>
+                        <button type="submit" class="btn btn-fill-out btn-block">ثبت سفارش و پرداخت</button>
                     </div>
                 </div>
         </div>
