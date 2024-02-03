@@ -135,7 +135,6 @@ use Sim\Utils\StringUtil;
                         <th>تاریخ</th>
                         <th>وضعیت ارسال</th>
                         <th>وضعیت پرداخت</th>
-                        <th>پرداخت از طریق</th>
                         <th>جمع</th>
                         <th>اقدامات</th>
                     </tr>
@@ -154,7 +153,6 @@ use Sim\Utils\StringUtil;
                             <td>
                                 <?php load_partial('admin/parser/payment-status', ['status' => $order['payment_status']]); ?>
                             </td>
-                            <td><?= $order['method_title']; ?></td>
                             <td>
                                 <?= local_number(number_format(StringUtil::toEnglish($order['final_price']))); ?>
                                 <small>تومان</small>

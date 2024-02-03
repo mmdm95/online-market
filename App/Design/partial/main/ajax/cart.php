@@ -62,10 +62,10 @@ use Sim\Utils\StringUtil;
                                     </span>
                                 </div>
 
-                                <?php if (!empty($item['color_hex']) && ($item['show_color'] === DB_YES || $item['is_patterned_color'] === DB_YES)): ?>
+                                <?php if (!empty($item['color_hex']) && ($item['show_color'] == DB_YES || $item['is_patterned_color'] == DB_YES)): ?>
                                     <div class="mt-2">
                                         <div class="product_color_switch d-inline-block mx-2">
-                                            <?php if ($item['is_patterned_color'] === DB_NO): ?>
+                                            <?php if ($item['is_patterned_color'] == DB_NO): ?>
                                                 <span style="background-color: <?= $item['color_hex']; ?>;"></span>
                                             <?php endif; ?>
                                             <div class="d-inline-block mr-2">

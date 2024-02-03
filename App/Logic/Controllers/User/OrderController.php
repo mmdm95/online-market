@@ -6,6 +6,7 @@ use App\Logic\Abstracts\AbstractUserController;
 use App\Logic\Interfaces\Report\IReportPdf;
 use App\Logic\Models\GatewayModel;
 use App\Logic\Models\OrderModel;
+use App\Logic\Models\OrderPaymentModel;
 use App\Logic\Models\OrderReserveModel;
 use App\Logic\Models\WalletFlowModel;
 use App\Logic\Utils\Jdf;
@@ -53,7 +54,6 @@ class OrderController extends AbstractUserController implements IReportPdf
             [
                 'o.id',
                 'o.code',
-                'o.method_title',
                 'o.payment_status',
                 'o.send_status_title',
                 'o.send_status_color',
@@ -98,6 +98,10 @@ class OrderController extends AbstractUserController implements IReportPdf
          * @var OrderReserveModel $reserveModel
          */
         $reserveModel = container()->get(OrderReserveModel::class);
+        /**
+         * @var OrderPaymentModel $orderPayModel
+         */
+        $orderPayModel = container()->get(OrderPaymentModel::class);
 
         if (0 === $orderModel->count('id=:id AND user_id=:uId', ['id' => $id, 'uId' => $user['id']])) {
             return $this->show404();
@@ -108,13 +112,14 @@ class OrderController extends AbstractUserController implements IReportPdf
             'oi.*', 'roi.order_item_id', 'pa.slug AS product_slug', 'pa.allow_commenting',
             'pa.image AS product_image', 'pa.code AS main_product_code',
         ], 'oi.order_code=:code', ['code' => $order['code']]);
+        $payment = $orderPayModel->getFirst(['*'], 'order_code=:code', ['code' => $order['code']], ['created_at DESC']);
 
         $paymentSuccess = $gatewayModel->getFirst([
             'id', 'price', 'msg', 'payment_code', 'is_success', 'method_type', 'payment_date'
-        ], 'order_code=:oc AND user_id=:uId AND method_type=:mt', [
+        ], 'order_code=:oc AND user_id=:uId AND (method_type IS NULL OR method_type=:mt)', [
             'oc' => $order['code'],
             'uId' => $user['id'],
-            'mt' => $order['method_type'],
+            'mt' => $payment['method_type'] ?? '',
         ], ['payment_date DESC', 'id DESC']) ?: null;
         $order['payment_code'] = $paymentSuccess['payment_code'] ?? null;
 

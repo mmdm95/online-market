@@ -205,7 +205,7 @@ if (count($order ?? []) && count($items ?? [])): ?>
             </th>
         </tr>
         </thead>
-        <?php if ($order['receiver_type'] === RECEIVER_TYPE_LEGAL): ?>
+        <?php if ((int)$order['receiver_type'] === RECEIVER_TYPE_LEGAL): ?>
             <tr>
                 <td>
                     <small>
@@ -362,7 +362,7 @@ if (count($order ?? []) && count($items ?? [])): ?>
                 </td>
                 <td>
                     <?php
-                    $isColorShowable = !empty($item['color_name']) && ($item['show_color'] === DB_YES || $item['is_patterned_color'] === DB_YES);
+                    $isColorShowable = !empty($item['color_name']) && ($item['show_color'] == DB_YES || $item['is_patterned_color'] == DB_YES);
                     ?>
                     <?php if ($isColorShowable): ?>
                         رنگ:

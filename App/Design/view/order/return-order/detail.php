@@ -189,10 +189,10 @@ $validator = form_validator();
                             <?php endif; ?>
                             <div class="text-muted">
                                 <?php
-                                $isColorShowable = !empty($item['color']) && ($item['show_color'] === DB_YES || $item['is_patterned_color'] === DB_YES);
+                                $isColorShowable = !empty($item['color']) && ($item['show_color'] == DB_YES || $item['is_patterned_color'] == DB_YES);
                                 ?>
                                 <?php if ($isColorShowable): ?>
-                                    <?php if ($item['is_patterned_color'] === DB_NO): ?>
+                                    <?php if ($item['is_patterned_color'] == DB_NO): ?>
                                         <span class="btn-icon rounded-full p-1 d-inline-block mt-1"
                                               style="background-color: <?= $item['color']; ?>; width: 15px; height: 15px;"></span>
                                     <?php endif; ?>

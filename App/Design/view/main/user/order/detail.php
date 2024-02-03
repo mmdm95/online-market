@@ -61,7 +61,7 @@ use Sim\Utils\StringUtil;
                 </label>
             </div>
 
-            <?php if ($order['receiver_type'] === RECEIVER_TYPE_LEGAL): ?>
+            <?php if ((int)$order['receiver_type'] === RECEIVER_TYPE_LEGAL): ?>
                 <div class="col-lg-5 border border-light px-3 py-2">
                     <small class="mb-1">
                         تلفن ثابت:
@@ -298,14 +298,6 @@ use Sim\Utils\StringUtil;
                 </div>
             <?php endif; ?>
 
-            <div class="col-lg-6 border border-light px-3 py-2">
-                <small class="mb-1">
-                    شیوه پرداخت:
-                </small>
-                <label class="mb-1">
-                    <?= $order['method_title']; ?>
-                </label>
-            </div>
             <div class="col-lg-12 border border-light px-3 py-2 text-center"
                  data-toggle="collapse" data-target="#paymentHistory">
                 <button class="btn p-0">
@@ -525,10 +517,10 @@ use Sim\Utils\StringUtil;
                                     <?php endif; ?>
                                 </div>
 
-                                <?php if (!empty($item['color']) && ($item['show_color'] === DB_YES || $item['is_patterned_color'] === DB_YES)): ?>
+                                <?php if (!empty($item['color']) && ($item['show_color'] == DB_YES || $item['is_patterned_color'] == DB_YES)): ?>
                                     <div class="d-flex align-items-center">
                                         <div class="product_color_badge">
-                                            <?php if ($item['is_patterned_color'] === DB_NO): ?>
+                                            <?php if ($item['is_patterned_color'] == DB_NO): ?>
                                                 <span class="mr-2"
                                                       style="background-color: <?= $item['color']; ?>;"></span>
                                             <?php endif; ?>

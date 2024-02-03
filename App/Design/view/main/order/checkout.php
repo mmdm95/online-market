@@ -54,7 +54,7 @@ $validator = form_validator();
                                 <?php
                                 $ufn = trim($user['first_name']);
                                 ?>
-                                <input type="text" required class="form-control" name="fname"
+                                <input type="text" class="form-control" name="fname"
                                        placeholder="حروف فارسی"
                                     <?= $ufn ? 'disabled="disabled"' : '' ?>
                                        value="<?= $ufn ?: $validator->setInput('fname'); ?>">
@@ -67,7 +67,7 @@ $validator = form_validator();
                                 <?php
                                 $uln = trim($user['last_name']);
                                 ?>
-                                <input type="text" required class="form-control" name="lname"
+                                <input type="text" class="form-control" name="lname"
                                        placeholder="حروف فارسی"
                                     <?= $uln ? 'disabled="disabled"' : '' ?>
                                        value="<?= $uln ?: $validator->setInput('lname'); ?>">
@@ -79,7 +79,7 @@ $validator = form_validator();
                                         <span class="text-danger" aria-hidden="true">*</span>
                                         کد ملی:
                                     </label>
-                                    <input type="text" required class="form-control" name="natnum"
+                                    <input type="text" class="form-control" name="natnum"
                                            placeholder="از نوع عددی"
                                            value="<?= $user['national_number'] ?: $validator->setInput('natnum'); ?>">
                                 </div>
@@ -94,7 +94,7 @@ $validator = form_validator();
                             <!-- Radio Buttons -->
                             <div class="pb-4 mb-4 border-bottom">
                                 <div class="form-check form-check-inline">
-                                    <input class="form-check-input d-none" required=""
+                                    <input class="form-check-input d-none"
                                            type="radio" name="inp-is-real-or-legal"
                                            value="<?= RECEIVER_TYPE_REAL; ?>"
                                         <?= $validator->setRadio('inp-addr-full-name', RECEIVER_TYPE_REAL, true); ?>
@@ -108,7 +108,7 @@ $validator = form_validator();
                                     </label>
                                 </div>
                                 <div class="form-check form-check-inline">
-                                    <input class="form-check-input d-none" required=""
+                                    <input class="form-check-input d-none"
                                            type="radio" name="inp-is-real-or-legal"
                                            value="<?= RECEIVER_TYPE_LEGAL; ?>"
                                         <?= $validator->setRadio('inp-addr-full-name', RECEIVER_TYPE_LEGAL, false); ?>
@@ -138,7 +138,7 @@ $validator = form_validator();
                                             <span class="text-danger" aria-hidden="true">*</span>
                                             نام گیرنده:
                                         </label>
-                                        <input class="form-control" required type="text"
+                                        <input class="form-control" type="text"
                                                placeholder="حروف فارسی" name="inp-addr-full-name"
                                                value="<?= $validator->setInput('inp-addr-full-name') ?: trim("{$user['first_name']} {$user['last_name']}"); ?>">
                                     </div>
@@ -147,7 +147,7 @@ $validator = form_validator();
                                             <span class="text-danger" aria-hidden="true">*</span>
                                             موبایل گیرنده:
                                         </label>
-                                        <input class="form-control" required type="text"
+                                        <input class="form-control" type="text"
                                                placeholder="یازده رقم" name="inp-addr-mobile"
                                                value="<?= $validator->setInput('inp-addr-mobile') ?: $user['username']; ?>">
                                     </div>
@@ -186,7 +186,7 @@ $validator = form_validator();
                                             <span class="text-danger" aria-hidden="true">*</span>
                                             کد پستی:
                                         </label>
-                                        <input class="form-control" required type="text"
+                                        <input class="form-control" type="text"
                                                placeholder="از نوع عددی" name="inp-addr-postal-code"
                                                value="<?= $validator->setInput('inp-addr-postal-code'); ?>">
                                     </div>
@@ -199,7 +199,6 @@ $validator = form_validator();
                                                 type="text"
                                                 class="form-control form-control-min-height"
                                                 name="inp-addr-address"
-                                                required=""
                                                 placeholder=""
                                         ><?= $validator->setInput('inp-addr-address'); ?></textarea>
                                     </div>
@@ -218,7 +217,7 @@ $validator = form_validator();
                                             <span class="text-danger" aria-hidden="true">*</span>
                                             نام شرکت:
                                         </label>
-                                        <input class="form-control" required type="text"
+                                        <input class="form-control" type="text"
                                                placeholder="حروف فارسی" name="inp-addr-company-name"
                                                value="<?= $validator->setInput('inp-addr-company-name'); ?>">
                                     </div>
@@ -227,7 +226,7 @@ $validator = form_validator();
                                             <span class="text-danger" aria-hidden="true">*</span>
                                             کد اقتصادی:
                                         </label>
-                                        <input class="form-control" required type="text"
+                                        <input class="form-control" type="text"
                                                placeholder="وارد نمایید" name="inp-addr-company-eco-code"
                                                value="<?= $validator->setInput('inp-addr-company-eco-code'); ?>">
                                     </div>
@@ -236,7 +235,7 @@ $validator = form_validator();
                                             <span class="text-danger" aria-hidden="true">*</span>
                                             شناسه ملی:
                                         </label>
-                                        <input class="form-control" required type="text"
+                                        <input class="form-control" type="text"
                                                placeholder="وارد نمایید" name="inp-addr-company-eco-nid"
                                                value="<?= $validator->setInput('inp-addr-company-eco-nid'); ?>">
                                     </div>
@@ -245,7 +244,7 @@ $validator = form_validator();
                                             <span class="text-danger" aria-hidden="true">*</span>
                                             شماره ثبت:
                                         </label>
-                                        <input class="form-control" required type="text"
+                                        <input class="form-control" type="text"
                                                placeholder="وارد نمایید" name="inp-addr-company-reg-num"
                                                value="<?= $validator->setInput('inp-addr-company-reg-num'); ?>">
                                     </div>
@@ -254,7 +253,7 @@ $validator = form_validator();
                                             <span class="text-danger" aria-hidden="true">*</span>
                                             تلفن ثابت:
                                         </label>
-                                        <input class="form-control" required type="text"
+                                        <input class="form-control" type="text"
                                                placeholder="یازده رقم" name="inp-addr-tel"
                                                value="<?= $validator->setInput('inp-addr-tel'); ?>">
                                     </div>
@@ -293,7 +292,7 @@ $validator = form_validator();
                                             <span class="text-danger" aria-hidden="true">*</span>
                                             کد پستی:
                                         </label>
-                                        <input class="form-control" required type="text"
+                                        <input class="form-control" type="text"
                                                placeholder="از نوع عددی" name="inp-addr-company-postal-code"
                                                value="<?= $validator->setInput('inp-addr-company-postal-code'); ?>">
                                     </div>
@@ -306,7 +305,6 @@ $validator = form_validator();
                                                 type="text"
                                                 class="form-control form-control-min-height"
                                                 name="inp-addr-company-address"
-                                                required=""
                                                 placeholder=""
                                         ><?= $validator->setInput('inp-addr-company-address'); ?></textarea>
                                     </div>
@@ -359,10 +357,10 @@ $validator = form_validator();
                                         <?php foreach ($send_methods as $k => $method): ?>
                                             <div class="d-flex align-items-center">
                                                 <div class="custome-radio">
-                                                    <input class="form-check-input" required=""
+                                                    <input class="form-check-input"
                                                         <?= 0 == $counter++ ? 'checked="checked"' : ''; ?>
                                                            type="radio" name="send_method_option"
-                                                           id="sendMethod<?= $k; ?>" value="<?= $method['id']; ?>">
+                                                           id="sendMethod<?= $k; ?>" value="<?= $method['code']; ?>">
                                                     <label class="form-check-label" for="sendMethod<?= $k; ?>">
                                                         <img src=""
                                                              data-src="<?= url('image.show', ['filename' => $method['image']])->getRelativeUrl(); ?>"
@@ -390,7 +388,7 @@ $validator = form_validator();
                                         <?php foreach ($payment_methods as $k => $method): ?>
                                             <div class="d-flex align-items-center">
                                                 <div class="custome-radio">
-                                                    <input class="form-check-input" required=""
+                                                    <input class="form-check-input"
                                                         <?= 0 == $counter++ ? 'checked="checked"' : ''; ?>
                                                            type="radio" name="payment_method_option"
                                                            id="method<?= $k; ?>" value="<?= $method['code']; ?>">

@@ -108,7 +108,7 @@
                                                 data-guarantee="<?= $prd['guarantee']; ?>">
 
                                             <?php
-                                            $isColorShowable = !empty($item['color_hex']) && ($item['show_color'] === DB_YES || $item['is_patterned_color'] === DB_YES);
+                                            $isColorShowable = !empty($item['color_hex']) && ($item['show_color'] == DB_YES || $item['is_patterned_color'] == DB_YES);
                                             ?>
                                             <?php if ($isColorShowable): ?>
                                                 <?= $prd['color_name']; ?>
