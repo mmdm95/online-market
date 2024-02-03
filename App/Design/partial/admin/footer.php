@@ -9,7 +9,7 @@
     <div class="navbar-collapse collapse mb-1" id="navbar-footer">
         <span class="form-text text-center text-muted">
             توسعه داده شده توسط
-            <a href="#">تیم هیوا</a>
+            <a href="#" class="text-orange">داده افزار رهام</a>
         </span>
 
         <!--        <ul class="navbar-nav ml-lg-auto">-->
