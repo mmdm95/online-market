@@ -27,9 +27,9 @@ class SliderUtil
             ->from(BaseModel::TBL_PRODUCT_ADVANCED . ' AS pa')
             ->cols([
                 'pa.title', 'pa.slug', 'pa.image', 'pa.category_id', 'pa.is_special', 'pa.product_availability',
-                'pa.code', 'pa.product_id', 'pa.price', 'pa.discounted_price', 'pa.discount_until', 'pa.is_available',
-                'pa.festival_id', 'pa.festival_discount', 'pa.created_at', 'pa.stock_count', 'pa.max_cart_count',
-                'pa.show_coming_soon', 'pa.call_for_more',
+                'pa.code', 'pa.product_id', 'pa.price', 'pa.discounted_price', 'pa.discount_from', 'pa.discount_until',
+                'pa.is_available', 'pa.festival_id', 'pa.festival_discount', 'pa.created_at', 'pa.stock_count',
+                'pa.max_cart_count', 'pa.show_coming_soon', 'pa.call_for_more',
             ])
             ->where('pa.publish=:pub')
             ->bindValue('pub', DB_YES);
@@ -55,7 +55,12 @@ class SliderUtil
                 break;
             case SLIDER_TABBED_MOST_DISCOUNT:
                 $select
-                    ->orderBy(['CASE WHEN (pa.discount_until IS NULL OR pa.discount_until >= UNIX_TIMESTAMP()) AND pa.stock_count > 0 AND pa.is_available = 1 THEN 0 ELSE 1 END', '((pa.price - pa.discounted_price) / pa.price * 100) DESC', 'pa.discounted_price ASC', 'pa.title DESC']);
+                    ->where('((pa.discount_until IS NULL AND pa.discount_from IS NOT NULL AND pa.discount_from <= :nw) OR (pa.discount_from IS NULL AND pa.discount_until IS NOT NULL AND pa.discount_until >= :nw) OR (pa.discount_from IS NOT NULL AND pa.discount_from <= :nw AND pa.discount_until IS NOT NULL AND pa.discount_until >= :nw))')
+                    ->bindValue('nw', time())
+                    ->orderBy([
+                        'CASE WHEN (pa.discount_from IS NULL OR pa.discount_from <= UNIX_TIMESTAMP()) AND pa.stock_count > 0 AND pa.is_available = 1 THEN 0 ELSE 1 END', '((pa.price - pa.discounted_price) / pa.price * 100) DESC', 'pa.discounted_price ASC', 'pa.title DESC',
+                        'CASE WHEN (pa.discount_until IS NULL OR pa.discount_until >= UNIX_TIMESTAMP()) AND pa.stock_count > 0 AND pa.is_available = 1 THEN 0 ELSE 1 END', '((pa.price - pa.discounted_price) / pa.price * 100) DESC', 'pa.discounted_price ASC', 'pa.title DESC',
+                    ]);
                 break;
             case SLIDER_TABBED_SPECIAL:
                 $select
@@ -110,9 +115,10 @@ class SliderUtil
             ->from(BaseModel::TBL_PRODUCT_ADVANCED . ' AS pa')
             ->cols([
                 'pa.title', 'pa.slug', 'pa.image', 'pa.category_id', 'pa.product_availability',
-                'pa.code', 'pa.product_id', 'pa.price', 'pa.discounted_price', 'pa.discount_until',
-                'pa.is_available', 'pa.festival_id', 'pa.festival_discount', 'pa.festival_expire',
-                'pa.stock_count', 'pa.max_cart_count', 'pa.show_coming_soon', 'pa.call_for_more',
+                'pa.code', 'pa.product_id', 'pa.price', 'pa.discounted_price', 'pa.discount_from',
+                'pa.discount_until', 'pa.is_available', 'pa.festival_id', 'pa.festival_discount',
+                'pa.festival_expire', 'pa.stock_count', 'pa.max_cart_count', 'pa.show_coming_soon',
+                'pa.call_for_more',
             ])
             ->join(
                 'INNER',

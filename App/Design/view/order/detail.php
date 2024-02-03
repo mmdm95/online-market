@@ -110,30 +110,66 @@ $isSuperUser = $authAdmin->userHasRole(ROLE_DEVELOPER) || $authAdmin->userHasRol
                     اطلاعات گیرنده
                 </legend>
                 <div class="row m-0">
-                    <div class="col-lg-6 border py-2 px-3">
-                        <div class="mb-2">
-                            نام
+                    <?php if ($order['receiver_type'] === RECEIVER_TYPE_LEGAL): ?>
+                        <div class="col-lg-6 border py-2 px-3">
+                            <div class="mb-2">
+                                کد اقتصادی
+                            </div>
+                            <div class="text-info-800">
+                                <?= $order['company_economic_code']; ?>
+                            </div>
                         </div>
-                        <div class="text-info-800">
-                            <?= $order['receiver_name']; ?>
+                        <div class="col-lg-6 border py-2 px-3">
+                            <div class="mb-2">
+                                شناسه ملی
+                            </div>
+                            <div class="text-info-800">
+                                <?= $order['company_economic_national_id']; ?>
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-lg-6 border py-2 px-3">
-                        <div class="mb-2">
-                            کد ملی
+                        <div class="col-lg-6 border py-2 px-3">
+                            <div class="mb-2">
+                                شماره ثبت
+                            </div>
+                            <div class="text-info-800">
+                                <?= $order['company_registration_number']; ?>
+                            </div>
                         </div>
-                        <div class="text-info-800">
-                            <?= StringUtil::toPersian(trim($order['user_national_number'])) ?? '-'; ?>
+                        <div class="col-lg-6 border py-2 px-3">
+                            <div class="mb-2">
+                                تلفن ثابت
+                            </div>
+                            <div class="text-info-800">
+                                <?= $order['company_tel']; ?>
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-lg-6 border py-2 px-3">
-                        <div class="mb-2">
-                            شماره تماس
+                    <?php else: ?>
+                        <div class="col-lg-6 border py-2 px-3">
+                            <div class="mb-2">
+                                نام
+                            </div>
+                            <div class="text-info-800">
+                                <?= $order['receiver_name']; ?>
+                            </div>
                         </div>
-                        <div class="text-info-800">
-                            <?= StringUtil::toPersian($order['receiver_mobile']); ?>
+                        <div class="col-lg-6 border py-2 px-3">
+                            <div class="mb-2">
+                                کد ملی
+                            </div>
+                            <div class="text-info-800">
+                                <?= StringUtil::toPersian(trim($order['user_national_number'])) ?? '-'; ?>
+                            </div>
                         </div>
-                    </div>
+                        <div class="col-lg-6 border py-2 px-3">
+                            <div class="mb-2">
+                                شماره تماس
+                            </div>
+                            <div class="text-info-800">
+                                <?= StringUtil::toPersian($order['receiver_mobile']); ?>
+                            </div>
+                        </div>
+                    <?php endif; ?>
+
                     <div class="col-lg-6 border py-2 px-3">
                         <div class="mb-2">
                             استان
@@ -340,6 +376,7 @@ $isSuperUser = $authAdmin->userHasRole(ROLE_DEVELOPER) || $authAdmin->userHasRol
                     <th>مشخصات محصول</th>
                     <th>فی(به تومان)</th>
                     <th>تعداد</th>
+                    <th>مرسوله مجزا</th>
                     <th>مرجوع شده</th>
                     <th>مبلغ بدون تخفیف(به تومان)</th>
                     <th>مبلغ تخفیف(به تومان)</th>
@@ -370,17 +407,24 @@ $isSuperUser = $authAdmin->userHasRole(ROLE_DEVELOPER) || $authAdmin->userHasRol
                                     </h6>
                                 <?php endif; ?>
                                 <div class="text-muted">
-                                    رنگ
-                                    <span class="btn-icon rounded-full p-3"
-                                          style="background-color: <?= $item['color_name']; ?>"></span>
-                                    <?= $item['color_name']; ?>
+                                    <?php
+                                    $isColorShowable = !empty($item['color']) && ($item['show_color'] === DB_YES || $item['is_patterned_color'] === DB_YES);
+                                    ?>
+                                    <?php if ($isColorShowable): ?>
+                                        رنگ
+                                        <?php if ($item['is_patterned_color'] === DB_NO): ?>
+                                            <span class="btn-icon rounded-full p-3"
+                                                  style="background-color: <?= $item['color_name']; ?>"></span>
+                                        <?php endif; ?>
+                                        <?= $item['color_name']; ?>
+                                    <?php endif; ?>
                                     <?php if (!empty($item['size'])): ?>
-                                        ,
+                                        <?= $isColorShowable ? ',' : ''; ?>
                                         سایز
                                         <?= $item['size']; ?>
                                     <?php endif; ?>
                                     <?php if (!empty($item['guarantee'])): ?>
-                                        ,
+                                        <?= ($isColorShowable || !empty($item['size'])) ? ',' : ''; ?>
                                         <?= $item['guarantee']; ?>
                                     <?php endif; ?>
                                 </div>
@@ -394,6 +438,17 @@ $isSuperUser = $authAdmin->userHasRole(ROLE_DEVELOPER) || $authAdmin->userHasRol
                         </td>
 
                         <?php
+                        $isChecked = is_value_checked($item['separate_consignment']);
+                        ?>
+                        <td class="<?= $isChecked ? 'table-info' : 'table-warning'; ?>">
+                            <?php if ($isChecked): ?>
+                                بله
+                            <?php else: ?>
+                                خیر
+                            <?php endif; ?>
+                        </td>
+
+                        <?php
                         $isChecked = is_value_checked($item['is_returned']);
                         ?>
                         <td class="<?= $isChecked ? 'table-success' : 'table-warning'; ?>">
@@ -403,6 +458,7 @@ $isSuperUser = $authAdmin->userHasRole(ROLE_DEVELOPER) || $authAdmin->userHasRol
                                 خیر
                             <?php endif; ?>
                         </td>
+
                         <td data-order="<?= (int)StringUtil::toEnglish($item['price']); ?>">
                             <?= StringUtil::toPersian(number_format(StringUtil::toEnglish($item['price']))); ?>
                         </td>

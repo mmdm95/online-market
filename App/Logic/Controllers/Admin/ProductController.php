@@ -8,7 +8,9 @@ use App\Logic\Forms\Admin\Product\Attribute\Value\AssignProductAttrValueForm;
 use App\Logic\Forms\Admin\Product\BatchEditProductForm;
 use App\Logic\Forms\Admin\Product\BatchEditProductPriceForm;
 use App\Logic\Forms\Admin\Product\EditProductForm;
+use App\Logic\Forms\Ajax\Product\QuickEditProductForm;
 use App\Logic\Handlers\DatatableHandler;
+use App\Logic\Handlers\GeneralAjaxFormHandler;
 use App\Logic\Handlers\GeneralAjaxRemoveHandler;
 use App\Logic\Handlers\GeneralAjaxStatusHandler;
 use App\Logic\Handlers\GeneralFormHandler;
@@ -189,7 +191,7 @@ class ProductController extends AbstractAdminController implements IDatatableCon
 
         $this->setLayout($this->main_layout)->setTemplate('view/product/add');
         return $this->render(array_merge($data, [
-            'colors' => $colorModel->get(['hex', 'name']),
+            'colors' => $colorModel->get(['id', 'hex', 'name']),
             'units' => $unitModel->get(['id', 'title', 'sign']),
             'brands' => $brandModel->get(['id', 'name'], 'publish=:pub', ['pub' => DB_YES]),
             'categories' => $categoryModel->get(['id', 'name'], 'publish=:pub', ['pub' => DB_YES]),
@@ -274,7 +276,7 @@ class ProductController extends AbstractAdminController implements IDatatableCon
             'product_properties' => $productProperties,
             'related' => $related,
             'gallery' => $gallery,
-            'colors' => $colorModel->get(['hex', 'name']),
+            'colors' => $colorModel->get(['id', 'hex', 'name']),
             'units' => $unitModel->get(['id', 'title', 'sign']),
             'brands' => $brandModel->get(['id', 'name'], 'publish=:pub', ['pub' => DB_YES]),
             'categories' => $categoryModel->get(['id', 'name'], 'publish=:pub', ['pub' => DB_YES]),
@@ -414,7 +416,7 @@ class ProductController extends AbstractAdminController implements IDatatableCon
         return $this->render(array_merge($data, [
             'ids' => $ids,
             'products' => $products,
-            'colors' => $colorModel->get(['hex', 'name']),
+            'colors' => $colorModel->get(['id', 'hex', 'name']),
             'units' => $unitModel->get(['id', 'title', 'sign']),
             'brands' => $brandModel->get(['id', 'name'], 'publish=:pub', ['pub' => DB_YES]),
             'categories' => $categoryModel->get(['id', 'name'], 'publish=:pub', ['pub' => DB_YES]),
@@ -480,7 +482,7 @@ class ProductController extends AbstractAdminController implements IDatatableCon
         return $this->render(array_merge($data, [
             'ids' => $ids,
             'products' => $products,
-            'colors' => $colorModel->get(['hex', 'name']),
+            'colors' => $colorModel->get(['id', 'hex', 'name']),
             'units' => $unitModel->get(['id', 'title', 'sign']),
             'brands' => $brandModel->get(['id', 'name'], 'publish=:pub', ['pub' => DB_YES]),
             'categories' => $categoryModel->get(['id', 'name'], 'publish=:pub', ['pub' => DB_YES]),
@@ -653,6 +655,105 @@ class ProductController extends AbstractAdminController implements IDatatableCon
     }
 
     /**
+     * @param $id
+     * @throws IDBException
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
+     */
+    public function getEditProductVariants($id)
+    {
+        /**
+         * @var DBAuth $auth
+         */
+        $auth = container()->get('auth_admin');
+        if (!$auth->isAllow(RESOURCE_PRODUCT, IAuth::PERMISSION_READ)) {
+            show_403();
+        }
+
+        $resourceHandler = new ResourceHandler();
+
+        try {
+            /**
+             * @var Agent $agent
+             */
+            $agent = container()->get(Agent::class);
+            if (!$agent->isRobot()) {
+                /**
+                 * @var ProductModel $productModel
+                 */
+                $productModel = container()->get(ProductModel::class);
+                /**
+                 * @var ColorModel $colorModel
+                 */
+                $colorModel = container()->get(ColorModel::class);
+
+                $productProperty = $productModel->getProductProperty($id);
+
+                $resourceHandler
+                    ->type(RESPONSE_TYPE_SUCCESS)
+                    ->data([
+                        'content' => $this->setTemplate('partial/admin/product/quick-edit')
+                            ->render([
+                                'product_properties' => $productProperty,
+                                'colors' => $colorModel->get(['id', 'hex', 'name']),
+                            ])
+                    ]);
+            } else {
+                response()->httpCode(403);
+                $resourceHandler
+                    ->type(RESPONSE_TYPE_ERROR)
+                    ->errorMessage('خطا در ارتباط با سرور، لطفا دوباره تلاش کنید.');
+            }
+        } catch (\Exception $e) {
+            LogUtil::logException($e, __LINE__, self::class);
+            $resourceHandler
+                ->type(RESPONSE_TYPE_ERROR)
+                ->errorMessage('خطا در ارتباط با سرور، لطفا دوباره تلاش کنید.');
+        }
+
+        response()->json($resourceHandler->getReturnData());
+    }
+
+    /**
+     * @param $id
+     * @throws IDBException
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
+     */
+    public function editProductVariants($id)
+    {
+        /**
+         * @var DBAuth $auth
+         */
+        $auth = container()->get('auth_admin');
+        if (!$auth->isAllow(RESOURCE_PRODUCT, IAuth::PERMISSION_READ)) {
+            show_403();
+        }
+
+        $resourceHandler = new ResourceHandler();
+
+        /**
+         * @var Agent $agent
+         */
+        $agent = container()->get(Agent::class);
+        if (!$agent->isRobot()) {
+            // store previous info to update with
+            session()->setFlash('product-quick-edit-curr-id', $id);
+
+            $formHandler = new GeneralAjaxFormHandler();
+            $resourceHandler = $formHandler
+                ->setSuccessMessage('تغییرات با موفقیت اعمال شد.')
+                ->handle(QuickEditProductForm::class);
+        } else {
+            response()->httpCode(403);
+            $resourceHandler
+                ->type(RESPONSE_TYPE_ERROR)
+                ->errorMessage('خطا در ارتباط با سرور، لطفا دوباره تلاش کنید.');
+        }
+        response()->json($resourceHandler->getReturnData());
+    }
+
+    /**
      * @param array $_
      * @return void
      * @throws IDBException
@@ -777,6 +878,15 @@ class ProductController extends AbstractAdminController implements IDatatableCon
                         'formatter' => function ($d) {
                             return Jdf::jdate(DEFAULT_TIME_FORMAT, $d);
                         }
+                    ],
+                    [
+                        'dt' => 'quick_edit',
+                        'formatter' => function ($row) {
+                            return '<button type="button" class="btn btn-dark __item_product_quick_edit_btn" data-toggle="modal" ' .
+                                ' data-target="#modal_form_quick_edit" data-ajax-quick-edit="' . $row['id'] . '">' .
+                                'ویرایش سریع' .
+                                '</button>';
+                        },
                     ],
                     [
                         'dt' => 'operations',

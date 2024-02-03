@@ -106,6 +106,7 @@ $authAdmin = auth_admin();
 
                 <?php
                 $allowPayMethod = $authAdmin->isAllow(RESOURCE_PAY_METHOD, OWN_PERMISSIONS);
+                $allowSendMethod = $authAdmin->isAllow(RESOURCE_SEND_METHOD, OWN_PERMISSIONS);
                 $allowColor = $authAdmin->isAllow(RESOURCE_COLOR, OWN_PERMISSIONS);
                 $allowBrand = $authAdmin->isAllow(RESOURCE_BRAND, OWN_PERMISSIONS);
                 $allowCategory = $authAdmin->isAllow(RESOURCE_CATEGORY, OWN_PERMISSIONS);
@@ -115,7 +116,7 @@ $authAdmin = auth_admin();
                 $allowProduct = $authAdmin->isAllow(RESOURCE_PRODUCT, OWN_PERMISSIONS);
                 ?>
                 <?php if (
-                    $allowPayMethod || $allowColor || $allowBrand || $allowCategory ||
+                    $allowPayMethod || $allowSendMethod || $allowColor || $allowBrand || $allowCategory ||
                     $allowFestival || $allowUnit || $allowCoupon || $allowProduct
                 ): ?>
                     <!-- Shop -->
@@ -146,24 +147,27 @@ $authAdmin = auth_admin();
                         </li>
                     <?php endif; ?>
 
-                    <!--                <li class="nav-item nav-item-submenu">-->
-                    <!--                    <a href="#" class="nav-link"><i class="icon-box-remove"></i> <span>روش‌های ارسال</span></a>-->
-                    <!---->
-                    <!--                    <ul class="nav nav-group-sub">-->
-                    <!--                        <li class="nav-item">-->
-                    <!--                            <a href="" class="nav-link">-->
-                    <?= '';//url('admin.send_method.add');                                                  ?>
-                    <!--                                افزودن روش ارسال جدید-->
-                    <!--                            </a>-->
-                    <!--                        </li>-->
-                    <!--                        <li class="nav-item">-->
-                    <!--                            <a href="" class="nav-link">-->
-                    <?= '';//url('admin.send_method.view', '');                                                  ?>
-                    <!--                                لیست روش‌های ارسال-->
-                    <!--                            </a>-->
-                    <!--                        </li>-->
-                    <!--                    </ul>-->
-                    <!--                </li>-->
+                    <?php if ($allowSendMethod): ?>
+                        <li class="nav-item nav-item-submenu">
+                            <a href="#" class="nav-link"><i class="icon-box-remove"></i>
+                                <span>روش‌های ارسال</span></a>
+
+                            <ul class="nav nav-group-sub">
+                                <li class="nav-item">
+                                    <a href="<?= url('admin.send_method.add'); ?>"
+                                       class="nav-link <?= url()->contains(url('admin.send_method.add')->getRelativeUrlTrimmed()) ? 'active' : ''; ?>">
+                                        افزودن روش ارسال جدید
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="<?= url('admin.send_method.view', ''); ?>"
+                                       class="nav-link <?= url()->contains(url('admin.send_method.view', '')->getRelativeUrlTrimmed()) ? 'active' : ''; ?>">
+                                        لیست روش‌های ارسال
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                    <?php endif; ?>
 
                     <?php if ($allowColor): ?>
                         <li class="nav-item nav-item-submenu">
@@ -318,6 +322,12 @@ $authAdmin = auth_admin();
                                     <a href="<?= url('admin.product.view', ''); ?>"
                                        class="nav-link <?= url()->contains(url('admin.product.view', '')->getRelativeUrlTrimmed()) ? 'active' : ''; ?>">
                                         مشاهده محصولات
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="<?= url('admin.product.comments.all', ''); ?>"
+                                       class="nav-link <?= url()->contains(url('admin.product.comments.all', '')->getRelativeUrlTrimmed()) ? 'active' : ''; ?>">
+                                        مشاهده تمامی نظرات
                                     </a>
                                 </li>
                             </ul>

@@ -24,13 +24,13 @@ class CategoryModel extends BaseModel
      * @return array
      */
     public function getCategories(
-        array $columns = ['c.*', 'cc.name'],
+        array   $columns = ['c.*', 'cc.name'],
         ?string $where = null,
-        array $bind_values = [],
-        ?int $limit = null,
-        int $offset = 0,
-        array $order_by = ['c.id DESC'],
-        array $group_by = ['c.id']
+        array   $bind_values = [],
+        ?int    $limit = null,
+        int     $offset = 0,
+        array   $order_by = ['c.id DESC'],
+        array   $group_by = ['c.id']
     ): array
     {
         $select = $this->connector->select();

@@ -4,7 +4,6 @@ namespace App\Logic\Forms\Admin\Comment;
 
 use App\Logic\Interfaces\IPageForm;
 use App\Logic\Models\CommentModel;
-use App\Logic\Models\PaymentMethodModel;
 use App\Logic\Models\ProductModel;
 use App\Logic\Validations\ExtendedValidator;
 use Sim\Auth\DBAuth;

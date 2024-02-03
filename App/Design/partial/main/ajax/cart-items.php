@@ -68,10 +68,12 @@ $items = $cart->getItems();
                     </div>
 
                     <div class="d-flex flex-wrap">
-                        <?php if (!empty($item['color_hex'])): ?>
+                        <?php if (!empty($item['color_hex']) && ($item['show_color'] === DB_YES || $item['is_patterned_color'] === DB_YES)): ?>
                             <div class="m-2">
                                 <div class="product_color_switch d-inline-block mx-2">
-                                    <span style="background-color: <?= $item['color_hex']; ?>;"></span>
+                                    <?php if ($item['is_patterned_color'] === DB_NO): ?>
+                                        <span style="background-color: <?= $item['color_hex']; ?>;"></span>
+                                    <?php endif; ?>
                                     <div class="d-inline-block mr-2">
                                         <?= $item['color_name']; ?>
                                     </div>

@@ -2,7 +2,7 @@
     <?php
     $isDismissible = $dismissible ?? true;
     ?>
-    <div class="alert alert-info <?= $isDismissible ? 'alert-dismissible' : ''; ?> fade show" role="alert">
+    <div class="alert alert-info <?= $class ?? ''; ?> <?= $isDismissible ? 'alert-dismissible' : ''; ?> fade show" role="alert">
         <?php if ($isDismissible): ?>
             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                 <span aria-hidden="true">&times;</span>

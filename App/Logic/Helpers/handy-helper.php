@@ -171,6 +171,10 @@ function get_percentage($num, $total, bool $low = true): int
 }
 
 /**
+ * It'll first put stepped price and stepped discounted price as original price and discounted price of the item, if EXISTS,
+ * then it'll check if item is in any festival, then consider festival's price instead
+ * otherwise if there is a discount_until/discount_from it would apply discount (from original item or from stepped price)
+ *
  * @param array $item
  * @return array
  */
@@ -181,10 +185,12 @@ function get_discount_price(array $item): array
     $discountPrice = $item['price'];
 
     // apply stepped prices
+    // NOTE:
+    //  -'stepped_discounted_price', 'stepped_price' calculated in cart to add process
     if (isset($item['stepped_discounted_price']) && isset($item['stepped_price'])) {
         $item['price'] = $item['stepped_price'];
         $item['discounted_price'] = $item['stepped_discounted_price'];
-        $discountPrice = $item['price'];
+        $discountPrice = $item['stepped_price'];
     }
     //
 
@@ -197,7 +203,14 @@ function get_discount_price(array $item): array
     ) {
         $hasDiscount = true;
         $discountPrice = ((float)$item['price'] * (100 - (float)$item['festival_discount'])) / 100;
-    } elseif (isset($item['discount_until']) && $item['discount_until'] >= time()) {
+    } elseif (
+        (!isset($item['discount_until']) && isset($item['discount_from']) && $item['discount_from'] <= time()) ||
+        (!isset($item['discount_from']) && isset($item['discount_until']) && $item['discount_until'] >= time()) ||
+        (
+            isset($item['discount_from']) && $item['discount_from'] <= time() &&
+            isset($item['discount_until']) && $item['discount_until'] >= time()
+        )
+    ) {
         $hasDiscount = true;
         $discountPrice = (float)$item['discounted_price'];
     }
@@ -213,15 +226,41 @@ function get_discount_price(array $item): array
  * @param array $item
  * @return int|null
  */
+function getDiscountStartTime(array $item): ?int
+{
+    if (isset($item['festival_start']) && !empty($item['festival_start'])) {
+        return $item['festival_start'];
+    }
+    if (isset($item['discount_from']) && !empty($item['discount_from'])) {
+        return $item['discount_from'];
+    }
+    return null;
+}
+
+/**
+ * @param array $item
+ * @return int|null
+ */
 function getDiscountExpireTime(array $item): ?int
 {
     if (isset($item['festival_expire']) && !empty($item['festival_expire']) && $item['festival_expire'] >= time()) {
         return $item['festival_expire'];
     }
-    if (isset($item['discount_until']) && $item['discount_until'] >= time()) {
+    if (isset($item['discount_until']) && !empty($item['discount_until']) && $item['discount_until'] >= time()) {
         return $item['discount_until'];
     }
     return null;
+}
+
+/**
+ * @param $discountStart
+ * @param $discountExpire
+ * @return bool
+ */
+function shouldShowCountdown($discountStart, $discountExpire): bool
+{
+    return (empty($discountStart) && !empty($discountExpire)) ||
+        (!empty($discountStart) && $discountStart <= time() && !empty($discountExpire));
 }
 
 /**

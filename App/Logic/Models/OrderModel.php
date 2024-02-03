@@ -85,6 +85,64 @@ class OrderModel extends BaseModel
     }
 
     /**
+     * Use [gf for gateway_flow], [o for orders], [u for users]
+     *
+     * @param string|null $where
+     * @param array $bind_values
+     * @param array $order_by
+     * @param int|null $limit
+     * @param int $offset
+     * @param array $columns
+     * @return array
+     */
+    public function getOrdersWithGatewayFlow(
+        ?string $where = null,
+        array   $bind_values = [],
+        array   $order_by = ['o.id DESC'],
+        ?int    $limit = null,
+        int     $offset = 0,
+        array   $columns = [
+            'o.*',
+            'u.username',
+            'u.first_name AS user_first_name',
+            'u.last_name AS user_last_name',
+        ]
+    ): array
+    {
+        $select = $this->connector->select();
+        $select
+            ->from(self::TBL_GATEWAY_FLOW . ' AS gf')
+            ->cols($columns)
+            ->offset($offset)
+            ->orderBy($order_by);
+        try {
+            $select
+                ->innerJoin(
+                    self::TBL_ORDERS . ' AS o',
+                    'gf.order_code=o.code'
+                )
+                ->leftJoin(
+                    self::TBL_USERS . ' AS u',
+                    'u.id=o.user_id'
+                );
+        } catch (AuraException $e) {
+            return [];
+        }
+
+        if (!empty($where)) {
+            $select
+                ->where($where)
+                ->bindValues($bind_values);
+        }
+
+        if (!empty($limit) && $limit > 0) {
+            $select->limit($limit);
+        }
+
+        return $this->db->fetchAll($select->getStatement(), $select->getBindValues());
+    }
+
+    /**
      * Use [o for orders], [u for users], [iu for users (invoice_status_changer)], [su for users (send_status_changer)]
      *
      * @param string|null $where
@@ -422,6 +480,11 @@ class OrderModel extends BaseModel
          */
         $model = container()->get(Model::class);
 
+        // unset unwanted order properties
+        unset($order['method_code']);
+        unset($order['method_title']);
+        unset($order['method_type']);
+
         // issue a factor by inserting to orders table
         $res = $this->insert($order);
         //-----
@@ -448,8 +511,11 @@ class OrderModel extends BaseModel
                     'unit_title' => $item['unit_title'],
                     'color' => $item['color_hex'],
                     'color_name' => $item['color_name'],
+                    'show_color' => $item['show_color'],
+                    'is_patterned_color' => $item['is_patterned_color'],
                     'size' => $item['size'],
                     'guarantee' => $item['guarantee'],
+                    'separate_consignment' => is_value_checked($item['separate_consignment']) ? DB_YES : DB_NO,
                     'is_returnable' => is_value_checked($item['is_returnable']) ? DB_YES : DB_NO,
                 ]);
 
@@ -471,11 +537,6 @@ class OrderModel extends BaseModel
         }
         //-----
 
-        if (!$res || !$res2 || !$res4) {
-            $this->db->rollBack();
-            return false;
-        }
-
         /**
          * @var OrderReserveModel $reserveModel
          */
@@ -487,7 +548,7 @@ class OrderModel extends BaseModel
             'expire_at' => time() + RESERVE_MAX_TIME,
         ]);
 
-        if (!$res3) {
+        if (!$res || !$res2 || !$res3 || !$res4) {
             $this->db->rollBack();
             return false;
         }

@@ -43,15 +43,28 @@ class CheckoutForm implements IPageForm
 
         // aliases
         $validator->setFieldsAlias([
+            'inp-is-real-or-legal' => 'نوع گیرنده',
+            //
             'fname' => 'نام',
             'lname' => 'نام خانوادگی',
             'natnum' => 'کد ملی',
+            //
             'inp-addr-full-name' => 'نام خریدار',
             'inp-addr-mobile' => 'شماره موبایل خریدار',
             'inp-addr-province' => 'شهر',
             'inp-addr-city' => 'استان',
             'inp-addr-postal-code' => 'کد پستی',
             'inp-addr-address' => 'آدرس',
+            //
+            'inp-addr-company-name' => 'نام شرکت',
+            'inp-addr-company-eco-code' => 'کد اقتصادی',
+            'inp-addr-company-eco-nid' => 'شناسه ملی',
+            'inp-addr-company-reg-num' => 'شماره ثبت',
+            'inp-addr-tel' => 'تلفن ثابت',
+            'inp-addr-company-province' => 'شهر',
+            'inp-addr-company-city' => 'استان',
+            'inp-addr-company-postal-code' => 'کد پستی',
+            'inp-addr-company-address' => 'آدرس',
         ])
             ->toEnglishValue(true, true);
         // all required fields
@@ -59,85 +72,174 @@ class CheckoutForm implements IPageForm
             ->setFields([
                 'fname',
                 'lname',
-                'inp-addr-full-name',
-                'inp-addr-address',
             ])
             ->stopValidationAfterFirstError(false)
             ->required()
             ->stopValidationAfterFirstError(true);
-        // province
-        $validator
-            ->setFields('inp-addr-province')
-            ->stopValidationAfterFirstError(false)
-            ->required()
-            ->stopValidationAfterFirstError(true)
-            ->custom(function (FormValue $formValue) {
-                /**
-                 * @var ProvinceModel $provinceModel
-                 */
-                $provinceModel = container()->get(ProvinceModel::class);
-                $province = $provinceModel->getFirst(['name'], 'id=:id AND is_deleted=:del', [
-                    'id' => $formValue->getValue(),
-                    'del' => DB_NO,
-                ]);
-                if (0 !== count($province)) {
-                    session()->setFlash('__custom_province_info_in_order', $province['name']);
-                    return true;
-                }
-                return false;
-            }, '{alias} ' . 'انتخاب شده نامعتبر است.');
-        if (empty($validator->getError('inp-addr-province'))) {
-            // city
+
+        // get type of receiver/buyer
+        $realOrLegal = $validator->getFieldValue('inp-is-real-or-legal', RECEIVER_TYPE_REAL);
+
+        // check validation for real person type
+        if ($realOrLegal === RECEIVER_TYPE_REAL) {
+            // all required fields
             $validator
-                ->setFields('inp-addr-city')
+                ->setFields([
+                    'inp-addr-full-name',
+                    'inp-addr-address',
+                ])
+                ->stopValidationAfterFirstError(false)
+                ->required()
+                ->stopValidationAfterFirstError(true);
+            // province
+            $validator
+                ->setFields('inp-addr-province')
                 ->stopValidationAfterFirstError(false)
                 ->required()
                 ->stopValidationAfterFirstError(true)
-                ->custom(function (FormValue $formValue) use ($validator) {
+                ->custom(function (FormValue $formValue) {
                     /**
-                     * @var CityModel $cityModel
+                     * @var ProvinceModel $provinceModel
                      */
-                    $cityModel = container()->get(CityModel::class);
-                    $city = $cityModel->getFirst(['name'], 'id=:id AND province_id=:pid AND is_deleted=:del', [
+                    $provinceModel = container()->get(ProvinceModel::class);
+                    $province = $provinceModel->getFirst(['name'], 'id=:id AND is_deleted=:del', [
                         'id' => $formValue->getValue(),
-                        'pid' => $validator->getFieldValue('inp-addr-province', -1),
                         'del' => DB_NO,
                     ]);
-                    if (0 !== count($city)) {
-                        session()->setFlash('__custom_city_info_in_order', $city['name']);
+                    if (0 !== count($province)) {
+                        session()->setFlash('__custom_province_info_in_order', $province['name']);
                         return true;
                     }
                     return false;
                 }, '{alias} ' . 'انتخاب شده نامعتبر است.');
-        }
-        // mobile
-        $validator
-            ->setFields('inp-addr-mobile')
-            ->stopValidationAfterFirstError(false)
-            ->required()
-            ->stopValidationAfterFirstError(true)
-            ->persianMobile('{alias} ' . 'نامعتبر است.');
-        // postal code
-        $validator
-            ->setFields('inp-addr-postal-code')
-            ->stopValidationAfterFirstError(false)
-            ->required()
-            ->stopValidationAfterFirstError(true);
-
-        // national number
-        $auth = auth_home();
-        /**
-         * @var UserModel $userModel
-         */
-        $userModel = container()->get(UserModel::class);
-        $user = $userModel->getFirst(['national_number'], 'id=:id', ['id' => $auth->getCurrentUser()['id'] ?? 0]);
-        if (empty(trim($user['national_number']))) {
+            if (empty($validator->getError('inp-addr-province'))) {
+                // city
+                $validator
+                    ->setFields('inp-addr-city')
+                    ->stopValidationAfterFirstError(false)
+                    ->required()
+                    ->stopValidationAfterFirstError(true)
+                    ->custom(function (FormValue $formValue) use ($validator) {
+                        /**
+                         * @var CityModel $cityModel
+                         */
+                        $cityModel = container()->get(CityModel::class);
+                        $city = $cityModel->getFirst(['name'], 'id=:id AND province_id=:pid AND is_deleted=:del', [
+                            'id' => $formValue->getValue(),
+                            'pid' => $validator->getFieldValue('inp-addr-province', -1),
+                            'del' => DB_NO,
+                        ]);
+                        if (0 !== count($city)) {
+                            session()->setFlash('__custom_city_info_in_order', $city['name']);
+                            return true;
+                        }
+                        return false;
+                    }, '{alias} ' . 'انتخاب شده نامعتبر است.');
+            }
+            // mobile
             $validator
-                ->setFields('natnum')
+                ->setFields('inp-addr-mobile')
                 ->stopValidationAfterFirstError(false)
                 ->required()
                 ->stopValidationAfterFirstError(true)
-                ->persianNationalCode('{alias} ' . 'نامعتبر است.');
+                ->persianMobile('{alias} ' . 'نامعتبر است.');
+            // postal code
+            $validator
+                ->setFields('inp-addr-postal-code')
+                ->stopValidationAfterFirstError(false)
+                ->required()
+                ->stopValidationAfterFirstError(true);
+        } elseif ($realOrLegal === RECEIVER_TYPE_LEGAL) { // check validation for legal/company type
+            // all required fields
+            $validator
+                ->setFields([
+                    'inp-addr-company-name',
+                    'inp-addr-company-eco-code',
+                    'inp-addr-company-eco-nid',
+                    'inp-addr-company-reg-num',
+                    'inp-addr-company-address',
+                ])
+                ->stopValidationAfterFirstError(false)
+                ->required()
+                ->stopValidationAfterFirstError(true);
+            // tel
+            $validator
+                ->setFields('inp-addr-tel')
+                ->stopValidationAfterFirstError(false)
+                ->required()
+                ->stopValidationAfterFirstError(true)
+                ->regex('/^\d{11}$/', '{alias} ' . 'نامعتبر است.');
+            // province
+            $validator
+                ->setFields('inp-addr-company-province')
+                ->stopValidationAfterFirstError(false)
+                ->required()
+                ->stopValidationAfterFirstError(true)
+                ->custom(function (FormValue $formValue) {
+                    /**
+                     * @var ProvinceModel $provinceModel
+                     */
+                    $provinceModel = container()->get(ProvinceModel::class);
+                    $province = $provinceModel->getFirst(['name'], 'id=:id AND is_deleted=:del', [
+                        'id' => $formValue->getValue(),
+                        'del' => DB_NO,
+                    ]);
+                    if (0 !== count($province)) {
+                        session()->setFlash('__custom_province_info_in_order', $province['name']);
+                        return true;
+                    }
+                    return false;
+                }, '{alias} ' . 'انتخاب شده نامعتبر است.');
+            if (empty($validator->getError('inp-addr-company-province'))) {
+                // city
+                $validator
+                    ->setFields('inp-addr-company-city')
+                    ->stopValidationAfterFirstError(false)
+                    ->required()
+                    ->stopValidationAfterFirstError(true)
+                    ->custom(function (FormValue $formValue) use ($validator) {
+                        /**
+                         * @var CityModel $cityModel
+                         */
+                        $cityModel = container()->get(CityModel::class);
+                        $city = $cityModel->getFirst(['name'], 'id=:id AND province_id=:pid AND is_deleted=:del', [
+                            'id' => $formValue->getValue(),
+                            'pid' => $validator->getFieldValue('inp-addr-company-province', -1),
+                            'del' => DB_NO,
+                        ]);
+                        if (0 !== count($city)) {
+                            session()->setFlash('__custom_city_info_in_order', $city['name']);
+                            return true;
+                        }
+                        return false;
+                    }, '{alias} ' . 'انتخاب شده نامعتبر است.');
+            }
+            // postal code
+            $validator
+                ->setFields('inp-addr-company-postal-code')
+                ->stopValidationAfterFirstError(false)
+                ->required()
+                ->stopValidationAfterFirstError(true);
+        } else {
+            $validator->setError('inp-is-real-or-legal', 'نوع گیرنده/خریدار را مشخص نمایید.');
+        }
+
+        if ($validator->getStatus()) {
+            // national number
+            $auth = auth_home();
+            /**
+             * @var UserModel $userModel
+             */
+            $userModel = container()->get(UserModel::class);
+            $user = $userModel->getFirst(['national_number'], 'id=:id', ['id' => $auth->getCurrentUser()['id'] ?? 0]);
+            if (empty(trim($user['national_number']))) {
+                $validator
+                    ->setFields('natnum')
+                    ->stopValidationAfterFirstError(false)
+                    ->required()
+                    ->stopValidationAfterFirstError(true)
+                    ->persianNationalCode('{alias} ' . 'نامعتبر است.');
+            }
         }
 
         // to reset form values and not set them again
@@ -194,10 +296,13 @@ class CheckoutForm implements IPageForm
             // if user is logged in, fetch his info
             if ($auth->isLoggedIn()) {
                 $code = OrderUtil::getUniqueOrderCode();
+
+                $isRealOrLegal = input()->post('inp-is-real-or-legal', null)->getValue();
+
+                if (!in_array($isRealOrLegal, RECEIVER_TYPES)) return false;
+
                 $firstName = input()->post('fname', '')->getValue();
                 $lastName = input()->post('lname', '')->getValue();
-                $receiver = input()->post('inp-addr-full-name', '')->getValue();
-                $mobile = input()->post('inp-addr-mobile', '')->getValue();
                 $postalCode = input()->post('inp-addr-postal-code', '')->getValue();
                 $addr = input()->post('inp-addr-address', '')->getValue();
 
@@ -205,6 +310,7 @@ class CheckoutForm implements IPageForm
                 $city = session()->getFlash('__custom_city_info_in_order', 'نامشخص');
 
                 $gateway = session()->getFlash(SESSION_GATEWAY_RECORD);
+                $sendMethod = session()->getFlash(SESSION_SEND_METHOD_RECORD);
 
                 $badge = $badgeMode->getFirst([
                     'code', 'title', 'color'
@@ -257,8 +363,6 @@ class CheckoutForm implements IPageForm
                     'code' => $code,
                     'user_id' => $user['id'],
                     'user_national_number' => $user['national_number'],
-                    'receiver_name' => $xss->xss_clean($receiver),
-                    'receiver_mobile' => $xss->xss_clean($mobile),
                     'first_name' => $xss->xss_clean($firstName),
                     'last_name' => $xss->xss_clean($lastName),
                     'mobile' => $xss->xss_clean($user['username']),
@@ -269,9 +373,32 @@ class CheckoutForm implements IPageForm
                     'method_code' => $gateway['code'] ?? 'نامشخص',
                     'method_title' => $gateway['title'] ?? 'نامشخص',
                     'method_type' => $gateway['method_type'] ?? 'نامشخص',
-                    'send_method_title' => 'پست',
+                    'send_method_title' => $sendMethod['title'],
                     'payment_status' => PAYMENT_STATUS_WAIT,
                 ];
+
+                // check for company or a real user difference to add info accordingly
+                if ($isRealOrLegal === RECEIVER_TYPE_LEGAL) { // is legal company
+                    $receiver = input()->post('inp-addr-company-name', '')->getValue();
+                    $ecoCode = input()->post('inp-addr-company-eco-code', '')->getValue();
+                    $ecoNID = input()->post('inp-addr-company-eco-nid', '')->getValue();
+                    $regNum = input()->post('inp-addr-company-reg-number', '')->getValue();
+                    $tel = input()->post('inp-addr-company-tel', '')->getValue();
+
+                    $orderArr['receiver_type'] = RECEIVER_TYPE_LEGAL;
+                    $orderArr['company_economic_code'] = $xss->xss_clean($ecoCode);
+                    $orderArr['company_economic_national_id'] = $xss->xss_clean($ecoNID);
+                    $orderArr['company_registration_number'] = $xss->xss_clean($regNum);
+                    $orderArr['company_tel'] = $xss->xss_clean($tel);
+                } else { // otherwise
+                    $orderArr['receiver_type'] = RECEIVER_TYPE_REAL;
+                    $receiver = input()->post('inp-addr-full-name', '')->getValue();
+                    $mobile = input()->post('inp-addr-mobile', '')->getValue();
+
+                    $orderArr['receiver_mobile'] = $xss->xss_clean($mobile);
+                }
+
+                $orderArr['receiver_name'] = $xss->xss_clean($receiver);
 
                 $couponRes = true;
                 $coupon = $couponModel->getFirst([

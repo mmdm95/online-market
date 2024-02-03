@@ -332,7 +332,7 @@ class CommentController extends AbstractAdminController implements IDatatableCon
                         'dt' => 'username',
                         'formatter' => function ($d, $row) {
                             $user = $d;
-                            if(!empty(trim($row['first_name'])) || !empty(trim($row['last_name']))) {
+                            if (!empty(trim($row['first_name'])) || !empty(trim($row['last_name']))) {
                                 $user = trim(trim($row['first_name']) . ' ' . trim($row['last_name']));
                             }
                             return "<a href='" . url('admin.user.view', ['id' => $row['user_id']])->getRelativeUrl() . "' target='__blank'> " . $user . "</a>";

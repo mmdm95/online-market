@@ -3,8 +3,8 @@
 namespace App\Logic\Handlers;
 
 use Pecee\Http\Request;
-use Pecee\SimpleRouter\Handlers\IExceptionHandler;
 use Pecee\SimpleRouter\Exceptions\NotFoundHttpException;
+use Pecee\SimpleRouter\Handlers\IExceptionHandler;
 
 class CustomExceptionHandler implements IExceptionHandler
 {

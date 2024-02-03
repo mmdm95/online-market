@@ -43,8 +43,8 @@
 
                         <p><?= $message; ?></p>
 
-                        <a href="<?= url('home.index')->getRelativeUrl(); ?>" class="btn btn-dark">
-                            بازگشت به خانه
+                        <a href="<?= url('user.index')->getRelativeUrl(); ?>" class="btn btn-dark">
+                            بازگشت به داشبورد
                         </a>
                     </div>
                 </div>

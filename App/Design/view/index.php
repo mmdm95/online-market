@@ -416,6 +416,25 @@ $allowSetting = $authAdmin->isAllow(RESOURCE_SETTING, OWN_PERMISSION_READ);
             </div>
         <?php endif; ?>
 
+        <?php if ($authAdmin->isAllow(RESOURCE_SEND_METHOD, OWN_PERMISSION_READ)): ?>
+            <div class="col-sm-6 col-lg-4">
+                <div class="card card-body border-left-3 border-left-pink-300">
+                    <div class="media">
+                        <div class="mr-3 align-self-center">
+                            <i class="icon-box-remove icon-3x text-pink-300"></i>
+                        </div>
+
+                        <div class="media-body">
+                            <h3 class="font-weight-semibold mb-0">
+                                <?= StringUtil::toPersian($send_method_count); ?>
+                            </h3>
+                            <span class="text-uppercase font-size-sm text-muted">روش ارسال</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <?php endif; ?>
+
         <?php if ($authAdmin->isAllow(RESOURCE_COLOR, OWN_PERMISSION_READ)): ?>
             <div class="col-sm-6 col-lg-4">
                 <div class="card card-body border-left-3 border-left-violet-300">

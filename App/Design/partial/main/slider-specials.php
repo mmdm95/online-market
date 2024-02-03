@@ -80,8 +80,10 @@
                                         <?php if (!$isComingSoon && !$callForMore && $isAvailable): ?>
                                             <?php
                                             $discountExpire = getDiscountExpireTime($item);
+                                            $discountStart = getDiscountStartTime($item);
+                                            $showExpireCountdown = shouldShowCountdown($discountStart, $discountExpire);
                                             ?>
-                                            <?php if (!empty($discountExpire)): ?>
+                                            <?php if ($showExpireCountdown): ?>
                                                 <div class="d-flex text-center countdown_style4 mb-4" countdown
                                                      data-date="<?= date('Y-m-d H:i:s', $discountExpire); ?>">
                                                     <div class="col bg-light ml-2 py-2">

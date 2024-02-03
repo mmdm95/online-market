@@ -3,15 +3,13 @@
 namespace App\Logic\Models;
 
 use Aura\SqlQuery\Exception as AuraException;
+use DI\DependencyException;
+use DI\NotFoundException;
 use Pecee\Http\Input\InputItem;
 use Sim\Auth\DBAuth as Auth;
 use Sim\Auth\Exceptions\IncorrectPasswordException;
 use Sim\Auth\Exceptions\InvalidUserException;
 use Sim\Auth\Interfaces\IDBException;
-use Sim\Container\Exceptions\MethodNotFoundException;
-use Sim\Container\Exceptions\ParameterHasNoDefaultValueException;
-use Sim\Container\Exceptions\ServiceNotFoundException;
-use Sim\Container\Exceptions\ServiceNotInstantiableException;
 
 class UserModel extends BaseModel
 {
@@ -37,13 +35,7 @@ class UserModel extends BaseModel
          */
         try {
             $auth = \container()->get($authContainer);
-        } catch (
-        \ReflectionException|
-        MethodNotFoundException|
-        ParameterHasNoDefaultValueException|
-        ServiceNotFoundException|
-        ServiceNotInstantiableException $e
-        ) {
+        } catch (DependencyException|NotFoundException $e) {
             return false;
         }
 

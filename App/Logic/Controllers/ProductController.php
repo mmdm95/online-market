@@ -292,7 +292,7 @@ class ProductController extends AbstractHomeController
         $select = $model->select();
         $select
             ->from(BaseModel::TBL_PRODUCT_PROPERTY)
-            ->cols(['code', 'color_hex', 'color_name', 'size', 'guarantee'])
+            ->cols(['code', 'color_hex', 'color_name', 'show_color', 'is_patterned_color', 'size', 'guarantee'])
             ->where('product_id=:p_id')
             ->bindValue('p_id', $product['product_id'])
             ->orderBy(['is_available DESC', 'stock_count DESC']);
@@ -425,6 +425,7 @@ class ProductController extends AbstractHomeController
                     'pa.is_available',
                     'pa.price',
                     'pa.festival_discount',
+                    'pa.discount_from',
                     'pa.discount_until',
                     'pa.discounted_price',
                     'pa.max_cart_count',

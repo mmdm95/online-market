@@ -2,9 +2,7 @@
 
 namespace App\Logic\Middlewares\Logic;
 
-use App\Logic\Models\UserModel;
 use Sim\Abstracts\Mvc\Controller\Middleware\AbstractMiddleware;
-use Sim\Auth\DBAuth;
 
 class NonePublicFolderAccessMiddleware extends AbstractMiddleware
 {

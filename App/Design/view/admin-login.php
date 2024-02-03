@@ -74,7 +74,7 @@ $validator = form_validator();
 
                         <span class="form-text text-center text-muted">
                             توسعه داده شده توسط
-                            <a href="#" class="text-orange">داده افزار رهام</a>
+                            <a href="#">تیم هیوا</a>
                         </span>
                     </div>
                 </div>

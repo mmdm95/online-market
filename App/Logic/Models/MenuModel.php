@@ -13,9 +13,9 @@ class MenuModel extends BaseModel
      * @return array
      */
     public function getMenuItemsWithColumns(
-        array $columns,
+        array  $columns,
         string $where = null,
-        array $bind_values = []
+        array  $bind_values = []
     ): array
     {
         $select = $this->connector->select();

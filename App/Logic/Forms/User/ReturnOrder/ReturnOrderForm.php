@@ -8,7 +8,6 @@ use App\Logic\Models\ReturnOrderModel;
 use App\Logic\Utils\ReturnOrderUtil;
 use App\Logic\Validations\ExtendedValidator;
 use Pecee\Http\Input\InputItem;
-use Sim\Auth\DBAuth;
 use Sim\Exceptions\ConfigManager\ConfigNotRegisteredException;
 use Sim\Form\Exceptions\FormException;
 use Sim\Interfaces\IFileNotExistsException;

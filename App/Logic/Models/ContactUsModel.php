@@ -23,16 +23,16 @@ class ContactUsModel extends BaseModel
      * @return array
      */
     public function getContacts(
-        array $columns = [
+        array   $columns = [
             'cu.*',
             'CONCAT(u.first_name, " ", u.last_name) AS creator',
             'u.id AS creator_id'
         ],
         ?string $where = null,
-        array $bind_values = [],
-        array $order_by = ['cu.id DESC'],
-        ?int $limit = null,
-        int $offset = 0
+        array   $bind_values = [],
+        array   $order_by = ['cu.id DESC'],
+        ?int    $limit = null,
+        int     $offset = 0
     ): array
     {
         $select = $this->connector->select();
@@ -75,8 +75,8 @@ class ContactUsModel extends BaseModel
      */
     public function getSingleContact(
         ?string $where = null,
-        array $bind_values = [],
-        array $columns = [
+        array   $bind_values = [],
+        array   $columns = [
             'cu.*',
             'u.first_name AS creator_name',
             'u.last_name AS creator_family',

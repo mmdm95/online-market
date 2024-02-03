@@ -109,11 +109,15 @@ if (empty($p1) && empty($p2) && empty($p3)) {
                                             <?php foreach ($products_property[$p1['id']] as $k => $item): ?>
                                                 <div class="product_color_switch">
                                                     <div class="<?= 0 != $k ? 'border-top' : ''; ?>">
-                                                        <div class="mb-1">
-                                                            <span class="active"
-                                                                  data-color="<?= $item['color_hex']; ?>"></span>
-                                                            <?= $item['color_name']; ?>
-                                                        </div>
+                                                        <?php if (!empty($item['color_hex']) && ($item['show_color'] === DB_YES || $item['is_patterned_color'] === DB_YES)): ?>
+                                                            <div class="mb-1">
+                                                                <?php if ($item['is_patterned_color'] === DB_NO): ?>
+                                                                    <span class="active"
+                                                                          data-color="<?= $item['color_hex']; ?>"></span>
+                                                                <?php endif; ?>
+                                                                <?= $item['color_name']; ?>
+                                                            </div>
+                                                        <?php endif; ?>
                                                         <?php if (!empty($item['size'])): ?>
                                                             <div class="mx-1">
                                                                 سایز:
@@ -166,11 +170,15 @@ if (empty($p1) && empty($p2) && empty($p3)) {
                                             <?php foreach ($products_property[$p2['id']] as $k => $item): ?>
                                                 <div class="product_color_switch">
                                                     <div class="<?= 0 != $k ? 'border-top' : ''; ?>">
-                                                        <div class="mb-1">
-                                                            <span class="active"
-                                                                  data-color="<?= $item['color_hex']; ?>"></span>
-                                                            <?= $item['color_name']; ?>
-                                                        </div>
+                                                        <?php if (!empty($item['color_hex']) && ($item['show_color'] === DB_YES || $item['is_patterned_color'] === DB_YES)): ?>
+                                                            <div class="mb-1">
+                                                                <?php if ($item['is_patterned_color'] === DB_NO): ?>
+                                                                    <span class="active"
+                                                                          data-color="<?= $item['color_hex']; ?>"></span>
+                                                                <?php endif; ?>
+                                                                <?= $item['color_name']; ?>
+                                                            </div>
+                                                        <?php endif; ?>
                                                         <?php if (!empty($item['size'])): ?>
                                                             <div class="mx-1">
                                                                 سایز:
@@ -223,11 +231,15 @@ if (empty($p1) && empty($p2) && empty($p3)) {
                                             <?php foreach ($products_property[$p3['id']] as $k => $item): ?>
                                                 <div class="product_color_switch">
                                                     <div class="<?= 0 != $k ? 'border-top' : ''; ?>">
-                                                        <div class="mb-1">
-                                                            <span class="active"
-                                                                  data-color="<?= $item['color_hex']; ?>"></span>
-                                                            <?= $item['color_name']; ?>
-                                                        </div>
+                                                        <?php if (!empty($item['color_hex']) && ($item['show_color'] === DB_YES || $item['is_patterned_color'] === DB_YES)): ?>
+                                                            <div class="mb-1">
+                                                                <?php if ($item['is_patterned_color'] === DB_NO): ?>
+                                                                    <span class="active"
+                                                                          data-color="<?= $item['color_hex']; ?>"></span>
+                                                                <?php endif; ?>
+                                                                <?= $item['color_name']; ?>
+                                                            </div>
+                                                        <?php endif; ?>
                                                         <?php if (!empty($item['size'])): ?>
                                                             <div class="mx-1">
                                                                 سایز:

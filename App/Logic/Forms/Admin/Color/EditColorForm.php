@@ -46,29 +46,29 @@ class EditColorForm implements IPageForm
             ->stopValidationAfterFirstError(false)
             ->required()
             ->stopValidationAfterFirstError(true)
-            ->lessThanEqualLength(250);
+            ->lessThanEqualLength(250)
+            ->custom(function (FormValue $value) {
+                /**
+                 * @var ColorModel $colorModel
+                 */
+                $colorModel = container()->get(ColorModel::class);
+                $prevHex = session()->getFlash('color-prev-name', null);
+                if (empty($prevHex)) return false;
+                if (
+                    $prevHex != trim($value->getValue()) &&
+                    0 !== $colorModel->count('name=:name', ['name' => trim($value->getValue())])
+                ) {
+                    return false;
+                }
+                return true;
+            }, 'رنگ انتخاب شده وجود دارد.');
         // color
         $validator
             ->setFields('inp-edit-color-color')
             ->stopValidationAfterFirstError(false)
             ->required()
             ->stopValidationAfterFirstError(true)
-            ->hexColor()
-            ->custom(function (FormValue $value) {
-                /**
-                 * @var ColorModel $colorModel
-                 */
-                $colorModel = container()->get(ColorModel::class);
-                $prevHex = session()->getFlash('color-prev-hex', null);
-                if (empty($prevHex)) return false;
-                if (
-                    $prevHex != trim($value->getValue()) &&
-                    0 !== $colorModel->count('hex=:hex', ['hex' => trim($value->getValue())])
-                ) {
-                    return false;
-                }
-                return true;
-            }, 'کد رنگی انتخاب شده وجود دارد.');
+            ->hexColor();
 
         $id = session()->getFlash('color-curr-id', null, false);
         if (!empty($id)) {
@@ -127,11 +127,15 @@ class EditColorForm implements IPageForm
             $name = input()->post('inp-edit-color-name', '')->getValue();
             $color = input()->post('inp-edit-color-color', '')->getValue();
             $pub = input()->post('inp-edit-color-status', '')->getValue();
+            $showColor = input()->post('inp-edit-color-show-color', '')->getValue();
+            $patternedColor = input()->post('inp-edit-color-is-patterned-color', '')->getValue();
 
             return $colorModel->update([
                 'name' => $xss->xss_clean(trim($name)),
                 'hex' => $xss->xss_clean(strtolower($color)),
                 'publish' => is_value_checked($pub) ? DB_YES : DB_NO,
+                'show_color' => is_value_checked($showColor) ? DB_YES : DB_NO,
+                'is_patterned_color' => is_value_checked($patternedColor) ? DB_YES : DB_NO,
                 'updated_by' => $auth->getCurrentUser()['id'] ?? null,
                 'updated_at' => time(),
             ], 'id=:id', ['id' => $id]);

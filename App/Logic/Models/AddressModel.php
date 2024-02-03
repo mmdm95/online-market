@@ -23,12 +23,12 @@ class AddressModel extends BaseModel
      * @return array
      */
     public function getUserAddresses(
-        array $columns = ['u_addr.*', 'c.name AS city_name', 'p.name AS province_name'],
+        array   $columns = ['u_addr.*', 'c.name AS city_name', 'p.name AS province_name'],
         ?string $where = null,
-        array $bind_values = [],
-        ?int $limit = null,
-        int $offset = 0,
-        array $order_by = ['u_addr.id DESC']): array
+        array   $bind_values = [],
+        ?int    $limit = null,
+        int     $offset = 0,
+        array   $order_by = ['u_addr.id DESC']): array
     {
         $select = $this->connector->select();
         $select
@@ -73,8 +73,8 @@ class AddressModel extends BaseModel
      */
     public function getSingleUserAddress(
         ?string $where = null,
-        array $bind_values = [],
-        array $columns = ['u_addr.*', 'c.name AS city_name', 'p.name AS province_name']
+        array   $bind_values = [],
+        array   $columns = ['u_addr.*', 'c.name AS city_name', 'p.name AS province_name']
     ): array
     {
         $res = $this->getUserAddresses($columns, $where, $bind_values, 1);

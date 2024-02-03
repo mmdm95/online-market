@@ -7,10 +7,12 @@ use App\Logic\Forms\Order\CheckoutForm;
 use App\Logic\Handlers\GeneralAjaxFormHandler;
 use App\Logic\Handlers\ResourceHandler;
 use App\Logic\Middlewares\Logic\AllowCheckoutMiddleware;
+use App\Logic\Models\AddressCompanyModel;
 use App\Logic\Models\AddressModel;
 use App\Logic\Models\OrderModel;
 use App\Logic\Models\PaymentMethodModel;
 use App\Logic\Models\ProvinceModel;
+use App\Logic\Models\SendMethodModel;
 use App\Logic\Models\UserModel;
 use App\Logic\Utils\LogUtil;
 use App\Logic\Utils\PaymentUtil;
@@ -26,9 +28,6 @@ use Sim\Exceptions\Mvc\Controller\ControllerException;
 use Sim\Exceptions\PathManager\PathNotRegisteredException;
 use Sim\Interfaces\IFileNotExistsException;
 use Sim\Interfaces\IInvalidVariableNameException;
-use Sim\Payment\Providers\IranKish\IranKishRequestResultProvider;
-use Sim\Payment\Providers\Sadad\SadadRequestResultProvider;
-use Sim\Payment\Providers\TAP\Payment\TapRequestResultProvider;
 
 class CheckoutController extends AbstractHomeController
 {
@@ -75,20 +74,33 @@ class CheckoutController extends AbstractHomeController
         $this->middlewareResult();
 
         /**
-         * @var PaymentMethodModel $methodModel
+         * @var PaymentMethodModel $payMethodModel
          */
-        $methodModel = container()->get(PaymentMethodModel::class);
+        $payMethodModel = container()->get(PaymentMethodModel::class);
+        /**
+         * @var SendMethodModel $sendMethodModel
+         */
+        $sendMethodModel = container()->get(SendMethodModel::class);
         /**
          * @var AddressModel $addressModel
          */
         $addressModel = container()->get(AddressModel::class);
+        /**
+         * @var AddressCompanyModel $addressCompanyModel
+         */
+        $addressCompanyModel = container()->get(AddressCompanyModel::class);
 
         $user = $this->getDefaultArguments()['user'];
 
-        $paymentMethods = $methodModel->get(['code', 'title', 'image', 'method_type'], 'publish=:pub', ['pub' => DB_YES]);
+        $paymentMethods = $payMethodModel->get(['code', 'title', 'image', 'method_type'], 'publish=:pub', ['pub' => DB_YES]);
+        $sendMethods = $sendMethodModel->get(['id', 'title', '`desc`', 'image'], 'publish=:pub', ['pub' => DB_YES]);
         $addresses = $addressModel->getUserAddresses(
             ['u_addr.*', 'c.name AS city_name', 'p.name AS province_name']
             , 'u_addr.user_id=:uId', ['uId' => $user['id']]
+        );
+        $addressesCompany = $addressCompanyModel->getUserAddresses(
+            ['uc_addr.*', 'c.name AS city_name', 'p.name AS province_name']
+            , 'uc_addr.user_id=:uId', ['uId' => $user['id']]
         );
 
         $inPersonDelivery = session()->get(SESSION_APPLIED_IN_PlACE_DELIVERY, 'no');
@@ -96,7 +108,9 @@ class CheckoutController extends AbstractHomeController
         $this->setLayout($this->main_layout)->setTemplate('view/main/order/checkout');
         return $this->render([
             'payment_methods' => $paymentMethods,
+            'send_methods' => $sendMethods,
             'addresses' => $addresses,
+            'addresses_company' => $addressesCompany,
             'in_person_delivery' => $inPersonDelivery,
         ]);
     }
@@ -111,6 +125,7 @@ class CheckoutController extends AbstractHomeController
         $resourceHandler = new ResourceHandler();
 
         $this->setMiddleWare(AllowCheckoutMiddleware::class, [false]);
+        // it'll send a json response back to browser inside the middleware
         $this->middlewareResult();
 
         try {
@@ -119,28 +134,12 @@ class CheckoutController extends AbstractHomeController
              */
             $agent = container()->get(Agent::class);
             if (!$agent->isRobot()) {
+                //------------------------------------------------------------------
                 // check gateway code and get information about it
+                //------------------------------------------------------------------
                 $gatewayCode = input()->post('payment_method_option')->getValue();
-                if (null == $gatewayCode) {
-                    $resourceHandler
-                        ->type(RESPONSE_TYPE_ERROR)
-                        ->errorMessage('روش پرداخت انتخاب شده نامعتبر است.');
-                    response()->json($resourceHandler->getReturnData());
-                }
-                /**
-                 * @var PaymentMethodModel $methodModel
-                 */
-                $methodModel = container()->get(PaymentMethodModel::class);
-                $gatewayMethod = $methodModel->getFirst([
-                    'code',
-                    'title',
-                    'method_type',
-                    'meta_parameters',
-                ], 'code=:code AND publish=:pub', [
-                    'code' => $gatewayCode,
-                    'pub' => DB_YES,
-                ]);
-                if (!count($gatewayMethod)) {
+                $gatewayMethod = PaymentUtil::validateAndGetPaymentMethod($gatewayCode);
+                if (is_null($gatewayMethod)) {
                     $resourceHandler
                         ->type(RESPONSE_TYPE_ERROR)
                         ->errorMessage('روش پرداخت انتخاب شده نامعتبر است.');
@@ -149,6 +148,39 @@ class CheckoutController extends AbstractHomeController
                 // store to flash session to retrieve in form store
                 session()->setFlash(SESSION_GATEWAY_RECORD, $gatewayMethod);
 
+                //------------------------------------------------------------------
+                // check send method and get information about it
+                //------------------------------------------------------------------
+                $sendMethodId = input()->post('send_method_option')->getValue();
+                if (null == $sendMethodId) {
+                    $resourceHandler
+                        ->type(RESPONSE_TYPE_ERROR)
+                        ->errorMessage('روش ارسال انتخاب شده نامعتبر است.');
+                    response()->json($resourceHandler->getReturnData());
+                }
+                /**
+                 * @var SendMethodModel $sendMethodModel
+                 */
+                $sendMethodModel = container()->get(SendMethodModel::class);
+                $sendMethod = $sendMethodModel->getFirst([
+                    'id',
+                    'title',
+                    'desc',
+                ], 'id=:id AND publish=:pub', [
+                    'id' => $sendMethodId,
+                    'pub' => DB_YES,
+                ]);
+                if (!count($sendMethod)) {
+                    $resourceHandler
+                        ->type(RESPONSE_TYPE_ERROR)
+                        ->errorMessage('روش ارسال انتخاب شده نامعتبر است.');
+                    response()->json($resourceHandler->getReturnData());
+                }
+                // store to flash session to retrieve in form store
+                session()->setFlash(SESSION_SEND_METHOD_RECORD, $sendMethod);
+
+                //------------------------------------------------------------------
+
                 // issue a factor for order
                 $formHandler = new GeneralAjaxFormHandler();
                 $resourceHandler = $formHandler
@@ -156,100 +188,35 @@ class CheckoutController extends AbstractHomeController
 
                 // return needed response for gateway redirection if everything is ok
                 if ($resourceHandler->getReturnData()['type'] == RESPONSE_TYPE_SUCCESS) {
-                    if ($gatewayMethod['method_type'] == METHOD_TYPE_WALLET) {
-                        [$gatewayInfo, $infoRes] = PaymentUtil::walletCheck($gatewayMethod['code']);
-                    } else {
-                        // connect to gateway and get needed info
-                        [$gatewayInfo, $infoRes] = PaymentUtil::getGatewayInfo(
-                            $gatewayMethod['method_type'],
-                            $gatewayMethod['code'],
-                            json_decode(cryptographer()->decrypt($gatewayMethod['meta_parameters']), true)
-                        );
-                    }
+                    $connOptions = PaymentUtil::getGatewayConnectionOptions($gatewayMethod);
 
-                    if (
-                        $infoRes &&
-                        !empty($gatewayInfo) &&
-                        in_array(
-                            (int)$gatewayMethod['method_type'], [
-                                METHOD_TYPE_WALLET,
-                                //
-                                METHOD_TYPE_GATEWAY_BEH_PARDAKHT,
-                                METHOD_TYPE_GATEWAY_IDPAY,
-                                METHOD_TYPE_GATEWAY_MABNA,
-                                METHOD_TYPE_GATEWAY_ZARINPAL,
-                                METHOD_TYPE_GATEWAY_SADAD,
-                                METHOD_TYPE_GATEWAY_TAP,
-                                METHOD_TYPE_GATEWAY_IRAN_KISH,
-                            ]
-                        )
-                    ) {
-                        $canContinue = true;
+                    if (is_array($connOptions)) {
+                        $url = $connOptions['url'];
+                        $inputs = $connOptions['inputs'];
+                        $redirect = $connOptions['redirect'];
+                        $isMultipart = $connOptions['isMultipart'];
 
-                        $url = '#';
-                        $inputs = [];
-                        $redirect = false;
-                        $isMultipart = false;
+                        // remove all cart items
+                        cart()->destroy();
+                        // remove order array that stored before to prevent any error due to traces
+                        session()->remove(SESSION_ORDER_ARR_INFO);
+                        // remove other traces
+                        session()->remove(SESSION_APPLIED_COUPON_CODE);
+                        session()->remove(SESSION_APPLIED_POST_PRICE);
+                        session()->remove(SESSION_APPLIED_IN_PlACE_DELIVERY);
 
-                        switch ((int)$gatewayMethod['method_type']) {
-                            case METHOD_TYPE_WALLET:
-                                $url = $gatewayInfo['url'];
-                                $redirect = true;
-                                break;
-                            case METHOD_TYPE_GATEWAY_SADAD:
-                            case METHOD_TYPE_GATEWAY_TAP:
-                                /**
-                                 * @var SadadRequestResultProvider|TapRequestResultProvider $gatewayInfo
-                                 */
-                                $url = $gatewayInfo->getUrl();
-                                $redirect = true;
-                                break;
-                            case METHOD_TYPE_GATEWAY_IRAN_KISH:
-                                /**
-                                 * @var IranKishRequestResultProvider $gatewayInfo
-                                 */
-                                $inputs = [
-                                    [
-                                        'name' => 'tokenIdentity',
-                                        'value' => $gatewayInfo->getToken(),
-                                    ],
-                                ];
-                                $url = $gatewayInfo->getUrl();
-                                $isMultipart = true;
-                                break;
-                            default:
-                                $resourceHandler
-                                    ->type(RESPONSE_TYPE_WARNING)
-                                    ->data('روش پرداخت انتخاب شده نامعتبر است!');
-                                $canContinue = false;
-                                break;
-                        }
-
-                        if ($canContinue) {
-                            // remove all cart items
-                            cart()->destroy();
-                            // remove order array that stored before to prevent any error due to traces
-                            session()->remove(SESSION_ORDER_ARR_INFO);
-                            // remove other traces
-                            session()->remove(SESSION_APPLIED_COUPON_CODE);
-                            session()->remove(SESSION_APPLIED_POST_PRICE);
-                            session()->remove(SESSION_APPLIED_IN_PlACE_DELIVERY);
-
-                            $resourceHandler
-                                ->type(RESPONSE_TYPE_SUCCESS)
-                                ->data([
-                                    'redirect' => $redirect,
-                                    'url' => $url,
-                                    'inputs' => $inputs,
-                                    'multipart_form' => $isMultipart,
-                                ]);
-                        } else {
-                            $this->removeIssuedFactor();
-                        }
+                        $resourceHandler
+                            ->type(RESPONSE_TYPE_SUCCESS)
+                            ->data([
+                                'redirect' => $redirect,
+                                'url' => $url,
+                                'inputs' => $inputs,
+                                'multipart_form' => $isMultipart,
+                            ]);
                     } else {
                         $msg = 'خطا در ارتباط با درگاه بانک، لطفا دوباره تلاش کنید.';
-                        if ($gatewayMethod['method_type'] == METHOD_TYPE_WALLET) {
-                            $msg = $gatewayInfo['error']['message'];
+                        if (is_string($connOptions) && !empty($connOptions)) {
+                            $msg = $connOptions;
                         }
 
                         $this->removeIssuedFactor();
@@ -336,7 +303,18 @@ class CheckoutController extends AbstractHomeController
                             $price = $postUtil->post();
                         }
                     }
-                    session()->set(SESSION_APPLIED_POST_PRICE, $price);
+
+                    // consider separate consignment of each item for shipping price
+                    $shippingTimes = 1;
+                    foreach (cart()->getItems() as $item) {
+                        if (is_value_checked($item['separate_consignment'])) {
+                            $shippingTimes += $item['qnt'];
+                        }
+                    }
+                    //
+
+                    session()->set(SESSION_APPLIED_POST_PRICE, (float)$price * (float)$shippingTimes);
+
                     session()->remove(SESSION_APPLIED_IN_PlACE_DELIVERY);
                     $resourceHandler
                         ->type(RESPONSE_TYPE_SUCCESS)

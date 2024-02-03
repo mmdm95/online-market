@@ -26,7 +26,7 @@ class SMSLogsModel extends BaseModel
         array   $columns = ['sl.*'],
         ?string $where = null,
         array   $bind_values = [],
-        ?array   $order_by = ['id DESC'],
+        ?array  $order_by = ['id DESC'],
         ?int    $limit = null,
         int     $offset = 0
     ): array

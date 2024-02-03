@@ -86,4 +86,12 @@ class Model
     {
         return $this->connector->delete();
     }
+
+    /**
+     * @return ExtendedPdoInterface|null
+     */
+    public function getDB(): ?ExtendedPdoInterface
+    {
+        return $this->db;
+    }
 }

@@ -35,18 +35,22 @@ class SMSUtil implements ISMS
     }
 
     /**
-     * @return float
-     * @throws SMSException
-     * @throws \DI\DependencyException
-     * @throws \DI\NotFoundException
+     * @return float|array
      */
-    public static function getCredit(): float
+    public static function getCredit()
     {
-        /**
-         * @var NiazPardaz $sms
-         */
-        $sms = container()->get('sms_panel');
-        return $sms->getCredit();
+        try {
+            /**
+             * @var NiazPardaz $sms
+             */
+            $sms = container()->get('sms_panel');
+            return $sms->getCredit();
+        } catch (\Exception $e) {
+            return [
+                'count' => 0,
+                'error' => 'خطا در ارتباط با پنل پیامکی'
+            ];
+        }
     }
 
     /**

@@ -188,16 +188,23 @@ $validator = form_validator();
                                 </h6>
                             <?php endif; ?>
                             <div class="text-muted">
-                                <span class="btn-icon rounded-full p-1 d-inline-block mt-1"
-                                      style="background-color: <?= $item['color']; ?>; width: 15px; height: 15px;"></span>
-                                (<?= $item['color_name']; ?>)
+                                <?php
+                                $isColorShowable = !empty($item['color']) && ($item['show_color'] === DB_YES || $item['is_patterned_color'] === DB_YES);
+                                ?>
+                                <?php if ($isColorShowable): ?>
+                                    <?php if ($item['is_patterned_color'] === DB_NO): ?>
+                                        <span class="btn-icon rounded-full p-1 d-inline-block mt-1"
+                                              style="background-color: <?= $item['color']; ?>; width: 15px; height: 15px;"></span>
+                                    <?php endif; ?>
+                                    (<?= $item['color_name']; ?>)
+                                <?php endif; ?>
                                 <?php if (!empty($item['size'])): ?>
-                                    ,
+                                    <?= $isColorShowable ? ',' : ''; ?>
                                     سایز
                                     (<?= $item['size']; ?>)
                                 <?php endif; ?>
                                 <?php if (!empty($item['guarantee'])): ?>
-                                    ,
+                                    <?= ($isColorShowable || !empty($item['size'])) ? ',' : ''; ?>
                                     (<?= $item['guarantee']; ?>)
                                 <?php endif; ?>
                             </div>

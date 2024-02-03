@@ -2,10 +2,7 @@
 
 namespace App\Logic\Middlewares\Logic;
 
-use App\Logic\Models\UserModel;
 use Sim\Abstracts\Mvc\Controller\Middleware\AbstractMiddleware;
-use Sim\Auth\DBAuth;
-use Sim\Auth\Interfaces\IDBException;
 
 class PublicFolderModifyMiddleware extends AbstractMiddleware
 {

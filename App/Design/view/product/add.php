@@ -169,16 +169,23 @@ $validator = form_validator();
                             </div>
                         </div>
                     </div>
-                    <div class="card-body text-right">
-                        <button type="button" class="btn btn-primary flat-icon __duplicator_btn"
-                                data-container-element=".__all_products_container"
-                                data-sample-element="#__sample_all_product"
-                                data-clearable-elements='["inp-add-product-stock-count[]","inp-add-product-max-count[]","inp-add-product-color[]","inp-add-product-size[]","inp-add-product-weight[]","inp-add-product-guarantee[]","inp-add-product-price[]","inp-add-product-discount-price[]","inp-add-product-discount-date[]","inp-add-product-product-availability[]","inp-add-product-consider-discount-date[]"]'
-                                data-alt-field='["inp-add-product-discount-date-tmp[]"]'
-                                data-add-remove="true">
-                            افزودن محصول جدید
-                            <i class="icon-plus2 ml-2" aria-hidden="true"></i>
-                        </button>
+                    <div class="card-body">
+                        <div class="alert alert-primary">
+                            مواردی که رنگ آنها انتخاب نشده، در نظر گرفته نمی‌شود.
+                        </div>
+                        <div class="text-right">
+                            <button type="button" class="btn btn-primary flat-icon __duplicator_btn"
+                                    data-container-element=".__all_products_container"
+                                    data-sample-element="#__sample_all_product"
+                                    data-clearable-elements='["inp-add-product-stock-count[]","inp-add-product-max-count[]","inp-add-product-color[]","inp-add-product-size[]","inp-add-product-weight[]","inp-add-product-guarantee[]","inp-add-product-price[]","inp-add-product-discount-price[]"]'
+                                    data-alt-field='["inp-add-product-discount-date-tmp[]","inp-add-product-discount-date-from-tmp[]"]'
+                                    data-default-checked-elements='["inp-add-product-product-availability[]", "inp-add-product-consider-discount-date-from[]", "inp-add-product-consider-discount-date[]"]'
+                                    data-default-unchecked-elements='["inp-add-product-separate-consignment[]"]'
+                                    data-add-remove="true">
+                                افزودن محصول جدید
+                                <i class="icon-plus2 ml-2" aria-hidden="true"></i>
+                            </button>
+                        </div>
                     </div>
                     <div class="card-body __all_products_container">
                         <?php
@@ -188,7 +195,10 @@ $validator = form_validator();
                             <?php $counter = 0; ?>
                             <?php foreach ($stockCounts as $count): ?>
                                 <fieldset
-                                        class="position-relative form-group" <?= 0 === $counter ? 'id="__sample_all_product"' : ''; ?>>
+                                        class="position-relative form-group"
+                                    <?= 0 === $counter ? 'id="__sample_all_product"' : ''; ?>
+                                        data-child-container
+                                >
                                     <div class="row px-3 pb-3 m-0 border-dashed border-2 border-info rounded">
                                         <div class="mt-3 col-md-6 col-xl-2">
                                             <label>
@@ -222,9 +232,9 @@ $validator = form_validator();
                                                     انتخاب کنید
                                                 </option>
                                                 <?php foreach ($colors as $color): ?>
-                                                    <option value="<?= $color['hex']; ?>"
+                                                    <option value="<?= $color['id']; ?>"
                                                             data-color="<?= $color['hex']; ?>"
-                                                        <?= $validator->setSelect('inp-add-product-color', $color['hex']); ?>>
+                                                        <?= $validator->setSelect('inp-add-product-color', $color['id']); ?>>
                                                         <?= $color['name']; ?>
                                                     </option>
                                                 <?php endforeach; ?>
@@ -269,41 +279,94 @@ $validator = form_validator();
                                                    name="inp-add-product-discount-price[]"
                                                    value="<?= $validator->setInput('inp-add-product-discount-price.' . $counter); ?>">
                                         </div>
-                                        <div class="mt-3 col-lg-4">
-                                            <label>تخفیف تا تاریخ:</label>
-                                            <?php
-                                            $sd = date('Y/m/d H:i', $validator->setInput('inp-add-product-discount-date.' . $counter, time()));
-                                            ?>
-                                            <input type="hidden" name="inp-add-product-discount-date[]"
-                                                   id="altDate<?= $counter; ?>">
-                                            <input type="text" class="form-control myDatepickerWithEn"
-                                                   placeholder="انتخاب تاریخ" readonly data-ignored
-                                                   name="inp-add-product-discount-date-tmp[]"
-                                                   data-alt-field="#altDate<?= $counter; ?>"
-                                                   data-format="YYYY/MM/DD HH:mm"
-                                                   data-time="true"
-                                                   value="<?= $sd ?>">
-                                        </div>
-                                        <div class="mt-3 col alert-warning d-flex align-items-center rounded">
-                                            <div class="form-check">
-                                                <label class="form-check-label">
-                                                    <input type="checkbox"
-                                                           name="inp-add-product-consider-discount-date[]"
-                                                           value="<?= $validator->setCheckbox('inp-add-product-consider-discount-date', '') ?>"
-                                                           class="styled form-input-styled">
-                                                    عدم درنظرگیری تاریخ تخفیف
-                                                </label>
+
+                                        <div class="row col-12 flex-row-reverse">
+                                            <div class="mt-3 ml-5">
+                                                <div class="form-check form-check-switchery form-check-switchery-double mt-4 text-right">
+                                                    <label class="form-check-label">
+                                                        موجود
+                                                        <input type="checkbox" class="form-check-input-switchery"
+                                                               name="inp-add-product-product-availability[]"
+                                                            <?= $validator->setCheckbox('inp-add-product-product-availability.' . $counter, 'on', true); ?>>
+                                                        ناموجود
+                                                    </label>
+                                                </div>
+                                            </div>
+
+                                            <div class="mt-3 mr-3">
+                                                <div class="form-check form-check-switchery form-check-switchery-double mt-4 text-right">
+                                                    <label class="form-check-label">
+                                                        <input type="checkbox" class="form-check-input-switchery"
+                                                               name="inp-add-product-separate-consignment[]"
+                                                            <?= $validator->setCheckbox('inp-add-product-separate-consignment.' . $counter, 'on', false); ?>>
+                                                        مرسوله مجزا
+                                                    </label>
+                                                </div>
                                             </div>
                                         </div>
-                                        <div class="mt-3 col">
-                                            <div class="form-check form-check-switchery form-check-switchery-double mt-4 text-right">
-                                                <label class="form-check-label">
-                                                    موجود
-                                                    <input type="checkbox" class="form-check-input-switchery"
-                                                           name="inp-add-product-product-availability[]"
-                                                        <?= $validator->setCheckbox('inp-add-product-product-availability.' . $counter, 'on', true); ?>>
-                                                    ناموجود
-                                                </label>
+
+                                        <div class="row col-12 no-gutters">
+                                            <div class="col-12 mt-3">
+                                                <div class="row">
+                                                    <div class="col-sm-6">
+                                                        <label>تخفیف از تاریخ:</label>
+                                                        <?php
+                                                        $sdf = date('Y/m/d H:i', $validator->setInput('inp-add-product-discount-date-from.' . $counter, time()));
+                                                        ?>
+                                                        <input type="hidden" name="inp-add-product-discount-date-from[]"
+                                                               id="altDateFrom<?= $counter; ?>">
+                                                        <input type="text" class="form-control range-from"
+                                                               placeholder="انتخاب تاریخ" readonly data-ignored
+                                                               name="inp-add-product-discount-date-from-tmp[]"
+                                                               data-format="YYYY/MM/DD HH:mm"
+                                                               data-alt-field="#altDateFrom<?= $counter; ?>"
+                                                               data-time="true"
+                                                               value="<?= $sdf ?>">
+                                                    </div>
+
+                                                    <div class="col-sm-6 py-3 alert-warning d-flex align-items-center rounded">
+                                                        <div class="form-check">
+                                                            <label class="form-check-label">
+                                                                <input type="checkbox"
+                                                                       name="inp-add-product-consider-discount-date-from[]"
+                                                                    <?= $validator->setCheckbox('inp-add-product-consider-discount-date-from.' . $counter, 'on', true) ?>
+                                                                       class="styled form-input-styled">
+                                                                عدم درنظرگیری تاریخ شروع تخفیف
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-12 mt-3">
+                                                <div class="row">
+                                                    <div class="col-sm-6">
+                                                        <label>تخفیف تا تاریخ:</label>
+                                                        <?php
+                                                        $sd = date('Y/m/d H:i', $validator->setInput('inp-add-product-discount-date.' . $counter, time()));
+                                                        ?>
+                                                        <input type="hidden" name="inp-add-product-discount-date[]"
+                                                               id="altDate<?= $counter; ?>">
+                                                        <input type="text" class="form-control range-to"
+                                                               placeholder="انتخاب تاریخ" readonly data-ignored
+                                                               name="inp-add-product-discount-date-tmp[]"
+                                                               data-format="YYYY/MM/DD HH:mm"
+                                                               data-alt-field="#altDate<?= $counter; ?>"
+                                                               data-time="true"
+                                                               value="<?= $sd ?>">
+                                                    </div>
+                                                    <div class="col-sm-6 py-3 alert-warning d-flex align-items-center rounded">
+                                                        <div class="form-check">
+                                                            <label class="form-check-label">
+                                                                <input type="checkbox"
+                                                                       name="inp-add-product-consider-discount-date[]"
+                                                                    <?= $validator->setCheckbox('inp-add-product-consider-discount-date.' . $counter, 'on', true) ?>
+                                                                       class="styled form-input-styled">
+                                                                عدم درنظرگیری تاریخ پایان تخفیف
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -313,7 +376,11 @@ $validator = form_validator();
                                 </fieldset>
                             <?php endforeach; ?>
                         <?php else: ?>
-                            <fieldset class="position-relative form-group" id="__sample_all_product">
+                            <fieldset
+                                    class="position-relative form-group"
+                                    id="__sample_all_product"
+                                    data-child-container
+                            >
                                 <div class="row px-3 pb-3 m-0 border-dashed border-2 border-info rounded">
                                     <div class="mt-3 col-md-6 col-xl-2">
                                         <label>
@@ -345,7 +412,7 @@ $validator = form_validator();
                                                 انتخاب کنید
                                             </option>
                                             <?php foreach ($colors as $color): ?>
-                                                <option value="<?= $color['hex']; ?>"
+                                                <option value="<?= $color['id']; ?>"
                                                         data-color="<?= $color['hex']; ?>">
                                                     <?= $color['name']; ?>
                                                 </option>
@@ -386,36 +453,86 @@ $validator = form_validator();
                                         <input type="text" class="form-control" placeholder="به تومان"
                                                name="inp-add-product-discount-price[]">
                                     </div>
-                                    <div class="mt-3 col-lg-4">
-                                        <label>تخفیف تا تاریخ:</label>
-                                        <input type="hidden" name="inp-add-product-discount-date[]"
-                                               id="altDateField">
-                                        <input type="text" class="form-control myDatepickerWithEn"
-                                               placeholder="انتخاب تاریخ" readonly data-ignored
-                                               name="inp-add-product-discount-date-tmp[]"
-                                               data-format="YYYY/MM/DD HH:mm"
-                                               data-alt-field="#altDateField"
-                                               data-time="true"
-                                               value="<?= date('Y/m/d H:i', time()); ?>">
-                                    </div>
-                                    <div class="mt-3 col alert-warning d-flex align-items-center rounded">
-                                        <div class="form-check">
-                                            <label class="form-check-label">
-                                                <input type="checkbox"
-                                                       name="inp-add-product-consider-discount-date[]"
-                                                       class="styled form-input-styled">
-                                                عدم درنظرگیری تاریخ تخفیف
-                                            </label>
+
+                                    <div class="row col-12 flex-row-reverse">
+                                        <div class="mt-3 ml-5">
+                                            <div class="form-check form-check-switchery form-check-switchery-double mt-4 text-right">
+                                                <label class="form-check-label">
+                                                    موجود
+                                                    <input type="checkbox" class="form-check-input-switchery"
+                                                           name="inp-add-product-product-availability[]"
+                                                           checked="checked">
+                                                    ناموجود
+                                                </label>
+                                            </div>
+                                        </div>
+
+                                        <div class="mt-3 mr-3">
+                                            <div class="form-check form-check-switchery form-check-switchery-double mt-4 text-right">
+                                                <label class="form-check-label">
+                                                    <input type="checkbox" class="form-check-input-switchery"
+                                                           name="inp-add-product-separate-consignment[]">
+                                                    مرسوله مجزا
+                                                </label>
+                                            </div>
                                         </div>
                                     </div>
-                                    <div class="mt-3 col">
-                                        <div class="form-check form-check-switchery form-check-switchery-double mt-4 text-right">
-                                            <label class="form-check-label">
-                                                موجود
-                                                <input type="checkbox" class="form-check-input-switchery"
-                                                       name="inp-add-product-product-availability[]" checked="checked">
-                                                ناموجود
-                                            </label>
+
+                                    <div class="row col-12 no-gutters">
+                                        <div class="col-12 mt-3">
+                                            <div class="row">
+                                                <div class="col-sm-6">
+                                                    <label>تخفیف از تاریخ:</label>
+                                                    <input type="hidden" name="inp-add-product-discount-date-from[]"
+                                                           id="altDateFromField">
+                                                    <input type="text" class="form-control range-from"
+                                                           placeholder="انتخاب تاریخ" readonly data-ignored
+                                                           name="inp-add-product-discount-date-from-tmp[]"
+                                                           data-format="YYYY/MM/DD HH:mm"
+                                                           data-alt-field="#altDateFromField"
+                                                           data-time="true"
+                                                           value="<?= date('Y/m/d H:i', time()); ?>">
+                                                </div>
+                                                <div class="col-sm-6 py-3 alert-warning d-flex align-items-center rounded">
+                                                    <div class="form-check">
+                                                        <label class="form-check-label">
+                                                            <input type="checkbox"
+                                                                   name="inp-add-product-consider-discount-date-from[]"
+                                                                   checked="checked"
+                                                                   class="styled form-input-styled">
+                                                            عدم درنظرگیری تاریخ شروع تخفیف
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-12 mt-3">
+                                            <div class="row">
+                                                <div class="col-sm-6">
+                                                    <label>تخفیف تا تاریخ:</label>
+                                                    <input type="hidden" name="inp-add-product-discount-date[]"
+                                                           id="altDateField">
+                                                    <input type="text" class="form-control range-to"
+                                                           placeholder="انتخاب تاریخ" readonly data-ignored
+                                                           name="inp-add-product-discount-date-tmp[]"
+                                                           data-format="YYYY/MM/DD HH:mm"
+                                                           data-alt-field="#altDateField"
+                                                           data-time="true"
+                                                           value="<?= date('Y/m/d H:i', time()); ?>">
+                                                </div>
+                                                <div class="col-sm-6 py-3 alert-warning d-flex align-items-center rounded">
+                                                    <div class="form-check">
+                                                        <label class="form-check-label">
+                                                            <input type="checkbox"
+                                                                   name="inp-add-product-consider-discount-date[]"
+                                                                   checked="checked"
+                                                                   class="styled form-input-styled">
+                                                            عدم درنظرگیری تاریخ پایان تخفیف
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -567,7 +684,7 @@ $validator = form_validator();
             <!--                                    <label class="form-check-label">-->
             <!--                                        <input id="__rtStatus" type="checkbox" class="form-check-input-switchery"-->
             <!--                                               name="inp-add-product-returnable"-->
-            <?= '';//$validator->setCheckbox('inp-add-product-returnable', 'on', true);   ?>
+            <?= '';//$validator->setCheckbox('inp-add-product-returnable', 'on', true);                 ?>
             <!--            >-->
             <!--                                    </label>-->
             <!--                                </div>-->
@@ -618,7 +735,7 @@ $validator = form_validator();
                                     <label class="form-check-label">
                                         <input id="__csStatus" type="checkbox" class="form-check-input-switchery"
                                                name="inp-add-product-coming-soon"
-                                            <?= $validator->setCheckbox('inp-add-product-coming-soon', 'on', true); ?>>
+                                            <?= $validator->setCheckbox('inp-add-product-coming-soon', 'on', false); ?>>
                                     </label>
                                 </div>
                             </div>
@@ -643,7 +760,7 @@ $validator = form_validator();
                                     <label class="form-check-label">
                                         <input id="__cfmStatus" type="checkbox" class="form-check-input-switchery"
                                                name="inp-add-product-call-for-more"
-                                            <?= $validator->setCheckbox('inp-add-product-call-for-more', 'on', true); ?>>
+                                            <?= $validator->setCheckbox('inp-add-product-call-for-more', 'on', false); ?>>
                                     </label>
                                 </div>
                             </div>

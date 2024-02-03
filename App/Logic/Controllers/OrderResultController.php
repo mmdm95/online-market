@@ -89,7 +89,9 @@ class OrderResultController extends AbstractHomeController
 
             if ($info['payment_status'] != PAYMENT_STATUS_SUCCESS) {
                 $res = PaymentUtil::walletPayConfirmation($code);
-                $this->sendSmsForOrderVerification($info);
+
+                // do not send SMS on fail payment
+//                $this->sendSmsForOrderVerification($info);
 
                 if (!$res) {
                     $username = $info['username'] ?? null;

@@ -221,7 +221,7 @@ class ReturnOrderController extends AbstractUserController
 
         $returnOrderItems = $returnOrderModel->getReturnOrderItems(
             [
-                'oi.*', 'roi.order_item_id', 'roi.is_accepted','roi.product_count AS return_count',
+                'oi.*', 'roi.order_item_id', 'roi.is_accepted', 'roi.product_count AS return_count',
                 'pa.slug AS product_slug', 'pa.image AS product_image', 'pa.code AS main_product_code',
             ],
             'ro.id=:id',

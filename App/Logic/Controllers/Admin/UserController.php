@@ -16,7 +16,6 @@ use App\Logic\Models\RoleModel;
 use App\Logic\Models\UserModel;
 use App\Logic\Utils\Jdf;
 use App\Logic\Utils\LogUtil;
-use function DI\get;
 use Jenssegers\Agent\Agent;
 use ReflectionException;
 use Sim\Auth\DBAuth;
@@ -28,8 +27,6 @@ use Sim\Exceptions\Mvc\Controller\ControllerException;
 use Sim\Exceptions\PathManager\PathNotRegisteredException;
 use Sim\Interfaces\IFileNotExistsException;
 use Sim\Interfaces\IInvalidVariableNameException;
-use Sim\Utils\ArrayUtil;
-use Tests\FakeData;
 
 class UserController extends AbstractAdminController implements IDatatableController
 {

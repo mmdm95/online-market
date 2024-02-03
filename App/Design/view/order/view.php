@@ -56,24 +56,54 @@
 
                 <div class="modal-body">
                     <ul class="list-group list-group-flush">
-                        <li class="list-group-item border-bottom">
+                        <!-- Real person info -->
+                        <li class="list-group-item border-bottom d-none">
                             <div class="font-weight-semibold">نام گیرنده:</div>
                             <div class="ml-auto text-info-800" id="__receiver_info_full_name">
                                 خطا در بارگذاری
                             </div>
                         </li>
-                        <li class="list-group-item border-bottom">
+                        <li class="list-group-item border-bottom d-none">
                             <div class="font-weight-semibold">شماره تلفن:</div>
                             <div class="ml-auto text-info-800" id="__receiver_info_phone">
                                 خطا در بارگذاری
                             </div>
                         </li>
-                        <li class="list-group-item border-bottom">
+                        <li class="list-group-item border-bottom d-none">
                             <div class="font-weight-semibold">کد ملی:</div>
                             <div class="ml-auto text-info-800" id="__receiver_info_natnum">
                                 خطا در بارگذاری
                             </div>
                         </li>
+                        <!-- /real person info -->
+
+                        <!-- Legal company info -->
+                        <li class="list-group-item border-bottom d-none">
+                            <div class="font-weight-semibold">کد اقتصادی:</div>
+                            <div class="ml-auto text-info-800" id="__receiver_info_eco_code">
+                                خطا در بارگذاری
+                            </div>
+                        </li>
+                        <li class="list-group-item border-bottom d-none">
+                            <div class="font-weight-semibold">شناسه ملی:</div>
+                            <div class="ml-auto text-info-800" id="__receiver_info_eco_nid">
+                                خطا در بارگذاری
+                            </div>
+                        </li>
+                        <li class="list-group-item border-bottom d-none">
+                            <div class="font-weight-semibold">شماره ثبت:</div>
+                            <div class="ml-auto text-info-800" id="__receiver_info_reg_num">
+                                خطا در بارگذاری
+                            </div>
+                        </li>
+                        <li class="list-group-item border-bottom d-none">
+                            <div class="font-weight-semibold">تلفن ثابت:</div>
+                            <div class="ml-auto text-info-800" id="__receiver_info_tel">
+                                خطا در بارگذاری
+                            </div>
+                        </li>
+                        <!-- /legal company info -->
+
                         <li class="list-group-item border-bottom">
                             <div class="font-weight-semibold">استان:</div>
                             <div class="ml-auto text-info-800" id="__receiver_info_province">

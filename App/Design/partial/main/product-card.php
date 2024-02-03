@@ -59,8 +59,10 @@
             <?php if (!$isComingSoon && !$callForMore && $isAvailable): ?>
                 <?php
                 $discountExpire = getDiscountExpireTime($item);
+                $discountStart = getDiscountStartTime($item);
+                $showExpireCountdown = shouldShowCountdown($discountStart, $discountExpire);
                 ?>
-                <?php if (!empty($discountExpire)): ?>
+                <?php if ($showExpireCountdown): ?>
                     <div class="flex-row text-center" countdown
                          data-date="<?= date('Y-m-d H:i:s', $discountExpire); ?>">
                         <div class="col">

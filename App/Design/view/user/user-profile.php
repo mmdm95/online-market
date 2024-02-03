@@ -118,7 +118,7 @@
     </div>
     <!-- /2 columns form -->
 
-    <!-- Highlighting rows and columns -->
+    <!-- User addresses list and creation -->
     <div class="card">
         <div class="card-header header-elements-inline">
             <h5 class="card-title">
@@ -172,7 +172,69 @@
             </tfoot>
         </table>
     </div>
-    <!-- /highlighting rows and columns -->
+    <!-- /user addresses list and creation -->
+
+    <!-- User company addresses list and creation -->
+    <div class="card">
+        <div class="card-header header-elements-inline">
+            <h5 class="card-title">
+                آدرس‌های حقوقی کاربر
+            </h5>
+            <div class="header-elements">
+                <div class="list-icons">
+                    <a class="list-icons-item" data-action="collapse"></a>
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="d-flex justify-content-between">
+                <span>با استفاده از ستون عملیات می‌توانید اقدام به حذف و ویرایش آدرس‌ها کنید.</span>
+                <button type="button"
+                        class="btn btn-success ml-3"
+                        data-toggle="modal"
+                        data-target="#modal_form_address_company_add">
+                    افزودن آدرس حقوقی
+                    <i class="icon-truck ml-2"></i>
+                </button>
+            </div>
+        </div>
+
+        <table class="table table-bordered table-hover datatable-highlight" id="__datatable_addr_company_view"
+               data-columns='[{"data":"id"}, {"data":"company_name"}, {"data":"eco_code"}, {"data":"eco_nid"}, {"data":"reg_number"}, {"data":"tel"}, {"data":"province"}, {"data":"city"}, {"data":"postal_code"}, {"data":"address"}, {"data":"operations"}]'
+               data-ajax-url="<?= url('admin.addr.company.dt.view', ['user_id' => $user['id']])->getRelativeUrlTrimmed(); ?>">
+            <thead>
+            <tr>
+                <th>#</th>
+                <th>نام شرکت</th>
+                <th>کد اقتصادی</th>
+                <th>شناسه ملی</th>
+                <th>شماره ثبت</th>
+                <th>تلفن ثابت</th>
+                <th>استان</th>
+                <th>شهر</th>
+                <th>کدپستی</th>
+                <th>آدرس</th>
+                <th class="text-center">عملیات</th>
+            </tr>
+            </thead>
+            <tfoot>
+            <tr>
+                <th>#</th>
+                <th>نام شرکت</th>
+                <th>کد اقتصادی</th>
+                <th>شناسه ملی</th>
+                <th>شماره ثبت</th>
+                <th>تلفن ثابت</th>
+                <th>استان</th>
+                <th>شهر</th>
+                <th>کدپستی</th>
+                <th>آدرس</th>
+                <th class="text-center">عملیات</th>
+            </tr>
+            </tfoot>
+        </table>
+    </div>
+    <!-- /user company addresses list and creation -->
 
     <?php load_partial('admin/table/user-orders', ['user_id' => $user['id']]); ?>
 
@@ -326,6 +388,188 @@
         </div>
     </div>
     <!-- /edit address  modal -->
+
+    <!-- Add address company modal -->
+    <div id="modal_form_address_company_add" class="modal fade" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-primary">
+                    <h5 class="modal-title">افزودن آدرس حقوقی جدید</h5>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <form action="#" id="__form_add_address_company">
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-lg-6 form-group">
+                                <label>نام شرکت:</label>
+                                <input type="text" placeholder="وارد کنید" class="form-control"
+                                       name="inp-add-address-company-name">
+                            </div>
+                            <div class="col-lg-6 form-group">
+                                <label>کد اقتصادی:</label>
+                                <input type="text" placeholder="وارد کنید" class="form-control"
+                                       name="inp-add-address-company-economic-code">
+                            </div>
+                            <div class="col-lg-6 form-group">
+                                <label>شناسه ملی:</label>
+                                <input type="text" placeholder="وارد کنید" class="form-control"
+                                       name="inp-add-address-company-economic-national-id">
+                            </div>
+                            <div class="col-lg-6 form-group">
+                                <label>شماره ثبت:</label>
+                                <input type="text" placeholder="وارد کنید" class="form-control"
+                                       name="inp-add-address-company-registration-number">
+                            </div>
+                            <div class="col-lg-6 form-group">
+                                <label>تلفن ثابت:</label>
+                                <input type="text" placeholder="09xxxxxxxxx"
+                                       class="form-control"
+                                       name="inp-add-address-company-landline-tel">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-4 form-group">
+                                <label>استان:</label>
+                                <select data-placeholder="استان را انتخاب کنید."
+                                        class="form-control form-control-select2-searchable city-loader-select"
+                                        data-city-select-target="#addAddressCompanyCitySelect"
+                                        name="inp-add-address-company-province"
+                                        data-fouc>
+                                    <option value="<?= DEFAULT_OPTION_VALUE; ?>" disabled selected>انتخاب کنید</option>
+                                </select>
+                            </div>
+
+                            <div class="col-lg-4 form-group">
+                                <label>شهر:</label>
+                                <select data-placeholder="شهر را انتخاب کنید."
+                                        id="addAddressCompanyCitySelect"
+                                        name="inp-add-address-company-city"
+                                        class="form-control form-control-select2-searchable"
+                                        data-fouc>
+                                    <option value="<?= DEFAULT_OPTION_VALUE; ?>" disabled selected>انتخاب کنید</option>
+                                </select>
+                            </div>
+
+                            <div class="col-lg-4 form-group">
+                                <label>کد پستی:</label>
+                                <input type="text" placeholder="xxxxxxxxxx" class="form-control"
+                                       maxlength="10"
+                                       name="inp-add-address-company-postal-code">
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-lg-12 form-group">
+                                <label>آدرس پستی:</label>
+                                <input type="text"
+                                       placeholder="آدرس کامل پستی را در اینجا وارد کنید"
+                                       class="form-control"
+                                       name="inp-add-address-company-addr">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-link" data-dismiss="modal">بستن</button>
+                        <button type="submit" class="btn btn-primary">افزودن آدرس</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- /add address company modal -->
+
+    <!-- Edit address company modal -->
+    <div id="modal_form_address_company_edit" class="modal fade" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-success">
+                    <h5 class="modal-title">ویرایش آدرس حقوقی</h5>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <form action="#" id="__form_edit_address_company">
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-lg-6 form-group">
+                                <label>نام شرکت:</label>
+                                <input type="text" placeholder="وارد کنید" class="form-control"
+                                       name="inp-edit-address-company-name">
+                            </div>
+                            <div class="col-lg-6 form-group">
+                                <label>کد اقتصادی:</label>
+                                <input type="text" placeholder="وارد کنید" class="form-control"
+                                       name="inp-edit-address-company-economic-code">
+                            </div>
+                            <div class="col-lg-6 form-group">
+                                <label>شناسه ملی:</label>
+                                <input type="text" placeholder="وارد کنید" class="form-control"
+                                       name="inp-edit-address-company-economic-national-id">
+                            </div>
+                            <div class="col-lg-6 form-group">
+                                <label>شماره ثبت:</label>
+                                <input type="text" placeholder="وارد کنید" class="form-control"
+                                       name="inp-edit-address-company-registration-number">
+                            </div>
+                            <div class="col-lg-6 form-group">
+                                <label>تلفن ثابت:</label>
+                                <input type="text" placeholder="09xxxxxxxxx"
+                                       class="form-control"
+                                       name="inp-edit-address-company-landline-tel">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-4 form-group">
+                                <label>استان:</label>
+                                <select data-placeholder="استان را انتخاب کنید."
+                                        class="form-control form-control-select2-searchable city-loader-select"
+                                        data-city-select-target="#editAddressCompanyCitySelect"
+                                        name="inp-edit-address-company-province"
+                                        data-fouc>
+                                    <option value="<?= DEFAULT_OPTION_VALUE; ?>" disabled selected>انتخاب کنید</option>
+                                </select>
+                            </div>
+
+                            <div class="col-lg-4 form-group">
+                                <label>شهر:</label>
+                                <select data-placeholder="شهر را انتخاب کنید."
+                                        id="editAddressCompanyCitySelect"
+                                        name="inp-edit-address-company-city"
+                                        class="form-control form-control-select2-searchable"
+                                        data-fouc>
+                                    <option value="<?= DEFAULT_OPTION_VALUE; ?>" disabled selected>انتخاب کنید</option>
+                                </select>
+                            </div>
+
+                            <div class="col-lg-4 form-group">
+                                <label>کد پستی:</label>
+                                <input type="text" placeholder="xxxxxxxxxx" class="form-control"
+                                       maxlength="10"
+                                       name="inp-edit-address-company-postal-code">
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-lg-12 form-group">
+                                <label>آدرس پستی:</label>
+                                <input type="text"
+                                       placeholder="آدرس کامل پستی را در اینجا وارد کنید"
+                                       class="form-control"
+                                       name="inp-edit-address-company-addr">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-link" data-dismiss="modal">بستن</button>
+                        <button type="submit" class="btn btn-success">ویرایش آدرس</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- /edit address company modal -->
 
 </div>
 <!-- /content area -->

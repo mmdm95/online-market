@@ -36,6 +36,7 @@ abstract class BaseModel
     const TBL_ORDER_ADVANCED = 'order_advanced';
     const TBL_ORDER_BADGES = 'order_badges';
     const TBL_ORDER_ITEMS = 'order_items';
+    const TBL_ORDER_PAYMENTS = 'order_payments';
     const TBL_ORDER_RESERVED = 'order_reserved';
     const TBL_OUR_TEAM = 'our_team';
     const TBL_PAYMENT_METHODS = 'payment_methods';
@@ -62,6 +63,7 @@ abstract class BaseModel
     const TBL_UNITS = 'units';
     const TBL_USERS = 'users';
     const TBL_USER_ADDRESS = 'user_address';
+    const TBL_USER_COMPANY_ADDRESS = 'user_company_address';
     const TBL_USER_ROLE = 'user_role';
     const TBL_WALLET = 'wallet';
     const TBL_WALLET_FLOW = 'wallet_flow';

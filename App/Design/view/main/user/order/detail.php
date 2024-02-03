@@ -5,6 +5,49 @@ use Sim\Utils\StringUtil;
 
 ?>
 
+<?php if (
+    in_array($order['payment_status'], [PAYMENT_STATUS_WAIT, PAYMENT_STATUS_NOT_PAYED]) &&
+    isset($reserved_item['expire_at'])
+): ?>
+    <!-- Repay ability -->
+    <div class="dashboard_content alert alert-warning">
+        <div class="m-0 row flex-column-reverse flex-sm-row">
+            <a href="<?= url('user.order.re-pay', ['id' => $order['id']])->getRelativeUrlTrimmed(); ?>"
+               class="btn btn-sm bg-warning text-white mt-4 mt-sm-0">
+                هم‌اکنون پرداخت شود
+                <i class="linearicons-chevron-left icon-half-x ml-2"></i>
+            </a>
+            <div class="col row no-gutters align-content-center text-center" countdown
+                 data-date="<?= date('Y-m-d H:i:s', $reserved_item['expire_at']); ?>">
+                <div class="col">
+                    <span class="d-inline-block" data-hours>0</span>
+                    <small class="text-danger d-inline-block">ساعت</small>
+                </div>
+                <div class="col">
+                    <span class="d-inline-block" data-minutes>0</span>
+                    <small class="text-danger d-inline-block">دقیقه</small>
+                </div>
+                <div class="col">
+                    <span class="d-inline-block" data-seconds>0</span>
+                    <small class="text-danger d-inline-block">ثانیه</small>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /repay ability -->
+<?php endif; ?>
+
+<!-- Order factor download -->
+<div class="dashboard_content text-right">
+    <button type="button" id="excelPdfOrder"
+            class="btn btn-sm bg-info text-white"
+            data-export-code="<?= $order['code']; ?>">
+        دانلود فاکتور
+        <i class="ti-file icon-half-x ml-2"></i>
+    </button>
+</div>
+<!-- /order factor download -->
+
 <!-- Receiver info -->
 <div class="dashboard_content">
     <div class="card">
@@ -17,14 +60,59 @@ use Sim\Utils\StringUtil;
                     <?= $order['receiver_name']; ?>
                 </label>
             </div>
-            <div class="col-lg-5 border border-light px-3 py-2">
-                <small class="mb-1">
-                    کد ملی:
-                </small>
-                <label class="mb-1">
-                    <?= StringUtil::toPersian(trim($order['user_national_number'])) ?? '-'; ?>
-                </label>
-            </div>
+
+            <?php if ($order['receiver_type'] === RECEIVER_TYPE_LEGAL): ?>
+                <div class="col-lg-5 border border-light px-3 py-2">
+                    <small class="mb-1">
+                        تلفن ثابت:
+                    </small>
+                    <label class="mb-1">
+                        <?= StringUtil::toPersian(trim($order['company_tel'])) ?? '-'; ?>
+                    </label>
+                </div>
+                <div class="col-lg-6 border border-light px-3 py-2">
+                    <small class="mb-1">
+                        کد اقتصادی:
+                    </small>
+                    <label class="mb-1">
+                        <?= StringUtil::toPersian(trim($order['company_economic_code'])) ?? '-'; ?>
+                    </label>
+                </div>
+                <div class="col-lg-6 border border-light px-3 py-2">
+                    <small class="mb-1">
+                        شناسه ملی:
+                    </small>
+                    <label class="mb-1">
+                        <?= StringUtil::toPersian(trim($order['company_economic_national_id'])) ?? '-'; ?>
+                    </label>
+                </div>
+                <div class="col-lg-6 border border-light px-3 py-2">
+                    <small class="mb-1">
+                        شماره ثبت:
+                    </small>
+                    <label class="mb-1">
+                        <?= StringUtil::toPersian(trim($order['company_registration_number'])) ?? '-'; ?>
+                    </label>
+                </div>
+            <?php else: ?>
+                <div class="col-lg-5 border border-light px-3 py-2">
+                    <small class="mb-1">
+                        کد ملی:
+                    </small>
+                    <label class="mb-1">
+                        <?= StringUtil::toPersian(trim($order['user_national_number'])) ?? '-'; ?>
+                    </label>
+                </div>
+                <div class="col-lg-6 border border-light px-3 py-2">
+                    <small class="mb-1">
+                        شماره تماس:
+                    </small>
+                    <label class="mb-1">
+                        <?= StringUtil::toPersian(trim($order['receiver_mobile'])); ?>
+                    </label>
+                </div>
+            <?php endif; ?>
+
             <div class="col-lg-6 border border-light px-3 py-2">
                 <small class="mb-1">
                     استان:
@@ -39,14 +127,6 @@ use Sim\Utils\StringUtil;
                 </small>
                 <label class="mb-1">
                     <?= $order['city']; ?>
-                </label>
-            </div>
-            <div class="col-lg-6 border border-light px-3 py-2">
-                <small class="mb-1">
-                    شماره تماس:
-                </small>
-                <label class="mb-1">
-                    <?= $order['receiver_mobile']; ?>
                 </label>
             </div>
             <div class="col-lg-6 border border-light px-3 py-2">
@@ -428,9 +508,15 @@ use Sim\Utils\StringUtil;
                                         </h6>
                                     <?php endif; ?>
 
+                                    <?php if ($item['separate_consignment'] == DB_YES): ?>
+                                        <div>
+                                            <span class="badge badge-info px-2 py-1 mx-1">مرسوله مجزا</span>
+                                        </div>
+                                    <?php endif; ?>
+
                                     <?php if ($item['is_returned'] == DB_YES): ?>
                                         <div>
-                                            <span class="badge badge-danger px-2 py-1">مرجوع شده</span>
+                                            <span class="badge badge-danger px-2 py-1 mx-1">مرجوع شده</span>
                                         </div>
                                     <?php elseif (!empty($item['order_item_id'])): ?>
                                         <div>
@@ -439,10 +525,13 @@ use Sim\Utils\StringUtil;
                                     <?php endif; ?>
                                 </div>
 
-                                <?php if (!empty($item['color'])): ?>
+                                <?php if (!empty($item['color']) && ($item['show_color'] === DB_YES || $item['is_patterned_color'] === DB_YES)): ?>
                                     <div class="d-flex align-items-center">
                                         <div class="product_color_badge">
-                                            <span class="mr-2" style="background-color: <?= $item['color']; ?>;"></span>
+                                            <?php if ($item['is_patterned_color'] === DB_NO): ?>
+                                                <span class="mr-2"
+                                                      style="background-color: <?= $item['color']; ?>;"></span>
+                                            <?php endif; ?>
                                             <div class="d-inline-block"><?= $item['color_name']; ?></div>
                                         </div>
                                     </div>

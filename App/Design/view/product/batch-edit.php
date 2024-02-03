@@ -280,7 +280,7 @@ $validator = form_validator();
             <!--                                    <label class="form-check-label">-->
             <!--                                        <input id="__rtStatus" type="checkbox" class="form-check-input-switchery"-->
             <!--                                               name="inp-edit-product-returnable"-->
-            <?= '';//$validator->setCheckbox('inp-edit-product-returnable', 'on');  ?>>
+            <?= '';//$validator->setCheckbox('inp-edit-product-returnable', 'on');  ?>
             <!--                                    </label>-->
             <!--                                </div>-->
             <!--                            </div>-->

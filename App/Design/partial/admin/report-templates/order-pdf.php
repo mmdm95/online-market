@@ -205,48 +205,85 @@ if (count($order ?? []) && count($items ?? [])): ?>
             </th>
         </tr>
         </thead>
-        <tr>
-            <td>
-                <small>
-                    نام گیرنده:
-                </small>
-                <strong>
-                    <?= $order['receiver_name']; ?>
-                </strong>
-            </td>
-            <td>
-                <small>
-                    شماره تماس:
-                </small>
-                <strong>
-                    <?= local_number(StringUtil::toEnglish($order['receiver_mobile'])); ?>
-                </strong>
-            </td>
-            <td>
-                <small>
-                    استان:
-                </small>
-                <strong>
-                    <?= $order['province']; ?>
-                </strong>
-            </td>
-            <td>
-                <small>
-                    شهر:
-                </small>
-                <strong>
-                    <?= $order['city']; ?>
-                </strong>
-            </td>
-            <td>
-                <small>
-                    کد پستی:
-                </small>
-                <strong>
-                    <?= local_number(StringUtil::toEnglish($order['postal_code'])); ?>
-                </strong>
-            </td>
-        </tr>
+        <?php if ($order['receiver_type'] === RECEIVER_TYPE_LEGAL): ?>
+            <tr>
+                <td>
+                    <small>
+                        کد اقتصادی:
+                    </small>
+                    <strong>
+                        <?= $order['company_economic_code']; ?>
+                    </strong>
+                </td>
+                <td>
+                    <small>
+                        شناسه ملی:
+                    </small>
+                    <strong>
+                        <?= $order['company_economic_national_id']; ?>
+                    </strong>
+                </td>
+                <td>
+                    <small>
+                        شماره ثبت:
+                    </small>
+                    <strong>
+                        <?= $order['company_registration_number']; ?>
+                    </strong>
+                </td>
+                <td>
+                    <small>
+                        تلفن ثابت:
+                    </small>
+                    <strong>
+                        <?= $order['company_tel']; ?>
+                    </strong>
+                </td>
+            </tr>
+        <?php else: ?>
+            <tr>
+                <td>
+                    <small>
+                        نام گیرنده:
+                    </small>
+                    <strong>
+                        <?= $order['receiver_name']; ?>
+                    </strong>
+                </td>
+                <td>
+                    <small>
+                        شماره تماس:
+                    </small>
+                    <strong>
+                        <?= local_number(StringUtil::toEnglish($order['receiver_mobile'])); ?>
+                    </strong>
+                </td>
+                <td>
+                    <small>
+                        استان:
+                    </small>
+                    <strong>
+                        <?= $order['province']; ?>
+                    </strong>
+                </td>
+                <td>
+                    <small>
+                        شهر:
+                    </small>
+                    <strong>
+                        <?= $order['city']; ?>
+                    </strong>
+                </td>
+                <td>
+                    <small>
+                        کد پستی:
+                    </small>
+                    <strong>
+                        <?= local_number(StringUtil::toEnglish($order['postal_code'])); ?>
+                    </strong>
+                </td>
+            </tr>
+        <?php endif; ?>
         <tr>
             <td colspan="5">
                 <small>
@@ -262,7 +299,7 @@ if (count($order ?? []) && count($items ?? [])): ?>
     <table class='table table-bordered'>
         <thead>
         <tr>
-            <th colspan="9">
+            <th colspan="10">
                 محصولات خریداری شده
             </th>
         </tr>
@@ -302,6 +339,9 @@ if (count($order ?? []) && count($items ?? [])): ?>
                 (به تومان)
             </th>
             <th>
+                مرسوله مجزا
+            </th>
+            <th>
                 مرجوع شده
             </th>
         </tr>
@@ -321,16 +361,25 @@ if (count($order ?? []) && count($items ?? [])): ?>
                     <?= $item['product_title']; ?>
                 </td>
                 <td>
-                    رنگ:
-                    <span><?= $item['color_name']; ?></span>
+                    <?php
+                    $isColorShowable = !empty($item['color_name']) && ($item['show_color'] === DB_YES || $item['is_patterned_color'] === DB_YES);
+                    ?>
+                    <?php if ($isColorShowable): ?>
+                        رنگ:
+                        <span><?= $item['color_name']; ?></span>
+                    <?php endif; ?>
 
                     <?php if (!empty($item['size'])): ?>
-                        <br>
+                        <?php if ($isColorShowable): ?>
+                            <br>
+                        <?php endif; ?>
                         <?= $item['size'] ?>
                     <?php endif; ?>
 
                     <?php if (!empty($item['guarantee'])): ?>
-                        <br>
+                        <?php if ($isColorShowable || !empty($item['size'])): ?>
+                            <br>
+                        <?php endif; ?>
                         <?= $item['guarantee'] ?>
                     <?php endif; ?>
                 </td>
@@ -373,6 +422,13 @@ if (count($order ?? []) && count($items ?? [])): ?>
                         تومان
                     <?php else: ?>
                         رایگان
+                    <?php endif; ?>
+                </td>
+                <td <?= DB_YES == $item['separate_consignment'] ? 'class="bg-gray"' : ''; ?>>
+                    <?php if (DB_YES == $item['separate_consignment']): ?>
+                        بله
+                    <?php else: ?>
+                        خیر
                     <?php endif; ?>
                 </td>
                 <td <?= DB_YES == $item['is_returned'] ? 'class="bg-gray"' : ''; ?>>

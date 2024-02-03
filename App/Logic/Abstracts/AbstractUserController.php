@@ -3,8 +3,6 @@
 namespace App\Logic\Abstracts;
 
 use App\Logic\Models\ProductModel;
-use App\Logic\Models\UserModel;
-use App\Logic\Models\WalletModel;
 use Sim\Auth\DBAuth;
 
 abstract class AbstractUserController extends AbstractMainController

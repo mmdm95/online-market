@@ -4,10 +4,13 @@ namespace App\Logic\Forms\User\Ajax\Address;
 
 use App\Logic\Interfaces\IPageForm;
 use App\Logic\Models\AddressModel;
+use App\Logic\Models\CityModel;
+use App\Logic\Models\ProvinceModel;
 use App\Logic\Models\UserModel;
 use App\Logic\Validations\ExtendedValidator;
 use Sim\Exceptions\ConfigManager\ConfigNotRegisteredException;
 use Sim\Form\Exceptions\FormException;
+use Sim\Form\FormValue;
 use Sim\Interfaces\IFileNotExistsException;
 use Sim\Interfaces\IInvalidVariableNameException;
 use Sim\Utils\StringUtil;
@@ -60,11 +63,35 @@ class EditAddressForm implements IPageForm
         // province
         $validator
             ->setFields('inp-edit-address-province')
-            ->required();
+            ->stopValidationAfterFirstError(false)
+            ->required()
+            ->stopValidationAfterFirstError(true)
+            ->custom(function (FormValue $formValue) {
+                /**
+                 * @var ProvinceModel $provinceModel
+                 */
+                $provinceModel = container()->get(ProvinceModel::class);
+                if (0 !== $provinceModel->count('id=:id', ['id' => $formValue->getValue()])) {
+                    return true;
+                }
+                return false;
+            }, '{alias} ' . 'انتخاب شده نامعتبر است.');
         // city
         $validator
             ->setFields('inp-edit-address-city')
-            ->required();
+            ->stopValidationAfterFirstError(false)
+            ->required()
+            ->stopValidationAfterFirstError(true)
+            ->custom(function (FormValue $formValue) {
+                /**
+                 * @var CityModel $cityModel
+                 */
+                $cityModel = container()->get(CityModel::class);
+                if (0 !== $cityModel->count('id=:id', ['id' => $formValue->getValue()])) {
+                    return true;
+                }
+                return false;
+            }, '{alias} ' . 'انتخاب شده نامعتبر است.');
         // postal code
         $validator
             ->setFields('inp-edit-address-postal-code')
@@ -74,7 +101,7 @@ class EditAddressForm implements IPageForm
             ->setFields('inp-edit-address-address')
             ->required();
 
-        // check if address is exists
+        // check if address is existed
         $id = session()->getFlash('user-address-edit-addr-id', null, false);
         if (!empty($id)) {
             /**
@@ -92,7 +119,7 @@ class EditAddressForm implements IPageForm
                 ->setError('inp-edit-address-full-name', 'شناسه آدرس نامعتبر است.');
         }
 
-        // check if user is exists
+        // check if user is existed
         $userId = session()->getFlash('user-address-edit-id', null, false);
         if (!empty($userId)) {
             /**
@@ -148,8 +175,9 @@ class EditAddressForm implements IPageForm
             $postalCode = input()->post('inp-edit-address-postal-code', '')->getValue();
             $address = input()->post('inp-edit-address-address', '')->getValue();
 
+            if (is_null($userId)) return false;
+
             $res = $addressModel->update([
-                'user_id' => $userId,
                 'full_name' => $xss->xss_clean($name),
                 'mobile' => $xss->xss_clean(StringUtil::toEnglish($mobile)),
                 'address' => $xss->xss_clean($address),
@@ -157,7 +185,7 @@ class EditAddressForm implements IPageForm
                 'province_id' => $xss->xss_clean($province),
                 'postal_code' => $xss->xss_clean($postalCode),
                 'updated_at' => time(),
-            ], 'id=:id', ['id' => $id]);
+            ], 'id=:id AND user_id=:uId', ['id' => $id, 'uId' => $userId]);
             return $res;
         } catch (\Exception $e) {
             return false;

@@ -46,26 +46,26 @@ class AddColorForm implements IPageForm
             ->stopValidationAfterFirstError(false)
             ->required()
             ->stopValidationAfterFirstError(true)
-            ->lessThanEqualLength(250);
-        // color
-        $validator
-            ->setFields('inp-add-color-color')
-            ->stopValidationAfterFirstError(false)
-            ->required()
-            ->stopValidationAfterFirstError(true)
-            ->hexColor()
+            ->lessThanEqualLength(250)
             ->custom(function (FormValue $value) {
                 /**
                  * @var ColorModel $colorModel
                  */
                 $colorModel = container()->get(ColorModel::class);
                 if (
-                    0 !== $colorModel->count('hex=:hex', ['hex' => trim($value->getValue())])
+                    0 !== $colorModel->count('name=:name', ['name' => trim($value->getValue())])
                 ) {
                     return false;
                 }
                 return true;
-            }, 'کد رنگی انتخاب شده وجود دارد.');
+            }, 'رنگ انتخاب شده وجود دارد.');
+        // color
+        $validator
+            ->setFields('inp-add-color-color')
+            ->stopValidationAfterFirstError(false)
+            ->required()
+            ->stopValidationAfterFirstError(true)
+            ->hexColor();
 
         // to reset form values and not set them again
         if ($validator->getStatus()) {
@@ -107,11 +107,15 @@ class AddColorForm implements IPageForm
             $name = input()->post('inp-add-color-name', '')->getValue();
             $color = input()->post('inp-add-color-color', '')->getValue();
             $pub = input()->post('inp-add-color-status', '')->getValue();
+            $showColor = input()->post('inp-add-color-show-color', '')->getValue();
+            $patternedColor = input()->post('inp-add-color-is-patterned-color', '')->getValue();
 
             return $colorModel->insert([
                 'name' => $xss->xss_clean(trim($name)),
                 'hex' => $xss->xss_clean(strtolower($color)),
                 'publish' => is_value_checked($pub) ? DB_YES : DB_NO,
+                'show_color' => is_value_checked($showColor) ? DB_YES : DB_NO,
+                'is_patterned_color' => is_value_checked($patternedColor) ? DB_YES : DB_NO,
                 'created_by' => $auth->getCurrentUser()['id'] ?? null,
                 'created_at' => time(),
             ]);
