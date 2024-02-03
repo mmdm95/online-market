@@ -28,10 +28,6 @@ use Sim\Exceptions\Mvc\Controller\ControllerException;
 use Sim\Exceptions\PathManager\PathNotRegisteredException;
 use Sim\Interfaces\IFileNotExistsException;
 use Sim\Interfaces\IInvalidVariableNameException;
-use Sim\Payment\Providers\BehPardakht\BehPardakhtRequestResultProvider;
-use Sim\Payment\Providers\IranKish\IranKishRequestResultProvider;
-use Sim\Payment\Providers\Sadad\SadadRequestResultProvider;
-use Sim\Payment\Providers\TAP\Payment\TapRequestResultProvider;
 
 class CheckoutController extends AbstractHomeController
 {

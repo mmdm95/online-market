@@ -270,7 +270,7 @@ class OrderBadgeController extends AbstractAdminController implements IAjaxContr
                         'dt' => 'title',
                         'formatter' => function ($d, $row) {
                             $show = $d;
-                            if(DB_YES == $row['is_default_badge']) {
+                            if (DB_YES == $row['is_default_badge']) {
                                 $show .= ' <span class="badge badge-success ml-1">پیش فرض</span>';
                             }
                             return $show;

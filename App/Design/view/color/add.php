@@ -11,6 +11,30 @@ $validator = form_validator();
         <?php load_partial('admin/card-header', ['header_title' => 'افزودن رنگ جدید']); ?>
 
         <div class="card-body">
+            <div class="alert alert-primary">
+                <ul class="m-0">
+                    <li>
+                        برای نمایش رنگ و نام آن، گزینه
+                        <span class="badge badge-dark">نمایش در صفحه جزئیات</span>
+                        را فعال نمایید.
+                    </li>
+                    <li>
+                        برای اینکه تنها نام رنگ نمایش داده شود، گزینه
+                        <span class="badge badge-dark">رنگ طرحدار می‌باشد</span>
+                        را فعال نمایید.
+                    </li>
+                    <li>
+                        برای عدم نمایش رنگ و نام آن، گزینه‌های
+                        <span class="badge badge-dark">نمایش در صفحه جزئیات</span>
+                        و
+                        <span class="badge badge-dark">رنگ طرحدار می‌باشد</span>
+                        را غیر فعال نمایید.
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="card-body">
             <form action="<?= url('admin.color.add')->getRelativeUrlTrimmed(); ?>"
                   method="post" id="__form_add_color">
                 <?php load_partial('admin/message/message-form', [

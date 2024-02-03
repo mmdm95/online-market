@@ -6,8 +6,6 @@ use App\Logic\Handlers\Payment\PaymentHandlerConnectionInput;
 use App\Logic\Handlers\Payment\PaymentHandlerConnectionOutput;
 use App\Logic\Handlers\Payment\PaymentHandlerResultInput;
 use App\Logic\Handlers\Payment\PaymentHandlerResultOutput;
-use App\Logic\Models\OrderModel;
-use App\Logic\Models\OrderReserveModel;
 use Sim\Event\Interfaces\IEvent;
 use Sim\Payment\Factories\Mabna;
 use Sim\Payment\PaymentFactory;
@@ -16,7 +14,7 @@ use Sim\Payment\Providers\Mabna\MabnaHandlerProvider;
 use Sim\Payment\Providers\Mabna\MabnaRequestProvider;
 use Sim\Payment\Providers\Mabna\MabnaRequestResultProvider;
 
-class MabnaPaymentHandler extends AbstractPaymentHandler implements PaymentHandlerInterface
+class MabnaPaymentHandler extends AbstractPaymentHandler
 {
     /**
      * @inheritDoc
@@ -62,17 +60,12 @@ class MabnaPaymentHandler extends AbstractPaymentHandler implements PaymentHandl
                     ]),
                 ]);
 
-                $this->orderPayModel->insert([
-                    'code' => $input->getUniqueCode(),
-                    'order_code' => $input->getOrderCode(),
-                    'method_code' => $input->getPaymentMethodInfo()['method_code'],
-                    'method_title' => $input->getPaymentMethodInfo()['method_title'],
-                    'method_type' => $input->getPaymentMethodInfo()['method_type'],
-                    'payment_status' => PAYMENT_STATUS_WAIT,
-                ]);
+                $this->emitter->dispatch(self::EVENT_CONNECTION_SUCCESS, [$input]);
             }
         )->createRequestNotOkClosure(
-            function (IEvent $event, $code, $msg) use (&$res) {
+            function (IEvent $event, $code, $msg) use ($input, &$res) {
+                $this->emitter->dispatch(self::EVENT_CONNECTION_FAILED, [$input, $msg, $code]);
+
                 $res = false;
                 self::logConnectionError(METHOD_TYPE_GATEWAY_MABNA, $code, $msg);
             }
@@ -91,15 +84,6 @@ class MabnaPaymentHandler extends AbstractPaymentHandler implements PaymentHandl
         $res = [false, 'سفارش نامعتبر می‌باشد.', null];
 
         /**
-         * @var OrderModel $orderModel
-         */
-        $orderModel = container()->get(OrderModel::class);
-        /**
-         * @var OrderReserveModel $orderReserveModel
-         */
-        $orderReserveModel = container()->get(OrderReserveModel::class);
-
-        /**
          * @var Mabna $gateway
          */
         // $terminalId
@@ -115,7 +99,7 @@ class MabnaPaymentHandler extends AbstractPaymentHandler implements PaymentHandl
                     IEvent                    $event,
                     MabnaAdviceResultProvider $adviceProvider,
                     MabnaHandlerProvider      $resultProvider
-                ) use ($orderModel, $orderReserveModel, $input, &$res) {
+                ) use ($input, &$res) {
                     // most information are in $resultProvider
                     $this->gatewayModel->update([
                         'payment_code' => $resultProvider->getTraceNumber(''),
@@ -130,16 +114,7 @@ class MabnaPaymentHandler extends AbstractPaymentHandler implements PaymentHandl
                         ]),
                     ], 'code=:code', ['code' => $input->getGatewayCode()]);
 
-                    $this->orderPayModel->update([
-                        'payment_status' => PAYMENT_STATUS_SUCCESS,
-                    ], 'code=:code', ['code' => $input->getGatewayCode()]);
-
-                    $orderModel->update([
-                        'payment_status' => PAYMENT_STATUS_SUCCESS,
-                        'payed_at' => time(),
-                    ], 'code=:code', ['code' => $input->getOrderCode()]);
-
-                    $orderReserveModel->delete('order_code=:code', ['code' => $input->getOrderCode()]);
+                    $this->emitter->dispatch(self::EVENT_RESULT_SUCCESS, [$input]);
 
                     $res = [true, GATEWAY_SUCCESS_MESSAGE, $resultProvider->getTraceNumber('')];
                 }
@@ -165,9 +140,7 @@ class MabnaPaymentHandler extends AbstractPaymentHandler implements PaymentHandl
                         ]),
                     ], 'code=:code AND is_success=:suc', ['code' => $input->getGatewayCode(), 'suc' => DB_NO]);
 
-                    $this->orderPayModel->update([
-                        'payment_status' => PAYMENT_STATUS_FAILED,
-                    ], 'code=:code', ['code' => $input->getGatewayCode()]);
+                    $this->emitter->dispatch(self::EVENT_RESULT_FAILED, [$input, $msg, $code]);
 
                     $res = [false, GATEWAY_ERROR_MESSAGE, $resultProvider->getTraceNumber('')];
                 }

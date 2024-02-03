@@ -3,7 +3,6 @@
 namespace App\Logic\Forms\Ajax\Product\Attribute\Value;
 
 use App\Logic\Interfaces\IPageForm;
-use App\Logic\Models\BaseModel;
 use App\Logic\Models\ProductAttributeModel;
 use App\Logic\Validations\ExtendedValidator;
 use DI\DependencyException;

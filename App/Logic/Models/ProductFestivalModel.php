@@ -23,17 +23,17 @@ class ProductFestivalModel extends BaseModel
      * @return array
      */
     public function getFestivalProducts(
-        array $columns = [
+        array   $columns = [
             'pf.*',
             'p.image AS product_image',
             'p.title AS product_name',
             'c.name AS category_name',
         ],
         ?string $where = null,
-        array $bind_values = [],
-        array $order_by = [],
-        ?int $limit = null,
-        int $offset = 0
+        array   $bind_values = [],
+        array   $order_by = [],
+        ?int    $limit = null,
+        int     $offset = 0
     ): array
     {
         $select = $this->connector->select();

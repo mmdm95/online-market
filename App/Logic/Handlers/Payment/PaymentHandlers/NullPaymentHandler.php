@@ -7,7 +7,7 @@ use App\Logic\Handlers\Payment\PaymentHandlerConnectionOutput;
 use App\Logic\Handlers\Payment\PaymentHandlerResultInput;
 use App\Logic\Handlers\Payment\PaymentHandlerResultOutput;
 
-class NullPaymentHandler extends AbstractPaymentHandler implements PaymentHandlerInterface
+class NullPaymentHandler extends AbstractPaymentHandler
 {
     /**
      * @inheritDoc

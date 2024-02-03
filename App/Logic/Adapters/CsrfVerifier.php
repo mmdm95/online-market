@@ -2,7 +2,6 @@
 
 namespace App\Logic\Adapters;
 
-use App\Logic\Handlers\ResourceHandler;
 use Pecee\Http\Middleware\BaseCsrfVerifier;
 use Pecee\Http\Middleware\Exceptions\TokenMismatchException;
 use Pecee\Http\Request;

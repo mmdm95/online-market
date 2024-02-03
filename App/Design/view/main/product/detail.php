@@ -99,10 +99,11 @@
                             <div>
                                 <select name="changeable-stuffs"
                                         class="form-control d-block selectric_dropdown selectric-dropdown-products selectric_dropdown_changeable_stuffs">
+                                    <?php $counter = 1; ?>
                                     <?php foreach ($colors_and_sizes as $k => $prd): ?>
                                         <option value='<?= $prd['code']; ?>' <?= 0 === $k ? 'selected="selected"' : ''; ?>
                                                 data-color-hex="<?= is_value_checked($prd['show_color']) ? $prd['color_hex'] : ''; ?>"
-                                                data-color-name="<?= is_value_checked($prd['show_color']) || is_value_checked($prd['is_patterned_color']) ? $prd['color_name'] : ''; ?>"
+                                                data-color-name="<?= (is_value_checked($prd['show_color']) || is_value_checked($prd['is_patterned_color'])) ? $prd['color_name'] : ''; ?>"
                                                 data-size="<?= $prd['size']; ?>"
                                                 data-guarantee="<?= $prd['guarantee']; ?>">
 
@@ -110,14 +111,22 @@
                                             $isColorShowable = !empty($item['color_hex']) && ($item['show_color'] === DB_YES || $item['is_patterned_color'] === DB_YES);
                                             ?>
                                             <?php if ($isColorShowable): ?>
-                                                رنگ
                                                 <?= $prd['color_name']; ?>
                                             <?php endif; ?>
                                             <?php if (trim($prd['size']) != ''): ?>
                                                 <?= ($isColorShowable ? ' - ' : '') . $prd['size']; ?>
                                             <?php endif; ?>
                                             <?php if (trim($prd['guarantee']) != ''): ?>
-                                                <?= ' - ' . $prd['guarantee']; ?>
+                                                <?= ($isColorShowable && trim($prd['size']) != '' ? ' - ' : '') . $prd['guarantee']; ?>
+                                            <?php endif; ?>
+
+                                            <?php if (!$isColorShowable && trim($prd['size']) == '' && trim($prd['guarantee']) == ''): ?>
+                                                <?php if (count($colors_and_sizes) > 1): ?>
+                                                    محصول شماره
+                                                    <?= $counter++; ?>
+                                                <?php else: ?>
+                                                    محصول انتخابی
+                                                <?php endif; ?>
                                             <?php endif; ?>
                                         </option>
                                     <?php endforeach; ?>

@@ -629,6 +629,12 @@ variables = window.MyGlobalVariables;
               guaranteeSpan = '<p class="mx-2 mb-0 d-inline-block pr_desc">' + guarantee + '</p>';
             }
 
+            if (!colorHex && !colorName && !size && !guarantee) {
+              colorSpan = '<div class="product_color_switch d-inline-block mx-2">'
+              colorSpan += '<div class="d-inline-block mr-2">محصول انتخابی</div>';
+              colorSpan += '</div>';
+            }
+
             return str + colorSpan + sizeSpan + guaranteeSpan;
           },
           labelBuilder: function (currItem) {
@@ -646,17 +652,29 @@ variables = window.MyGlobalVariables;
             size = el.attr('data-size');
             guarantee = el.attr('data-guarantee');
 
-            if (colorHex && colorName) {
-              colorSpan = '<div class="product_color_switch d-inline-block mx-2">' +
-                '<span class="border" style="background-color: ' + colorHex + ';"></span>' +
-                '<div class="d-inline-block mr-2">' + colorName + '</div>' +
-                '</div>';
+            if (colorHex || colorName) {
+              colorSpan = '<div class="product_color_switch d-inline-block mx-2">'
+
+              if (colorHex) {
+                colorSpan += '<span class="border" style="background-color: ' + colorHex + ';"></span>';
+              }
+              if (colorName) {
+                colorSpan += '<div class="d-inline-block mr-2">' + colorName + '</div>';
+              }
+
+              colorSpan += '</div>';
             }
             if (size) {
               sizeSpan = '<span class="product_size_switch mx-2"><span>' + size + '</span></span>';
             }
             if (guarantee) {
               guaranteeSpan = '<p class="mx-2 mb-0 d-inline-block pr_desc">' + guarantee + '</p>';
+            }
+
+            if (!colorHex && !colorName && !size && !guarantee) {
+              colorSpan = '<div class="product_color_switch d-inline-block mx-2">' +
+                '<div class="d-inline-block mr-2">محصول انتخابی</div>' +
+                '</div>';
             }
 
             return str + colorSpan + sizeSpan + guaranteeSpan;

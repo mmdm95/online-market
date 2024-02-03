@@ -24,16 +24,16 @@ class StaticPageModel extends BaseModel
      * @return array
      */
     public function getPages(
-        array $columns = [
+        array   $columns = [
             'sp.*',
             'CONCAT(u.first_name, " ", u.last_name) AS creator',
         ],
         ?string $where = null,
-        array $bind_values = [],
-        ?int $limit = null,
-        int $offset = 0,
-        array $order_by = ['sp.id DESC'],
-        array $group_by = ['sp.id']
+        array   $bind_values = [],
+        ?int    $limit = null,
+        int     $offset = 0,
+        array   $order_by = ['sp.id DESC'],
+        array   $group_by = ['sp.id']
     ): array
     {
         $select = $this->connector->select();

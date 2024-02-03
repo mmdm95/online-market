@@ -9,7 +9,6 @@ use App\Logic\Models\WalletFlowModel;
 use App\Logic\Models\WalletModel;
 use App\Logic\Utils\WalletChargeUtil;
 use App\Logic\Validations\ExtendedValidator;
-use Sim\Auth\DBAuth;
 use Sim\Exceptions\ConfigManager\ConfigNotRegisteredException;
 use Sim\Form\Exceptions\FormException;
 use Sim\Interfaces\IFileNotExistsException;
@@ -103,7 +102,7 @@ class WalletCharge implements IPageForm
         try {
             $userId = $auth->getCurrentUser()['id'] ?? null;
 
-            if(is_null($userId)) return false;
+            if (is_null($userId)) return false;
 
             $username = $userModel->getFirst(['username'], 'id=:id', ['id' => $userId])['username'] ?? null;
             $price = input()->post('inp-wallet-price', 0)->getValue();

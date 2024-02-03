@@ -140,7 +140,7 @@ class BlogController extends AbstractAdminController implements IDatatableContro
         }
 
         $blog = $blogModel->getFirst(['*'], 'id=:id', ['id' => $id]);
-        
+
         /**
          * @var BlogCategoryModel $categoryModel
          */

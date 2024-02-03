@@ -5,6 +5,7 @@ namespace App\Logic\Utils;
 use App\Logic\Models\BaseModel;
 use App\Logic\Models\Model;
 use App\Logic\Models\OrderModel;
+use App\Logic\Models\OrderPaymentModel;
 use App\Logic\Models\OrderReserveModel;
 
 class ReserveOrderUtil
@@ -64,6 +65,10 @@ class ReserveOrderUtil
          */
         $orderModel = container()->get(OrderModel::class);
         /**
+         * @var OrderPaymentModel $orderPayModel
+         */
+        $orderPayModel = container()->get(OrderPaymentModel::class);
+        /**
          * @var Model $model
          */
         $model = container()->get(Model::class);
@@ -73,6 +78,11 @@ class ReserveOrderUtil
         ], 'code=:code', [
             'code' => $orderCode,
         ]);
+        $payments = $orderPayModel->get(
+            ['id'],
+            'order_code=:code AND payment_status=:ps',
+            ['code' => $orderCode, 'ps' => PAYMENT_STATUS_WAIT]
+        );
 
         $ok = true;
         if (count($theOrder)) {
@@ -114,9 +124,21 @@ class ReserveOrderUtil
                 if ($ok) {
                     connector()->getDb()->commit();
                 } else {
-                    self::log('could not complete reserve task for order with code: ' . $orderCode);
+                    self::log('Could not complete reserve task for order with code: ' . $orderCode);
                     connector()->getDb()->rollBack();
                 }
+            }
+
+            // make all order payments status to fail if they are in wait status
+            $okStatus = true;
+            foreach ($payments as $payment) {
+                $okStatus = $okStatus && $orderPayModel->update([
+                        'payment_status' => PAYMENT_STATUS_FAILED
+                    ], 'id=:id', ['id' => $payment['id']]);
+            }
+            //-----
+            if (!$okStatus) {
+                self::log("NOTICE: Some of order payments have WAIT status still that couldn't change");
             }
         }
         //-----
@@ -133,8 +155,8 @@ class ReserveOrderUtil
     private static function log($msg = null)
     {
         logger()->warning([
-            'from' => 'cron job reserve action',
-            'msg' => $msg ?: 'could not complete reserve task',
+            'from' => 'Cron job reserve action',
+            'msg' => $msg ?: 'Could not complete reserve task',
         ]);
     }
 }

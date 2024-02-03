@@ -226,15 +226,41 @@ function get_discount_price(array $item): array
  * @param array $item
  * @return int|null
  */
+function getDiscountStartTime(array $item): ?int
+{
+    if (isset($item['festival_start']) && !empty($item['festival_start'])) {
+        return $item['festival_start'];
+    }
+    if (isset($item['discount_from']) && !empty($item['discount_from'])) {
+        return $item['discount_from'];
+    }
+    return null;
+}
+
+/**
+ * @param array $item
+ * @return int|null
+ */
 function getDiscountExpireTime(array $item): ?int
 {
     if (isset($item['festival_expire']) && !empty($item['festival_expire']) && $item['festival_expire'] >= time()) {
         return $item['festival_expire'];
     }
-    if (isset($item['discount_until']) && $item['discount_until'] >= time()) {
+    if (isset($item['discount_until']) && !empty($item['discount_until']) && $item['discount_until'] >= time()) {
         return $item['discount_until'];
     }
     return null;
+}
+
+/**
+ * @param $discountStart
+ * @param $discountExpire
+ * @return bool
+ */
+function shouldShowCountdown($discountStart, $discountExpire): bool
+{
+    return (empty($discountStart) && !empty($discountExpire)) ||
+        (!empty($discountStart) && $discountStart <= time() && !empty($discountExpire));
 }
 
 /**

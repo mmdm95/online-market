@@ -60,11 +60,16 @@
       shopCartInfoTable,
       //-----
       userCity,
+      userCompanyCity,
       //-----
       inPersonDeliveryChk,
       shouldCalcSendPrice = true,
       //-----
       canSubmit = true;
+
+    const
+      RECEIVER_TYPE_REAL = 1,
+      RECEIVER_TYPE_LEGAL = 2;
 
     //-----
     constraints = {
@@ -87,6 +92,7 @@
     shopCartInfoTable = $('.shop-cart-info-table');
 
     userCity = $('select[name="inp-addr-city"]');
+    userCompanyCity = $('select[name="inp-addr-company-city"]');
 
     inPersonDeliveryChk = $('#inPersonDeliveryChk');
 
@@ -227,9 +233,16 @@
     realOrLegalRadio.change(function () {
       // Get the selected radio button's ID
       var selectedTabId = $(this).attr('id');
+      var checkedRadio = $('input[name="inp-is-real-or-legal"]:checked');
 
       realOrLegalRadio.parent().find('label').removeClass('active-real-or-legal-radio');
-      $('input[name="inp-is-real-or-legal"]:checked').parent().find('label').addClass('active-real-or-legal-radio');
+      checkedRadio.parent().find('label').addClass('active-real-or-legal-radio');
+
+      if (checkedRadio.val() == RECEIVER_TYPE_LEGAL) {
+        userCompanyCity.trigger('change' + variables.namespace);
+      } else {
+        userCity.trigger('change' + variables.namespace);
+      }
 
       // Show the corresponding tab-pane and hide others
       $('#realOrLegalTabContent .tab-pane').removeClass('show active');
@@ -330,6 +343,36 @@
       }
     });
 
+    // when city changed in legal section, calculate send price and update side info table
+    userCompanyCity.on('change' + variables.namespace, function () {
+      var checked, checkedProvince;
+      checked = $(this).find('option:selected').val();
+      checkedProvince = $('select[name="inp-addr-company-province"]').find('option:selected').val();
+
+      if (shouldCalcSendPrice && checked && checked != -1 && checkedProvince && checkedProvince != -1) {
+        if (createLoader) {
+          createLoader = false;
+          loaderId = shop.showLoader();
+        }
+
+        var form = new FormData();
+        form.append('city', checked);
+        form.append('province', checkedProvince);
+        canSubmit = false;
+        shop.request(variables.url.cart.checkPostPrice, 'post', function () {
+          loadNPlaceCartInfo();
+          canSubmit = true;
+          createLoader = true;
+          shop.hideLoader(loaderId);
+        }, {
+          data: form,
+        }, false, function () {
+          createLoader = true;
+          shop.hideLoader(loaderId);
+        });
+      }
+    });
+
     inPersonDeliveryChk.mSwitch({
       onTurnOn: function (btn) {
         btn.closest('.alert').addClass('alert-primary').removeClass('bg-light');
@@ -352,7 +395,11 @@
       onTurnOff: function (btn) {
         btn.closest('.alert').addClass('bg-light').removeClass('alert-primary');
         shouldCalcSendPrice = true;
-        userCity.trigger('change' + variables.namespace);
+        if ($('input[name="inp-is-real-or-legal"]:checked').val() == RECEIVER_TYPE_LEGAL) {
+          userCompanyCity.trigger('change' + variables.namespace);
+        } else {
+          userCity.trigger('change' + variables.namespace);
+        }
       }
     });
 

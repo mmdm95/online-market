@@ -11,10 +11,9 @@ use Mpdf\Config\ConfigVariables;
 use Mpdf\Config\FontVariables;
 use Mpdf\Mpdf;
 use Mpdf\Output\Destination;
-use Sim\File\Download;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx as WriterXlsx;
+use Sim\File\Download;
 use Sim\Utils\StringUtil;
-use function Symfony\Component\String\b;
 
 class ReportUtil
 {

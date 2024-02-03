@@ -176,33 +176,33 @@ class AddAddressForm implements IPageForm
         $xss = container()->get(AntiXSS::class);
 
 //        try {
-            $userId = session()->getFlash('addr-company-add-user-id', null);
-            $name = input()->post('inp-add-address-company-name', '')->getValue();
-            $ecoCode = input()->post('inp-add-address-company-economic-code', '')->getValue();
-            $ecoId = input()->post('inp-add-address-company-economic-national-id', '')->getValue();
-            $regNum = input()->post('inp-add-address-company-registration-number', '')->getValue();
-            $tel = input()->post('inp-add-address-company-landline-tel', '')->getValue();
-            $province = input()->post('inp-add-address-company-province', '')->getValue();
-            $city = input()->post('inp-add-address-company-city', '')->getValue();
-            $postalCode = input()->post('inp-add-address-company-postal-code', '')->getValue();
-            $address = input()->post('inp-add-address-company-addr', '')->getValue();
+        $userId = session()->getFlash('addr-company-add-user-id', null);
+        $name = input()->post('inp-add-address-company-name', '')->getValue();
+        $ecoCode = input()->post('inp-add-address-company-economic-code', '')->getValue();
+        $ecoId = input()->post('inp-add-address-company-economic-national-id', '')->getValue();
+        $regNum = input()->post('inp-add-address-company-registration-number', '')->getValue();
+        $tel = input()->post('inp-add-address-company-landline-tel', '')->getValue();
+        $province = input()->post('inp-add-address-company-province', '')->getValue();
+        $city = input()->post('inp-add-address-company-city', '')->getValue();
+        $postalCode = input()->post('inp-add-address-company-postal-code', '')->getValue();
+        $address = input()->post('inp-add-address-company-addr', '')->getValue();
 
-            if (is_null($userId)) return false;
+        if (is_null($userId)) return false;
 
-            $res = $addressCompanyModel->insert([
-                'user_id' => $userId,
-                'company_name' => $xss->xss_clean($name),
-                'economic_code' => $xss->xss_clean($ecoCode),
-                'economic_national_id' => $xss->xss_clean($ecoId),
-                'registration_number' => $xss->xss_clean($regNum),
-                'landline_tel' => $xss->xss_clean(StringUtil::toEnglish($tel)),
-                'address' => $xss->xss_clean($address),
-                'city_id' => $xss->xss_clean($city),
-                'province_id' => $xss->xss_clean($province),
-                'postal_code' => $xss->xss_clean($postalCode),
-                'created_at' => time(),
-            ]);
-            return $res;
+        $res = $addressCompanyModel->insert([
+            'user_id' => $userId,
+            'company_name' => $xss->xss_clean($name),
+            'economic_code' => $xss->xss_clean($ecoCode),
+            'economic_national_id' => $xss->xss_clean($ecoId),
+            'registration_number' => $xss->xss_clean($regNum),
+            'landline_tel' => $xss->xss_clean(StringUtil::toEnglish($tel)),
+            'address' => $xss->xss_clean($address),
+            'city_id' => $xss->xss_clean($city),
+            'province_id' => $xss->xss_clean($province),
+            'postal_code' => $xss->xss_clean($postalCode),
+            'created_at' => time(),
+        ]);
+        return $res;
 //        } catch (\Exception $e) {
 //            return false;
 //        }

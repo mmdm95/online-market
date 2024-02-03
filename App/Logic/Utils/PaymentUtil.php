@@ -8,6 +8,7 @@ use App\Logic\Handlers\Payment\PaymentHandlerResultInput;
 use App\Logic\Models\DepositTypeModel;
 use App\Logic\Models\GatewayModel;
 use App\Logic\Models\OrderModel;
+use App\Logic\Models\OrderPaymentModel;
 use App\Logic\Models\OrderReserveModel;
 use App\Logic\Models\PaymentMethodModel;
 use App\Logic\Models\WalletFlowModel;
@@ -15,6 +16,7 @@ use App\Logic\Models\WalletModel;
 use DI\DependencyException;
 use DI\NotFoundException;
 use Sim\Auth\DBAuth;
+use Sim\Event\Interfaces\IEvent;
 use Sim\Payment\Providers\BehPardakht\BehPardakhtRequestResultProvider;
 use Sim\Payment\Providers\IranKish\IranKishRequestResultProvider;
 use Sim\Payment\Providers\Sadad\SadadRequestResultProvider;
@@ -144,6 +146,10 @@ class PaymentUtil
          * @var DBAuth $auth
          */
         $auth = container()->get('auth_home');
+        /**
+         * @var OrderPaymentModel $orderPayModel
+         */
+        $orderPayModel = container()->get(OrderPaymentModel::class);
 
         $newCode = self::getUniqueGatewayFlowCode();
         $userId = $auth->getCurrentUser()['id'] ?? 0;
@@ -164,9 +170,24 @@ class PaymentUtil
         session()->set(SESSION_REPAY_GATEWAY_UNIQUE_CODE, $newCode);
 
         $handler = PaymentHandlerFactory::getInstance((int)$gatewayType, $gatewayInfo);
-        $output = $handler->connection(new PaymentHandlerConnectionInput(
-            $userId, $orderCode, $price, $callbackUrl, $newCode, $paymentMethodInfo
-        ));
+        $output = $handler
+            ->onSuccessConnectionEvent(function (
+                IEvent                        $event,
+                PaymentHandlerConnectionInput $input
+            ) use ($orderPayModel, $paymentMethodInfo) {
+                $orderPayModel->insert([
+                    'code' => $input->getUniqueCode(),
+                    'order_code' => $input->getOrderCode(),
+                    'method_code' => $paymentMethodInfo['method_code'],
+                    'method_title' => $paymentMethodInfo['method_title'],
+                    'method_type' => $paymentMethodInfo['method_type'],
+                    'payment_status' => PAYMENT_STATUS_WAIT,
+                    'created_at' => time(),
+                ]);
+            })
+            ->connection(new PaymentHandlerConnectionInput(
+                $userId, $orderCode, $price, $callbackUrl, $newCode
+            ));
 
         return [$output->getConnectionResponse(), $output->getConnectionResult()];
     }
@@ -204,6 +225,14 @@ class PaymentUtil
          * @var PaymentMethodModel $methodModel
          */
         $methodModel = container()->get(PaymentMethodModel::class);
+        /**
+         * @var OrderPaymentModel $orderPayModel
+         */
+        $orderPayModel = container()->get(OrderPaymentModel::class);
+        /**
+         * @var OrderReserveModel $orderReserveModel
+         */
+        $orderReserveModel = container()->get(OrderReserveModel::class);
 
         $res = [false, 'سفارش نامعتبر می‌باشد.', null];
 
@@ -240,9 +269,33 @@ class PaymentUtil
         $gatewayInfo = json_decode(cryptographer()->decrypt($method['meta_parameters']), true);
 
         $handler = PaymentHandlerFactory::getInstance((int)$type, $gatewayInfo);
-        $output = $handler->result(new PaymentHandlerResultInput(
-            $gatewayCode, $flow['order_code'], $order['final_price']
-        ));
+        $output = $handler
+            ->onSuccessResultEvent(function (
+                IEvent                    $event,
+                PaymentHandlerResultInput $input
+            ) use ($orderPayModel, $orderModel, $orderReserveModel) {
+                $orderPayModel->update([
+                    'payment_status' => PAYMENT_STATUS_SUCCESS,
+                ], 'code=:code', ['code' => $input->getGatewayCode()]);
+
+                $orderModel->update([
+                    'payment_status' => PAYMENT_STATUS_SUCCESS,
+                    'payed_at' => time(),
+                ], 'code=:code', ['code' => $input->getOrderCode()]);
+
+                $orderReserveModel->delete('order_code=:code', ['code' => $input->getOrderCode()]);
+            })
+            ->onFailedResultEvent(function (
+                IEvent                    $event,
+                PaymentHandlerResultInput $input
+            ) use ($orderPayModel) {
+                $orderPayModel->update([
+                    'payment_status' => PAYMENT_STATUS_FAILED,
+                ], 'code=:code', ['code' => $input->getGatewayCode()]);
+            })
+            ->result(new PaymentHandlerResultInput(
+                $gatewayCode, $flow['order_code'], $order['final_price']
+            ));
 
         return [$output->getResult(), $output->getMessage(), $output->getReferenceId()];
     }

@@ -237,7 +237,7 @@ class EditProductForm implements IPageForm
                  */
                 $colorModel = container()->get(ColorModel::class);
 
-                if (trim($value->getValue()) != DEFAULT_OPTION_VALUE && 0 === $colorModel->count('hex=:hex', ['hex' => $value->getValue()])) {
+                if (trim($value->getValue()) != DEFAULT_OPTION_VALUE && 0 === $colorModel->count('id=:id', ['id' => $value->getValue()])) {
                     return false;
                 }
                 return true;

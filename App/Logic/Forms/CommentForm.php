@@ -6,7 +6,6 @@ use App\Logic\Interfaces\IPageForm;
 use App\Logic\Models\CommentModel;
 use App\Logic\Models\ProductModel;
 use App\Logic\Models\UserModel;
-use App\Logic\Utils\LogUtil;
 use App\Logic\Validations\ExtendedValidator;
 use Sim\Auth\DBAuth;
 use Sim\Exceptions\ConfigManager\ConfigNotRegisteredException;

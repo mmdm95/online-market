@@ -388,7 +388,7 @@ class ProductUtil
             }
             $stock = input()->post('inp-' . ($isUpdate ? 'edit' : 'add') . '-product-stock-count');
             $maxCart = input()->post('inp-' . ($isUpdate ? 'edit' : 'add') . '-product-max-count');
-            $color = input()->post('inp-' . ($isUpdate ? 'edit' : 'add') . '-product-color');
+            $colors = input()->post('inp-' . ($isUpdate ? 'edit' : 'add') . '-product-color');
             $size = input()->post('inp-' . ($isUpdate ? 'edit' : 'add') . '-product-size');
             $guarantee = input()->post('inp-' . ($isUpdate ? 'edit' : 'add') . '-product-guarantee');
             $weight = input()->post('inp-' . ($isUpdate ? 'edit' : 'add') . '-product-weight');
@@ -400,6 +400,14 @@ class ProductUtil
             $considerDisDate = input()->post('inp-' . ($isUpdate ? 'edit' : 'add') . '-product-consider-discount-date');
             $pAvailability = input()->post('inp-' . ($isUpdate ? 'edit' : 'add') . '-product-product-availability');
             $separeteC = input()->post('inp-' . ($isUpdate ? 'edit' : 'add') . '-product-separate-consignment');
+
+//            echo '<pre>';
+//            var_dump($disDateFrom);
+//            var_dump($considerDisDateFrom);
+//            var_dump($disDate);
+//            var_dump($considerDisDate);
+//            echo '</pre>';
+//            die();
 
             // create products object
             $productObj = [];
@@ -429,7 +437,7 @@ class ProductUtil
                 /**
                  * @var InputItem $c
                  */
-                $c = is_array($color) ? array_shift($color) : new InputItem('', null);
+                $c = is_array($colors) ? array_shift($colors) : new InputItem('', null);
                 $c = null === $c ? new InputItem('', null) : $c;
                 /**
                  * @var InputItem $eachSize
@@ -478,26 +486,42 @@ class ProductUtil
                         ? $colorModel->getFirst(['name', 'hex', 'show_color', 'is_patterned_color'], 'id=:id', ['id' => strtolower($c->getValue())])
                         : null;
 
-                    $productObj[$i]['id'] = $xss->xss_clean($id->getValue());
+                    $productObj[$i]['id'] = $id instanceof InputItem ? $xss->xss_clean($id->getValue()) : null;
                     $productObj[$i]['price'] = $xss->xss_clean($productPrice->getValue());
                     $productObj[$i]['stock_count'] = $xss->xss_clean($s->getValue());
                     $productObj[$i]['max_cart'] = $xss->xss_clean($mc->getValue());
                     $productObj[$i]['discount_price'] = $xss->xss_clean($dp->getValue());
                     $productObj[$i]['color_hex'] = $xss->xss_clean($color['hex'] ?? null);
                     $productObj[$i]['color_name'] = $xss->xss_clean($color['name'] ?? null);
-                    $productObj[$i]['show_color'] = is_value_checked($color['show_color']) ? DB_YES : DB_NO;
-                    $productObj[$i]['is_patterned_color'] = is_value_checked($color['is_patterned_color']) ? DB_YES : DB_NO;
+                    $productObj[$i]['show_color'] = isset($color['show_color'])
+                        ? (
+                        is_value_checked($color['show_color'])
+                            ? DB_YES
+                            : DB_NO
+                        )
+                        : null;
+                    $productObj[$i]['is_patterned_color'] = isset($color['is_patterned_color'])
+                        ? (
+                        is_value_checked($color['is_patterned_color'])
+                            ? DB_YES
+                            : DB_NO
+                        )
+                        : null;
                     $productObj[$i]['size'] = $xss->xss_clean($eachSize->getValue()) ?: null;
                     $productObj[$i]['guarantee'] = $xss->xss_clean($eachGuarantee->getValue()) ?: null;
                     $productObj[$i]['weight'] = $xss->xss_clean($eachWeight->getValue()) ?: null;
-                    $productObj[$i]['discount_from'] = (is_null($eachCDDF->getValue()) || $eachCDDF->getValue() != $k)
+                    $productObj[$i]['discount_from'] = (is_null($eachCDDF->getValue()) || !is_value_checked($eachCDDF->getValue()))
                         ? ($xss->xss_clean($eachDisDateFrom->getValue()) ?: null)
                         : null;
-                    $productObj[$i]['discount_until'] = (is_null($eachCDD->getValue()) || $eachCDD->getValue() != $k)
+                    $productObj[$i]['discount_until'] = (is_null($eachCDD->getValue()) || !is_value_checked($eachCDD->getValue()))
                         ? ($xss->xss_clean($eachDisDate->getValue()) ?: null)
                         : null;
-                    $productObj[$i]['available'] = is_value_checked($eachPAvailability->getValue()) ? DB_YES : DB_NO;
-                    $productObj[$i]['separate_consignment'] = is_value_checked($eachSeparateC->getValue()) ? DB_YES : DB_NO;
+                    $productObj[$i]['available'] = $eachPAvailability instanceof InputItem
+                        ? (is_value_checked($eachPAvailability->getValue()) ? DB_YES : DB_NO)
+                        : DB_NO;
+                    $productObj[$i]['separate_consignment'] = $eachSeparateC instanceof InputItem
+                        ? (is_value_checked($eachSeparateC->getValue()) ? DB_YES : DB_NO)
+                        : DB_NO;
                     $i++;
                 }
             }

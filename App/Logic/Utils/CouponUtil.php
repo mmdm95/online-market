@@ -93,7 +93,7 @@ class CouponUtil
                 }
             }
 
-            if(0 == $coupon['use_count']) {
+            if (0 == $coupon['use_count']) {
                 $ok = false;
                 $msg = 'کوپن مورد نظر به اتمام رسیده است.';
             }

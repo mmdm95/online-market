@@ -160,7 +160,7 @@ class AddAddressForm implements IPageForm
             $postalCode = input()->post('inp-add-address-company-postal-code', '')->getValue();
             $address = input()->post('inp-add-address-company-addr', '')->getValue();
 
-            if(is_null($userId)) return false;
+            if (is_null($userId)) return false;
 
             $res = $addressCompanyModel->insert([
                 'user_id' => $userId,

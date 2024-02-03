@@ -614,15 +614,16 @@ class ProductModel extends BaseModel
         // insert new or update previous product properties
         $visitedProductsIds = [];
         $res = false;
-        foreach ($products as $product) {
-            if (!($product['color_hex'] ?? false)) continue;
 
+        foreach ($products as $product) {
             $prevProduct = array_filter($prevProducts, function ($item) use ($product) {
                 return $item['id'] == $product['id'];
             });
             $prevProduct = array_pop($prevProduct);
 
             if (empty($prevProduct)) {
+                if (!($product['color_hex'] ?? false)) continue;
+
                 $insertOrUpdate = $this->connector->insert();
                 $insertOrUpdate
                     ->into(self::TBL_PRODUCT_PROPERTY)
@@ -636,6 +637,7 @@ class ProductModel extends BaseModel
                         'discount_from' => $product['discount_from'] ?: null,
                         'discount_until' => $product['discount_until'] ?: null,
                         'is_available' => $product['available'],
+                        'separate_consignment' => $product['separate_consignment'],
                         'color_hex' => $product['color_hex'],
                         'color_name' => $product['color_name'],
                         'show_color' => $product['show_color'],
@@ -658,10 +660,15 @@ class ProductModel extends BaseModel
                         'discount_from' => $product['discount_from'] ?: null,
                         'discount_until' => $product['discount_until'] ?: null,
                         'is_available' => $product['available'],
+                        'separate_consignment' => $product['separate_consignment'],
                         'color_hex' => $product['color_hex'] ?: $prevProduct['color_hex'],
                         'color_name' => $product['color_name'] ?: $prevProduct['color_name'],
-                        'show_color' => $product['show_color'] ?: $prevProduct['show_color'],
-                        'is_patterned_color' => $product['is_patterned_color'] ?: $prevProduct['is_patterned_color'],
+                        'show_color' => !is_null($product['show_color'])
+                            ? $product['show_color']
+                            : $prevProduct['show_color'],
+                        'is_patterned_color' => !is_null($product['is_patterned_color'])
+                            ? $product['is_patterned_color']
+                            : $prevProduct['is_patterned_color'],
                         'size' => $product['size'] ?: null,
                         'guarantee' => $product['guarantee'] ?: null,
                         'weight' => $product['weight'],
@@ -685,19 +692,22 @@ class ProductModel extends BaseModel
         }, $notExistenceProducts);
 
         if (count($notExistenceProductsIds)) {
-            $placeholders = array_map(function ($id) {
-                return ':id' . $id;
-            }, range(1, count($notExistenceProductsIds) - 1));
-            $bindings = array_map(function ($item, $idx) {
-                return [':id' . ($idx + 1) => $item];
-            }, $notExistenceProductsIds);
+            $idxRange = range(1, count($notExistenceProductsIds));
+            $placeholders = [];
+            $bindings = [];
+
+            foreach ($idxRange as $id) {
+                $key = 'id' . $id;
+                $placeholders[] = ':' . $key;
+                $bindings[$key] = array_shift($notExistenceProductsIds);
+            }
 
             $delete = $this->connector->delete();
             $delete
                 ->from(self::TBL_PRODUCT_PROPERTY)
                 ->where('product_id=:pId')
                 ->bindValues(['pId' => $product_id])
-                ->where('NOT IN (' . implode(',', $placeholders) . ')')
+                ->where('id IN (' . implode(',', $placeholders) . ')')
                 ->bindValues($bindings);
             $stmt = $this->db->prepare($delete->getStatement());
             $res2 = $stmt->execute($delete->getBindValues());

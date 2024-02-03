@@ -3232,7 +3232,9 @@
         var switchery = copy.find('.form-check-input-switchery');
         if (switchery.length) {
           switchery.removeAttr('data-switchery').parent().find('.switchery').remove();
-          new Switchery(switchery.get(0));
+          switchery.each(function () {
+            new Switchery(this);
+          })
         }
       }
     }
@@ -3286,6 +3288,8 @@
             container,
             sample,
             clearableElements,
+            defaultCheckedElements,
+            defaultUnCheckedElements,
             removableElements,
             removableClasses,
             removableClassesForAll,
@@ -3298,6 +3302,14 @@
           clearableElements = $(this).attr('data-clearable-elements');
           if (clearableElements && JSON.parse(clearableElements)) {
             clearableElements = JSON.parse(clearableElements);
+          }
+          defaultCheckedElements = $(this).attr('data-default-checked-elements');
+          if (defaultCheckedElements && JSON.parse(defaultCheckedElements)) {
+            defaultCheckedElements = JSON.parse(defaultCheckedElements);
+          }
+          defaultUnCheckedElements = $(this).attr('data-default-unchecked-elements');
+          if (defaultUnCheckedElements && JSON.parse(defaultUnCheckedElements)) {
+            defaultUnCheckedElements = JSON.parse(defaultUnCheckedElements);
           }
           removableElements = $(this).attr('data-removable-elements');
           if (removableElements && JSON.parse(removableElements)) {
@@ -3324,12 +3336,13 @@
             container = $(container);
             sample = $(sample);
             if (container.length && sample.length) {
+              var i, len, el;
+
               copy = sample.clone(!!$(this).attr('data-deep-copy'));
               copy.removeAttr('id');
 
               // clear element value inside cloned element
               if (clearableElements) {
-                var i, len, el;
                 len = clearableElements.length;
                 for (i = 0; i < len; ++i) {
                   el = copy.find('[name="' + clearableElements[i] + '"]');
@@ -3345,6 +3358,28 @@
                           .prop('selectedIndex', 0);
                       }
                     });
+                  }
+                }
+              }
+
+              // make checkboxes to checked by default
+              if (defaultCheckedElements) {
+                len = defaultCheckedElements.length;
+                for (let n of defaultCheckedElements) {
+                  el = copy.find('[name="' + n + '"]');
+                  if (el.length && el.is(':checkbox')) {
+                    el.attr('checked', true).prop('checked', true);
+                  }
+                }
+              }
+
+              // make checkboxes to unchecked by default
+              if (defaultUnCheckedElements) {
+                len = defaultUnCheckedElements.length;
+                for (let n of defaultUnCheckedElements) {
+                  el = copy.find('[name="' + n + '"]');
+                  if (el.length && el.is(':checkbox')) {
+                    el.attr('checked', false).prop('checked', false);
                   }
                 }
               }

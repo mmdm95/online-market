@@ -179,8 +179,10 @@ $validator = form_validator();
                             <button type="button" class="btn btn-primary flat-icon __duplicator_btn"
                                     data-container-element=".__all_products_container"
                                     data-sample-element="#__sample_all_product"
-                                    data-clearable-elements='["inp-edit-product-stock-count[]","inp-edit-product-max-count[]","inp-edit-product-color[]","inp-edit-product-size[]","inp-edit-product-weight[]","inp-edit-product-guarantee[]","inp-edit-product-price[]","inp-edit-product-discount-price[]","inp-edit-product-discount-date[]","inp-edit-product-product-availability[]","inp-edit-product-separate-consignment[]","inp-edit-product-consider-discount-date[]"]'
+                                    data-clearable-elements='["inp-edit-product-stock-count[]","inp-edit-product-max-count[]","inp-edit-product-color[]","inp-edit-product-size[]","inp-edit-product-weight[]","inp-edit-product-guarantee[]","inp-edit-product-price[]","inp-edit-product-discount-price[]","inp-edit-product-discount-date[]"]'
                                     data-alt-field='["inp-edit-product-discount-date-tmp[]","inp-edit-product-discount-date-from-tmp[]"]'
+                                    data-default-checked-elements='["inp-edit-product-product-availability[]", "inp-edit-product-consider-discount-date-from[]", "inp-edit-product-consider-discount-date[]"]'
+                                    data-default-unchecked-elements='["inp-edit-product-separate-consignment[]"]'
                                     data-add-remove="true"
                                     data-removable-elements='[".product-color-badge"]'>
                                 افزودن محصول جدید
@@ -874,7 +876,7 @@ $validator = form_validator();
             <!--                                    <label class="form-check-label">-->
             <!--                                        <input id="__rtStatus" type="checkbox" class="form-check-input-switchery"-->
             <!--                                               name="inp-edit-product-returnable"-->
-            <?= '';//$validator->setCheckbox('inp-edit-product-returnable', 'on') ?: (is_value_checked($product['is_returnable']) ? 'checked="checked"' : '');           ?>
+            <?= '';//$validator->setCheckbox('inp-edit-product-returnable', 'on') ?: (is_value_checked($product['is_returnable']) ? 'checked="checked"' : '');            ?>
             <!--            >-->
             <!--                                    </label>-->
             <!--                                </div>-->

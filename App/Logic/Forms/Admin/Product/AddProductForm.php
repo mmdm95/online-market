@@ -228,7 +228,7 @@ class AddProductForm implements IPageForm
                  */
                 $colorModel = container()->get(ColorModel::class);
 
-                if (0 === $colorModel->count('hex=:hex', ['hex' => $value->getValue()])) {
+                if (0 === $colorModel->count('id=:id', ['id' => $value->getValue()])) {
                     return false;
                 }
                 return true;

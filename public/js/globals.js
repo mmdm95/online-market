@@ -833,10 +833,10 @@ window.MyGlobalVariables = {
               if (window.TheCore.isDefined(window.MyGlobalVariables.elements[formKey].inputs[o])) {
                 if (window.TheCore.isArray(val)) {
                   for (let i of val) {
-                    formData.append(window.MyGlobalVariables.elements[formKey].inputs[o], i);
+                    formData.append(window.MyGlobalVariables.elements[formKey].inputs[o], window.TheCore.isDefined(i) ? i : '');
                   }
                 } else {
-                  formData.append(window.MyGlobalVariables.elements[formKey].inputs[o], val);
+                  formData.append(window.MyGlobalVariables.elements[formKey].inputs[o], window.TheCore.isDefined(val) ? val : '');
                 }
               } else {
                 formData.append(o, val);

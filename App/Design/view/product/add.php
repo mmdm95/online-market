@@ -169,16 +169,23 @@ $validator = form_validator();
                             </div>
                         </div>
                     </div>
-                    <div class="card-body text-right">
-                        <button type="button" class="btn btn-primary flat-icon __duplicator_btn"
-                                data-container-element=".__all_products_container"
-                                data-sample-element="#__sample_all_product"
-                                data-clearable-elements='["inp-add-product-stock-count[]","inp-add-product-max-count[]","inp-add-product-color[]","inp-add-product-size[]","inp-add-product-weight[]","inp-add-product-guarantee[]","inp-add-product-price[]","inp-add-product-discount-price[]","inp-add-product-product-availability[]","inp-add-product-separate-consignment[]","inp-add-product-consider-discount-date[]"]'
-                                data-alt-field='["inp-add-product-discount-date-tmp[]","inp-add-product-discount-date-from-tmp[]"]'
-                                data-add-remove="true">
-                            افزودن محصول جدید
-                            <i class="icon-plus2 ml-2" aria-hidden="true"></i>
-                        </button>
+                    <div class="card-body">
+                        <div class="alert alert-primary">
+                            مواردی که رنگ آنها انتخاب نشده، در نظر گرفته نمی‌شود.
+                        </div>
+                        <div class="text-right">
+                            <button type="button" class="btn btn-primary flat-icon __duplicator_btn"
+                                    data-container-element=".__all_products_container"
+                                    data-sample-element="#__sample_all_product"
+                                    data-clearable-elements='["inp-add-product-stock-count[]","inp-add-product-max-count[]","inp-add-product-color[]","inp-add-product-size[]","inp-add-product-weight[]","inp-add-product-guarantee[]","inp-add-product-price[]","inp-add-product-discount-price[]"]'
+                                    data-alt-field='["inp-add-product-discount-date-tmp[]","inp-add-product-discount-date-from-tmp[]"]'
+                                    data-default-checked-elements='["inp-add-product-product-availability[]", "inp-add-product-consider-discount-date-from[]", "inp-add-product-consider-discount-date[]"]'
+                                    data-default-unchecked-elements='["inp-add-product-separate-consignment[]"]'
+                                    data-add-remove="true">
+                                افزودن محصول جدید
+                                <i class="icon-plus2 ml-2" aria-hidden="true"></i>
+                            </button>
+                        </div>
                     </div>
                     <div class="card-body __all_products_container">
                         <?php
@@ -491,6 +498,7 @@ $validator = form_validator();
                                                         <label class="form-check-label">
                                                             <input type="checkbox"
                                                                    name="inp-add-product-consider-discount-date-from[]"
+                                                                   checked="checked"
                                                                    class="styled form-input-styled">
                                                             عدم درنظرگیری تاریخ شروع تخفیف
                                                         </label>
@@ -518,6 +526,7 @@ $validator = form_validator();
                                                         <label class="form-check-label">
                                                             <input type="checkbox"
                                                                    name="inp-add-product-consider-discount-date[]"
+                                                                   checked="checked"
                                                                    class="styled form-input-styled">
                                                             عدم درنظرگیری تاریخ پایان تخفیف
                                                         </label>
@@ -675,7 +684,7 @@ $validator = form_validator();
             <!--                                    <label class="form-check-label">-->
             <!--                                        <input id="__rtStatus" type="checkbox" class="form-check-input-switchery"-->
             <!--                                               name="inp-add-product-returnable"-->
-            <?= '';//$validator->setCheckbox('inp-add-product-returnable', 'on', true);              ?>
+            <?= '';//$validator->setCheckbox('inp-add-product-returnable', 'on', true);                 ?>
             <!--            >-->
             <!--                                    </label>-->
             <!--                                </div>-->
@@ -726,7 +735,7 @@ $validator = form_validator();
                                     <label class="form-check-label">
                                         <input id="__csStatus" type="checkbox" class="form-check-input-switchery"
                                                name="inp-add-product-coming-soon"
-                                            <?= $validator->setCheckbox('inp-add-product-coming-soon', 'on', true); ?>>
+                                            <?= $validator->setCheckbox('inp-add-product-coming-soon', 'on', false); ?>>
                                     </label>
                                 </div>
                             </div>
@@ -751,7 +760,7 @@ $validator = form_validator();
                                     <label class="form-check-label">
                                         <input id="__cfmStatus" type="checkbox" class="form-check-input-switchery"
                                                name="inp-add-product-call-for-more"
-                                            <?= $validator->setCheckbox('inp-add-product-call-for-more', 'on', true); ?>>
+                                            <?= $validator->setCheckbox('inp-add-product-call-for-more', 'on', false); ?>>
                                     </label>
                                 </div>
                             </div>

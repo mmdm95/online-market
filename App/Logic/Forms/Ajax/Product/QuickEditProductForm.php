@@ -5,18 +5,15 @@ namespace App\Logic\Forms\Ajax\Product;
 use App\Logic\Interfaces\IPageForm;
 use App\Logic\Models\ColorModel;
 use App\Logic\Models\ProductModel;
-use App\Logic\Models\UnitModel;
 use App\Logic\Utils\ProductUtil;
 use App\Logic\Validations\ExtendedValidator;
 use Pecee\Http\Input\InputItem;
-use Sim\Auth\DBAuth;
 use Sim\Exceptions\ConfigManager\ConfigNotRegisteredException;
 use Sim\Form\Exceptions\FormException;
 use Sim\Form\FormValue;
 use Sim\Form\Validations\TimestampValidation;
 use Sim\Interfaces\IFileNotExistsException;
 use Sim\Interfaces\IInvalidVariableNameException;
-use voku\helper\AntiXSS;
 
 class QuickEditProductForm implements IPageForm
 {
@@ -144,7 +141,7 @@ class QuickEditProductForm implements IPageForm
                  */
                 $colorModel = container()->get(ColorModel::class);
 
-                if (trim($value->getValue()) != DEFAULT_OPTION_VALUE && 0 === $colorModel->count('hex=:hex', ['hex' => $value->getValue()])) {
+                if (trim($value->getValue()) != DEFAULT_OPTION_VALUE && 0 === $colorModel->count('id=:id', ['id' => $value->getValue()])) {
                     return false;
                 }
                 return true;

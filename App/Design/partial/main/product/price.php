@@ -47,8 +47,10 @@
 
         <?php
         $discountExpire = getDiscountExpireTime($product);
+        $discountStart = getDiscountStartTime($product);
+        $showExpireCountdown = shouldShowCountdown($discountStart, $discountExpire);
         ?>
-        <?php if (!empty($discountExpire)): ?>
+        <?php if ($showExpireCountdown): ?>
             <h5 class="countdown_time d-flex text-info alert alert-info" countdown
                 data-date="<?= date('Y-m-d H:i:s', $discountExpire); ?>">
                 <div class="col">

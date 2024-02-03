@@ -6,8 +6,6 @@ use App\Logic\Handlers\Payment\PaymentHandlerConnectionInput;
 use App\Logic\Handlers\Payment\PaymentHandlerConnectionOutput;
 use App\Logic\Handlers\Payment\PaymentHandlerResultInput;
 use App\Logic\Handlers\Payment\PaymentHandlerResultOutput;
-use App\Logic\Models\OrderModel;
-use App\Logic\Models\OrderReserveModel;
 use Sim\Event\Interfaces\IEvent;
 use Sim\Payment\Factories\IranKish;
 use Sim\Payment\PaymentFactory;
@@ -16,7 +14,7 @@ use Sim\Payment\Providers\IranKish\IranKishHandlerProvider;
 use Sim\Payment\Providers\IranKish\IranKishRequestProvider;
 use Sim\Payment\Providers\IranKish\IranKishRequestResultProvider;
 
-class IranKishPaymentHandler extends AbstractPaymentHandler implements PaymentHandlerInterface
+class IranKishPaymentHandler extends AbstractPaymentHandler
 {
     /**
      * @inheritDoc
@@ -65,17 +63,12 @@ class IranKishPaymentHandler extends AbstractPaymentHandler implements PaymentHa
                     ]),
                 ]);
 
-                $this->orderPayModel->insert([
-                    'code' => $input->getUniqueCode(),
-                    'order_code' => $input->getOrderCode(),
-                    'method_code' => $input->getPaymentMethodInfo()['method_code'],
-                    'method_title' => $input->getPaymentMethodInfo()['method_title'],
-                    'method_type' => $input->getPaymentMethodInfo()['method_type'],
-                    'payment_status' => PAYMENT_STATUS_WAIT,
-                ]);
+                $this->emitter->dispatch(self::EVENT_CONNECTION_SUCCESS, [$input]);
             }
         )->createRequestNotOkClosure(
-            function (IEvent $event, $code, $msg) use (&$res) {
+            function (IEvent $event, $code, $msg) use ($input, &$res) {
+                $this->emitter->dispatch(self::EVENT_CONNECTION_FAILED, [$input, $msg, $code]);
+
                 $res = false;
                 self::logConnectionError(METHOD_TYPE_GATEWAY_IRAN_KISH, $code, $msg);
             }
@@ -92,15 +85,6 @@ class IranKishPaymentHandler extends AbstractPaymentHandler implements PaymentHa
     public function result(PaymentHandlerResultInput $input): PaymentHandlerResultOutput
     {
         $res = [false, 'سفارش نامعتبر می‌باشد.', null];
-
-        /**
-         * @var OrderModel $orderModel
-         */
-        $orderModel = container()->get(OrderModel::class);
-        /**
-         * @var OrderReserveModel $orderReserveModel
-         */
-        $orderReserveModel = container()->get(OrderReserveModel::class);
 
         /**
          * @var IranKish $gateway
@@ -126,7 +110,7 @@ class IranKishPaymentHandler extends AbstractPaymentHandler implements PaymentHa
                     IEvent                       $event,
                     IranKishAdviceResultProvider $adviceProvider,
                     IranKishHandlerProvider      $resultProvider
-                ) use ($orderModel, $orderReserveModel, $input, &$res) {
+                ) use ($input, &$res) {
                     $this->gatewayModel->update([
                         'payment_code' => $adviceProvider->getResultSystemTraceAuditNumber(''),
                         'status' => $adviceProvider->getResponseCode(),
@@ -140,16 +124,7 @@ class IranKishPaymentHandler extends AbstractPaymentHandler implements PaymentHa
                         ]),
                     ], 'code=:code', ['code' => $input->getGatewayCode()]);
 
-                    $this->orderPayModel->update([
-                        'payment_status' => PAYMENT_STATUS_SUCCESS,
-                    ], 'code=:code', ['code' => $input->getGatewayCode()]);
-
-                    $orderModel->update([
-                        'payment_status' => PAYMENT_STATUS_SUCCESS,
-                        'payed_at' => time(),
-                    ], 'code=:code', ['code' => $input->getOrderCode()]);
-
-                    $orderReserveModel->delete('order_code=:code', ['code' => $input->getOrderCode()]);
+                    $this->emitter->dispatch(self::EVENT_RESULT_SUCCESS, [$input]);
 
                     $res = [true, GATEWAY_SUCCESS_MESSAGE, $adviceProvider->getResultSystemTraceAuditNumber('')];
                 }
@@ -173,9 +148,7 @@ class IranKishPaymentHandler extends AbstractPaymentHandler implements PaymentHa
                         ]),
                     ], 'code=:code AND is_success=:suc', ['code' => $input->getGatewayCode(), 'suc' => DB_NO]);
 
-                    $this->orderPayModel->update([
-                        'payment_status' => PAYMENT_STATUS_FAILED,
-                    ], 'code=:code', ['code' => $input->getGatewayCode()]);
+                    $this->emitter->dispatch(self::EVENT_RESULT_FAILED, [$input, $msg, $code]);
 
                     $res = [false, GATEWAY_ERROR_MESSAGE, $adviceProvider->getResultSystemTraceAuditNumber('')];
                 }

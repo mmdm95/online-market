@@ -23,12 +23,12 @@ class CategoryImageModel extends BaseModel
      * @return array
      */
     public function getCategoryImages(
-        array $columns = [],
+        array   $columns = [],
         ?string $where = null,
-        array $bind_values = [],
-        ?int $limit = null,
-        int $offset = 0,
-        array $order_by = ['c.id DESC']
+        array   $bind_values = [],
+        ?int    $limit = null,
+        int     $offset = 0,
+        array   $order_by = ['c.id DESC']
     ): array
     {
         $select = $this->connector->select();

@@ -4,7 +4,6 @@ namespace App\Logic\Forms\User\Ajax\Address\Company;
 
 use App\Logic\Interfaces\IPageForm;
 use App\Logic\Models\AddressCompanyModel;
-use App\Logic\Models\AddressModel;
 use App\Logic\Models\CityModel;
 use App\Logic\Models\ProvinceModel;
 use App\Logic\Models\UserModel;

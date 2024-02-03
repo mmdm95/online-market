@@ -44,7 +44,7 @@ class SessionTokenProvider implements ITokenProvider
     {
         $token = \cookie()->getCookieValueFromString($token);
         $res = \csrf()->validate($token);
-        if(!$res) cookie()->remove(self::CSRF_KEY);
+        if (!$res) cookie()->remove(self::CSRF_KEY);
         return $res;
     }
 

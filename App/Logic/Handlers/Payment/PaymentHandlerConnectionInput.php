@@ -31,18 +31,12 @@ class PaymentHandlerConnectionInput
      */
     protected string $uniqueCode;
 
-    /**
-     * @var array
-     */
-    protected array $paymentMethodInfo = [];
-
     public function __construct(
         int    $userId,
         string $orderCode,
         float  $price,
         string $callbackUrl,
-        string $uniqueCode,
-        array  $paymentMethodInfo
+        string $uniqueCode
     )
     {
         $this->userId = $userId;
@@ -50,7 +44,6 @@ class PaymentHandlerConnectionInput
         $this->price = $price;
         $this->callbackUrl = $callbackUrl;
         $this->uniqueCode = $uniqueCode;
-        $this->paymentMethodInfo = $paymentMethodInfo;
     }
 
     /**
@@ -91,13 +84,5 @@ class PaymentHandlerConnectionInput
     public function getUniqueCode(): string
     {
         return $this->uniqueCode;
-    }
-
-    /**
-     * @return array
-     */
-    public function getPaymentMethodInfo(): array
-    {
-        return $this->paymentMethodInfo;
     }
 }

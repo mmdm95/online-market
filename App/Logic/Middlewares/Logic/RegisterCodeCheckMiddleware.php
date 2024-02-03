@@ -3,7 +3,6 @@
 namespace App\Logic\Middlewares\Logic;
 
 use Sim\Abstracts\Mvc\Controller\Middleware\AbstractMiddleware;
-use Sim\Form\Validations\PersianMobileValidation;
 
 class RegisterCodeCheckMiddleware extends AbstractMiddleware
 {
