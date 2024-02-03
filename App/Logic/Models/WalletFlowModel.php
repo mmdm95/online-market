@@ -87,7 +87,7 @@ class WalletFlowModel extends BaseModel
     /**
      * Use [wf for wallet_flow], [w for wallet], [u for users]
      *
-     * @param $code
+     * @param $code - order_code from orders table
      * @param array $columns
      * @return array
      */

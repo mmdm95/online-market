@@ -246,8 +246,8 @@ use Sim\Utils\StringUtil;
                         <?= StringUtil::toPersian($item['max_cart_count']); ?>
                     </td>
                     <td>
-                        <?php if (!empty($item['color']) && ($item['show_color'] === DB_YES || $item['is_patterned_color'] === DB_YES)): ?>
-                            <?php if ($item['is_patterned_color'] === DB_NO): ?>
+                        <?php if (!empty($item['color']) && ($item['show_color'] == DB_YES || $item['is_patterned_color'] == DB_YES)): ?>
+                            <?php if ($item['is_patterned_color'] == DB_NO): ?>
                                 <?php load_partial('admin/parser/color-shape', [
                                     'hex' => $item['color_hex'],
                                 ]); ?>

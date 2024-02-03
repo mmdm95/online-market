@@ -1014,14 +1014,14 @@ window.MyGlobalVariables = {
             } else if (input.type === "checkbox") {
               if (input.attributes.value) {
                 if (!input.checked) {
-                  value = values[name][i] || values[name] || null;
+                  value = (values[name] && values[name][i]) ? (values[name][i] || values[name]) : null;
                 }
               } else {
                 value = input.checked;
               }
             } else if (input.type === "radio") {
               if (!input.checked) {
-                value = values[name][i] || values[name] || null;
+                value = (values[name] && values[name][i]) ? (values[name][i] || values[name]) : null;
               }
             }
 

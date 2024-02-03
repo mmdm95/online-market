@@ -110,7 +110,7 @@ $isSuperUser = $authAdmin->userHasRole(ROLE_DEVELOPER) || $authAdmin->userHasRol
                     اطلاعات گیرنده
                 </legend>
                 <div class="row m-0">
-                    <?php if ($order['receiver_type'] === RECEIVER_TYPE_LEGAL): ?>
+                    <?php if ((int)$order['receiver_type'] === RECEIVER_TYPE_LEGAL): ?>
                         <div class="col-lg-6 border py-2 px-3">
                             <div class="mb-2">
                                 کد اقتصادی
@@ -341,14 +341,6 @@ $isSuperUser = $authAdmin->userHasRole(ROLE_DEVELOPER) || $authAdmin->userHasRol
                             <?php endif; ?>
                         </div>
                     </div>
-                    <div class="col-lg-6 border py-2 px-3">
-                        <div class="mb-2">
-                            شیوه پرداخت
-                        </div>
-                        <div class="text-green-800">
-                            <?= $order['method_title']; ?>
-                        </div>
-                    </div>
                 </div>
             </fieldset>
         </div>
@@ -408,11 +400,11 @@ $isSuperUser = $authAdmin->userHasRole(ROLE_DEVELOPER) || $authAdmin->userHasRol
                                 <?php endif; ?>
                                 <div class="text-muted">
                                     <?php
-                                    $isColorShowable = !empty($item['color']) && ($item['show_color'] === DB_YES || $item['is_patterned_color'] === DB_YES);
+                                    $isColorShowable = !empty($item['color']) && ($item['show_color']=== DB_YES || $item['is_patterned_color'] == DB_YES);
                                     ?>
                                     <?php if ($isColorShowable): ?>
                                         رنگ
-                                        <?php if ($item['is_patterned_color'] === DB_NO): ?>
+                                        <?php if ($item['is_patterned_color'] == DB_NO): ?>
                                             <span class="btn-icon rounded-full p-3"
                                                   style="background-color: <?= $item['color_name']; ?>"></span>
                                         <?php endif; ?>
@@ -548,6 +540,71 @@ $isSuperUser = $authAdmin->userHasRole(ROLE_DEVELOPER) || $authAdmin->userHasRol
         </div>
     </div>
     <!-- /invoice template -->
+
+    <!-- Order payments -->
+    <div class="card">
+        <div class="card-header bg-transparent header-elements-inline">
+            <h6 class="card-title">تاریخچه تراکنش‌ها</h6>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table">
+                <thead class="bg-light">
+                <tr>
+                    <th>#</th>
+                    <th>تاریخ</th>
+                    <th>توضیحات</th>
+                    <th>طریقه پرداخت</th>
+                    <th>وضعیت</th>
+                    <th>شماره پیگیری</th>
+                    <th>مبلغ</th>
+                </tr>
+                </thead>
+                <tbody>
+                <?php $k = 0; ?>
+                <?php foreach ($order_payments as $payment): ?>
+                    <tr>
+                        <td data-order="<?= $k; ?>"><?= StringUtil::toPersian(++$k); ?></td>
+                        <td>
+                            <?= Jdf::jdate(DEFAULT_TIME_FORMAT, $payment['created_at']); ?>
+                        </td>
+                        <td>
+                            <?= $payment['msg']; ?>
+                        </td>
+                        <td>
+                            <?php load_partial('admin/parser/payment-method-type', ['type' => $payment['method_type']]); ?>
+                        </td>
+                        <td>
+                            <?php if (DB_YES == $payment['is_success']): ?>
+                                <i class="icon-checkmark-circle text-success icon-2x"
+                                   aria-hidden="true"></i>
+                            <?php else: ?>
+                                <i class="icon-cancel-circle2 text-danger icon-2x"
+                                   aria-hidden="true"></i>
+                            <?php endif; ?>
+                        </td>
+                        <td>
+                            <?php if (!empty($payment['payment_code'])): ?>
+                                <?= $payment['payment_code']; ?>
+                            <?php else: ?>
+                                <i class="icon-minus2" aria-hidden="true"></i>
+                            <?php endif; ?>
+                        </td>
+                        <td>
+                            <?php if (!empty($payment['price'])): ?>
+                                <?= StringUtil::toPersian(number_format(StringUtil::toEnglish($payment['price']))); ?>
+                                <small>تومان</small>
+                            <?php else: ?>
+                                <i class="icon-minus2" aria-hidden="true"></i>
+                            <?php endif; ?>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <!-- order payments -->
 
     <?php load_partial('admin/table/user-orders', ['user_id' => $order['user_id']]); ?>
 </div>

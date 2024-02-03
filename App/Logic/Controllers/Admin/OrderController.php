@@ -12,6 +12,7 @@ use App\Logic\Interfaces\IDatatableController;
 use App\Logic\Models\GatewayModel;
 use App\Logic\Models\OrderBadgeModel;
 use App\Logic\Models\OrderModel;
+use App\Logic\Models\OrderPaymentModel;
 use App\Logic\Utils\Jdf;
 use App\Logic\Utils\LogUtil;
 use App\Logic\Utils\OrderUtil;
@@ -151,15 +152,24 @@ class OrderController extends AbstractAdminController implements IDatatableContr
          * @var GatewayModel $gatewayModel
          */
         $gatewayModel = container()->get(GatewayModel::class);
+        /**
+         * @var OrderPaymentModel $orderPayModel
+         */
+        $orderPayModel = container()->get(OrderPaymentModel::class);
 
         $order = $orderModel->getOrders('o.id=:id', ['id' => $id], ['o.id DESC'], 1)[0];
         $orderItems = $orderModel->getOrderItems([
             'oi.*', 'p.image AS product_image'
         ], 'oi.order_code=:code', ['code' => $order['code']]);
-        $order['payment_code'] = $gatewayModel->getFirst(['payment_code'], 'order_code=:oc AND method_type=:mt', [
+        $payment = $orderPayModel->getFirst(['*'], 'order_code=:code', ['code' => $order['code']], ['created_at DESC']);
+        $order['payment_code'] = $gatewayModel->getFirst(
+            ['payment_code'],
+            'order_code=:oc AND (method_type IS NULL OR method_type=:mt)', [
             'oc' => $order['code'],
-            'mt' => $order['method_type'],
+            'mt' => $payment['method_type'] ?? '',
         ])['payment_code'] ?? null;
+
+        $orderPayments = OrderUtil::getOrderPaymentWithFlows($order['code']);
 
         $badges = $badgeModel->get(['code', 'title', 'color'], 'is_deleted=:del', ['del' => DB_NO]);
 
@@ -167,6 +177,7 @@ class OrderController extends AbstractAdminController implements IDatatableContr
         return $this->render(array_merge($data, [
             'order' => $order,
             'order_items' => $orderItems,
+            'order_payments' => $orderPayments,
             'badges' => $badges,
             'order_id' => $id,
             'sub_title' => 'جزيیات سفارش' . '-' . $order['code'],
@@ -209,7 +220,7 @@ class OrderController extends AbstractAdminController implements IDatatableContr
             ], 'id=:id', ['id' => $id]);
 
             if (count($info)) {
-                $info['show_legal'] = $info['receiver_type'] === RECEIVER_TYPE_LEGAL;
+                $info['show_legal'] = (int)$info['receiver_type'] === RECEIVER_TYPE_LEGAL;
                 unset($info['receiver_type']);
 
                 $resourceHandler->data($info);

@@ -21,6 +21,16 @@
         address: 'inp-addr-address',
         sendMethod: 'send_method_option',
         gateway: 'payment_method_option',
+        companyName: 'inp-addr-company-name',
+        companyEcoCode: 'inp-addr-company-eco-code',
+        companyEcoNID: 'inp-addr-company-eco-nid',
+        companyRegNum: 'inp-addr-company-reg-num',
+        companyTel: 'inp-addr-tel',
+        companyProvince: 'inp-addr-company-province',
+        companyCity: 'inp-addr-company-city',
+        companyPostalCode: 'inp-addr-company-postal-code',
+        companyAddress: 'inp-addr-company-address',
+        legalOrReal: 'inp-is-real-or-legal',
       },
     },
   });
@@ -419,6 +429,9 @@
             shop.toasts.toast(this.data, {
               type: variables.toasts.types.warning,
             });
+
+            createLoader = true;
+            shop.hideLoader(loaderId);
           } else {
             var data = this.data;
             if (data.redirect) {

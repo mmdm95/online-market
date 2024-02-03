@@ -23,7 +23,14 @@ foreach ($items as $item) {
         </tr>
         </thead>
         <tbody>
+        <?php
+        $shippingTimes = 1;
+        ?>
         <?php foreach ($items as $item): ?>
+            <?php if (is_value_checked($item['separate_consignment'])): ?>
+                <?= $shippingTimes++; ?>
+            <?php endif; ?>
+
             <tr>
                 <td>
                     <span class="d-inline-block"><?= $item['title']; ?></span>
@@ -33,18 +40,28 @@ foreach ($items as $item) {
                     <?php
                     $price = (float)get_discount_price($item)[0];
                     ?>
+
                     <?php if (0 != $price): ?>
                         <?= number_format(StringUtil::toEnglish($item['qnt'] * $price)); ?>
                         <small>تومان</small>
                     <?php else: ?>
                         رایگان
                     <?php endif; ?>
-
                 </td>
             </tr>
         <?php endforeach; ?>
         </tbody>
         <tfoot>
+        <?php if ($shippingTimes > 1): ?>
+            <tr>
+                <th>تعداد مرسوله</th>
+                <td>
+                    <?= number_format(StringUtil::toEnglish($shippingTimes)); ?>
+                    <small>عدد</small>
+                </td>
+            </tr>
+        <?php endif; ?>
+
         <tr>
             <th>جمع</th>
             <td class="product-subtotal">

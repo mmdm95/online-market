@@ -79,6 +79,7 @@ class CheckoutForm implements IPageForm
 
         // get type of receiver/buyer
         $realOrLegal = $validator->getFieldValue('inp-is-real-or-legal', RECEIVER_TYPE_REAL);
+        $realOrLegal = (int)$realOrLegal;
 
         // check validation for real person type
         if ($realOrLegal === RECEIVER_TYPE_REAL) {
@@ -288,9 +289,9 @@ class CheckoutForm implements IPageForm
          */
         $couponModel = container()->get(CouponModel::class);
         /**
-         * @var OrderBadgeModel $badgeMode
+         * @var OrderBadgeModel $badgeModel
          */
-        $badgeMode = container()->get(OrderBadgeModel::class);
+        $badgeModel = container()->get(OrderBadgeModel::class);
 
         try {
             // if user is logged in, fetch his info
@@ -298,13 +299,20 @@ class CheckoutForm implements IPageForm
                 $code = OrderUtil::getUniqueOrderCode();
 
                 $isRealOrLegal = input()->post('inp-is-real-or-legal', null)->getValue();
+                $isRealOrLegal = (int)$isRealOrLegal;
 
                 if (!in_array($isRealOrLegal, RECEIVER_TYPES)) return false;
 
                 $firstName = input()->post('fname', '')->getValue();
                 $lastName = input()->post('lname', '')->getValue();
-                $postalCode = input()->post('inp-addr-postal-code', '')->getValue();
-                $addr = input()->post('inp-addr-address', '')->getValue();
+
+                if ($isRealOrLegal === RECEIVER_TYPE_LEGAL) {
+                    $postalCode = input()->post('inp-addr-company-postal-code', '')->getValue();
+                    $addr = input()->post('inp-addr-company-address', '')->getValue();
+                } else {
+                    $postalCode = input()->post('inp-addr-postal-code', '')->getValue();
+                    $addr = input()->post('inp-addr-address', '')->getValue();
+                }
 
                 $province = session()->getFlash('__custom_province_info_in_order', 'نامشخص');
                 $city = session()->getFlash('__custom_city_info_in_order', 'نامشخص');
@@ -312,7 +320,7 @@ class CheckoutForm implements IPageForm
                 $gateway = session()->getFlash(SESSION_GATEWAY_RECORD);
                 $sendMethod = session()->getFlash(SESSION_SEND_METHOD_RECORD);
 
-                $badge = $badgeMode->getFirst([
+                $badge = $badgeModel->getFirst([
                     'code', 'title', 'color'
                 ], 'is_default_badge=:idb AND is_deleted=:del', [
                     'idb' => DB_YES,
@@ -382,8 +390,8 @@ class CheckoutForm implements IPageForm
                     $receiver = input()->post('inp-addr-company-name', '')->getValue();
                     $ecoCode = input()->post('inp-addr-company-eco-code', '')->getValue();
                     $ecoNID = input()->post('inp-addr-company-eco-nid', '')->getValue();
-                    $regNum = input()->post('inp-addr-company-reg-number', '')->getValue();
-                    $tel = input()->post('inp-addr-company-tel', '')->getValue();
+                    $regNum = input()->post('inp-addr-company-reg-num', '')->getValue();
+                    $tel = input()->post('inp-addr-tel', '')->getValue();
 
                     $orderArr['receiver_type'] = RECEIVER_TYPE_LEGAL;
                     $orderArr['company_economic_code'] = $xss->xss_clean($ecoCode);

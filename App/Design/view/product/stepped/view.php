@@ -39,8 +39,8 @@ use Sim\Utils\StringUtil;
                     <td><?= $item['stock_count']; ?></td>
                     <td><?= $item['max_cart_count']; ?></td>
                     <td>
-                        <?php if (!empty($item['color']) && ($item['show_color'] === DB_YES || $item['is_patterned_color'] === DB_YES)): ?>
-                            <?php if ($item['is_patterned_color'] === DB_NO): ?>
+                        <?php if (!empty($item['color']) && ($item['show_color'] == DB_YES || $item['is_patterned_color'] == DB_YES)): ?>
+                            <?php if ($item['is_patterned_color'] == DB_NO): ?>
                                 <?php load_partial('admin/parser/color-shape', ['hex' => $item['color_hex']]); ?>
                             <?php endif; ?>
                             <span class="ml-2"><?= $item['color_name']; ?></span>

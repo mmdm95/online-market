@@ -25,7 +25,7 @@ $validator = form_validator();
                             <div class="col-lg-12 col-xl-4 form-group">
                                 <label>
                                     <span class="text-danger">*</span>
-                                    مبلغ:
+                                    مبلغ(به تومان):
                                 </label>
                                 <input type="text"
                                        class="form-control"

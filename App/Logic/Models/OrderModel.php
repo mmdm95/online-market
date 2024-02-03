@@ -351,7 +351,7 @@ class OrderModel extends BaseModel
             ->from(self::TBL_ORDER_ITEMS . ' AS oi')
             ->cols($columns)
             ->orderBy(['pa.product_availability DESC', 'pa.is_available DESC', 'pa.stock_count DESC', 'pa.product_id DESC'])
-            ->groupBy(['pa.product_id']);
+            ->groupBy(['oi.id', 'pa.product_id']);
 
         try {
             $select
@@ -735,6 +735,7 @@ class OrderModel extends BaseModel
             ->cols([
                 'SUM(final_price) AS price_sum',
             ]);
+
         $res = $model->get($select);
 
         if (count($res)) return $res[0]['price_sum'] ?? 0;

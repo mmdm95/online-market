@@ -122,10 +122,10 @@ use Sim\Utils\StringUtil;
                                     <?php endif; ?>
                                 </div>
 
-                                <?php if (!empty($item['color']) && ($item['show_color'] === DB_YES || $item['is_patterned_color'] === DB_YES)): ?>
+                                <?php if (!empty($item['color']) && ($item['show_color'] == DB_YES || $item['is_patterned_color'] == DB_YES)): ?>
                                     <div class="d-flex align-items-center">
                                         <div class="product_color_badge">
-                                            <?php if ($item['is_patterned_color'] === DB_NO): ?>
+                                            <?php if ($item['is_patterned_color'] == DB_NO): ?>
                                                 <span class="mr-2"
                                                       style="background-color: <?= $item['color']; ?>;"></span>
                                             <?php endif; ?>
