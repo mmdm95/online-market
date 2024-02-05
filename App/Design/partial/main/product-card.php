@@ -24,7 +24,7 @@
                      alt="<?= $item['title']; ?>" class="lazy">
             </a>
 
-            <div class="product_action_box">
+            <div dir="ltr" class="product_action_box">
                 <ul class="list_none pr_action_btn">
                     <li class="add-to-cart">
                         <a href="javascript:void(0);"
