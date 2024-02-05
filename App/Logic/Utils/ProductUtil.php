@@ -255,7 +255,7 @@ class ProductUtil
             }
         }
         // order by parameter
-        $orderBy = [];
+        $orderBy = ['pa.product_id DESC'];
         $order = input()->get('sort', null);
         if (!is_array($order)) {
             $order = $order->getValue();

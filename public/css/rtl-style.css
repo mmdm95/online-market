@@ -548,7 +548,7 @@ body[dir="rtl"] .alert .close {
 }
 
 .product_wrap .pr_action_btn {
-    margin: 0 10px 0 0px;
+    margin: 0 10px 0 10px;
 }
 
 .deal_content {
