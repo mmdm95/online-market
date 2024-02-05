@@ -48,6 +48,7 @@ defined("TITLE_DELIMITER") or define("TITLE_DELIMITER", ' | ');
 defined("DB_YES") or define("DB_YES", 1);
 defined("DB_NO") or define("DB_NO", 0);
 
+defined("TIME_ONE_DAY_IN_SECONDS") or define("TIME_ONE_DAY_IN_SECONDS", 86400);
 defined("TIME_ONE_WEEK_IN_SECONDS") or define("TIME_ONE_WEEK_IN_SECONDS", 604800);
 defined("TIME_THREE_DAYS_IN_SECONDS") or define("TIME_THREE_DAYS_IN_SECONDS", 259200);
 
