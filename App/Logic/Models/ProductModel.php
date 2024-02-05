@@ -1111,4 +1111,22 @@ class ProductModel extends BaseModel
         }
         return 0;
     }
+
+    /**
+     * @param $productId
+     * @param int $viewCount
+     * @return bool
+     */
+    public function increaseViewCount($productId, int $viewCount = 1): bool
+    {
+        $update = $this->connector->update();
+        $update
+            ->table($this->table)
+            ->where('id=:id')
+            ->bindValue('id', $productId)
+            ->set('view_count', 'view_count+' . $viewCount);
+
+        $stmt = $this->db->prepare($update->getStatement());
+        return $stmt->execute($update->getBindValues());
+    }
 }

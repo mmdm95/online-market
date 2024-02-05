@@ -15,6 +15,7 @@ use App\Logic\Utils\ProductUtil;
 use App\Logic\Utils\TorobUtil;
 use Jenssegers\Agent\Agent;
 use Sim\Auth\DBAuth;
+use Sim\Cookie\Exceptions\CookieException;
 use Sim\Exceptions\ConfigManager\ConfigNotRegisteredException;
 use Sim\Exceptions\Mvc\Controller\ControllerException;
 use Sim\Exceptions\PathManager\PathNotRegisteredException;
@@ -245,7 +246,7 @@ class ProductController extends AbstractHomeController
      * @throws PathNotRegisteredException
      * @throws \DI\DependencyException
      * @throws \DI\NotFoundException
-     * @throws \ReflectionException
+     * @throws \ReflectionException|CookieException
      */
     public function show($id, $slug = null)
     {
@@ -333,6 +334,9 @@ class ProductController extends AbstractHomeController
             ]);
         $commentsCount = $model->get($select);
         $commentsCount = count($commentsCount) ? (int)$commentsCount[0]['count'] : 0;
+
+        // hit view count
+        ProductUtil::hitViewOfProduct($product['product_id']);
 
         $this->setLayout($this->main_layout)->setTemplate('view/main/product/detail');
         return $this->render([

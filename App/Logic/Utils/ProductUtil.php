@@ -255,7 +255,7 @@ class ProductUtil
             }
         }
         // order by parameter
-        $orderBy = [];
+        $orderBy = ['pa.product_id DESC'];
         $order = input()->get('sort', null);
         if (!is_array($order)) {
             $order = $order->getValue();
@@ -600,5 +600,40 @@ class ProductUtil
         } catch (\Exception $e) {
             return [];
         }
+    }
+
+    /**
+     * @param $productId
+     * @return bool
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
+     * @throws \Sim\Cookie\Exceptions\CookieException
+     */
+    public static function hitViewOfProduct($productId): bool
+    {
+        $auth = auth_home();
+        /**
+         * @var ProductModel $productModel
+         */
+        $productModel = container()->get(ProductModel::class);
+        $userId = $auth->getCurrentUser()['id'] ?? null;
+
+        $time = time() + TIME_ONE_DAY_IN_SECONDS;
+        $key = $productId . '-' . ($userId ?? '');
+
+        $prev = cookie()->get($key);
+        if (empty($prev) || (int)$prev !== $productId) {
+            cookie()
+                ->remove($key)
+                ->set($key)
+                ->setValue($productId)
+                ->setExpiration($time)
+                ->setHttpOnly(true)
+                ->save();
+
+            return $productModel->increaseViewCount($productId);
+        }
+
+        return true;
     }
 }
