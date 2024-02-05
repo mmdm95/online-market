@@ -74,7 +74,7 @@ class FakeData
             foreach ($orders as $order) {
                 $orderPayModel->insert([
                     'code' => $order['gateway_code'],
-                    'order_code' => $order['order_code'],
+                    'order_code' => $order['code'],
                     'method_code' => $order['method_code'],
                     'method_title' => $order['method_title'],
                     'method_type' => $order['method_type'],
