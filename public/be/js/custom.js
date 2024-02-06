@@ -4773,7 +4773,7 @@
           var _ = this;
           if (core.objSize(_.data)) {
             if (_.data['show_legal']) {
-              $('#__receiver_info_full_name,#__receiver_info_phone,#__receiver_info_natnum')
+              $('#__receiver_info_eco_code,#__receiver_info_eco_nid,#__receiver_info_reg_num,#__receiver_info_tel')
                 .closest('li').removeClass('d-none');
 
               currentModal.find('#__receiver_info_eco_code')
@@ -4785,7 +4785,7 @@
               currentModal.find('#__receiver_info_tel')
                 .html(_.data['landline_tel'] ? _.data['landline_tel'] : '<i class="icon-minus2" aria-hidden="true"></i>');
             } else {
-              $('#__receiver_info_eco_code,#__receiver_info_eco_nid,#__receiver_info_reg_num,#__receiver_info_tel')
+              $('#__receiver_info_full_name,#__receiver_info_phone,#__receiver_info_natnum')
                 .closest('li').removeClass('d-none');
 
               currentModal.find('#__receiver_info_full_name')
