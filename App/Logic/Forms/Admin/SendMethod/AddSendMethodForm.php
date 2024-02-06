@@ -39,6 +39,7 @@ class AddSendMethodForm implements IPageForm
                 'inp-add-send-method-img' => 'تصویر',
                 'inp-add-send-method-title' => 'عنوان',
                 'inp-add-send-method-desc' => 'توضیحات',
+                'inp-add-send-method-price' => 'هزینه ارسال',
             ])
             ->setOptionalFields([
                 'inp-add-send-method-desc',
@@ -62,6 +63,11 @@ class AddSendMethodForm implements IPageForm
         $validator
             ->setFields('inp-add-send-method-desc')
             ->lessThanEqualLength(250);
+        // price
+        $validator
+            ->setFields('inp-add-send-method-price')
+            ->greaterThanEqual(0, '{alias} ' . 'باید عددی بزرگتر یا مساوی صفر باشد.')
+            ->regex('/\d+/', '{alias} ' . 'باید از نوع عددی باشد.');
 
         // to reset form values and not set them again
         if ($validator->getStatus()) {
@@ -104,6 +110,8 @@ class AddSendMethodForm implements IPageForm
             $title = input()->post('inp-add-send-method-title', '')->getValue();
             $pub = input()->post('inp-add-send-method-status', '')->getValue();
             $desc = input()->post('inp-add-send-method-desc', '')->getValue();
+            $price = input()->post('inp-add-send-method-price', '')->getValue();
+            $determineLoc = input()->post('inp-add-send-method-determine-location', '')->getValue();
 
             return $sendModel->insert([
                 'code' => StringUtil::uniqidReal(12),
@@ -111,6 +119,8 @@ class AddSendMethodForm implements IPageForm
                 'desc' => $xss->xss_clean(trim($desc)),
                 'image' => $xss->xss_clean(get_image_name($image)),
                 'publish' => is_value_checked($pub) ? DB_YES : DB_NO,
+                'price' => $xss->xss_clean($price),
+                'determine_price_by_location' => is_value_checked($determineLoc) ? DB_YES : DB_NO,
                 'created_by' => $auth->getCurrentUser()['id'] ?? null,
                 'created_at' => time(),
             ]);

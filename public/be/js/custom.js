@@ -537,6 +537,8 @@
         image: 'inp-add-send-method-img',
         title: 'inp-add-send-method-title',
         desc: 'inp-add-send-method-desc',
+        price: 'inp-add-send-method-price',
+        determineLoc: 'inp-add-send-method-determine-location',
       },
     },
     editSendMethod: {
@@ -546,6 +548,8 @@
         image: 'inp-edit-send-method-img',
         title: 'inp-edit-send-method-title',
         desc: 'inp-edit-send-method-desc',
+        price: 'inp-edit-send-method-price',
+        determineLoc: 'inp-edit-send-method-determine-location',
       },
     },
     addFestival: {
@@ -1782,6 +1786,18 @@
             maxlength: 'توضیحات روش ارسال باید حداکثر ۲۵۰ کاراکتر باشد.',
           },
         },
+        price: {
+          rules: {
+            requiredNotEmpty: true,
+            format: /\d+/,
+            min: 0,
+          },
+          messages: {
+            requiredNotEmpty: 'هزینه ارسال را وارد نمایدد.',
+            format: 'هزینه ارسال وارد شده نامعتبر است.',
+            min: 'هزینه ارسال باید ععدی بزگتر یا مساوی صفر باشد.',
+          },
+        },
       },
       editSendMethod: {
         image: {
@@ -1808,6 +1824,18 @@
           },
           messages: {
             maxlength: 'توضیحات روش ارسال باید حداکثر ۲۵۰ کاراکتر باشد.',
+          },
+        },
+        price: {
+          rules: {
+            requiredNotEmpty: true,
+            format: /\d+/,
+            min: 0,
+          },
+          messages: {
+            requiredNotEmpty: 'هزینه ارسال را وارد نمایدد.',
+            format: 'هزینه ارسال وارد شده نامعتبر است.',
+            min: 'هزینه ارسال باید ععدی بزگتر یا مساوی صفر باشد.',
           },
         },
       },
@@ -2435,11 +2463,13 @@
         image: variables.validation.constraints.addSendMethod.image,
         title: variables.validation.constraints.addSendMethod.title,
         desc: variables.validation.constraints.addSendMethod.desc,
+        price: variables.validation.constraints.addSendMethod.price,
       },
       editSendMethod: {
         image: variables.validation.constraints.editSendMethod.image,
         title: variables.validation.constraints.editSendMethod.title,
         desc: variables.validation.constraints.editSendMethod.desc,
+        price: variables.validation.constraints.editSendMethod.price,
       },
       addFestival: {
         title: variables.validation.constraints.addFestival.title,

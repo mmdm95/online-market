@@ -80,6 +80,25 @@ $validator = form_validator();
                                name="inp-edit-send-method-desc"
                                value="<?= $validator->setInput('inp-edit-send-method-desc') ?: $method['desc']; ?>">
                     </div>
+                    <div class="form-group col-lg-6">
+                        <label>
+                            <span class="text-danger">*</span>
+                            هزینه ارسال:
+                        </label>
+                        <input type="number" min="0" class="form-control" placeholder="وارد کنید"
+                               name="inp-edit-send-method-price"
+                               value="<?= $validator->setInput('inp-edit-send-method-price') ?: $method['price']; ?>">
+                    </div>
+                    <div class="form-group text-center text-lg-right">
+                        <div class="form-check form-check-switchery form-check-switchery-double">
+                            <label class="form-check-label">
+                                در نظرگیری هزینه ارسال بر حسب مکان
+                                <input type="checkbox" class="form-check-input-switchery"
+                                       name="inp-edit-send-method-determine-location"
+                                    <?= $validator->setCheckbox('inp-edit-send-method-determine-location', 'on') ?: (is_value_checked($method['determine_price_by_location']) ? 'checked="checked"' : ''); ?>>
+                            </label>
+                        </div>
+                    </div>
                 </div>
                 <div class="text-right">
                     <button type="submit" class="btn btn-success">

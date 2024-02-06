@@ -39,7 +39,7 @@ class SadadPaymentHandler extends AbstractPaymentHandler
         $provider
             ->setReturnUrl($input->getCallbackUrl())
             ->setAmount(($input->getPrice() * 10))
-            ->setOrderId((int)$input->getOrderCode());
+            ->setOrderId((int)$input->getUniqueCode());
         // events
         $gateway->createRequestOkClosure(
             function (

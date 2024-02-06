@@ -40,7 +40,7 @@ class BehPardakhtPaymentHandler extends AbstractPaymentHandler
         $provider
             ->setCallbackUrl($input->getCallbackUrl())
             ->setAmount(($input->getPrice() * 10))
-            ->setOrderId($input->getOrderCode())
+            ->setOrderId($input->getUniqueCode())
             ->setPayerId(0);
         // events
         $gateway->createRequestOkClosure(

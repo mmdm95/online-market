@@ -7,7 +7,7 @@ use Sim\Utils\StringUtil;
 
 <?php if (
     in_array($order['payment_status'], [PAYMENT_STATUS_WAIT, PAYMENT_STATUS_NOT_PAYED]) &&
-    isset($reserved_item['expire_at'])
+    isset($reserved_item['expire_at']) && $reserved_item['expire_at'] >= time()
 ): ?>
     <!-- Repay ability -->
     <div class="dashboard_content alert alert-warning">

@@ -30,13 +30,13 @@ return [
         ],
     ],
     'view/main/order/checkout' => [
-        'title' => title_concat(\config()->get('settings.title.value'), 'بررسی'),
+        'title' => title_concat(\config()->get('settings.title.value'), 'تکمیل فرایند خرید'),
         'common' => [
             'default',
             'default-theia-sticky-sidebar',
             'default-changeable',
         ],
-        'sub_title' => 'بررسی',
+        'sub_title' => 'تکمیل فرایند خرید',
         'breadcrumb' => [
             [
                 'url' => url('home.index')->getRelativeUrl(),
@@ -44,7 +44,7 @@ return [
                 'is_active' => false,
             ],
             [
-                'text' => 'بررسی',
+                'text' => 'تکمیل فرایند خرید',
                 'is_active' => true,
             ],
         ],

@@ -20,13 +20,15 @@
         </div>
 
         <table class="table table-bordered table-hover datatable-highlight"
-               data-columns='[{"data":"id"},{"data":"image"},{"data":"title"},{"data":"status"},{"data":"operations"}]'
+               data-columns='[{"data":"id"},{"data":"image"},{"data":"title"},{"data":"price"},{"data":"determine_location"},{"data":"status"},{"data":"operations"}]'
                data-ajax-url="<?= url('admin.send_method.dt.view')->getRelativeUrlTrimmed(); ?>">
             <thead>
             <tr>
                 <th>#</th>
                 <th>تصویر</th>
                 <th>عنوان</th>
+                <th>هزینه ارسال</th>
+                <th>در نظرگیری مکان در هزینه ارسال</th>
                 <th>وضعیت نمایش</th>
                 <th class="text-center">عملیات</th>
             </tr>
@@ -36,6 +38,8 @@
                 <th>#</th>
                 <th>تصویر</th>
                 <th>عنوان</th>
+                <th>هزینه ارسال</th>
+                <th>در نظرگیری مکان در هزینه ارسال</th>
                 <th>وضعیت نمایش</th>
                 <th class="text-center">عملیات</th>
             </tr>

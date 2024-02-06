@@ -37,7 +37,7 @@ class TapPaymentHandler extends AbstractPaymentHandler
         $provider
             ->setCallBackUrl($input->getCallbackUrl())
             ->setAmount(($input->getPrice() * 10))
-            ->setOrderId((int)$input->getOrderCode());
+            ->setOrderId((int)$input->getUniqueCode());
         // events
         $gateway->createRequestOkClosure(
             function (

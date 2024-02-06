@@ -177,6 +177,10 @@ class ReportOrderController extends AbstractAdminController implements
                 if (!empty($order['info']['successful']) && !empty($order['info']['failed'])) break;
             }
 
+            $order['method_title'] = METHOD_TYPES_ALL[$order['info']['successful']['method_type'] ?? -999]
+                ?? METHOD_TYPES_ALL[$order['info']['failed']['method_type'] ?? -999]
+                ?? 'نامشخص';
+
             if (count($orderItems)) {
                 $html = $this
                     ->setLayout($this->report_layout)

@@ -38,6 +38,7 @@ class EditSendMethodForm implements IPageForm
                 'inp-edit-send-method-img' => 'تصویر',
                 'inp-edit-send-method-title' => 'عنوان',
                 'inp-edit-send-method-desc' => 'توضیحات',
+                'inp-edit-send-method-price' => 'هزینه ارسال',
             ])
             ->setOptionalFields([
                 'inp-edit-send-method-desc',
@@ -61,6 +62,11 @@ class EditSendMethodForm implements IPageForm
         $validator
             ->setFields('inp-edit-send-method-desc')
             ->lessThanEqualLength(250);
+        // price
+        $validator
+            ->setFields('inp-edit-send-method-price')
+            ->greaterThanEqual(0, '{alias} ' . 'باید عددی بزرگتر یا مساوی صفر باشد.')
+            ->regex('/\d+/', '{alias} ' . 'باید از نوع عددی باشد.');
 
         /**
          * @var SendMethodModel $sendModel
@@ -119,6 +125,8 @@ class EditSendMethodForm implements IPageForm
             $title = input()->post('inp-edit-send-method-title', '')->getValue();
             $desc = input()->post('inp-edit-send-method-desc', '')->getValue();
             $pub = input()->post('inp-edit-send-method-status', '')->getValue();
+            $price = input()->post('inp-edit-send-method-price', '')->getValue();
+            $determineLoc = input()->post('inp-edit-send-method-determine-location', '')->getValue();
             $id = session()->getFlash('send-method-curr-id', null);
             if (is_null($id)) return false;
 
@@ -127,6 +135,8 @@ class EditSendMethodForm implements IPageForm
                 'desc' => $xss->xss_clean(trim($desc)),
                 'image' => $xss->xss_clean(get_image_name($image)),
                 'publish' => is_value_checked($pub) ? DB_YES : DB_NO,
+                'price' => $xss->xss_clean($price),
+                'determine_price_by_location' => is_value_checked($determineLoc) ? DB_YES : DB_NO,
                 'updated_by' => $auth->getCurrentUser()['id'] ?? null,
                 'updated_at' => time(),
             ], 'id=:id', ['id' => $id]);

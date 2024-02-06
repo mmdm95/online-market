@@ -20,6 +20,7 @@ use Sim\Exceptions\Mvc\Controller\ControllerException;
 use Sim\Exceptions\PathManager\PathNotRegisteredException;
 use Sim\Interfaces\IFileNotExistsException;
 use Sim\Interfaces\IInvalidVariableNameException;
+use Sim\Utils\StringUtil;
 
 class SendMethodController extends AbstractAdminController implements IDatatableController
 {
@@ -170,7 +171,7 @@ class SendMethodController extends AbstractAdminController implements IDatatable
                                     'img' => $d,
                                     'alt' => $row['title'],
                                 ]);
-                        }
+                        },
                     ],
                     [
                         'db' => 'publish',
@@ -182,7 +183,29 @@ class SendMethodController extends AbstractAdminController implements IDatatable
                                     'status' => $d,
                                 ]);
                             return $status;
-                        }
+                        },
+                    ],
+                    [
+                        'db' => 'price',
+                        'db_alias' => 'price',
+                        'dt' => 'price',
+                        'formatter' => function ($d) {
+                            if ((int)$d !== 0) {
+                                return StringUtil::toPersian(number_format(StringUtil::toEnglish($d))) . ' تومان';
+                            }
+                            return $this->setTemplate('partial/admin/parser/dash-icon')->render();
+                        },
+                    ],
+                    [
+                        'db' => 'determine_price_by_location',
+                        'db_alias' => 'determine_price_by_location',
+                        'dt' => 'determine_location',
+                        'formatter' => function ($d) {
+                            return $this->setTemplate('partial/admin/parser/active-status')
+                                ->render([
+                                    'status' => $d,
+                                ]);
+                        },
                     ],
                     [
                         'dt' => 'operations',
@@ -192,7 +215,7 @@ class SendMethodController extends AbstractAdminController implements IDatatable
                                     'row' => $row,
                                 ]);
                             return $operations;
-                        }
+                        },
                     ],
                 ];
 
