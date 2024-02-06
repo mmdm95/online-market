@@ -54,6 +54,7 @@
       loaderId,
       createLoader = true,
       //-----
+      sendMethodRadio,
       realOrLegalRadio,
       //-----
       addressChoosingContainer,
@@ -86,6 +87,7 @@
       checkoutCheck: {},
     };
 
+    sendMethodRadio = $('input[name="send_method_option"]');
     realOrLegalRadio = $('input[name="inp-is-real-or-legal"]');
 
     addressChoosingContainer = $('#__address_choice_container');
@@ -202,6 +204,49 @@
       }
     }
 
+    function checkPostPriceRemote(sendMethod, city, province) {
+      var form = new FormData();
+      form.append('send_method_option', sendMethod);
+      form.append('city', city);
+      form.append('province', province);
+
+      canSubmit = false;
+      shop.request(variables.url.cart.checkPostPrice, 'post', function () {
+        loadNPlaceCartInfo();
+        canSubmit = true;
+        createLoader = true;
+        shop.hideLoader(loaderId);
+      }, {
+        data: form,
+      }, false, function () {
+        createLoader = true;
+        shop.hideLoader(loaderId);
+      });
+    }
+
+    function determinePostPriceRemote(showLoader) {
+      var sendMethodRadio = $('input[name="send_method_option"]:checked');
+      var legalRadio = $('input[name="inp-is-real-or-legal"]:checked');
+      var city, province;
+
+      if (legalRadio.val() == RECEIVER_TYPE_LEGAL) {
+        city = $('select[name="inp-addr-company-city"]').find('option:selected').val();
+        province = $('select[name="inp-addr-company-province"]').find('option:selected').val();
+      } else {
+        city = $('select[name="inp-addr-city"]').find('option:selected').val();
+        province = $('select[name="inp-addr-province"]').find('option:selected').val();
+      }
+
+      if (showLoader !== false) {
+        if (createLoader) {
+          createLoader = false;
+          loaderId = shop.showLoader();
+        }
+      }
+
+      checkPostPriceRemote(sendMethodRadio.val(), city, province);
+    }
+
     // change item quantity event
     $('#__update_main_cart').on('click' + variables.namespace, function () {
       shopCartTable
@@ -240,7 +285,11 @@
       }
     });
 
-    realOrLegalRadio.change(function () {
+    sendMethodRadio.on('change' + variables.namespace, function () {
+      determinePostPriceRemote();
+    });
+
+    realOrLegalRadio.on('change' + variables.namespace, function () {
       // Get the selected radio button's ID
       var selectedTabId = $(this).attr('id');
       var checkedRadio = $('input[name="inp-is-real-or-legal"]:checked');
@@ -325,62 +374,12 @@
 
     // when city changed, calculate send price and update side info table
     userCity.on('change' + variables.namespace, function () {
-      var checked, checkedProvince;
-      checked = $(this).find('option:selected').val();
-      checkedProvince = $('select[name="inp-addr-province"]').find('option:selected').val();
-
-      if (shouldCalcSendPrice && checked && checked != -1 && checkedProvince && checkedProvince != -1) {
-        if (createLoader) {
-          createLoader = false;
-          loaderId = shop.showLoader();
-        }
-
-        var form = new FormData();
-        form.append('city', checked);
-        form.append('province', checkedProvince);
-        canSubmit = false;
-        shop.request(variables.url.cart.checkPostPrice, 'post', function () {
-          loadNPlaceCartInfo();
-          canSubmit = true;
-          createLoader = true;
-          shop.hideLoader(loaderId);
-        }, {
-          data: form,
-        }, false, function () {
-          createLoader = true;
-          shop.hideLoader(loaderId);
-        });
-      }
+      determinePostPriceRemote();
     });
 
     // when city changed in legal section, calculate send price and update side info table
     userCompanyCity.on('change' + variables.namespace, function () {
-      var checked, checkedProvince;
-      checked = $(this).find('option:selected').val();
-      checkedProvince = $('select[name="inp-addr-company-province"]').find('option:selected').val();
-
-      if (shouldCalcSendPrice && checked && checked != -1 && checkedProvince && checkedProvince != -1) {
-        if (createLoader) {
-          createLoader = false;
-          loaderId = shop.showLoader();
-        }
-
-        var form = new FormData();
-        form.append('city', checked);
-        form.append('province', checkedProvince);
-        canSubmit = false;
-        shop.request(variables.url.cart.checkPostPrice, 'post', function () {
-          loadNPlaceCartInfo();
-          canSubmit = true;
-          createLoader = true;
-          shop.hideLoader(loaderId);
-        }, {
-          data: form,
-        }, false, function () {
-          createLoader = true;
-          shop.hideLoader(loaderId);
-        });
-      }
+      determinePostPriceRemote();
     });
 
     inPersonDeliveryChk.mSwitch({
@@ -473,5 +472,7 @@
 
     loadNPlaceCartItemsNInfo();
     loadNPlaceCartInfo();
+
+    determinePostPriceRemote(false);
   });
 })(jQuery);

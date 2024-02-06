@@ -31,7 +31,7 @@ return [
          * Is it in maintenance mode or not
          * [accept: true|false]
          */
-        'is_on' => true,
+        'is_on' => false,
 
         /*
          * Which page to show on maintenance mode

@@ -128,117 +128,100 @@ class CheckoutController extends AbstractHomeController
         // it'll send a json response back to browser inside the middleware
         $this->middlewareResult();
 
-//        try {
-        /**
-         * @var Agent $agent
-         */
-        $agent = container()->get(Agent::class);
-        if (!$agent->isRobot()) {
-            //------------------------------------------------------------------
-            // check gateway code and get information about it
-            //------------------------------------------------------------------
-            $gatewayCode = input()->post('payment_method_option')->getValue();
-            $gatewayMethod = PaymentUtil::validateAndGetPaymentMethod($gatewayCode);
-            if (is_null($gatewayMethod)) {
-                $resourceHandler
-                    ->type(RESPONSE_TYPE_ERROR)
-                    ->errorMessage('روش پرداخت انتخاب شده نامعتبر است.');
-                response()->json($resourceHandler->getReturnData());
-            }
-            // store to flash session to retrieve in form store
-            session()->setFlash(SESSION_GATEWAY_RECORD, $gatewayMethod);
-
-            //------------------------------------------------------------------
-            // check send method and get information about it
-            //------------------------------------------------------------------
-            $sendMethodCode = input()->post('send_method_option')->getValue();
-            if (null == $sendMethodCode) {
-                $resourceHandler
-                    ->type(RESPONSE_TYPE_ERROR)
-                    ->errorMessage('روش ارسال انتخاب شده نامعتبر است.');
-                response()->json($resourceHandler->getReturnData());
-            }
+        try {
             /**
-             * @var SendMethodModel $sendMethodModel
+             * @var Agent $agent
              */
-            $sendMethodModel = container()->get(SendMethodModel::class);
-
-            $sendMethod = $sendMethodModel->getFirst([
-                'id',
-                'code',
-                'title',
-                '`desc`',
-            ], 'code=:code AND publish=:pub', [
-                'code' => $sendMethodCode,
-                'pub' => DB_YES,
-            ]);
-            if (!count($sendMethod)) {
-                $resourceHandler
-                    ->type(RESPONSE_TYPE_ERROR)
-                    ->errorMessage('روش ارسال انتخاب شده نامعتبر است.');
-                response()->json($resourceHandler->getReturnData());
-            }
-            // store to flash session to retrieve in form store
-            session()->setFlash(SESSION_SEND_METHOD_RECORD, $sendMethod);
-
-            //------------------------------------------------------------------
-
-            // issue a factor for order
-            $formHandler = new GeneralAjaxFormHandler();
-            $resourceHandler = $formHandler
-                ->handle(CheckoutForm::class);
-
-            // return needed response for gateway redirection if everything is ok
-            if ($resourceHandler->getReturnData()['type'] == RESPONSE_TYPE_SUCCESS) {
-                $connOptions = PaymentUtil::getGatewayConnectionOptions($gatewayMethod);
-
-                if (is_array($connOptions)) {
-                    $url = $connOptions['url'];
-                    $inputs = $connOptions['inputs'];
-                    $redirect = $connOptions['redirect'];
-                    $isMultipart = $connOptions['isMultipart'];
-
-                    // remove all cart items
-                    cart()->destroy();
-                    // remove order array that stored before to prevent any error due to traces
-                    session()->remove(SESSION_ORDER_ARR_INFO);
-                    // remove other traces
-                    session()->remove(SESSION_APPLIED_COUPON_CODE);
-                    session()->remove(SESSION_APPLIED_POST_PRICE);
-                    session()->remove(SESSION_APPLIED_IN_PlACE_DELIVERY);
-
-                    $resourceHandler
-                        ->type(RESPONSE_TYPE_SUCCESS)
-                        ->data([
-                            'redirect' => $redirect,
-                            'url' => $url,
-                            'inputs' => $inputs,
-                            'multipart_form' => $isMultipart,
-                        ]);
-                } else {
-                    $msg = 'خطا در ارتباط با درگاه بانک، لطفا دوباره تلاش کنید.';
-                    if (is_string($connOptions) && !empty($connOptions)) {
-                        $msg = $connOptions;
-                    }
-
-                    $this->removeIssuedFactor();
+            $agent = container()->get(Agent::class);
+            if (!$agent->isRobot()) {
+                //------------------------------------------------------------------
+                // check gateway code and get information about it
+                //------------------------------------------------------------------
+                $gatewayCode = input()->post('payment_method_option')->getValue();
+                $gatewayMethod = PaymentUtil::validateAndGetPaymentMethod($gatewayCode);
+                if (is_null($gatewayMethod)) {
                     $resourceHandler
                         ->type(RESPONSE_TYPE_ERROR)
-                        ->errorMessage($msg);
+                        ->errorMessage('روش پرداخت انتخاب شده نامعتبر است.');
+                    response()->json($resourceHandler->getReturnData());
                 }
+                // store to flash session to retrieve in form store
+                session()->setFlash(SESSION_GATEWAY_RECORD, $gatewayMethod);
+
+                //------------------------------------------------------------------
+                // check send method and get information about it
+                //------------------------------------------------------------------
+                $sendMethodCode = input()->post('send_method_option')->getValue();
+                $sendMethod = PaymentUtil::validateAndGetSendMethod($sendMethodCode);
+                if (is_null($sendMethodCode)) {
+                    $resourceHandler
+                        ->type(RESPONSE_TYPE_ERROR)
+                        ->errorMessage('روش ارسال انتخاب شده نامعتبر است.');
+                    response()->json($resourceHandler->getReturnData());
+                }
+                // store to flash session to retrieve in form store
+                session()->setFlash(SESSION_SEND_METHOD_RECORD, $sendMethod);
+
+                //------------------------------------------------------------------
+
+                // issue a factor for order
+                $formHandler = new GeneralAjaxFormHandler();
+                $resourceHandler = $formHandler
+                    ->handle(CheckoutForm::class);
+
+                // return needed response for gateway redirection if everything is ok
+                if ($resourceHandler->getReturnData()['type'] == RESPONSE_TYPE_SUCCESS) {
+                    $connOptions = PaymentUtil::getGatewayConnectionOptions($gatewayMethod);
+
+                    if (is_array($connOptions)) {
+                        $url = $connOptions['url'];
+                        $inputs = $connOptions['inputs'];
+                        $redirect = $connOptions['redirect'];
+                        $isMultipart = $connOptions['isMultipart'];
+
+                        // remove all cart items
+                        cart()->destroy();
+                        // remove generated unique code to prevent error on repay
+                        session()->remove(SESSION_REPAY_GATEWAY_UNIQUE_CODE);
+                        // remove order array that stored before to prevent any error due to traces
+                        session()->remove(SESSION_ORDER_ARR_INFO);
+                        // remove other traces
+                        session()->remove(SESSION_APPLIED_COUPON_CODE);
+                        session()->remove(SESSION_APPLIED_POST_PRICE);
+                        session()->remove(SESSION_APPLIED_IN_PlACE_DELIVERY);
+
+                        $resourceHandler
+                            ->type(RESPONSE_TYPE_SUCCESS)
+                            ->data([
+                                'redirect' => $redirect,
+                                'url' => $url,
+                                'inputs' => $inputs,
+                                'multipart_form' => $isMultipart,
+                            ]);
+                    } else {
+                        $msg = 'خطا در ارتباط با درگاه بانک، لطفا دوباره تلاش کنید.';
+                        if (is_string($connOptions) && !empty($connOptions)) {
+                            $msg = $connOptions;
+                        }
+
+                        $this->removeIssuedFactor();
+                        $resourceHandler
+                            ->type(RESPONSE_TYPE_ERROR)
+                            ->errorMessage($msg);
+                    }
+                }
+            } else {
+                response()->httpCode(403);
+                $resourceHandler
+                    ->type(RESPONSE_TYPE_ERROR)
+                    ->errorMessage('خطا در ارتباط با سرور، لطفا دوباره تلاش کنید.');
             }
-        } else {
-            response()->httpCode(403);
+        } catch (Exception $e) {
+            LogUtil::logException($e, __LINE__, self::class);
             $resourceHandler
                 ->type(RESPONSE_TYPE_ERROR)
                 ->errorMessage('خطا در ارتباط با سرور، لطفا دوباره تلاش کنید.');
         }
-//        } catch (Exception $e) {
-//            LogUtil::logException($e, __LINE__, self::class);
-//            $resourceHandler
-//                ->type(RESPONSE_TYPE_ERROR)
-//                ->errorMessage('خطا در ارتباط با سرور، لطفا دوباره تلاش کنید.');
-//        }
 
         response()->json($resourceHandler->getReturnData());
     }
@@ -269,24 +252,43 @@ class CheckoutController extends AbstractHomeController
                  */
                 $provinceModel = container()->get(ProvinceModel::class);
 
+                $sendMethodCode = input()->post('send_method_option')->getValue();
+                $sendMethod = PaymentUtil::validateAndGetSendMethod($sendMethodCode);
+                if (is_null($sendMethodCode)) {
+                    $resourceHandler
+                        ->type(RESPONSE_TYPE_ERROR)
+                        ->errorMessage('روش ارسال انتخاب شده نامعتبر است.');
+                    response()->json($resourceHandler->getReturnData());
+                }
+
                 $cityId = input()->post('city')->getValue();
                 $provinceId = input()->post('province')->getValue();
                 $province = $provinceModel->getFirst(['post_price_order'], 'id=:id', ['id' => $provinceId]);
                 $ownProvince = $provinceModel->getFirst(['post_price_order'], 'id=:id', ['id' => config()->get('settings.store_province.value')]);
 
-                if (0 != count($province) && 0 != count($ownProvince)) {
-                    // calculate weights
-                    $items = cart()->getItems();
-                    $totalPrice = 0.0;
-                    $weight = 0.0;
-                    foreach ($items as $item) {
-                        $weight += (float)$item['weight'];
-                        $totalPrice += $item['qnt'] * (float)get_discount_price($item)[0];
-                    }
+                $canContinue = false;
 
-                    if ($totalPrice > (config()->get('settings.min_free_price.value') ?: PHP_INT_MAX)) {
-                        $price = 0;
-                    } elseif (
+                // calculate weights
+                $items = cart()->getItems();
+                $totalPrice = 0.0;
+                $weight = 0.0;
+                foreach ($items as $item) {
+                    $weight += (float)$item['weight'];
+                    $totalPrice += $item['qnt'] * (float)get_discount_price($item)[0];
+                }
+
+                if ($totalPrice > (config()->get('settings.min_free_price.value') ?: PHP_INT_MAX)) {
+                    $price = 0;
+                }
+
+                if (!empty($sendMethod) && $sendMethod['determine_price_by_location'] == DB_NO) {
+                    $canContinue = true;
+
+                    $price = (float)$sendMethod['price'];
+                } else if (0 != count($province) && 0 != count($ownProvince)) {
+                    $canContinue = true;
+
+                    if (
                         (config()->get('settings.store_city.value') ?: -1) == $cityId &&
                         (config()->get('settings.store_province.value') ?: -1) == $provinceId
                     ) {
@@ -305,7 +307,9 @@ class CheckoutController extends AbstractHomeController
                             $price = $postUtil->post();
                         }
                     }
+                }
 
+                if ($canContinue) {
                     // consider separate consignment of each item for shipping price
                     $shippingTimes = 1;
                     foreach (cart()->getItems() as $item) {
@@ -316,15 +320,15 @@ class CheckoutController extends AbstractHomeController
                     //
 
                     session()->set(SESSION_APPLIED_POST_PRICE, (float)$price * (float)$shippingTimes);
-
                     session()->remove(SESSION_APPLIED_IN_PlACE_DELIVERY);
+
                     $resourceHandler
                         ->type(RESPONSE_TYPE_SUCCESS)
                         ->data('هزینه ارسال اعمال شد.');
                 } else {
                     $resourceHandler
                         ->type(RESPONSE_TYPE_ERROR)
-                        ->errorMessage('استان وارد شده نامعتبر است.');
+                        ->errorMessage('استان وارد شده/روش ارسال انتخاب شده نامعتبر است.');
                 }
             } else {
                 response()->httpCode(403);
@@ -332,7 +336,8 @@ class CheckoutController extends AbstractHomeController
                     ->type(RESPONSE_TYPE_ERROR)
                     ->errorMessage('خطا در ارتباط با سرور، لطفا دوباره تلاش کنید.');
             }
-        } catch (Exception $e) {
+        } catch
+        (Exception $e) {
             LogUtil::logException($e, __LINE__, self::class);
             $resourceHandler
                 ->type(RESPONSE_TYPE_ERROR)

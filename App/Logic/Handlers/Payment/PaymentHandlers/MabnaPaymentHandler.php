@@ -37,7 +37,7 @@ class MabnaPaymentHandler extends AbstractPaymentHandler
         $provider
             ->setCallbackUrl($input->getCallbackUrl())
             ->setAmount(($input->getPrice() * 10))
-            ->setInvoiceId($input->getOrderCode());
+            ->setInvoiceId($input->getUniqueCode());
         // events
         $gateway->createRequestOkClosure(
             function (

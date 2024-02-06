@@ -319,7 +319,7 @@ $validator = form_validator();
                                                     <div class="col-sm-6">
                                                         <label>تخفیف از تاریخ:</label>
                                                         <?php
-                                                        $sds = date('Y/m/d H:i', $validator->setInput('inp-edit-product-discount-date=from.' . $counter, time()));
+                                                        $sdf = date('Y/m/d H:i', $validator->setInput('inp-edit-product-discount-date-from.' . $counter, time()));
                                                         ?>
                                                         <input type="hidden"
                                                                name="inp-edit-product-discount-date-from[]"

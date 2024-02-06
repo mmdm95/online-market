@@ -40,7 +40,7 @@ class IranKishPaymentHandler extends AbstractPaymentHandler
         $provider
             ->setRevertUrl($input->getCallbackUrl())
             ->setAmount(($input->getPrice() * 10))
-            ->setRequestId($input->getOrderCode());
+            ->setRequestId($input->getUniqueCode());
         // events
         $gateway->createRequestOkClosure(
             function (

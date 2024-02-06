@@ -11,10 +11,6 @@ use App\Logic\Utils\LogUtil;
 use Sim\Auth\DBAuth;
 use Sim\Auth\Interfaces\IAuth;
 use Sim\Auth\Interfaces\IDBException;
-use Sim\Container\Exceptions\MethodNotFoundException;
-use Sim\Container\Exceptions\ParameterHasNoDefaultValueException;
-use Sim\Container\Exceptions\ServiceNotFoundException;
-use Sim\Container\Exceptions\ServiceNotInstantiableException;
 use Sim\Exceptions\ConfigManager\ConfigNotRegisteredException;
 use Sim\Exceptions\Mvc\Controller\ControllerException;
 use Sim\Exceptions\PathManager\PathNotRegisteredException;
@@ -168,10 +164,6 @@ class FileController extends AbstractAdminController
      * Delete a file or directory
      *
      * @throws IDBException
-     * @throws MethodNotFoundException
-     * @throws ParameterHasNoDefaultValueException
-     * @throws ServiceNotFoundException
-     * @throws ServiceNotInstantiableException
      * @throws \DI\DependencyException
      * @throws \DI\NotFoundException
      * @throws \ReflectionException
@@ -214,10 +206,6 @@ class FileController extends AbstractAdminController
      * Delete a file or directory
      *
      * @throws IDBException
-     * @throws MethodNotFoundException
-     * @throws ParameterHasNoDefaultValueException
-     * @throws ServiceNotFoundException
-     * @throws ServiceNotInstantiableException
      * @throws \DI\DependencyException
      * @throws \DI\NotFoundException
      * @throws \ReflectionException
@@ -266,10 +254,6 @@ class FileController extends AbstractAdminController
 
     /**
      * @throws IDBException
-     * @throws MethodNotFoundException
-     * @throws ParameterHasNoDefaultValueException
-     * @throws ServiceNotFoundException
-     * @throws ServiceNotInstantiableException
      * @throws \DI\DependencyException
      * @throws \DI\NotFoundException
      * @throws \ReflectionException
@@ -350,10 +334,6 @@ class FileController extends AbstractAdminController
      * Create a directory
      *
      * @throws IDBException
-     * @throws MethodNotFoundException
-     * @throws ParameterHasNoDefaultValueException
-     * @throws ServiceNotFoundException
-     * @throws ServiceNotInstantiableException
      * @throws \DI\DependencyException
      * @throws \DI\NotFoundException
      * @throws \ReflectionException
@@ -405,10 +385,6 @@ class FileController extends AbstractAdminController
      * Move items to another directory
      *
      * @throws IDBException
-     * @throws MethodNotFoundException
-     * @throws ParameterHasNoDefaultValueException
-     * @throws ServiceNotFoundException
-     * @throws ServiceNotInstantiableException
      * @throws \DI\DependencyException
      * @throws \DI\NotFoundException
      * @throws \ReflectionException
@@ -460,10 +436,6 @@ class FileController extends AbstractAdminController
 
     /**
      * @throws IDBException
-     * @throws MethodNotFoundException
-     * @throws ParameterHasNoDefaultValueException
-     * @throws ServiceNotFoundException
-     * @throws ServiceNotInstantiableException
      * @throws \DI\DependencyException
      * @throws \DI\NotFoundException
      * @throws \ReflectionException
@@ -495,8 +467,16 @@ class FileController extends AbstractAdminController
             }
 
             $xss = container()->get(AntiXSS::class);
-            $filename = $xss->xss_clean(str_replace(' ', '-', input()->file('file_data')->getFilename()));
+            $filename = str_replace(' ', '-', input()->file('file_data')->getFilename());
             $filename = str_replace('@', '', $filename);
+            $filename = strtolower(
+                str_replace(
+                    ['?', ' ', '_', '$', '<', '>', '&', '{', '}', '*', '\\', '/', ':', ';', ',', "'", '"'],
+                    '-',
+                    $filename
+                )
+            );
+            $filename = $xss->xss_clean($filename);
 
             $filename = StringUtil::toPersian($filename);
             $filename = StringUtil::toEnglish($filename);
@@ -521,10 +501,6 @@ class FileController extends AbstractAdminController
     /**
      * @param $file
      * @throws IDBException
-     * @throws MethodNotFoundException
-     * @throws ParameterHasNoDefaultValueException
-     * @throws ServiceNotFoundException
-     * @throws ServiceNotInstantiableException
      * @throws \DI\DependencyException
      * @throws \DI\NotFoundException
      * @throws \ReflectionException
@@ -627,10 +603,6 @@ class FileController extends AbstractAdminController
      * @param $file
      * @param $newDir
      * @return bool
-     * @throws MethodNotFoundException
-     * @throws ParameterHasNoDefaultValueException
-     * @throws ServiceNotFoundException
-     * @throws ServiceNotInstantiableException
      * @throws \ReflectionException
      */
     private function moveSingleFile($file, $newDir)
@@ -674,7 +646,7 @@ class FileController extends AbstractAdminController
      */
     private function getFileFromRequest(bool $is_array = false)
     {
-        // Disable error report for undefined superglobals
+        // Disable error report for undefined super globals
         error_reporting(error_reporting() & ~E_NOTICE);
         // must be in UTF-8 or `basename` doesn't work
         setlocale(LC_ALL, 'en_US.UTF-8');
@@ -774,10 +746,6 @@ class FileController extends AbstractAdminController
 
     /**
      * @param $filename
-     * @throws MethodNotFoundException
-     * @throws ParameterHasNoDefaultValueException
-     * @throws ServiceNotFoundException
-     * @throws ServiceNotInstantiableException
      * @throws \ReflectionException
      */
     private function checkAccess($filename)

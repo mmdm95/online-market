@@ -10,34 +10,6 @@ $validator = form_validator();
     <!-- START SECTION SHOP -->
     <div class="section">
         <div class="custom-container container">
-            <div class="row justify-content-center">
-                <div class="col-lg-8">
-                    <div class="coupon_form" id="coupon">
-                        <div class="panel-body">
-                            <p>اگر کد کوپن دارید ، لطفاً آن را در اینجا وارد کنید.</p>
-                            <div class="coupon field_form input-group">
-                                <input type="text" value=""
-                                       class="form-control __coupon_field_inp"
-                                       placeholder="کد کوپن را وارد کنید...">
-                                <div class="input-group-append">
-                                    <button class="btn btn-fill-out btn-sm __apply_coupon" type="button">
-                                        اعمال کوپن
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-12">
-                    <div class="medium_divider"></div>
-                    <div class="divider center_icon"><i class="linearicons-credit-card"></i></div>
-                    <div class="medium_divider"></div>
-                </div>
-            </div>
-
             <form action="#"
                   method="post" id="__checkout_payment_gateway">
                 <div class="row" id="__theia_sticky_sidebar_container">
@@ -45,272 +17,299 @@ $validator = form_validator();
                         <div class="heading_s1">
                             <h4>جزئیات صورتحساب</h4>
                         </div>
-                        <form method="post">
-                            <div class="form-group">
-                                <label>
-                                    <span class="text-danger" aria-hidden="true">*</span>
-                                    نام:
-                                </label>
-                                <?php
-                                $ufn = trim($user['first_name']);
-                                ?>
-                                <input type="text" class="form-control" name="fname"
-                                       placeholder="حروف فارسی"
-                                    <?= $ufn ? 'disabled="disabled"' : '' ?>
-                                       value="<?= $ufn ?: $validator->setInput('fname'); ?>">
-                            </div>
-                            <div class="form-group">
-                                <label>
-                                    <span class="text-danger" aria-hidden="true">*</span>
-                                    نام خانوادگی:
-                                </label>
-                                <?php
-                                $uln = trim($user['last_name']);
-                                ?>
-                                <input type="text" class="form-control" name="lname"
-                                       placeholder="حروف فارسی"
-                                    <?= $uln ? 'disabled="disabled"' : '' ?>
-                                       value="<?= $uln ?: $validator->setInput('lname'); ?>">
-                            </div>
 
-                            <?php if (empty($user['national_number'])): ?>
+                        <div class="form-group">
+                            <label>
+                                <span class="text-danger" aria-hidden="true">*</span>
+                                نام:
+                            </label>
+                            <?php
+                            $ufn = trim($user['first_name']);
+                            ?>
+                            <input type="text" class="form-control" name="fname"
+                                   placeholder="حروف فارسی"
+                                <?= $ufn ? 'disabled="disabled"' : '' ?>
+                                   value="<?= $ufn ?: $validator->setInput('fname'); ?>">
+                        </div>
+                        <div class="form-group">
+                            <label>
+                                <span class="text-danger" aria-hidden="true">*</span>
+                                نام خانوادگی:
+                            </label>
+                            <?php
+                            $uln = trim($user['last_name']);
+                            ?>
+                            <input type="text" class="form-control" name="lname"
+                                   placeholder="حروف فارسی"
+                                <?= $uln ? 'disabled="disabled"' : '' ?>
+                                   value="<?= $uln ?: $validator->setInput('lname'); ?>">
+                        </div>
+
+                        <?php if (empty($user['national_number'])): ?>
+                            <div class="form-group">
+                                <label>
+                                    <span class="text-danger" aria-hidden="true">*</span>
+                                    کد ملی:
+                                </label>
+                                <input type="text" class="form-control" name="natnum"
+                                       placeholder="از نوع عددی"
+                                       value="<?= $user['national_number'] ?: $validator->setInput('natnum'); ?>">
+                            </div>
+                        <?php endif; ?>
+
+                        <div class="medium_divider"></div>
+
+                        <div class="heading_s1">
+                            <h4>خرید به عنوان</h4>
+                        </div>
+
+                        <!-- Radio Buttons -->
+                        <div class="pb-4 mb-4 border-bottom">
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input d-none"
+                                       type="radio" name="inp-is-real-or-legal"
+                                       value="<?= RECEIVER_TYPE_REAL; ?>"
+                                    <?= $validator->setRadio('inp-addr-full-name', RECEIVER_TYPE_REAL, true); ?>
+                                       id="realOrLegalTab1">
+                                <label
+                                        class="form-check-label active-real-or-legal-radio"
+                                        style="cursor: pointer;"
+                                        for="realOrLegalTab1"
+                                >
+                                    شخص حقیقی
+                                </label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input d-none"
+                                       type="radio" name="inp-is-real-or-legal"
+                                       value="<?= RECEIVER_TYPE_LEGAL; ?>"
+                                    <?= $validator->setRadio('inp-addr-full-name', RECEIVER_TYPE_LEGAL, false); ?>
+                                       id="realOrLegalTab2">
+                                <label
+                                        class="form-check-label"
+                                        style="cursor: pointer;"
+                                        for="realOrLegalTab2"
+                                >
+                                    شخص حقوقی
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Tab Content -->
+                        <div class="tab-content mt-3" id="realOrLegalTabContent">
+                            <div class="tab-pane fade show active" id="realOrLegalContent1">
+                                <div class="form-group text-right">
+                                    <button type="button" class="btn btn-fill-line"
+                                            id="__user_addr_choose_btn"
+                                            data-toggle="modal" data-target="#__user_addr_choose_modal">
+                                        انتخاب آدرس
+                                    </button>
+                                </div>
                                 <div class="form-group">
                                     <label>
                                         <span class="text-danger" aria-hidden="true">*</span>
-                                        کد ملی:
+                                        نام گیرنده:
                                     </label>
-                                    <input type="text" class="form-control" name="natnum"
-                                           placeholder="از نوع عددی"
-                                           value="<?= $user['national_number'] ?: $validator->setInput('natnum'); ?>">
+                                    <input class="form-control" type="text"
+                                           placeholder="حروف فارسی" name="inp-addr-full-name"
+                                           value="<?= $validator->setInput('inp-addr-full-name') ?: trim("{$user['first_name']} {$user['last_name']}"); ?>">
                                 </div>
-                            <?php endif; ?>
-
-                            <div class="medium_divider"></div>
-
-                            <div class="heading_s1">
-                                <h4>خرید به عنوان</h4>
+                                <div class="form-group">
+                                    <label>
+                                        <span class="text-danger" aria-hidden="true">*</span>
+                                        موبایل گیرنده:
+                                    </label>
+                                    <input class="form-control" type="text"
+                                           placeholder="یازده رقم" name="inp-addr-mobile"
+                                           value="<?= $validator->setInput('inp-addr-mobile') ?: $user['username']; ?>">
+                                </div>
+                                <div class="form-group">
+                                    <label>
+                                        <span class="text-danger" aria-hidden="true">*</span>
+                                        استان:
+                                    </label>
+                                    <select name="inp-addr-province"
+                                            class="selectric_dropdown city-loader-select"
+                                            data-current-province="<?= $validator->setInput('inp-addr-province'); ?>"
+                                            data-city-select-target="#addAddressCitySelect">
+                                        <option value="<?= DEFAULT_OPTION_VALUE ?>"
+                                                selected="selected">
+                                            انتخاب کنید
+                                        </option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>
+                                        <span class="text-danger" aria-hidden="true">*</span>
+                                        شهر:
+                                    </label>
+                                    <select name="inp-addr-city"
+                                            class="selectric_dropdown"
+                                            data-current-city="<?= $validator->setInput('inp-addr-city'); ?>"
+                                            id="addAddressCitySelect">
+                                        <option value="<?= DEFAULT_OPTION_VALUE ?>"
+                                                selected="selected">
+                                            انتخاب کنید
+                                        </option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>
+                                        <span class="text-danger" aria-hidden="true">*</span>
+                                        کد پستی:
+                                    </label>
+                                    <input class="form-control" type="text"
+                                           placeholder="از نوع عددی" name="inp-addr-postal-code"
+                                           value="<?= $validator->setInput('inp-addr-postal-code'); ?>">
+                                </div>
+                                <div class="form-group">
+                                    <label>
+                                        <span class="text-danger" aria-hidden="true">*</span>
+                                        آدرس:
+                                    </label>
+                                    <textarea
+                                            type="text"
+                                            class="form-control form-control-min-height"
+                                            name="inp-addr-address"
+                                            placeholder=""
+                                    ><?= $validator->setInput('inp-addr-address'); ?></textarea>
+                                </div>
                             </div>
 
-                            <!-- Radio Buttons -->
-                            <div class="pb-4 mb-4 border-bottom">
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input d-none"
-                                           type="radio" name="inp-is-real-or-legal"
-                                           value="<?= RECEIVER_TYPE_REAL; ?>"
-                                        <?= $validator->setRadio('inp-addr-full-name', RECEIVER_TYPE_REAL, true); ?>
-                                           id="realOrLegalTab1">
-                                    <label
-                                            class="form-check-label active-real-or-legal-radio"
-                                            style="cursor: pointer;"
-                                            for="realOrLegalTab1"
-                                    >
-                                        شخص حقیقی
-                                    </label>
+                            <div class="tab-pane fade" id="realOrLegalContent2">
+                                <div class="form-group text-right">
+                                    <button type="button" class="btn btn-fill-line"
+                                            id="__user_addr_company_choose_btn"
+                                            data-toggle="modal" data-target="#__user_addr_company_choose_modal">
+                                        انتخاب آدرس
+                                    </button>
                                 </div>
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input d-none"
-                                           type="radio" name="inp-is-real-or-legal"
-                                           value="<?= RECEIVER_TYPE_LEGAL; ?>"
-                                        <?= $validator->setRadio('inp-addr-full-name', RECEIVER_TYPE_LEGAL, false); ?>
-                                           id="realOrLegalTab2">
-                                    <label
-                                            class="form-check-label"
-                                            style="cursor: pointer;"
-                                            for="realOrLegalTab2"
-                                    >
-                                        شخص حقوقی
+                                <div class="form-group">
+                                    <label>
+                                        <span class="text-danger" aria-hidden="true">*</span>
+                                        نام شرکت:
                                     </label>
+                                    <input class="form-control" type="text"
+                                           placeholder="حروف فارسی" name="inp-addr-company-name"
+                                           value="<?= $validator->setInput('inp-addr-company-name'); ?>">
+                                </div>
+                                <div class="form-group">
+                                    <label>
+                                        <span class="text-danger" aria-hidden="true">*</span>
+                                        کد اقتصادی:
+                                    </label>
+                                    <input class="form-control" type="text"
+                                           placeholder="وارد نمایید" name="inp-addr-company-eco-code"
+                                           value="<?= $validator->setInput('inp-addr-company-eco-code'); ?>">
+                                </div>
+                                <div class="form-group">
+                                    <label>
+                                        <span class="text-danger" aria-hidden="true">*</span>
+                                        شناسه ملی:
+                                    </label>
+                                    <input class="form-control" type="text"
+                                           placeholder="وارد نمایید" name="inp-addr-company-eco-nid"
+                                           value="<?= $validator->setInput('inp-addr-company-eco-nid'); ?>">
+                                </div>
+                                <div class="form-group">
+                                    <label>
+                                        <span class="text-danger" aria-hidden="true">*</span>
+                                        شماره ثبت:
+                                    </label>
+                                    <input class="form-control" type="text"
+                                           placeholder="وارد نمایید" name="inp-addr-company-reg-num"
+                                           value="<?= $validator->setInput('inp-addr-company-reg-num'); ?>">
+                                </div>
+                                <div class="form-group">
+                                    <label>
+                                        <span class="text-danger" aria-hidden="true">*</span>
+                                        تلفن ثابت:
+                                    </label>
+                                    <input class="form-control" type="text"
+                                           placeholder="یازده رقم" name="inp-addr-tel"
+                                           value="<?= $validator->setInput('inp-addr-tel'); ?>">
+                                </div>
+                                <div class="form-group">
+                                    <label>
+                                        <span class="text-danger" aria-hidden="true">*</span>
+                                        استان:
+                                    </label>
+                                    <select name="inp-addr-company-province"
+                                            class="selectric_dropdown city-loader-select"
+                                            data-current-province="<?= $validator->setInput('inp-addr-company-province'); ?>"
+                                            data-city-select-target="#addAddressCompanyCitySelect">
+                                        <option value="<?= DEFAULT_OPTION_VALUE ?>"
+                                                selected="selected">
+                                            انتخاب کنید
+                                        </option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>
+                                        <span class="text-danger" aria-hidden="true">*</span>
+                                        شهر:
+                                    </label>
+                                    <select name="inp-addr-company-city"
+                                            class="selectric_dropdown"
+                                            data-current-city="<?= $validator->setInput('inp-addr-company-city'); ?>"
+                                            id="addAddressCompanyCitySelect">
+                                        <option value="<?= DEFAULT_OPTION_VALUE ?>"
+                                                selected="selected">
+                                            انتخاب کنید
+                                        </option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>
+                                        <span class="text-danger" aria-hidden="true">*</span>
+                                        کد پستی:
+                                    </label>
+                                    <input class="form-control" type="text"
+                                           placeholder="از نوع عددی" name="inp-addr-company-postal-code"
+                                           value="<?= $validator->setInput('inp-addr-company-postal-code'); ?>">
+                                </div>
+                                <div class="form-group">
+                                    <label>
+                                        <span class="text-danger" aria-hidden="true">*</span>
+                                        آدرس:
+                                    </label>
+                                    <textarea
+                                            type="text"
+                                            class="form-control form-control-min-height"
+                                            name="inp-addr-company-address"
+                                            placeholder=""
+                                    ><?= $validator->setInput('inp-addr-company-address'); ?></textarea>
                                 </div>
                             </div>
+                        </div>
 
-                            <!-- Tab Content -->
-                            <div class="tab-content mt-3" id="realOrLegalTabContent">
-                                <div class="tab-pane fade show active" id="realOrLegalContent1">
-                                    <div class="form-group">
-                                        <button type="button" class="btn btn-fill-line btn-block"
-                                                id="__user_addr_choose_btn"
-                                                data-toggle="modal" data-target="#__user_addr_choose_modal">
-                                            انتخاب آدرس
-                                        </button>
-                                    </div>
-                                    <div class="form-group">
-                                        <label>
-                                            <span class="text-danger" aria-hidden="true">*</span>
-                                            نام گیرنده:
-                                        </label>
-                                        <input class="form-control" type="text"
-                                               placeholder="حروف فارسی" name="inp-addr-full-name"
-                                               value="<?= $validator->setInput('inp-addr-full-name') ?: trim("{$user['first_name']} {$user['last_name']}"); ?>">
-                                    </div>
-                                    <div class="form-group">
-                                        <label>
-                                            <span class="text-danger" aria-hidden="true">*</span>
-                                            موبایل گیرنده:
-                                        </label>
-                                        <input class="form-control" type="text"
-                                               placeholder="یازده رقم" name="inp-addr-mobile"
-                                               value="<?= $validator->setInput('inp-addr-mobile') ?: $user['username']; ?>">
-                                    </div>
-                                    <div class="form-group">
-                                        <label>
-                                            <span class="text-danger" aria-hidden="true">*</span>
-                                            استان:
-                                        </label>
-                                        <select name="inp-addr-province"
-                                                class="selectric_dropdown city-loader-select"
-                                                data-current-province="<?= $validator->setInput('inp-addr-province'); ?>"
-                                                data-city-select-target="#addAddressCitySelect">
-                                            <option value="<?= DEFAULT_OPTION_VALUE ?>"
-                                                    selected="selected">
-                                                انتخاب کنید
-                                            </option>
-                                        </select>
-                                    </div>
-                                    <div class="form-group">
-                                        <label>
-                                            <span class="text-danger" aria-hidden="true">*</span>
-                                            شهر:
-                                        </label>
-                                        <select name="inp-addr-city"
-                                                class="selectric_dropdown"
-                                                data-current-city="<?= $validator->setInput('inp-addr-city'); ?>"
-                                                id="addAddressCitySelect">
-                                            <option value="<?= DEFAULT_OPTION_VALUE ?>"
-                                                    selected="selected">
-                                                انتخاب کنید
-                                            </option>
-                                        </select>
-                                    </div>
-                                    <div class="form-group">
-                                        <label>
-                                            <span class="text-danger" aria-hidden="true">*</span>
-                                            کد پستی:
-                                        </label>
-                                        <input class="form-control" type="text"
-                                               placeholder="از نوع عددی" name="inp-addr-postal-code"
-                                               value="<?= $validator->setInput('inp-addr-postal-code'); ?>">
-                                    </div>
-                                    <div class="form-group">
-                                        <label>
-                                            <span class="text-danger" aria-hidden="true">*</span>
-                                            آدرس:
-                                        </label>
-                                        <textarea
-                                                type="text"
-                                                class="form-control form-control-min-height"
-                                                name="inp-addr-address"
-                                                placeholder=""
-                                        ><?= $validator->setInput('inp-addr-address'); ?></textarea>
-                                    </div>
-                                </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="medium_divider"></div>
+                                <div class="divider center_icon"><i class="linearicons-credit-card"></i></div>
+                                <div class="medium_divider"></div>
+                            </div>
+                        </div>
 
-                                <div class="tab-pane fade" id="realOrLegalContent2">
-                                    <div class="form-group">
-                                        <button type="button" class="btn btn-fill-line btn-block"
-                                                id="__user_addr_company_choose_btn"
-                                                data-toggle="modal" data-target="#__user_addr_company_choose_modal">
-                                            انتخاب آدرس
-                                        </button>
-                                    </div>
-                                    <div class="form-group">
-                                        <label>
-                                            <span class="text-danger" aria-hidden="true">*</span>
-                                            نام شرکت:
-                                        </label>
-                                        <input class="form-control" type="text"
-                                               placeholder="حروف فارسی" name="inp-addr-company-name"
-                                               value="<?= $validator->setInput('inp-addr-company-name'); ?>">
-                                    </div>
-                                    <div class="form-group">
-                                        <label>
-                                            <span class="text-danger" aria-hidden="true">*</span>
-                                            کد اقتصادی:
-                                        </label>
-                                        <input class="form-control" type="text"
-                                               placeholder="وارد نمایید" name="inp-addr-company-eco-code"
-                                               value="<?= $validator->setInput('inp-addr-company-eco-code'); ?>">
-                                    </div>
-                                    <div class="form-group">
-                                        <label>
-                                            <span class="text-danger" aria-hidden="true">*</span>
-                                            شناسه ملی:
-                                        </label>
-                                        <input class="form-control" type="text"
-                                               placeholder="وارد نمایید" name="inp-addr-company-eco-nid"
-                                               value="<?= $validator->setInput('inp-addr-company-eco-nid'); ?>">
-                                    </div>
-                                    <div class="form-group">
-                                        <label>
-                                            <span class="text-danger" aria-hidden="true">*</span>
-                                            شماره ثبت:
-                                        </label>
-                                        <input class="form-control" type="text"
-                                               placeholder="وارد نمایید" name="inp-addr-company-reg-num"
-                                               value="<?= $validator->setInput('inp-addr-company-reg-num'); ?>">
-                                    </div>
-                                    <div class="form-group">
-                                        <label>
-                                            <span class="text-danger" aria-hidden="true">*</span>
-                                            تلفن ثابت:
-                                        </label>
-                                        <input class="form-control" type="text"
-                                               placeholder="یازده رقم" name="inp-addr-tel"
-                                               value="<?= $validator->setInput('inp-addr-tel'); ?>">
-                                    </div>
-                                    <div class="form-group">
-                                        <label>
-                                            <span class="text-danger" aria-hidden="true">*</span>
-                                            استان:
-                                        </label>
-                                        <select name="inp-addr-company-province"
-                                                class="selectric_dropdown city-loader-select"
-                                                data-current-province="<?= $validator->setInput('inp-addr-company-province'); ?>"
-                                                data-city-select-target="#addAddressCompanyCitySelect">
-                                            <option value="<?= DEFAULT_OPTION_VALUE ?>"
-                                                    selected="selected">
-                                                انتخاب کنید
-                                            </option>
-                                        </select>
-                                    </div>
-                                    <div class="form-group">
-                                        <label>
-                                            <span class="text-danger" aria-hidden="true">*</span>
-                                            شهر:
-                                        </label>
-                                        <select name="inp-addr-company-city"
-                                                class="selectric_dropdown"
-                                                data-current-city="<?= $validator->setInput('inp-addr-company-city'); ?>"
-                                                id="addAddressCompanyCitySelect">
-                                            <option value="<?= DEFAULT_OPTION_VALUE ?>"
-                                                    selected="selected">
-                                                انتخاب کنید
-                                            </option>
-                                        </select>
-                                    </div>
-                                    <div class="form-group">
-                                        <label>
-                                            <span class="text-danger" aria-hidden="true">*</span>
-                                            کد پستی:
-                                        </label>
-                                        <input class="form-control" type="text"
-                                               placeholder="از نوع عددی" name="inp-addr-company-postal-code"
-                                               value="<?= $validator->setInput('inp-addr-company-postal-code'); ?>">
-                                    </div>
-                                    <div class="form-group">
-                                        <label>
-                                            <span class="text-danger" aria-hidden="true">*</span>
-                                            آدرس:
-                                        </label>
-                                        <textarea
-                                                type="text"
-                                                class="form-control form-control-min-height"
-                                                name="inp-addr-company-address"
-                                                placeholder=""
-                                        ><?= $validator->setInput('inp-addr-company-address'); ?></textarea>
+                        <div class="row justify-content-center">
+                            <div class="col-lg-12">
+                                <div class="coupon_form" id="coupon">
+                                    <div class="panel-body">
+                                        <p>اگر کد کوپن دارید ، لطفاً آن را در اینجا وارد کنید.</p>
+                                        <div class="coupon field_form input-group">
+                                            <input type="text" value=""
+                                                   class="form-control __coupon_field_inp"
+                                                   placeholder="کد کوپن را وارد کنید...">
+                                            <div class="input-group-append">
+                                                <button class="btn btn-fill-out btn-sm __apply_coupon" type="button">
+                                                    اعمال کوپن
+                                                </button>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </form>
+                        </div>
                     </div>
                     <div class="col-md-6" id="__theia_sticky_sidebar">
                         <div class="mb-3 alert <?= is_value_checked($in_person_delivery) ? 'alert-info' : 'bg-light'; ?>">
@@ -335,7 +334,7 @@ $validator = form_validator();
                                 </div>
                             </div>
                             <?php load_partial('main/message/message-common', [
-                                'message' => 'لطفا کارت احراز هویت خود را هنگام تحویل همراه داشته باشید.',
+                                'message' => 'لطفا اسناد احراز هویت خود را هنگام تحویل کالا همراه داشته باشید.',
                                 'dismissible' => false,
                                 'class' => 'mt-3 mb-0 text-white bg-primary',
                             ]); ?>
@@ -347,6 +346,17 @@ $validator = form_validator();
                             </div>
                             <div class="shop-cart-info-table">
                             </div>
+
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="medium_divider"></div>
+                                    <div class="divider center_icon">
+                                        <i class="linearicons-circle" style="background-color: #f7f8fb;"></i>
+                                    </div>
+                                    <div class="medium_divider"></div>
+                                </div>
+                            </div>
+
                             <div class="payment_method">
                                 <div class="heading_s1">
                                     <h4>روش ارسال</h4>
@@ -375,6 +385,16 @@ $validator = form_validator();
                                     <?php else: ?>
                                         هیچ روش ارسالی وجود ندارد
                                     <?php endif; ?>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="medium_divider"></div>
+                                    <div class="divider center_icon">
+                                        <i class="linearicons-circle" style="background-color: #f7f8fb;"></i>
+                                    </div>
+                                    <div class="medium_divider"></div>
                                 </div>
                             </div>
 

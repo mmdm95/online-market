@@ -54,7 +54,7 @@ use Sim\Utils\StringUtil;
                                                            id="method<?= $k; ?>" value="<?= $method['code']; ?>">
                                                     <label class="form-check-label" for="method<?= $k; ?>">
                                                         <img src=""
-                                                             data-src="<?= url('image.show', ['filename' => $method['image']])->getRelativeUrl(); ?>"
+                                                             data-src="<?= $method['method_type'] == METHOD_TYPE_WALLET ? asset_path($method['image'], false) : url('image.show', ['filename' => $method['image']])->getRelativeUrl(); ?>"
                                                              alt="<?= $method['title']; ?>" width="100px" height="auto"
                                                              class="lazy">
                                                         <span class="ml-2"><?= $method['title']; ?></span>

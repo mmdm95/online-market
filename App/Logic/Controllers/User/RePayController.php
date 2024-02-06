@@ -72,7 +72,7 @@ class RePayController extends AbstractUserController
         );
 
         $paymentMethods = $methodModel->get(
-            ['code', 'title', 'image'],
+            ['code', 'title', 'image', 'method_type'],
             'publish=:pub',
             ['pub' => DB_YES]
         );
@@ -95,121 +95,121 @@ class RePayController extends AbstractUserController
     {
         $resourceHandler = new ResourceHandler();
 
-        try {
+//        try {
+        /**
+         * @var Agent $agent
+         */
+        $agent = container()->get(Agent::class);
+        if (!$agent->isRobot()) {
+            //------------------------------------------------------------------
+            // check order and get information about it
+            //------------------------------------------------------------------
             /**
-             * @var Agent $agent
+             * @var OrderModel $orderModel
              */
-            $agent = container()->get(Agent::class);
-            if (!$agent->isRobot()) {
-                //------------------------------------------------------------------
-                // check order and get information about it
-                //------------------------------------------------------------------
-                /**
-                 * @var OrderModel $orderModel
-                 */
-                $orderModel = container()->get(OrderModel::class);
-                /**
-                 * @var OrderReserveModel $reserveModel
-                 */
-                $reserveModel = container()->get(OrderReserveModel::class);
+            $orderModel = container()->get(OrderModel::class);
+            /**
+             * @var OrderReserveModel $reserveModel
+             */
+            $reserveModel = container()->get(OrderReserveModel::class);
 
-                $order = $orderModel->getFirst(['*'], 'id=:id', ['id' => $id]);
-                $reservedItem = $reserveModel->getFirst(
-                    ['expire_at'],
-                    'order_code=:oc',
-                    ['oc' => $order['code']],
-                    ['created_at DESC']
-                );
+            $order = $orderModel->getFirst(['*'], 'id=:id', ['id' => $id]);
+            $reservedItem = $reserveModel->getFirst(
+                ['expire_at'],
+                'order_code=:oc',
+                ['oc' => $order['code']],
+                ['created_at DESC']
+            );
 
 
-                if (
-                    !count($order) ||
+            if (
+                !count($order) ||
+                (
+                    !in_array($order['payment_status'], [PAYMENT_STATUS_WAIT, PAYMENT_STATUS_NOT_PAYED]) &&
                     (
-                        !in_array($order['payment_status'], [PAYMENT_STATUS_WAIT, PAYMENT_STATUS_NOT_PAYED]) &&
-                        (
-                            !isset($reservedItem['expire_at']) ||
-                            $reservedItem['expire_at'] < time()
-                        )
+                        !isset($reservedItem['expire_at']) ||
+                        $reservedItem['expire_at'] < time()
                     )
-                ) {
-                    $msg = 'سفارش نامعتبر می‌باشد.';
-                    if (isset($reservedItem['expire_at']) && $reservedItem['expire_at'] < time()) {
-                        $msg = 'زمان پرداخت سفارش به پایان رسیده است، لطفا مجددا سفارش خود را ثبت کنید.';
+                )
+            ) {
+                $msg = 'سفارش نامعتبر می‌باشد.';
+                if (isset($reservedItem['expire_at']) && $reservedItem['expire_at'] < time()) {
+                    $msg = 'زمان پرداخت سفارش به پایان رسیده است، لطفا مجددا سفارش خود را ثبت کنید.';
+                }
+
+                $resourceHandler
+                    ->type(RESPONSE_TYPE_ERROR)
+                    ->errorMessage($msg);
+                response()->json($resourceHandler->getReturnData());
+            }
+
+            //------------------------------------------------------------------
+            // check gateway code and get information about it
+            //------------------------------------------------------------------
+            $gatewayCode = input()->post('inp-re-payment-method-option')->getValue();
+            $gatewayMethod = PaymentUtil::validateAndGetPaymentMethod($gatewayCode);
+            if (is_null($gatewayMethod)) {
+                $resourceHandler
+                    ->type(RESPONSE_TYPE_ERROR)
+                    ->errorMessage('روش پرداخت انتخاب شده نامعتبر است.');
+                response()->json($resourceHandler->getReturnData());
+            }
+
+            //------------------------------------------------------------------
+
+            // store payment method info to $order session to use other places
+            $order['method_code'] = $gatewayMethod['code'];
+            $order['method_title'] = $gatewayMethod['title'];
+            $order['method_type'] = $gatewayMethod['method_type'];
+
+            // store to session to retrieve in other places
+            session()->set(SESSION_REPAY_ORDER_RECORD, $order);
+
+            // return needed response for gateway redirection if everything is ok
+            if ($resourceHandler->getReturnData()['type'] == RESPONSE_TYPE_SUCCESS) {
+                $connOptions = PaymentUtil::getGatewayConnectionOptions($gatewayMethod);
+
+                if (is_array($connOptions)) {
+                    $url = $connOptions['url'];
+                    $inputs = $connOptions['inputs'];
+                    $redirect = $connOptions['redirect'];
+                    $isMultipart = $connOptions['isMultipart'];
+
+                    $resourceHandler
+                        ->type(RESPONSE_TYPE_SUCCESS)
+                        ->data([
+                            'redirect' => $redirect,
+                            'url' => $url,
+                            'inputs' => $inputs,
+                            'multipart_form' => $isMultipart,
+                        ]);
+
+                    session()->remove(SESSION_REPAY_GATEWAY_UNIQUE_CODE);
+                    session()->remove(SESSION_REPAY_ORDER_RECORD);
+                } else {
+                    $msg = 'خطا در ارتباط با درگاه بانک، لطفا دوباره تلاش کنید.';
+                    if (is_string($connOptions) && !empty($connOptions)) {
+                        $msg = $connOptions;
                     }
 
+                    $this->removeOrderPayment();
                     $resourceHandler
                         ->type(RESPONSE_TYPE_ERROR)
                         ->errorMessage($msg);
-                    response()->json($resourceHandler->getReturnData());
                 }
-                // store to flash session to retrieve in form store
-                session()->setFlash(SESSION_REPAY_ORDER_RECORD, $order);
-
-                //------------------------------------------------------------------
-                // check gateway code and get information about it
-                //------------------------------------------------------------------
-                $gatewayCode = input()->post('inp-re-payment-method-option')->getValue();
-                $gatewayMethod = PaymentUtil::validateAndGetPaymentMethod($gatewayCode);
-                if (is_null($gatewayMethod)) {
-                    $resourceHandler
-                        ->type(RESPONSE_TYPE_ERROR)
-                        ->errorMessage('روش پرداخت انتخاب شده نامعتبر است.');
-                    response()->json($resourceHandler->getReturnData());
-                }
-                // store to flash session to retrieve in form store
-                session()->setFlash(SESSION_REPAY_GATEWAY_RECORD, $gatewayMethod);
-
-                //------------------------------------------------------------------
-
-                // issue a factor for order
-                $formHandler = new GeneralAjaxFormHandler();
-                $resourceHandler = $formHandler
-                    ->handle(RepayForm::class);
-
-                // return needed response for gateway redirection if everything is ok
-                if ($resourceHandler->getReturnData()['type'] == RESPONSE_TYPE_SUCCESS) {
-                    $connOptions = PaymentUtil::getGatewayConnectionOptions($gatewayMethod);
-
-                    if (is_array($connOptions)) {
-                        $url = $connOptions['url'];
-                        $inputs = $connOptions['inputs'];
-                        $redirect = $connOptions['redirect'];
-                        $isMultipart = $connOptions['isMultipart'];
-
-                        $resourceHandler
-                            ->type(RESPONSE_TYPE_SUCCESS)
-                            ->data([
-                                'redirect' => $redirect,
-                                'url' => $url,
-                                'inputs' => $inputs,
-                                'multipart_form' => $isMultipart,
-                            ]);
-
-                        session()->remove(SESSION_REPAY_GATEWAY_UNIQUE_CODE);
-                    } else {
-                        $msg = 'خطا در ارتباط با درگاه بانک، لطفا دوباره تلاش کنید.';
-                        if (is_string($connOptions) && !empty($connOptions)) {
-                            $msg = $connOptions;
-                        }
-
-                        $this->removeOrderPayment();
-                        $resourceHandler
-                            ->type(RESPONSE_TYPE_ERROR)
-                            ->errorMessage($msg);
-                    }
-                }
-            } else {
-                response()->httpCode(403);
-                $resourceHandler
-                    ->type(RESPONSE_TYPE_ERROR)
-                    ->errorMessage('خطا در ارتباط با سرور، لطفا دوباره تلاش کنید.');
             }
-        } catch (Exception $e) {
-            LogUtil::logException($e, __LINE__, self::class);
+        } else {
+            response()->httpCode(403);
             $resourceHandler
                 ->type(RESPONSE_TYPE_ERROR)
                 ->errorMessage('خطا در ارتباط با سرور، لطفا دوباره تلاش کنید.');
         }
+//        } catch (Exception $e) {
+//            LogUtil::logException($e, __LINE__, self::class);
+//            $resourceHandler
+//                ->type(RESPONSE_TYPE_ERROR)
+//                ->errorMessage('خطا در ارتباط با سرور، لطفا دوباره تلاش کنید.');
+//        }
 
         response()->json($resourceHandler->getReturnData());
     }

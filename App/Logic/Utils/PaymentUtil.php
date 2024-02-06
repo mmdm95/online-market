@@ -11,6 +11,7 @@ use App\Logic\Models\OrderModel;
 use App\Logic\Models\OrderPaymentModel;
 use App\Logic\Models\OrderReserveModel;
 use App\Logic\Models\PaymentMethodModel;
+use App\Logic\Models\SendMethodModel;
 use App\Logic\Models\WalletFlowModel;
 use App\Logic\Models\WalletModel;
 use DI\DependencyException;
@@ -140,7 +141,12 @@ class PaymentUtil
     public static function getGatewayInfo($gatewayType, $gatewayCode, $gatewayInfo): array
     {
         $orderArr = session()->get(SESSION_ORDER_ARR_INFO);
-        if (is_null($orderArr) || !count($orderArr)) return [null, false];
+        if (is_null($orderArr) || !count($orderArr)) {
+            $orderArr = session()->get(SESSION_REPAY_ORDER_RECORD);
+            if (is_null($orderArr) || !count($orderArr)) {
+                return [null, false];
+            }
+        }
 
         /**
          * @var DBAuth $auth
@@ -152,6 +158,9 @@ class PaymentUtil
         $orderPayModel = container()->get(OrderPaymentModel::class);
 
         $newCode = self::getUniqueGatewayFlowCode();
+        // set new unique code in session to use it outside and other places
+        session()->set(SESSION_REPAY_GATEWAY_UNIQUE_CODE, $newCode);
+
         $userId = $auth->getCurrentUser()['id'] ?? 0;
         $orderCode = $orderArr['code'];
         $price = $orderArr['final_price'];
@@ -165,9 +174,6 @@ class PaymentUtil
             'method_title' => $orderArr['method_title'],
             'method_type' => $orderArr['method_type'],
         ];
-
-        // set new unique code in session to use it outside and other places
-        session()->set(SESSION_REPAY_GATEWAY_UNIQUE_CODE, $newCode);
 
         $handler = PaymentHandlerFactory::getInstance((int)$gatewayType, $gatewayInfo);
         $output = $handler
@@ -449,19 +455,48 @@ class PaymentUtil
     }
 
     /**
+     * @param $methodCode
+     * @return array|null
+     * @throws DependencyException
+     * @throws NotFoundException
+     */
+    public static function validateAndGetSendMethod($methodCode): ?array
+    {
+        if (is_null($methodCode)) return null;
+
+        /**
+         * @var SendMethodModel $sendMethodModel
+         */
+        $sendMethodModel = container()->get(SendMethodModel::class);
+        $sendMethod = $sendMethodModel->getFirst([
+            'id',
+            'code',
+            'title',
+            '`desc`',
+            'price',
+            'determine_price_by_location',
+        ], 'code=:code AND publish=:pub', [
+            'code' => $methodCode,
+            'pub' => DB_YES,
+        ]);
+
+        return !count($sendMethod) ? null : $sendMethod;
+    }
+
+    /**
      * @param int $length
      * @return string
      * @throws \DI\DependencyException
      * @throws \DI\NotFoundException
      */
-    private static function getUniqueGatewayFlowCode(int $length = 20): string
+    public static function getUniqueGatewayFlowCode(int $length = 20): string
     {
         /**
          * @var GatewayModel $flowModel
          */
         $flowModel = container()->get(GatewayModel::class);
         do {
-            $uniqueStr = StringUtil::randomString($length, StringUtil::RS_NUMBER | StringUtil::RS_LOWER_CHAR);
+            $uniqueStr = StringUtil::randomString($length, StringUtil::RS_NUMBER);
         } while ($flowModel->count('code=:code', ['code' => $uniqueStr]));
         return $uniqueStr;
     }

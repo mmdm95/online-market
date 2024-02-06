@@ -21,7 +21,7 @@ use Sim\I18n\ISOLanguageCodes;
  *     1.2.5.0 instead of 1.2.5-a
  *     1.2.5.0.1 instead of 1.2.5-a.1 (I'm not sure)
  */
-defined("APP_VERSION") or define("APP_VERSION", "0.19.5");
+defined("APP_VERSION") or define("APP_VERSION", "0.19.7");
 
 /***************************************
  * You can add your constants here
@@ -412,7 +412,6 @@ defined("SESSION_WALLET_CHARGE_CODE") or define("SESSION_WALLET_CHARGE_CODE", 's
 // repay constants
 //
 
-defined("SESSION_REPAY_GATEWAY_RECORD") or define("SESSION_REPAY_GATEWAY_RECORD", 'session_repay_gateway_record_custom');
 defined("SESSION_REPAY_ORDER_RECORD") or define("SESSION_REPAY_ORDER_RECORD", 'session_repay_order_record_custom');
 defined("SESSION_REPAY_GATEWAY_UNIQUE_CODE") or define("SESSION_REPAY_GATEWAY_UNIQUE_CODE", 'session_repay_gateway_unique_code_custom');
 
