@@ -116,8 +116,9 @@ class OrderController extends AbstractUserController implements IReportPdf
 
         $paymentSuccess = $gatewayModel->getFirst([
             'id', 'price', 'msg', 'payment_code', 'is_success', 'method_type', 'payment_date'
-        ], 'order_code=:oc AND user_id=:uId AND (method_type IS NULL OR method_type=:mt)', [
+        ], 'order_code=:oc AND is_success=:suc AND user_id=:uId AND (method_type IS NULL OR method_type=:mt)', [
             'oc' => $order['code'],
+            'suc' => DB_YES,
             'uId' => $user['id'],
             'mt' => $payment['method_type'] ?? '',
         ], ['payment_date DESC', 'id DESC']) ?: null;

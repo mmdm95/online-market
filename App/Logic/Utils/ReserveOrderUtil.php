@@ -88,26 +88,30 @@ class ReserveOrderUtil
         if (count($theOrder)) {
             if (PAYMENT_STATUS_WAIT == $theOrder['payment_status']) {
                 connector()->getDb()->beginTransaction();
-                $items = $orderModel->getOrderItems(['product_code', 'product_count'], 'order_code=:oc', ['oc' => $orderCode]);
-                // return order items to product stock
-                foreach ($items as $item) {
-                    $update = $model->update();
-                    $update
-                        ->table(BaseModel::TBL_PRODUCT_PROPERTY)
-                        ->set('stock_count', 'stock_count+' . $item['product_count'])
-                        ->where('code=:code')
-                        ->bindValues([
-                            'code' => $item['product_code'],
-                        ]);
-                    $res = $model->execute($update);
-                    if (!$res) {
-                        $ok = false;
-                        break;
+                if ($theOrder['is_product_returned_to_stock'] != DB_YES) {
+                    $items = $orderModel->getOrderItems(['product_code', 'product_count'], 'order_code=:oc', ['oc' => $orderCode]);
+                    // return order items to product stock
+                    foreach ($items as $item) {
+                        $update = $model->update();
+                        $update
+                            ->table(BaseModel::TBL_PRODUCT_PROPERTY)
+                            ->set('stock_count', 'stock_count+' . $item['product_count'])
+                            ->where('code=:code')
+                            ->bindValues([
+                                'code' => $item['product_code'],
+                            ]);
+                        $res = $model->execute($update);
+                        if (!$res) {
+                            $ok = false;
+                            break;
+                        }
                     }
                 }
+
                 // make order a failed one
                 $ok = $ok && $orderModel->update([
                         'payment_status' => PAYMENT_STATUS_NOT_PAYED,
+                        'is_product_returned_to_stock' => DB_YES,
                     ], 'code=:oc', ['oc' => $orderCode]);
                 // return used coupon to not use status
                 $couponUpdate = $model->update();
