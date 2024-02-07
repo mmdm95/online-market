@@ -12,6 +12,7 @@ use App\Logic\Models\OrderPaymentModel;
 use App\Logic\Models\OrderReserveModel;
 use App\Logic\Models\PaymentMethodModel;
 use App\Logic\Models\SendMethodModel;
+use App\Logic\Models\UserModel;
 use App\Logic\Models\WalletFlowModel;
 use App\Logic\Models\WalletModel;
 use DI\DependencyException;
@@ -72,7 +73,13 @@ class PaymentUtil
          * @var DBAuth $auth
          */
         $auth = container()->get('auth_home');
+        /**
+         * @var UserModel $userModel
+         */
+        $userModel = container()->get(UserModel::class);
+
         $user = $auth->getCurrentUser();
+        $user = $userModel->getFirst(['username'], 'id=:id', ['id' => $user['id'] ?? 0]);
 
         $url = '#';
         $inputs = [];
@@ -96,7 +103,7 @@ class PaymentUtil
                         'value' => $refId,
                     ],
                 ];
-                if ($user['username']) {
+                if (isset($user['username'])) {
                     $inputs[] = [
                         'name' => 'MobileNo',
                         'value' => $user['username'],
@@ -489,14 +496,14 @@ class PaymentUtil
      * @throws \DI\DependencyException
      * @throws \DI\NotFoundException
      */
-    public static function getUniqueGatewayFlowCode(int $length = 20): string
+    public static function getUniqueGatewayFlowCode(int $length = 16): string
     {
         /**
          * @var GatewayModel $flowModel
          */
         $flowModel = container()->get(GatewayModel::class);
         do {
-            $uniqueStr = StringUtil::randomString($length, StringUtil::RS_NUMBER);
+            $uniqueStr = StringUtil::randomString($length, StringUtil::RS_NUMBER, ['0']);
         } while ($flowModel->count('code=:code', ['code' => $uniqueStr]));
         return $uniqueStr;
     }

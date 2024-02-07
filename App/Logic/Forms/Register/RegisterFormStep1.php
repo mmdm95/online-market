@@ -59,7 +59,7 @@ class RegisterFormStep1 implements IPageForm
                     ['username' => trim($value->getValue())],
                     ['u.id', 'u.username', 'u.is_activated', 'r.id AS role_id']
                 );
-                if ($user['is_activated'] == DB_YES && !empty($user['role_id'])) {
+                if (count($user) && $user['is_activated'] == DB_YES && !empty($user['role_id'])) {
                     return false;
                 } else {
                     $userModel->delete('username=:username', ['username' => trim($value->getValue())]);

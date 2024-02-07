@@ -94,7 +94,7 @@
                     </form>
                 </div>
 
-                <div class="modal-footer mt-5">
+                <div class="modal-footer mt-2">
                     <button type="button" class="btn btn-primary px-4" data-dismiss="modal">بستن</button>
                 </div>
             </div>

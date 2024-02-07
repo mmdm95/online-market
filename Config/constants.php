@@ -21,7 +21,7 @@ use Sim\I18n\ISOLanguageCodes;
  *     1.2.5.0 instead of 1.2.5-a
  *     1.2.5.0.1 instead of 1.2.5-a.1 (I'm not sure)
  */
-defined("APP_VERSION") or define("APP_VERSION", "0.19.7");
+defined("APP_VERSION") or define("APP_VERSION", "0.19.8");
 
 /***************************************
  * You can add your constants here
@@ -345,7 +345,7 @@ defined("PRODUCT_ORDERINGS") or define("PRODUCT_ORDERINGS", [
 ]);
 
 // maximum order reserve time
-defined("RESERVE_MAX_TIME") or define("RESERVE_MAX_TIME", 3600 /* 1hour */);
+defined("RESERVE_MAX_TIME") or define("RESERVE_MAX_TIME", 1800 /* 1hour */);
 
 // maximum store for addresses
 defined("ADDRESS_MAX_COUNT") or define("ADDRESS_MAX_COUNT", 5);

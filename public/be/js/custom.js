@@ -2601,6 +2601,47 @@
 
     //-----------------------------------------------------------------
 
+    //-----------------------------------------------------------------
+    // This code is for calendar position justification
+    function positionNearTrigger(datePickerElement, pickerContainer) {
+      var datePickerOffset = datePickerElement.offset();
+      var datePickerHeight = datePickerElement.outerHeight();
+
+      var pickerContainerChild = pickerContainer.children().first()
+      var pickerContainerChildWidth = pickerContainerChild.outerWidth();
+      var pickerContainerChildHeight = pickerContainerChild.outerHeight();
+
+      var container = $(window);
+      var containerWidth = container.outerWidth();
+      var containerHeight = container.outerHeight();
+      var containerScrollTop = container.scrollTop();
+      var containerScrollLeft = container.scrollLeft();
+
+      // Calculate adjusted position
+      var adjustedTop = datePickerOffset.top + datePickerHeight;
+      var adjustedLeft = datePickerOffset.left;
+
+      if ((pickerContainerChildHeight + adjustedTop) > (containerHeight + containerScrollTop)) {
+        adjustedTop = datePickerOffset.top + ((containerHeight + containerScrollTop) - (pickerContainerChildHeight + adjustedTop));
+      }
+      if ((pickerContainerChildWidth + adjustedLeft) > (containerWidth + containerScrollLeft)) {
+        adjustedLeft = datePickerOffset.left + ((containerWidth + containerScrollLeft) - (pickerContainerChildWidth + adjustedLeft));
+      }
+
+      pickerContainer.css({
+        left: adjustedLeft,
+        top: adjustedTop,
+      });
+    }
+
+    function positionNearTriggerListener(datePickerElement, pickerContainer) {
+      $(window).on('resize' + variables.namespace, function () {
+        positionNearTrigger(datePickerElement, pickerContainer);
+      });
+    }
+
+    //-----------------------------------------------------------------
+
     $('.btn-show-loading').on('click' + variables.namespace, function () {
       loaderId = admin.showLoader();
     });
@@ -2906,6 +2947,12 @@
               "format": !!$this.attr('data-format') ? $this.attr('data-format') : 'L',
               "viewMode": "day",
               "initialValue": true,
+              onShow: function () {
+                positionNearTrigger(
+                  $this.data('datepicker').model.inputElement,
+                  $this.data('datepicker').model.view.$container
+                );
+              },
               "minDate": 0,
               "maxDate": 0,
               "autoClose": false,
@@ -2995,6 +3042,11 @@
               },
               "responsive": true
             });
+
+            positionNearTriggerListener(
+              $this.data('datepicker').model.inputElement,
+              $this.data('datepicker').model.view.$container
+            );
           });
 
           var altDP = copy.find('.myAltDatepicker');
@@ -3005,6 +3057,12 @@
               "format": !!$this.attr('data-format') ? $this.attr('data-format') : 'L',
               "viewMode": "day",
               "initialValue": true,
+              onShow: function () {
+                positionNearTrigger(
+                  $this.data('datepicker').model.inputElement,
+                  $this.data('datepicker').model.view.$container
+                );
+              },
               "minDate": 0,
               "maxDate": 0,
               "autoClose": false,
@@ -3094,6 +3152,11 @@
               },
               "responsive": true
             });
+
+            positionNearTriggerListener(
+              $this.data('datepicker').model.inputElement,
+              $this.data('datepicker').model.view.$container
+            );
           });
 
           var rtAll, rfAll;
@@ -3113,6 +3176,12 @@
               altField: rt.attr('data-alt-field'),
               format: !!rt.attr('data-format') ? rt.attr('data-format') : 'L',
               initialValue: true,
+              onShow: function () {
+                positionNearTrigger(
+                  $(rt.data('datepicker').model.inputElement),
+                  $(rt.data('datepicker').model.view.$container)
+                );
+              },
               onSelect: function (unix) {
                 to.touched = true;
                 if (from && from.options && from.options.maxDate != unix) {
@@ -3169,6 +3238,12 @@
               altField: rf.attr('data-alt-field'),
               format: !!rf.attr('data-format') ? rf.attr('data-format') : 'L',
               initialValue: true,
+              onShow: function () {
+                positionNearTrigger(
+                  $(rf.data('datepicker').model.inputElement),
+                  $(rf.data('datepicker').model.view.$container)
+                );
+              },
               onSelect: function (unix) {
                 from.touched = true;
                 if (to && to.options && to.options.minDate != unix) {
@@ -3220,6 +3295,15 @@
                 }
               }
             });
+
+            positionNearTriggerListener(
+              $(rf.data('datepicker').model.inputElement),
+              $(rf.data('datepicker').model.view.$container)
+            );
+            positionNearTriggerListener(
+              $(rt.data('datepicker').model.inputElement),
+              $(rt.data('datepicker').model.view.$container)
+            );
           });
 
           copy.find('.myTimepicker').persianDatepicker({
@@ -3618,6 +3702,12 @@
               "format": !!$this.attr('data-format') ? $this.attr('data-format') : 'L',
               "viewMode": "day",
               "initialValue": true,
+              onShow: function () {
+                positionNearTrigger(
+                  $this.data('datepicker').model.inputElement,
+                  $this.data('datepicker').model.view.$container
+                );
+              },
               "minDate": 0,
               "maxDate": 0,
               "autoClose": false,
@@ -3707,6 +3797,11 @@
               },
               "responsive": true
             });
+
+            positionNearTriggerListener(
+              $this.data('datepicker').model.inputElement,
+              $this.data('datepicker').model.view.$container
+            );
           });
 
           var altDP = $('.myAltDatepicker');
@@ -3717,6 +3812,12 @@
               "format": !!$this.attr('data-format') ? $this.attr('data-format') : 'L',
               "viewMode": "day",
               "initialValue": true,
+              onShow: function () {
+                positionNearTrigger(
+                  $this.data('datepicker').model.inputElement,
+                  $this.data('datepicker').model.view.$container
+                );
+              },
               "minDate": 0,
               "maxDate": 0,
               "autoClose": false,
@@ -3806,6 +3907,11 @@
               },
               "responsive": true
             });
+
+            positionNearTriggerListener(
+              $this.data('datepicker').model.inputElement,
+              $this.data('datepicker').model.view.$container
+            );
           });
 
           var rtAll, rfAll;
@@ -3825,6 +3931,12 @@
               altField: rt.attr('data-alt-field'),
               format: !!rt.attr('data-format') ? rt.attr('data-format') : 'L',
               initialValue: true,
+              onShow: function () {
+                positionNearTrigger(
+                  $(rt.data('datepicker').model.inputElement),
+                  $(rt.data('datepicker').model.view.$container)
+                );
+              },
               onSelect: function (unix) {
                 to.touched = true;
                 if (from && from.options && from.options.maxDate != unix) {
@@ -3881,6 +3993,12 @@
               altField: rf.attr('data-alt-field'),
               format: !!rf.attr('data-format') ? rf.attr('data-format') : 'L',
               initialValue: true,
+              onShow: function () {
+                positionNearTrigger(
+                  $(rf.data('datepicker').model.inputElement),
+                  $(rf.data('datepicker').model.view.$container)
+                );
+              },
               onSelect: function (unix) {
                 from.touched = true;
                 if (to && to.options && to.options.minDate != unix) {
@@ -3932,8 +4050,16 @@
                 }
               }
             });
-          });
 
+            positionNearTriggerListener(
+              $(rf.data('datepicker').model.inputElement),
+              $(rf.data('datepicker').model.view.$container)
+            );
+            positionNearTriggerListener(
+              $(rt.data('datepicker').model.inputElement),
+              $(rt.data('datepicker').model.view.$container)
+            );
+          });
 
           $('.myTimepicker').persianDatepicker({
             "inline": false,
