@@ -94,7 +94,9 @@ class AddSteppedForm implements IPageForm
         if (!empty($code)) {
             $count = $productModel->getProductPropertyWithInfoCount('code=:code', ['code' => $code]);
             if (0 === $count) {
-                $validator->setError('inp-add-stepped-price', 'شناسه کالای قیمت پلکانی نامعتبر است.');
+                $validator
+                    ->setStatus(false)
+                    ->setError('inp-add-stepped-price', 'شناسه کالای قیمت پلکانی نامعتبر است.');
             }
         } else {
             $validator

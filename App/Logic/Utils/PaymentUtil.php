@@ -482,6 +482,7 @@ class PaymentUtil
             '`desc`',
             'price',
             'determine_price_by_location',
+            'only_for_shop_location',
         ], 'code=:code AND publish=:pub', [
             'code' => $methodCode,
             'pub' => DB_YES,

@@ -111,7 +111,9 @@ class EditBlogForm implements IPageForm
             $blogModel = container()->get(BlogModel::class);
 
             if (0 === $blogModel->count('id=:id', ['id' => $id])) {
-                $validator->setError('inp-edit-blog-title', 'شناسه مطلب نامعتبر است.');
+                $validator
+                    ->setStatus(false)
+                    ->setError('inp-edit-blog-title', 'شناسه مطلب نامعتبر است.');
             }
         } else {
             $validator

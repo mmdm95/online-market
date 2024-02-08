@@ -112,6 +112,7 @@ class AddSendMethodForm implements IPageForm
             $desc = input()->post('inp-add-send-method-desc', '')->getValue();
             $price = input()->post('inp-add-send-method-price', '')->getValue();
             $determineLoc = input()->post('inp-add-send-method-determine-location', '')->getValue();
+            $forShopLoc = input()->post('inp-add-send-method-for-shop-location', '')->getValue();
 
             return $sendModel->insert([
                 'code' => StringUtil::uniqidReal(12),
@@ -121,6 +122,7 @@ class AddSendMethodForm implements IPageForm
                 'publish' => is_value_checked($pub) ? DB_YES : DB_NO,
                 'price' => $xss->xss_clean($price),
                 'determine_price_by_location' => is_value_checked($determineLoc) ? DB_YES : DB_NO,
+                'only_for_shop_location' => is_value_checked($forShopLoc) ? DB_YES : DB_NO,
                 'created_by' => $auth->getCurrentUser()['id'] ?? null,
                 'created_at' => time(),
             ]);

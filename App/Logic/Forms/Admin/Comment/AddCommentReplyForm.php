@@ -57,7 +57,9 @@ class AddCommentReplyForm implements IPageForm
         $pId = session()->getFlash('current-comment-product-id', null, false);
         if (!empty($pId)) {
             if (0 === $productModel->count('id=:id', ['id' => $pId])) {
-                $validator->setError('inp-ans-comment-desc', 'شناسه محصول نامعتبر است.');
+                $validator
+                    ->setStatus(false)
+                    ->setError('inp-ans-comment-desc', 'شناسه محصول نامعتبر است.');
             }
         } else {
             $validator
@@ -69,7 +71,9 @@ class AddCommentReplyForm implements IPageForm
         $id = session()->getFlash('current-comment-id', null, false);
         if (!empty($id)) {
             if (0 === $commentModel->count('id=:id', ['id' => $id])) {
-                $validator->setError('inp-ans-comment-desc', 'شناسه نظر نامعتبر است.');
+                $validator
+                    ->setStatus(false)
+                    ->setError('inp-ans-comment-desc', 'شناسه نظر نامعتبر است.');
             }
         } else {
             $validator

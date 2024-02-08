@@ -78,7 +78,9 @@ class EditColorForm implements IPageForm
             $colorModel = container()->get(ColorModel::class);
 
             if (0 === $colorModel->count('id=:id', ['id' => $id])) {
-                $validator->setError('inp-edit-color-name', 'شناسه رنگ نامعتبر است.');
+                $validator
+                    ->setStatus(false)
+                    ->setError('inp-edit-color-name', 'شناسه رنگ نامعتبر است.');
             }
         } else {
             $validator

@@ -92,7 +92,9 @@ class EditCategoryForm implements IPageForm
         $id = session()->getFlash('category-curr-id', null, false);
         if (!empty($id)) {
             if (0 === $categoryModel->count('id=:id', ['id' => $id])) {
-                $validator->setError('inp-edit-category-name', 'شناسه مطلب نامعتبر است.');
+                $validator
+                    ->setStatus(false)
+                    ->setError('inp-edit-category-name', 'شناسه مطلب نامعتبر است.');
             }
         } else {
             $validator

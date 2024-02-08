@@ -76,7 +76,9 @@ class EditSendMethodForm implements IPageForm
         $id = session()->getFlash('send-method-curr-id', null, false);
         if (!empty($id)) {
             if (0 === $sendModel->count('id=:id', ['id' => $id])) {
-                $validator->setError('inp-edit-send-method-title', 'شناسه روش ارسال نامعتبر است.');
+                $validator
+                    ->setStatus(false)
+                    ->setError('inp-edit-send-method-title', 'شناسه روش ارسال نامعتبر است.');
             }
         } else {
             $validator
@@ -127,6 +129,7 @@ class EditSendMethodForm implements IPageForm
             $pub = input()->post('inp-edit-send-method-status', '')->getValue();
             $price = input()->post('inp-edit-send-method-price', '')->getValue();
             $determineLoc = input()->post('inp-edit-send-method-determine-location', '')->getValue();
+            $forShopLoc = input()->post('inp-edit-send-method-for-shop-location', '')->getValue();
             $id = session()->getFlash('send-method-curr-id', null);
             if (is_null($id)) return false;
 
@@ -137,6 +140,7 @@ class EditSendMethodForm implements IPageForm
                 'publish' => is_value_checked($pub) ? DB_YES : DB_NO,
                 'price' => $xss->xss_clean($price),
                 'determine_price_by_location' => is_value_checked($determineLoc) ? DB_YES : DB_NO,
+                'only_for_shop_location' => is_value_checked($forShopLoc) ? DB_YES : DB_NO,
                 'updated_by' => $auth->getCurrentUser()['id'] ?? null,
                 'updated_at' => time(),
             ], 'id=:id', ['id' => $id]);

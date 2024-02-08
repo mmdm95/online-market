@@ -63,7 +63,9 @@ class AddCategoryImageForm implements IPageForm
         $category = session()->getFlash('cat-img-add-cat-id', null, false);
         if (!empty($category)) {
             if (0 === $categoryModel->count('id=:id', ['id' => $category])) {
-                $validator->setError('inp-add-cat-img-img', 'شناسه دسته مورد نظر نامعتبر است.');
+                $validator
+                    ->setStatus(false)
+                    ->setError('inp-add-cat-img-img', 'شناسه دسته مورد نظر نامعتبر است.');
             }
         } else {
             $validator

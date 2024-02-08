@@ -36,7 +36,8 @@ $validator = form_validator();
                                     <input type="hidden" name="inp-add-send-method-img"
                                            value="<?= $img; ?>">
                                     <?php if (!empty($img)): ?>
-                                        <img class="img-placeholder-image" src="<?= url('image.show') . $img; ?>" alt="selected image">
+                                        <img class="img-placeholder-image" src="<?= url('image.show') . $img; ?>"
+                                             alt="selected image">
                                     <?php endif; ?>
                                     <div class="img-placeholder-icon-container">
                                         <i class="icon-image2 img-placeholder-icon text-grey-300"></i>
@@ -82,17 +83,30 @@ $validator = form_validator();
                             <span class="text-danger">*</span>
                             هزینه ارسال:
                         </label>
-                        <input type="number" min="0" class="form-control" placeholder="وارد کنید" name="inp-add-send-method-price"
+                        <input type="number" min="0" class="form-control" placeholder="وارد کنید"
+                               name="inp-add-send-method-price"
                                value="<?= $validator->setInput('inp-add-send-method-price'); ?>">
                     </div>
-                    <div class="form-group text-center text-lg-right">
-                        <div class="form-check form-check-switchery form-check-switchery-double">
-                            <label class="form-check-label">
-                                در نظرگیری هزینه ارسال بر حسب مکان
-                                <input type="checkbox" class="form-check-input-switchery"
-                                       name="inp-add-send-method-determine-location"
-                                    <?= $validator->setCheckbox('inp-add-send-method-determine-location', 'on', true); ?>>
-                            </label>
+                    <div class="form-group col-lg-12 row mt-3 mb-5">
+                        <div class="form-group text-right col-lg-6">
+                            <div class="form-check form-check-switchery form-check-switchery-double">
+                                <label class="form-check-label">
+                                    در نظرگیری هزینه ارسال بر حسب مکان
+                                    <input type="checkbox" class="form-check-input-switchery"
+                                           name="inp-add-send-method-determine-location"
+                                        <?= $validator->setCheckbox('inp-add-send-method-determine-location', 'on', true); ?>>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group text-right col-lg-6">
+                            <div class="form-check form-check-switchery form-check-switchery-double">
+                                <label class="form-check-label">
+                                    مورد استفاده فقط برای محل فروشگاه
+                                    <input type="checkbox" class="form-check-input-switchery"
+                                           name="inp-add-send-method-for-shop-location"
+                                        <?= $validator->setCheckbox('inp-add-send-method-for-shop-location', 'on', false); ?>>
+                                </label>
+                            </div>
                         </div>
                     </div>
                 </div>

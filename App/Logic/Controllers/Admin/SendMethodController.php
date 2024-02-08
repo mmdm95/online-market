@@ -208,6 +208,19 @@ class SendMethodController extends AbstractAdminController implements IDatatable
                         },
                     ],
                     [
+                        'db' => 'only_for_shop_location',
+                        'db_alias' => 'only_for_shop_location',
+                        'dt' => 'for_shop_location',
+                        'formatter' => function ($d) {
+                            return $this->setTemplate('partial/admin/parser/active-status')
+                                ->render([
+                                    'status' => $d,
+                                    'active' => 'بله',
+                                    'deactive' => 'خیر',
+                                ]);
+                        },
+                    ],
+                    [
                         'dt' => 'operations',
                         'formatter' => function ($row) {
                             $operations = $this->setTemplate('partial/admin/datatable/actions-send-method')

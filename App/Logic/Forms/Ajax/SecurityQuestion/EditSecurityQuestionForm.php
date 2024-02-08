@@ -54,7 +54,9 @@ class EditSecurityQuestionForm implements IPageForm
             $secModel = container()->get(SecurityQuestionModel::class);
 
             if (0 === $secModel->count('id=:id', ['id' => $id])) {
-                $validator->setError('inp-edit-sec-question-q', 'شناسه سؤال مورد نظر نامعتبر است.');
+                $validator
+                    ->setStatus(false)
+                    ->setError('inp-edit-sec-question-q', 'شناسه سؤال مورد نظر نامعتبر است.');
             }
         } else {
             $validator

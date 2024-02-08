@@ -69,7 +69,9 @@ class EditBlogCategoryForm implements IPageForm
             $categoryModel = container()->get(BlogCategoryModel::class);
 
             if (0 === $categoryModel->count('id=:id', ['id' => $id])) {
-                $validator->setError('inp-edit-blog-category-name', 'شناسه دسته نامعتبر است.');
+                $validator
+                    ->setStatus(false)
+                    ->setError('inp-edit-blog-category-name', 'شناسه دسته نامعتبر است.');
             }
         } else {
             $validator

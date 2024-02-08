@@ -46,7 +46,9 @@ class EditProductAttrValueForm implements IPageForm
         $id = session()->getFlash('product-attr-val-curr-e-id', null, false);
         if (!empty($id)) {
             if (0 === $attrModel->count('id=:id', ['id' => $id], BaseModel::TBL_PRODUCT_ATTR_VALUES)) {
-                $validator->setError('inp-edit-product-attr-val', 'شناسه مقادیر ویژگی نامعتبر است.');
+                $validator
+                    ->setStatus(false)
+                    ->setError('inp-edit-product-attr-val', 'شناسه مقادیر ویژگی نامعتبر است.');
             }
         } else {
             $validator

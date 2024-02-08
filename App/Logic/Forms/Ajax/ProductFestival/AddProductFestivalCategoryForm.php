@@ -79,7 +79,9 @@ class AddProductFestivalCategoryForm implements IPageForm
             $festivalModel = container()->get(FestivalModel::class);
 
             if (0 === $festivalModel->count('id=:id', ['id' => $fId])) {
-                $validator->setError('inp-modify-product-festival-category', 'شناسه جشنواره نامعتبر است.');
+                $validator
+                    ->setStatus(false)
+                    ->setError('inp-modify-product-festival-category', 'شناسه جشنواره نامعتبر است.');
             }
         } else {
             $validator

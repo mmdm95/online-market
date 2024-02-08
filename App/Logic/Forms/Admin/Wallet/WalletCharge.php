@@ -81,7 +81,9 @@ class WalletCharge implements IPageForm
         if (!empty($id)) {
             $count = $walletModel->count('id=:id', ['id' => $id]);
             if (0 === $count) {
-                $validator->setError('inp-charge-wallet-price', 'شناسه کیف پول نامعتبر است.');
+                $validator
+                    ->setStatus(false)
+                    ->setError('inp-charge-wallet-price', 'شناسه کیف پول نامعتبر است.');
             }
         } else {
             $validator

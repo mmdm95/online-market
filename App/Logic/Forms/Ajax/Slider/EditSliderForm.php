@@ -80,7 +80,9 @@ class EditSliderForm implements IPageForm
             $sliderModel = container()->get(SliderModel::class);
 
             if (0 === $sliderModel->count('id=:id', ['id' => $id])) {
-                $validator->setError('inp-edit-slide-title', 'شناسه اسلاید مورد نظر نامعتبر است.');
+                $validator
+                    ->setStatus(false)
+                    ->setError('inp-edit-slide-title', 'شناسه اسلاید مورد نظر نامعتبر است.');
             }
         } else {
             $validator

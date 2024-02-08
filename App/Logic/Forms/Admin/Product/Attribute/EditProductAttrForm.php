@@ -48,7 +48,9 @@ class EditProductAttrForm implements IPageForm
         $id = session()->getFlash('product-attr-curr-id', null, false);
         if (!empty($id)) {
             if (0 === $attrModel->count('id=:id', ['id' => $id])) {
-                $validator->setError('inp-edit-product-attr-title', 'شناسه ویژگی جستجو نامعتبر است.');
+                $validator
+                    ->setStatus(false)
+                    ->setError('inp-edit-product-attr-title', 'شناسه ویژگی جستجو نامعتبر است.');
             }
         } else {
             $validator

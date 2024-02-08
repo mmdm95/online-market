@@ -59,7 +59,9 @@ class EditFAQForm implements IPageForm
             $faqModel = container()->get(FAQModel::class);
 
             if (0 === $faqModel->count('id=:id', ['id' => $id])) {
-                $validator->setError('inp-edit-faq-q', 'شناسه سؤال مورد نظر نامعتبر است.');
+                $validator
+                    ->setStatus(false)
+                    ->setError('inp-edit-faq-q', 'شناسه سؤال مورد نظر نامعتبر است.');
             }
         } else {
             $validator

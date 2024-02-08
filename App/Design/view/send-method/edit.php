@@ -89,14 +89,26 @@ $validator = form_validator();
                                name="inp-edit-send-method-price"
                                value="<?= $validator->setInput('inp-edit-send-method-price') ?: $method['price']; ?>">
                     </div>
-                    <div class="form-group text-center text-lg-right">
-                        <div class="form-check form-check-switchery form-check-switchery-double">
-                            <label class="form-check-label">
-                                در نظرگیری هزینه ارسال بر حسب مکان
-                                <input type="checkbox" class="form-check-input-switchery"
-                                       name="inp-edit-send-method-determine-location"
-                                    <?= $validator->setCheckbox('inp-edit-send-method-determine-location', 'on') ?: (is_value_checked($method['determine_price_by_location']) ? 'checked="checked"' : ''); ?>>
-                            </label>
+                    <div class="form-group col-lg-12 row mt-3 mb-5">
+                        <div class="form-group text-right col-lg-6">
+                            <div class="form-check form-check-switchery form-check-switchery-double">
+                                <label class="form-check-label">
+                                    در نظرگیری هزینه ارسال بر حسب مکان
+                                    <input type="checkbox" class="form-check-input-switchery"
+                                           name="inp-edit-send-method-determine-location"
+                                        <?= $validator->setCheckbox('inp-edit-send-method-determine-location', 'on') ?: (is_value_checked($method['determine_price_by_location']) ? 'checked="checked"' : ''); ?>>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group text-right col-lg-6">
+                            <div class="form-check form-check-switchery form-check-switchery-double">
+                                <label class="form-check-label">
+                                    مورد استفاده فقط برای محل فروشگاه
+                                    <input type="checkbox" class="form-check-input-switchery"
+                                           name="inp-edit-send-method-for-shop-location"
+                                        <?= $validator->setCheckbox('inp-edit-send-method-for-shop-location', 'on') ?: (is_value_checked($method['only_for_shop_location']) ? 'checked="checked"' : ''); ?>>
+                                </label>
+                            </div>
                         </div>
                     </div>
                 </div>

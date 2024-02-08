@@ -151,7 +151,9 @@ class EditCouponForm implements IPageForm
         $id = session()->getFlash('coupon-curr-id', null, false);
         if (!empty($id)) {
             if (0 === $couponModel->count('id=:id', ['id' => $id])) {
-                $validator->setError('inp-edit-coupon-title', 'شناسه کوپن نامعتبر است.');
+                $validator
+                    ->setStatus(false)
+                    ->setError('inp-edit-coupon-title', 'شناسه کوپن نامعتبر است.');
             }
         } else {
             $validator

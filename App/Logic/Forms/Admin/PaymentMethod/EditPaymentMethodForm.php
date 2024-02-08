@@ -142,7 +142,9 @@ class EditPaymentMethodForm implements IPageForm
         $id = session()->getFlash('pay-method-curr-id', null, false);
         if (!empty($id)) {
             if (0 === $payModel->count('id=:id', ['id' => $id])) {
-                $validator->setError('inp-edit-pay-method-title', 'شناسه روش پرداخت نامعتبر است.');
+                $validator
+                    ->setStatus(false)
+                    ->setError('inp-edit-pay-method-title', 'شناسه روش پرداخت نامعتبر است.');
             }
         } else {
             $validator
