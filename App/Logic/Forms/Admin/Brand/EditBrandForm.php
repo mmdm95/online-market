@@ -93,7 +93,9 @@ class EditBrandForm implements IPageForm
             $brandModel = container()->get(BrandModel::class);
 
             if (0 === $brandModel->count('id=:id', ['id' => $id])) {
-                $validator->setError('inp-edit-brand-fa-title', 'شناسه برند نامعتبر است.');
+                $validator
+                    ->setStatus(false)
+                    ->setError('inp-edit-brand-fa-title', 'شناسه برند نامعتبر است.');
             }
         } else {
             $validator

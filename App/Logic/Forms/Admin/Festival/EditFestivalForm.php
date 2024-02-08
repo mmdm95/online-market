@@ -90,7 +90,9 @@ class EditFestivalForm implements IPageForm
         $id = session()->getFlash('festival-curr-id', null, false);
         if (!empty($id)) {
             if (0 === $festivalModel->count('id=:id', ['id' => $id])) {
-                $validator->setError('inp-edit-festival-title', 'شناسه جشنواره نامعتبر است.');
+                $validator
+                    ->setStatus(false)
+                    ->setError('inp-edit-festival-title', 'شناسه جشنواره نامعتبر است.');
             }
         } else {
             $validator

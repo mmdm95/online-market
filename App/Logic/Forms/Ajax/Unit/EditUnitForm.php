@@ -72,7 +72,9 @@ class EditUnitForm implements IPageForm
 
         if (!empty($id)) {
             if (0 === $unitModel->count('id=:id', ['id' => $id])) {
-                $validator->setError('inp-edit-unit-title', 'شناسه واحد مورد نظر نامعتبر است.');
+                $validator
+                    ->setStatus(false)
+                    ->setError('inp-edit-unit-title', 'شناسه واحد مورد نظر نامعتبر است.');
             }
         } else {
             $validator

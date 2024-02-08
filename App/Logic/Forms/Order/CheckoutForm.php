@@ -77,6 +77,16 @@ class CheckoutForm implements IPageForm
             ->required()
             ->stopValidationAfterFirstError(true);
 
+        /**
+         * @var ProvinceModel $provinceModel
+         */
+        $provinceModel = container()->get(ProvinceModel::class);
+
+        /**
+         * @var CityModel $cityModel
+         */
+        $cityModel = container()->get(CityModel::class);
+
         // get type of receiver/buyer
         $realOrLegal = $validator->getFieldValue('inp-is-real-or-legal', RECEIVER_TYPE_REAL);
         $realOrLegal = (int)$realOrLegal;
@@ -98,17 +108,16 @@ class CheckoutForm implements IPageForm
                 ->stopValidationAfterFirstError(false)
                 ->required()
                 ->stopValidationAfterFirstError(true)
-                ->custom(function (FormValue $formValue) {
-                    /**
-                     * @var ProvinceModel $provinceModel
-                     */
-                    $provinceModel = container()->get(ProvinceModel::class);
-                    $province = $provinceModel->getFirst(['name'], 'id=:id AND is_deleted=:del', [
+                ->custom(function (FormValue $formValue) use ($provinceModel) {
+                    $province = $provinceModel->getFirst(['id', 'name'], 'id=:id AND is_deleted=:del', [
                         'id' => $formValue->getValue(),
                         'del' => DB_NO,
                     ]);
                     if (0 !== count($province)) {
-                        session()->setFlash('__custom_province_info_in_order', $province['name']);
+                        session()->setFlash('__custom_province_info_in_order', [
+                            'id' => $province['id'],
+                            'name' => $province['name'],
+                        ]);
                         return true;
                     }
                     return false;
@@ -120,18 +129,17 @@ class CheckoutForm implements IPageForm
                     ->stopValidationAfterFirstError(false)
                     ->required()
                     ->stopValidationAfterFirstError(true)
-                    ->custom(function (FormValue $formValue) use ($validator) {
-                        /**
-                         * @var CityModel $cityModel
-                         */
-                        $cityModel = container()->get(CityModel::class);
-                        $city = $cityModel->getFirst(['name'], 'id=:id AND province_id=:pid AND is_deleted=:del', [
+                    ->custom(function (FormValue $formValue) use ($validator, $cityModel) {
+                        $city = $cityModel->getFirst(['id', 'name'], 'id=:id AND province_id=:pid AND is_deleted=:del', [
                             'id' => $formValue->getValue(),
                             'pid' => $validator->getFieldValue('inp-addr-province', -1),
                             'del' => DB_NO,
                         ]);
                         if (0 !== count($city)) {
-                            session()->setFlash('__custom_city_info_in_order', $city['name']);
+                            session()->setFlash('__custom_city_info_in_order', [
+                                'id' => $city['id'],
+                                'name' => $city['name'],
+                            ]);
                             return true;
                         }
                         return false;
@@ -176,17 +184,16 @@ class CheckoutForm implements IPageForm
                 ->stopValidationAfterFirstError(false)
                 ->required()
                 ->stopValidationAfterFirstError(true)
-                ->custom(function (FormValue $formValue) {
-                    /**
-                     * @var ProvinceModel $provinceModel
-                     */
-                    $provinceModel = container()->get(ProvinceModel::class);
-                    $province = $provinceModel->getFirst(['name'], 'id=:id AND is_deleted=:del', [
+                ->custom(function (FormValue $formValue) use ($provinceModel) {
+                    $province = $provinceModel->getFirst(['id', 'name'], 'id=:id AND is_deleted=:del', [
                         'id' => $formValue->getValue(),
                         'del' => DB_NO,
                     ]);
                     if (0 !== count($province)) {
-                        session()->setFlash('__custom_province_info_in_order', $province['name']);
+                        session()->setFlash('__custom_province_info_in_order', [
+                            'id' => $province['id'],
+                            'name' => $province['name'],
+                        ]);
                         return true;
                     }
                     return false;
@@ -198,18 +205,17 @@ class CheckoutForm implements IPageForm
                     ->stopValidationAfterFirstError(false)
                     ->required()
                     ->stopValidationAfterFirstError(true)
-                    ->custom(function (FormValue $formValue) use ($validator) {
-                        /**
-                         * @var CityModel $cityModel
-                         */
-                        $cityModel = container()->get(CityModel::class);
-                        $city = $cityModel->getFirst(['name'], 'id=:id AND province_id=:pid AND is_deleted=:del', [
+                    ->custom(function (FormValue $formValue) use ($validator, $cityModel) {
+                        $city = $cityModel->getFirst(['id', 'name'], 'id=:id AND province_id=:pid AND is_deleted=:del', [
                             'id' => $formValue->getValue(),
                             'pid' => $validator->getFieldValue('inp-addr-company-province', -1),
                             'del' => DB_NO,
                         ]);
                         if (0 !== count($city)) {
-                            session()->setFlash('__custom_city_info_in_order', $city['name']);
+                            session()->setFlash('__custom_city_info_in_order', [
+                                'id' => $city['id'],
+                                'name' => $city['name'],
+                            ]);
                             return true;
                         }
                         return false;
@@ -222,10 +228,57 @@ class CheckoutForm implements IPageForm
                 ->required()
                 ->stopValidationAfterFirstError(true);
         } else {
-            $validator->setError('inp-is-real-or-legal', 'نوع گیرنده/خریدار را مشخص نمایید.');
+            $validator
+                ->setStatus(false)
+                ->setError('inp-is-real-or-legal', 'نوع گیرنده/خریدار را مشخص نمایید.');
         }
 
         if ($validator->getStatus()) {
+            $sendMethod = session()->getFlash(SESSION_SEND_METHOD_RECORD, null, false);
+            $chosenCityInfo = session()->getFlash('__custom_province_info_in_order', null, false);
+            $chosenProvinceInfo = session()->getFlash('__custom_city_info_in_order', null, false);
+
+            $chosenCity = $chosenCityInfo['id'] ?? null;
+            $chosenProvince = $chosenProvinceInfo['id'] ?? null;
+            $storeCity = (config()->get('settings.store_city.value') ?: -1);
+            $storeProvince = (config()->get('settings.store_province.value') ?: -1);
+
+            $storeCityInfo = $cityModel->getFirst(['id', 'name'], 'id=:id', ['id' => $storeCity]);
+            $storeProvinceInfo = $provinceModel->getFirst(['id', 'name'], 'id=:id', ['id' => $storeProvince]);
+
+            // check in place delivery support
+            $isInPlaceDelivery = session()->get(SESSION_APPLIED_IN_PlACE_DELIVERY);
+            if (
+                is_value_checked($isInPlaceDelivery) &&
+                count($storeCityInfo) && count($storeProvinceInfo) &&
+                !empty($chosenCity) && !empty($chosenProvince) &&
+                $storeCity != $chosenCity &&
+                $storeProvince != $chosenProvince
+            ) {
+                $validator
+                    ->setStatus(false)
+                    ->setError(
+                        'inp-is-real-or-legal',
+                        'تحویل حضوری فقط برای استان ' . $storeProvinceInfo['name'] . ' و شهر ' . $storeCityInfo['name'] . ' قابل انتخاب می‌باشد.'
+                    );
+            }
+
+            // check for send method city and province support
+            if (
+                $sendMethod['only_for_shop_location'] == DB_YES &&
+                count($storeCityInfo) && count($storeProvinceInfo) &&
+                !empty($chosenCity) && !empty($chosenProvince) &&
+                $storeCity != $chosenCity &&
+                $storeProvince != $chosenProvince
+            ) {
+                $validator
+                    ->setStatus(false)
+                    ->setError(
+                        'inp-is-real-or-legal',
+                        $sendMethod['title'] . ' فقط برای استان ' . $storeProvinceInfo['name'] . ' و شهر ' . $storeCityInfo['name'] . ' قابل انتخاب می‌باشد. لطفا از روش‌های دیگر ارسال استفاده نمایید.'
+                    );
+            }
+
             // national number
             $auth = auth_home();
             /**
@@ -314,8 +367,11 @@ class CheckoutForm implements IPageForm
                     $addr = input()->post('inp-addr-address', '')->getValue();
                 }
 
-                $province = session()->getFlash('__custom_province_info_in_order', 'نامشخص');
-                $city = session()->getFlash('__custom_city_info_in_order', 'نامشخص');
+                $provinceInfo = session()->getFlash('__custom_province_info_in_order', []);
+                $cityInfo = session()->getFlash('__custom_city_info_in_order', []);
+
+                $province = $provinceInfo['name'] ?? 'نامشخص';
+                $city = $cityInfo['name'] ?? 'نامشخص';
 
                 $gateway = session()->getFlash(SESSION_GATEWAY_RECORD);
                 $sendMethod = session()->getFlash(SESSION_SEND_METHOD_RECORD);

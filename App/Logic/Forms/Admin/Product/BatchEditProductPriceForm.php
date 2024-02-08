@@ -47,7 +47,9 @@ class BatchEditProductPriceForm implements IPageForm
         // check for all ids and if there is no product with ids, give an error
         $ids = session()->getFlash('product-curr-ids', '');
         if (!is_string($ids) || empty($ids)) {
-            $validator->setError('p-ids', 'محصولات انتخاب شده نامعتبر می‌باشند!');
+            $validator
+                ->setStatus(false)
+                ->setError('p-ids', 'محصولات انتخاب شده نامعتبر می‌باشند!');
         }
         $ids = explode('/', str_replace('\\', '/', $ids));
         $newIds = [];

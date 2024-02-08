@@ -60,7 +60,9 @@ class EditDepositTypeForm implements IPageForm
         $id = session()->getFlash('deposit-type-edit-id', null, false);
         if (!empty($id)) {
             if (0 === $depositModel->count('id=:id', ['id' => $id])) {
-                $validator->setError('inp-edit-deposit-type-title', 'شناسه نوع تراکنش مورد نظر نامعتبر است.');
+                $validator
+                    ->setStatus(false)
+                    ->setError('inp-edit-deposit-type-title', 'شناسه نوع تراکنش مورد نظر نامعتبر است.');
             } else {
                 // check for duplicate
                 $validator

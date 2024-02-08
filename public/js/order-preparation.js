@@ -219,6 +219,7 @@
       }, {
         data: form,
       }, false, function () {
+        canSubmit = true;
         createLoader = true;
         shop.hideLoader(loaderId);
       });

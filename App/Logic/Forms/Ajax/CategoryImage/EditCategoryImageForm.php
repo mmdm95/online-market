@@ -66,7 +66,9 @@ class EditCategoryImageForm implements IPageForm
         $category = session()->getFlash('cat-img-edit-cat-id', null, false);
         if (!empty($category)) {
             if (0 === $categoryImageModel->count('category_id=:id', ['id' => $category])) {
-                $validator->setError('inp-edit-cat-img-img', 'شناسه دسته مورد نظر نامعتبر است.');
+                $validator
+                    ->setStatus(false)
+                    ->setError('inp-edit-cat-img-img', 'شناسه دسته مورد نظر نامعتبر است.');
             }
         } else {
             $validator

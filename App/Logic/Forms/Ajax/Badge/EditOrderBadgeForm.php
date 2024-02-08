@@ -52,7 +52,9 @@ class EditOrderBadgeForm implements IPageForm
             $unitModel = container()->get(UnitModel::class);
 
             if (0 === $unitModel->count('id=:id', ['id' => $id])) {
-                $validator->setError('inp-edit-badge-title', 'شناسه وضعیت مورد نظر نامعتبر است.');
+                $validator
+                    ->setStatus(false)
+                    ->setError('inp-edit-badge-title', 'شناسه وضعیت مورد نظر نامعتبر است.');
             } else {
                 // title
                 $validator

@@ -119,7 +119,7 @@ class EditAddressForm implements IPageForm
                 ->setError('inp-edit-address-full-name', 'شناسه آدرس نامعتبر است.');
         }
 
-        // check if user is exists
+        // check if user is existed
         $userId = session()->getFlash('addr-edit-user-id', null, false);
         if (!empty($userId)) {
             /**

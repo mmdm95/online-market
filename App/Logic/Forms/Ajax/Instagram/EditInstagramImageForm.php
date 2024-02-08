@@ -61,7 +61,9 @@ class EditInstagramImageForm implements IPageForm
             $instagramModel = container()->get(InstagramImagesModel::class);
 
             if (0 === $instagramModel->count('id=:id', ['id' => $id])) {
-                $validator->setError('inp-edit-ins-link', 'شناسه تصویر مورد نظر نامعتبر است.');
+                $validator
+                    ->setStatus(false)
+                    ->setError('inp-edit-ins-link', 'شناسه تصویر مورد نظر نامعتبر است.');
             }
         } else {
             $validator

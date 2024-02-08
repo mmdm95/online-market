@@ -96,7 +96,9 @@ class EditSteppedForm implements IPageForm
         if (!empty($code)) {
             $count = $productModel->getProductPropertyWithInfoCount('code=:code', ['code' => $code]);
             if (0 === $count) {
-                $validator->setError('inp-edit-stepped-price', 'شناسه کالای قیمت پلکانی نامعتبر است.');
+                $validator
+                    ->setStatus(false)
+                    ->setError('inp-edit-stepped-price', 'شناسه کالای قیمت پلکانی نامعتبر است.');
             }
         } else {
             $validator
@@ -108,7 +110,9 @@ class EditSteppedForm implements IPageForm
         if (!empty($id)) {
             $count = $productModel->getSteppedPricesCount('id=:id', ['id' => $id]);
             if (0 === $count) {
-                $validator->setError('inp-edit-stepped-price', 'شناسه قیمت پلکانی نامعتبر است.');
+                $validator
+                    ->setStatus(false)
+                    ->setError('inp-edit-stepped-price', 'شناسه قیمت پلکانی نامعتبر است.');
             }
         } else {
             $validator

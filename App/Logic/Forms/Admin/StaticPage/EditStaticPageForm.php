@@ -73,7 +73,9 @@ class EditStaticPageForm implements IPageForm
         $id = session()->getFlash('static-page-curr-id', null, false);
         if (!empty($id)) {
             if (0 === $pageModel->count('id=:id', ['id' => $id])) {
-                $validator->setError('inp-edit-static-page-title', 'شناسه صفحه نامعتبر است.');
+                $validator
+                    ->setStatus(false)
+                    ->setError('inp-edit-static-page-title', 'شناسه صفحه نامعتبر است.');
             }
         } else {
             $validator

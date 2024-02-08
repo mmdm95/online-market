@@ -50,7 +50,9 @@ class EditProductAttrCategoryForm implements IPageForm
         $id = session()->getFlash('product-attr-cat-curr-id', null, false);
         if (!empty($id)) {
             if (0 === $attrModel->count('id=:id', ['id' => $id], BaseModel::TBL_PRODUCT_ATTR_CATEGORY)) {
-                $validator->setError('inp-edit-product-attr-id', 'شناسه تخصیص ویژگی به دسته‌بندی نامعتبر است.');
+                $validator
+                    ->setStatus(false)
+                    ->setError('inp-edit-product-attr-id', 'شناسه تخصیص ویژگی به دسته‌بندی نامعتبر است.');
             }
         } else {
             $validator
