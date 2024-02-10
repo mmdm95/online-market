@@ -73,9 +73,6 @@
       userCity,
       userCompanyCity,
       //-----
-      inPersonDeliveryChk,
-      shouldCalcSendPrice = true,
-      //-----
       canSubmit = true;
 
     const
@@ -105,8 +102,6 @@
 
     userCity = $('select[name="inp-addr-city"]');
     userCompanyCity = $('select[name="inp-addr-company-city"]');
-
-    inPersonDeliveryChk = $('#inPersonDeliveryChk');
 
     function initializeItemQuantityChanger() {
       $('.plus').off('click').on('click', function () {
@@ -209,7 +204,6 @@
       form.append('send_method_option', sendMethod);
       form.append('city', city);
       form.append('province', province);
-      form.append('should_calc_send_price', shouldCalcSendPrice);
 
       canSubmit = false;
       shop.request(variables.url.cart.checkPostPrice, 'post', function () {
@@ -382,36 +376,6 @@
     // when city changed in legal section, calculate send price and update side info table
     userCompanyCity.on('change' + variables.namespace, function () {
       determinePostPriceRemote();
-    });
-
-    inPersonDeliveryChk.mSwitch({
-      onTurnOn: function (btn) {
-        btn.closest('.alert').addClass('alert-primary').removeClass('bg-light');
-        shouldCalcSendPrice = false;
-
-        if (createLoader) {
-          createLoader = false;
-          loaderId = shop.showLoader();
-        }
-        shop.request(variables.url.cart.removePostPrice, 'post', function () {
-          loadNPlaceCartInfo();
-          canSubmit = true;
-          createLoader = true;
-          shop.hideLoader(loaderId);
-        }, {}, false, function () {
-          createLoader = true;
-          shop.hideLoader(loaderId);
-        });
-      },
-      onTurnOff: function (btn) {
-        btn.closest('.alert').addClass('bg-light').removeClass('alert-primary');
-        shouldCalcSendPrice = true;
-        if ($('input[name="inp-is-real-or-legal"]:checked').val() == RECEIVER_TYPE_LEGAL) {
-          userCompanyCity.trigger('change' + variables.namespace);
-        } else {
-          userCity.trigger('change' + variables.namespace);
-        }
-      }
     });
 
     //---------------------------------------------------------------

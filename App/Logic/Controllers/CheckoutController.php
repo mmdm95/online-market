@@ -108,15 +108,12 @@ class CheckoutController extends AbstractHomeController
             , 'uc_addr.user_id=:uId', ['uId' => $user['id']]
         );
 
-        $inPersonDelivery = session()->get(SESSION_APPLIED_IN_PlACE_DELIVERY, 'no');
-
         $this->setLayout($this->main_layout)->setTemplate('view/main/order/checkout');
         return $this->render([
             'payment_methods' => $paymentMethods,
             'send_methods' => $sendMethods,
             'addresses' => $addresses,
             'addresses_company' => $addressesCompany,
-            'in_person_delivery' => $inPersonDelivery,
         ]);
     }
 
@@ -193,7 +190,6 @@ class CheckoutController extends AbstractHomeController
                         // remove other traces
                         session()->remove(SESSION_APPLIED_COUPON_CODE);
                         session()->remove(SESSION_APPLIED_POST_PRICE);
-                        session()->remove(SESSION_APPLIED_IN_PlACE_DELIVERY);
 
                         $resourceHandler
                             ->type(RESPONSE_TYPE_SUCCESS)
@@ -266,13 +262,6 @@ class CheckoutController extends AbstractHomeController
                     response()->json($resourceHandler->getReturnData());
                 }
 
-                $shouldCalcSendPrice = input()->post('should_calc_send_price', true)->getValue();
-
-                if (!$shouldCalcSendPrice) {
-                    session()->remove(SESSION_APPLIED_POST_PRICE);
-                    response()->json($resourceHandler->getReturnData());
-                }
-
                 $cityId = input()->post('city')->getValue();
                 $provinceId = input()->post('province')->getValue();
                 $province = $provinceModel->getFirst(['post_price_order'], 'id=:id', ['id' => $provinceId]);
@@ -332,7 +321,6 @@ class CheckoutController extends AbstractHomeController
                     //
 
                     session()->set(SESSION_APPLIED_POST_PRICE, (float)$price * (float)$shippingTimes);
-                    session()->remove(SESSION_APPLIED_IN_PlACE_DELIVERY);
 
                     $resourceHandler
                         ->type(RESPONSE_TYPE_SUCCESS)
@@ -350,45 +338,6 @@ class CheckoutController extends AbstractHomeController
             }
         } catch
         (Exception $e) {
-            LogUtil::logException($e, __LINE__, self::class);
-            $resourceHandler
-                ->type(RESPONSE_TYPE_ERROR)
-                ->errorMessage('خطا در ارتباط با سرور، لطفا دوباره تلاش کنید.');
-        }
-
-        response()->json($resourceHandler->getReturnData());
-    }
-
-    /**
-     * @return void
-     * @throws DependencyException
-     * @throws NotFoundException
-     */
-    public function removeSendPrice()
-    {
-        $resourceHandler = new ResourceHandler();
-
-        $this->setMiddleWare(AllowCheckoutMiddleware::class, [false]);
-        $this->middlewareResult();
-
-        try {
-            /**
-             * @var Agent $agent
-             */
-            $agent = container()->get(Agent::class);
-            if (!$agent->isRobot()) {
-                session()->remove(SESSION_APPLIED_POST_PRICE);
-                session()->set(SESSION_APPLIED_IN_PlACE_DELIVERY, 'yes');
-                $resourceHandler
-                    ->type(RESPONSE_TYPE_SUCCESS)
-                    ->data('هزینه ارسال حذف شد.');
-            } else {
-                response()->httpCode(403);
-                $resourceHandler
-                    ->type(RESPONSE_TYPE_ERROR)
-                    ->errorMessage('خطا در ارتباط با سرور، لطفا دوباره تلاش کنید.');
-            }
-        } catch (Exception $e) {
             LogUtil::logException($e, __LINE__, self::class);
             $resourceHandler
                 ->type(RESPONSE_TYPE_ERROR)

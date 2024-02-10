@@ -266,20 +266,6 @@ $isSuperUser = $authAdmin->userHasRole(ROLE_DEVELOPER) || $authAdmin->userHasRol
                     </div>
                     <div class="col-lg-6 border py-2 px-3">
                         <div class="mb-2">
-                            تحویل حضوری
-                        </div>
-                        <?php if ($order['is_in_place_delivery'] == DB_YES): ?>
-                            <div class="text-success-800">
-                                بله
-                            </div>
-                        <?php else: ?>
-                            <div class="text-danger-800">
-                                خیر
-                            </div>
-                        <?php endif; ?>
-                    </div>
-                    <div class="col-lg-6 border py-2 px-3">
-                        <div class="mb-2">
                             عنوان کوپن
                         </div>
                         <div class="text-info-800">

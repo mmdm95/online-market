@@ -312,34 +312,6 @@ $validator = form_validator();
                         </div>
                     </div>
                     <div class="col-md-6" id="__theia_sticky_sidebar">
-                        <div class="mb-3 alert <?= is_value_checked($in_person_delivery) ? 'alert-info' : 'bg-light'; ?>">
-                            <div class="d-flex align-items-center justify-content-between">
-                                <div class="d-flex align-items-center">
-                                    <input class="mswitch" type="checkbox"
-                                           name="in-person-delivery" id="inPersonDeliveryChk"
-                                        <?= is_value_checked($in_person_delivery) ? 'checked="checked"' : ''; ?>>
-                                    <label for="inPersonDeliveryChk" class="ml-3 my-0 user-select-none text-dark">
-                                        تحویل حضوری
-                                    </label>
-                                </div>
-                                <div class="ml-3">
-                                    <a tabindex="0" class="linearicons-question-circle fa-2x"
-                                       style="cursor: pointer;"
-                                       role="button"
-                                       data-toggle="popover"
-                                       data-trigger="focus"
-                                       title="توجه"
-                                       data-content="با فعال نمودن این گزینه، هزینه ارسال حذف شده و بایستی محصولات خریداری شده را به صورت حضوری تحویل بگیرید."
-                                       aria-hidden="true"></a>
-                                </div>
-                            </div>
-                            <?php load_partial('main/message/message-common', [
-                                'message' => 'لطفا اسناد احراز هویت خود را هنگام تحویل کالا همراه داشته باشید.',
-                                'dismissible' => false,
-                                'class' => 'mt-3 mb-0 text-white bg-primary',
-                            ]); ?>
-                        </div>
-
                         <div class="order_review">
                             <div class="heading_s1">
                                 <h4>سفارشات شما</h4>
