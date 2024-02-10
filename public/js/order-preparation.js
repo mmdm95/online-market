@@ -209,6 +209,7 @@
       form.append('send_method_option', sendMethod);
       form.append('city', city);
       form.append('province', province);
+      form.append('should_calc_send_price', shouldCalcSendPrice);
 
       canSubmit = false;
       shop.request(variables.url.cart.checkPostPrice, 'post', function () {

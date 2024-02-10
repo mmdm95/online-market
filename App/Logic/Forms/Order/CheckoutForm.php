@@ -235,8 +235,8 @@ class CheckoutForm implements IPageForm
 
         if ($validator->getStatus()) {
             $sendMethod = session()->getFlash(SESSION_SEND_METHOD_RECORD, null, false);
-            $chosenCityInfo = session()->getFlash('__custom_province_info_in_order', null, false);
-            $chosenProvinceInfo = session()->getFlash('__custom_city_info_in_order', null, false);
+            $chosenCityInfo = session()->getFlash('__custom_city_info_in_order', null, false);
+            $chosenProvinceInfo = session()->getFlash('__custom_province_info_in_order', null, false);
 
             $chosenCity = $chosenCityInfo['id'] ?? null;
             $chosenProvince = $chosenProvinceInfo['id'] ?? null;
