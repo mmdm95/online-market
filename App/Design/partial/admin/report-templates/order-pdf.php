@@ -17,7 +17,7 @@ if (count($order ?? []) && count($items ?? [])): ?>
         </tr>
         </thead>
         <tr>
-            <td colspan="2" style="width: 50%;">
+            <td>
                 <small>
                     تاریخ ثبت سفارش
                 </small>
@@ -39,6 +39,14 @@ if (count($order ?? []) && count($items ?? [])): ?>
                 </small>
                 <strong>
                     <?= $order['method_title']; ?>
+                </strong>
+            </td>
+            <td>
+                <small>
+                    روش ارسال:
+                </small>
+                <strong>
+                    <?= !empty($order['send_method_title']) ? $order['send_method_title'] : '-'; ?>
                 </strong>
             </td>
         </tr>
@@ -83,7 +91,7 @@ if (count($order ?? []) && count($items ?? [])): ?>
                     تومان
                 </strong>
             </td>
-            <td colspan="2">
+            <td>
                 <small>
                     مبلغ تخفیف:
                 </small>
@@ -132,10 +140,13 @@ if (count($order ?? []) && count($items ?? [])): ?>
                     <?php if (0 != $order['shipping_price']): ?>
                         <?= local_number(number_format(StringUtil::toEnglish($order['shipping_price']))); ?>
                         تومان
-                    <?php elseif ($order['is_in_place_delivery'] == DB_YES): ?>
-                        تحویل حضوری
                     <?php else: ?>
                         رایگان
+                    <?php endif; ?>
+
+                    <?php if ($order['is_in_place_delivery'] == DB_YES): ?>
+                        -
+                        تحویل حضوری
                     <?php endif; ?>
                 </strong>
             </td>

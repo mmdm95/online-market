@@ -266,6 +266,13 @@ class CheckoutController extends AbstractHomeController
                     response()->json($resourceHandler->getReturnData());
                 }
 
+                $shouldCalcSendPrice = input()->post('should_calc_send_price', true)->getValue();
+
+                if (!$shouldCalcSendPrice) {
+                    session()->remove(SESSION_APPLIED_POST_PRICE);
+                    response()->json($resourceHandler->getReturnData());
+                }
+
                 $cityId = input()->post('city')->getValue();
                 $provinceId = input()->post('province')->getValue();
                 $province = $provinceModel->getFirst(['post_price_order'], 'id=:id', ['id' => $provinceId]);
