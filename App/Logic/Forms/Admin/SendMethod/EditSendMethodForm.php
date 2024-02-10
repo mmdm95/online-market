@@ -39,9 +39,11 @@ class EditSendMethodForm implements IPageForm
                 'inp-edit-send-method-title' => 'عنوان',
                 'inp-edit-send-method-desc' => 'توضیحات',
                 'inp-edit-send-method-price' => 'هزینه ارسال',
+                'inp-edit-send-method-priority' => 'اولویت',
             ])
             ->setOptionalFields([
                 'inp-edit-send-method-desc',
+                'inp-edit-send-method-priority',
             ]);
 
         // title
@@ -67,6 +69,13 @@ class EditSendMethodForm implements IPageForm
             ->setFields('inp-edit-send-method-price')
             ->greaterThanEqual(0, '{alias} ' . 'باید عددی بزرگتر یا مساوی صفر باشد.')
             ->regex('/\d+/', '{alias} ' . 'باید از نوع عددی باشد.');
+        // priority
+        $validator
+            ->setFields('inp-edit-send-method-priority')
+            ->stopValidationAfterFirstError(false)
+            ->required()
+            ->stopValidationAfterFirstError(true)
+            ->regex('/\-?[0-9]+/', '{alias} ' . 'باید از نوع عددی باشد.');
 
         /**
          * @var SendMethodModel $sendModel
@@ -130,6 +139,8 @@ class EditSendMethodForm implements IPageForm
             $price = input()->post('inp-edit-send-method-price', '')->getValue();
             $determineLoc = input()->post('inp-edit-send-method-determine-location', '')->getValue();
             $forShopLoc = input()->post('inp-edit-send-method-for-shop-location', '')->getValue();
+            $priority = input()->post('inp-edit-send-method-priority', '')->getValue();
+
             $id = session()->getFlash('send-method-curr-id', null);
             if (is_null($id)) return false;
 
@@ -141,6 +152,7 @@ class EditSendMethodForm implements IPageForm
                 'price' => $xss->xss_clean($price),
                 'determine_price_by_location' => is_value_checked($determineLoc) ? DB_YES : DB_NO,
                 'only_for_shop_location' => is_value_checked($forShopLoc) ? DB_YES : DB_NO,
+                'priority' => $xss->xss_clean($priority),
                 'updated_by' => $auth->getCurrentUser()['id'] ?? null,
                 'updated_at' => time(),
             ], 'id=:id', ['id' => $id]);

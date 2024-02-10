@@ -20,7 +20,7 @@
         </div>
 
         <table class="table table-bordered table-hover datatable-highlight"
-               data-columns='[{"data":"id"},{"data":"image"},{"data":"title"},{"data":"price"},{"data":"determine_location"},{"data":"for_shop_location"},{"data":"status"},{"data":"operations"}]'
+               data-columns='[{"data":"id"},{"data":"image"},{"data":"title"},{"data":"price"},{"data":"determine_location"},{"data":"for_shop_location"},{"data":"status"},{"data":"priority"},{"data":"operations"}]'
                data-ajax-url="<?= url('admin.send_method.dt.view')->getRelativeUrlTrimmed(); ?>">
             <thead>
             <tr>
@@ -31,6 +31,7 @@
                 <th>در نظرگیری مکان در هزینه ارسال</th>
                 <th>مورد استفاده فقط برای محل فروشگاه</th>
                 <th>وضعیت نمایش</th>
+                <th>اولویت</th>
                 <th class="text-center">عملیات</th>
             </tr>
             </thead>
@@ -43,6 +44,7 @@
                 <th>در نظرگیری مکان در هزینه ارسال</th>
                 <th>مورد استفاده فقط برای محل فروشگاه</th>
                 <th>وضعیت نمایش</th>
+                <th>اولویت</th>
                 <th class="text-center">عملیات</th>
             </tr>
             </tfoot>

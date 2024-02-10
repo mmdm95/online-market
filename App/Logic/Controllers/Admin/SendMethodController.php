@@ -161,6 +161,7 @@ class SendMethodController extends AbstractAdminController implements IDatatable
                 $columns = [
                     ['db' => 'id', 'db_alias' => 'id', 'dt' => 'id'],
                     ['db' => 'title', 'db_alias' => 'title', 'dt' => 'title'],
+                    ['db' => 'priority', 'db_alias' => 'priority', 'dt' => 'priority'],
                     [
                         'db' => 'image',
                         'db_alias' => 'image',

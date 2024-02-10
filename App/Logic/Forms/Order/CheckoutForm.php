@@ -249,6 +249,7 @@ class CheckoutForm implements IPageForm
             // check in place delivery support
             $isInPlaceDelivery = session()->get(SESSION_APPLIED_IN_PlACE_DELIVERY);
             if (
+                !empty($isInPlaceDelivery) &&
                 is_value_checked($isInPlaceDelivery) &&
                 count($storeCityInfo) && count($storeProvinceInfo) &&
                 !empty($chosenCity) && !empty($chosenProvince) &&
@@ -265,6 +266,7 @@ class CheckoutForm implements IPageForm
 
             // check for send method city and province support
             if (
+                !empty($sendMethod) &&
                 $sendMethod['only_for_shop_location'] == DB_YES &&
                 count($storeCityInfo) && count($storeProvinceInfo) &&
                 !empty($chosenCity) && !empty($chosenProvince) &&

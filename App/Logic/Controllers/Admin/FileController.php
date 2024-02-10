@@ -284,6 +284,7 @@ class FileController extends AbstractAdminController
         $filename = $xss->xss_clean(str_replace(' ', '-', $newName));
         $filename = StringUtil::toPersian($filename);
         $filename = StringUtil::toEnglish($filename);
+        $filename = $this->cleanFilename($filename);
         $filename = rtrim($filename, '\\/');
 
         $this->checkAccess($file);
@@ -374,7 +375,10 @@ class FileController extends AbstractAdminController
                 \response()->json($this->data->getReturnData());
             }
             chdir($file);
-            @mkdir(str_replace(' ', '-', input()->post('name', '')->getValue()));
+
+            $dirname = str_replace(' ', '-', input()->post('name', '')->getValue());
+            $dirname = $this->cleanFilename($dirname);
+            @mkdir($dirname);
 
             $this->data->resetData();
             \response()->json($this->data->getReturnData());
@@ -469,13 +473,7 @@ class FileController extends AbstractAdminController
             $xss = container()->get(AntiXSS::class);
             $filename = str_replace(' ', '-', input()->file('file_data')->getFilename());
             $filename = str_replace('@', '', $filename);
-            $filename = strtolower(
-                str_replace(
-                    ['?', ' ', '_', '$', '<', '>', '&', '{', '}', '*', '\\', '/', ':', ';', ',', "'", '"'],
-                    '-',
-                    $filename
-                )
-            );
+            $filename = $this->cleanFilename($filename);
             $filename = $xss->xss_clean($filename);
 
             $filename = StringUtil::toPersian($filename);
@@ -805,5 +803,20 @@ class FileController extends AbstractAdminController
             error_reporting(0);
             @ini_set("display_errors", 0);
         }
+    }
+
+    /**
+     * @param string $filename
+     * @return string
+     */
+    private function cleanFilename(string $filename): string
+    {
+        return strtolower(
+            str_replace(
+                ['?', ' ', '_', '$', '<', '>', '&', '{', '}', '*', '\\', '/', ':', ';', ',', "'", '"'],
+                '-',
+                $filename
+            )
+        );
     }
 }

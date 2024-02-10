@@ -93,7 +93,12 @@ class CheckoutController extends AbstractHomeController
         $user = $this->getDefaultArguments()['user'];
 
         $paymentMethods = $payMethodModel->get(['code', 'title', 'image', 'method_type'], 'publish=:pub', ['pub' => DB_YES]);
-        $sendMethods = $sendMethodModel->get(['code', 'title', '`desc`', 'image'], 'publish=:pub', ['pub' => DB_YES]);
+        $sendMethods = $sendMethodModel->get(
+            ['code', 'title', '`desc`', 'image'],
+            'publish=:pub',
+            ['pub' => DB_YES],
+            ['priority ASC', 'id ASC']
+        );
         $addresses = $addressModel->getUserAddresses(
             ['u_addr.*', 'c.name AS city_name', 'p.name AS province_name']
             , 'u_addr.user_id=:uId', ['uId' => $user['id']]

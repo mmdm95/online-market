@@ -40,9 +40,11 @@ class AddSendMethodForm implements IPageForm
                 'inp-add-send-method-title' => 'عنوان',
                 'inp-add-send-method-desc' => 'توضیحات',
                 'inp-add-send-method-price' => 'هزینه ارسال',
+                'inp-add-send-method-priority' => 'اولویت',
             ])
             ->setOptionalFields([
                 'inp-add-send-method-desc',
+                'inp-add-send-method-priority',
             ]);
 
         // title
@@ -68,6 +70,13 @@ class AddSendMethodForm implements IPageForm
             ->setFields('inp-add-send-method-price')
             ->greaterThanEqual(0, '{alias} ' . 'باید عددی بزرگتر یا مساوی صفر باشد.')
             ->regex('/\d+/', '{alias} ' . 'باید از نوع عددی باشد.');
+        // priority
+        $validator
+            ->setFields('inp-add-send-method-priority')
+            ->stopValidationAfterFirstError(false)
+            ->required()
+            ->stopValidationAfterFirstError(true)
+            ->regex('/\-?[0-9]+/', '{alias} ' . 'باید از نوع عددی باشد.');
 
         // to reset form values and not set them again
         if ($validator->getStatus()) {
@@ -113,6 +122,7 @@ class AddSendMethodForm implements IPageForm
             $price = input()->post('inp-add-send-method-price', '')->getValue();
             $determineLoc = input()->post('inp-add-send-method-determine-location', '')->getValue();
             $forShopLoc = input()->post('inp-add-send-method-for-shop-location', '')->getValue();
+            $priority = input()->post('inp-add-send-method-priority', '')->getValue();
 
             return $sendModel->insert([
                 'code' => StringUtil::uniqidReal(12),
@@ -123,6 +133,7 @@ class AddSendMethodForm implements IPageForm
                 'price' => $xss->xss_clean($price),
                 'determine_price_by_location' => is_value_checked($determineLoc) ? DB_YES : DB_NO,
                 'only_for_shop_location' => is_value_checked($forShopLoc) ? DB_YES : DB_NO,
+                'priority' => $xss->xss_clean($priority),
                 'created_by' => $auth->getCurrentUser()['id'] ?? null,
                 'created_at' => time(),
             ]);
