@@ -854,7 +854,6 @@ class Route implements IInitialize
             ])->name('ajax.cart.check.coupon');
             Router::post('/cart/check-stored-coupon', [CartController::class, 'checkStoredCoupon'])->name('ajax.cart.check.stored.coupon');
             Router::post('/cart/check-post-price', [CheckoutController::class, 'calculateSendPrice'])->name('ajax.cart.check.post.price');
-            Router::post('/cart/remove-post-price', [CheckoutController::class, 'removeSendPrice'])->name('ajax.cart.remove.post.price');
 
             Router::group(['middleware' => AuthMiddleware::class], function () {
                 /**

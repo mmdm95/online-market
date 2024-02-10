@@ -73,7 +73,6 @@ window.MyGlobalVariables = {
       checkCoupon: '/ajax/cart/check-coupon',
       checkStoredCoupon: '/ajax/cart/check-stored-coupon',
       checkPostPrice: '/ajax/cart/check-post-price',
-      removePostPrice: '/ajax/cart/remove-post-price',
     },
     newsletter: {
       add: '/ajax/newsletter/add',

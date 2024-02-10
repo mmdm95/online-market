@@ -143,11 +143,6 @@ if (count($order ?? []) && count($items ?? [])): ?>
                     <?php else: ?>
                         رایگان
                     <?php endif; ?>
-
-                    <?php if ($order['is_in_place_delivery'] == DB_YES): ?>
-                        -
-                        تحویل حضوری
-                    <?php endif; ?>
                 </strong>
             </td>
             <td>
@@ -465,8 +460,6 @@ if (count($order ?? []) && count($items ?? [])): ?>
                     <?php $totalPrice += (int)$order['shipping_price']; ?>
                     <?= local_number(number_format(StringUtil::toEnglish($order['shipping_price']))); ?>
                     تومان
-                <?php elseif ($order['is_in_place_delivery'] == DB_YES): ?>
-                    تحویل حضوری
                 <?php else: ?>
                     رایگان
                 <?php endif; ?>
