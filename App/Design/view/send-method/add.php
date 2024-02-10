@@ -87,6 +87,15 @@ $validator = form_validator();
                                name="inp-add-send-method-price"
                                value="<?= $validator->setInput('inp-add-send-method-price'); ?>">
                     </div>
+                    <div class="form-group col-lg-6">
+                        <label>
+                            <span class="text-danger">*</span>
+                            اولویت:
+                        </label>
+                        <input type="number" class="form-control" placeholder="وارد کنید"
+                               name="inp-add-send-method-priority"
+                               value="<?= $validator->setInput('inp-add-send-method-priority'); ?>">
+                    </div>
                     <div class="form-group col-lg-12 row mt-3 mb-5">
                         <div class="form-group text-right col-lg-6">
                             <div class="form-check form-check-switchery form-check-switchery-double">
