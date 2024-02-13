@@ -10,13 +10,13 @@ namespace App\Logic\Utils;
  */
 class PostPriceUtil
 {
-    private $price_500g = array("insidePart" => 7239, "edgePart" => 9334, "outsidePart" => 10096);
-    private $price_501g_1000g = array("insidePart" => 9525, "edgePart" => 12954, "outsidePart" => 13906);
-    private $price_1001g_2000g = array("insidePart" => 13716, "edgePart" => 16764, "outsidePart" => 18097);
-    private $price_2000g_Higher = 22000;
+    private $price_500g = array("insidePart" => 10900, "edgePart" => 15000, "outsidePart" => 18000);
+    private $price_501g_1000g = array("insidePart" => 14100, "edgePart" => 20000, "outsidePart" => 21700);
+    private $price_1001g_2000g = array("insidePart" => 18800, "edgePart" => 24700, "outsidePart" => 26400);
+    private $price_2000g_Higher = 31100;
 
     private $MALIAT = 9; // percent
-    private $BIME = 2000;
+    private $BIME = 2250;
 
     private $addPrice;
 
