@@ -24,11 +24,11 @@ foreach ($items as $item) {
         </thead>
         <tbody>
         <?php
-        $shippingTimes = 1;
+        $shippingTimes = 0;
         ?>
         <?php foreach ($items as $item): ?>
             <?php if (is_value_checked($item['separate_consignment'])): ?>
-                <?= $shippingTimes++; ?>
+                <?php $shippingTimes++; ?>
             <?php endif; ?>
 
             <tr>
@@ -52,15 +52,21 @@ foreach ($items as $item) {
         <?php endforeach; ?>
         </tbody>
         <tfoot>
-        <?php if ($shippingTimes > 1): ?>
-            <tr>
-                <th>تعداد مرسوله</th>
-                <td>
-                    <?= number_format(StringUtil::toEnglish($shippingTimes)); ?>
-                    <small>عدد</small>
-                </td>
-            </tr>
-        <?php endif; ?>
+        <?php
+        if (count($items) <= 1) {
+            $shippingTimes = 1;
+        }
+        if (count($items) > $shippingTimes) {
+            $shippingTimes += 1;
+        }
+        ?>
+        <tr>
+            <th>تعداد مرسوله</th>
+            <td>
+                <?= number_format(StringUtil::toEnglish($shippingTimes)); ?>
+                <small>عدد</small>
+            </td>
+        </tr>
 
         <tr>
             <th>جمع</th>

@@ -312,11 +312,27 @@ class CheckoutController extends AbstractHomeController
 
                 if ($canContinue) {
                     // consider separate consignment of each item for shipping price
-                    $shippingTimes = 1;
-                    foreach (cart()->getItems() as $item) {
+                    $shippingTimes = 0;
+                    $countQntItems = 0;
+                    $cartItems = cart()->getItems();
+                    foreach ($cartItems as $item) {
+                        $countQntItems += $item['qnt'];
                         if (is_value_checked($item['separate_consignment'])) {
                             $shippingTimes += $item['qnt'];
                         }
+                    }
+
+                    if ($countQntItems > $shippingTimes) {
+                        $shippingTimes += 1;
+                    }
+                    if (
+                        count($cartItems) <= 1 ||
+                        (
+                            count($sendMethod) &&
+                            $sendMethod['only_for_shop_location'] == DB_YES
+                        )
+                    ) {
+                        $shippingTimes = 1;
                     }
                     //
 
