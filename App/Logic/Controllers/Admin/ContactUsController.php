@@ -166,7 +166,7 @@ class ContactUsController extends AbstractAdminController implements IDatatableC
                         'formatter' => function ($d, $row) {
                             if (!is_null($row['creator_id'])) {
                                 return "<a href='"
-                                    . url('admin.user.view', ['id' => $row['id']])->getRelativeUrl()
+                                    . url('admin.user.view', ['id' => $row['creator_id']])->getRelativeUrl()
                                     . "' target='__blank'>"
                                     . ($row['creator_name'] ?? '') . ' ' . ($row['creator_family'] ?? '')
                                     . "</a>";
