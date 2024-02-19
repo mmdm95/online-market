@@ -76,13 +76,14 @@
 
                 <div class="modal-body">
                     <ul class="list-group list-group-flush">
-                        <!-- Real person info -->
-                        <li class="list-group-item border-bottom d-none">
+                        <li class="list-group-item border-bottom">
                             <div class="font-weight-semibold">نام گیرنده:</div>
                             <div class="ml-auto text-info-800" id="__receiver_info_full_name">
                                 خطا در بارگذاری
                             </div>
                         </li>
+
+                        <!-- Real person info -->
                         <li class="list-group-item border-bottom d-none">
                             <div class="font-weight-semibold">شماره تلفن:</div>
                             <div class="ml-auto text-info-800" id="__receiver_info_phone">

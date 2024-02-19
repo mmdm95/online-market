@@ -4892,7 +4892,7 @@
         $('#__receiver_info_full_name,#__receiver_info_phone,#__receiver_info_natnum,#__receiver_info_eco_code,#__receiver_info_eco_nid,#__receiver_info_reg_num,#__receiver_info_tel,#__receiver_info_province,#__receiver_info_city,#__receiver_info_postal_code,#__receiver_info_address')
           .html('در حال بارگذاری');
 
-        $('#__receiver_info_full_name,#__receiver_info_phone,#__receiver_info_natnum,#__receiver_info_eco_code,#__receiver_info_eco_nid,#__receiver_info_reg_num,#__receiver_info_tel')
+        $('#__receiver_info_phone,#__receiver_info_natnum,#__receiver_info_eco_code,#__receiver_info_eco_nid,#__receiver_info_reg_num,#__receiver_info_tel')
           .closest('li').addClass('d-none');
 
         admin.request(variables.url.orders.info + '/' + id, 'get', function () {
@@ -4903,25 +4903,25 @@
                 .closest('li').removeClass('d-none');
 
               currentModal.find('#__receiver_info_eco_code')
-                .html(_.data['economic_code'] ? _.data['economic_code'] : '<i class="icon-minus2" aria-hidden="true"></i>');
+                .html(_.data['company_economic_code'] ? _.data['company_economic_code'] : '<i class="icon-minus2" aria-hidden="true"></i>');
               currentModal.find('#__receiver_info_eco_nid')
-                .html(_.data['economic_national_id'] ? _.data['economic_national_id'] : '<i class="icon-minus2" aria-hidden="true"></i>');
+                .html(_.data['company_economic_national_id'] ? _.data['company_economic_national_id'] : '<i class="icon-minus2" aria-hidden="true"></i>');
               currentModal.find('#__receiver_info_reg_num')
-                .html(_.data['registration_number'] ? _.data['registration_number'] : '<i class="icon-minus2" aria-hidden="true"></i>');
+                .html(_.data['company_registration_number'] ? _.data['company_registration_number'] : '<i class="icon-minus2" aria-hidden="true"></i>');
               currentModal.find('#__receiver_info_tel')
-                .html(_.data['landline_tel'] ? _.data['landline_tel'] : '<i class="icon-minus2" aria-hidden="true"></i>');
+                .html(_.data['company_tel'] ? _.data['company_tel'] : '<i class="icon-minus2" aria-hidden="true"></i>');
             } else {
               $('#__receiver_info_full_name,#__receiver_info_phone,#__receiver_info_natnum')
                 .closest('li').removeClass('d-none');
 
-              currentModal.find('#__receiver_info_full_name')
-                .html(_.data['receiver_name'] ? _.data['receiver_name'] : '<i class="icon-minus2" aria-hidden="true"></i>');
               currentModal.find('#__receiver_info_phone')
                 .html(_.data['receiver_mobile'] ? _.data['receiver_mobile'] : '<i class="icon-minus2" aria-hidden="true"></i>');
               currentModal.find('#__receiver_info_natnum')
                 .html(_.data['user_national_number'] ? _.data['user_national_number'] : '<i class="icon-minus2" aria-hidden="true"></i>');
             }
 
+            currentModal.find('#__receiver_info_full_name')
+              .html(_.data['receiver_name'] ? _.data['receiver_name'] : '<i class="icon-minus2" aria-hidden="true"></i>');
             currentModal.find('#__receiver_info_province')
               .html(_.data['province'] ? _.data['province'] : '<i class="icon-minus2" aria-hidden="true"></i>');
             currentModal.find('#__receiver_info_city')
