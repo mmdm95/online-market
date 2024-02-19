@@ -299,7 +299,19 @@ if (count($order ?? []) && count($items ?? [])): ?>
             </tr>
         <?php endif; ?>
         <tr>
+            <?php if ((int)$order['receiver_type'] === RECEIVER_TYPE_LEGAL): ?>
+            <td>
+                <small>
+                    کد پستی:
+                </small>
+                <strong>
+                    <?= local_number(StringUtil::toEnglish($order['postal_code'])); ?>
+                </strong>
+            </td>
+            <td colspan="4">
+                <?php else: ?>
             <td colspan="5">
+                <?php endif; ?>
                 <small>
                     آدرس:
                 </small>
