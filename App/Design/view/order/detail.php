@@ -113,6 +113,14 @@ $isSuperUser = $authAdmin->userHasRole(ROLE_DEVELOPER) || $authAdmin->userHasRol
                     <?php if ((int)$order['receiver_type'] === RECEIVER_TYPE_LEGAL): ?>
                         <div class="col-lg-6 border py-2 px-3">
                             <div class="mb-2">
+                                نام شرکت
+                            </div>
+                            <div class="text-info-800">
+                                <?= $order['receiver_name']; ?>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 border py-2 px-3">
+                            <div class="mb-2">
                                 کد اقتصادی
                             </div>
                             <div class="text-info-800">
@@ -386,7 +394,7 @@ $isSuperUser = $authAdmin->userHasRole(ROLE_DEVELOPER) || $authAdmin->userHasRol
                                 <?php endif; ?>
                                 <div class="text-muted">
                                     <?php
-                                    $isColorShowable = !empty($item['color']) && ($item['show_color']=== DB_YES || $item['is_patterned_color'] == DB_YES);
+                                    $isColorShowable = !empty($item['color']) && ($item['show_color'] === DB_YES || $item['is_patterned_color'] == DB_YES);
                                     ?>
                                     <?php if ($isColorShowable): ?>
                                         رنگ

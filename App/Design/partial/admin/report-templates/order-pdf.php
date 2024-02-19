@@ -215,6 +215,14 @@ if (count($order ?? []) && count($items ?? [])): ?>
             <tr>
                 <td>
                     <small>
+                        نام شرکت:
+                    </small>
+                    <strong>
+                        <?= $order['receiver_name']; ?>
+                    </strong>
+                </td>
+                <td>
+                    <small>
                         کد اقتصادی:
                     </small>
                     <strong>
