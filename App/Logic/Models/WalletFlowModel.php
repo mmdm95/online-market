@@ -3,6 +3,8 @@
 namespace App\Logic\Models;
 
 use Aura\SqlQuery\Exception as AuraException;
+use DI\DependencyException;
+use DI\NotFoundException;
 
 class WalletFlowModel extends BaseModel
 {
@@ -140,7 +142,7 @@ class WalletFlowModel extends BaseModel
         $select
             ->from(self::TBL_WALLET_FLOW . ' AS wf')
             ->cols([
-
+                'order_code',
             ])
             ->where('gf.is_success=:suc')
             ->bindValue('suc', DB_NO)
@@ -171,6 +173,8 @@ class WalletFlowModel extends BaseModel
     /**
      * @param array $flowArr
      * @return bool
+     * @throws DependencyException
+     * @throws NotFoundException
      */
     public function payOrderWithWallet(array $flowArr): bool
     {
