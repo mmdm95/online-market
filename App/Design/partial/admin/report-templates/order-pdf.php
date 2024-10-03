@@ -141,7 +141,7 @@ if (count($order ?? []) && count($items ?? [])): ?>
                         <?= local_number(number_format(StringUtil::toEnglish($order['shipping_price']))); ?>
                         تومان
                     <?php else: ?>
-                        رایگان
+                        (0) تومان
                     <?php endif; ?>
                 </strong>
             </td>
@@ -481,7 +481,7 @@ if (count($order ?? []) && count($items ?? [])): ?>
                     <?= local_number(number_format(StringUtil::toEnglish($order['shipping_price']))); ?>
                     تومان
                 <?php else: ?>
-                    رایگان
+                    (0) تومان
                 <?php endif; ?>
             </td>
         </tr>
