@@ -189,6 +189,7 @@ class CheckoutController extends AbstractHomeController
                         session()->remove(SESSION_ORDER_ARR_INFO);
                         // remove other traces
                         session()->remove(SESSION_APPLIED_COUPON_CODE);
+                        session()->remove(SESSION_ZERO_POST_PRICE);
                         session()->remove(SESSION_APPLIED_POST_PRICE);
 
                         $resourceHandler
@@ -278,34 +279,38 @@ class CheckoutController extends AbstractHomeController
                     $totalPrice += $item['qnt'] * (float)get_discount_price($item)[0];
                 }
 
+                // Reset this session every time price is calculating
+                session()->set(SESSION_ZERO_POST_PRICE, false);
+
                 if ($totalPrice > (config()->get('settings.min_free_price.value') ?: PHP_INT_MAX)) {
+                    $canContinue = true;
                     $price = 0;
-                }
+                } else {
+                    if (!empty($sendMethod) && $sendMethod['determine_price_by_location'] == DB_NO) {
+                        $canContinue = true;
+                        $price = (float)$sendMethod['price'];
+                        session()->set(SESSION_ZERO_POST_PRICE, $price === 0.0);
+                    } else if (0 != count($province) && 0 != count($ownProvince)) {
+                        $canContinue = true;
 
-                if (!empty($sendMethod) && $sendMethod['determine_price_by_location'] == DB_NO) {
-                    $canContinue = true;
-
-                    $price = (float)$sendMethod['price'];
-                } else if (0 != count($province) && 0 != count($ownProvince)) {
-                    $canContinue = true;
-
-                    if (
-                        (config()->get('settings.store_city.value') ?: -1) == $cityId &&
-                        (config()->get('settings.store_province.value') ?: -1) == $provinceId
-                    ) {
-                        $price = config()->get('settings.current_city_post_price.value');
-                    } else {
-                        $postPriceCalcMode = config()->get('settings.post_price_calculation_mode.value');
-                        if ($postPriceCalcMode == SEND_PRICE_CALCULATION_STATIC) {
-                            $price = config()->get('settings.static_post_price.value') ?: 0;
-                            //
-                            if (0 == $price) {
+                        if (
+                            (config()->get('settings.store_city.value') ?: -1) == $cityId &&
+                            (config()->get('settings.store_province.value') ?: -1) == $provinceId
+                        ) {
+                            $price = config()->get('settings.current_city_post_price.value');
+                        } else {
+                            $postPriceCalcMode = config()->get('settings.post_price_calculation_mode.value');
+                            if ($postPriceCalcMode == SEND_PRICE_CALCULATION_STATIC) {
+                                $price = config()->get('settings.static_post_price.value') ?: 0;
+                                //
+                                if (0 == $price) {
+                                    $postUtil = new PostPriceUtil($ownProvince['post_price_order'], $province['post_price_order'], $weight);
+                                    $price = $postUtil->post();
+                                }
+                            } else {
                                 $postUtil = new PostPriceUtil($ownProvince['post_price_order'], $province['post_price_order'], $weight);
                                 $price = $postUtil->post();
                             }
-                        } else {
-                            $postUtil = new PostPriceUtil($ownProvince['post_price_order'], $province['post_price_order'], $weight);
-                            $price = $postUtil->post();
                         }
                     }
                 }
@@ -328,7 +333,7 @@ class CheckoutController extends AbstractHomeController
                     if (
                         count($cartItems) <= 1 ||
                         (
-                            count($sendMethod) &&
+                            !empty($sendMethod) &&
                             $sendMethod['only_for_shop_location'] == DB_YES
                         )
                     ) {

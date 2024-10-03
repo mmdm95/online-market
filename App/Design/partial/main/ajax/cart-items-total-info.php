@@ -98,12 +98,15 @@ foreach ($items as $item) {
             <td>
                 <?php
                 $postPrice = session()->get(SESSION_APPLIED_POST_PRICE, 0.0);
+                $isZeroPostPrice = session()->get(SESSION_ZERO_POST_PRICE, false);
                 ?>
                 <?php if (!is_null($postPrice) && 0 != $postPrice): ?>
                     <?= number_format(StringUtil::toEnglish($postPrice)); ?>
                 <?php else: ?>
-                    <?php if (0 == $postPrice): ?>
+                    <?php if (0 == $postPrice && !$isZeroPostPrice): ?>
                         رایگان
+                    <?php elseif($isZeroPostPrice): ?>
+                        (0) تومان
                     <?php else: ?>
                         وابسته به آدرس
                     <?php endif; ?>

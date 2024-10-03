@@ -397,6 +397,7 @@ defined("SESSION_ORDER_ARR_INFO") or define("SESSION_ORDER_ARR_INFO", 'session_o
 defined("SESSION_APPLIED_COUPON_CODE") or define("SESSION_APPLIED_COUPON_CODE", 'session_applied_coupon_code');
 // post price session key constant
 defined("SESSION_APPLIED_POST_PRICE") or define("SESSION_APPLIED_POST_PRICE", 'session_applied_post_price');
+defined("SESSION_ZERO_POST_PRICE") or define("SESSION_ZERO_POST_PRICE", 'session_zero_post_price');
 // the gateway session key constant
 defined("SESSION_GATEWAY_RECORD") or define("SESSION_GATEWAY_RECORD", 'session_gateway_record_custom');
 defined("SESSION_SEND_METHOD_RECORD") or define("SESSION_SEND_METHOD_RECORD", 'session_send_method_record_custom');
